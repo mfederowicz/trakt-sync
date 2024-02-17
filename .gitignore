@@ -1,0 +1,8 @@
+golinter
+vendor
+dist/
+trakt-sync
+*.log
+*.swp
+coverage.out
+*.json
