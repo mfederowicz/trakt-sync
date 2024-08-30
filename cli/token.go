@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"trakt-sync/cfg"
-	"trakt-sync/internal"
-	"trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/str"
 )
 
 // valid if access_token is expired or not, and refresh if expired

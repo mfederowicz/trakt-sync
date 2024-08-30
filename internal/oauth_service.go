@@ -2,7 +2,7 @@ package internal
 
 import (
 	"context"
-	"trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/str"
 )
 
 // OauthService handles communication with the oauth related

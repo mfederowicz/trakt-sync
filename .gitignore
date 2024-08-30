@@ -6,3 +6,4 @@ trakt-sync
 *.swp
 coverage.out
 *.json
+.idea

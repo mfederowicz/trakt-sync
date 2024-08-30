@@ -3,8 +3,8 @@ package internal
 import (
 	"context"
 	"fmt"
-	"trakt-sync/str"
-	"trakt-sync/uri"
+	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/uri"
 )
 
 // SyncService  handles communication with the sync related

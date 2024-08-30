@@ -3,7 +3,7 @@ package str
 import (
 	"fmt"
 	"net/http"
-	"trakt-sync/uri"
+	"github.com/mfederowicz/trakt-sync/uri"
 )
 
 type ErrorResponse struct {

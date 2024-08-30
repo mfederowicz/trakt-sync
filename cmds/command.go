@@ -6,9 +6,9 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"trakt-sync/cfg"
-	"trakt-sync/internal"
-	"trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/str"
 
 	"github.com/spf13/afero"
 )

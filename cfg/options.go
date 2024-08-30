@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/str"
 
 	"github.com/spf13/afero"
 )

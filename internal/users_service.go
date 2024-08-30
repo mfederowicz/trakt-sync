@@ -3,7 +3,7 @@ package internal
 import (
 	"context"
 	"fmt"
-	"trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/str"
 )
 
 // UsersService  handles communication with the users related

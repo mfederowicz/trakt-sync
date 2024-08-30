@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"trakt-sync/cfg"
-	"trakt-sync/internal"
-	"trakt-sync/str"
-	"trakt-sync/uri"
-	"trakt-sync/writer"
+	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/uri"
+	"github.com/mfederowicz/trakt-sync/writer"
 )
 
 var CollectionCmd = &Command{

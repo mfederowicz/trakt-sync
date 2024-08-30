@@ -8,9 +8,9 @@ import (
 	"os/exec"
 	"runtime"
 	"time"
-	"trakt-sync/cfg"
-	"trakt-sync/internal"
-	"trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/str"
 )
 
 func fail(err string) {

@@ -7,11 +7,11 @@ import (
 	"os"
 	"strconv"
 	"time"
-	"trakt-sync/cfg"
-	"trakt-sync/internal"
-	"trakt-sync/str"
-	"trakt-sync/uri"
-	"trakt-sync/writer"
+	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/uri"
+	"github.com/mfederowicz/trakt-sync/writer"
 )
 
 var HistoryCmd = &Command{

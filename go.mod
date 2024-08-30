@@ -1,4 +1,4 @@
-module trakt-sync
+module github.com/mfederowicz/trakt-sync
 
 go 1.21
 

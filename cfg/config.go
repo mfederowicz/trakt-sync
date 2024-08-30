@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/str"
 
 	"github.com/BurntSushi/toml"
 	"github.com/spf13/afero"
@@ -97,6 +97,12 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 	if len(fileConfig.TokenPath) > 0 && fileConfig.TokenPath != defaultConfig.TokenPath {
 		defaultConfig.TokenPath = fileConfig.TokenPath
 	}
+
+	tokenPath, err := expandTilde(defaultConfig.TokenPath)
+	if err != nil {
+		panic(err)
+	}
+	defaultConfig.TokenPath = tokenPath
 
 	if len(fileConfig.ConfigPath) > 0 && fileConfig.ConfigPath != defaultConfig.ConfigPath {
 		defaultConfig.ConfigPath = fileConfig.ConfigPath

@@ -3,8 +3,8 @@ package internal
 import (
 	"context"
 	"fmt"
-	"trakt-sync/str"
-	"trakt-sync/uri"
+	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/uri"
 )
 
 // SearchService  handles communication with the search related

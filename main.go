@@ -1,15 +1,15 @@
-// Package main trakt-sync.
+// Package main github.com/mfederowicz/trakt-sync.
 package main
 
 import (
 	"flag"
 	"os"
 
-	"trakt-sync/cfg"
-	"trakt-sync/cli"
-	"trakt-sync/cmds"
-	"trakt-sync/internal"
-	"trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/cli"
+	"github.com/mfederowicz/trakt-sync/cmds"
+	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/str"
 
 	"github.com/spf13/afero"
 )

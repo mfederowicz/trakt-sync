@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"trakt-sync/cfg"
-	"trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/internal"
 
 	"github.com/spf13/afero"
 )
