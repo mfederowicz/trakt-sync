@@ -1,25 +1,27 @@
+// Package cmds used for commands modules
 package cmds
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
-	"time"
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
+	"os"
+	"time"
 )
 
 var (
-	_cal_action    = CalendarsCmd.Flag.String("a", cfg.DefaultConfig().Action, ActionUsage)
-	_cal_startDate = CalendarsCmd.Flag.String("start_date", time.Now().Format("2006-01-02"), StartDateUsage)
-	_cal_days      = CalendarsCmd.Flag.Int("days", 7, DaysUsage)
-	actionType     = "my"
+	_calAction    = CalendarsCmd.Flag.String("a", cfg.DefaultConfig().Action, ActionUsage)
+	_calStartDate = CalendarsCmd.Flag.String("start_date", time.Now().Format("2006-01-02"), StartDateUsage)
+	_calDays      = CalendarsCmd.Flag.Int("days", 7, DaysUsage)
+	actionType    = "my"
 )
 
+// CalendarsCmd process selected user calendars
 var CalendarsCmd = &Command{
 	Name:    "calendars",
 	Usage:   "",
@@ -27,7 +29,7 @@ var CalendarsCmd = &Command{
 	Help:    `calendars command`,
 }
 
-func calendarsFunc(cmd *Command, args ...string) {
+func calendarsFunc(cmd *Command, _ ...string) {
 
 	options := cmd.Options
 	client := cmd.Client
@@ -58,7 +60,7 @@ func calendarsFunc(cmd *Command, args ...string) {
 				print("write data to:" + options.Output)
 				jsonData, _ := json.MarshalIndent(result, "", "  ")
 
-				writer.WriteJson(options, jsonData)
+				writer.WriteJSON(options, jsonData)
 			} else {
 				fmt.Print("No " + options.Action + " calendar to fetch\n")
 			}
@@ -84,7 +86,7 @@ func calendarsFunc(cmd *Command, args ...string) {
 				print("write data to:" + options.Output)
 				jsonData, _ := json.MarshalIndent(result, "", "  ")
 
-				writer.WriteJson(options, jsonData)
+				writer.WriteJSON(options, jsonData)
 			} else {
 				fmt.Print("No " + options.Action + " calendar to fetch\n")
 			}
@@ -110,7 +112,7 @@ func calendarsFunc(cmd *Command, args ...string) {
 				print("write data to:" + options.Output)
 				jsonData, _ := json.MarshalIndent(result, "", "  ")
 
-				writer.WriteJson(options, jsonData)
+				writer.WriteJSON(options, jsonData)
 			} else {
 				fmt.Print("No " + options.Action + " calendar to fetch\n")
 			}
@@ -132,17 +134,17 @@ func calendarsFunc(cmd *Command, args ...string) {
 
 		if err == nil {
 			if result != nil {
-				fmt.Print("Found "+options.Action+" calendar data \n")
+				fmt.Print("Found " + options.Action + " calendar data \n")
 				print("write data to:" + options.Output)
 				jsonData, _ := json.MarshalIndent(result, "", "  ")
 
-				writer.WriteJson(options, jsonData)
+				writer.WriteJSON(options, jsonData)
 			} else {
-				fmt.Print("No "+options.Action+" calendar to fetch\n")
+				fmt.Print("No " + options.Action + " calendar to fetch\n")
 			}
 
 		}
-	case "my-movies","all-movies":
+	case "my-movies", "all-movies":
 
 		fmt.Println("Get calendar: " + options.Action + " movies")
 		result, err := fetchCalendarMovies(client, options)
@@ -158,19 +160,19 @@ func calendarsFunc(cmd *Command, args ...string) {
 
 		if err == nil {
 			if result != nil {
-				fmt.Print("Found "+options.Action+" calendar data \n")
+				fmt.Print("Found " + options.Action + " calendar data \n")
 				print("write data to:" + options.Output)
 				jsonData, _ := json.MarshalIndent(result, "", "  ")
 
-				writer.WriteJson(options, jsonData)
+				writer.WriteJSON(options, jsonData)
 			} else {
-				fmt.Print("No "+options.Action+" calendar to fetch\n")
+				fmt.Print("No " + options.Action + " calendar to fetch\n")
 			}
 
 		}
 	case "my-dvd", "all-dvd":
 
-		fmt.Println("Get calendar: "+options.Action+" releases")
+		fmt.Println("Get calendar: " + options.Action + " releases")
 		result, err := fetchCalendarDvdReleases(client, options)
 		if err != nil {
 			fmt.Printf("fetch calendar "+options.Action+" error:%v", err)
@@ -184,13 +186,13 @@ func calendarsFunc(cmd *Command, args ...string) {
 
 		if err == nil {
 			if result != nil {
-				fmt.Print("Found "+options.Action+" calendar data \n")
+				fmt.Print("Found " + options.Action + " calendar data \n")
 				print("write data to:" + options.Output)
 				jsonData, _ := json.MarshalIndent(result, "", "  ")
 
-				writer.WriteJson(options, jsonData)
+				writer.WriteJSON(options, jsonData)
 			} else {
-				fmt.Print("No "+options.Action+" calendar to fetch\n")
+				fmt.Print("No " + options.Action + " calendar to fetch\n")
 			}
 
 		}
@@ -283,7 +285,7 @@ func fetchCalendarFinales(client *internal.Client, options *str.Options) ([]*str
 	if options.Action == "all-finales" {
 		actionType = "all"
 	}
-	
+
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Calendars.GetFinales(
 		context.Background(),
@@ -325,7 +327,7 @@ func fetchCalendarMovies(client *internal.Client, options *str.Options) ([]*str.
 }
 
 func fetchCalendarDvdReleases(client *internal.Client, options *str.Options) ([]*str.CalendarList, error) {
-	
+
 	if options.Action == "all-dvd" {
 		actionType = "all"
 	}

@@ -1,5 +1,7 @@
+// Package str used for structs
 package str
 
+// Job represents JSON crew member positions
 type Job struct {
 	Job          *string   `json:"job,omitempty"`
 	Jobs         *[]string `json:"jobs,omitempty"`

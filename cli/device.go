@@ -1,3 +1,4 @@
+// Package cli for basic cli functions
 package cli
 
 import (
@@ -67,7 +68,7 @@ func deviceCodeVerification(deviceToken *str.NewDeviceToken, oauth *internal.Oau
 // fetch new device code for client
 func fetchNewDeviceCodeForClient(config *cfg.Config, oauth *internal.OauthService) *str.DeviceCode {
 
-	code, resp, err := oauth.GenerateNewDeviceCodes(context.Background(), &str.NewDeviceCode{ClientId: &config.ClientId})
+	code, resp, err := oauth.GenerateNewDeviceCodes(context.Background(), &str.NewDeviceCode{ClientID: &config.ClientID})
 
 	if err != nil {
 		fail("Error generate new device code:" + err.Error())
@@ -81,7 +82,7 @@ func fetchNewDeviceCodeForClient(config *cfg.Config, oauth *internal.OauthServic
 
 }
 
-// pool new device code (open browser and wait for correct code activation)
+// PoolNewDeviceCode pool new device code (open browser and wait for correct code activation)
 func PoolNewDeviceCode(config *cfg.Config, oauth *internal.OauthService) {
 
 	fmt.Println("Polling for new device code...")
@@ -97,12 +98,12 @@ func PoolNewDeviceCode(config *cfg.Config, oauth *internal.OauthService) {
 // show new device code to stdout and open browser
 func showCodeAndOpenBrowser(device *str.DeviceCode) {
 
-	fmt.Println("Go to:" + device.VerificationUrl)
+	fmt.Println("Go to:" + device.VerificationURL)
 	fmt.Println("Enter code: " + device.UserCode)
 
-	browser_err := openBrowser(device.VerificationUrl)
-	if browser_err != nil {
-		fail("Error opening browser:" + browser_err.Error())
+	browserErr := openBrowser(device.VerificationURL)
+	if browserErr != nil {
+		fail("Error opening browser:" + browserErr.Error())
 	}
 
 }
@@ -115,7 +116,7 @@ func verifyCode(device *str.DeviceCode, config *cfg.Config, oauth *internal.Oaut
 
 		token := &str.NewDeviceToken{
 			Code:         &device.DeviceCode,
-			ClientId:     &config.ClientId,
+			ClientID:     &config.ClientID,
 			ClientSecret: &config.ClientSecret,
 		}
 		if verified := deviceCodeVerification(token, oauth, config); verified {

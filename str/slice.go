@@ -1,12 +1,13 @@
+// Package str used for structs
 package str
 
 import "strings"
 
-// Define a type named "StrSlice" as a slice of strings
-type StrSlice []string
+// Slice as a slice of strings
+type Slice []string
 
 // Get string value of slice
-func (i *StrSlice) String() string {
+func (i *Slice) String() string {
 	if len(*i) == 0 {
 		return ""
 	}
@@ -24,8 +25,8 @@ func (i *StrSlice) String() string {
 
 }
 
-// The second method is Set(value string) error
-func (i *StrSlice) Set(value string) error {
+// Set add element to slice 
+func (i *Slice) Set(value string) error {
 	*i = append(*i, value)
 	return nil
 }

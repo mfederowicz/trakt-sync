@@ -1,5 +1,7 @@
+// Package str used for structs
 package str
 
+// PersonalList represents JSON personal list object
 type PersonalList struct {
 	Name           *string      `json:"name,omitempty"`
 	Description    *string      `json:"description,omitempty"`
@@ -15,7 +17,7 @@ type PersonalList struct {
 	ItemCount      *int         `json:"item_count,omitempty"`
 	CommentCount   *int         `json:"comment_count,omitempty"`
 	Likes          *int         `json:"likes,omitempty"`
-	Ids            *Ids         `json:"ids,omitempty"`
+	IDs            *IDs         `json:"ids,omitempty"`
 	User           *UserProfile `json:"user,omitempty"`
 }
 

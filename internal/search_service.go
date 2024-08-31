@@ -1,3 +1,4 @@
+// Package internal used for client and services
 package internal
 
 import (
@@ -17,9 +18,9 @@ type SearchService Service
 // Specify the type of results by sending a single value or a comma delimited string for multiple types.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/search/text-query/get-text-query-results
-func (s *SearchService) GetTextQueryResults(ctx context.Context, search_type *string, opts *uri.ListOptions) ([]*str.SearchListItem, *str.Response, error) {
+func (s *SearchService) GetTextQueryResults(ctx context.Context, searchType *string, opts *uri.ListOptions) ([]*str.SearchListItem, *str.Response, error) {
 
-	var url = fmt.Sprintf("search/%s", *search_type)
+	var url = fmt.Sprintf("search/%s", *searchType)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -43,15 +44,15 @@ func (s *SearchService) GetTextQueryResults(ctx context.Context, search_type *st
 
 }
 
-// GetTextQueryResults Lookup items by their Trakt, IMDB, TMDB, or TVDB ID.
+// GetIDLookupResults Lookup items by their Trakt, IMDB, TMDB, or TVDB ID.
 // If you use the search url without a type it might return multiple items
 // if the id_type is not globally unique. Specify the type of results by
 // sending a single value or a comma delimited string for multiple types.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/search/id-lookup/get-id-lookup-results
-func (s *SearchService) GetIdLookupResults(ctx context.Context, format_type *string, id *string, opts *uri.ListOptions) ([]*str.SearchListItem, *str.Response, error) {
+func (s *SearchService) GetIDLookupResults(ctx context.Context, formatType *string, id *string, opts *uri.ListOptions) ([]*str.SearchListItem, *str.Response, error) {
 
-	var url = fmt.Sprintf("search/%s/%s", *format_type, *id)
+	var url = fmt.Sprintf("search/%s/%s", *formatType, *id)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err

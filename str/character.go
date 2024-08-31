@@ -1,5 +1,7 @@
+// Package str used for structs
 package str
 
+// Character represents JSON character object
 type Character struct {
 	Character     *string   `json:"character,omitempty"`
 	Characters    *[]string `json:"characters,omitempty"`

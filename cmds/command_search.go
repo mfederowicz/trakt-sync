@@ -1,3 +1,4 @@
+// Package cmds used for commands modules
 package cmds
 
 import (
@@ -14,22 +15,23 @@ import (
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
-var _search_field str.StrSlice
-var _search_type str.StrSlice
+var _searchField str.Slice
+var _searchType str.Slice
 
 var (
-	_search_action  = SearchCmd.Flag.String("a", cfg.DefaultConfig().Action, ActionUsage)
-	_search_query   = SearchCmd.Flag.String("q", cfg.DefaultConfig().Query, QueryUsage)
-	_search_id      = SearchCmd.Flag.String("i", cfg.DefaultConfig().Id, IdLookupUsage)
-	_search_id_type = SearchCmd.Flag.String("id_type", cfg.DefaultConfig().SearchIdType, IdTypeUsage)
+	_searchAction  = SearchCmd.Flag.String("a", cfg.DefaultConfig().Action, ActionUsage)
+	_searchQuery   = SearchCmd.Flag.String("q", cfg.DefaultConfig().Query, QueryUsage)
+	_searchID      = SearchCmd.Flag.String("i", cfg.DefaultConfig().ID, IDLookupUsage)
+	_searchIDType = SearchCmd.Flag.String("id_type", cfg.DefaultConfig().SearchIDType, IDTypeUsage)
 )
 
+// Usage strings in module
 const (
 	SearchActionUsage = "allow to overwrite action in search command"
-	IdLookupUsage     = "allow to overwrite id in search lookup"
-	IdTypeUsage       = "allow to overwrite id_type in search lookup"
+	IDLookupUsage     = "allow to overwrite id in search lookup"
+	IDTypeUsage       = "allow to overwrite id_type in search lookup"
 )
-
+// SearchCmd can use queries or ID lookups
 var SearchCmd = &Command{
 	Name:    "search",
 	Usage:   "",
@@ -37,7 +39,7 @@ var SearchCmd = &Command{
 	Help:    `search command: Queries will search text fields like the title and overview. ID lookups are helpful if you have an external ID and want to get the Trakt ID and info. These methods can search for movies, shows, episodes, people, and str.`,
 }
 
-func searchFunc(cmd *Command, args ...string) {
+func searchFunc(cmd *Command, _ ...string) {
 
 	options := cmd.Options
 	client := cmd.Client
@@ -70,7 +72,7 @@ func searchFunc(cmd *Command, args ...string) {
 				print("write data to:" + options.Output)
 				jsonData, _ := json.MarshalIndent(result, "", "  ")
 
-				writer.WriteJson(options, jsonData)
+				writer.WriteJSON(options, jsonData)
 			} else {
 				fmt.Print("No " + options.Action + " search to fetch\n")
 			}
@@ -79,11 +81,11 @@ func searchFunc(cmd *Command, args ...string) {
 	case "id-lookup":
 
 		fmt.Println("Get sarch: " + options.Action)
-		fmt.Println("search id_type: " + options.SearchIdType)
-		fmt.Println("search id: " + options.Id)
+		fmt.Println("search id_type: " + options.SearchIDType)
+		fmt.Println("search id: " + options.ID)
 		fmt.Println("search item_type: " + options.SearchType.String())
 
-		result, err := fetchSearchIdLookup(client, options)
+		result, err := fetchSearchIDLookup(client, options)
 		if err != nil {
 			fmt.Printf("fetch "+options.Action+" search error:%v", err)
 			os.Exit(0)
@@ -100,7 +102,7 @@ func searchFunc(cmd *Command, args ...string) {
 				print("write data to:" + options.Output)
 				jsonData, _ := json.MarshalIndent(result, "", "  ")
 
-				writer.WriteJson(options, jsonData)
+				writer.WriteJSON(options, jsonData)
 			} else {
 				fmt.Print("No " + options.Action + " search to fetch\n")
 			}
@@ -119,20 +121,20 @@ var (
 
 func init() {
 
-	SearchCmd.Flag.Var(&_search_type, "t", TypeUsage)
-	SearchCmd.Flag.Var(&_search_field, "field", FieldUsage)
+	SearchCmd.Flag.Var(&_searchType, "t", TypeUsage)
+	SearchCmd.Flag.Var(&_searchField, "field", FieldUsage)
 	SearchCmd.Run = searchFunc
 }
 
 func fetchSearchTextQuery(client *internal.Client, options *str.Options, page int) ([]*str.SearchListItem, error) {
 
 	checkRequiredFields(options)
-	search_type := options.SearchType.String()
-	search_field := options.SearchField.String()
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Query: options.Query, Field: search_field}
+	searchType := options.SearchType.String()
+	searchField := options.SearchField.String()
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Query: options.Query, Field: searchField}
 	list, resp, err := client.Search.GetTextQueryResults(
 		context.Background(),
-		&search_type,
+		&searchType,
 		&opts,
 	)
 
@@ -167,16 +169,16 @@ func fetchSearchTextQuery(client *internal.Client, options *str.Options, page in
 
 }
 
-func fetchSearchIdLookup(client *internal.Client, options *str.Options) ([]*str.SearchListItem, error) {
+func fetchSearchIDLookup(client *internal.Client, options *str.Options) ([]*str.SearchListItem, error) {
 
 	checkRequiredFields(options)
-	search_type := options.SearchType.String()
+	searchType := options.SearchType.String()
 
-	opts := uri.ListOptions{Extended: options.ExtendedInfo, Type: search_type}
-	list, _, err := client.Search.GetIdLookupResults(
+	opts := uri.ListOptions{Extended: options.ExtendedInfo, Type: searchType}
+	list, _, err := client.Search.GetIDLookupResults(
 		context.Background(),
-		&options.SearchIdType,
-		&options.Id,
+		&options.SearchIDType,
+		&options.ID,
 		&opts,
 	)
 
@@ -215,10 +217,10 @@ func checkRequiredFields(options *str.Options) {
 	}
 
 	// Check id_type values
-	if len(options.SearchIdType) > 0 {
-		if !cfg.IsValidConfigType(moduleConfig.SearchIdType, options.SearchIdType) {
+	if len(options.SearchIDType) > 0 {
+		if !cfg.IsValidConfigType(moduleConfig.SearchIDType, options.SearchIDType) {
 			fmt.Printf("Invalid --id_type flag value: %v avalable values:%v",
-				options.SearchIdType, moduleConfig.SearchIdType)
+				options.SearchIDType, moduleConfig.SearchIDType)
 			os.Exit(1)
 
 		}

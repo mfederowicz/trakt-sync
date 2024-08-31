@@ -1,3 +1,4 @@
+// Package internal used for client and services
 package internal
 
 import (
@@ -10,7 +11,6 @@ import (
 // SyncService  handles communication with the sync related
 // methods of the Trakt API.
 type SyncService Service
-
 
 // GetCollection Get all collected items in a user's collection.
 //
@@ -46,7 +46,6 @@ func (s *SyncService) GetCollection(ctx context.Context, types *string, opts *ur
 
 	return list, resp, nil
 }
-
 
 // GetWatchedHistory Returns movies and episodes that a user has watched, sorted by most recent.
 //

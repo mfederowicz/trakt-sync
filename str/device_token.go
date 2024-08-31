@@ -1,5 +1,7 @@
+// Package str used for structs
 package str
 
+// DeviceToken represents JSON response for /device/token
 type DeviceToken struct {
 	AccessToken  *string `json:"access_token"`
 	TokenType    *string `json:"token_type"`

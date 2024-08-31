@@ -1,3 +1,4 @@
+// Package cli for basic cli functions
 package cli
 
 import (
@@ -10,7 +11,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
-// valid if access_token is expired or not, and refresh if expired
+// ValidAccessToken valid if access_token is expired or not, and refresh if expired
 func ValidAccessToken(config *cfg.Config, oauth *internal.OauthService) bool {
 
 	token, err := ReadTokenFromFile(config.TokenPath)
@@ -62,19 +63,19 @@ func refreshToken(config *cfg.Config, oauth *internal.OauthService) bool {
 		return false
 	}
 
-	grant_type := "refresh_token"
+	grantType := "refresh_token"
 
-	current_token := &str.CurrentDeviceToken{
+	currentToken := &str.CurrentDeviceToken{
 		RefreshToken: &token.RefreshToken,
-		ClientId:     &config.ClientId,
+		ClientID:     &config.ClientID,
 		ClientSecret: &config.ClientSecret,
-		RedirectUri:  &config.RedirectUri,
-		GrantType:    &grant_type,
+		RedirectURI:  &config.RedirectURI,
+		GrantType:    &grantType,
 	}
 
-	new_token, resp, err := oauth.ExchangeRefreshTokenForAccessToken(
+	newToken, resp, err := oauth.ExchangeRefreshTokenForAccessToken(
 		context.Background(),
-		current_token,
+		currentToken,
 	)
 
 	if err != nil {
@@ -84,7 +85,7 @@ func refreshToken(config *cfg.Config, oauth *internal.OauthService) bool {
 
 	if resp.StatusCode == 200 {
 
-		tokenjson, _ := json.Marshal(new_token)
+		tokenjson, _ := json.Marshal(newToken)
 		if err := os.WriteFile(config.TokenPath, tokenjson, 0644); err != nil {
 			fmt.Println(err.Error())
 			return false

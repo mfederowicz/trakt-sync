@@ -1,3 +1,4 @@
+// Package cmds used for commands modules
 package cmds
 
 import (
@@ -14,6 +15,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
+// HistoryCmd returns movies and episodes that a user has watched, sorted by most recent. 
 var HistoryCmd = &Command{
 	Name:    "history",
 	Usage:   "",
@@ -21,7 +23,7 @@ var HistoryCmd = &Command{
 	Help:    `history command`,
 }
 
-func historyFunc(cmd *Command, args ...string) {
+func historyFunc(cmd *Command, _ ...string) {
 
 	options := cmd.Options
 	client := cmd.Client
@@ -29,33 +31,33 @@ func historyFunc(cmd *Command, args ...string) {
 
 	fmt.Println("fetch history lists for:" + options.UserName)
 
-	history_lists, err := fetchHistoryList(client, options, 1)
+	historyLists, err := fetchHistoryList(client, options, 1)
 	if err != nil {
 		fmt.Printf("fetch history list error:%v", err)
 		os.Exit(0)
 	}
 
-	if len(history_lists) == 0 {
+	if len(historyLists) == 0 {
 		fmt.Print("empty history lists")
 		os.Exit(0)
 	}
 
-	fmt.Printf("Found %d history elements\n", len(history_lists))
+	fmt.Printf("Found %d history elements\n", len(historyLists))
 	options.Time = cfg.GetOptionTime(options)
-	export_json := []str.ExportlistItemJson{}
-	find_duplicates := []any{}
-	for _, data := range history_lists {
-		find_duplicates, export_json = cmd.ExportListProcess(data, options, find_duplicates, export_json)
+	exportJSON := []str.ExportlistItemJSON{}
+	findDuplicates := []any{}
+	for _, data := range historyLists {
+		findDuplicates, exportJSON = cmd.ExportListProcess(data, options, findDuplicates, exportJSON)
 	}
 
-	if len(export_json) == 0 {
+	if len(exportJSON) == 0 {
 		print("Warning no data to export, probably a bug")
 		os.Exit(1)
 	}
 
 	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(export_json, "", "  ")
-	writer.WriteJson(options, jsonData)
+	jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
+	writer.WriteJSON(options, jsonData)
 
 }
 

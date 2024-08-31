@@ -1,10 +1,12 @@
+// Package str used for structs
 package str
 
 import (
 	"reflect"
 )
 
-type Ids struct {
+// IDs represents JSON ids object with ids of object from other services
+type IDs struct {
 	Trakt  *int64  `json:"trakt,omitempty"`
 	Slug   *string `json:"slug,omitempty"`
 	Imdb   *string `json:"imdb,omitempty"`
@@ -13,7 +15,8 @@ type Ids struct {
 	Tvrage *string `json:"tvrage,omitempty"`
 }
 
-func (i *Ids) HaveId(key string) bool {
+// HaveID checks if id for key exists in object
+func (i *IDs) HaveID(key string) bool {
 
 	v := reflect.ValueOf(i)
 

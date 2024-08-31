@@ -1,3 +1,4 @@
+// Package internal used for client and services
 package internal
 
 import (
@@ -157,10 +158,10 @@ func (p *PeopleService) GetRecentlyUpdatedPeople(ctx context.Context, startDate 
 	return list, resp, nil
 }
 
-// GetRecentlyUpdatedPeopleTraktIds Returns all people Trakt IDs updated since the specified UTC date and time.
+// GetRecentlyUpdatedPeopleTraktIDs Returns all people Trakt IDs updated since the specified UTC date and time.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/people/updated-ids
-func (p *PeopleService) GetRecentlyUpdatedPeopleTraktIds(ctx context.Context, startDate *string, opts *uri.ListOptions) ([]*int, *str.Response, error) {
+func (p *PeopleService) GetRecentlyUpdatedPeopleTraktIDs(ctx context.Context, startDate *string, opts *uri.ListOptions) ([]*int, *str.Response, error) {
 
 	var url string
 

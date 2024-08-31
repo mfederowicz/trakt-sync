@@ -1,3 +1,4 @@
+// Package cmds used for commands modules
 package cmds
 
 import (
@@ -5,21 +6,22 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"os"
-	"strconv"
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/writer"
+	"os"
+	"strconv"
 )
 
 var (
-	username    = "me"
-	export_data []*str.PersonalList
+	username   = "me"
+	exportData []*str.PersonalList
 
-	_listId = flag.String("i", cfg.DefaultConfig().Id, UserlistUsage)
+	_listID = flag.String("i", cfg.DefaultConfig().ID, UserlistUsage)
 )
 
+// UsersListItemsCmd Returns all personal lists for a user.
 var UsersListItemsCmd = &Command{
 	Name:    "lists",
 	Usage:   "",
@@ -27,45 +29,45 @@ var UsersListItemsCmd = &Command{
 	Help:    `lists command`,
 }
 
-func usersListItemsFunc(cmd *Command, args ...string) {
+func usersListItemsFunc(cmd *Command, _ ...string) {
 	options := cmd.Options
 	client := cmd.Client
-	intId, _ := strconv.Atoi(*_listId)
+	intID, _ := strconv.Atoi(*_listID)
 
 	fmt.Println("fetch private lists for:" + options.UserName)
 
 	username = options.UserName
-	personal_lists, _, err := fetchUsersPersonalLists(client, &username)
+	personalLists, _, err := fetchUsersPersonalLists(client, &username)
 	if err != nil {
 		fmt.Printf("fetch user list error:%v", err)
 		os.Exit(0)
 	}
 
-	if len(personal_lists) == 0 {
+	if len(personalLists) == 0 {
 		fmt.Print("empty personal lists")
 		os.Exit(0)
 	}
 
-	fmt.Printf("Found %d user list\n", len(personal_lists))
+	fmt.Printf("Found %d user list\n", len(personalLists))
 
-	var av_lists []int
+	var avLists []int
 
-	for _, data := range personal_lists {
-		fmt.Printf("Found list id %d name '%s' with %d items own by %s\n", *data.Ids.Trakt, *data.Name, *data.ItemCount, *data.User.Name)
-		av_lists = append(av_lists, int(*data.Ids.Trakt))
+	for _, data := range personalLists {
+		fmt.Printf("Found list id %d name '%s' with %d items own by %s\n", *data.IDs.Trakt, *data.Name, *data.ItemCount, *data.User.Name)
+		avLists = append(avLists, int(*data.IDs.Trakt))
 	}
 
-	if intId == 0 {
+	if intID == 0 {
 		fmt.Print("please set personal listid")
 		os.Exit(0)
 	}
 
-	if !str.ContainInt(intId, av_lists) {
-		fmt.Printf("unknown listid:%d\n", intId)
+	if !str.ContainInt(intID, avLists) {
+		fmt.Printf("unknown listid:%d\n", intID)
 		os.Exit(0)
 	}
 
-	fmt.Printf("ListId to fetch:%d\n", intId)
+	fmt.Printf("ListId to fetch:%d\n", intID)
 
 	if len(*_output) > 0 {
 		options.Output = *_output
@@ -73,20 +75,20 @@ func usersListItemsFunc(cmd *Command, args ...string) {
 		options.Output = fmt.Sprintf("export_%s_%s.json", options.Module, options.Type)
 	}
 
-	if intId > 0 && str.ContainInt(intId, av_lists) {
+	if intID > 0 && str.ContainInt(intID, avLists) {
 
-		options.Id = strconv.Itoa(intId)
-		items_export_data, _, items_err := fetchUsersPersonalList(client, options)
-		if items_err == nil {
-			if len(items_export_data) > 0 {
-				fmt.Printf("Found %d items \n", len(items_export_data))
-				export_json := []*str.UserListItem{}
-				export_json = append(export_json, items_export_data...)
+		options.ID = strconv.Itoa(intID)
+		itemsExportData, _, itemsErr := fetchUsersPersonalList(client, options)
+		if itemsErr == nil {
+			if len(itemsExportData) > 0 {
+				fmt.Printf("Found %d items \n", len(itemsExportData))
+				exportJSON := []*str.UserListItem{}
+				exportJSON = append(exportJSON, itemsExportData...)
 				print("write data to:" + options.Output)
-				jsonData, _ := json.MarshalIndent(export_json, "", "  ")
-				writer.WriteJson(options, jsonData)
+				jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
+				writer.WriteJSON(options, jsonData)
 			} else {
-				fmt.Printf("No %s items in list %d to fetch\n", options.Type, intId)
+				fmt.Printf("No %s items in list %d to fetch\n", options.Type, intID)
 			}
 
 		}
@@ -115,11 +117,11 @@ func fetchUsersPersonalLists(client *internal.Client, username *string) ([]*str.
 
 func fetchUsersPersonalList(client *internal.Client, options *str.Options) ([]*str.UserListItem, *str.Response, error) {
 
-	listIdString := options.Id
+	listIDString := options.ID
 	lists, resp, err := client.Users.GetItemstOnAPersonalList(
 		context.Background(),
 		&username,
-		&listIdString,
+		&listIDString,
 		&options.Type,
 	)
 

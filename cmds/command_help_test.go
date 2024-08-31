@@ -1,3 +1,4 @@
+// Package cmds used for commands modules
 package cmds
 
 import (
@@ -19,7 +20,7 @@ func TestHelp(t *testing.T) {
 	afero.WriteFile(AppFs, tmpPath+"/token.json", []byte("{}"), 0644)
 
 	c := cfg.DefaultConfig()
-	c.ClientId = "a"
+	c.ClientID = "a"
 	c.ClientSecret = "b"
 	c.TokenPath = tmpPath + "/token.json"
 	tests := []struct {

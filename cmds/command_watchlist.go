@@ -1,19 +1,21 @@
+// Package cmds used for commands modules
 package cmds
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
-	"strconv"
-	"time"
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
+	"os"
+	"strconv"
+	"time"
 )
 
+// WatchlistCmd Returns all items in a user's watchlist filtered by type.
 var WatchlistCmd = &Command{
 	Name:    "watchlist",
 	Usage:   "",
@@ -21,7 +23,7 @@ var WatchlistCmd = &Command{
 	Help:    `watchlist command`,
 }
 
-func watchlistFunc(cmd *Command, args ...string) {
+func watchlistFunc(cmd *Command, _ ...string) {
 	options := cmd.Options
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
@@ -41,20 +43,20 @@ func watchlistFunc(cmd *Command, args ...string) {
 
 	fmt.Printf("Found %d watchlist elements\n", len(watchlist))
 	options.Time = cfg.GetOptionTime(options)
-	export_json := []str.ExportlistItemJson{}
-	find_duplicates := []any{}
+	exportJSON := []str.ExportlistItemJSON{}
+	findDuplicates := []any{}
 	for _, data := range watchlist {
-		find_duplicates, export_json = cmd.ExportListProcess(data, options, find_duplicates, export_json)
+		findDuplicates, exportJSON = cmd.ExportListProcess(data, options, findDuplicates, exportJSON)
 	}
 
-	if len(export_json) == 0 {
+	if len(exportJSON) == 0 {
 		print("Warning no data to export, probably a bug")
 		os.Exit(1)
 	}
 
 	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(export_json, "", "  ")
-	writer.WriteJson(options, jsonData)
+	jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
+	writer.WriteJSON(options, jsonData)
 
 }
 

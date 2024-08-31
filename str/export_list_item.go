@@ -1,6 +1,8 @@
+// Package str used for structs
 package str
 
-type ExportlistItemJson struct {
+// ExportlistItemJSON represents JSON for list item
+type ExportlistItemJSON struct {
 	Title           *string    `json:"title,omitempty"`
 	Trakt           *int64     `json:"trakt,omitempty"`
 	Imdb            *string    `json:"imdb,omitempty"`
@@ -20,13 +22,14 @@ type ExportlistItemJson struct {
 	Metadata        *Metadata  `json:"metadata,omitempty"`
 }
 
-func (i ExportlistItemJson) String() string {
+func (i ExportlistItemJSON) String() string {
 	return Stringify(i)
 }
 
+// ExportlistItem represents JSON for list item
 type ExportlistItem struct {
 	Rank            *int       `json:"rank,omitempty"`
-	Id              *int64     `json:"id,omitempty"`
+	ID              *int64     `json:"id,omitempty"`
 	WatchedAt       *Timestamp `json:"watched_at,omitempty"`
 	ListedAt        *Timestamp `json:"listed_at,omitempty"`
 	CollectedAt     *Timestamp `json:"collected_at,omitempty"`
@@ -46,6 +49,7 @@ func (i ExportlistItem) String() string {
 	return Stringify(i)
 }
 
+// GetTime return Timestamp from item
 func (i ExportlistItem) GetTime() *Timestamp {
 
 	if i.WatchedAt != nil {

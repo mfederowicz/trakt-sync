@@ -1,17 +1,18 @@
+// Package cfg used for process configuration
 package cfg
 
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 	"github.com/mfederowicz/trakt-sync/str"
+	"os"
 
 	"github.com/spf13/afero"
 )
 
 // OptionsConfig represents the configuration options for each module
 type OptionsConfig struct {
-	SearchIdType []string
+	SearchIDType []string
 	SearchType   []string
 	SearchField  []string
 	Type         []string
@@ -32,7 +33,7 @@ var SearchFieldConfig = map[string][]string{
 // ModuleConfig represents the configuration options for all modules
 var ModuleConfig = map[string]OptionsConfig{
 	"watchlist": {
-		SearchIdType: []string{},
+		SearchIDType: []string{},
 		SearchType:   []string{},
 		SearchField:  []string{},
 		Type:         []string{"movies", "shows", "episodes", "persons"},
@@ -41,7 +42,7 @@ var ModuleConfig = map[string]OptionsConfig{
 		Action:       []string{},
 	},
 	"collection": {
-		SearchIdType: []string{},
+		SearchIDType: []string{},
 		SearchType:   []string{},
 		SearchField:  []string{},
 		Type:         []string{"movies", "shows", "episodes", "persons"},
@@ -50,7 +51,7 @@ var ModuleConfig = map[string]OptionsConfig{
 		Action:       []string{},
 	},
 	"history": {
-		SearchIdType: []string{},
+		SearchIDType: []string{},
 		SearchType:   []string{},
 		SearchField:  []string{},
 		Type:         []string{"movies", "shows", "episodes", "persons"},
@@ -59,7 +60,7 @@ var ModuleConfig = map[string]OptionsConfig{
 		Action:       []string{},
 	},
 	"lists": {
-		SearchIdType: []string{},
+		SearchIDType: []string{},
 		SearchType:   []string{},
 		SearchField:  []string{},
 		Type:         []string{"movies", "shows", "episodes", "persons"},
@@ -68,7 +69,7 @@ var ModuleConfig = map[string]OptionsConfig{
 		Action:       []string{},
 	},
 	"people": {
-		SearchIdType: []string{},
+		SearchIDType: []string{},
 		SearchType:   []string{},
 		SearchField:  []string{},
 		Type:         []string{"movies", "shows", "episodes", "persons", "all", "personal", "official"},
@@ -77,7 +78,7 @@ var ModuleConfig = map[string]OptionsConfig{
 		Action:       []string{},
 	},
 	"search": {
-		SearchIdType: []string{"trakt", "imdb", "tmdb", "tvdb"},
+		SearchIDType: []string{"trakt", "imdb", "tmdb", "tvdb"},
 		SearchType:   []string{"movie", "show", "episode", "person", "list", "podcast", "podcast_episode"},
 		SearchField:  []string{"title", "aliases", "biography", "description", "episode", "name", "overview", "people", "show", "tagline", "translations"},
 		Type:         []string{"movies", "shows", "episodes", "persons", "all", "personal", "official"},
@@ -108,11 +109,14 @@ func isSubset(a, b []string) bool {
 	}
 	return true
 }
+
+// SyncOptionsFromFlags reads options from user flags
 func SyncOptionsFromFlags(fs afero.Fs, config *Config, flagMap map[string]string) str.Options {
 	cfg := MergeConfigs(DefaultConfig(), config, flagMap)
 	return OptionsFromConfig(fs, cfg)
 }
 
+// OptionsFromConfig reads optionf from config file
 func OptionsFromConfig(fs afero.Fs, config *Config) str.Options {
 
 	options := &str.Options{}
@@ -126,7 +130,7 @@ func OptionsFromConfig(fs afero.Fs, config *Config) str.Options {
 	options.Format = config.Format
 	options.List = config.List
 	options.UserName = config.UserName
-	options.Id = config.Id
+	options.ID = config.ID
 	options.PerPage = config.PerPage
 	options.Sort = config.Sort
 	options.Action = config.Action
@@ -138,7 +142,7 @@ func OptionsFromConfig(fs afero.Fs, config *Config) str.Options {
 	}
 
 	str.Headers["Authorization"] = "Bearer " + token.AccessToken
-	str.Headers["trakt-api-key"] = config.ClientId
+	str.Headers["trakt-api-key"] = config.ClientID
 
 	// Check if the provided module exists in ModuleConfig
 	moduleConfig, ok := ModuleConfig[options.Module]
@@ -203,7 +207,7 @@ func IsValidConfigType(allowedTypes []string, userType string) bool {
 
 // IsValidConfigTypeSlice checks if all elements of userElements are in allowedElements,
 // considering the counts of each element.
-func IsValidConfigTypeSlice(allowedElements []string, userElements str.StrSlice) bool {
+func IsValidConfigTypeSlice(allowedElements []string, userElements str.Slice) bool {
 	if len(userElements) == 0 {
 		return true
 	}
@@ -246,6 +250,7 @@ func readTokenFromFile(fs afero.Fs, filePath string) (*str.Token, error) {
 	return &token, nil
 }
 
+// GetOptionTime config Time depends on Module name
 func GetOptionTime(options *str.Options) string {
 
 	if options.Module == "history" {

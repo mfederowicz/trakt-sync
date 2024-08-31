@@ -1,5 +1,7 @@
+// Package str used for structs
 package str
 
+// CalendarList represents JSON calendar list item
 type CalendarList struct {
 	Released   *string    `json:"released,omitempty"`
 	FirstAired *Timestamp `json:"first_aired,omitempty"`

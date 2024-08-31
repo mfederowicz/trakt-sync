@@ -1,6 +1,7 @@
+// Package str used for structs
 package str
 
-// Trakt headers.
+// Headers map with headers
 var Headers = map[string]any{
 	"Accept":            "application/json",
 	"Content-Type":      "application/json",

@@ -1,3 +1,4 @@
+// Package cmds used for commands modules
 package cmds
 
 import (
@@ -17,9 +18,10 @@ import (
 var (
 	_action    = PeopleCmd.Flag.String("a", cfg.DefaultConfig().Action, ActionUsage)
 	_startDate = PeopleCmd.Flag.String("start_date", "", StartDateUsage)
-	_personId  = PeopleCmd.Flag.String("i", cfg.DefaultConfig().Id, UserlistUsage)
+	_personID  = PeopleCmd.Flag.String("i", cfg.DefaultConfig().ID, UserlistUsage)
 )
 
+// PeopleCmd returns all data for selected person.
 var PeopleCmd = &Command{
 	Name:    "people",
 	Usage:   "",
@@ -27,7 +29,7 @@ var PeopleCmd = &Command{
 	Help:    `people command`,
 }
 
-func peopleFunc(cmd *Command, args ...string) {
+func peopleFunc(cmd *Command, _ ...string) {
 
 	options := cmd.Options
 	client := cmd.Client
@@ -51,11 +53,11 @@ func peopleFunc(cmd *Command, args ...string) {
 		if err == nil {
 			if len(updates) > 0 {
 				fmt.Printf("Found %d items \n", len(updates))
-				export_json := []*str.PersonItem{}
-				export_json = append(export_json, updates...)
+				exportJSON := []*str.PersonItem{}
+				exportJSON = append(exportJSON, updates...)
 				print("write data to:" + options.Output)
-				jsonData, _ := json.MarshalIndent(export_json, "", "  ")
-				writer.WriteJson(options, jsonData)
+				jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
+				writer.WriteJSON(options, jsonData)
 			} else {
 				fmt.Print("No update items to fetch\n")
 			}
@@ -65,7 +67,7 @@ func peopleFunc(cmd *Command, args ...string) {
 	case "updated_ids":
 		fmt.Println("Get recently updated people Trakt IDs")
 		date := time.Now().Format("2006-01-02T15:00Z")
-		updates, err := fetchPeoplesUpdatedIds(client, options, date, 1)
+		updates, err := fetchPeoplesUpdatedIDs(client, options, date, 1)
 		if err != nil {
 			fmt.Printf("fetch peoples updated ids error:%v", err)
 			os.Exit(0)
@@ -79,12 +81,12 @@ func peopleFunc(cmd *Command, args ...string) {
 		if err == nil {
 			if len(updates) > 0 {
 				fmt.Printf("Found %d items \n", len(updates))
-				export_json := []*int{}
-				export_json = append(export_json, updates...)
+				exportJSON := []*int{}
+				exportJSON = append(exportJSON, updates...)
 				print("write data to:" + options.Output)
-				jsonData, _ := json.MarshalIndent(export_json, "", "  ")
+				jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
 
-				writer.WriteJson(options, jsonData)
+				writer.WriteJSON(options, jsonData)
 			} else {
 				fmt.Print("No update items to fetch\n")
 			}
@@ -92,7 +94,7 @@ func peopleFunc(cmd *Command, args ...string) {
 		}
 
 	case "summary":
-		if len(*_personId) == 0 {
+		if len(*_personID) == 0 {
 			fmt.Print("set personId ie: -i john-wayne")
 			os.Exit(0)
 		}
@@ -114,7 +116,7 @@ func peopleFunc(cmd *Command, args ...string) {
 				print("write data to:" + options.Output)
 				jsonData, _ := json.MarshalIndent(result, "", "  ")
 
-				writer.WriteJson(options, jsonData)
+				writer.WriteJSON(options, jsonData)
 			} else {
 				fmt.Print("No person to fetch\n")
 			}
@@ -122,7 +124,7 @@ func peopleFunc(cmd *Command, args ...string) {
 		}
 
 	case "movies":
-		if len(*_personId) == 0 {
+		if len(*_personID) == 0 {
 			fmt.Print("set personId ie: -i john-wayne")
 			os.Exit(0)
 		}
@@ -144,7 +146,7 @@ func peopleFunc(cmd *Command, args ...string) {
 				print("write data to:" + options.Output)
 				jsonData, _ := json.MarshalIndent(result, "", "  ")
 
-				writer.WriteJson(options, jsonData)
+				writer.WriteJSON(options, jsonData)
 			} else {
 				fmt.Print("No movie credits to fetch\n")
 			}
@@ -152,7 +154,7 @@ func peopleFunc(cmd *Command, args ...string) {
 		}
 
 	case "shows":
-		if len(*_personId) == 0 {
+		if len(*_personID) == 0 {
 			fmt.Print("set personId ie: -i john-wayne")
 			os.Exit(0)
 		}
@@ -174,7 +176,7 @@ func peopleFunc(cmd *Command, args ...string) {
 				print("write data to:" + options.Output)
 				jsonData, _ := json.MarshalIndent(result, "", "  ")
 
-				writer.WriteJson(options, jsonData)
+				writer.WriteJSON(options, jsonData)
 			} else {
 				fmt.Print("No show credits to fetch\n")
 			}
@@ -182,7 +184,7 @@ func peopleFunc(cmd *Command, args ...string) {
 		}
 
 	case "lists":
-		if len(*_personId) == 0 {
+		if len(*_personID) == 0 {
 			fmt.Print("set personId ie: -i john-wayne")
 			os.Exit(0)
 		}
@@ -201,12 +203,12 @@ func peopleFunc(cmd *Command, args ...string) {
 		if err == nil {
 			if len(result) > 0 {
 				fmt.Printf("Found %d result \n", len(result))
-				export_json := []*str.PersonalList{}
-				export_json = append(export_json, result...)
+				exportJSON := []*str.PersonalList{}
+				exportJSON = append(exportJSON, result...)
 				print("write data to:" + options.Output)
-				jsonData, _ := json.MarshalIndent(export_json, "", "  ")
+				jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
 
-				writer.WriteJson(options, jsonData)
+				writer.WriteJSON(options, jsonData)
 			} else {
 				fmt.Print("No lists to fetch\n")
 			}
@@ -267,10 +269,10 @@ func fetchPeoplesUpdates(client *internal.Client, options *str.Options, startDat
 
 }
 
-func fetchPeoplesUpdatedIds(client *internal.Client, options *str.Options, startDate string, page int) ([]*int, error) {
+func fetchPeoplesUpdatedIDs(client *internal.Client, options *str.Options, startDate string, page int) ([]*int, error) {
 
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
-	list, resp, err := client.People.GetRecentlyUpdatedPeopleTraktIds(
+	list, resp, err := client.People.GetRecentlyUpdatedPeopleTraktIDs(
 		context.Background(),
 		&startDate,
 		&opts,
@@ -291,7 +293,7 @@ func fetchPeoplesUpdatedIds(client *internal.Client, options *str.Options, start
 
 			// Fetch items from the next page
 			nextPage := page + 1
-			nextPageItems, err := fetchPeoplesUpdatedIds(client, options, startDate, nextPage)
+			nextPageItems, err := fetchPeoplesUpdatedIDs(client, options, startDate, nextPage)
 			if err != nil {
 				return nil, err
 			}
@@ -312,7 +314,7 @@ func fetchSinglePerson(client *internal.Client, options *str.Options) (*str.Pers
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetSinglePerson(
 		context.Background(),
-		&options.Id,
+		&options.ID,
 		&opts,
 	)
 
@@ -329,7 +331,7 @@ func fetchMovieCredits(client *internal.Client, options *str.Options) (*str.Pers
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetMovieCredits(
 		context.Background(),
-		&options.Id,
+		&options.ID,
 		&opts,
 	)
 
@@ -346,7 +348,7 @@ func fetchShowCredits(client *internal.Client, options *str.Options) (*str.Perso
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetShowCredits(
 		context.Background(),
-		&options.Id,
+		&options.ID,
 		&opts,
 	)
 
@@ -363,7 +365,7 @@ func fetchListsContainingThisPerson(client *internal.Client, options *str.Option
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.People.GetListsContainingThisPerson(
 		context.Background(),
-		&options.Id,
+		&options.ID,
 		&options.Type,
 		&options.Sort,
 		&opts,

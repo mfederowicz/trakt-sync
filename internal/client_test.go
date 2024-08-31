@@ -9,7 +9,7 @@ import (
 	"net/url"
 	"strings"
 	"testing"
-	"trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/str"
 )
 
 const (
@@ -25,7 +25,7 @@ func setup() (client *Client, mux *http.ServeMux, serverURL string, teardown fun
 	mux = http.NewServeMux()
 	apiHandler := http.NewServeMux()
 	apiHandler.Handle(baseURLPath+"/", http.StripPrefix(baseURLPath, mux))
-	apiHandler.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
+	apiHandler.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
 		http.Error(w, "Client.BaseURL path prefix is not preserved in the request URL.", http.StatusInternalServerError)
 	})
 
@@ -45,7 +45,7 @@ func TestNewRequest(t *testing.T) {
 	c := NewClient(nil)
 
 	inURL, outURL := "/foo", defaultBaseURL+"foo"
-	inBody, outBody := &str.NewDeviceCode{ClientId: str.String("abc")}, `{"client_id":"abc"}`+"\n"
+	inBody, outBody := &str.NewDeviceCode{ClientID: str.String("abc")}, `{"client_id":"abc"}`+"\n"
 	req, _ := c.NewRequest("GET", inURL, inBody)
 
 	// test that relative URL was expanded
@@ -133,15 +133,15 @@ func TestBareDo_rate_limit_reset(t *testing.T) {
 		fmt.Fprint(w, "Body")
 	})
 
-	req_next, err_next := client.NewRequest("GET", "test-url-next", nil)
-	if err_next != nil {
+	reqNext, errNext := client.NewRequest("GET", "test-url-next", nil)
+	if errNext != nil {
 		t.Fatalf("client.NewRequest returned error: %v", err)
 	}
 
-	_, err_bare := client.BareDo(ctx, req_next)
-	if err_bare != nil {
+	_, errBare := client.BareDo(ctx, reqNext)
+	if errBare != nil {
 		// Update rate limit reset.
-		rerr, _ := err_bare.(*AbuseRateLimitError)
+		rerr, _ := errBare.(*AbuseRateLimitError)
 		if !strings.Contains(rerr.Message, "API rate limit exceeded until") {
 			t.Fatal("Rate Limit Error msg not valid")
 		}

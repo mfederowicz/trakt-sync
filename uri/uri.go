@@ -1,3 +1,4 @@
+// Package uri used for url operations
 package uri
 
 import (
@@ -9,11 +10,13 @@ import (
 	"strings"
 )
 
+// config slices
 var (
 	StatusOptions = []string{"running series", "continuing", "in production", "planned", "upcoming", "pilot", "canceled", "ended"}
 	EpisodeTypes  = []string{"standard", "series_premiere", "season_premiere", "mid_season_finale", "mid_season_premiere", "season_finale", "series_finale"}
 )
 
+// Pagination represents pagination params
 type Pagination struct {
 	// For paginated result sets, page of results to retrieve.
 	Page int `url:"page,omitempty"`
@@ -21,6 +24,7 @@ type Pagination struct {
 	Limit int `url:"limit,omitempty"`
 }
 
+// RatingRange represents min/max int parameters
 type RatingRange struct {
 	Min int `url:"min,omitempty"`
 	Max int `url:"max,omitempty"`
@@ -37,6 +41,7 @@ func (rr RatingRange) String() string {
 	return fmt.Sprintf("%d-%d", rr.Min, rr.Max)
 }
 
+// RatingRangeFloat represents min/max float parameters
 type RatingRangeFloat struct {
 	Min float32 `url:"min,omitempty"`
 	Max float32 `url:"max,omitempty"`
@@ -54,6 +59,7 @@ func (rr RatingRangeFloat) String() string {
 
 }
 
+// VotesRange represents min/max int votes parameters
 type VotesRange struct {
 	Min int `url:"min,omitempty"`
 	Max int `url:"max,omitempty"`
@@ -71,6 +77,7 @@ func (r VotesRange) String() string {
 	return fmt.Sprintf("%d-%d", r.Min, r.Max)
 }
 
+// ImdbVotesRange represents min/max int imdb votes parameters
 type ImdbVotesRange struct {
 	Min int `url:"min,omitempty"`
 	Max int `url:"max,omitempty"`
@@ -88,6 +95,7 @@ func (r ImdbVotesRange) String() string {
 	return fmt.Sprintf("%d-%d", r.Min, r.Max)
 }
 
+// TmdbRatingRange represents min/max float tmdb rating parameters
 type TmdbRatingRange struct {
 	Min float32 `url:"min,omitempty"`
 	Max float32 `url:"max,omitempty"`
@@ -119,9 +127,9 @@ type ListOptions struct {
 	EpisodeTypes   []string         `url:"episode_types,omitempty"`
 	Countries      []string         `url:"countries,omitempty"`
 	Languages      []string         `url:"languages,omitempty"`
-	StudioIds      []int            `url:"studio_ids,omitempty"`
+	StudioIDs      []int            `url:"studio_ids,omitempty"`
 	Status         []string         `url:"status,omitempty"`
-	NetworkIds     []int            `url:"network_ids,omitempty"`
+	NetworkIDs     []int            `url:"network_ids,omitempty"`
 	Ratings        RatingRange      `url:"ratings,omitempty"`
 	TmdbVotes      VotesRange       `url:"tmdb_votes,omitempty"`
 	ImdbRatings    RatingRange      `url:"imdb_ratings,omitempty"`
@@ -309,7 +317,7 @@ func EncodeParams(values url.Values) string {
 	if len(values) == 0 {
 		return ""
 	}
-	
+
 	var buf strings.Builder
 	keys := make([]string, 0, len(values))
 	for k := range values {

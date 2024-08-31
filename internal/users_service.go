@@ -1,3 +1,4 @@
+// Package internal used for client and services
 package internal
 
 import (
@@ -13,12 +14,12 @@ type UsersService Service
 // GetItemstOnAPersonalList Get all items on a personal list.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/users/list-items/get-items-on-a-personal-list
-func (u *UsersService) GetItemstOnAPersonalList(ctx context.Context, id *string, list_id *string, t *string) ([]*str.UserListItem, *str.Response, error) {
+func (u *UsersService) GetItemstOnAPersonalList(ctx context.Context, id *string, listID *string, t *string) ([]*str.UserListItem, *str.Response, error) {
 
 	var url string
 
 	if id != nil {
-		url = fmt.Sprintf("users/%s/lists/%s/items/%s", *id, *list_id, *t)
+		url = fmt.Sprintf("users/%s/lists/%s/items/%s", *id, *listID, *t)
 	} else {
 		url = "users/me/lists/watchlist/items/movies"
 	}

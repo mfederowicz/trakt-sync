@@ -1,3 +1,4 @@
+// Package str used for structs
 package str
 
 import (
@@ -22,7 +23,6 @@ func Stringify(message interface{}) string {
 }
 
 // stringifyValue was heavily inspired by the goprotobuf library.
-
 func stringifyValue(w *bytes.Buffer, val reflect.Value) {
 	if val.Kind() == reflect.Ptr && val.IsNil() {
 		w.Write([]byte("<nil>"))
@@ -90,7 +90,7 @@ func stringifyValue(w *bytes.Buffer, val reflect.Value) {
 		}
 	}
 }
-
+// ContainString check if string exists in slice
 func ContainString(key string, s []string) bool {
 	for _, v := range s {
 		if v == key {
@@ -101,6 +101,7 @@ func ContainString(key string, s []string) bool {
 	return false
 }
 
+// ContainInt check if int exists in slice
 func ContainInt(key int, s []int) bool {
 	for _, v := range s {
 		if v == key {
@@ -111,11 +112,13 @@ func ContainInt(key int, s []int) bool {
 	return false
 }
 
+// Formatc helper function for FormatComplex in stringFormatter 
 func Formatc(pattern string, data map[string]any) string {
 
 	return stringFormatter.FormatComplex(pattern, data)
 }
 
+// Format helper function for Fomat in stringFormatter
 func Format(pattern string, args ...any) string {
 
 	return stringFormatter.Format(pattern, args...)

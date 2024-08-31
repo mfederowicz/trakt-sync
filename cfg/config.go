@@ -1,53 +1,54 @@
+// Package cfg used for process configuration
 package cfg
 
 import (
 	"errors"
 	"flag"
 	"fmt"
+	"github.com/mfederowicz/trakt-sync/str"
 	"os"
 	"os/user"
 	"path/filepath"
 	"strconv"
 	"strings"
-	"github.com/mfederowicz/trakt-sync/str"
 
 	"github.com/BurntSushi/toml"
 	"github.com/spf13/afero"
 )
 
-// Trakt config.
+// Config struct for app.
 type Config struct {
-	UserName     string   `toml:"username"`
-	ConfigPath   string   `toml:"config_path"`
-	Action       string   `toml:"action"`
-	TokenPath    string   `toml:"token_path"`
-	Type         string   `toml:"type"`
-	Output       string   `toml:"output"`
-	Id           string   `toml:"id"`
-	SearchIdType string   `toml:"search_id_type"`
-	RedirectUri  string   `toml:"redirect_uri"`
-	ClientSecret string   `toml:"client_secret"`
-	List         string   `toml:"list"`
-	Format       string   `toml:"format"`
-	ClientId     string   `toml:"client_id"`
-	Query        string   `toml:"query"`
-	Field        string   `toml:"field"`
-	Sort         string   `toml:"sort"`
-	Module       string   `toml:"module"`
-	SearchField  str.StrSlice `toml:"search_field"`
-	SearchType   str.StrSlice `toml:"search_type"`
-	WarningCode  int      `toml:"warningCode"`
-	ErrorCode    int      `toml:"errorCode"`
-	Days         int      `toml:"days"`
-	PerPage      int      `toml:"per_page"`
-	Verbose      bool     `toml:"verbose"`
+	UserName     string       `toml:"username"`
+	ConfigPath   string       `toml:"config_path"`
+	Action       string       `toml:"action"`
+	TokenPath    string       `toml:"token_path"`
+	Type         string       `toml:"type"`
+	Output       string       `toml:"output"`
+	ID           string       `toml:"id"`
+	SearchIDType string       `toml:"search_id_type"`
+	RedirectURI  string       `toml:"redirect_uri"`
+	ClientSecret string       `toml:"client_secret"`
+	List         string       `toml:"list"`
+	Format       string       `toml:"format"`
+	ClientID     string       `toml:"client_id"`
+	Query        string       `toml:"query"`
+	Field        string       `toml:"field"`
+	Sort         string       `toml:"sort"`
+	Module       string       `toml:"module"`
+	SearchField  str.Slice `toml:"search_field"`
+	SearchType   str.Slice `toml:"search_type"`
+	WarningCode  int          `toml:"warningCode"`
+	ErrorCode    int          `toml:"errorCode"`
+	Days         int          `toml:"days"`
+	PerPage      int          `toml:"per_page"`
+	Verbose      bool         `toml:"verbose"`
 }
 
 var (
 	versionFlag bool
 )
 
-
+// InitConfig of app
 func InitConfig() *Config {
 	flagMap := make(map[string]string)
 	flag.VisitAll(func(f *flag.Flag) {
@@ -59,7 +60,7 @@ func InitConfig() *Config {
 	return MergeConfigs(DefaultConfig(), configFromFile, flagMap)
 }
 
-// generate map of used flags
+// GenUsedFlagMap map of used flags
 func GenUsedFlagMap() map[string]bool {
 
 	flagset := make(map[string]bool)
@@ -76,22 +77,23 @@ func GenUsedFlagMap() map[string]bool {
 
 }
 
+// MergeConfigs from two sources file and flags
 func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string) *Config {
 
 	flagset := GenUsedFlagMap()
 	//fmt.Println(flagConfig)
 
 	// Use values from fileConfig if present
-	if len(fileConfig.ClientId) > 0 && fileConfig.ClientId != defaultConfig.ClientId {
-		defaultConfig.ClientId = fileConfig.ClientId
+	if len(fileConfig.ClientID) > 0 && fileConfig.ClientID != defaultConfig.ClientID {
+		defaultConfig.ClientID = fileConfig.ClientID
 	}
 
 	if len(fileConfig.ClientSecret) > 0 && fileConfig.ClientSecret != defaultConfig.ClientSecret {
 		defaultConfig.ClientSecret = fileConfig.ClientSecret
 	}
 
-	if len(fileConfig.RedirectUri) > 0 && fileConfig.RedirectUri != defaultConfig.RedirectUri {
-		defaultConfig.RedirectUri = fileConfig.RedirectUri
+	if len(fileConfig.RedirectURI) > 0 && fileConfig.RedirectURI != defaultConfig.RedirectURI {
+		defaultConfig.RedirectURI = fileConfig.RedirectURI
 	}
 
 	if len(fileConfig.TokenPath) > 0 && fileConfig.TokenPath != defaultConfig.TokenPath {
@@ -154,8 +156,8 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 		defaultConfig.List = fileConfig.List
 	}
 
-	if fileConfig.Id == "" && fileConfig.Id != defaultConfig.Id {
-		defaultConfig.Id = fileConfig.Id
+	if fileConfig.ID == "" && fileConfig.ID != defaultConfig.ID {
+		defaultConfig.ID = fileConfig.ID
 	}
 
 	if fileConfig.PerPage > 0 && fileConfig.PerPage != defaultConfig.PerPage {
@@ -203,9 +205,9 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 	}
 
 	if flagset["i"] && flagConfig["i"] != "" {
-		defaultConfig.Id = flagConfig["i"]
-	} else if fileConfig.Id != "" {
-		defaultConfig.Id = fileConfig.Id
+		defaultConfig.ID = flagConfig["i"]
+	} else if fileConfig.ID != "" {
+		defaultConfig.ID = fileConfig.ID
 	}
 
 	if flagset["m"] && flagConfig["m"] != "" {
@@ -230,6 +232,7 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 	return defaultConfig
 }
 
+// ReadConfigFromFile reads config from file stored on disc
 func ReadConfigFromFile(fs afero.Fs, filename string) *Config {
 
 	var config Config
@@ -279,12 +282,13 @@ func parseConfig(fs afero.Fs, path string, config *Config) error {
 	return nil
 }
 
+// DefaultConfig config with default values
 func DefaultConfig() *Config {
 
 	return &Config{
-		ClientId:     "",
+		ClientID:     "",
 		ClientSecret: "",
-		RedirectUri:  "",
+		RedirectURI:  "",
 		WarningCode:  0,
 		ErrorCode:    0,
 		Verbose:      false,
@@ -295,20 +299,20 @@ func DefaultConfig() *Config {
 		Module:       "history",
 		Action:       "",
 		Type:         "movies",
-		SearchIdType: "trakt",
+		SearchIDType: "trakt",
 		SearchType:   []string{},
 		SearchField:  []string{},
 		Sort:         "rank",
 		List:         "history",
 		UserName:     "me",
-		Id:           "",
+		ID:           "",
 		PerPage:      100,
 	}
 }
 
 func normalizeConfig(config *Config) {
 
-	if config.ClientId == "" || config.ClientSecret == "" {
+	if config.ClientID == "" || config.ClientSecret == "" {
 		fmt.Println("client_id and client_secret are required fields, update your config file")
 		os.Exit(0)
 	}

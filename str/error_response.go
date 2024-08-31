@@ -1,3 +1,4 @@
+// Package str used for structs
 package str
 
 import (
@@ -5,7 +6,7 @@ import (
 	"net/http"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
-
+// ErrorResponse represents reponse with message 
 type ErrorResponse struct {
 	Response *http.Response `json:"-"`       // HTTP response that caused this error
 	Message  string         `json:"message"` // error message

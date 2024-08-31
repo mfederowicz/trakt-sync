@@ -1,3 +1,4 @@
+// Package cmds used for commands modules
 package cmds
 
 import (
@@ -10,7 +11,7 @@ import (
 
 	"github.com/spf13/afero"
 )
-
+// Commands is list of all commands
 var Commands = []*Command{
 	HelpCmd,
 	HistoryCmd,
@@ -21,6 +22,8 @@ var Commands = []*Command{
 	CalendarsCmd,
 	SearchCmd,
 }
+
+// ModulesRuntime core function for process commands 
 func ModulesRuntime(args []string, config *cfg.Config, client *internal.Client, fs afero.Fs) {
 
 	var found []*Command

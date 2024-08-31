@@ -18,7 +18,7 @@ var (
 	options      = &str.Options{}
 	_verbose     = flag.Bool("v", false, cmds.VerboseUsage)
 	_version     = flag.Bool("version", false, cmds.VersionUsage)
-	_config_path = flag.String("c", cfg.DefaultConfig().ConfigPath, cmds.ConfigUsage)
+	_configPath = flag.String("c", cfg.DefaultConfig().ConfigPath, cmds.ConfigUsage)
 )
 
 func main() {

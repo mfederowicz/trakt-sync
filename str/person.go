@@ -1,9 +1,11 @@
+// Package str used for structs
 package str
 
+// Person represents JSON person object
 type Person struct {
 	Name               *string    `json:"name,omitempty"`
-	Ids                *Ids       `json:"ids,omitempty"`
-	SocialIds          *SocialIds `json:"social_ids,omitempty"`
+	IDs                *IDs       `json:"ids,omitempty"`
+	SocialIDs          *SocialIDs `json:"social_ids,omitempty"`
 	Biography          *string    `json:"biography,omitempty"`
 	Birthday           *string    `json:"birthday,omitempty"`
 	Death              *string    `json:"death,omitempty"`

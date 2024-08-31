@@ -1,5 +1,7 @@
+// Package str used for structs
 package str
 
+// Metadata represents JSON media metadata object
 type Metadata struct {
 	MediaType     *string `json:"media_type,omitempty"`
 	Resolution    *string `json:"resolution,omitempty"`

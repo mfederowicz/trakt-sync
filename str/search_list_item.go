@@ -1,5 +1,7 @@
+// Package str used for structs
 package str
 
+// SearchListItem represents JSON search response object
 type SearchListItem struct {
 	Type           *string         `json:"type,omitempty"`
 	Score          *float32        `json:"score,omitempty"`

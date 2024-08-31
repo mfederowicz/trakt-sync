@@ -1,9 +1,11 @@
+// Package str used for structs
 package str
 
+// Show represents JSON show object
 type Show struct {
 	Title                 *string    `json:"title,omitempty"`
 	Year                  *int       `json:"year,omitempty"`
-	Ids                   *Ids       `json:"ids,omitempty"`
+	IDs                   *IDs       `json:"ids,omitempty"`
 	Tagline               *string    `json:"tagline,omitempty"`
 	Overview              *string    `json:"overview,omitempty"`
 	FirstAired            *Timestamp `json:"first_aired,omitempty"`

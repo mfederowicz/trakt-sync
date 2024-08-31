@@ -1,3 +1,4 @@
+// Package internal used for client and services
 package internal
 
 import (
@@ -6,6 +7,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/uri"
 	"io"
 	"net/http"
 	"net/url"
@@ -13,10 +16,9 @@ import (
 	"strings"
 	"sync"
 	"time"
-	"github.com/mfederowicz/trakt-sync/str"
-	"github.com/mfederowicz/trakt-sync/uri"
 )
 
+// basic consts for client
 const (
 	Version                   = "2"
 	defaultBaseURL            = "https://api.trakt.tv/"
@@ -31,6 +33,7 @@ var errNonNilContext = errors.New("context must be non-nil")
 
 type requestContext uint8
 
+// AbuseRateLimitError occurs when trakt.tv returns 429 too many requests header
 type AbuseRateLimitError struct {
 	Response   *http.Response
 	RetryAfter *time.Duration
@@ -49,6 +52,7 @@ func (r *AbuseRateLimitError) Error() string {
 // RequestOption represents an option that can modify an http.Request.
 type RequestOption func(req *http.Request)
 
+// A Client manages communication with the trakt.tv API.
 type Client struct {
 	RateLimitReset time.Time
 	client         *http.Client
@@ -64,6 +68,7 @@ type Client struct {
 	rateMu         sync.Mutex
 }
 
+// UpdateHeaders is for update client headers map
 func (c *Client) UpdateHeaders(headers map[string]any) {
 	c.headers = headers
 }
@@ -159,6 +164,7 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*str
 	return resp, err
 }
 
+// BareDo sends an API request and lets you handle the api response.
 func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, error) {
 
 	if ctx == nil {
@@ -201,12 +207,12 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 
 	response := c.NewResponse(resp)
 
-	err_check := c.CheckResponse(resp)
-	if err_check != nil {
+	errCheck := c.CheckResponse(resp)
+	if errCheck != nil {
 		defer resp.Body.Close()
 
 		// Update rate limit reset.
-		rerr, ok := err_check.(*AbuseRateLimitError)
+		rerr, ok := errCheck.(*AbuseRateLimitError)
 		if ok && rerr.RetryAfter != nil {
 			c.rateMu.Lock()
 			c.RateLimitReset = time.Now().Add(*rerr.RetryAfter)
@@ -217,6 +223,7 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 	return response, nil
 }
 
+// CheckResponse checks if api response have errors.
 func (c *Client) CheckResponse(r *http.Response) error {
 
 	if c := r.StatusCode; 200 <= c && c <= 299 {
@@ -252,7 +259,7 @@ func (c *Client) CheckResponse(r *http.Response) error {
 	}
 
 }
-
+// CheckRetryAfter check Retry After header.
 func (c *Client) CheckRetryAfter(req *http.Request) *AbuseRateLimitError {
 
 	c.rateMu.Lock()
@@ -278,12 +285,12 @@ func (c *Client) CheckRetryAfter(req *http.Request) *AbuseRateLimitError {
 
 	return nil
 }
-
+// WithContext pass context to request
 func (c *Client) WithContext(ctx context.Context, req *http.Request) *http.Request {
 	return req.WithContext(ctx)
 }
 
-// parseRate parses the rate related headers.
+// ParseRate parses the rate related headers.
 func (c *Client) ParseRate(r *http.Response) str.Rate {
 
 	var rate str.Rate
@@ -294,7 +301,7 @@ func (c *Client) ParseRate(r *http.Response) str.Rate {
 	return rate
 }
 
-// newResponse creates a new Response for the provided http.Response.
+// NewResponse creates a new Response for the provided http.Response.
 // r must not be nil.
 func (c *Client) NewResponse(r *http.Response) *str.Response {
 
@@ -303,7 +310,7 @@ func (c *Client) NewResponse(r *http.Response) *str.Response {
 	return response
 }
 
-// parseRateLimit parses related headers, and returns the time to retry after.
+// ParseRateLimit parses related headers, and returns the time to retry after.
 func (c *Client) ParseRateLimit(r *http.Response) *time.Duration {
 	// number of seconds that one should
 	// wait before resuming making requests.

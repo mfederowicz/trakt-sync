@@ -1,3 +1,4 @@
+// Package cmds used for commands modules
 package cmds
 
 import (
@@ -15,9 +16,12 @@ import (
 	"golang.org/x/text/language"
 )
 
+// Command vars
 var (
 	AppFs = afero.NewOsFs()
 )
+
+// HelpCmd shows help on the trakt-sync command and subcommands.
 var HelpCmd = &Command{
 	Name:    "help",
 	Usage:   "[<commands>]",
@@ -26,7 +30,8 @@ var HelpCmd = &Command{
 
 var helpDump = HelpCmd.Flag.Bool("godoc", false, "Dump the godoc output for the command(s)")
 
-func HelpFunc(cmd *Command, args ...string) {
+// HelpFunc shows help message for command
+func HelpFunc(_ *Command, args ...string) {
 	var selected []*Command
 
 	if len(args) > 0 {

@@ -1,3 +1,4 @@
+// Package cli for basic cli functions
 package cli
 
 import (
@@ -14,6 +15,7 @@ var (
 	builtBy = "unknown"
 )
 
+// GenAppVersion gen app verrsion string
 func GenAppVersion() {
 
 	var buildInfo string
