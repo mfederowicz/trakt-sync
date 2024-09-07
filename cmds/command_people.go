@@ -5,9 +5,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
 	"strconv"
 	"time"
+
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -29,7 +29,7 @@ var PeopleCmd = &Command{
 	Help:    `people command`,
 }
 
-func peopleFunc(cmd *Command, _ ...string) {
+func peopleFunc(cmd *Command, _ ...string) error {
 
 	options := cmd.Options
 	client := cmd.Client
@@ -41,27 +41,22 @@ func peopleFunc(cmd *Command, _ ...string) {
 		date := time.Now().Format("2006-01-02T15:00Z")
 		updates, err := fetchPeoplesUpdates(client, options, date, 1)
 		if err != nil {
-			fmt.Printf("fetch peoples updates error:%v", err)
-			os.Exit(0)
+			return fmt.Errorf("fetch peoples updates error:%w", err)
 		}
 
 		if len(updates) == 0 {
-			fmt.Print("empty updates lists")
-			os.Exit(0)
+			return fmt.Errorf("empty updates lists")
 		}
 
-		if err == nil {
-			if len(updates) > 0 {
-				fmt.Printf("Found %d items \n", len(updates))
-				exportJSON := []*str.PersonItem{}
-				exportJSON = append(exportJSON, updates...)
-				print("write data to:" + options.Output)
-				jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
-				writer.WriteJSON(options, jsonData)
-			} else {
-				fmt.Print("No update items to fetch\n")
-			}
-
+		if len(updates) > 0 {
+			fmt.Printf("Found %d items \n", len(updates))
+			exportJSON := []*str.PersonItem{}
+			exportJSON = append(exportJSON, updates...)
+			print("write data to:" + options.Output)
+			jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
+			writer.WriteJSON(options, jsonData)
+		} else {
+			fmt.Print("No update items to fetch\n")
 		}
 
 	case "updated_ids":
@@ -69,156 +64,110 @@ func peopleFunc(cmd *Command, _ ...string) {
 		date := time.Now().Format("2006-01-02T15:00Z")
 		updates, err := fetchPeoplesUpdatedIDs(client, options, date, 1)
 		if err != nil {
-			fmt.Printf("fetch peoples updated ids error:%v", err)
-			os.Exit(0)
+			return fmt.Errorf("fetch peoples updated ids error:%w", err)
 		}
 
 		if len(updates) == 0 {
-			fmt.Print("empty updates lists")
-			os.Exit(0)
+			return fmt.Errorf("empty updates lists")
 		}
 
-		if err == nil {
-			if len(updates) > 0 {
-				fmt.Printf("Found %d items \n", len(updates))
-				exportJSON := []*int{}
-				exportJSON = append(exportJSON, updates...)
-				print("write data to:" + options.Output)
-				jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
+		if len(updates) > 0 {
+			fmt.Printf("Found %d items \n", len(updates))
+			exportJSON := []*int{}
+			exportJSON = append(exportJSON, updates...)
+			print("write data to:" + options.Output)
+			jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
 
-				writer.WriteJSON(options, jsonData)
-			} else {
-				fmt.Print("No update items to fetch\n")
-			}
-
+			writer.WriteJSON(options, jsonData)
+		} else {
+			fmt.Print("No update items to fetch\n")
 		}
 
 	case "summary":
 		if len(*_personID) == 0 {
-			fmt.Print("set personId ie: -i john-wayne")
-			os.Exit(0)
+			return fmt.Errorf("set personId ie: -i john-wayne")
 		}
 		fmt.Println("Get a single person")
 		result, err := fetchSinglePerson(client, options)
 		if err != nil {
-			fmt.Printf("fetch single person error:%v", err)
-			os.Exit(0)
+			return fmt.Errorf("fetch single person error:%w", err)
 		}
 
 		if result == nil {
-			fmt.Print("empty result")
-			os.Exit(0)
+			return fmt.Errorf("empty result")
 		}
 
-		if err == nil {
-			if result != nil {
-				fmt.Print("Found person \n")
-				print("write data to:" + options.Output)
-				jsonData, _ := json.MarshalIndent(result, "", "  ")
+		fmt.Print("Found person \n")
+		print("write data to:" + options.Output)
+		jsonData, _ := json.MarshalIndent(result, "", "  ")
 
-				writer.WriteJSON(options, jsonData)
-			} else {
-				fmt.Print("No person to fetch\n")
-			}
-
-		}
+		writer.WriteJSON(options, jsonData)
 
 	case "movies":
 		if len(*_personID) == 0 {
-			fmt.Print("set personId ie: -i john-wayne")
-			os.Exit(0)
+			return fmt.Errorf("set personId ie: -i john-wayne")
 		}
 		fmt.Println("Get movie credits")
 		result, err := fetchMovieCredits(client, options)
 		if err != nil {
-			fmt.Printf("fetch movie credits error:%v", err)
-			os.Exit(0)
+			return fmt.Errorf("fetch movie credits error:%v", err)
 		}
 
 		if result == nil {
-			fmt.Print("empty result")
-			os.Exit(0)
+			return fmt.Errorf("empty result")
 		}
 
-		if err == nil {
-			if result != nil {
-				fmt.Print("Found movie credits data \n")
-				print("write data to:" + options.Output)
-				jsonData, _ := json.MarshalIndent(result, "", "  ")
-
-				writer.WriteJSON(options, jsonData)
-			} else {
-				fmt.Print("No movie credits to fetch\n")
-			}
-
-		}
+		fmt.Print("Found movie credits data \n")
+		print("write data to:" + options.Output)
+		jsonData, _ := json.MarshalIndent(result, "", "  ")
+		writer.WriteJSON(options, jsonData)
 
 	case "shows":
 		if len(*_personID) == 0 {
-			fmt.Print("set personId ie: -i john-wayne")
-			os.Exit(0)
+			return fmt.Errorf("set personId ie: -i john-wayne")
 		}
 		fmt.Println("Get show credits")
 		result, err := fetchShowCredits(client, options)
 		if err != nil {
-			fmt.Printf("fetch show credits error:%v", err)
-			os.Exit(0)
+			return fmt.Errorf("fetch show credits error:%w", err)
 		}
 
 		if result == nil {
-			fmt.Print("empty result")
-			os.Exit(0)
+			return fmt.Errorf("empty result")
 		}
 
-		if err == nil {
-			if result != nil {
-				fmt.Print("Found show credits data \n")
-				print("write data to:" + options.Output)
-				jsonData, _ := json.MarshalIndent(result, "", "  ")
+		fmt.Print("Found show credits data \n")
+		print("write data to:" + options.Output)
+		jsonData, _ := json.MarshalIndent(result, "", "  ")
 
-				writer.WriteJSON(options, jsonData)
-			} else {
-				fmt.Print("No show credits to fetch\n")
-			}
-
-		}
+		writer.WriteJSON(options, jsonData)
 
 	case "lists":
 		if len(*_personID) == 0 {
-			fmt.Print("set personId ie: -i john-wayne")
-			os.Exit(0)
+			return fmt.Errorf("set personId ie: -i john-wayne")
 		}
 		fmt.Println("Get lists containing this person")
 		result, err := fetchListsContainingThisPerson(client, options, 1)
 		if err != nil {
-			fmt.Printf("fetch lists error:%v", err)
-			os.Exit(0)
+			return fmt.Errorf("fetch lists error:%v", err)
 		}
 
 		if len(result) == 0 {
-			fmt.Print("empty lists")
-			os.Exit(0)
+			return fmt.Errorf("empty lists")
 		}
 
-		if err == nil {
-			if len(result) > 0 {
-				fmt.Printf("Found %d result \n", len(result))
-				exportJSON := []*str.PersonalList{}
-				exportJSON = append(exportJSON, result...)
-				print("write data to:" + options.Output)
-				jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
+		fmt.Printf("Found %d result \n", len(result))
+		exportJSON := []*str.PersonalList{}
+		exportJSON = append(exportJSON, result...)
+		print("write data to:" + options.Output)
+		jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
 
-				writer.WriteJSON(options, jsonData)
-			} else {
-				fmt.Print("No lists to fetch\n")
-			}
-
-		}
+		writer.WriteJSON(options, jsonData)
 
 	default:
 		fmt.Println("possible actions: updates, updated_ids, summary, movies, shows, lists")
 	}
-
+	return nil
 }
 
 var (
@@ -344,7 +293,7 @@ func fetchMovieCredits(client *internal.Client, options *str.Options) (*str.Pers
 }
 
 func fetchShowCredits(client *internal.Client, options *str.Options) (*str.PersonShows, error) {
-	
+
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetShowCredits(
 		context.Background(),

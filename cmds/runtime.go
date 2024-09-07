@@ -4,13 +4,14 @@ package cmds
 import (
 	"flag"
 	"fmt"
-	"os"
 	"strings"
+
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/internal"
 
 	"github.com/spf13/afero"
 )
+
 // Commands is list of all commands
 var Commands = []*Command{
 	HelpCmd,
@@ -45,11 +46,9 @@ find:
 	case 0:
 		fmt.Fprintf(stdout, "error: unknown command %q\n\n", sub)
 		flag.Usage()
-		os.Exit(1)
 	default:
 		fmt.Fprintf(stdout, "error: non-unique command prefix %q (matched %d commands)\n\n", sub, cnt)
 		flag.Usage()
-		os.Exit(1)
 	}
 
 }

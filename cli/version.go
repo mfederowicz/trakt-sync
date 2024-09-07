@@ -3,7 +3,6 @@ package cli
 
 import (
 	"fmt"
-	"os"
 	"runtime/debug"
 	"strings"
 )
@@ -16,12 +15,12 @@ var (
 )
 
 // GenAppVersion gen app verrsion string
-func GenAppVersion() {
+func GenAppVersion() error {
 
 	var buildInfo string
 
 	if date != "unknown" && builtBy != "unknown" {
-		buildInfo = fmt.Sprintf("Built\t\t%s by %s\n", date, builtBy)
+		buildInfo = fmt.Sprintf("Built\t\t%s by %s", date, builtBy)
 	}
 
 	if commit != "none" {
@@ -36,13 +35,11 @@ func GenAppVersion() {
 				version = bi.Main.Version[1:]
 			}
 			if len(buildInfo) == 0 {
-				fmt.Printf("version %s\n", version)
-				os.Exit(0)
+				return fmt.Errorf("version %s", version)
 			}
 		}
 	}
 
 	fmt.Printf("Version:\t%s\n%s", version, buildInfo)
-	os.Exit(0)
-
+	return nil
 }

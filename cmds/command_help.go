@@ -31,7 +31,7 @@ var HelpCmd = &Command{
 var helpDump = HelpCmd.Flag.Bool("godoc", false, "Dump the godoc output for the command(s)")
 
 // HelpFunc shows help message for command
-func HelpFunc(_ *Command, args ...string) {
+func HelpFunc(_ *Command, args ...string) error {
 	var selected []*Command
 
 	if len(args) > 0 {
@@ -54,6 +54,7 @@ func HelpFunc(_ *Command, args ...string) {
 	case len(selected) == 1:
 		render(stdout, helpTemplate, selected[0])
 	}
+	return nil
 }
 
 func init() {

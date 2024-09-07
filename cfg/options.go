@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/mfederowicz/trakt-sync/str"
-	"os"
 
 	"github.com/spf13/afero"
 )
@@ -111,13 +110,18 @@ func isSubset(a, b []string) bool {
 }
 
 // SyncOptionsFromFlags reads options from user flags
-func SyncOptionsFromFlags(fs afero.Fs, config *Config, flagMap map[string]string) str.Options {
-	cfg := MergeConfigs(DefaultConfig(), config, flagMap)
+func SyncOptionsFromFlags(fs afero.Fs, config *Config, flagMap map[string]string) (str.Options, error) {
+	cfg, err := MergeConfigs(DefaultConfig(), config, flagMap)
+
+	if err != nil {
+		return str.Options{}, fmt.Errorf("error sync options from flags: %w", err)
+	}
+
 	return OptionsFromConfig(fs, cfg)
 }
 
 // OptionsFromConfig reads optionf from config file
-func OptionsFromConfig(fs afero.Fs, config *Config) str.Options {
+func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 
 	options := &str.Options{}
 
@@ -137,8 +141,7 @@ func OptionsFromConfig(fs afero.Fs, config *Config) str.Options {
 
 	token, err := readTokenFromFile(fs, config.TokenPath)
 	if err != nil {
-		fmt.Println("Error reading token:", err)
-		os.Exit(1)
+		return str.Options{}, fmt.Errorf("error reading token:%w", err)
 	}
 
 	str.Headers["Authorization"] = "Bearer " + token.AccessToken
@@ -153,8 +156,7 @@ func OptionsFromConfig(fs afero.Fs, config *Config) str.Options {
 
 	// Check if the provided type is valid for the selected module
 	if !IsValidConfigType(moduleConfig.Type, options.Type) {
-		fmt.Printf("Type '%s' is not valid for module '%s'\n", options.Type, options.Module)
-		os.Exit(1)
+		return str.Options{}, fmt.Errorf("type '%s' is not valid for module '%s'", options.Type, options.Module)
 	}
 
 	if !IsValidConfigType(moduleConfig.Format, options.Format) {
@@ -184,15 +186,13 @@ func OptionsFromConfig(fs afero.Fs, config *Config) str.Options {
 	}
 
 	if len(str.Headers["Authorization"].(string)) == 0 && len(str.Headers["trakt-api-key"].(string)) == 0 {
-		fmt.Println("No valid Authorization header")
-		os.Exit(1)
-
+		return str.Options{}, fmt.Errorf("no valid Authorization header")
 	}
 
 	options.Headers = str.Headers
 	options.Token = *token
 
-	return *options
+	return *options, nil
 }
 
 // IsValidConfigType checks if the provided type is valid for the module

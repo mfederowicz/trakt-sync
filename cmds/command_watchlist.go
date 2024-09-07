@@ -5,14 +5,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strconv"
+	"time"
+
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
-	"os"
-	"strconv"
-	"time"
 )
 
 // WatchlistCmd Returns all items in a user's watchlist filtered by type.
@@ -23,7 +23,7 @@ var WatchlistCmd = &Command{
 	Help:    `watchlist command`,
 }
 
-func watchlistFunc(cmd *Command, _ ...string) {
+func watchlistFunc(cmd *Command, _ ...string) error {
 	options := cmd.Options
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
@@ -32,13 +32,11 @@ func watchlistFunc(cmd *Command, _ ...string) {
 
 	watchlist, err := fetchWatchlist(client, options, 1)
 	if err != nil {
-		fmt.Printf("fetch watchlist error:%v", err)
-		os.Exit(0)
+		return fmt.Errorf("fetch watchlist error:%w", err)
 	}
 
 	if len(watchlist) == 0 {
-		fmt.Print("empty watchlist")
-		os.Exit(0)
+		return fmt.Errorf("empty watchlist")
 	}
 
 	fmt.Printf("Found %d watchlist elements\n", len(watchlist))
@@ -50,14 +48,13 @@ func watchlistFunc(cmd *Command, _ ...string) {
 	}
 
 	if len(exportJSON) == 0 {
-		print("Warning no data to export, probably a bug")
-		os.Exit(1)
+		return fmt.Errorf("warning no data to export, probably a bug")
 	}
 
 	print("write data to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
 	writer.WriteJSON(options, jsonData)
-
+	return nil
 }
 
 var (
