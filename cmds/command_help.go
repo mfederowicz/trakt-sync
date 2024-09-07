@@ -45,15 +45,28 @@ func HelpFunc(_ *Command, args ...string) error {
 
 	switch {
 	case *helpDump:
-		render(stdout, docTemplate, Commands)
+		result := render(stdout, docTemplate, Commands)
+		if result != nil {
+			return fmt.Errorf("error render: %w", result)
+		}
 	case len(selected) < len(args):
 		fmt.Fprintf(stdout, "error: unknown command %q\n", args[0])
-		render(stdout, helpTemplate, HelpCmd)
+		result := render(stdout, helpTemplate, HelpCmd)
+		if result != nil {
+			return fmt.Errorf("error render: %w", result)
+		}
 	case len(selected) == 0:
-		render(stdout, usageTemplate, Commands)
+		result := render(stdout, usageTemplate, Commands)
+		if result != nil {
+			return fmt.Errorf("error render: %w", result)
+		}
 	case len(selected) == 1:
-		render(stdout, helpTemplate, selected[0])
+		result := render(stdout, helpTemplate, selected[0])
+		if result != nil {
+			return fmt.Errorf("error render: %w", result)
+		}
 	}
+
 	return nil
 }
 
@@ -114,12 +127,13 @@ func (t tabConverter) Write(p []byte) (int, error) {
 	return t.Writer.Write(p)
 }
 
-func render(w io.Writer, tpl string, data interface{}) {
+func render(w io.Writer, tpl string, data interface{}) error {
 	t := template.New("help")
 	t.Funcs(templateFuncs)
 	if err := template.Must(t.Parse(tpl)).Execute(w, data); err != nil {
-		panic(err)
+		return fmt.Errorf("render error:%w", err)
 	}
+	return nil
 }
 
 var generalHelp = `	trakt-sync [<options>] [<command> [<suboptions>] [<arguments> ...]]
