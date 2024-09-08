@@ -5,12 +5,12 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/mfederowicz/trakt-sync/str"
-	"os"
 	"os/user"
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/mfederowicz/trakt-sync/str"
 
 	"github.com/BurntSushi/toml"
 	"github.com/spf13/afero"
@@ -18,30 +18,30 @@ import (
 
 // Config struct for app.
 type Config struct {
-	UserName     string       `toml:"username"`
-	ConfigPath   string       `toml:"config_path"`
-	Action       string       `toml:"action"`
-	TokenPath    string       `toml:"token_path"`
-	Type         string       `toml:"type"`
-	Output       string       `toml:"output"`
-	ID           string       `toml:"id"`
-	SearchIDType string       `toml:"search_id_type"`
-	RedirectURI  string       `toml:"redirect_uri"`
-	ClientSecret string       `toml:"client_secret"`
-	List         string       `toml:"list"`
-	Format       string       `toml:"format"`
-	ClientID     string       `toml:"client_id"`
-	Query        string       `toml:"query"`
-	Field        string       `toml:"field"`
-	Sort         string       `toml:"sort"`
-	Module       string       `toml:"module"`
+	UserName     string    `toml:"username"`
+	ConfigPath   string    `toml:"config_path"`
+	Action       string    `toml:"action"`
+	TokenPath    string    `toml:"token_path"`
+	Type         string    `toml:"type"`
+	Output       string    `toml:"output"`
+	ID           string    `toml:"id"`
+	SearchIDType string    `toml:"search_id_type"`
+	RedirectURI  string    `toml:"redirect_uri"`
+	ClientSecret string    `toml:"client_secret"`
+	List         string    `toml:"list"`
+	Format       string    `toml:"format"`
+	ClientID     string    `toml:"client_id"`
+	Query        string    `toml:"query"`
+	Field        string    `toml:"field"`
+	Sort         string    `toml:"sort"`
+	Module       string    `toml:"module"`
 	SearchField  str.Slice `toml:"search_field"`
 	SearchType   str.Slice `toml:"search_type"`
-	WarningCode  int          `toml:"warningCode"`
-	ErrorCode    int          `toml:"errorCode"`
-	Days         int          `toml:"days"`
-	PerPage      int          `toml:"per_page"`
-	Verbose      bool         `toml:"verbose"`
+	WarningCode  int       `toml:"warningCode"`
+	ErrorCode    int       `toml:"errorCode"`
+	Days         int       `toml:"days"`
+	PerPage      int       `toml:"per_page"`
+	Verbose      bool      `toml:"verbose"`
 }
 
 var (
@@ -49,13 +49,20 @@ var (
 )
 
 // InitConfig of app
-func InitConfig() *Config {
+func InitConfig(fs afero.Fs) (*Config, error) {
 	flagMap := make(map[string]string)
 	flag.VisitAll(func(f *flag.Flag) {
 		flagMap[f.Name] = f.Value.String()
 	})
-	fs := afero.NewOsFs()
-	configFromFile := ReadConfigFromFile(fs, flagMap["c"])
+	
+	if len(flagMap["c"]) == 0 {
+		return nil, fmt.Errorf("config file not exists")
+	}
+
+	configFromFile, err := ReadConfigFromFile(fs, flagMap["c"])
+	if err != nil {
+		return nil, fmt.Errorf("init config error : %w", err)
+	}
 
 	return MergeConfigs(DefaultConfig(), configFromFile, flagMap)
 }
@@ -66,10 +73,7 @@ func GenUsedFlagMap() map[string]bool {
 	flagset := make(map[string]bool)
 
 	flag.Visit(func(f *flag.Flag) {
-		key := string(f.Name[0])
-		if len(f.Name) > 1 && f.Name[1] == '-' {
-			key = f.Name[1:]
-		}
+		key := string(f.Name[0])	
 		flagset[key] = true
 	})
 
@@ -78,7 +82,7 @@ func GenUsedFlagMap() map[string]bool {
 }
 
 // MergeConfigs from two sources file and flags
-func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string) *Config {
+func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string) (*Config, error) {
 
 	flagset := GenUsedFlagMap()
 	//fmt.Println(flagConfig)
@@ -102,7 +106,7 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 
 	tokenPath, err := expandTilde(defaultConfig.TokenPath)
 	if err != nil {
-		panic(err)
+		return nil, fmt.Errorf("failed to expand tilde from tokenPath: %w", err)
 	}
 	defaultConfig.TokenPath = tokenPath
 
@@ -228,27 +232,35 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 		defaultConfig.Sort = fileConfig.Sort
 	}
 
-	normalizeConfig(defaultConfig)
-	return defaultConfig
+	err = normalizeConfig(defaultConfig)
+	if err != nil {
+		return nil, fmt.Errorf("config error : %w", err)
+	}
+
+	return defaultConfig, nil
 }
 
 // ReadConfigFromFile reads config from file stored on disc
-func ReadConfigFromFile(fs afero.Fs, filename string) *Config {
+func ReadConfigFromFile(fs afero.Fs, filename string) (*Config, error) {
 
 	var config Config
 
 	file, err := afero.ReadFile(fs, filename)
+
 	if err != nil {
-		fmt.Println("cannot read the config file")
-		os.Exit(0)
-	}
-	_, err = toml.Decode(string(file), &config)
-	if err != nil {
-		fmt.Println(fmt.Errorf("cannot parse the config file: %v", err))
-		os.Exit(0)
+		return nil, fmt.Errorf("cannot read the config file : %w", err)
 	}
 
-	return &config
+	if len(string(file)) == 0 {
+		return nil, fmt.Errorf("empty file content")
+	}
+
+	_, err = toml.Decode(string(file), &config)
+	if err != nil {
+		return nil, fmt.Errorf("cannot parse the config file : %w", err)
+	}
+
+	return &config, nil
 }
 
 // GetConfig yields the configuration
@@ -310,17 +322,17 @@ func DefaultConfig() *Config {
 	}
 }
 
-func normalizeConfig(config *Config) {
+func normalizeConfig(config *Config) error {
 
-	if config.ClientID == "" || config.ClientSecret == "" {
-		fmt.Println("client_id and client_secret are required fields, update your config file")
-		os.Exit(0)
+	if len(config.ClientID) == 0 || len(config.ClientSecret) == 0 {
+		return fmt.Errorf("client_id and client_secret are required fields, update your config file")
 	}
 
 	if len(config.TokenPath) == 0 || (config.TokenPath != "" && !strings.HasSuffix(config.TokenPath, "json")) {
-		fmt.Println("token_path should be json file, update your config file")
-		os.Exit(0)
+		return fmt.Errorf("token_path should be json file, update your config file")
 	}
+
+	return nil
 
 }
 

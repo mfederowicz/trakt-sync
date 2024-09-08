@@ -5,18 +5,17 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/str"
 	"os"
 	"os/exec"
 	"runtime"
 	"time"
-	"github.com/mfederowicz/trakt-sync/cfg"
-	"github.com/mfederowicz/trakt-sync/internal"
-	"github.com/mfederowicz/trakt-sync/str"
 )
 
 func fail(err string) {
 	fmt.Fprintln(os.Stderr, err)
-	os.Exit(1)
 }
 
 // open browser for https://trakt.tv/activate code activation
@@ -66,32 +65,37 @@ func deviceCodeVerification(deviceToken *str.NewDeviceToken, oauth *internal.Oau
 }
 
 // fetch new device code for client
-func fetchNewDeviceCodeForClient(config *cfg.Config, oauth *internal.OauthService) *str.DeviceCode {
+func fetchNewDeviceCodeForClient(config *cfg.Config, oauth *internal.OauthService) (*str.DeviceCode, error) {
 
 	code, resp, err := oauth.GenerateNewDeviceCodes(context.Background(), &str.NewDeviceCode{ClientID: &config.ClientID})
 
 	if err != nil {
-		fail("Error generate new device code:" + err.Error())
+		return nil, fmt.Errorf("Error generate new device code:" + err.Error())
 	}
 
 	if resp.StatusCode == 200 {
-		return code
+		return code, nil
 	}
 
-	return nil
+	return nil, nil
 
 }
 
 // PoolNewDeviceCode pool new device code (open browser and wait for correct code activation)
-func PoolNewDeviceCode(config *cfg.Config, oauth *internal.OauthService) {
+func PoolNewDeviceCode(config *cfg.Config, oauth *internal.OauthService) error {
 
 	fmt.Println("Polling for new device code...")
 
-	device := fetchNewDeviceCodeForClient(config, oauth)
+	device, err := fetchNewDeviceCodeForClient(config, oauth)
+	if err != nil {
+		return fmt.Errorf("Error generate new device code:" + err.Error())
+	}
 
 	showCodeAndOpenBrowser(device)
 
 	verifyCode(device, config, oauth)
+
+	return nil
 
 }
 

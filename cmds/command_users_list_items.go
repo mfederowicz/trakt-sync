@@ -6,12 +6,12 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"strconv"
+
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/writer"
-	"os"
-	"strconv"
 )
 
 var (
@@ -29,7 +29,7 @@ var UsersListItemsCmd = &Command{
 	Help:    `lists command`,
 }
 
-func usersListItemsFunc(cmd *Command, _ ...string) {
+func usersListItemsFunc(cmd *Command, _ ...string) error {
 	options := cmd.Options
 	client := cmd.Client
 	intID, _ := strconv.Atoi(*_listID)
@@ -39,13 +39,11 @@ func usersListItemsFunc(cmd *Command, _ ...string) {
 	username = options.UserName
 	personalLists, _, err := fetchUsersPersonalLists(client, &username)
 	if err != nil {
-		fmt.Printf("fetch user list error:%v", err)
-		os.Exit(0)
+		return fmt.Errorf("fetch user list error:%w", err)
 	}
 
 	if len(personalLists) == 0 {
-		fmt.Print("empty personal lists")
-		os.Exit(0)
+		return fmt.Errorf("empty personal lists")
 	}
 
 	fmt.Printf("Found %d user list\n", len(personalLists))
@@ -58,13 +56,11 @@ func usersListItemsFunc(cmd *Command, _ ...string) {
 	}
 
 	if intID == 0 {
-		fmt.Print("please set personal listid")
-		os.Exit(0)
+		return fmt.Errorf("please set personal listid")
 	}
 
 	if !str.ContainInt(intID, avLists) {
-		fmt.Printf("unknown listid:%d\n", intID)
-		os.Exit(0)
+		return fmt.Errorf("unknown listid:%d", intID)
 	}
 
 	fmt.Printf("ListId to fetch:%d\n", intID)
@@ -93,7 +89,7 @@ func usersListItemsFunc(cmd *Command, _ ...string) {
 
 		}
 	}
-
+	return nil
 }
 
 var (

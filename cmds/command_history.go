@@ -5,9 +5,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
 	"strconv"
 	"time"
+
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -15,7 +15,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
-// HistoryCmd returns movies and episodes that a user has watched, sorted by most recent. 
+// HistoryCmd returns movies and episodes that a user has watched, sorted by most recent.
 var HistoryCmd = &Command{
 	Name:    "history",
 	Usage:   "",
@@ -23,7 +23,7 @@ var HistoryCmd = &Command{
 	Help:    `history command`,
 }
 
-func historyFunc(cmd *Command, _ ...string) {
+func historyFunc(cmd *Command, _ ...string) error {
 
 	options := cmd.Options
 	client := cmd.Client
@@ -33,13 +33,11 @@ func historyFunc(cmd *Command, _ ...string) {
 
 	historyLists, err := fetchHistoryList(client, options, 1)
 	if err != nil {
-		fmt.Printf("fetch history list error:%v", err)
-		os.Exit(0)
+		return fmt.Errorf("fetch history list error:%w", err)
 	}
 
 	if len(historyLists) == 0 {
-		fmt.Print("empty history lists")
-		os.Exit(0)
+		return fmt.Errorf("empty history lists")
 	}
 
 	fmt.Printf("Found %d history elements\n", len(historyLists))
@@ -51,14 +49,13 @@ func historyFunc(cmd *Command, _ ...string) {
 	}
 
 	if len(exportJSON) == 0 {
-		print("Warning no data to export, probably a bug")
-		os.Exit(1)
+		return fmt.Errorf("warning no data to export, probably a bug")
 	}
 
 	print("write data to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
 	writer.WriteJSON(options, jsonData)
-
+	return nil
 }
 
 var (

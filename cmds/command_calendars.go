@@ -5,13 +5,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"time"
+
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
-	"os"
-	"time"
 )
 
 var (
@@ -29,7 +29,7 @@ var CalendarsCmd = &Command{
 	Help:    `calendars command`,
 }
 
-func calendarsFunc(cmd *Command, _ ...string) {
+func calendarsFunc(cmd *Command, _ ...string) error {
 
 	options := cmd.Options
 	client := cmd.Client
@@ -45,161 +45,112 @@ func calendarsFunc(cmd *Command, _ ...string) {
 		fmt.Println("Get calendar: " + options.Action)
 		result, err := fetchCalendarShows(client, options)
 		if err != nil {
-			fmt.Printf("fetch "+options.Action+" calendar error:%v", err)
-			os.Exit(0)
+			return fmt.Errorf("fetch "+options.Action+" calendar error:%w", err)
 		}
 
 		if result == nil {
-			fmt.Print("empty result")
-			os.Exit(0)
+			return fmt.Errorf("empty result")
 		}
 
-		if err == nil {
-			if result != nil {
-				fmt.Print("Found " + options.Action + " calendar data \n")
-				print("write data to:" + options.Output)
-				jsonData, _ := json.MarshalIndent(result, "", "  ")
+		fmt.Print("Found " + options.Action + " calendar data \n")
+		print("write data to:" + options.Output)
+		jsonData, _ := json.MarshalIndent(result, "", "  ")
 
-				writer.WriteJSON(options, jsonData)
-			} else {
-				fmt.Print("No " + options.Action + " calendar to fetch\n")
-			}
+		writer.WriteJSON(options, jsonData)
 
-		}
 	case "my-new-shows", "all-new-shows":
 
 		fmt.Println("Get calendar: " + options.Action)
 		result, err := fetchCalendarNewShows(client, options)
 		if err != nil {
-			fmt.Printf("fetch "+options.Action+" calendar error:%v", err)
-			os.Exit(0)
+			return fmt.Errorf("fetch "+options.Action+" calendar error:%w", err)
 		}
 
 		if result == nil {
-			fmt.Print("empty result")
-			os.Exit(0)
+			return fmt.Errorf("empty result")
 		}
 
-		if err == nil {
-			if result != nil {
-				fmt.Print("Found " + options.Action + " calendar data \n")
-				print("write data to:" + options.Output)
-				jsonData, _ := json.MarshalIndent(result, "", "  ")
+		fmt.Print("Found " + options.Action + " calendar data \n")
+		print("write data to:" + options.Output)
+		jsonData, _ := json.MarshalIndent(result, "", "  ")
 
-				writer.WriteJSON(options, jsonData)
-			} else {
-				fmt.Print("No " + options.Action + " calendar to fetch\n")
-			}
+		writer.WriteJSON(options, jsonData)
 
-		}
 	case "my-season-premieres", "all-season-premieres":
 
 		fmt.Println("Get calendar: " + options.Action + " premieres")
 		result, err := fetchCalendarSeasonPremieres(client, options)
 		if err != nil {
-			fmt.Printf("fetch calendar "+options.Action+" premieres error:%v", err)
-			os.Exit(0)
+			return fmt.Errorf("fetch calendar "+options.Action+" premieres error:%w", err)
 		}
 
 		if result == nil {
-			fmt.Print("empty result")
-			os.Exit(0)
+			return fmt.Errorf("empty result")
 		}
 
-		if err == nil {
-			if result != nil {
-				fmt.Print("Found " + options.Action + " calendar data \n")
-				print("write data to:" + options.Output)
-				jsonData, _ := json.MarshalIndent(result, "", "  ")
+		fmt.Print("Found " + options.Action + " calendar data \n")
+		print("write data to:" + options.Output)
+		jsonData, _ := json.MarshalIndent(result, "", "  ")
+		writer.WriteJSON(options, jsonData)
 
-				writer.WriteJSON(options, jsonData)
-			} else {
-				fmt.Print("No " + options.Action + " calendar to fetch\n")
-			}
-
-		}
 	case "my-finales", "all-finales":
 
 		fmt.Println("Get calendar: " + options.Action + " finales")
 		result, err := fetchCalendarFinales(client, options)
 		if err != nil {
-			fmt.Printf("fetch calendar "+options.Action+" finales error:%v", err)
-			os.Exit(0)
+			return fmt.Errorf("fetch calendar "+options.Action+" finales error:%w", err)
 		}
 
 		if result == nil {
-			fmt.Print("empty result")
-			os.Exit(0)
+			return fmt.Errorf("empty result")
 		}
 
-		if err == nil {
-			if result != nil {
-				fmt.Print("Found " + options.Action + " calendar data \n")
-				print("write data to:" + options.Output)
-				jsonData, _ := json.MarshalIndent(result, "", "  ")
+		fmt.Print("Found " + options.Action + " calendar data \n")
+		print("write data to:" + options.Output)
+		jsonData, _ := json.MarshalIndent(result, "", "  ")
+		writer.WriteJSON(options, jsonData)
 
-				writer.WriteJSON(options, jsonData)
-			} else {
-				fmt.Print("No " + options.Action + " calendar to fetch\n")
-			}
-
-		}
 	case "my-movies", "all-movies":
 
 		fmt.Println("Get calendar: " + options.Action + " movies")
 		result, err := fetchCalendarMovies(client, options)
 		if err != nil {
-			fmt.Printf("fetch calendar "+options.Action+" error:%v", err)
-			os.Exit(0)
+			return fmt.Errorf("fetch calendar "+options.Action+" error:%w", err)
 		}
 
 		if result == nil {
-			fmt.Print("empty result")
-			os.Exit(0)
+			return fmt.Errorf("empty result")
 		}
 
-		if err == nil {
-			if result != nil {
-				fmt.Print("Found " + options.Action + " calendar data \n")
-				print("write data to:" + options.Output)
-				jsonData, _ := json.MarshalIndent(result, "", "  ")
+		fmt.Print("Found " + options.Action + " calendar data \n")
+		print("write data to:" + options.Output)
+		jsonData, _ := json.MarshalIndent(result, "", "  ")
 
-				writer.WriteJSON(options, jsonData)
-			} else {
-				fmt.Print("No " + options.Action + " calendar to fetch\n")
-			}
+		writer.WriteJSON(options, jsonData)
 
-		}
 	case "my-dvd", "all-dvd":
 
 		fmt.Println("Get calendar: " + options.Action + " releases")
 		result, err := fetchCalendarDvdReleases(client, options)
 		if err != nil {
-			fmt.Printf("fetch calendar "+options.Action+" error:%v", err)
-			os.Exit(0)
+			return fmt.Errorf("fetch calendar "+options.Action+" error:%w", err)
 		}
 
 		if result == nil {
-			fmt.Print("empty result")
-			os.Exit(0)
+			return fmt.Errorf("empty result")
 		}
 
-		if err == nil {
-			if result != nil {
-				fmt.Print("Found " + options.Action + " calendar data \n")
-				print("write data to:" + options.Output)
-				jsonData, _ := json.MarshalIndent(result, "", "  ")
+		fmt.Print("Found " + options.Action + " calendar data \n")
+		print("write data to:" + options.Output)
+		jsonData, _ := json.MarshalIndent(result, "", "  ")
 
-				writer.WriteJSON(options, jsonData)
-			} else {
-				fmt.Print("No " + options.Action + " calendar to fetch\n")
-			}
-
-		}
+		writer.WriteJSON(options, jsonData)
 
 	default:
 		fmt.Println("possible actions: {my,all}-shows,{my,all}-new-shows,{my,all}-season-premieres,{my,all}-finales,{my,all}-movies,{my,all}-dvd")
 	}
+
+	return nil
 
 }
 

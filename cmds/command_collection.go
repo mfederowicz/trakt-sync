@@ -5,12 +5,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
-	"os"
 )
 
 // CollectionCmd get all collected items in a user's collection.
@@ -21,7 +21,7 @@ var CollectionCmd = &Command{
 	Help:    `collection command`,
 }
 
-func collectionFunc(cmd *Command, _ ...string) {
+func collectionFunc(cmd *Command, _ ...string) error {
 	options := cmd.Options
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
@@ -30,13 +30,11 @@ func collectionFunc(cmd *Command, _ ...string) {
 
 	collection, err := fetchCollectionList(client, options)
 	if err != nil {
-		fmt.Printf("fetch collection error:%v", err)
-		os.Exit(0)
+		return fmt.Errorf("fetch collection error:%w", err)
 	}
 
 	if len(collection) == 0 {
-		fmt.Print("empty collection")
-		os.Exit(0)
+		return fmt.Errorf("empty collection")
 	}
 
 	fmt.Printf("Found %d collection elements\n", len(collection))
@@ -48,13 +46,14 @@ func collectionFunc(cmd *Command, _ ...string) {
 	}
 
 	if len(exportJSON) == 0 {
-		print("Warning no data to export, probably a bug")
-		os.Exit(1)
+		return fmt.Errorf("warning no data to export, probably a bug")
 	}
 
 	print("write data to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
 	writer.WriteJSON(options, jsonData)
+
+	return nil
 
 }
 

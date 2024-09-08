@@ -4,12 +4,12 @@ package cmds
 import (
 	"flag"
 	"fmt"
+	"strconv"
+	"strings"
+
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
-	"os"
-	"strconv"
-	"strings"
 
 	"github.com/spf13/afero"
 )
@@ -83,7 +83,7 @@ type fatal struct{}
 // A Command represents a subcommand of trakt-sync.
 type Command struct {
 	Flag    flag.FlagSet
-	Run     func(cmd *Command, args ...string)
+	Run     func(cmd *Command, args ...string) error
 	Client  *internal.Client
 	Config  *cfg.Config
 	Options *str.Options
@@ -96,7 +96,7 @@ type Command struct {
 }
 
 // Exec core command function
-func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config, args []string) {
+func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config, args []string) error {
 
 	c.Client = client
 	c.Config = config
@@ -106,7 +106,11 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	c.registerGlobalFlagsInSet(&c.Flag)
 	c.Flag.Parse(args)
 	m := c.fetchFlagsMap()
-	options := cfg.SyncOptionsFromFlags(fs, c.Config, m)
+	options, err := cfg.SyncOptionsFromFlags(fs, c.Config, m)
+
+	if err != nil {
+		return fmt.Errorf("error command exec: %w", err)
+	}
 
 	options.Type = *_strType
 	options.Module = c.Name
@@ -134,8 +138,7 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	c.Options = &options
 
 	if !c.ValidFlags() {
-		fmt.Println("invalid flags")
-		os.Exit(1)
+		return fmt.Errorf("invalid flags")
 	}
 
 	if options.Verbose {
@@ -152,20 +155,23 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 		)
 
 	}
-	defer func() {
+	defer func() error {
 		if r := recover(); r != nil {
 			if _, ok := r.(fatal); ok {
-				os.Exit(1)
+				return fmt.Errorf("fatal error")
 			}
-			panic(r)
+			return fmt.Errorf("panic error:%s", r)
 		}
+		return nil
 	}()
 
-	c.Run(c, c.Flag.Args()...)
+	err = c.Run(c, c.Flag.Args()...)
 
-	if c.exit != 0 {
-		os.Exit(c.exit)
+	if err != nil {
+		return fmt.Errorf("error command run: %w", err)
 	}
+
+	return nil
 }
 
 // BadArgs shows error if command have invalid arguments
