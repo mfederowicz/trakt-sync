@@ -23,13 +23,13 @@ var (
 
 func main() {
 
-	config, err := cfg.InitConfig()
+	fs := afero.NewOsFs()
+	config, err := cfg.InitConfig(fs)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
 	client := internal.NewClient(nil)
-	fs := afero.NewOsFs()
 	options, err := cfg.OptionsFromConfig(fs, config)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)

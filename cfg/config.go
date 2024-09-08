@@ -49,12 +49,16 @@ var (
 )
 
 // InitConfig of app
-func InitConfig() (*Config, error) {
+func InitConfig(fs afero.Fs) (*Config, error) {
 	flagMap := make(map[string]string)
 	flag.VisitAll(func(f *flag.Flag) {
 		flagMap[f.Name] = f.Value.String()
 	})
-	fs := afero.NewOsFs()
+	
+	if len(flagMap["c"]) == 0 {
+		return nil, fmt.Errorf("config file not exists")
+	}
+
 	configFromFile, err := ReadConfigFromFile(fs, flagMap["c"])
 	if err != nil {
 		return nil, fmt.Errorf("init config error : %w", err)
@@ -69,10 +73,7 @@ func GenUsedFlagMap() map[string]bool {
 	flagset := make(map[string]bool)
 
 	flag.Visit(func(f *flag.Flag) {
-		key := string(f.Name[0])
-		if len(f.Name) > 1 && f.Name[1] == '-' {
-			key = f.Name[1:]
-		}
+		key := string(f.Name[0])	
 		flagset[key] = true
 	})
 
@@ -245,9 +246,15 @@ func ReadConfigFromFile(fs afero.Fs, filename string) (*Config, error) {
 	var config Config
 
 	file, err := afero.ReadFile(fs, filename)
+
 	if err != nil {
 		return nil, fmt.Errorf("cannot read the config file : %w", err)
 	}
+
+	if len(string(file)) == 0 {
+		return nil, fmt.Errorf("empty file content")
+	}
+
 	_, err = toml.Decode(string(file), &config)
 	if err != nil {
 		return nil, fmt.Errorf("cannot parse the config file : %w", err)
