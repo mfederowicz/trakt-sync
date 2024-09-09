@@ -43,7 +43,8 @@ func main() {
 	flag.Parse()
 
 	if *_version {
-		cli.GenAppVersion()
+		fmt.Println(cli.GenAppVersion())
+		return
 	}
 
 	args := flag.Args()

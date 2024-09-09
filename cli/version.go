@@ -40,6 +40,5 @@ func GenAppVersion() error {
 		}
 	}
 
-	fmt.Printf("Version:\t%s\n%s", version, buildInfo)
-	return nil
+	return fmt.Errorf("Version:\t%s\n%s", version, buildInfo)
 }
