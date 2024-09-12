@@ -1,0 +1,31 @@
+# This is an example .goreleaser.yaml file with some sensible defaults.
+# Make sure to check the documentation at http://goreleaser.com
+---
+archives:
+  - id: trakt-sync
+    name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+
+
+version: 2
+
+
+before:
+  hooks:
+    - "go mod download"
+    - "go generate ./..."
+builds:
+  - env:
+      - CGO_ENABLED=0
+      - BUILDER=GoReleaser
+    goos:
+      - linux
+ 
+changelog:
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+  sort: asc
+checksum:
+  name_template: checksums.txt
+project_name: trakt-sync
