@@ -4,6 +4,8 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -26,7 +28,7 @@ func (p *PeopleService) GetListsContainingThisPerson(ctx context.Context, id *st
 		return nil, nil, err
 	}
 	fmt.Println("fetch lists url:" + url)
-	req, err := p.client.NewRequest("GET", url, nil)
+	req, err := p.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -55,7 +57,7 @@ func (p *PeopleService) GetMovieCredits(ctx context.Context, id *string, opts *u
 	}
 
 	fmt.Println("fetch movie credits url:" + url)
-	req, err := p.client.NewRequest("GET", url, nil)
+	req, err := p.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -84,7 +86,7 @@ func (p *PeopleService) GetShowCredits(ctx context.Context, id *string, opts *ur
 	}
 
 	fmt.Println("fetch shows credits url:" + url)
-	req, err := p.client.NewRequest("GET", url, nil)
+	req, err := p.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -113,7 +115,7 @@ func (p *PeopleService) GetSinglePerson(ctx context.Context, id *string, opts *u
 		return nil, nil, err
 	}
 	fmt.Println("fetch person url:" + url)
-	req, err := p.client.NewRequest("GET", url, nil)
+	req, err := p.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -142,7 +144,7 @@ func (p *PeopleService) GetRecentlyUpdatedPeople(ctx context.Context, startDate 
 		return nil, nil, err
 	}
 	fmt.Println("fetch updates url:" + url)
-	req, err := p.client.NewRequest("GET", url, nil)
+	req, err := p.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -172,7 +174,7 @@ func (p *PeopleService) GetRecentlyUpdatedPeopleTraktIDs(ctx context.Context, st
 		return nil, nil, err
 	}
 	fmt.Println("fetch updates url:" + url)
-	req, err := p.client.NewRequest("GET", url, nil)
+	req, err := p.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}

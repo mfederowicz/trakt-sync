@@ -4,6 +4,8 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -25,7 +27,7 @@ func (c *CalendarsService) GetDVDReleases(ctx context.Context, actionType *strin
 	}
 
 	fmt.Println("fetch dvd calendars url:" + url)
-	req, err := c.client.NewRequest("GET", url, nil)
+	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -55,7 +57,7 @@ func (c *CalendarsService) GetMovies(ctx context.Context, actionType *string, st
 	}
 
 	fmt.Println("fetch movies calendars url:" + url)
-	req, err := c.client.NewRequest("GET", url, nil)
+	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -86,7 +88,7 @@ func (c *CalendarsService) GetSeasonPremieres(ctx context.Context, actionType *s
 	}
 
 	fmt.Println("fetch season premieres url:" + url)
-	req, err := c.client.NewRequest("GET", url, nil)
+	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -117,7 +119,7 @@ func (c *CalendarsService) GetShows(ctx context.Context, actionType *string, sta
 	}
 
 	fmt.Println("fetch shows calendars url:" + url)
-	req, err := c.client.NewRequest("GET", url, nil)
+	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -147,7 +149,7 @@ func (c *CalendarsService) GetNewShows(ctx context.Context, actionType *string, 
 	}
 
 	fmt.Println("fetch new shows calendars url:" + url)
-	req, err := c.client.NewRequest("GET", url, nil)
+	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -177,7 +179,7 @@ func (c *CalendarsService) GetFinales(ctx context.Context, actionType *string, s
 	}
 
 	fmt.Println("fetch finales calendars url:" + url)
-	req, err := c.client.NewRequest("GET", url, nil)
+	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"reflect"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/wissance/stringFormatter"
 )
 
@@ -36,8 +37,8 @@ func stringifyValue(w *bytes.Buffer, val reflect.Value) {
 		fmt.Fprintf(w, `"%s"`, v)
 	case reflect.Slice:
 		w.Write([]byte{'['})
-		for i := 0; i < v.Len(); i++ {
-			if i > 0 {
+		for i := consts.ZeroValue; i < v.Len(); i++ {
+			if i > consts.ZeroValue {
 				w.Write([]byte{' '})
 			}
 
@@ -60,7 +61,7 @@ func stringifyValue(w *bytes.Buffer, val reflect.Value) {
 		w.Write([]byte{'{'})
 
 		var sep bool
-		for i := 0; i < v.NumField(); i++ {
+		for i := consts.ZeroValue; i < v.NumField(); i++ {
 			fv := v.Field(i)
 			if fv.Kind() == reflect.Ptr && fv.IsNil() {
 				continue

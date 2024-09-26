@@ -5,13 +5,16 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/mfederowicz/trakt-sync/cfg"
-	"github.com/mfederowicz/trakt-sync/internal"
-	"github.com/mfederowicz/trakt-sync/str"
+	"net/http"
 	"os"
 	"os/exec"
 	"runtime"
 	"time"
+
+	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/consts"
+	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/str"
 )
 
 func fail(err string) {
@@ -47,21 +50,21 @@ func deviceCodeVerification(deviceToken *str.NewDeviceToken, oauth *internal.Oau
 		return false
 	}
 
-	if resp.StatusCode == 418 {
+	if resp.StatusCode == http.StatusTeapot {
 		fail("Error: Your device is not connected")
 		return false
 	}
 
-	if resp.StatusCode == 200 {
+	if resp.StatusCode == http.StatusOK {
 
 		tokenjson, _ := json.Marshal(token)
-		if err := os.WriteFile(config.TokenPath, tokenjson, 0644); err != nil {
+		if err := os.WriteFile(config.TokenPath, tokenjson, consts.X644); err != nil {
 			fmt.Println(err.Error())
 		}
 
 	}
 
-	return resp.StatusCode == 200
+	return resp.StatusCode == http.StatusOK
 }
 
 // fetch new device code for client
@@ -73,7 +76,7 @@ func fetchNewDeviceCodeForClient(config *cfg.Config, oauth *internal.OauthServic
 		return nil, fmt.Errorf("Error generate new device code:" + err.Error())
 	}
 
-	if resp.StatusCode == 200 {
+	if resp.StatusCode == http.StatusOK {
 		return code, nil
 	}
 
@@ -115,6 +118,10 @@ func showCodeAndOpenBrowser(device *str.DeviceCode) {
 // verify device code in loop with intervals
 func verifyCode(device *str.DeviceCode, config *cfg.Config, oauth *internal.OauthService) {
 
+	const (
+		CounterNoSeconds = 0
+	)
+
 	count := device.ExpiresIn
 	for {
 
@@ -128,7 +135,7 @@ func verifyCode(device *str.DeviceCode, config *cfg.Config, oauth *internal.Oaut
 			break
 		}
 		count -= device.Interval
-		if count == 0 {
+		if count == CounterNoSeconds {
 			fmt.Println("Time out!")
 			break
 		}

@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
@@ -16,9 +17,9 @@ import (
 )
 
 var (
-	_action    = PeopleCmd.Flag.String("a", cfg.DefaultConfig().Action, ActionUsage)
-	_startDate = PeopleCmd.Flag.String("start_date", "", StartDateUsage)
-	_personID  = PeopleCmd.Flag.String("i", cfg.DefaultConfig().ID, UserlistUsage)
+	_action    = PeopleCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_startDate = PeopleCmd.Flag.String("start_date", "", consts.StartDateUsage)
+	_personID  = PeopleCmd.Flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
 )
 
 // PeopleCmd returns all data for selected person.
@@ -39,16 +40,16 @@ func peopleFunc(cmd *Command, _ ...string) error {
 	case "updates":
 		fmt.Println("Get recently updated people")
 		date := time.Now().Format("2006-01-02T15:00Z")
-		updates, err := fetchPeoplesUpdates(client, options, date, 1)
+		updates, err := fetchPeoplesUpdates(client, options, date, consts.DefaultPage)
 		if err != nil {
 			return fmt.Errorf("fetch peoples updates error:%w", err)
 		}
 
-		if len(updates) == 0 {
+		if len(updates) == consts.ZeroValue {
 			return fmt.Errorf("empty updates lists")
 		}
 
-		if len(updates) > 0 {
+		if len(updates) > consts.ZeroValue {
 			fmt.Printf("Found %d items \n", len(updates))
 			exportJSON := []*str.PersonItem{}
 			exportJSON = append(exportJSON, updates...)
@@ -62,16 +63,16 @@ func peopleFunc(cmd *Command, _ ...string) error {
 	case "updated_ids":
 		fmt.Println("Get recently updated people Trakt IDs")
 		date := time.Now().Format("2006-01-02T15:00Z")
-		updates, err := fetchPeoplesUpdatedIDs(client, options, date, 1)
+		updates, err := fetchPeoplesUpdatedIDs(client, options, date, consts.DefaultPage)
 		if err != nil {
 			return fmt.Errorf("fetch peoples updated ids error:%w", err)
 		}
 
-		if len(updates) == 0 {
+		if len(updates) == consts.ZeroValue {
 			return fmt.Errorf("empty updates lists")
 		}
 
-		if len(updates) > 0 {
+		if len(updates) > consts.ZeroValue {
 			fmt.Printf("Found %d items \n", len(updates))
 			exportJSON := []*int{}
 			exportJSON = append(exportJSON, updates...)
@@ -84,7 +85,7 @@ func peopleFunc(cmd *Command, _ ...string) error {
 		}
 
 	case "summary":
-		if len(*_personID) == 0 {
+		if len(*_personID) == consts.ZeroValue {
 			return fmt.Errorf("set personId ie: -i john-wayne")
 		}
 		fmt.Println("Get a single person")
@@ -99,12 +100,12 @@ func peopleFunc(cmd *Command, _ ...string) error {
 
 		fmt.Print("Found person \n")
 		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, "", "  ")
+		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JsonDataFormat)
 
 		writer.WriteJSON(options, jsonData)
 
 	case "movies":
-		if len(*_personID) == 0 {
+		if len(*_personID) == consts.ZeroValue {
 			return fmt.Errorf("set personId ie: -i john-wayne")
 		}
 		fmt.Println("Get movie credits")
@@ -119,12 +120,12 @@ func peopleFunc(cmd *Command, _ ...string) error {
 
 		fmt.Print("Found movie credits data \n")
 		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, "", "  ")
+		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JsonDataFormat)
 		writer.WriteJSON(options, jsonData)
 
 	case "shows":
-		if len(*_personID) == 0 {
-			return fmt.Errorf("set personId ie: -i john-wayne")
+		if len(*_personID) == consts.ZeroValue {
+			return fmt.Errorf(consts.EmptyPersonIdMsg)
 		}
 		fmt.Println("Get show credits")
 		result, err := fetchShowCredits(client, options)
@@ -133,26 +134,26 @@ func peopleFunc(cmd *Command, _ ...string) error {
 		}
 
 		if result == nil {
-			return fmt.Errorf("empty result")
+			return fmt.Errorf(consts.EmptyResult)
 		}
 
 		fmt.Print("Found show credits data \n")
 		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, "", "  ")
+		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JsonDataFormat)
 
 		writer.WriteJSON(options, jsonData)
 
 	case "lists":
-		if len(*_personID) == 0 {
-			return fmt.Errorf("set personId ie: -i john-wayne")
+		if len(*_personID) == consts.ZeroValue {
+			return fmt.Errorf(consts.EmptyPersonIdMsg)
 		}
 		fmt.Println("Get lists containing this person")
-		result, err := fetchListsContainingThisPerson(client, options, 1)
+		result, err := fetchListsContainingThisPerson(client, options, consts.DefaultPage)
 		if err != nil {
 			return fmt.Errorf("fetch lists error:%v", err)
 		}
 
-		if len(result) == 0 {
+		if len(result) == consts.ZeroValue {
 			return fmt.Errorf("empty lists")
 		}
 
@@ -160,7 +161,7 @@ func peopleFunc(cmd *Command, _ ...string) error {
 		exportJSON := []*str.PersonalList{}
 		exportJSON = append(exportJSON, result...)
 		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
+		jsonData, _ := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JsonDataFormat)
 
 		writer.WriteJSON(options, jsonData)
 
@@ -192,16 +193,16 @@ func fetchPeoplesUpdates(client *internal.Client, options *str.Options, startDat
 	}
 
 	// Check if there are more pages
-	if pages := resp.Header.Get(internal.HeaderPaginationPageCount); pages != "" {
+	if pages := resp.Header.Get(internal.HeaderPaginationPageCount); pages != consts.EmptyString {
 
 		pagesInt, _ := strconv.Atoi(pages)
 
-		if page != pagesInt && pagesInt > 0 {
+		if page != pagesInt && pagesInt > consts.ZeroValue {
 
 			time.Sleep(time.Duration(2) * time.Second)
 
 			// Fetch items from the next page
-			nextPage := page + 1
+			nextPage := page + consts.NextPageStep
 			nextPageItems, err := fetchPeoplesUpdates(client, options, startDate, nextPage)
 			if err != nil {
 				return nil, err
@@ -232,16 +233,16 @@ func fetchPeoplesUpdatedIDs(client *internal.Client, options *str.Options, start
 	}
 
 	// Check if there are more pages
-	if pages := resp.Header.Get(internal.HeaderPaginationPageCount); pages != "" {
+	if pages := resp.Header.Get(internal.HeaderPaginationPageCount); pages != consts.EmptyString {
 
 		pagesInt, _ := strconv.Atoi(pages)
 
-		if page != pagesInt && pagesInt > 0 {
+		if page != pagesInt && pagesInt > consts.ZeroValue {
 
 			time.Sleep(time.Duration(2) * time.Second)
 
 			// Fetch items from the next page
-			nextPage := page + 1
+			nextPage := page + consts.NextPageStep
 			nextPageItems, err := fetchPeoplesUpdatedIDs(client, options, startDate, nextPage)
 			if err != nil {
 				return nil, err
@@ -325,16 +326,16 @@ func fetchListsContainingThisPerson(client *internal.Client, options *str.Option
 	}
 
 	// Check if there are more pages
-	if pages := resp.Header.Get(internal.HeaderPaginationPageCount); pages != "" {
+	if pages := resp.Header.Get(internal.HeaderPaginationPageCount); pages != consts.EmptyString {
 
 		pagesInt, _ := strconv.Atoi(pages)
 
-		if page != pagesInt && pagesInt > 0 {
+		if page != pagesInt && pagesInt > consts.ZeroValue {
 
 			time.Sleep(time.Duration(2) * time.Second)
 
 			// Fetch items from the next page
-			nextPage := page + 1
+			nextPage := page + consts.NextPageStep
 			nextPageItems, err := fetchListsContainingThisPerson(client, options, nextPage)
 			if err != nil {
 				return nil, err

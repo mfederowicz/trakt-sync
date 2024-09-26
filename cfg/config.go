@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/str"
 
 	"github.com/BurntSushi/toml"
@@ -54,8 +55,8 @@ func InitConfig(fs afero.Fs) (*Config, error) {
 	flag.VisitAll(func(f *flag.Flag) {
 		flagMap[f.Name] = f.Value.String()
 	})
-	
-	if len(flagMap["c"]) == 0 {
+
+	if len(flagMap["c"]) == consts.ZeroValue {
 		return nil, fmt.Errorf("config file not exists")
 	}
 
@@ -73,7 +74,7 @@ func GenUsedFlagMap() map[string]bool {
 	flagset := make(map[string]bool)
 
 	flag.Visit(func(f *flag.Flag) {
-		key := string(f.Name[0])	
+		key := string(f.Name[0])
 		flagset[key] = true
 	})
 
@@ -88,19 +89,19 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 	//fmt.Println(flagConfig)
 
 	// Use values from fileConfig if present
-	if len(fileConfig.ClientID) > 0 && fileConfig.ClientID != defaultConfig.ClientID {
+	if len(fileConfig.ClientID) > consts.ZeroValue && fileConfig.ClientID != defaultConfig.ClientID {
 		defaultConfig.ClientID = fileConfig.ClientID
 	}
 
-	if len(fileConfig.ClientSecret) > 0 && fileConfig.ClientSecret != defaultConfig.ClientSecret {
+	if len(fileConfig.ClientSecret) > consts.ZeroValue && fileConfig.ClientSecret != defaultConfig.ClientSecret {
 		defaultConfig.ClientSecret = fileConfig.ClientSecret
 	}
 
-	if len(fileConfig.RedirectURI) > 0 && fileConfig.RedirectURI != defaultConfig.RedirectURI {
+	if len(fileConfig.RedirectURI) > consts.ZeroValue && fileConfig.RedirectURI != defaultConfig.RedirectURI {
 		defaultConfig.RedirectURI = fileConfig.RedirectURI
 	}
 
-	if len(fileConfig.TokenPath) > 0 && fileConfig.TokenPath != defaultConfig.TokenPath {
+	if len(fileConfig.TokenPath) > consts.ZeroValue && fileConfig.TokenPath != defaultConfig.TokenPath {
 		defaultConfig.TokenPath = fileConfig.TokenPath
 	}
 
@@ -110,23 +111,23 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 	}
 	defaultConfig.TokenPath = tokenPath
 
-	if len(fileConfig.ConfigPath) > 0 && fileConfig.ConfigPath != defaultConfig.ConfigPath {
+	if len(fileConfig.ConfigPath) > consts.ZeroValue && fileConfig.ConfigPath != defaultConfig.ConfigPath {
 		defaultConfig.ConfigPath = fileConfig.ConfigPath
 	}
 
-	if len(fileConfig.Output) > 0 && fileConfig.Output != defaultConfig.Output {
+	if len(fileConfig.Output) > consts.ZeroValue && fileConfig.Output != defaultConfig.Output {
 		defaultConfig.Output = fileConfig.Output
 	}
 
-	if len(fileConfig.Action) > 0 && fileConfig.Action != defaultConfig.Action {
+	if len(fileConfig.Action) > consts.ZeroValue && fileConfig.Action != defaultConfig.Action {
 		defaultConfig.Action = fileConfig.Action
 	}
 
-	if fileConfig.ErrorCode != 0 {
+	if fileConfig.ErrorCode != consts.ZeroValue {
 		defaultConfig.ErrorCode = fileConfig.ErrorCode
 	}
 
-	if fileConfig.WarningCode != 0 {
+	if fileConfig.WarningCode != consts.ZeroValue {
 		defaultConfig.WarningCode = fileConfig.WarningCode
 	}
 
@@ -136,35 +137,35 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 		defaultConfig.Verbose = fileConfig.Verbose
 	}
 
-	if len(fileConfig.Type) > 0 && fileConfig.Type != defaultConfig.Type {
+	if len(fileConfig.Type) > consts.ZeroValue && fileConfig.Type != defaultConfig.Type {
 		defaultConfig.Type = fileConfig.Type
 	}
 
-	if len(fileConfig.Sort) > 0 && fileConfig.Sort != defaultConfig.Sort {
+	if len(fileConfig.Sort) > consts.ZeroValue && fileConfig.Sort != defaultConfig.Sort {
 		defaultConfig.Sort = fileConfig.Sort
 	}
 
-	if len(fileConfig.Module) > 0 && fileConfig.Module != defaultConfig.Module {
+	if len(fileConfig.Module) > consts.ZeroValue && fileConfig.Module != defaultConfig.Module {
 		defaultConfig.Module = fileConfig.Module
 	}
 
-	if len(fileConfig.Format) > 0 && fileConfig.Format != defaultConfig.Format {
+	if len(fileConfig.Format) > consts.ZeroValue && fileConfig.Format != defaultConfig.Format {
 		defaultConfig.Format = fileConfig.Format
 	}
 
-	if len(fileConfig.UserName) > 0 && fileConfig.UserName != defaultConfig.UserName {
+	if len(fileConfig.UserName) > consts.ZeroValue && fileConfig.UserName != defaultConfig.UserName {
 		defaultConfig.UserName = fileConfig.UserName
 	}
 
-	if len(fileConfig.List) > 0 && fileConfig.List != defaultConfig.List {
+	if len(fileConfig.List) > consts.ZeroValue && fileConfig.List != defaultConfig.List {
 		defaultConfig.List = fileConfig.List
 	}
 
-	if fileConfig.ID == "" && fileConfig.ID != defaultConfig.ID {
+	if fileConfig.ID == consts.EmptyString && fileConfig.ID != defaultConfig.ID {
 		defaultConfig.ID = fileConfig.ID
 	}
 
-	if fileConfig.PerPage > 0 && fileConfig.PerPage != defaultConfig.PerPage {
+	if fileConfig.PerPage > consts.ZeroValue && fileConfig.PerPage != defaultConfig.PerPage {
 		defaultConfig.PerPage = fileConfig.PerPage
 	}
 
@@ -174,61 +175,68 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 		defaultConfig.Verbose = boolValue
 	}
 
-	if flagset["c"] && flagConfig["c"] != "" {
-		defaultConfig.ConfigPath = flagConfig["c"]
-	} else if fileConfig.ConfigPath != "" {
+	f := "c"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.ConfigPath = flagConfig[f]
+	} else if fileConfig.ConfigPath != consts.EmptyString {
 		defaultConfig.ConfigPath = fileConfig.ConfigPath
 	}
 
-	if flagset["o"] && flagConfig["o"] != "" {
-		defaultConfig.Output = flagConfig["o"]
-	} else if fileConfig.Output != "" {
+	f = "o"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.Output = flagConfig[f]
+	} else if fileConfig.Output != consts.EmptyString {
 		defaultConfig.Output = fileConfig.Output
 	}
-	if flagset["t"] && flagConfig["t"] != "" {
-		defaultConfig.Type = flagConfig["t"]
-	} else if fileConfig.Type != "" {
+	f = "t"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.Type = flagConfig[f]
+	} else if fileConfig.Type != consts.EmptyString {
 		defaultConfig.Type = fileConfig.Type
 	}
-	if flagset["f"] && flagConfig["f"] != "" {
-		defaultConfig.Format = flagConfig["f"]
-	} else if fileConfig.Format != "" {
+
+	f = "f"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.Format = flagConfig[f]
+	} else if fileConfig.Format != consts.EmptyString {
 		defaultConfig.Format = fileConfig.Format
 	}
 
-	if flagset["u"] && flagConfig["u"] != "" {
-		defaultConfig.UserName = flagConfig["u"]
-	} else if fileConfig.UserName != "" {
+	f = "u"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.UserName = flagConfig[f]
+	} else if fileConfig.UserName != consts.EmptyString {
 		defaultConfig.UserName = fileConfig.UserName
 	}
 
-	if flagset["l"] && flagConfig["l"] != "" {
-		defaultConfig.List = flagConfig["l"]
-	} else if fileConfig.List != "" {
+	f = "l"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.List = flagConfig[f]
+	} else if fileConfig.List != consts.EmptyString {
 		defaultConfig.List = fileConfig.List
 	}
-
-	if flagset["i"] && flagConfig["i"] != "" {
-		defaultConfig.ID = flagConfig["i"]
-	} else if fileConfig.ID != "" {
+	f = "i"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.ID = flagConfig[f]
+	} else if fileConfig.ID != consts.EmptyString {
 		defaultConfig.ID = fileConfig.ID
 	}
-
-	if flagset["m"] && flagConfig["m"] != "" {
-		defaultConfig.Module = flagConfig["m"]
-	} else if fileConfig.Module != "" {
+	f = "m"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.Module = flagConfig[f]
+	} else if fileConfig.Module != consts.EmptyString {
 		defaultConfig.Module = fileConfig.Module
 	}
-
-	if flagset["a"] && flagConfig["a"] != "" {
-		defaultConfig.Action = flagConfig["a"]
-	} else if fileConfig.Action != "" {
+	f = "a"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.Action = flagConfig[f]
+	} else if fileConfig.Action != consts.EmptyString {
 		defaultConfig.Action = fileConfig.Action
 	}
-
-	if flagset["s"] && flagConfig["s"] != "" {
-		defaultConfig.Sort = flagConfig["s"]
-	} else if fileConfig.Sort != "" {
+	f = "s"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.Sort = flagConfig[f]
+	} else if fileConfig.Sort != consts.EmptyString {
 		defaultConfig.Sort = fileConfig.Sort
 	}
 
@@ -251,7 +259,7 @@ func ReadConfigFromFile(fs afero.Fs, filename string) (*Config, error) {
 		return nil, fmt.Errorf("cannot read the config file : %w", err)
 	}
 
-	if len(string(file)) == 0 {
+	if len(string(file)) == consts.ZeroValue {
 		return nil, fmt.Errorf("empty file content")
 	}
 
@@ -267,7 +275,7 @@ func ReadConfigFromFile(fs afero.Fs, filename string) (*Config, error) {
 func GetConfig(fs afero.Fs, configPath string) (*Config, error) {
 	config := &Config{}
 	switch {
-	case configPath != "":
+	case configPath != consts.EmptyString:
 		err := parseConfig(fs, configPath, config)
 		if err != nil {
 			return nil, err
@@ -298,18 +306,18 @@ func parseConfig(fs afero.Fs, path string, config *Config) error {
 func DefaultConfig() *Config {
 
 	return &Config{
-		ClientID:     "",
-		ClientSecret: "",
-		RedirectURI:  "",
-		WarningCode:  0,
-		ErrorCode:    0,
+		ClientID:     consts.EmptyString,
+		ClientSecret: consts.EmptyString,
+		RedirectURI:  consts.EmptyString,
+		WarningCode:  consts.ZeroValue,
+		ErrorCode:    consts.ZeroValue,
 		Verbose:      false,
-		TokenPath:    "",
+		TokenPath:    consts.EmptyString,
 		ConfigPath:   buildDefaultConfigPath(),
-		Output:       "",
+		Output:       consts.EmptyString,
 		Format:       "imdb",
 		Module:       "history",
-		Action:       "",
+		Action:       consts.EmptyString,
 		Type:         "movies",
 		SearchIDType: "trakt",
 		SearchType:   []string{},
@@ -317,18 +325,18 @@ func DefaultConfig() *Config {
 		Sort:         "rank",
 		List:         "history",
 		UserName:     "me",
-		ID:           "",
-		PerPage:      100,
+		ID:           consts.EmptyString,
+		PerPage:      consts.DefaultPerPage,
 	}
 }
 
 func normalizeConfig(config *Config) error {
 
-	if len(config.ClientID) == 0 || len(config.ClientSecret) == 0 {
+	if len(config.ClientID) == consts.ZeroValue || len(config.ClientSecret) == consts.ZeroValue {
 		return fmt.Errorf("client_id and client_secret are required fields, update your config file")
 	}
 
-	if len(config.TokenPath) == 0 || (config.TokenPath != "" && !strings.HasSuffix(config.TokenPath, "json")) {
+	if len(config.TokenPath) == consts.ZeroValue || (config.TokenPath != consts.EmptyString && !strings.HasSuffix(config.TokenPath, "json")) {
 		return fmt.Errorf("token_path should be json file, update your config file")
 	}
 
@@ -337,10 +345,10 @@ func normalizeConfig(config *Config) error {
 }
 
 func expandTilde(path string) (string, error) {
-	if len(path) > 0 && path[0] == '~' {
+	if len(path) > consts.ZeroValue && path[consts.ZeroValue] == '~' {
 		usr, err := user.Current()
 		if err != nil {
-			return "", err
+			return consts.EmptyString, err
 		}
 		return filepath.Join(usr.HomeDir, path[1:]), nil
 	}

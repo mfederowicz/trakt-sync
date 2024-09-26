@@ -5,7 +5,9 @@ import (
 	"bytes"
 	"regexp"
 	"testing"
+
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 
 	"github.com/spf13/afero"
@@ -15,9 +17,9 @@ func TestHelp(t *testing.T) {
 	
 	AppFs = afero.NewMemMapFs()
 	tmpPath := "/tmp-iofs/"
-	AppFs.MkdirAll(tmpPath, 0755)
+	AppFs.MkdirAll(tmpPath, consts.X755)
 
-	afero.WriteFile(AppFs, tmpPath+"/token.json", []byte("{}"), 0644)
+	afero.WriteFile(AppFs, tmpPath+"/token.json", []byte("{}"), consts.X644)
 
 	c := cfg.DefaultConfig()
 	c.ClientID = "a"

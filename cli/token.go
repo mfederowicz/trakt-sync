@@ -5,8 +5,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"os"
+
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 )
@@ -83,10 +86,10 @@ func refreshToken(config *cfg.Config, oauth *internal.OauthService) bool {
 		return false
 	}
 
-	if resp.StatusCode == 200 {
+	if resp.StatusCode == http.StatusOK {
 
 		tokenjson, _ := json.Marshal(newToken)
-		if err := os.WriteFile(config.TokenPath, tokenjson, 0644); err != nil {
+		if err := os.WriteFile(config.TokenPath, tokenjson, consts.X644); err != nil {
 			fmt.Println(err.Error())
 			return false
 		}

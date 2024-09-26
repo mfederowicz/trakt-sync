@@ -4,6 +4,8 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -31,7 +33,7 @@ func (s *SyncService) GetCollection(ctx context.Context, types *string, opts *ur
 	}
 
 	fmt.Println("fetch collection url:" + url)
-	req, err := s.client.NewRequest("GET", url, nil)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -7,8 +7,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/mfederowicz/trakt-sync/str"
-	"github.com/mfederowicz/trakt-sync/uri"
 	"io"
 	"net/http"
 	"net/url"
@@ -16,6 +14,10 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/mfederowicz/trakt-sync/consts"
+	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/uri"
 )
 
 // basic consts for client
@@ -27,9 +29,11 @@ const (
 	HeaderPaginationPageCount = "X-Pagination-Page-Count"
 
 	skipRateLimitCheck requestContext = iota
+	emptyLimit                        = ""
 )
 
 var errNonNilContext = errors.New("context must be non-nil")
+var emptyReader = strings.NewReader("")
 
 type requestContext uint8
 
@@ -226,7 +230,7 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 // CheckResponse checks if api response have errors.
 func (c *Client) CheckResponse(r *http.Response) error {
 
-	if c := r.StatusCode; 200 <= c && c <= 299 {
+	if c := r.StatusCode; http.StatusOK <= c && c <= consts.MaxAcceptedStatus {
 		return nil
 	}
 
@@ -259,6 +263,7 @@ func (c *Client) CheckResponse(r *http.Response) error {
 	}
 
 }
+
 // CheckRetryAfter check Retry After header.
 func (c *Client) CheckRetryAfter(req *http.Request) *AbuseRateLimitError {
 
@@ -272,7 +277,7 @@ func (c *Client) CheckRetryAfter(req *http.Request) *AbuseRateLimitError {
 			StatusCode: http.StatusForbidden,
 			Request:    req,
 			Header:     make(http.Header),
-			Body:       io.NopCloser(strings.NewReader("")),
+			Body:       io.NopCloser(emptyReader),
 		}
 
 		retryAfter := time.Until(reset)
@@ -285,6 +290,7 @@ func (c *Client) CheckRetryAfter(req *http.Request) *AbuseRateLimitError {
 
 	return nil
 }
+
 // WithContext pass context to request
 func (c *Client) WithContext(ctx context.Context, req *http.Request) *http.Request {
 	return req.WithContext(ctx)
@@ -294,7 +300,7 @@ func (c *Client) WithContext(ctx context.Context, req *http.Request) *http.Reque
 func (c *Client) ParseRate(r *http.Response) str.Rate {
 
 	var rate str.Rate
-	if limit := r.Header.Get(HeaderRateLimit); limit != "" {
+	if limit := r.Header.Get(HeaderRateLimit); limit != emptyLimit {
 		rate.Limit, _ = strconv.Atoi(limit)
 	}
 
@@ -315,7 +321,7 @@ func (c *Client) ParseRateLimit(r *http.Response) *time.Duration {
 	// number of seconds that one should
 	// wait before resuming making requests.
 	if v := r.Header.Get(HeaderRetryAfter); v != "" {
-		retryAfterSeconds, _ := strconv.ParseInt(v, 10, 64) // Error handling is noop.
+		retryAfterSeconds, _ := strconv.ParseInt(v, consts.BaseInt, consts.BitSize) // Error handling is noop.
 		retryAfter := time.Duration(retryAfterSeconds) * time.Second
 		return &retryAfter
 	}

@@ -11,6 +11,7 @@ import (
 	"text/tabwriter"
 	"text/template"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/spf13/afero"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -34,7 +35,7 @@ var helpDump = HelpCmd.Flag.Bool("godoc", false, "Dump the godoc output for the 
 func HelpFunc(_ *Command, args ...string) error {
 	var selected []*Command
 
-	if len(args) > 0 {
+	if len(args) > consts.ZeroValue {
 		want := strings.ToLower(args[0])
 		for _, cmd := range Commands {
 			if cmd.Name == want {
@@ -47,20 +48,20 @@ func HelpFunc(_ *Command, args ...string) error {
 	case *helpDump:
 		result := render(stdout, docTemplate, Commands)
 		if result != nil {
-			return fmt.Errorf("error render: %w", result)
+			return fmt.Errorf(consts.ErrorRender, result)
 		}
 	case len(selected) < len(args):
 		fmt.Fprintf(stdout, "error: unknown command %q\n", args[0])
 		result := render(stdout, helpTemplate, HelpCmd)
 		if result != nil {
-			return fmt.Errorf("error render: %w", result)
+			return fmt.Errorf(consts.ErrorRender, result)
 		}
-	case len(selected) == 0:
+	case len(selected) == consts.ZeroValue:
 		result := render(stdout, usageTemplate, Commands)
 		if result != nil {
-			return fmt.Errorf("error render: %w", result)
+			return fmt.Errorf(consts.ErrorRender, result)
 		}
-	case len(selected) == 1:
+	case len(selected) == consts.OneValue:
 		result := render(stdout, helpTemplate, selected[0])
 		if result != nil {
 			return fmt.Errorf("error render: %w", result)
@@ -75,7 +76,16 @@ func init() {
 }
 
 func tabify(w io.Writer) *tabwriter.Writer {
-	return tabwriter.NewWriter(w, 0, 0, 1, ' ', 0)
+	
+	const (
+		WriterMinWidth = 0
+		WriterTabWidth = 0
+		WriterPadding  = 1
+		WriterPadChar  = ' '
+		WriterFlags    = 0
+	)
+
+	return tabwriter.NewWriter(w, WriterMinWidth, WriterTabWidth, WriterPadding, WriterPadChar, WriterFlags)
 }
 
 var templateFuncs = template.FuncMap{

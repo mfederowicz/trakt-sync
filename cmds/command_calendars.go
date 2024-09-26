@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
@@ -15,9 +16,9 @@ import (
 )
 
 var (
-	_calAction    = CalendarsCmd.Flag.String("a", cfg.DefaultConfig().Action, ActionUsage)
-	_calStartDate = CalendarsCmd.Flag.String("start_date", time.Now().Format("2006-01-02"), StartDateUsage)
-	_calDays      = CalendarsCmd.Flag.Int("days", 7, DaysUsage)
+	_calAction    = CalendarsCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_calStartDate = CalendarsCmd.Flag.String("start_date", time.Now().Format("2006-01-02"), consts.StartDateUsage)
+	_calDays      = CalendarsCmd.Flag.Int("days", 7, consts.DaysUsage)
 	actionType    = "my"
 )
 
@@ -85,12 +86,12 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 		}
 
 		if result == nil {
-			return fmt.Errorf("empty result")
+			return fmt.Errorf(consts.EmptyResult)
 		}
 
 		fmt.Print("Found " + options.Action + " calendar data \n")
 		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, "", "  ")
+		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JsonDataFormat)
 		writer.WriteJSON(options, jsonData)
 
 	case "my-finales", "all-finales":
@@ -102,12 +103,12 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 		}
 
 		if result == nil {
-			return fmt.Errorf("empty result")
+			return fmt.Errorf(consts.EmptyResult)
 		}
 
 		fmt.Print("Found " + options.Action + " calendar data \n")
 		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, "", "  ")
+		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JsonDataFormat)
 		writer.WriteJSON(options, jsonData)
 
 	case "my-movies", "all-movies":
@@ -119,12 +120,12 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 		}
 
 		if result == nil {
-			return fmt.Errorf("empty result")
+			return fmt.Errorf(consts.EmptyResult)
 		}
 
 		fmt.Print("Found " + options.Action + " calendar data \n")
 		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, "", "  ")
+		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JsonDataFormat)
 
 		writer.WriteJSON(options, jsonData)
 
@@ -137,12 +138,12 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 		}
 
 		if result == nil {
-			return fmt.Errorf("empty result")
+			return fmt.Errorf(consts.EmptyResult)
 		}
 
 		fmt.Print("Found " + options.Action + " calendar data \n")
 		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, "", "  ")
+		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JsonDataFormat)
 
 		writer.WriteJSON(options, jsonData)
 
@@ -211,7 +212,7 @@ func fetchCalendarNewShows(client *internal.Client, options *str.Options) ([]*st
 func fetchCalendarSeasonPremieres(client *internal.Client, options *str.Options) ([]*str.CalendarList, error) {
 
 	if options.Action == "all-season-premieres" {
-		actionType = "all"
+		actionType = consts.ActionTypeAll
 	}
 
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
@@ -234,7 +235,7 @@ func fetchCalendarSeasonPremieres(client *internal.Client, options *str.Options)
 func fetchCalendarFinales(client *internal.Client, options *str.Options) ([]*str.CalendarList, error) {
 
 	if options.Action == "all-finales" {
-		actionType = "all"
+		actionType = consts.ActionTypeAll
 	}
 
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
@@ -257,7 +258,7 @@ func fetchCalendarFinales(client *internal.Client, options *str.Options) ([]*str
 func fetchCalendarMovies(client *internal.Client, options *str.Options) ([]*str.CalendarList, error) {
 
 	if options.Action == "all-movies" {
-		actionType = "all"
+		actionType = consts.ActionTypeAll
 	}
 
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
@@ -280,7 +281,7 @@ func fetchCalendarMovies(client *internal.Client, options *str.Options) ([]*str.
 func fetchCalendarDvdReleases(client *internal.Client, options *str.Options) ([]*str.CalendarList, error) {
 
 	if options.Action == "all-dvd" {
-		actionType = "all"
+		actionType = consts.ActionTypeAll
 	}
 
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}

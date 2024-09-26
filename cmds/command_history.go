@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
@@ -31,12 +32,12 @@ func historyFunc(cmd *Command, _ ...string) error {
 
 	fmt.Println("fetch history lists for:" + options.UserName)
 
-	historyLists, err := fetchHistoryList(client, options, 1)
+	historyLists, err := fetchHistoryList(client, options, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("fetch history list error:%w", err)
 	}
 
-	if len(historyLists) == 0 {
+	if len(historyLists) == consts.ZeroValue {
 		return fmt.Errorf("empty history lists")
 	}
 
@@ -48,7 +49,7 @@ func historyFunc(cmd *Command, _ ...string) error {
 		findDuplicates, exportJSON = cmd.ExportListProcess(data, options, findDuplicates, exportJSON)
 	}
 
-	if len(exportJSON) == 0 {
+	if len(exportJSON) == consts.ZeroValue {
 		return fmt.Errorf("warning no data to export, probably a bug")
 	}
 
@@ -89,7 +90,7 @@ func fetchHistoryList(client *internal.Client, options *str.Options, page int) (
 			time.Sleep(time.Duration(2) * time.Second)
 
 			// Fetch items from the next page
-			nextPage := page + 1
+			nextPage := page + consts.NextPageStep
 			nextPageItems, err := fetchHistoryList(client, options, nextPage)
 			if err != nil {
 				return nil, err

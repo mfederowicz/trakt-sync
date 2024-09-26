@@ -4,6 +4,8 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
@@ -24,7 +26,7 @@ func (u *UsersService) GetItemstOnAPersonalList(ctx context.Context, id *string,
 		url = "users/me/lists/watchlist/items/movies"
 	}
 
-	req, err := u.client.NewRequest("GET", url, nil)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}

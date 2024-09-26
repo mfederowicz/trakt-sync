@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 
@@ -15,11 +16,11 @@ import (
 )
 
 var (
-	_userName     = flag.String("u", cfg.DefaultConfig().UserName, UserlistUsage)
-	_strType      = flag.String("t", cfg.DefaultConfig().Type, TypeUsage)
-	_output       = flag.String("o", cfg.DefaultConfig().Output, OutputUsage)
-	_format       = flag.String("f", cfg.DefaultConfig().Format, FormatUsage)
-	_extendedInfo = flag.String("ex", "", ExtendedInfoUsage)
+	_userName     = flag.String("u", cfg.DefaultConfig().UserName, consts.UserlistUsage)
+	_strType      = flag.String("t", cfg.DefaultConfig().Type, consts.TypeUsage)
+	_output       = flag.String("o", cfg.DefaultConfig().Output, consts.OutputUsage)
+	_format       = flag.String("f", cfg.DefaultConfig().Format, consts.FormatUsage)
+	_extendedInfo = flag.String("ex", "", consts.ExtendedInfoUsage)
 	_query        = flag.String("query", "", "")
 	_years        = flag.String("years", "", "")
 	_genres       = flag.String("genres", "", "")
@@ -29,26 +30,6 @@ var (
 	_studioIDs    = flag.String("studio_ids", "", "")
 )
 
-// usage strings
-const (
-	ConfigUsage       = "allow to overwrite default config filename"
-	VersionUsage      = "get trakt-sync version"
-	VerboseUsage      = "print additional verbose information"
-	OutputUsage       = "allow to overwrite default output filename"
-	FormatUsage       = "allow to overwrite default ID type format"
-	TypeUsage         = "allow to overwrite type"
-	ListUsage         = "allow to overwrite list"
-	UserlistUsage     = "allow to export a user custom list"
-	StartDateUsage    = "allow to overwrite start_date"
-	DaysUsage         = "allow to overwrite days"
-	ListIDUsage       = "allow to export a specific custom list"
-	ModuleUsage       = "allow use selected module"
-	ActionUsage       = "allow use selected action"
-	QueryUsage        = "allow use selected query"
-	FieldUsage        = "allow use selected field"
-	SortUsage         = "allow to overwrite sort"
-	ExtendedInfoUsage = "allow to overwrite extended flag"
-)
 
 // Avflags contains all available flags
 var Avflags = map[string]bool{
@@ -146,7 +127,7 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 		fmt.Println("trakt-api-key header:" + options.Headers["trakt-api-key"].(string))
 		fmt.Println("token expiration in seconds:" + strconv.Itoa(options.Token.ExpiritySeconds()))
 		fmt.Println("Extended info:" + *_extendedInfo)
-		if len(options.Module) > 0 {
+		if len(options.Module) > consts.ZeroValue {
 			fmt.Println("selected module:" + options.Module)
 		}
 		fmt.Println(
@@ -184,8 +165,8 @@ func (c *Command) BadArgs(errFormat string, args ...interface{}) {
 // Errorf prints out a formatted error with the right prefixes.
 func (c *Command) Errorf(errFormat string, args ...interface{}) {
 	fmt.Fprintf(stdout, c.Name+": error: "+errFormat+"\n", args...)
-	if c.exit == 0 {
-		c.exit = 1
+	if c.exit == consts.ZeroValue {
+		c.exit = consts.DefaultExitCode
 	}
 }
 
@@ -220,7 +201,7 @@ func argsToMap(args []string) map[string]bool {
 
 	for _, arg := range args {
 		// If the argument starts with "-", consider it a key
-		if arg[0] == '-' {
+		if arg[consts.FirstArgElement] == '-' {
 			// If we already have a key, it means it's a single argument without a value
 			if key != "" {
 				argMap[cleanKey(key)] = true // Set the key to true for bool map
@@ -230,7 +211,7 @@ func argsToMap(args []string) map[string]bool {
 			// If we have a key, assign the value to it
 			if key != "" {
 				argMap[cleanKey(key)] = true // Set the key to true for bool map
-				key = ""
+				key = consts.EmptyString
 			} else {
 				// If we don't have a key, consider it a standalone argument
 				argMap[arg] = true // Set the key to true for bool map
@@ -239,7 +220,7 @@ func argsToMap(args []string) map[string]bool {
 	}
 
 	// If we still have a key at the end, it means it's a single argument without a value
-	if key != "" {
+	if key != consts.EmptyString {
 		argMap[cleanKey(key)] = true // Set the key to true for bool map
 	}
 
@@ -326,7 +307,7 @@ func (c *Command) ExportListProcess(
 
 		exportJSON = append(exportJSON, emap)
 
-	} else if options.Type != "episodes" && data.Movie != nil && data.Movie.IDs.HaveID("Tmdb") && options.Format == "tmdb" {
+	} else if options.Type != consts.EpisodesType && data.Movie != nil && data.Movie.IDs.HaveID("Tmdb") && options.Format == "tmdb" {
 
 		findDuplicates = append(findDuplicates, *data.Movie.IDs.Tmdb)
 		emap := str.ExportlistItemJSON{
@@ -338,7 +319,7 @@ func (c *Command) ExportListProcess(
 		emap.UpdatedAt = data.UpdatedAt
 		exportJSON = append(exportJSON, emap)
 
-	} else if options.Type != "episodes" && data.Show != nil && data.Show.IDs.HaveID("Tmdb") && options.Format == "tmdb" {
+	} else if options.Type != consts.EpisodesType && data.Show != nil && data.Show.IDs.HaveID("Tmdb") && options.Format == "tmdb" {
 
 		findDuplicates = append(findDuplicates, *data.Show.IDs.Tmdb)
 		emap := str.ExportlistItemJSON{
@@ -348,16 +329,16 @@ func (c *Command) ExportListProcess(
 		c.Uptime(&emap, options, data)
 		exportJSON = append(exportJSON, emap)
 
-	} else if data.Episode.IDs.HaveID("Tmdb") && options.Format == "tmdb" {
+	} else if data.Episode.IDs.HaveID(consts.TmdbIDFormat) && options.Format == consts.TmdbFormat {
 		//fmt.Println("episode export by format tmdb")
 		findDuplicates = append(findDuplicates, *data.Episode.IDs.Tmdb)
 
-		if len(*data.Episode.Title) == 0 {
+		if len(*data.Episode.Title) == consts.ZeroValue {
 			notitle := "no episode title"
 			data.Episode.Title = &notitle
 		}
 
-		if data.Show != nil && len(*data.Show.Title) == 0 {
+		if data.Show != nil && len(*data.Show.Title) == consts.ZeroValue {
 			notitle := "no show title"
 			data.Show.Title = &notitle
 		}
@@ -386,13 +367,13 @@ func (c *Command) ExportListProcess(
 		//fmt.Println("episode export by format tvdb")
 		findDuplicates = append(findDuplicates, *data.Episode.IDs.Tvdb)
 
-		if len(*data.Episode.Title) == 0 {
-			notitle := "no episode title"
+		if len(*data.Episode.Title) == consts.ZeroValue {
+			notitle := consts.NoEpisodeTitle
 			data.Episode.Title = &notitle
 		}
 
-		if len(*data.Show.Title) == 0 {
-			notitle := "no show title"
+		if len(*data.Show.Title) == consts.ZeroValue {
+			notitle := consts.NoShowTitle
 			data.Show.Title = &notitle
 		}
 
@@ -409,18 +390,18 @@ func (c *Command) ExportListProcess(
 
 		exportJSON = append(exportJSON, emap)
 
-	} else if data.Episode.IDs.HaveID("Imdb") && options.Format == "imdb" {
+	} else if data.Episode.IDs.HaveID(consts.ImdbIDFormat) && options.Format == consts.ImdbFormat {
 
 		//fmt.Println("episode export by format imdb")
 		findDuplicates = append(findDuplicates, *data.Episode.IDs.Imdb)
 
-		if len(*data.Episode.Title) == 0 {
-			notitle := "no episode title"
+		if len(*data.Episode.Title) == consts.ZeroValue {
+			notitle := consts.NoEpisodeTitle
 			data.Episode.Title = &notitle
 		}
 
-		if len(*data.Show.Title) == 0 {
-			notitle := "no show title"
+		if len(*data.Show.Title) == consts.ZeroValue {
+			notitle := consts.NoShowTitle
 			data.Show.Title = &notitle
 		}
 
@@ -435,18 +416,18 @@ func (c *Command) ExportListProcess(
 
 		exportJSON = append(exportJSON, emap)
 
-	} else if data.Episode.IDs.HaveID("Tmdb") && options.Format == "tmdb" {
+	} else if data.Episode.IDs.HaveID(consts.TmdbIDFormat) && options.Format == consts.TmdbFormat {
 
 		//fmt.Println("episode export by format tmdb")
 		findDuplicates = append(findDuplicates, *data.Episode.IDs.Tmdb)
 
-		if len(*data.Episode.Title) == 0 {
-			notitle := "no episode title"
+		if len(*data.Episode.Title) == consts.ZeroValue {
+			notitle := consts.NoEpisodeTitle
 			data.Episode.Title = &notitle
 		}
 
-		if len(*data.Show.Title) == 0 {
-			notitle := "no show title"
+		if len(*data.Show.Title) == consts.ZeroValue {
+			notitle := consts.NoShowTitle
 			data.Show.Title = &notitle
 		}
 
@@ -474,52 +455,52 @@ func (c *Command) PrepareQueryString(q string) *string {
 // UpdateOptionsWithCommandFlags update options depends on command flags
 func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Options {
 
-	if len(*_searchQuery) > 0 {
+	if len(*_searchQuery) > consts.ZeroValue {
 		options.Query = *c.PrepareQueryString(*_searchQuery)
 	}
 
-	if len(*_extendedInfo) > 0 {
+	if len(*_extendedInfo) > consts.ZeroValue {
 		options.ExtendedInfo = *_extendedInfo
 	}
 
-	if len(*_format) > 0 {
+	if len(*_format) > consts.ZeroValue {
 		options.Format = *_format
 	}
 
-	if len(*_output) > 0 {
+	if len(*_output) > consts.ZeroValue {
 		options.Output = *_output
 	} else {
 		switch options.Module {
 		case "calendars":
 			switch options.Action {
 			case "my-shows", "all-shows":
-				options.Output = fmt.Sprintf("export_%s_%s_%s.json", options.Module, "shows", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+				options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, "shows", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
 			case "my-new-shows", "all-new-shows":
-				options.Output = fmt.Sprintf("export_%s_%s_%s.json", options.Module, "new_shows", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+				options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, "new_shows", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
 			case "my-season-premieres", "all-season-premieres":
-				options.Output = fmt.Sprintf("export_%s_%s_%s.json", options.Module, "season_premieres", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+				options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, "season_premieres", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
 			case "my-finales", "all-finales":
-				options.Output = fmt.Sprintf("export_%s_%s_%s.json", options.Module, "finales", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+				options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, "finales", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
 			case "my-movies", "all-movies":
-				options.Output = fmt.Sprintf("export_%s_%s_%s.json", options.Module, "movies", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+				options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, "movies", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
 			case "my-dvd", "all-dvd":
-				options.Output = fmt.Sprintf("export_%s_%s_%s.json", options.Module, "dvd", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+				options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, "dvd", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
 
 			default:
-				options.Output = fmt.Sprintf("export_%s.json", options.Module)
+				options.Output = fmt.Sprintf(consts.DefaultOutputFormat1, options.Module)
 			}
 		case "search":
 			switch options.Action {
 			case "text-query":
-				options.Output = fmt.Sprintf("export_%s_%s_%s.json", options.Module, "query", strings.ReplaceAll(options.Type, ",", ""))
+				options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, "query", strings.ReplaceAll(options.Type, ",", consts.EmptyString))
 			case "id-lookup":
-				options.Output = fmt.Sprintf("export_%s_%s_%s.json", options.Module, "lookup", strings.ReplaceAll(options.SearchIDType, ",", ""))
+				options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, "lookup", strings.ReplaceAll(options.SearchIDType, ",", consts.EmptyString))
 			default:
-				options.Output = fmt.Sprintf("export_%s.json", options.Module)
+				options.Output = fmt.Sprintf(consts.DefaultOutputFormat1, options.Module)
 			}
 
 		default:
-			options.Output = fmt.Sprintf("export_%s_%s_%s.json", options.Module, options.Type, options.Format)
+			options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Type, options.Format)
 		}
 
 	}

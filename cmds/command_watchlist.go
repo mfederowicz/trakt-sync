@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
@@ -30,12 +31,12 @@ func watchlistFunc(cmd *Command, _ ...string) error {
 
 	fmt.Println("fetch watchlist lists for:" + options.UserName)
 
-	watchlist, err := fetchWatchlist(client, options, 1)
+	watchlist, err := fetchWatchlist(client, options, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("fetch watchlist error:%w", err)
 	}
 
-	if len(watchlist) == 0 {
+	if len(watchlist) == consts.ZeroValue {
 		return fmt.Errorf("empty watchlist")
 	}
 
@@ -47,7 +48,7 @@ func watchlistFunc(cmd *Command, _ ...string) error {
 		findDuplicates, exportJSON = cmd.ExportListProcess(data, options, findDuplicates, exportJSON)
 	}
 
-	if len(exportJSON) == 0 {
+	if len(exportJSON) == consts.ZeroValue {
 		return fmt.Errorf("warning no data to export, probably a bug")
 	}
 
@@ -83,12 +84,12 @@ func fetchWatchlist(client *internal.Client, options *str.Options, page int) ([]
 
 		pagesInt, _ := strconv.Atoi(pages)
 
-		if pagesInt > 0 && page != pagesInt {
+		if pagesInt > consts.ZeroValue && page != pagesInt {
 
 			time.Sleep(time.Duration(2) * time.Second)
 
 			// Fetch items from the next page
-			nextPage := page + 1
+			nextPage := page + consts.NextPageStep
 			nextPageItems, err := fetchWatchlist(client, options, nextPage)
 			if err != nil {
 				return nil, err

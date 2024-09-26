@@ -6,14 +6,39 @@ import (
 	"os"
 	"testing"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/test"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
 
 var (
-	AppFs = afero.NewMemMapFs()
+	AppFs              = afero.NewMemMapFs()
+	homeDirPath        = "/tmp-iofs/home/tester"
+	configFileName     = "/trakt-sync.toml"
+	configDirPath      = "/tmp-iofs/home/tester/.config"
+	tokenFile          = "/token.json"
+	bufferClientId     = "client_id = \"xxxxxxxxxxxxxxxxxxx\"\n"
+	bufferClientSecret = "client_secret = \"xxxxxxxxxxxxxxxxxxxxxxxxxxxx\"\n"
+	bufferTokenPath    = "token_path = \"\"\n"
+	bufferPerPage      = "per_page = 50\n"
 )
+
+func commandLineArg(filename string) []string {
+	return []string{"cmd", "-c=" + filename}
+}
+
+func addCFlag() {
+	flag.String("c", "", "c")
+}
+
+func addDaysFlag() {
+	flag.String("days", "", "days")
+}
+
+func emptyFlagset() *flag.FlagSet {
+	return flag.NewFlagSet(consts.EmptyString, flag.ExitOnError)
+}
 
 func TestMain(m *testing.M) {
 	//AppFs := afero.NewMemMapFs()
@@ -26,7 +51,7 @@ func TestMain(m *testing.M) {
 
 func TestGenUsedFlagMap(t *testing.T) {
 	// Reset the flag.CommandLine and reinitialize your flags
-	flag.CommandLine = flag.NewFlagSet("", flag.ExitOnError)
+	flag.CommandLine = emptyFlagset()
 	flagset := make(map[string]bool)
 	got := GenUsedFlagMap()
 	if !test.MapsStringBoolEqual(got, flagset) {
@@ -35,7 +60,7 @@ func TestGenUsedFlagMap(t *testing.T) {
 
 	// Recreate flags as needed
 	os.Args = []string{"cmd", "--days=1"}
-	flag.String("days", "", "days")
+	addDaysFlag()
 	flag.Parse()
 	got2 := GenUsedFlagMap()
 	var flagset2 = map[string]bool{
@@ -62,13 +87,12 @@ func TestInitConfigCannotReadOtherFile(t *testing.T) {
 		AppFs = afero.NewMemMapFs()
 	})
 	// Reset the flag.CommandLine and reinitialize your flags
-	flag.CommandLine = flag.NewFlagSet("", flag.ExitOnError)
-	homeDirPath := "/tmp-iofs/home/tester"
-	AppFs.MkdirAll(homeDirPath, 0755)
-	filename := homeDirPath + "/trakt-sync.toml"
+	flag.CommandLine = emptyFlagset()
+	AppFs.MkdirAll(homeDirPath, consts.X755)
+	filename := homeDirPath + configFileName
 
-	os.Args = []string{"cmd", "-c=" + filename}
-	flag.String("c", "", "c")
+	os.Args = commandLineArg(filename)
+	addCFlag()
 	flag.Parse()
 	_, err := InitConfig(AppFs)
 	assert.Contains(t, err.Error(), "cannot read the config file")
@@ -82,14 +106,13 @@ func TestInitConfigNoContent(t *testing.T) {
 		AppFs = afero.NewMemMapFs()
 	})
 	// Reset the flag.CommandLine and reinitialize your flags
-	flag.CommandLine = flag.NewFlagSet("", flag.ExitOnError)
-	homeDirPath := "/tmp-iofs/home/tester"
-	AppFs.MkdirAll(homeDirPath, 0755)
-	filename := homeDirPath + "/trakt-sync.toml"
-	afero.WriteFile(AppFs, filename, []byte(""), 0644)
+	flag.CommandLine = emptyFlagset()
+	AppFs.MkdirAll(homeDirPath, consts.X755)
+	filename := homeDirPath + configFileName
+	afero.WriteFile(AppFs, filename, []byte(consts.EmptyString), consts.X644)
 
-	os.Args = []string{"cmd", "-c=" + filename}
-	flag.String("c", "", "c")
+	os.Args = commandLineArg(filename)
+	addCFlag()
 	flag.Parse()
 	_, err := InitConfig(AppFs)
 	assert.Contains(t, err.Error(), "empty file content")
@@ -102,17 +125,16 @@ func TestInitConfigMalformedFile(t *testing.T) {
 		// reset fs after test
 		AppFs = afero.NewMemMapFs()
 	})
-	
+
 	// Reset the flag.CommandLine and reinitialize your flags
-	flag.CommandLine = flag.NewFlagSet("", flag.ExitOnError)
+	flag.CommandLine = emptyFlagset()
 
-	homeDirPath := "/tmp-iofs/home/tester"
-	AppFs.MkdirAll(homeDirPath, 0755)
-	filename := homeDirPath + "/trakt-sync.toml"
-	afero.WriteFile(AppFs, filename, []byte("..."), 0644)
+	AppFs.MkdirAll(homeDirPath, consts.X755)
+	filename := homeDirPath + configFileName
+	afero.WriteFile(AppFs, filename, []byte("..."), consts.X644)
 
-	os.Args = []string{"cmd", "-c=" + filename}
-	flag.String("c", "", "c")
+	os.Args = commandLineArg(filename)
+	addCFlag()
 	flag.Parse()
 	_, err := InitConfig(AppFs)
 	assert.Contains(t, err.Error(), "cannot parse the config file")
@@ -127,36 +149,32 @@ func TestInitConfigPerPageValue(t *testing.T) {
 	})
 
 	// Reset the flag.CommandLine and reinitialize your flags
-	flag.CommandLine = flag.NewFlagSet("", flag.ExitOnError)
+	flag.CommandLine = emptyFlagset()
 
-	homeDirPath := "/tmp-iofs/home/tester"
-	AppFs.MkdirAll(homeDirPath, 0755)
+	AppFs.MkdirAll(homeDirPath, consts.X755)
+	AppFs.MkdirAll(configDirPath, consts.X755)
+	filenameToken := configDirPath + tokenFile
 
-	configDirPath := "/tmp-iofs/home/tester/.config"
-	AppFs.MkdirAll(configDirPath, 0755)
+	afero.WriteFile(AppFs, filenameToken, []byte("\n"), consts.X644)
 
-	filenameToken := configDirPath + "/token.json"
-
-	afero.WriteFile(AppFs, filenameToken, []byte("\n"), 0644)
-
-	filename := homeDirPath + "/trakt-sync.toml"
+	filename := homeDirPath + configFileName
 	var buffer bytes.Buffer
 
 	// Write each line individually
-	buffer.WriteString("client_id = \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"\n")
-	buffer.WriteString("client_secret = \"xxxxxxxxxxxxxxxxxxxxxxxxxxxx\"\n")
+	buffer.WriteString(bufferClientId)
+	buffer.WriteString(bufferClientSecret)
 	buffer.WriteString("token_path = \"" + filenameToken + "\"\n")
-	buffer.WriteString("per_page = 50\n")
+	buffer.WriteString(bufferPerPage)
 
 	// Convert the buffer to a []byte
 	data := buffer.Bytes()
 
-	afero.WriteFile(AppFs, filename, data, 0644)
-	os.Args = []string{"cmd", "-c=" + homeDirPath + "/trakt-sync.toml"}
-	flag.String("c", "", "c")
+	afero.WriteFile(AppFs, filename, data, consts.X644)
+	os.Args = []string{consts.CMD, "-c=" + homeDirPath + configFileName}
+	addCFlag()
 	flag.Parse()
 	c, _ := InitConfig(AppFs)
-	assert.Equal(t, c.PerPage, 50)
+	assert.Equal(t, c.PerPage, consts.PerPage)
 
 }
 
@@ -168,33 +186,31 @@ func TestInitConfigNoClient(t *testing.T) {
 	})
 
 	// Reset the flag.CommandLine and reinitialize your flags
-	flag.CommandLine = flag.NewFlagSet("", flag.ExitOnError)
+	flag.CommandLine = emptyFlagset()
 
-	homeDirPath := "/tmp-iofs/home/tester"
-	AppFs.MkdirAll(homeDirPath, 0755)
+	AppFs.MkdirAll(homeDirPath, consts.X755)
 
-	configDirPath := "/tmp-iofs/home/tester/.config"
-	AppFs.MkdirAll(configDirPath, 0755)
+	AppFs.MkdirAll(configDirPath, consts.X755)
 
-	filenameToken := configDirPath + "/token.json"
+	filenameToken := configDirPath + tokenFile 
 
-	afero.WriteFile(AppFs, filenameToken, []byte("\n"), 0644)
+	afero.WriteFile(AppFs, filenameToken, []byte("\n"), consts.X644)
 
-	filename := homeDirPath + "/trakt-sync.toml"
+	filename := homeDirPath + configFileName
 	var buffer bytes.Buffer
 
 	// Write each line individually
 	buffer.WriteString("client_id = \"\"\n")
-	buffer.WriteString("client_secret = \"xxxxxxxxxxxxxxxxxxxxxxxxxxxx\"\n")
+	buffer.WriteString(bufferClientSecret)
 	buffer.WriteString("token_path = \"" + filenameToken + "\"\n")
-	buffer.WriteString("per_page = 50\n")
+	buffer.WriteString(bufferPerPage)
 
 	// Convert the buffer to a []byte
 	data := buffer.Bytes()
 
-	afero.WriteFile(AppFs, filename, data, 0644)
-	os.Args = []string{"cmd", "-c=" + homeDirPath + "/trakt-sync.toml"}
-	flag.String("c", "", "c")
+	afero.WriteFile(AppFs, filename, data, consts.X644)
+	os.Args = commandLineArg(homeDirPath + configFileName)
+	addCFlag()
 	flag.Parse()
 	_, err := InitConfig(AppFs)
 	assert.Contains(t, err.Error(), "client_id and client_secret are required fields")
@@ -209,33 +225,31 @@ func TestInitConfigNoTokenPath(t *testing.T) {
 	})
 
 	// Reset the flag.CommandLine and reinitialize your flags
-	flag.CommandLine = flag.NewFlagSet("", flag.ExitOnError)
+	flag.CommandLine = emptyFlagset()
 
-	homeDirPath := "/tmp-iofs/home/tester"
-	AppFs.MkdirAll(homeDirPath, 0755)
+	AppFs.MkdirAll(homeDirPath, consts.X755)
 
-	configDirPath := "/tmp-iofs/home/tester/.config"
-	AppFs.MkdirAll(configDirPath, 0755)
+	AppFs.MkdirAll(configDirPath, consts.X755)
 
-	filenameToken := configDirPath + "/token.json"
+	filenameToken := configDirPath + tokenFile
 
-	afero.WriteFile(AppFs, filenameToken, []byte("\n"), 0644)
+	afero.WriteFile(AppFs, filenameToken, []byte(consts.NewLine), consts.X644)
 
-	filename := homeDirPath + "/trakt-sync.toml"
+	filename := homeDirPath + configFileName
 	var buffer bytes.Buffer
 
 	// Write each line individually
-	buffer.WriteString("client_id = \"xxxxxxxxxxxxxxxxxxx\"\n")
-	buffer.WriteString("client_secret = \"xxxxxxxxxxxxxxxxxxxxxxxxxxxx\"\n")
-	buffer.WriteString("token_path = \"\"\n")
-	buffer.WriteString("per_page = 50\n")
+	buffer.WriteString(bufferClientId)
+	buffer.WriteString(bufferClientSecret)
+	buffer.WriteString(bufferTokenPath)
+	buffer.WriteString(bufferPerPage)
 
 	// Convert the buffer to a []byte
 	data := buffer.Bytes()
 
-	afero.WriteFile(AppFs, filename, data, 0644)
-	os.Args = []string{"cmd", "-c=" + homeDirPath + "/trakt-sync.toml"}
-	flag.String("c", "", "c")
+	afero.WriteFile(AppFs, filename, data, consts.X644)
+	os.Args = commandLineArg(homeDirPath + configFileName)
+	addCFlag()
 	flag.Parse()
 	_, err := InitConfig(AppFs)
 	assert.Contains(t, err.Error(), "token_path should be json file")
