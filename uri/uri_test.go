@@ -5,20 +5,20 @@ import (
 )
 
 var (
-	DefaultRange               = RatingRange{Min: 10, Max: 45}
-	ListOptionsBasic           = ListOptions{Page: 1, Limit: 10, Extended: "full"}
-	ListOptionsCommon          = ListOptions{Genres: []string{"action", "adventure", "comedy"}, Years: "2016", StudioIDs: []int{1, 2, 3}}
-	ListOptionsRatings         = ListOptions{Ratings: RatingRange{Min: 10, Max: 45}}
-	ListOptionsInvalidRatings  = ListOptions{Ratings: RatingRange{Min: 100, Max: 48}}
-	ListOptionsVotes           = ListOptions{Votes: VotesRange{Min: 10, Max: 45}}
-	ListOptionsEpisodesFilters = ListOptions{Certifications: []string{"pg-13", "pg-16"}, NetworkIDs: []int{1, 2, 45}, EpisodeTypes: []string{"standard", "series_premiere"}}
+	DefaultRange                     = RatingRange{Min: 10, Max: 45}
+	ListOptionsBasic                 = ListOptions{Page: 1, Limit: 10, Extended: "full"}
+	ListOptionsCommon                = ListOptions{Genres: []string{"action", "adventure", "comedy"}, Years: "2016", StudioIDs: []int{1, 2, 3}}
+	ListOptionsRatings               = ListOptions{Ratings: RatingRange{Min: 10, Max: 45}}
+	ListOptionsInvalidRatings        = ListOptions{Ratings: RatingRange{Min: 100, Max: 48}}
+	ListOptionsVotes                 = ListOptions{Votes: VotesRange{Min: 10, Max: 45}}
+	ListOptionsEpisodesFilters       = ListOptions{Certifications: []string{"pg-13", "pg-16"}, NetworkIDs: []int{1, 2, 45}, EpisodeTypes: []string{"standard", "series_premiere"}}
 	ListOptionsTmdbRatingsFilters    = ListOptions{TmdbRatings: TmdbRatingRange{Min: 5.5, Max: 10.0}}
 	ListOptionsShowsFilters          = ListOptions{Certifications: []string{"pg-13", "pg-16"}, NetworkIDs: []int{1, 2, 45}, Status: []string{"pilot", "ended"}}
 	ListOptionsCertificationsFilters = ListOptions{Certifications: []string{"pg-13", "pg-16"}}
 	ListOptionsTmdbVotes             = ListOptions{TmdbVotes: VotesRange{Min: 25, Max: 40}}
 	ListOptionsImdbVotes             = ListOptions{ImdbRatings: RatingRange{Min: 3, Max: 6}, ImdbVotes: ImdbVotesRange{Min: 10, Max: 25}}
-	ListOptionsRt = ListOptions{RtMeters: RatingRange{Min: 55, Max: 100}, RtUserMeters: RatingRange{Min: 65, Max: 100}}
-	ListOptionsMetascores = ListOptions{Metascores: RatingRangeFloat{Min: 55, Max: 100}}
+	ListOptionsRt                    = ListOptions{RtMeters: RatingRange{Min: 55, Max: 100}, RtUserMeters: RatingRange{Min: 65, Max: 100}}
+	ListOptionsMetascores            = ListOptions{Metascores: RatingRangeFloat{Min: 55, Max: 100}}
 )
 
 const (

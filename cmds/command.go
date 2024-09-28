@@ -30,7 +30,6 @@ var (
 	_studioIDs    = flag.String("studio_ids", "", "")
 )
 
-
 // Avflags contains all available flags
 var Avflags = map[string]bool{
 	"a":          true,
@@ -267,6 +266,37 @@ func (c *Command) Uptime(item *str.ExportlistItemJSON, options *str.Options, dat
 	}
 }
 
+func (c *Command) IsImdbMovie(options *str.Options, data *str.ExportlistItem) bool {
+	return options.Type != "episodes" && data.Movie != nil && options.Format == "imdb"
+}
+
+func (c *Command) IsImdbShow(options *str.Options, data *str.ExportlistItem) bool {
+	return options.Type != "episodes" && data.Show != nil && data.Show.IDs.HaveID("Imdb") && 
+	options.Format == "imdb"
+}
+
+func (c *Command) IsTmdbMovie(options *str.Options, data *str.ExportlistItem) bool {
+	return options.Type != consts.EpisodesType && data.Movie != nil && 
+	data.Movie.IDs.HaveID("Tmdb") && options.Format == "tmdb"
+}
+
+func (c *Command) IsTmdbShow(options *str.Options, data *str.ExportlistItem) bool {
+	return options.Type != consts.EpisodesType && data.Show != nil &&
+		data.Show.IDs.HaveID("Tmdb") && options.Format == "tmdb"
+}
+
+func (c *Command) IsTmdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
+	return data.Episode.IDs.HaveID(consts.TmdbIDFormat) && options.Format == consts.TmdbFormat
+}
+
+func (c *Command) IsTvdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
+	return data.Episode.IDs.HaveID("Tvdb") && options.Format == "tvdb"
+}
+
+func (c *Command) IsImdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
+	return data.Episode.IDs.HaveID(consts.ImdbIDFormat) && options.Format == consts.ImdbFormat
+}
+
 // ExportListProcess process list items
 func (c *Command) ExportListProcess(
 	data *str.ExportlistItem, options *str.Options,
@@ -274,7 +304,7 @@ func (c *Command) ExportListProcess(
 ) ([]any, []str.ExportlistItemJSON) {
 
 	//If movie or show export by format imdb
-	if options.Type != "episodes" && data.Movie != nil && options.Format == "imdb" {
+	if c.IsImdbMovie(options, data) {
 
 		//fmt.Println("movie or show by format imdb")
 		if !data.Movie.IDs.HaveID("Imdb") {
@@ -294,7 +324,7 @@ func (c *Command) ExportListProcess(
 		emap.Metadata = data.Metadata
 		exportJSON = append(exportJSON, emap)
 
-	} else if options.Type != "episodes" && data.Show != nil && data.Show.IDs.HaveID("Imdb") && options.Format == "imdb" {
+	} else if c.IsImdbShow(options, data) {
 
 		findDuplicates = append(findDuplicates, *data.Show.IDs.Imdb)
 		emap := str.ExportlistItemJSON{
@@ -307,7 +337,7 @@ func (c *Command) ExportListProcess(
 
 		exportJSON = append(exportJSON, emap)
 
-	} else if options.Type != consts.EpisodesType && data.Movie != nil && data.Movie.IDs.HaveID("Tmdb") && options.Format == "tmdb" {
+	} else if c.IsTmdbMovie(options, data) {
 
 		findDuplicates = append(findDuplicates, *data.Movie.IDs.Tmdb)
 		emap := str.ExportlistItemJSON{
@@ -319,7 +349,7 @@ func (c *Command) ExportListProcess(
 		emap.UpdatedAt = data.UpdatedAt
 		exportJSON = append(exportJSON, emap)
 
-	} else if options.Type != consts.EpisodesType && data.Show != nil && data.Show.IDs.HaveID("Tmdb") && options.Format == "tmdb" {
+	} else if c.IsTmdbShow(options, data) {
 
 		findDuplicates = append(findDuplicates, *data.Show.IDs.Tmdb)
 		emap := str.ExportlistItemJSON{
@@ -329,40 +359,7 @@ func (c *Command) ExportListProcess(
 		c.Uptime(&emap, options, data)
 		exportJSON = append(exportJSON, emap)
 
-	} else if data.Episode.IDs.HaveID(consts.TmdbIDFormat) && options.Format == consts.TmdbFormat {
-		//fmt.Println("episode export by format tmdb")
-		findDuplicates = append(findDuplicates, *data.Episode.IDs.Tmdb)
-
-		if len(*data.Episode.Title) == consts.ZeroValue {
-			notitle := "no episode title"
-			data.Episode.Title = &notitle
-		}
-
-		if data.Show != nil && len(*data.Show.Title) == consts.ZeroValue {
-			notitle := "no show title"
-			data.Show.Title = &notitle
-		}
-
-		emap := str.ExportlistItemJSON{
-			Tmdb:  data.Episode.IDs.Tmdb,
-			Trakt: data.Episode.IDs.Trakt}
-		c.Uptime(&emap, options, data)
-
-		emap.UpdatedAt = data.UpdatedAt
-
-		emap.Season = &str.Season{Number: data.Episode.Season}
-		emap.Episode = &str.Episode{Number: data.Episode.Number, Title: data.Episode.Title}
-
-		if data.Show != nil {
-			emap.Show = data.Show
-		} else {
-			notitle := "no show title"
-			emap.Show = &str.Show{Title: &notitle}
-		}
-
-		exportJSON = append(exportJSON, emap)
-
-	} else if data.Episode.IDs.HaveID("Tvdb") && options.Format == "tvdb" {
+	} else if c.IsTvdbEpisode(options, data) {
 
 		//fmt.Println("episode export by format tvdb")
 		findDuplicates = append(findDuplicates, *data.Episode.IDs.Tvdb)
@@ -390,7 +387,7 @@ func (c *Command) ExportListProcess(
 
 		exportJSON = append(exportJSON, emap)
 
-	} else if data.Episode.IDs.HaveID(consts.ImdbIDFormat) && options.Format == consts.ImdbFormat {
+	} else if c.IsImdbEpisode(options, data) {
 
 		//fmt.Println("episode export by format imdb")
 		findDuplicates = append(findDuplicates, *data.Episode.IDs.Imdb)
@@ -416,7 +413,7 @@ func (c *Command) ExportListProcess(
 
 		exportJSON = append(exportJSON, emap)
 
-	} else if data.Episode.IDs.HaveID(consts.TmdbIDFormat) && options.Format == consts.TmdbFormat {
+	} else if c.IsTmdbEpisode(options, data) {
 
 		//fmt.Println("episode export by format tmdb")
 		findDuplicates = append(findDuplicates, *data.Episode.IDs.Tmdb)
@@ -474,17 +471,41 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		case "calendars":
 			switch options.Action {
 			case "my-shows", "all-shows":
-				options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, "shows", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+				options.Output = fmt.Sprintf(
+					consts.DefaultOutputFormat3,
+					options.Module,
+					"shows",
+					strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
 			case "my-new-shows", "all-new-shows":
-				options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, "new_shows", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+				options.Output = fmt.Sprintf(
+					consts.DefaultOutputFormat3,
+					options.Module,
+					"new_shows",
+					strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
 			case "my-season-premieres", "all-season-premieres":
-				options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, "season_premieres", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+				options.Output = fmt.Sprintf(
+					consts.DefaultOutputFormat3,
+					options.Module,
+					"season_premieres",
+					strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
 			case "my-finales", "all-finales":
-				options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, "finales", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+				options.Output = fmt.Sprintf(
+					consts.DefaultOutputFormat3,
+					options.Module,
+					"finales",
+					strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
 			case "my-movies", "all-movies":
-				options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, "movies", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+				options.Output = fmt.Sprintf(
+					consts.DefaultOutputFormat3,
+					options.Module,
+					"movies",
+					strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
 			case "my-dvd", "all-dvd":
-				options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, "dvd", strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+				options.Output = fmt.Sprintf(
+					consts.DefaultOutputFormat3,
+					options.Module,
+					"dvd",
+					strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
 
 			default:
 				options.Output = fmt.Sprintf(consts.DefaultOutputFormat1, options.Module)
@@ -492,9 +513,17 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		case "search":
 			switch options.Action {
 			case "text-query":
-				options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, "query", strings.ReplaceAll(options.Type, ",", consts.EmptyString))
+				options.Output = fmt.Sprintf(
+					consts.DefaultOutputFormat3,
+					options.Module,
+					"query",
+					strings.ReplaceAll(options.Type, ",", consts.EmptyString))
 			case "id-lookup":
-				options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, "lookup", strings.ReplaceAll(options.SearchIDType, ",", consts.EmptyString))
+				options.Output = fmt.Sprintf(
+					consts.DefaultOutputFormat3,
+					options.Module,
+					"lookup",
+					strings.ReplaceAll(options.SearchIDType, ",", consts.EmptyString))
 			default:
 				options.Output = fmt.Sprintf(consts.DefaultOutputFormat1, options.Module)
 			}

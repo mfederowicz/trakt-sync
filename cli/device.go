@@ -70,7 +70,9 @@ func deviceCodeVerification(deviceToken *str.NewDeviceToken, oauth *internal.Oau
 // fetch new device code for client
 func fetchNewDeviceCodeForClient(config *cfg.Config, oauth *internal.OauthService) (*str.DeviceCode, error) {
 
-	code, resp, err := oauth.GenerateNewDeviceCodes(context.Background(), &str.NewDeviceCode{ClientID: &config.ClientID})
+	code, resp, err := oauth.GenerateNewDeviceCodes(
+		context.Background(),
+		&str.NewDeviceCode{ClientID: &config.ClientID})
 
 	if err != nil {
 		return nil, fmt.Errorf("Error generate new device code:" + err.Error())

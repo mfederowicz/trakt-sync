@@ -86,7 +86,7 @@ func searchFunc(cmd *Command, _ ...string) error {
 		if result == nil {
 			return fmt.Errorf("empty result")
 		}
-		
+
 		fmt.Print("Found " + options.Action + " search data \n")
 		print("write data to:" + options.Output)
 		jsonData, _ := json.MarshalIndent(result, "", "  ")
@@ -114,14 +114,19 @@ func init() {
 func fetchSearchTextQuery(client *internal.Client, options *str.Options, page int) ([]*str.SearchListItem, error) {
 
 	err := checkRequiredFields(options)
-	
+
 	if err != nil {
 		return nil, err
 	}
 
 	searchType := options.SearchType.String()
 	searchField := options.SearchField.String()
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Query: options.Query, Field: searchField}
+	opts := uri.ListOptions{
+		Page: page, 
+		Limit: options.PerPage, 
+		Extended: options.ExtendedInfo, 
+		Query: options.Query, 
+		Field: searchField}
 	list, resp, err := client.Search.GetTextQueryResults(
 		context.Background(),
 		&searchType,
@@ -162,7 +167,7 @@ func fetchSearchTextQuery(client *internal.Client, options *str.Options, page in
 func fetchSearchIDLookup(client *internal.Client, options *str.Options) ([]*str.SearchListItem, error) {
 
 	err := checkRequiredFields(options)
-	
+
 	if err != nil {
 		return nil, err
 	}
@@ -193,7 +198,8 @@ func checkRequiredFields(options *str.Options) error {
 		return fmt.Errorf("not found config for module '%s'", options.Module)
 	}
 	// Check search_type flag slice
-	if (options.Action == "text-query" && len(options.SearchType) == consts.ZeroValue) || !cfg.IsValidConfigTypeSlice(moduleConfig.SearchType, options.SearchType) {
+	if (options.Action == "text-query" && len(options.SearchType) == consts.ZeroValue) ||
+		!cfg.IsValidConfigTypeSlice(moduleConfig.SearchType, options.SearchType) {
 		return fmt.Errorf("invalid -t flag values: %v, avaliable values: %v", options.SearchType, moduleConfig.SearchType)
 	}
 	// Check search_field flag slice
