@@ -89,7 +89,7 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 
 		fmt.Print("Found " + options.Action + " calendar data \n")
 		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JsonDataFormat)
+		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
 		writer.WriteJSON(options, jsonData)
 
 	case "my-finales", "all-finales":
@@ -106,7 +106,7 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 
 		fmt.Print("Found " + options.Action + " calendar data \n")
 		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JsonDataFormat)
+		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
 		writer.WriteJSON(options, jsonData)
 
 	case "my-movies", "all-movies":
@@ -123,7 +123,7 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 
 		fmt.Print("Found " + options.Action + " calendar data \n")
 		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JsonDataFormat)
+		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
 
 		writer.WriteJSON(options, jsonData)
 
@@ -141,7 +141,7 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 
 		fmt.Print("Found " + options.Action + " calendar data \n")
 		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JsonDataFormat)
+		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
 
 		writer.WriteJSON(options, jsonData)
 

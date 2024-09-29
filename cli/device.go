@@ -110,7 +110,7 @@ func showCodeAndOpenBrowser(device *str.DeviceCode) {
 // verify device code in loop with intervals
 func verifyCode(device *str.DeviceCode, config *cfg.Config, oauth *internal.OauthService) {
 	const (
-		CounterNoSeconds = 0
+		counterNoSeconds = 0
 	)
 
 	count := device.ExpiresIn
@@ -125,7 +125,7 @@ func verifyCode(device *str.DeviceCode, config *cfg.Config, oauth *internal.Oaut
 			break
 		}
 		count -= device.Interval
-		if count == CounterNoSeconds {
+		if count == counterNoSeconds {
 			fmt.Println("Time out!")
 			break
 		}

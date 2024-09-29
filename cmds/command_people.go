@@ -99,7 +99,7 @@ func peopleFunc(cmd *Command, _ ...string) error {
 
 		fmt.Print("Found person \n")
 		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JsonDataFormat)
+		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
 
 		writer.WriteJSON(options, jsonData)
 
@@ -119,12 +119,12 @@ func peopleFunc(cmd *Command, _ ...string) error {
 
 		fmt.Print("Found movie credits data \n")
 		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JsonDataFormat)
+		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
 		writer.WriteJSON(options, jsonData)
 
 	case "shows":
 		if len(*_personID) == consts.ZeroValue {
-			return fmt.Errorf(consts.EmptyPersonIdMsg)
+			return fmt.Errorf(consts.EmptyPersonIDMsg)
 		}
 		fmt.Println("Get show credits")
 		result, err := fetchShowCredits(client, options)
@@ -138,13 +138,13 @@ func peopleFunc(cmd *Command, _ ...string) error {
 
 		fmt.Print("Found show credits data \n")
 		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JsonDataFormat)
+		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
 
 		writer.WriteJSON(options, jsonData)
 
 	case "lists":
 		if len(*_personID) == consts.ZeroValue {
-			return fmt.Errorf(consts.EmptyPersonIdMsg)
+			return fmt.Errorf(consts.EmptyPersonIDMsg)
 		}
 		fmt.Println("Get lists containing this person")
 		result, err := fetchListsContainingThisPerson(client, options, consts.DefaultPage)
@@ -160,7 +160,7 @@ func peopleFunc(cmd *Command, _ ...string) error {
 		exportJSON := []*str.PersonalList{}
 		exportJSON = append(exportJSON, result...)
 		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JsonDataFormat)
+		jsonData, _ := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
 
 		writer.WriteJSON(options, jsonData)
 
@@ -191,22 +191,19 @@ func fetchPeoplesUpdates(client *internal.Client, options *str.Options, startDat
 	}
 
 	// Check if there are more pages
-	if pages := resp.Header.Get(internal.HeaderPaginationPageCount); pages != consts.EmptyString {
-		pagesInt, _ := strconv.Atoi(pages)
+	pages, _ := strconv.Atoi(resp.Header.Get(internal.HeaderPaginationPageCount))
+	if client.HavePages(page, pages) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
 
-		if page != pagesInt && pagesInt > consts.ZeroValue {
-			time.Sleep(time.Duration(2) * time.Second)
-
-			// Fetch items from the next page
-			nextPage := page + consts.NextPageStep
-			nextPageItems, err := fetchPeoplesUpdates(client, options, startDate, nextPage)
-			if err != nil {
-				return nil, err
-			}
-
-			// Append items from the next page to the current page
-			list = append(list, nextPageItems...)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := fetchPeoplesUpdates(client, options, startDate, nextPage)
+		if err != nil {
+			return nil, err
 		}
+
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
 	}
 
 	return list, nil
@@ -225,22 +222,19 @@ func fetchPeoplesUpdatedIDs(client *internal.Client, options *str.Options, start
 	}
 
 	// Check if there are more pages
-	if pages := resp.Header.Get(internal.HeaderPaginationPageCount); pages != consts.EmptyString {
-		pagesInt, _ := strconv.Atoi(pages)
+	pages, _ := strconv.Atoi(resp.Header.Get(internal.HeaderPaginationPageCount))
+	if client.HavePages(page, pages) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
 
-		if page != pagesInt && pagesInt > consts.ZeroValue {
-			time.Sleep(time.Duration(2) * time.Second)
-
-			// Fetch items from the next page
-			nextPage := page + consts.NextPageStep
-			nextPageItems, err := fetchPeoplesUpdatedIDs(client, options, startDate, nextPage)
-			if err != nil {
-				return nil, err
-			}
-
-			// Append items from the next page to the current page
-			list = append(list, nextPageItems...)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := fetchPeoplesUpdatedIDs(client, options, startDate, nextPage)
+		if err != nil {
+			return nil, err
 		}
+
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
 	}
 
 	return list, nil
@@ -305,23 +299,21 @@ func fetchListsContainingThisPerson(client *internal.Client, options *str.Option
 		return nil, err
 	}
 
+	pages, _ := strconv.Atoi(resp.Header.Get(internal.HeaderPaginationPageCount))
 	// Check if there are more pages
-	if pages := resp.Header.Get(internal.HeaderPaginationPageCount); pages != consts.EmptyString {
-		pagesInt, _ := strconv.Atoi(pages)
+	if client.HavePages(page, pages) {
 
-		if page != pagesInt && pagesInt > consts.ZeroValue {
-			time.Sleep(time.Duration(2) * time.Second)
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
 
-			// Fetch items from the next page
-			nextPage := page + consts.NextPageStep
-			nextPageItems, err := fetchListsContainingThisPerson(client, options, nextPage)
-			if err != nil {
-				return nil, err
-			}
-
-			// Append items from the next page to the current page
-			list = append(list, nextPageItems...)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := fetchListsContainingThisPerson(client, options, nextPage)
+		if err != nil {
+			return nil, err
 		}
+
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
 	}
 
 	return list, nil

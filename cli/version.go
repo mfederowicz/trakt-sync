@@ -14,12 +14,14 @@ var (
 	builtBy = "unknown"
 )
 
+const (
+	First             = 1
+	EmptyBuildInfoLen = 0
+)
+
 // GenAppVersion gen app verrsion string
 func GenAppVersion() error {
-	const (
-		First = 1
-		EmptyBuildInfoLen = 0
-	)
+
 	var buildInfo string
 
 	if date != "unknown" && builtBy != "unknown" {
@@ -31,17 +33,24 @@ func GenAppVersion() error {
 	}
 
 	if version == "dev" {
-		bi, ok := debug.ReadBuildInfo()
-		if ok {
-			version = bi.Main.Version
-			if strings.HasPrefix(version, "v") {
-				version = bi.Main.Version[First:]
-			}
-			if len(buildInfo) == EmptyBuildInfoLen {
-				return fmt.Errorf("version %s", version)
-			}
-		}
+		genDev(buildInfo)
 	}
 
 	return fmt.Errorf("Version:\t%s\n%s", version, buildInfo)
+}
+
+func genDev(info string) error {
+	bi, ok := debug.ReadBuildInfo()
+	if ok {
+		var version string = bi.Main.Version
+		var versionNoPrefix string = bi.Main.Version[1:]
+
+		if strings.HasPrefix(version, "v") {
+			version = versionNoPrefix
+		}
+		if len(info) == EmptyBuildInfoLen {
+			return fmt.Errorf("version %s", version)
+		}
+	}
+	return nil
 }

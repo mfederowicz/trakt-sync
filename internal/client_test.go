@@ -36,8 +36,8 @@ func setup() (client *Client, mux *http.ServeMux, serverURL string, teardown fun
 	// client is the Trakt client being tested and is
 	// configured to use test server.
 	client = NewClient(nil)
-	url, _ := url.Parse(server.URL + baseURLPath + "/")
-	client.BaseURL = url
+	uri, _ := url.Parse(server.URL + baseURLPath + "/")
+	client.BaseURL = uri
 
 	return client, mux, server.URL, server.Close
 }

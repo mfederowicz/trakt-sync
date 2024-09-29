@@ -25,9 +25,17 @@ var Commands = []*Command{
 }
 
 const (
-		FoundOne = 1
-		NotFound = 0
-	)
+	FoundOne = 1
+	NotFound = 0
+)
+
+func runFoundedModule(cmd *Command, fs afero.Fs, client *internal.Client, config *cfg.Config, args []string) {
+
+	err := cmd.Exec(fs, client, config, args)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
 
 // ModulesRuntime core function for process commands
 func ModulesRuntime(args []string, config *cfg.Config, client *internal.Client, fs afero.Fs) {
@@ -43,10 +51,10 @@ find:
 			found = append(found, cmd)
 		}
 	}
-	
+
 	switch cnt := len(found); cnt {
 	case FoundOne:
-		found[0].Exec(fs, client, config, args)
+		runFoundedModule(found[0], fs, client, config, args)
 	case NotFound:
 		fmt.Fprintf(stdout, "error: unknown command %q\n\n", sub)
 		flag.Usage()
