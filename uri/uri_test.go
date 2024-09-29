@@ -37,7 +37,6 @@ func TestBuildQueryBasic(t *testing.T) {
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
-
 }
 
 func testBuildQueryCommonFilters(t *testing.T) {
@@ -48,7 +47,6 @@ func testBuildQueryCommonFilters(t *testing.T) {
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
-
 }
 
 func TestBuildQueryRatingFiltersRatings(t *testing.T) {
@@ -59,7 +57,6 @@ func TestBuildQueryRatingFiltersRatings(t *testing.T) {
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
-
 }
 
 func TestBuildQueryRatingFiltersInvalidRatings(t *testing.T) {
@@ -69,7 +66,6 @@ func TestBuildQueryRatingFiltersInvalidRatings(t *testing.T) {
 	if string(got) != BaseUrl {
 		t.Fatalf(Expected, BaseUrl, string(got))
 	}
-
 }
 
 func TestBuildQueryRatingFiltersVotes(t *testing.T) {
@@ -81,7 +77,6 @@ func TestBuildQueryRatingFiltersVotes(t *testing.T) {
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
-
 }
 
 func TestBuildQueryRatingFiltersTmdbRatings(t *testing.T) {
@@ -93,7 +88,6 @@ func TestBuildQueryRatingFiltersTmdbRatings(t *testing.T) {
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
-
 }
 
 func TestBuildQueryRatingFiltersTmdbVotes(t *testing.T) {
@@ -105,7 +99,6 @@ func TestBuildQueryRatingFiltersTmdbVotes(t *testing.T) {
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
-
 }
 
 func TestBuildQueryRatingFiltersImdb(t *testing.T) {
@@ -117,7 +110,6 @@ func TestBuildQueryRatingFiltersImdb(t *testing.T) {
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
-
 }
 func TestBuildQueryRatingFiltersRt(t *testing.T) {
 	t.Helper()
@@ -127,7 +119,6 @@ func TestBuildQueryRatingFiltersRt(t *testing.T) {
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
-
 }
 
 func TestBuildQueryRatingFiltersMeta(t *testing.T) {
@@ -139,7 +130,6 @@ func TestBuildQueryRatingFiltersMeta(t *testing.T) {
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
-
 }
 
 func TestBuildQueryCertificationsFilters(t *testing.T) {
@@ -151,7 +141,6 @@ func TestBuildQueryCertificationsFilters(t *testing.T) {
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
-
 }
 
 func TestBuildQueryShowFilters(t *testing.T) {
@@ -163,7 +152,6 @@ func TestBuildQueryShowFilters(t *testing.T) {
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
-
 }
 
 func TestBuildQueryEpisodeFilters(t *testing.T) {
@@ -175,5 +163,4 @@ func TestBuildQueryEpisodeFilters(t *testing.T) {
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
-
 }

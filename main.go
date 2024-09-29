@@ -23,7 +23,6 @@ var (
 )
 
 func main() {
-
 	fs := afero.NewOsFs()
 	config, err := cfg.InitConfig(fs)
 	if err != nil {
@@ -59,5 +58,4 @@ func main() {
 	}
 
 	cmds.ModulesRuntime(args, config, client, fs)
-
 }

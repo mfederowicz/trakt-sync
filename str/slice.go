@@ -26,7 +26,6 @@ func (i *Slice) String() string {
 	}
 
 	return strings.Join(deduplicated, ",")
-
 }
 
 // Set add element to slice

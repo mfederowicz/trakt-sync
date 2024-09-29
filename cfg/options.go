@@ -124,9 +124,7 @@ func SyncOptionsFromFlags(fs afero.Fs, config *Config, flagMap map[string]string
 
 // OptionsFromConfig reads optionf from config file
 func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
-
 	options := &str.Options{}
-
 	options.Verbose = config.Verbose
 	options.Type = config.Type
 	options.SearchType = config.SearchType
@@ -238,7 +236,6 @@ func IsValidConfigTypeSlice(allowedElements []string, userElements str.Slice) bo
 
 // ReadTokenFromFile reads the token from the specified file
 func readTokenFromFile(fs afero.Fs, filePath string) (*str.Token, error) {
-
 	data, err := afero.ReadFile(fs, filePath)
 	if err != nil {
 		return nil, err
@@ -254,7 +251,6 @@ func readTokenFromFile(fs afero.Fs, filePath string) (*str.Token, error) {
 
 // GetOptionTime config Time depends on Module name
 func GetOptionTime(options *str.Options) string {
-
 	if options.Module == "history" {
 		options.Time = "watched_at"
 	} else if options.Module == "watchlist" {
@@ -266,5 +262,4 @@ func GetOptionTime(options *str.Options) string {
 	}
 
 	return options.Time
-
 }

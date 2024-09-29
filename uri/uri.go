@@ -58,7 +58,6 @@ func (rr RatingRangeFloat) String() string {
 		return consts.EmptyString
 	}
 	return fmt.Sprintf("%.1f-%.1f", rr.Min, rr.Max)
-
 }
 
 // VotesRange represents min/max int votes parameters
@@ -147,7 +146,6 @@ type ListOptions struct {
 
 // AddQuery adds query parameters to s.
 func AddQuery(s string, opts interface{}) (string, error) {
-
 	u, err := url.Parse(s)
 	if err != nil {
 		return s, err
@@ -161,7 +159,6 @@ func AddQuery(s string, opts interface{}) (string, error) {
 
 	u.RawQuery = EncodeParams(qs)
 	return u.String(), nil
-
 }
 
 // CustomTypeHandler defines the function signature for handling custom types
@@ -185,7 +182,6 @@ func handleRatingRange(fieldValue reflect.Value, qs *url.Values, fieldTag string
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
 	}
-
 }
 
 // handleVotesRange handles the VotesRange custom type
@@ -197,7 +193,6 @@ func handleVotesRange(fieldValue reflect.Value, qs *url.Values, fieldTag string)
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
 	}
-
 }
 
 // handleTmdbRatingRange handles the TmdbRatingRange custom type
@@ -209,7 +204,6 @@ func handleTmdbRatingRange(fieldValue reflect.Value, qs *url.Values, fieldTag st
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
 	}
-
 }
 
 // handleImdbVotesRange handles the ImdbVotesRange custom type
@@ -221,7 +215,6 @@ func handleImdbVotesRange(fieldValue reflect.Value, qs *url.Values, fieldTag str
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
 	}
-
 }
 
 // handleMetaCriticRange handles the RatingRangeFloat custom type
@@ -233,11 +226,9 @@ func handleMetaCriticRange(fieldValue reflect.Value, qs *url.Values, fieldTag st
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
 	}
-
 }
 
 func flatOptsStruct(v reflect.Value, qs *url.Values) error {
-
 	// Check if the value is a pointer
 	if v.Kind() == reflect.Ptr {
 		// Dereference the pointer to get the underlying value
@@ -315,7 +306,6 @@ func isEmptyValue(v reflect.Value) bool {
 
 // EncodeParams encodes the values for query sorted by key
 func EncodeParams(values url.Values) string {
-
 	if len(values) == consts.ZeroValue {
 		return consts.EmptyString
 	}

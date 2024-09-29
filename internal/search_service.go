@@ -19,7 +19,6 @@ type SearchService Service
 //
 // API docs: https://trakt.docs.apiary.io/#reference/search/text-query/get-text-query-results
 func (s *SearchService) GetTextQueryResults(ctx context.Context, searchType *string, opts *uri.ListOptions) ([]*str.SearchListItem, *str.Response, error) {
-
 	var url = fmt.Sprintf("search/%s", *searchType)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
@@ -41,7 +40,6 @@ func (s *SearchService) GetTextQueryResults(ctx context.Context, searchType *str
 	}
 
 	return list, resp, nil
-
 }
 
 // GetIDLookupResults Lookup items by their Trakt, IMDB, TMDB, or TVDB ID.
@@ -51,7 +49,6 @@ func (s *SearchService) GetTextQueryResults(ctx context.Context, searchType *str
 //
 // API docs: https://trakt.docs.apiary.io/#reference/search/id-lookup/get-id-lookup-results
 func (s *SearchService) GetIDLookupResults(ctx context.Context, formatType *string, id *string, opts *uri.ListOptions) ([]*str.SearchListItem, *str.Response, error) {
-
 	var url = fmt.Sprintf("search/%s/%s", *formatType, *id)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
@@ -73,5 +70,4 @@ func (s *SearchService) GetIDLookupResults(ctx context.Context, formatType *stri
 	}
 
 	return list, resp, nil
-
 }

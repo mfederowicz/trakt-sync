@@ -13,8 +13,7 @@ import (
 	"github.com/spf13/afero"
 )
 
-func TestHelp(t *testing.T) {
-	
+func TestHelp(t *testing.T) {	
 	AppFs = afero.NewMemMapFs()
 	tmpPath := "/tmp-iofs/"
 	AppFs.MkdirAll(tmpPath, consts.X755)

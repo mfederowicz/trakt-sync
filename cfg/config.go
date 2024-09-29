@@ -70,7 +70,6 @@ func InitConfig(fs afero.Fs) (*Config, error) {
 
 // GenUsedFlagMap map of used flags
 func GenUsedFlagMap() map[string]bool {
-
 	flagset := make(map[string]bool)
 
 	flag.Visit(func(f *flag.Flag) {
@@ -79,12 +78,10 @@ func GenUsedFlagMap() map[string]bool {
 	})
 
 	return flagset
-
 }
 
 // MergeConfigs from two sources file and flags
 func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string) (*Config, error) {
-
 	flagset := GenUsedFlagMap()
 	//fmt.Println(flagConfig)
 
@@ -250,7 +247,6 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 
 // ReadConfigFromFile reads config from file stored on disc
 func ReadConfigFromFile(fs afero.Fs, filename string) (*Config, error) {
-
 	var config Config
 
 	file, err := afero.ReadFile(fs, filename)
@@ -304,7 +300,6 @@ func parseConfig(fs afero.Fs, path string, config *Config) error {
 
 // DefaultConfig config with default values
 func DefaultConfig() *Config {
-
 	return &Config{
 		ClientID:     consts.EmptyString,
 		ClientSecret: consts.EmptyString,
@@ -331,7 +326,6 @@ func DefaultConfig() *Config {
 }
 
 func normalizeConfig(config *Config) error {
-
 	if len(config.ClientID) == consts.ZeroValue || len(config.ClientSecret) == consts.ZeroValue {
 		return fmt.Errorf("client_id and client_secret are required fields, update your config file")
 	}
@@ -341,7 +335,6 @@ func normalizeConfig(config *Config) error {
 	}
 
 	return nil
-
 }
 
 func expandTilde(path string) (string, error) {
@@ -356,7 +349,6 @@ func expandTilde(path string) (string, error) {
 }
 
 func buildDefaultConfigPath() string {
-
 	absPath, err := expandTilde("~/trakt-sync.toml")
 	if err != nil {
 		panic(err)

@@ -18,7 +18,6 @@ type SyncService Service
 //
 // API docs: https://trakt.docs.apiary.io/#reference/sync/get-collection/get-collection
 func (s *SyncService) GetCollection(ctx context.Context, types *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
-
 	var url string
 
 	if types != nil {
@@ -53,7 +52,6 @@ func (s *SyncService) GetCollection(ctx context.Context, types *string, opts *ur
 //
 // API docs: https://trakt.docs.apiary.io/#reference/sync/get-watched/get-watched-history
 func (s *SyncService) GetWatchedHistory(ctx context.Context, types *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
-
 	var url string
 
 	if types != nil {
@@ -87,7 +85,6 @@ func (s *SyncService) GetWatchedHistory(ctx context.Context, types *string, opts
 //
 // API docs: https://trakt.docs.apiary.io/#reference/sync/get-watchlist/get-watchlist
 func (s *SyncService) GetWatchlist(ctx context.Context, types *string, sort *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
-
 	var url string
 
 	if types != nil && sort != nil {

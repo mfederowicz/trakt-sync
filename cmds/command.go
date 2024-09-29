@@ -77,7 +77,6 @@ type Command struct {
 
 // Exec core command function
 func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config, args []string) error {
-
 	c.Client = client
 	c.Config = config
 	c.Flag.Usage = func() {
@@ -133,7 +132,6 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 			str.Format("selected user: {0}, module: {1}, type: {2}, per_page: {3}, format: {4}, action: {5}, sort: {6}",
 				options.UserName, options.Module, options.Type, options.PerPage, options.Format, options.Action, options.Sort),
 		)
-
 	}
 	defer func() error {
 		if r := recover(); r != nil {
@@ -177,7 +175,6 @@ func (c *Command) Fatalf(errFormat string, args ...interface{}) {
 }
 
 func (c *Command) fetchFlagsMap() map[string]string {
-
 	flagMap := make(map[string]string)
 	flag.VisitAll(func(f *flag.Flag) {
 		flagMap[f.Name] = f.Value.String()
@@ -187,7 +184,6 @@ func (c *Command) fetchFlagsMap() map[string]string {
 	})
 
 	return flagMap
-
 }
 
 func cleanKey(arg string) string {
@@ -228,7 +224,6 @@ func argsToMap(args []string) map[string]bool {
 
 // ValidFlags validate if flag is in our list
 func (c *Command) ValidFlags() bool {
-
 	for flag := range argsToMap(flag.Args()) {
 		if _, ok := Avflags[flag]; !ok {
 			return false
@@ -247,9 +242,7 @@ func (c *Command) registerGlobalFlagsInSet(fset *flag.FlagSet) {
 
 // Uptime update item time fields
 func (c *Command) Uptime(item *str.ExportlistItemJSON, options *str.Options, data *str.ExportlistItem) {
-
 	switch options.Time {
-
 	case "watched_at":
 		item.WatchedAt = data.WatchedAt
 	case "listed_at":
@@ -262,7 +255,6 @@ func (c *Command) Uptime(item *str.ExportlistItemJSON, options *str.Options, dat
 		item.UpdatedAt = data.UpdatedAt
 	case "last_updated_at":
 		item.LastUpdatedAt = data.LastUpdatedAt
-
 	}
 }
 
@@ -271,13 +263,13 @@ func (c *Command) IsImdbMovie(options *str.Options, data *str.ExportlistItem) bo
 }
 
 func (c *Command) IsImdbShow(options *str.Options, data *str.ExportlistItem) bool {
-	return options.Type != "episodes" && data.Show != nil && data.Show.IDs.HaveID("Imdb") && 
-	options.Format == "imdb"
+	return options.Type != "episodes" && data.Show != nil && data.Show.IDs.HaveID("Imdb") &&
+		options.Format == "imdb"
 }
 
 func (c *Command) IsTmdbMovie(options *str.Options, data *str.ExportlistItem) bool {
-	return options.Type != consts.EpisodesType && data.Movie != nil && 
-	data.Movie.IDs.HaveID("Tmdb") && options.Format == "tmdb"
+	return options.Type != consts.EpisodesType && data.Movie != nil &&
+		data.Movie.IDs.HaveID("Tmdb") && options.Format == "tmdb"
 }
 
 func (c *Command) IsTmdbShow(options *str.Options, data *str.ExportlistItem) bool {
@@ -302,10 +294,8 @@ func (c *Command) ExportListProcess(
 	data *str.ExportlistItem, options *str.Options,
 	findDuplicates []any, exportJSON []str.ExportlistItemJSON,
 ) ([]any, []str.ExportlistItemJSON) {
-
 	//If movie or show export by format imdb
 	if c.IsImdbMovie(options, data) {
-
 		//fmt.Println("movie or show by format imdb")
 		if !data.Movie.IDs.HaveID("Imdb") {
 			noImdb := "no-imdb"
@@ -323,9 +313,7 @@ func (c *Command) ExportListProcess(
 		emap.Year = data.Movie.Year
 		emap.Metadata = data.Metadata
 		exportJSON = append(exportJSON, emap)
-
 	} else if c.IsImdbShow(options, data) {
-
 		findDuplicates = append(findDuplicates, *data.Show.IDs.Imdb)
 		emap := str.ExportlistItemJSON{
 			Imdb:  data.Show.IDs.Imdb,
@@ -336,21 +324,16 @@ func (c *Command) ExportListProcess(
 		emap.UpdatedAt = data.UpdatedAt
 
 		exportJSON = append(exportJSON, emap)
-
 	} else if c.IsTmdbMovie(options, data) {
-
 		findDuplicates = append(findDuplicates, *data.Movie.IDs.Tmdb)
 		emap := str.ExportlistItemJSON{
 			Tmdb:  data.Movie.IDs.Tmdb,
 			Trakt: data.Movie.IDs.Trakt,
 			Title: data.Movie.Title}
 		c.Uptime(&emap, options, data)
-
 		emap.UpdatedAt = data.UpdatedAt
 		exportJSON = append(exportJSON, emap)
-
 	} else if c.IsTmdbShow(options, data) {
-
 		findDuplicates = append(findDuplicates, *data.Show.IDs.Tmdb)
 		emap := str.ExportlistItemJSON{
 			Tmdb:  data.Show.IDs.Tmdb,
@@ -358,9 +341,7 @@ func (c *Command) ExportListProcess(
 			Title: data.Show.Title}
 		c.Uptime(&emap, options, data)
 		exportJSON = append(exportJSON, emap)
-
 	} else if c.IsTvdbEpisode(options, data) {
-
 		//fmt.Println("episode export by format tvdb")
 		findDuplicates = append(findDuplicates, *data.Episode.IDs.Tvdb)
 
@@ -386,9 +367,7 @@ func (c *Command) ExportListProcess(
 		emap.Show = &str.Show{Title: data.Show.Title}
 
 		exportJSON = append(exportJSON, emap)
-
 	} else if c.IsImdbEpisode(options, data) {
-
 		//fmt.Println("episode export by format imdb")
 		findDuplicates = append(findDuplicates, *data.Episode.IDs.Imdb)
 
@@ -412,9 +391,7 @@ func (c *Command) ExportListProcess(
 		emap.Show = &str.Show{Title: data.Show.Title}
 
 		exportJSON = append(exportJSON, emap)
-
 	} else if c.IsTmdbEpisode(options, data) {
-
 		//fmt.Println("episode export by format tmdb")
 		findDuplicates = append(findDuplicates, *data.Episode.IDs.Tmdb)
 
@@ -441,7 +418,6 @@ func (c *Command) ExportListProcess(
 	}
 
 	return findDuplicates, exportJSON
-
 }
 
 // PrepareQueryString for remove or replace unwanted signs from query string
@@ -451,7 +427,6 @@ func (c *Command) PrepareQueryString(q string) *string {
 
 // UpdateOptionsWithCommandFlags update options depends on command flags
 func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Options {
-
 	if len(*_searchQuery) > consts.ZeroValue {
 		options.Query = *c.PrepareQueryString(*_searchQuery)
 	}
@@ -531,9 +506,7 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		default:
 			options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Type, options.Format)
 		}
-
 	}
 
 	return options
-
 }

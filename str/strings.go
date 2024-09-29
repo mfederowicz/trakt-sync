@@ -115,12 +115,10 @@ func ContainInt(key int, s []int) bool {
 
 // Formatc helper function for FormatComplex in stringFormatter 
 func Formatc(pattern string, data map[string]any) string {
-
 	return stringFormatter.FormatComplex(pattern, data)
 }
 
 // Format helper function for Fomat in stringFormatter
 func Format(pattern string, args ...any) string {
-
 	return stringFormatter.Format(pattern, args...)
 }

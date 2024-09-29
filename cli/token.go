@@ -16,7 +16,6 @@ import (
 
 // ValidAccessToken valid if access_token is expired or not, and refresh if expired
 func ValidAccessToken(config *cfg.Config, oauth *internal.OauthService) bool {
-
 	token, err := ReadTokenFromFile(config.TokenPath)
 	if err != nil {
 		fmt.Println("Error reading token:", err)
@@ -24,7 +23,6 @@ func ValidAccessToken(config *cfg.Config, oauth *internal.OauthService) bool {
 	}
 
 	if token.Expired() {
-
 		if refreshed := refreshToken(config, oauth); refreshed {
 			fmt.Println("Token refresed!")
 		}
@@ -38,12 +36,10 @@ func ValidAccessToken(config *cfg.Config, oauth *internal.OauthService) bool {
 	}
 
 	return !token.Expired()
-
 }
 
 // ReadTokenFromFile reads the token from the specified file
 func ReadTokenFromFile(filePath string) (*str.Token, error) {
-
 	data, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
@@ -59,7 +55,6 @@ func ReadTokenFromFile(filePath string) (*str.Token, error) {
 
 // refresh access token to new one
 func refreshToken(config *cfg.Config, oauth *internal.OauthService) bool {
-
 	token, err := ReadTokenFromFile(config.TokenPath)
 	if err != nil {
 		fmt.Println("Error reading token:", err)
@@ -87,7 +82,6 @@ func refreshToken(config *cfg.Config, oauth *internal.OauthService) bool {
 	}
 
 	if resp.StatusCode == http.StatusOK {
-
 		tokenjson, _ := json.Marshal(newToken)
 		if err := os.WriteFile(config.TokenPath, tokenjson, consts.X644); err != nil {
 			fmt.Println(err.Error())
@@ -95,9 +89,7 @@ func refreshToken(config *cfg.Config, oauth *internal.OauthService) bool {
 		}
 
 		return true
-
 	}
 
 	return false
-
 }

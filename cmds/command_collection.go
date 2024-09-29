@@ -55,7 +55,6 @@ func collectionFunc(cmd *Command, _ ...string) error {
 	writer.WriteJSON(options, jsonData)
 
 	return nil
-
 }
 
 var (
@@ -79,5 +78,4 @@ func fetchCollectionList(client *internal.Client, options *str.Options) ([]*str.
 	}
 
 	return list, nil
-
 }

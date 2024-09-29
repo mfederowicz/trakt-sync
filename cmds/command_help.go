@@ -75,8 +75,7 @@ func init() {
 	HelpCmd.Run = HelpFunc
 }
 
-func tabify(w io.Writer) *tabwriter.Writer {
-	
+func tabify(w io.Writer) *tabwriter.Writer {	
 	const (
 		WriterMinWidth = 0
 		WriterTabWidth = 0

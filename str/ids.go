@@ -17,7 +17,6 @@ type IDs struct {
 
 // HaveID checks if id for key exists in object
 func (i *IDs) HaveID(key string) bool {
-
 	v := reflect.ValueOf(i)
 
 	if v.Kind() == reflect.Ptr {

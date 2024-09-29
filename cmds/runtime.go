@@ -31,7 +31,6 @@ const (
 
 // ModulesRuntime core function for process commands
 func ModulesRuntime(args []string, config *cfg.Config, client *internal.Client, fs afero.Fs) {
-
 	var found []*Command
 	sub, args := args[NotFound], args[FoundOne:]
 find:
@@ -55,5 +54,4 @@ find:
 		fmt.Fprintf(stdout, "error: non-unique command prefix %q (matched %d commands)\n\n", sub, cnt)
 		flag.Usage()
 	}
-
 }

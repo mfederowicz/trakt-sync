@@ -31,7 +31,6 @@ var PeopleCmd = &Command{
 }
 
 func peopleFunc(cmd *Command, _ ...string) error {
-
 	options := cmd.Options
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
@@ -180,7 +179,6 @@ func init() {
 }
 
 func fetchPeoplesUpdates(client *internal.Client, options *str.Options, startDate string, page int) ([]*str.PersonItem, error) {
-
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.People.GetRecentlyUpdatedPeople(
 		context.Background(),
@@ -194,11 +192,9 @@ func fetchPeoplesUpdates(client *internal.Client, options *str.Options, startDat
 
 	// Check if there are more pages
 	if pages := resp.Header.Get(internal.HeaderPaginationPageCount); pages != consts.EmptyString {
-
 		pagesInt, _ := strconv.Atoi(pages)
 
 		if page != pagesInt && pagesInt > consts.ZeroValue {
-
 			time.Sleep(time.Duration(2) * time.Second)
 
 			// Fetch items from the next page
@@ -210,17 +206,13 @@ func fetchPeoplesUpdates(client *internal.Client, options *str.Options, startDat
 
 			// Append items from the next page to the current page
 			list = append(list, nextPageItems...)
-
 		}
-
 	}
 
 	return list, nil
-
 }
 
 func fetchPeoplesUpdatedIDs(client *internal.Client, options *str.Options, startDate string, page int) ([]*int, error) {
-
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.People.GetRecentlyUpdatedPeopleTraktIDs(
 		context.Background(),
@@ -234,11 +226,9 @@ func fetchPeoplesUpdatedIDs(client *internal.Client, options *str.Options, start
 
 	// Check if there are more pages
 	if pages := resp.Header.Get(internal.HeaderPaginationPageCount); pages != consts.EmptyString {
-
 		pagesInt, _ := strconv.Atoi(pages)
 
 		if page != pagesInt && pagesInt > consts.ZeroValue {
-
 			time.Sleep(time.Duration(2) * time.Second)
 
 			// Fetch items from the next page
@@ -250,17 +240,13 @@ func fetchPeoplesUpdatedIDs(client *internal.Client, options *str.Options, start
 
 			// Append items from the next page to the current page
 			list = append(list, nextPageItems...)
-
 		}
-
 	}
 
 	return list, nil
-
 }
 
 func fetchSinglePerson(client *internal.Client, options *str.Options) (*str.Person, error) {
-
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetSinglePerson(
 		context.Background(),
@@ -273,11 +259,9 @@ func fetchSinglePerson(client *internal.Client, options *str.Options) (*str.Pers
 	}
 
 	return result, nil
-
 }
 
 func fetchMovieCredits(client *internal.Client, options *str.Options) (*str.PersonMovies, error) {
-
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetMovieCredits(
 		context.Background(),
@@ -290,11 +274,9 @@ func fetchMovieCredits(client *internal.Client, options *str.Options) (*str.Pers
 	}
 
 	return result, nil
-
 }
 
 func fetchShowCredits(client *internal.Client, options *str.Options) (*str.PersonShows, error) {
-
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetShowCredits(
 		context.Background(),
@@ -307,11 +289,9 @@ func fetchShowCredits(client *internal.Client, options *str.Options) (*str.Perso
 	}
 
 	return result, nil
-
 }
 
 func fetchListsContainingThisPerson(client *internal.Client, options *str.Options, page int) ([]*str.PersonalList, error) {
-
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.People.GetListsContainingThisPerson(
 		context.Background(),
@@ -327,11 +307,9 @@ func fetchListsContainingThisPerson(client *internal.Client, options *str.Option
 
 	// Check if there are more pages
 	if pages := resp.Header.Get(internal.HeaderPaginationPageCount); pages != consts.EmptyString {
-
 		pagesInt, _ := strconv.Atoi(pages)
 
 		if page != pagesInt && pagesInt > consts.ZeroValue {
-
 			time.Sleep(time.Duration(2) * time.Second)
 
 			// Fetch items from the next page
@@ -343,11 +321,8 @@ func fetchListsContainingThisPerson(client *internal.Client, options *str.Option
 
 			// Append items from the next page to the current page
 			list = append(list, nextPageItems...)
-
 		}
-
 	}
 
 	return list, nil
-
 }

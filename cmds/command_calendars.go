@@ -31,7 +31,6 @@ var CalendarsCmd = &Command{
 }
 
 func calendarsFunc(cmd *Command, _ ...string) error {
-
 	options := cmd.Options
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
@@ -40,7 +39,6 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 	fmt.Println("start_date:", options.StartDate)
 	fmt.Println("days:", options.Days)
 	switch options.Action {
-
 	case "my-shows", "all-shows":
 
 		fmt.Println("Get calendar: " + options.Action)
@@ -150,9 +148,7 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 	default:
 		fmt.Println("possible actions: {my,all}-shows,{my,all}-new-shows,{my,all}-season-premieres,{my,all}-finales,{my,all}-movies,{my,all}-dvd")
 	}
-
 	return nil
-
 }
 
 var (
@@ -164,7 +160,6 @@ func init() {
 }
 
 func fetchCalendarShows(client *internal.Client, options *str.Options) ([]*str.CalendarList, error) {
-
 	if options.Action == "all-shows" {
 		actionType = "all"
 	}
@@ -185,11 +180,9 @@ func fetchCalendarShows(client *internal.Client, options *str.Options) ([]*str.C
 	}
 
 	return list, nil
-
 }
 
 func fetchCalendarNewShows(client *internal.Client, options *str.Options) ([]*str.CalendarList, error) {
-
 	if options.Action == "all-new-shows" {
 		actionType = "all"
 	}
@@ -207,10 +200,8 @@ func fetchCalendarNewShows(client *internal.Client, options *str.Options) ([]*st
 	}
 
 	return list, nil
-
 }
 func fetchCalendarSeasonPremieres(client *internal.Client, options *str.Options) ([]*str.CalendarList, error) {
-
 	if options.Action == "all-season-premieres" {
 		actionType = consts.ActionTypeAll
 	}
@@ -229,11 +220,9 @@ func fetchCalendarSeasonPremieres(client *internal.Client, options *str.Options)
 	}
 
 	return list, nil
-
 }
 
 func fetchCalendarFinales(client *internal.Client, options *str.Options) ([]*str.CalendarList, error) {
-
 	if options.Action == "all-finales" {
 		actionType = consts.ActionTypeAll
 	}
@@ -252,11 +241,9 @@ func fetchCalendarFinales(client *internal.Client, options *str.Options) ([]*str
 	}
 
 	return list, nil
-
 }
 
 func fetchCalendarMovies(client *internal.Client, options *str.Options) ([]*str.CalendarList, error) {
-
 	if options.Action == "all-movies" {
 		actionType = consts.ActionTypeAll
 	}
@@ -275,11 +262,9 @@ func fetchCalendarMovies(client *internal.Client, options *str.Options) ([]*str.
 	}
 
 	return list, nil
-
 }
 
 func fetchCalendarDvdReleases(client *internal.Client, options *str.Options) ([]*str.CalendarList, error) {
-
 	if options.Action == "all-dvd" {
 		actionType = consts.ActionTypeAll
 	}
@@ -298,5 +283,4 @@ func fetchCalendarDvdReleases(client *internal.Client, options *str.Options) ([]
 	}
 
 	return list, nil
-
 }

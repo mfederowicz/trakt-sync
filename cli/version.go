@@ -16,7 +16,6 @@ var (
 
 // GenAppVersion gen app verrsion string
 func GenAppVersion() error {
-
 	const (
 		First = 1
 		EmptyBuildInfoLen = 0

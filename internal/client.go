@@ -79,7 +79,6 @@ func (c *Client) UpdateHeaders(headers map[string]any) {
 
 // initialize sets default values and initializes services.
 func (c *Client) initialize() {
-
 	if c.client == nil {
 		c.client = &http.Client{}
 	}
@@ -170,7 +169,6 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*str
 
 // BareDo sends an API request and lets you handle the api response.
 func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, error) {
-
 	if ctx == nil {
 		return nil, errNonNilContext
 	}
@@ -180,7 +178,6 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 	if skip := ctx.Value(skipRateLimitCheck); skip == nil {
 		// don't make further requests before Retry After.
 		if err := c.CheckRetryAfter(req); err != nil {
-
 			return &str.Response{
 				Response: err.Response,
 			}, err
@@ -229,7 +226,6 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 
 // CheckResponse checks if api response have errors.
 func (c *Client) CheckResponse(r *http.Response) error {
-
 	if c := r.StatusCode; http.StatusOK <= c && c <= consts.MaxAcceptedStatus {
 		return nil
 	}
@@ -246,7 +242,6 @@ func (c *Client) CheckResponse(r *http.Response) error {
 
 	r.Body = io.NopCloser(bytes.NewBuffer(data))
 	switch r.StatusCode {
-
 	case http.StatusTooManyRequests:
 		abuseRateLimitError := &AbuseRateLimitError{
 			Response: errorResponse.Response,
@@ -261,12 +256,10 @@ func (c *Client) CheckResponse(r *http.Response) error {
 	default:
 		return errorResponse
 	}
-
 }
 
 // CheckRetryAfter check Retry After header.
 func (c *Client) CheckRetryAfter(req *http.Request) *AbuseRateLimitError {
-
 	c.rateMu.Lock()
 	reset := c.RateLimitReset
 	c.rateMu.Unlock()
@@ -298,7 +291,6 @@ func (c *Client) WithContext(ctx context.Context, req *http.Request) *http.Reque
 
 // ParseRate parses the rate related headers.
 func (c *Client) ParseRate(r *http.Response) str.Rate {
-
 	var rate str.Rate
 	if limit := r.Header.Get(HeaderRateLimit); limit != emptyLimit {
 		rate.Limit, _ = strconv.Atoi(limit)
@@ -310,7 +302,6 @@ func (c *Client) ParseRate(r *http.Response) str.Rate {
 // NewResponse creates a new Response for the provided http.Response.
 // r must not be nil.
 func (c *Client) NewResponse(r *http.Response) *str.Response {
-
 	response := &str.Response{Response: r}
 	response.Rate = c.ParseRate(r)
 	return response

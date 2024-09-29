@@ -23,7 +23,6 @@ func fail(err string) {
 
 // open browser for https://trakt.tv/activate code activation
 func openBrowser(url string) error {
-
 	var cmd *exec.Cmd
 
 	switch runtime.GOOS {
@@ -42,7 +41,6 @@ func openBrowser(url string) error {
 
 // check if user accept device code or not
 func deviceCodeVerification(deviceToken *str.NewDeviceToken, oauth *internal.OauthService, config *cfg.Config) bool {
-
 	token, resp, err := oauth.PoolForTheAccessToken(context.Background(), deviceToken)
 
 	if err != nil {
@@ -56,12 +54,10 @@ func deviceCodeVerification(deviceToken *str.NewDeviceToken, oauth *internal.Oau
 	}
 
 	if resp.StatusCode == http.StatusOK {
-
 		tokenjson, _ := json.Marshal(token)
 		if err := os.WriteFile(config.TokenPath, tokenjson, consts.X644); err != nil {
 			fmt.Println(err.Error())
 		}
-
 	}
 
 	return resp.StatusCode == http.StatusOK
@@ -69,7 +65,6 @@ func deviceCodeVerification(deviceToken *str.NewDeviceToken, oauth *internal.Oau
 
 // fetch new device code for client
 func fetchNewDeviceCodeForClient(config *cfg.Config, oauth *internal.OauthService) (*str.DeviceCode, error) {
-
 	code, resp, err := oauth.GenerateNewDeviceCodes(
 		context.Background(),
 		&str.NewDeviceCode{ClientID: &config.ClientID})
@@ -83,12 +78,10 @@ func fetchNewDeviceCodeForClient(config *cfg.Config, oauth *internal.OauthServic
 	}
 
 	return nil, nil
-
 }
 
 // PoolNewDeviceCode pool new device code (open browser and wait for correct code activation)
 func PoolNewDeviceCode(config *cfg.Config, oauth *internal.OauthService) error {
-
 	fmt.Println("Polling for new device code...")
 
 	device, err := fetchNewDeviceCodeForClient(config, oauth)
@@ -101,12 +94,10 @@ func PoolNewDeviceCode(config *cfg.Config, oauth *internal.OauthService) error {
 	verifyCode(device, config, oauth)
 
 	return nil
-
 }
 
 // show new device code to stdout and open browser
 func showCodeAndOpenBrowser(device *str.DeviceCode) {
-
 	fmt.Println("Go to:" + device.VerificationURL)
 	fmt.Println("Enter code: " + device.UserCode)
 
@@ -114,19 +105,16 @@ func showCodeAndOpenBrowser(device *str.DeviceCode) {
 	if browserErr != nil {
 		fail("Error opening browser:" + browserErr.Error())
 	}
-
 }
 
 // verify device code in loop with intervals
 func verifyCode(device *str.DeviceCode, config *cfg.Config, oauth *internal.OauthService) {
-
 	const (
 		CounterNoSeconds = 0
 	)
 
 	count := device.ExpiresIn
 	for {
-
 		token := &str.NewDeviceToken{
 			Code:         &device.DeviceCode,
 			ClientID:     &config.ClientID,
@@ -143,5 +131,4 @@ func verifyCode(device *str.DeviceCode, config *cfg.Config, oauth *internal.Oaut
 		}
 		time.Sleep(time.Duration(device.Interval) * time.Second)
 	}
-
 }

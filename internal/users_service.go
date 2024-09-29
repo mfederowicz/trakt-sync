@@ -17,7 +17,6 @@ type UsersService Service
 //
 // API docs: https://trakt.docs.apiary.io/#reference/users/list-items/get-items-on-a-personal-list
 func (u *UsersService) GetItemstOnAPersonalList(ctx context.Context, id *string, listID *string, t *string) ([]*str.UserListItem, *str.Response, error) {
-
 	var url string
 
 	if id != nil {
@@ -46,7 +45,6 @@ func (u *UsersService) GetItemstOnAPersonalList(ctx context.Context, id *string,
 //
 // API docs: https://trakt.docs.apiary.io/#reference/users/lists/get-a-user's-personal-lists
 func (u *UsersService) GetUsersPersonalLists(ctx context.Context, id *string) ([]*str.PersonalList, *str.Response, error) {
-
 	var url string
 
 	if id != nil {
@@ -75,7 +73,6 @@ func (u *UsersService) GetUsersPersonalLists(ctx context.Context, id *string) ([
 //
 // API docs:https://trakt.docs.apiary.io/#reference/users/profile/get-user-profile
 func (u *UsersService) GetUserProfile(ctx context.Context, id *string) (*str.UserProfile, *str.Response, error) {
-
 	var url string
 
 	if id != nil {

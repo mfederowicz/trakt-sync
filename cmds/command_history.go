@@ -25,7 +25,6 @@ var HistoryCmd = &Command{
 }
 
 func historyFunc(cmd *Command, _ ...string) error {
-
 	options := cmd.Options
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
@@ -68,7 +67,6 @@ func init() {
 }
 
 func fetchHistoryList(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
-
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Sync.GetWatchedHistory(
 		context.Background(),
@@ -82,11 +80,9 @@ func fetchHistoryList(client *internal.Client, options *str.Options, page int) (
 
 	// Check if there are more pages
 	if pages := resp.Header.Get(internal.HeaderPaginationPageCount); pages != "" {
-
 		pagesInt, _ := strconv.Atoi(pages)
 
 		if page != pagesInt {
-
 			time.Sleep(time.Duration(2) * time.Second)
 
 			// Fetch items from the next page
@@ -98,11 +94,8 @@ func fetchHistoryList(client *internal.Client, options *str.Options, page int) (
 
 			// Append items from the next page to the current page
 			list = append(list, nextPageItems...)
-
 		}
-
 	}
 
 	return list, nil
-
 }

@@ -11,5 +11,4 @@ func TestIsValidConfigTypeSlice(t *testing.T) {
 	if bool(got) != false {
 		t.Fatalf("Expected %v, got %v", false, bool(got))
 	}
-
 }

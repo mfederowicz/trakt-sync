@@ -18,7 +18,6 @@ type PeopleService Service
 //
 // API docs: https://trakt.docs.apiary.io/#reference/people/lists/get-lists-containing-this-person
 func (p *PeopleService) GetListsContainingThisPerson(ctx context.Context, id *string, typeString *string, sort *string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
-
 	var url string
 
 	url = fmt.Sprintf("people/%s/lists/%s/%s", *id, *typeString, *sort)
@@ -48,7 +47,6 @@ func (p *PeopleService) GetListsContainingThisPerson(ctx context.Context, id *st
 //
 // API docs: https://trakt.docs.apiary.io/#reference/people/movies/get-movie-credits
 func (p *PeopleService) GetMovieCredits(ctx context.Context, id *string, opts *uri.ListOptions) (*str.PersonMovies, *str.Response, error) {
-
 	var url = fmt.Sprintf("people/%s/movies", *id)
 	url, err := uri.AddQuery(url, opts)
 
@@ -77,7 +75,6 @@ func (p *PeopleService) GetMovieCredits(ctx context.Context, id *string, opts *u
 //
 // API docs: https://trakt.docs.apiary.io/#reference/people/shows/get-show-credits
 func (p *PeopleService) GetShowCredits(ctx context.Context, id *string, opts *uri.ListOptions) (*str.PersonShows, *str.Response, error) {
-
 	var url = fmt.Sprintf("people/%s/shows", *id)
 	url, err := uri.AddQuery(url, opts)
 
@@ -106,7 +103,6 @@ func (p *PeopleService) GetShowCredits(ctx context.Context, id *string, opts *ur
 //
 // API docs: https://trakt.docs.apiary.io/#reference/people/summary/get-a-single-person
 func (p *PeopleService) GetSinglePerson(ctx context.Context, id *string, opts *uri.ListOptions) (*str.Person, *str.Response, error) {
-
 	var url string
 
 	url = fmt.Sprintf("people/%s", *id)
@@ -135,7 +131,6 @@ func (p *PeopleService) GetSinglePerson(ctx context.Context, id *string, opts *u
 //
 // API docs: https://trakt.docs.apiary.io/#reference/people/updates/get-recently-updated-people
 func (p *PeopleService) GetRecentlyUpdatedPeople(ctx context.Context, startDate *string, opts *uri.ListOptions) ([]*str.PersonItem, *str.Response, error) {
-
 	var url string
 
 	url = fmt.Sprintf("people/updates/%s", *startDate)
@@ -164,7 +159,6 @@ func (p *PeopleService) GetRecentlyUpdatedPeople(ctx context.Context, startDate 
 //
 // API docs: https://trakt.docs.apiary.io/#reference/people/updated-ids
 func (p *PeopleService) GetRecentlyUpdatedPeopleTraktIDs(ctx context.Context, startDate *string, opts *uri.ListOptions) ([]*int, *str.Response, error) {
-
 	var url string
 
 	url = fmt.Sprintf("people/updates/id/%s", *startDate)

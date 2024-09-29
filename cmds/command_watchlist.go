@@ -81,11 +81,9 @@ func fetchWatchlist(client *internal.Client, options *str.Options, page int) ([]
 
 	// Check if there are more pages
 	if pages := resp.Header.Get(internal.HeaderPaginationPageCount); pages != "" {
-
 		pagesInt, _ := strconv.Atoi(pages)
 
 		if pagesInt > consts.ZeroValue && page != pagesInt {
-
 			time.Sleep(time.Duration(2) * time.Second)
 
 			// Fetch items from the next page
@@ -97,11 +95,8 @@ func fetchWatchlist(client *internal.Client, options *str.Options, page int) ([]
 
 			// Append items from the next page to the current page
 			list = append(list, nextPageItems...)
-
 		}
-
 	}
 
 	return list, nil
-
 }

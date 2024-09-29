@@ -42,7 +42,6 @@ var SearchCmd = &Command{
 }
 
 func searchFunc(cmd *Command, _ ...string) error {
-
 	options := cmd.Options
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
@@ -50,7 +49,6 @@ func searchFunc(cmd *Command, _ ...string) error {
 	fmt.Println("action:", options.Action)
 
 	switch options.Action {
-
 	case "text-query":
 
 		fmt.Println("Get search: " + options.Action)
@@ -97,7 +95,6 @@ func searchFunc(cmd *Command, _ ...string) error {
 		fmt.Println("possible actions: text-query, id-lookup")
 	}
 	return nil
-
 }
 
 var (
@@ -105,14 +102,12 @@ var (
 )
 
 func init() {
-
 	SearchCmd.Flag.Var(&_searchType, "t", consts.TypeUsage)
 	SearchCmd.Flag.Var(&_searchField, "field", consts.FieldUsage)
 	SearchCmd.Run = searchFunc
 }
 
 func fetchSearchTextQuery(client *internal.Client, options *str.Options, page int) ([]*str.SearchListItem, error) {
-
 	err := checkRequiredFields(options)
 
 	if err != nil {
@@ -139,11 +134,8 @@ func fetchSearchTextQuery(client *internal.Client, options *str.Options, page in
 
 	// Check if there are more pages
 	if pages := resp.Header.Get(internal.HeaderPaginationPageCount); pages != consts.EmptyString {
-
 		pagesInt, _ := strconv.Atoi(pages)
-
 		if page != pagesInt && pagesInt > consts.ZeroValue {
-
 			time.Sleep(time.Duration(2) * time.Second)
 
 			// Fetch items from the next page
@@ -155,17 +147,13 @@ func fetchSearchTextQuery(client *internal.Client, options *str.Options, page in
 
 			// Append items from the next page to the current page
 			list = append(list, nextPageItems...)
-
 		}
-
 	}
 
 	return list, nil
-
 }
 
 func fetchSearchIDLookup(client *internal.Client, options *str.Options) ([]*str.SearchListItem, error) {
-
 	err := checkRequiredFields(options)
 
 	if err != nil {
@@ -187,11 +175,9 @@ func fetchSearchIDLookup(client *internal.Client, options *str.Options) ([]*str.
 	}
 
 	return list, nil
-
 }
 
 func checkRequiredFields(options *str.Options) error {
-
 	// Check if the provided module exists in ModuleConfig
 	moduleConfig, ok := cfg.ModuleConfig[options.Module]
 	if !ok {
@@ -208,10 +194,8 @@ func checkRequiredFields(options *str.Options) error {
 			if !cfg.IsValidConfigTypeSlice(cfg.SearchFieldConfig[stype], options.SearchField) {
 				return fmt.Errorf("invalid --field flag values: %v for selected type: %v, avalable values:%v",
 					options.SearchField, stype, cfg.SearchFieldConfig[stype])
-
 			}
 		}
-
 	}
 
 	// Check id_type values
@@ -219,10 +203,8 @@ func checkRequiredFields(options *str.Options) error {
 		if !cfg.IsValidConfigType(moduleConfig.SearchIDType, options.SearchIDType) {
 			return fmt.Errorf("invalid --id_type flag value: %v avalable values:%v",
 				options.SearchIDType, moduleConfig.SearchIDType)
-
 		}
 	}
 
 	return nil
-
 }

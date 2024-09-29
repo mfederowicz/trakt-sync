@@ -73,7 +73,6 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 	}
 
 	if intID > consts.ZeroValue && str.ContainInt(intID, avLists) {
-
 		options.ID = strconv.Itoa(intID)
 		itemsExportData, _, itemsErr := fetchUsersPersonalList(client, options)
 		if itemsErr == nil {
@@ -87,7 +86,6 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 			} else {
 				fmt.Printf("No %s items in list %d to fetch\n", options.Type, intID)
 			}
-
 		}
 	}
 	return nil
@@ -102,18 +100,15 @@ func init() {
 }
 
 func fetchUsersPersonalLists(client *internal.Client, username *string) ([]*str.PersonalList, *str.Response, error) {
-
 	lists, resp, err := client.Users.GetUsersPersonalLists(
 		context.Background(),
 		username,
 	)
 
 	return lists, resp, err
-
 }
 
 func fetchUsersPersonalList(client *internal.Client, options *str.Options) ([]*str.UserListItem, *str.Response, error) {
-
 	listIDString := options.ID
 	lists, resp, err := client.Users.GetItemstOnAPersonalList(
 		context.Background(),
@@ -123,5 +118,4 @@ func fetchUsersPersonalList(client *internal.Client, options *str.Options) ([]*s
 	)
 
 	return lists, resp, err
-
 }

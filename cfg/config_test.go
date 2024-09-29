@@ -70,18 +70,15 @@ func TestGenUsedFlagMap(t *testing.T) {
 	if !test.MapsStringBoolEqual(got2, flagset2) {
 		t.Errorf("maps should be equal:%v, got:%v", flagset2, got2)
 	}
-
 }
 
 func TestInitConfigCannotRead(t *testing.T) {
-
 	AppFs = afero.NewMemMapFs()
 	_, err := InitConfig(AppFs)
 	assert.Contains(t, err.Error(), "config file not exist")
 }
 
 func TestInitConfigCannotReadOtherFile(t *testing.T) {
-
 	t.Cleanup(func() {
 		// reset fs after test
 		AppFs = afero.NewMemMapFs()
@@ -96,11 +93,9 @@ func TestInitConfigCannotReadOtherFile(t *testing.T) {
 	flag.Parse()
 	_, err := InitConfig(AppFs)
 	assert.Contains(t, err.Error(), "cannot read the config file")
-
 }
 
 func TestInitConfigNoContent(t *testing.T) {
-
 	t.Cleanup(func() {
 		// reset fs after test
 		AppFs = afero.NewMemMapFs()
@@ -116,11 +111,9 @@ func TestInitConfigNoContent(t *testing.T) {
 	flag.Parse()
 	_, err := InitConfig(AppFs)
 	assert.Contains(t, err.Error(), "empty file content")
-
 }
 
 func TestInitConfigMalformedFile(t *testing.T) {
-
 	t.Cleanup(func() {
 		// reset fs after test
 		AppFs = afero.NewMemMapFs()
@@ -138,11 +131,9 @@ func TestInitConfigMalformedFile(t *testing.T) {
 	flag.Parse()
 	_, err := InitConfig(AppFs)
 	assert.Contains(t, err.Error(), "cannot parse the config file")
-
 }
 
 func TestInitConfigPerPageValue(t *testing.T) {
-
 	t.Cleanup(func() {
 		// reset fs after test
 		AppFs = afero.NewMemMapFs()
@@ -175,11 +166,9 @@ func TestInitConfigPerPageValue(t *testing.T) {
 	flag.Parse()
 	c, _ := InitConfig(AppFs)
 	assert.Equal(t, c.PerPage, consts.PerPage)
-
 }
 
 func TestInitConfigNoClient(t *testing.T) {
-
 	t.Cleanup(func() {
 		// reset fs after test
 		AppFs = afero.NewMemMapFs()
@@ -214,11 +203,9 @@ func TestInitConfigNoClient(t *testing.T) {
 	flag.Parse()
 	_, err := InitConfig(AppFs)
 	assert.Contains(t, err.Error(), "client_id and client_secret are required fields")
-
 }
 
 func TestInitConfigNoTokenPath(t *testing.T) {
-
 	t.Cleanup(func() {
 		// reset fs after test
 		AppFs = afero.NewMemMapFs()
@@ -253,5 +240,4 @@ func TestInitConfigNoTokenPath(t *testing.T) {
 	flag.Parse()
 	_, err := InitConfig(AppFs)
 	assert.Contains(t, err.Error(), "token_path should be json file")
-
 }
