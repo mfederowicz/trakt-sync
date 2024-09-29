@@ -3,6 +3,8 @@ package internal
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
@@ -57,7 +59,7 @@ func (o *OauthService) PoolForTheAccessToken(ctx context.Context, deviceToken *s
 // API docs: https://trakt.docs.apiary.io/#reference/authentication-oauth/get-token/exchange-refresh_token-for-access_token
 func (o *OauthService) ExchangeRefreshTokenForAccessToken(ctx context.Context, deviceToken *str.CurrentDeviceToken) (*str.DeviceToken, *str.Response, error) {
 	u := "oauth/token"
-	req, err := o.client.NewRequest("POST", u, deviceToken)
+	req, err := o.client.NewRequest(http.MethodPost, u, deviceToken)
 	if err != nil {
 		return nil, nil, err
 	}

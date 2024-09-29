@@ -8,6 +8,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/cmds"
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 
@@ -16,13 +17,12 @@ import (
 
 var (
 	options     = &str.Options{}
-	_verbose    = flag.Bool("v", false, cmds.VerboseUsage)
-	_version    = flag.Bool("version", false, cmds.VersionUsage)
-	_configPath = flag.String("c", cfg.DefaultConfig().ConfigPath, cmds.ConfigUsage)
+	_verbose    = flag.Bool("v", false, consts.VerboseUsage)
+	_version    = flag.Bool("version", false, consts.VersionUsage)
+	_configPath = flag.String("c", cfg.DefaultConfig().ConfigPath, consts.ConfigUsage)
 )
 
 func main() {
-
 	fs := afero.NewOsFs()
 	config, err := cfg.InitConfig(fs)
 	if err != nil {
@@ -48,7 +48,7 @@ func main() {
 	}
 
 	args := flag.Args()
-	if len(args) == 0 {
+	if len(args) == consts.ZeroValue {
 		flag.Usage()
 		return
 	}
@@ -58,5 +58,4 @@ func main() {
 	}
 
 	cmds.ModulesRuntime(args, config, client, fs)
-
 }

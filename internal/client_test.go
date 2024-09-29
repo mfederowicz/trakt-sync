@@ -3,18 +3,19 @@ package internal
 import (
 	"context"
 	"fmt"
+	"github.com/mfederowicz/trakt-sync/str"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"strings"
 	"testing"
-	"github.com/mfederowicz/trakt-sync/str"
 )
 
 const (
 	// baseURLPath is a non-empty Client.BaseURL path to use during tests,
-	baseURLPath = "/trakt"
+	baseURLPath           = "/trakt"
+	clientNewRequestFatal = "client.NewRequest returned error: %v"
 )
 
 // setup sets up a test HTTP server along with a trakt.Client that is
@@ -46,7 +47,7 @@ func TestNewRequest(t *testing.T) {
 
 	inURL, outURL := "/foo", defaultBaseURL+"foo"
 	inBody, outBody := &str.NewDeviceCode{ClientID: str.String("abc")}, `{"client_id":"abc"}`+"\n"
-	req, _ := c.NewRequest("GET", inURL, inBody)
+	req, _ := c.NewRequest(http.MethodGet, inURL, inBody)
 
 	// test that relative URL was expanded
 	if got, want := req.URL.String(), outURL; got != want {
@@ -74,14 +75,14 @@ func TestBareDo_returnsOpenBody(t *testing.T) {
 	expectedBody := "Hello from the other side !"
 
 	mux.HandleFunc("/test-url", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, "GET")
+		testMethod(t, r, http.MethodGet)
 		fmt.Fprint(w, expectedBody)
 	})
 
 	ctx := context.Background()
-	req, err := client.NewRequest("GET", "test-url", nil)
+	req, err := client.NewRequest(http.MethodGet, "test-url", nil)
 	if err != nil {
-		t.Fatalf("client.NewRequest returned error: %v", err)
+		t.Fatalf(clientNewRequestFatal, err)
 	}
 
 	resp, err := client.BareDo(ctx, req)
@@ -108,16 +109,16 @@ func TestBareDo_rate_limit_reset(t *testing.T) {
 	expectedBody := "Hello from the other side !"
 
 	mux.HandleFunc("/test-url", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, "GET")
+		testMethod(t, r, http.MethodGet)
 		w.Header().Add(HeaderRetryAfter, "100")
 		w.WriteHeader(http.StatusTooManyRequests)
 		fmt.Fprint(w, expectedBody)
 	})
 
 	ctx := context.Background()
-	req, err := client.NewRequest("GET", "test-url", nil)
+	req, err := client.NewRequest(http.MethodGet, "test-url", nil)
 	if err != nil {
-		t.Fatalf("client.NewRequest returned error: %v", err)
+		t.Fatalf(clientNewRequestFatal, err)
 	}
 
 	client.BareDo(ctx, req)
@@ -129,13 +130,13 @@ func TestBareDo_rate_limit_reset(t *testing.T) {
 	}
 
 	mux.HandleFunc("/test-url-next", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, "GET")
+		testMethod(t, r, http.MethodGet)
 		fmt.Fprint(w, "Body")
 	})
 
-	reqNext, errNext := client.NewRequest("GET", "test-url-next", nil)
+	reqNext, errNext := client.NewRequest(http.MethodGet, "test-url-next", nil)
 	if errNext != nil {
-		t.Fatalf("client.NewRequest returned error: %v", err)
+		t.Fatalf(clientNewRequestFatal, err)
 	}
 
 	_, errBare := client.BareDo(ctx, reqNext)

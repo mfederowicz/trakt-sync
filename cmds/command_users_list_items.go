@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/writer"
@@ -18,7 +19,7 @@ var (
 	username   = "me"
 	exportData []*str.PersonalList
 
-	_listID = flag.String("i", cfg.DefaultConfig().ID, UserlistUsage)
+	_listID = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
 )
 
 // UsersListItemsCmd Returns all personal lists for a user.
@@ -42,7 +43,7 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 		return fmt.Errorf("fetch user list error:%w", err)
 	}
 
-	if len(personalLists) == 0 {
+	if len(personalLists) == consts.ZeroValue {
 		return fmt.Errorf("empty personal lists")
 	}
 
@@ -55,7 +56,7 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 		avLists = append(avLists, int(*data.IDs.Trakt))
 	}
 
-	if intID == 0 {
+	if intID == consts.ZeroValue {
 		return fmt.Errorf("please set personal listid")
 	}
 
@@ -65,18 +66,17 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 
 	fmt.Printf("ListId to fetch:%d\n", intID)
 
-	if len(*_output) > 0 {
+	if len(*_output) > consts.ZeroValue {
 		options.Output = *_output
 	} else {
 		options.Output = fmt.Sprintf("export_%s_%s.json", options.Module, options.Type)
 	}
 
-	if intID > 0 && str.ContainInt(intID, avLists) {
-
+	if intID > consts.ZeroValue && str.ContainInt(intID, avLists) {
 		options.ID = strconv.Itoa(intID)
 		itemsExportData, _, itemsErr := fetchUsersPersonalList(client, options)
 		if itemsErr == nil {
-			if len(itemsExportData) > 0 {
+			if len(itemsExportData) > consts.ZeroValue {
 				fmt.Printf("Found %d items \n", len(itemsExportData))
 				exportJSON := []*str.UserListItem{}
 				exportJSON = append(exportJSON, itemsExportData...)
@@ -86,7 +86,6 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 			} else {
 				fmt.Printf("No %s items in list %d to fetch\n", options.Type, intID)
 			}
-
 		}
 	}
 	return nil
@@ -101,18 +100,15 @@ func init() {
 }
 
 func fetchUsersPersonalLists(client *internal.Client, username *string) ([]*str.PersonalList, *str.Response, error) {
-
 	lists, resp, err := client.Users.GetUsersPersonalLists(
 		context.Background(),
 		username,
 	)
 
 	return lists, resp, err
-
 }
 
 func fetchUsersPersonalList(client *internal.Client, options *str.Options) ([]*str.UserListItem, *str.Response, error) {
-
 	listIDString := options.ID
 	lists, resp, err := client.Users.GetItemstOnAPersonalList(
 		context.Background(),
@@ -122,5 +118,4 @@ func fetchUsersPersonalList(client *internal.Client, options *str.Options) ([]*s
 	)
 
 	return lists, resp, err
-
 }

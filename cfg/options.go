@@ -4,6 +4,8 @@ package cfg
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/str"
 
 	"github.com/spf13/afero"
@@ -122,9 +124,7 @@ func SyncOptionsFromFlags(fs afero.Fs, config *Config, flagMap map[string]string
 
 // OptionsFromConfig reads optionf from config file
 func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
-
 	options := &str.Options{}
-
 	options.Verbose = config.Verbose
 	options.Type = config.Type
 	options.SearchType = config.SearchType
@@ -169,15 +169,15 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 		fmt.Println("Forcing sort to rank")
 	}
 
-	if len(options.Output) == 0 && options.Module == "lists" {
+	if len(options.Output) == consts.ZeroValue && options.Module == "lists" {
 		options.Output = fmt.Sprintf("export_%s_%s.json", options.Module, options.Type)
 	}
-	if len(options.Output) == 0 && options.Module == "people" {
+	if len(options.Output) == consts.ZeroValue && options.Module == "people" {
 		options.Output = fmt.Sprintf("export_%s_%s.json", options.Module, options.Action)
 	}
 
-	if len(options.Output) == 0 {
-		options.Output = fmt.Sprintf("export_%s_%s.json", options.Type, options.Module)
+	if len(options.Output) == consts.ZeroValue {
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Type, options.Module)
 	}
 
 	if options.Type == "episodes" && options.Format == "imdb" {
@@ -185,7 +185,7 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 		fmt.Println("Forcing format to tmdb for type episode")
 	}
 
-	if len(str.Headers["Authorization"].(string)) == 0 && len(str.Headers["trakt-api-key"].(string)) == 0 {
+	if len(str.Headers["Authorization"].(string)) == consts.ZeroValue && len(str.Headers["trakt-api-key"].(string)) == consts.ZeroValue {
 		return str.Options{}, fmt.Errorf("no valid Authorization header")
 	}
 
@@ -208,7 +208,7 @@ func IsValidConfigType(allowedTypes []string, userType string) bool {
 // IsValidConfigTypeSlice checks if all elements of userElements are in allowedElements,
 // considering the counts of each element.
 func IsValidConfigTypeSlice(allowedElements []string, userElements str.Slice) bool {
-	if len(userElements) == 0 {
+	if len(userElements) == consts.ZeroValue {
 		return true
 	}
 
@@ -236,7 +236,6 @@ func IsValidConfigTypeSlice(allowedElements []string, userElements str.Slice) bo
 
 // ReadTokenFromFile reads the token from the specified file
 func readTokenFromFile(fs afero.Fs, filePath string) (*str.Token, error) {
-
 	data, err := afero.ReadFile(fs, filePath)
 	if err != nil {
 		return nil, err
@@ -252,7 +251,6 @@ func readTokenFromFile(fs afero.Fs, filePath string) (*str.Token, error) {
 
 // GetOptionTime config Time depends on Module name
 func GetOptionTime(options *str.Options) string {
-
 	if options.Module == "history" {
 		options.Time = "watched_at"
 	} else if options.Module == "watchlist" {
@@ -264,5 +262,4 @@ func GetOptionTime(options *str.Options) string {
 	}
 
 	return options.Time
-
 }

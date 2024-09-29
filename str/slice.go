@@ -8,7 +8,11 @@ type Slice []string
 
 // Get string value of slice
 func (i *Slice) String() string {
-	if len(*i) == 0 {
+	const (
+		EmptySliceLen = 0
+	)
+
+	if len(*i) == EmptySliceLen {
 		return ""
 	}
 
@@ -22,10 +26,9 @@ func (i *Slice) String() string {
 	}
 
 	return strings.Join(deduplicated, ",")
-
 }
 
-// Set add element to slice 
+// Set add element to slice
 func (i *Slice) Set(value string) error {
 	*i = append(*i, value)
 	return nil

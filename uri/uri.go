@@ -8,6 +8,8 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/mfederowicz/trakt-sync/consts"
 )
 
 // config slices
@@ -31,7 +33,7 @@ type RatingRange struct {
 }
 
 func (rr RatingRange) String() string {
-	if rr.Min <= 0 || rr.Max > 100 {
+	if rr.Min <= consts.RatingRageMin || rr.Max > consts.RatingRangeMax {
 		return ""
 	}
 
@@ -48,15 +50,14 @@ type RatingRangeFloat struct {
 }
 
 func (rr RatingRangeFloat) String() string {
-	if rr.Min <= 0.0 || rr.Max > 100.0 {
-		return ""
+	if rr.Min <= consts.RatingRageMinFloat || rr.Max > consts.RatingRangeMaxFloat {
+		return consts.EmptyString
 	}
 
 	if rr.Min > rr.Max {
-		return ""
+		return consts.EmptyString
 	}
 	return fmt.Sprintf("%.1f-%.1f", rr.Min, rr.Max)
-
 }
 
 // VotesRange represents min/max int votes parameters
@@ -66,12 +67,12 @@ type VotesRange struct {
 }
 
 func (r VotesRange) String() string {
-	if r.Min <= 0 || r.Max > 100000 {
-		return ""
+	if r.Min <= consts.VotesRangeMin || r.Max > consts.VotesRangeMax {
+		return consts.EmptyString
 	}
 
 	if r.Min > r.Max {
-		return ""
+		return consts.EmptyString
 	}
 
 	return fmt.Sprintf("%d-%d", r.Min, r.Max)
@@ -84,15 +85,15 @@ type ImdbVotesRange struct {
 }
 
 func (r ImdbVotesRange) String() string {
-	if r.Min <= 0 || r.Max > 3000000 {
-		return ""
+	if r.Min <= consts.ImdbVotesRangeMin || r.Max > consts.ImdbVotesRangeMax {
+		return consts.EmptyString
 	}
 
 	if r.Min > r.Max {
-		return ""
+		return consts.EmptyString
 	}
 
-	return fmt.Sprintf("%d-%d", r.Min, r.Max)
+	return fmt.Sprintf(consts.RangeFormatDigits, r.Min, r.Max)
 }
 
 // TmdbRatingRange represents min/max float tmdb rating parameters
@@ -102,15 +103,15 @@ type TmdbRatingRange struct {
 }
 
 func (r TmdbRatingRange) String() string {
-	if r.Min < 0.0 || r.Max > 10.0 {
-		return ""
+	if r.Min < consts.TmdbRatingRangeMin || r.Max > consts.TmdbRatingRangeMax {
+		return consts.EmptyString
 	}
 
 	if r.Min > r.Max || r.Min == r.Max {
-		return ""
+		return consts.EmptyString
 	}
 
-	return fmt.Sprintf("%.1f-%.1f", r.Min, r.Max)
+	return fmt.Sprintf(consts.RangeFormatFloats, r.Min, r.Max)
 }
 
 // ListOptions specifies the optional parameters to various List methods that
@@ -145,7 +146,6 @@ type ListOptions struct {
 
 // AddQuery adds query parameters to s.
 func AddQuery(s string, opts interface{}) (string, error) {
-
 	u, err := url.Parse(s)
 	if err != nil {
 		return s, err
@@ -159,7 +159,6 @@ func AddQuery(s string, opts interface{}) (string, error) {
 
 	u.RawQuery = EncodeParams(qs)
 	return u.String(), nil
-
 }
 
 // CustomTypeHandler defines the function signature for handling custom types
@@ -178,71 +177,65 @@ var customTypeHandlers = map[reflect.Type]CustomTypeHandler{
 func handleRatingRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) {
 	rr := fieldValue.Interface().(RatingRange)
 
-	if fieldTag != "" && len(rr.String()) > 0 {
+	if fieldTag != consts.EmptyString && len(rr.String()) > consts.ZeroValue {
 		// Remove omitempty tag from the field tag
-		fieldTag = strings.Split(fieldTag, ",")[0]
+		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
 	}
-
 }
 
 // handleVotesRange handles the VotesRange custom type
 func handleVotesRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) {
 	rr := fieldValue.Interface().(VotesRange)
 
-	if fieldTag != "" && len(rr.String()) > 0 {
+	if fieldTag != consts.EmptyString && len(rr.String()) > consts.ZeroValue {
 		// Remove omitempty tag from the field tag
-		fieldTag = strings.Split(fieldTag, ",")[0]
+		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
 	}
-
 }
 
 // handleTmdbRatingRange handles the TmdbRatingRange custom type
 func handleTmdbRatingRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) {
 	rr := fieldValue.Interface().(TmdbRatingRange)
 
-	if fieldTag != "" && len(rr.String()) > 0 {
+	if fieldTag != consts.EmptyString && len(rr.String()) > consts.ZeroValue {
 		// Remove omitempty tag from the field tag
-		fieldTag = strings.Split(fieldTag, ",")[0]
+		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
 	}
-
 }
 
 // handleImdbVotesRange handles the ImdbVotesRange custom type
 func handleImdbVotesRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) {
 	rr := fieldValue.Interface().(ImdbVotesRange)
 
-	if fieldTag != "" && len(rr.String()) > 0 {
+	if fieldTag != consts.EmptyString && len(rr.String()) > consts.ZeroValue {
 		// Remove omitempty tag from the field tag
-		fieldTag = strings.Split(fieldTag, ",")[0]
+		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
 	}
-
 }
 
 // handleMetaCriticRange handles the RatingRangeFloat custom type
 func handleMetaCriticRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) {
 	rr := fieldValue.Interface().(RatingRangeFloat)
 
-	if fieldTag != "" && len(rr.String()) > 0 {
+	if fieldTag != consts.EmptyString && len(rr.String()) > consts.ZeroValue {
 		// Remove omitempty tag from the field tag
-		fieldTag = strings.Split(fieldTag, ",")[0]
+		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
 	}
-
 }
 
 func flatOptsStruct(v reflect.Value, qs *url.Values) error {
-
 	// Check if the value is a pointer
 	if v.Kind() == reflect.Ptr {
 		// Dereference the pointer to get the underlying value
 		v = v.Elem()
 	}
 
-	for i := 0; i < v.NumField(); i++ {
+	for i := consts.ZeroValue; i < v.NumField(); i++ {
 		fieldValue := v.Field(i)
 		fieldType := v.Type().Field(i)
 
@@ -260,31 +253,31 @@ func flatOptsStruct(v reflect.Value, qs *url.Values) error {
 			}
 		} else {
 			fieldTag := fieldType.Tag.Get("url")
-			if fieldTag != "" {
+			if fieldTag != consts.EmptyString {
 				// Remove omitempty tag from the field tag
-				fieldTag = strings.Split(fieldTag, ",")[0]
+				fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 
 				// Convert field value to string based on its type
 				var value string
 				switch fieldValue.Kind() {
 				case reflect.Slice, reflect.Array:
-					if fieldValue.Len() == 0 {
-						value = "" // If the slice is empty, return an empty string
+					if fieldValue.Len() == consts.ZeroValue {
+						value = consts.EmptyString // If the slice is empty, return an empty string
 					}
 					var values []string
-					for i := 0; i < fieldValue.Len(); i++ {
+					for i := consts.ZeroValue; i < fieldValue.Len(); i++ {
 						switch fieldValue.Index(i).Kind() {
 						case reflect.String:
 							values = append(values, fieldValue.Index(i).String())
 						case reflect.Int:
-							values = append(values, strconv.FormatInt(fieldValue.Index(i).Int(), 10))
+							values = append(values, strconv.FormatInt(fieldValue.Index(i).Int(), consts.BaseInt))
 						}
 					}
 					// Join the string slice into a single comma-separated string
-					if len(values) > 0 {
-						value = strings.Join(values, ",")
+					if len(values) > consts.ZeroValue {
+						value = strings.Join(values, consts.SeparatorString)
 					} else {
-						value = ""
+						value = consts.EmptyString
 					}
 
 				case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
@@ -296,7 +289,7 @@ func flatOptsStruct(v reflect.Value, qs *url.Values) error {
 				}
 
 				// Add field to query string only if it's non-empty
-				if value != "" && !isEmptyValue(fieldValue) {
+				if value != consts.EmptyString && !isEmptyValue(fieldValue) {
 					qs.Add(fieldTag, value)
 				}
 			}
@@ -313,13 +306,12 @@ func isEmptyValue(v reflect.Value) bool {
 
 // EncodeParams encodes the values for query sorted by key
 func EncodeParams(values url.Values) string {
-
-	if len(values) == 0 {
-		return ""
+	if len(values) == consts.ZeroValue {
+		return consts.EmptyString
 	}
 
 	var buf strings.Builder
-	keys := make([]string, 0, len(values))
+	keys := make([]string, consts.ZeroValue, len(values))
 	for k := range values {
 		keys = append(keys, k)
 	}
@@ -327,7 +319,7 @@ func EncodeParams(values url.Values) string {
 	for _, k := range keys {
 		vs := values[k]
 		for _, v := range vs {
-			if buf.Len() > 0 {
+			if buf.Len() > consts.ZeroValue {
 				buf.WriteByte('&')
 			}
 			buf.WriteString(k)
@@ -339,7 +331,7 @@ func EncodeParams(values url.Values) string {
 }
 
 func hasStruct(v reflect.Value) bool {
-	for i := 0; i < v.NumField(); i++ {
+	for i := consts.ZeroValue; i < v.NumField(); i++ {
 		if v.Field(i).Kind() == reflect.Struct {
 			return true
 		}
@@ -354,7 +346,7 @@ func SanitizeURL(uri *url.URL) *url.URL {
 		return nil
 	}
 	params := uri.Query()
-	if len(params.Get("client_secret")) > 0 {
+	if len(params.Get("client_secret")) > consts.ZeroValue {
 		params.Set("client_secret", "REDACTED")
 		uri.RawQuery = params.Encode()
 	}

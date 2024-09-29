@@ -51,7 +51,6 @@ func (i ExportlistItem) String() string {
 
 // GetTime return Timestamp from item
 func (i ExportlistItem) GetTime() *Timestamp {
-
 	if i.WatchedAt != nil {
 		return i.WatchedAt
 	}

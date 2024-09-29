@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
@@ -24,19 +25,18 @@ var HistoryCmd = &Command{
 }
 
 func historyFunc(cmd *Command, _ ...string) error {
-
 	options := cmd.Options
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
 
 	fmt.Println("fetch history lists for:" + options.UserName)
 
-	historyLists, err := fetchHistoryList(client, options, 1)
+	historyLists, err := fetchHistoryList(client, options, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("fetch history list error:%w", err)
 	}
 
-	if len(historyLists) == 0 {
+	if len(historyLists) == consts.ZeroValue {
 		return fmt.Errorf("empty history lists")
 	}
 
@@ -48,7 +48,7 @@ func historyFunc(cmd *Command, _ ...string) error {
 		findDuplicates, exportJSON = cmd.ExportListProcess(data, options, findDuplicates, exportJSON)
 	}
 
-	if len(exportJSON) == 0 {
+	if len(exportJSON) == consts.ZeroValue {
 		return fmt.Errorf("warning no data to export, probably a bug")
 	}
 
@@ -67,7 +67,6 @@ func init() {
 }
 
 func fetchHistoryList(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
-
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Sync.GetWatchedHistory(
 		context.Background(),
@@ -81,15 +80,13 @@ func fetchHistoryList(client *internal.Client, options *str.Options, page int) (
 
 	// Check if there are more pages
 	if pages := resp.Header.Get(internal.HeaderPaginationPageCount); pages != "" {
-
 		pagesInt, _ := strconv.Atoi(pages)
 
 		if page != pagesInt {
-
 			time.Sleep(time.Duration(2) * time.Second)
 
 			// Fetch items from the next page
-			nextPage := page + 1
+			nextPage := page + consts.NextPageStep
 			nextPageItems, err := fetchHistoryList(client, options, nextPage)
 			if err != nil {
 				return nil, err
@@ -97,11 +94,8 @@ func fetchHistoryList(client *internal.Client, options *str.Options, page int) (
 
 			// Append items from the next page to the current page
 			list = append(list, nextPageItems...)
-
 		}
-
 	}
 
 	return list, nil
-
 }

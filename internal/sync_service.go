@@ -4,6 +4,8 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -16,7 +18,6 @@ type SyncService Service
 //
 // API docs: https://trakt.docs.apiary.io/#reference/sync/get-collection/get-collection
 func (s *SyncService) GetCollection(ctx context.Context, types *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
-
 	var url string
 
 	if types != nil {
@@ -31,7 +32,7 @@ func (s *SyncService) GetCollection(ctx context.Context, types *string, opts *ur
 	}
 
 	fmt.Println("fetch collection url:" + url)
-	req, err := s.client.NewRequest("GET", url, nil)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -51,7 +52,6 @@ func (s *SyncService) GetCollection(ctx context.Context, types *string, opts *ur
 //
 // API docs: https://trakt.docs.apiary.io/#reference/sync/get-watched/get-watched-history
 func (s *SyncService) GetWatchedHistory(ctx context.Context, types *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
-
 	var url string
 
 	if types != nil {
@@ -85,7 +85,6 @@ func (s *SyncService) GetWatchedHistory(ctx context.Context, types *string, opts
 //
 // API docs: https://trakt.docs.apiary.io/#reference/sync/get-watchlist/get-watchlist
 func (s *SyncService) GetWatchlist(ctx context.Context, types *string, sort *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
-
 	var url string
 
 	if types != nil && sort != nil {

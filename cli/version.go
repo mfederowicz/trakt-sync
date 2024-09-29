@@ -16,7 +16,10 @@ var (
 
 // GenAppVersion gen app verrsion string
 func GenAppVersion() error {
-
+	const (
+		First = 1
+		EmptyBuildInfoLen = 0
+	)
 	var buildInfo string
 
 	if date != "unknown" && builtBy != "unknown" {
@@ -32,9 +35,9 @@ func GenAppVersion() error {
 		if ok {
 			version = bi.Main.Version
 			if strings.HasPrefix(version, "v") {
-				version = bi.Main.Version[1:]
+				version = bi.Main.Version[First:]
 			}
-			if len(buildInfo) == 0 {
+			if len(buildInfo) == EmptyBuildInfoLen {
 				return fmt.Errorf("version %s", version)
 			}
 		}

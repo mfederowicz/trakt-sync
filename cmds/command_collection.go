@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
@@ -33,7 +34,7 @@ func collectionFunc(cmd *Command, _ ...string) error {
 		return fmt.Errorf("fetch collection error:%w", err)
 	}
 
-	if len(collection) == 0 {
+	if len(collection) == consts.ZeroValue {
 		return fmt.Errorf("empty collection")
 	}
 
@@ -45,7 +46,7 @@ func collectionFunc(cmd *Command, _ ...string) error {
 		findDuplicates, exportJSON = cmd.ExportListProcess(data, options, findDuplicates, exportJSON)
 	}
 
-	if len(exportJSON) == 0 {
+	if len(exportJSON) == consts.ZeroValue {
 		return fmt.Errorf("warning no data to export, probably a bug")
 	}
 
@@ -54,7 +55,6 @@ func collectionFunc(cmd *Command, _ ...string) error {
 	writer.WriteJSON(options, jsonData)
 
 	return nil
-
 }
 
 var (
@@ -78,5 +78,4 @@ func fetchCollectionList(client *internal.Client, options *str.Options) ([]*str.
 	}
 
 	return list, nil
-
 }

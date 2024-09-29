@@ -24,11 +24,15 @@ var Commands = []*Command{
 	SearchCmd,
 }
 
-// ModulesRuntime core function for process commands 
-func ModulesRuntime(args []string, config *cfg.Config, client *internal.Client, fs afero.Fs) {
+const (
+		FoundOne = 1
+		NotFound = 0
+	)
 
+// ModulesRuntime core function for process commands
+func ModulesRuntime(args []string, config *cfg.Config, client *internal.Client, fs afero.Fs) {
 	var found []*Command
-	sub, args := args[0], args[1:]
+	sub, args := args[NotFound], args[FoundOne:]
 find:
 	for _, cmd := range Commands {
 		if sub == cmd.Abbrev {
@@ -39,17 +43,15 @@ find:
 			found = append(found, cmd)
 		}
 	}
-
+	
 	switch cnt := len(found); cnt {
-	case 1:
+	case FoundOne:
 		found[0].Exec(fs, client, config, args)
-	case 0:
+	case NotFound:
 		fmt.Fprintf(stdout, "error: unknown command %q\n\n", sub)
 		flag.Usage()
 	default:
 		fmt.Fprintf(stdout, "error: non-unique command prefix %q (matched %d commands)\n\n", sub, cnt)
 		flag.Usage()
 	}
-
 }
-

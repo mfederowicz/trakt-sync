@@ -17,7 +17,6 @@ type IDs struct {
 
 // HaveID checks if id for key exists in object
 func (i *IDs) HaveID(key string) bool {
-
 	v := reflect.ValueOf(i)
 
 	if v.Kind() == reflect.Ptr {
@@ -35,10 +34,13 @@ func (i *IDs) HaveID(key string) bool {
 
 	fieldValue := v.FieldByName(key)
 
+	const (
+		EmptyStringLen = 0
+	)
 	// Check if the field is set and not nil or an empty string
 	switch field.Type.Kind() {
 	case reflect.String:
-		return len(fieldValue.String()) != 0
+		return len(fieldValue.String()) != EmptyStringLen
 	case reflect.Interface, reflect.Ptr, reflect.Slice, reflect.Map, reflect.Chan:
 		return !fieldValue.IsNil()
 	default:
