@@ -123,8 +123,12 @@ func TestBareDo_rate_limit_reset(t *testing.T) {
 		t.Fatalf(clientNewRequestFatal, err)
 	}
 
-	client.BareDo(ctx, req)
-
+	resp, err := client.BareDo(ctx, req)
+	if err != nil {
+		t.Fatalf("client.BareDo returned error: %s", err)
+	}
+	assert.Equal(t, resp.StatusCode, http.StatusTooManyRequests)
+	
 	reset := client.RateLimitReset
 
 	if reset.IsZero() {

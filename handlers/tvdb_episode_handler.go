@@ -6,10 +6,12 @@ import (
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
+// TvdbEpisodeHandler struct for handler
 type TvdbEpisodeHandler struct{}
 
+// Handle to handle json list item
 func (h TvdbEpisodeHandler) Handle(options *str.Options, data *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
-	//fmt.Println("episode export by format tvdb")
+	// episode export by format tvdb
 	findDuplicates = append(findDuplicates, *data.Episode.IDs.Tvdb)
 
 	if len(*data.Episode.Title) == consts.ZeroValue {

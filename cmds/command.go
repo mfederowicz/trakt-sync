@@ -81,7 +81,10 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	c.Client = client
 	c.Config = config
 	c.Flag.Usage = func() {
-		HelpFunc(c, c.Name)
+		err := HelpFunc(c, c.Name)
+		if err != nil {
+			fmt.Printf("error:%s", err)
+		}
 	}
 	c.registerGlobalFlagsInSet(&c.Flag)
 	c.Flag.Parse(args)
@@ -147,21 +150,23 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	err = c.Run(c, c.Flag.Args()...)
 
 	if err != nil {
-		return fmt.Errorf("%s", err)
+		return fmt.Errorf(".%s", err)
 	}
 
 	return nil
 }
 
 // BadArgs shows error if command have invalid arguments
-func (c *Command) BadArgs(errFormat string, args ...interface{}) {
+func (c *Command) BadArgs(errFormat string, args ...any) {
 	fmt.Fprintf(stdout, "error: "+errFormat+"\n\n", args...)
-	HelpFunc(c, c.Name)
-	panic(fatal{})
+	err := HelpFunc(c, c.Name)
+	if err != nil {
+		fmt.Printf("error:%s", err)
+	}
 }
 
 // Errorf prints out a formatted error with the right prefixes.
-func (c *Command) Errorf(errFormat string, args ...interface{}) {
+func (c *Command) Errorf(errFormat string, args ...any) {
 	fmt.Fprintf(stdout, c.Name+": error: "+errFormat+"\n", args...)
 	if c.exit == consts.ZeroValue {
 		c.exit = consts.DefaultExitCode
@@ -170,7 +175,7 @@ func (c *Command) Errorf(errFormat string, args ...interface{}) {
 
 // Fatalf is like Errorf except the stack unwinds up to the Exec call before
 // exiting the application with status code 1.
-func (c *Command) Fatalf(errFormat string, args ...interface{}) {
+func (c *Command) Fatalf(errFormat string, args ...any) {
 	c.Errorf(errFormat, args...)
 	panic(fatal{})
 }
@@ -241,36 +246,42 @@ func (c *Command) registerGlobalFlagsInSet(fset *flag.FlagSet) {
 	})
 }
 
-
+// IsImdbMovie check movie imdb format
 func (c *Command) IsImdbMovie(options *str.Options, data *str.ExportlistItem) bool {
-	return options.Type != "episodes" && data.Movie != nil && options.Format == "imdb"
+	return options.Type != consts.EpisodesType && data.Movie != nil && options.Format == consts.ImdbFormat
 }
 
+// IsImdbShow check show imdb format
 func (c *Command) IsImdbShow(options *str.Options, data *str.ExportlistItem) bool {
-	return options.Type != "episodes" && data.Show != nil && data.Show.IDs.HaveID("Imdb") &&
-		options.Format == "imdb"
+	return options.Type != consts.EpisodesType && data.Show != nil && data.Show.IDs.HaveID(consts.ImdbIDFormat) &&
+		options.Format == consts.ImdbFormat
 }
 
+// IsImdbEpisode check episode imdb format
+func (c *Command) IsImdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
+	return data.Episode != nil && data.Episode.IDs.HaveID(consts.ImdbIDFormat) && options.Format == consts.ImdbFormat
+}
+
+// IsTmdbMovie check movie tmdb format
 func (c *Command) IsTmdbMovie(options *str.Options, data *str.ExportlistItem) bool {
 	return options.Type != consts.EpisodesType && data.Movie != nil &&
-		data.Movie.IDs.HaveID("Tmdb") && options.Format == "tmdb"
+		data.Movie.IDs.HaveID(consts.TmdbIDFormat) && options.Format == consts.TmdbFormat
 }
 
+// IsTmdbShow check show tmdb format
 func (c *Command) IsTmdbShow(options *str.Options, data *str.ExportlistItem) bool {
 	return options.Type != consts.EpisodesType && data.Show != nil &&
-		data.Show.IDs.HaveID("Tmdb") && options.Format == "tmdb"
+		data.Show.IDs.HaveID(consts.TmdbIDFormat) && options.Format == consts.TmdbFormat
 }
 
+// IsTmdbEpisode check episode tmdb format
 func (c *Command) IsTmdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
 	return data.Episode.IDs.HaveID(consts.TmdbIDFormat) && options.Format == consts.TmdbFormat
 }
 
+// IsTvdbEpisode check episode tvdb format
 func (c *Command) IsTvdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
 	return data.Episode.IDs.HaveID("Tvdb") && options.Format == "tvdb"
-}
-
-func (c *Command) IsImdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
-	return data.Episode.IDs.HaveID(consts.ImdbIDFormat) && options.Format == consts.ImdbFormat
 }
 
 // ExportListProcess process list items
@@ -279,24 +290,23 @@ func (c *Command) ExportListProcess(
 	findDuplicates []any, exportJSON []str.ExportlistItemJSON,
 ) ([]any, []str.ExportlistItemJSON, error) {
 	var handler handlers.ItemsHandler
-
 	switch {
 	case c.IsImdbMovie(options, data):
 		handler = handlers.ImdbMovieHandler{}
 	case c.IsImdbShow(options, data):
 		handler = handlers.ImdbShowHandler{}
+	case c.IsImdbEpisode(options, data):
+		handler = handlers.ImdbEpisodeHandler{}
 	case c.IsTmdbMovie(options, data):
 		handler = handlers.TmdbMovieHandler{}
 	case c.IsTmdbShow(options, data):
 		handler = handlers.TmdbShowHandler{}
-	case c.IsTvdbEpisode(options, data):
-		handler = handlers.TvdbEpisodeHandler{}
-	case c.IsImdbEpisode(options, data):
-		handler = handlers.ImdbEpisodeHandler{}
 	case c.IsTmdbEpisode(options, data):
 		handler = handlers.TmdbEpisodeHandler{}
+	case c.IsTvdbEpisode(options, data):
+		handler = handlers.TvdbEpisodeHandler{}
 	default:
-		return nil, nil, fmt.Errorf("unknown items handler")
+		handler = handlers.DefaultHandler{}
 	}
 
 	return handler.Handle(options, data, findDuplicates, exportJSON)

@@ -159,7 +159,11 @@ func TestBuildQueryEpisodeFilters(t *testing.T) {
 
 	expectedURL := BaseURL + "?certifications=pg-13,pg-16&episode_types=standard,series_premiere&network_ids=1,2,45"
 
-	got, _ := AddQuery(BaseURL, ListOptionsEpisodesFilters)
+	got, err := AddQuery(BaseURL, ListOptionsEpisodesFilters)
+	if err != nil {
+		t.Logf("error:%s", err)
+	}
+
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}

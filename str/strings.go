@@ -16,7 +16,7 @@ var timestampType = reflect.TypeOf(Timestamp{})
 // the Trakt library. It does things like resolve pointers to their values
 // and omits struct fields with nil values.
 // inspired by the go-github library.
-func Stringify(message interface{}) string {
+func Stringify(message any) string {
 	var buf bytes.Buffer
 	v := reflect.ValueOf(message)
 	stringifyValue(&buf, v)

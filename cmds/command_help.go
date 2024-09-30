@@ -88,7 +88,7 @@ func tabify(w io.Writer) *tabwriter.Writer {
 }
 
 var templateFuncs = template.FuncMap{
-	"flags": func(indent int, args ...interface{}) string {
+	"flags": func(indent int, args ...any) string {
 		b := new(bytes.Buffer)
 		prefix := strings.Repeat(" ", indent)
 		w := tabify(b)
@@ -136,7 +136,7 @@ func (t tabConverter) Write(p []byte) (int, error) {
 	return t.Writer.Write(p)
 }
 
-func render(w io.Writer, tpl string, data interface{}) error {
+func render(w io.Writer, tpl string, data any) error {
 	t := template.New("help")
 	t.Funcs(templateFuncs)
 	if err := template.Must(t.Parse(tpl)).Execute(w, data); err != nil {

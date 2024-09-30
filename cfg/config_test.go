@@ -41,7 +41,6 @@ func emptyFlagset() *flag.FlagSet {
 }
 
 func TestMain(m *testing.M) {
-	//AppFs := afero.NewMemMapFs()
 	os.Unsetenv("HOME")
 	os.Unsetenv("XDG_CONFIG_HOME")
 	os.Unsetenv("FORK")

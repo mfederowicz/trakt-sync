@@ -5,8 +5,10 @@ import (
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
+// TmdbShowHandler struct for handler
 type TmdbShowHandler struct{}
 
+// Handle to handle json list item
 func (h TmdbShowHandler) Handle(options *str.Options, data *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
 	findDuplicates = append(findDuplicates, *data.Show.IDs.Tmdb)
 	emap := str.ExportlistItemJSON{

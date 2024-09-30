@@ -49,7 +49,7 @@ type ListOptions struct {
 }
 
 // AddQuery adds query parameters to s.
-func AddQuery(s string, opts interface{}) (string, error) {
+func AddQuery(s string, opts any) (string, error) {
 	u, err := url.Parse(s)
 	if err != nil {
 		return s, err
@@ -59,8 +59,9 @@ func AddQuery(s string, opts interface{}) (string, error) {
 	v := reflect.ValueOf(opts)
 	qs := url.Values{}
 
-	flatOptsStruct(v, &qs)
-
+	if err := flatOptsStruct(v, &qs); err != nil {
+		return "", err
+	}
 	u.RawQuery = EncodeParams(qs)
 	return u.String(), nil
 }
@@ -87,10 +88,9 @@ func handleRatingRange(fieldValue reflect.Value, qs *url.Values, fieldTag string
 		// Remove omitempty tag from the field tag
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
-		return nil
-	} else {
-		return fmt.Errorf("rating range error")
 	}
+
+	return nil
 }
 
 // handleVotesRange handles the VotesRange custom type
@@ -99,10 +99,8 @@ func handleVotesRange(fieldValue reflect.Value, qs *url.Values, fieldTag string)
 		// Remove omitempty tag from the field tag
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
-		return nil
-	} else {
-		return fmt.Errorf("votes range error")
 	}
+	return nil
 }
 
 // handleTmdbRatingRange handles the TmdbRatingRange custom type
@@ -111,10 +109,8 @@ func handleTmdbRatingRange(fieldValue reflect.Value, qs *url.Values, fieldTag st
 		// Remove omitempty tag from the field tag
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
-		return nil
-	} else {
-		return fmt.Errorf("votes range error")
 	}
+	return nil
 }
 
 // handleImdbVotesRange handles the ImdbVotesRange custom type
@@ -123,10 +119,8 @@ func handleImdbVotesRange(fieldValue reflect.Value, qs *url.Values, fieldTag str
 		// Remove omitempty tag from the field tag
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
-		return nil
-	} else {
-		return fmt.Errorf("imdb votes range error")
 	}
+	return nil
 }
 
 // handleMetaCriticRange handles the RatingRangeFloat custom type
@@ -135,10 +129,8 @@ func handleMetaCriticRange(fieldValue reflect.Value, qs *url.Values, fieldTag st
 		// Remove omitempty tag from the field tag
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
-		return nil
-	} else {
-		return fmt.Errorf("rating range float error")
 	}
+	return nil
 }
 
 func flatOptsStruct(v reflect.Value, qs *url.Values) error {
@@ -155,7 +147,11 @@ func flatOptsStruct(v reflect.Value, qs *url.Values) error {
 		// Check if the field value is a custom type
 		if handler, ok := customTypeHandlers[fieldValue.Type()]; ok {
 			fieldTag := fieldType.Tag.Get("url")
-			handler(fieldValue, qs, fieldTag)
+			err := handler(fieldValue, qs, fieldTag)
+			if err != nil {
+				return err
+			}
+
 			continue
 		}
 

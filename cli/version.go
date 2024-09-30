@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"runtime/debug"
 	"strings"
+
+	"github.com/mfederowicz/trakt-sync/consts"
 )
 
 var (
@@ -14,16 +16,9 @@ var (
 	builtBy = "unknown"
 )
 
-const (
-	First             = 1
-	EmptyBuildInfoLen = 0
-)
-
 // GenAppVersion gen app verrsion string
 func GenAppVersion() error {
-
 	var buildInfo string
-
 	if date != "unknown" && builtBy != "unknown" {
 		buildInfo = fmt.Sprintf("Built\t\t%s by %s", date, builtBy)
 	}
@@ -50,7 +45,7 @@ func genDev(info string) string {
 			ver = versionNoPrefix
 		}
 
-		if len(info) == EmptyBuildInfoLen {
+		if len(info) == consts.EmptyBuildInfoLen {
 			ver = version
 		}
 	}

@@ -6,10 +6,12 @@ import (
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
+// TmdbEpisodeHandler struct for handler
 type TmdbEpisodeHandler struct{}
 
+// Handle to handle json list item
 func (h TmdbEpisodeHandler) Handle(options *str.Options, data *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
-	//fmt.Println("episode export by format tmdb")
+	// episode export by format tmdb
 	findDuplicates = append(findDuplicates, *data.Episode.IDs.Tmdb)
 
 	if len(*data.Episode.Title) == consts.ZeroValue {
@@ -34,4 +36,3 @@ func (h TmdbEpisodeHandler) Handle(options *str.Options, data *str.ExportlistIte
 	exportJSON = append(exportJSON, emap)
 	return findDuplicates, exportJSON, nil
 }
-

@@ -83,8 +83,6 @@ func GenUsedFlagMap() map[string]bool {
 // MergeConfigs from two sources file and flags
 func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string) (*Config, error) {
 	flagset := GenUsedFlagMap()
-	//fmt.Println(flagConfig)
-
 	// Use values from fileConfig if present
 	if len(fileConfig.ClientID) > consts.ZeroValue && fileConfig.ClientID != defaultConfig.ClientID {
 		defaultConfig.ClientID = fileConfig.ClientID
@@ -127,8 +125,6 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 	if fileConfig.WarningCode != consts.ZeroValue {
 		defaultConfig.WarningCode = fileConfig.WarningCode
 	}
-
-	//fmt.Printf("%v",fileConfig.Verbose)
 
 	if fileConfig.Verbose {
 		defaultConfig.Verbose = fileConfig.Verbose
@@ -281,7 +277,11 @@ func GetConfig(fs afero.Fs, configPath string) (*Config, error) {
 		config = DefaultConfig()
 	}
 
-	normalizeConfig(config)
+	err := normalizeConfig(config)
+	if err != nil {
+		return nil, fmt.Errorf("config normalize error : %s", err)
+	}
+
 	return config, nil
 }
 

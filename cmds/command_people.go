@@ -302,19 +302,15 @@ func fetchListsContainingThisPerson(client *internal.Client, options *str.Option
 	pages, _ := strconv.Atoi(resp.Header.Get(internal.HeaderPaginationPageCount))
 	// Check if there are more pages
 	if client.HavePages(page, pages) {
-
 		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
-
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := fetchListsContainingThisPerson(client, options, nextPage)
 		if err != nil {
 			return nil, err
 		}
-
 		// Append items from the next page to the current page
 		list = append(list, nextPageItems...)
 	}
-
 	return list, nil
 }
