@@ -33,24 +33,26 @@ func GenAppVersion() error {
 	}
 
 	if version == "dev" {
-		genDev(buildInfo)
+		version = genDev(buildInfo)
 	}
 
 	return fmt.Errorf("Version:\t%s\n%s", version, buildInfo)
 }
 
-func genDev(info string) error {
+func genDev(info string) string {
+	ver := version
 	bi, ok := debug.ReadBuildInfo()
 	if ok {
 		var version string = bi.Main.Version
 		var versionNoPrefix string = bi.Main.Version[1:]
 
 		if strings.HasPrefix(version, "v") {
-			version = versionNoPrefix
+			ver = versionNoPrefix
 		}
+
 		if len(info) == EmptyBuildInfoLen {
-			return fmt.Errorf("version %s", version)
+			ver = version
 		}
 	}
-	return nil
+	return ver
 }
