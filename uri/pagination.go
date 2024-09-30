@@ -1,3 +1,4 @@
+// Package uri used for url operations
 package uri
 
 // Pagination represents pagination params
