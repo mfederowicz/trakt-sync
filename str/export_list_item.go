@@ -26,6 +26,24 @@ func (i ExportlistItemJSON) String() string {
 	return Stringify(i)
 }
 
+// Uptime update item time fields
+func (i ExportlistItemJSON) Uptime(options *Options, data *ExportlistItem) {
+	switch options.Time {
+	case "watched_at":
+		i.WatchedAt = data.WatchedAt
+	case "listed_at":
+		i.ListedAt = data.ListedAt
+	case "collected_at":
+		i.CollectedAt = data.CollectedAt
+	case "last_collected_at":
+		i.LastCollectedAt = data.LastCollectedAt
+	case "updated_at":
+		i.UpdatedAt = data.UpdatedAt
+	case "last_updated_at":
+		i.LastUpdatedAt = data.LastUpdatedAt
+	}
+}
+
 // ExportlistItem represents JSON for list item
 type ExportlistItem struct {
 	Rank            *int       `json:"rank,omitempty"`

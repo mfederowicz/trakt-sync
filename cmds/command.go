@@ -9,6 +9,7 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
+	"github.com/mfederowicz/trakt-sync/handlers"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 
@@ -240,23 +241,6 @@ func (c *Command) registerGlobalFlagsInSet(fset *flag.FlagSet) {
 	})
 }
 
-// Uptime update item time fields
-func (c *Command) Uptime(item *str.ExportlistItemJSON, options *str.Options, data *str.ExportlistItem) {
-	switch options.Time {
-	case "watched_at":
-		item.WatchedAt = data.WatchedAt
-	case "listed_at":
-		item.ListedAt = data.ListedAt
-	case "collected_at":
-		item.CollectedAt = data.CollectedAt
-	case "last_collected_at":
-		item.LastCollectedAt = data.LastCollectedAt
-	case "updated_at":
-		item.UpdatedAt = data.UpdatedAt
-	case "last_updated_at":
-		item.LastUpdatedAt = data.LastUpdatedAt
-	}
-}
 
 func (c *Command) IsImdbMovie(options *str.Options, data *str.ExportlistItem) bool {
 	return options.Type != "episodes" && data.Movie != nil && options.Format == "imdb"
@@ -293,131 +277,29 @@ func (c *Command) IsImdbEpisode(options *str.Options, data *str.ExportlistItem) 
 func (c *Command) ExportListProcess(
 	data *str.ExportlistItem, options *str.Options,
 	findDuplicates []any, exportJSON []str.ExportlistItemJSON,
-) ([]any, []str.ExportlistItemJSON) {
-	//If movie or show export by format imdb
-	if c.IsImdbMovie(options, data) {
-		//fmt.Println("movie or show by format imdb")
-		if !data.Movie.IDs.HaveID("Imdb") {
-			noImdb := "no-imdb"
-			data.Movie.IDs.Imdb = &noImdb
-		}
+) ([]any, []str.ExportlistItemJSON, error) {
+	var handler handlers.ItemsHandler
 
-		findDuplicates = append(findDuplicates, *data.Movie.IDs.Imdb)
-		emap := str.ExportlistItemJSON{
-			Imdb:  data.Movie.IDs.Imdb,
-			Trakt: data.Movie.IDs.Trakt,
-			Title: data.Movie.Title}
-		c.Uptime(&emap, options, data)
-
-		emap.UpdatedAt = data.UpdatedAt
-		emap.Year = data.Movie.Year
-		emap.Metadata = data.Metadata
-		exportJSON = append(exportJSON, emap)
-	} else if c.IsImdbShow(options, data) {
-		findDuplicates = append(findDuplicates, *data.Show.IDs.Imdb)
-		emap := str.ExportlistItemJSON{
-			Imdb:  data.Show.IDs.Imdb,
-			Trakt: data.Show.IDs.Trakt,
-			Title: data.Show.Title}
-		c.Uptime(&emap, options, data)
-
-		emap.UpdatedAt = data.UpdatedAt
-
-		exportJSON = append(exportJSON, emap)
-	} else if c.IsTmdbMovie(options, data) {
-		findDuplicates = append(findDuplicates, *data.Movie.IDs.Tmdb)
-		emap := str.ExportlistItemJSON{
-			Tmdb:  data.Movie.IDs.Tmdb,
-			Trakt: data.Movie.IDs.Trakt,
-			Title: data.Movie.Title}
-		c.Uptime(&emap, options, data)
-		emap.UpdatedAt = data.UpdatedAt
-		exportJSON = append(exportJSON, emap)
-	} else if c.IsTmdbShow(options, data) {
-		findDuplicates = append(findDuplicates, *data.Show.IDs.Tmdb)
-		emap := str.ExportlistItemJSON{
-			Tmdb:  data.Show.IDs.Tmdb,
-			Trakt: data.Show.IDs.Trakt,
-			Title: data.Show.Title}
-		c.Uptime(&emap, options, data)
-		exportJSON = append(exportJSON, emap)
-	} else if c.IsTvdbEpisode(options, data) {
-		//fmt.Println("episode export by format tvdb")
-		findDuplicates = append(findDuplicates, *data.Episode.IDs.Tvdb)
-
-		if len(*data.Episode.Title) == consts.ZeroValue {
-			notitle := consts.NoEpisodeTitle
-			data.Episode.Title = &notitle
-		}
-
-		if len(*data.Show.Title) == consts.ZeroValue {
-			notitle := consts.NoShowTitle
-			data.Show.Title = &notitle
-		}
-
-		emap := str.ExportlistItemJSON{
-			Tvdb:  data.Episode.IDs.Tvdb,
-			Trakt: data.Episode.IDs.Trakt}
-		c.Uptime(&emap, options, data)
-
-		emap.UpdatedAt = data.UpdatedAt
-
-		emap.Season = &str.Season{Number: data.Episode.Season}
-		emap.Episode = &str.Episode{Number: data.Episode.Number, Title: data.Episode.Title}
-		emap.Show = &str.Show{Title: data.Show.Title}
-
-		exportJSON = append(exportJSON, emap)
-	} else if c.IsImdbEpisode(options, data) {
-		//fmt.Println("episode export by format imdb")
-		findDuplicates = append(findDuplicates, *data.Episode.IDs.Imdb)
-
-		if len(*data.Episode.Title) == consts.ZeroValue {
-			notitle := consts.NoEpisodeTitle
-			data.Episode.Title = &notitle
-		}
-
-		if len(*data.Show.Title) == consts.ZeroValue {
-			notitle := consts.NoShowTitle
-			data.Show.Title = &notitle
-		}
-
-		emap := str.ExportlistItemJSON{
-			Imdb:  data.Episode.IDs.Imdb,
-			Trakt: data.Episode.IDs.Trakt}
-		c.Uptime(&emap, options, data)
-
-		emap.Season = &str.Season{Number: data.Episode.Season}
-		emap.Episode = &str.Episode{Number: data.Episode.Number, Title: data.Episode.Title}
-		emap.Show = &str.Show{Title: data.Show.Title}
-
-		exportJSON = append(exportJSON, emap)
-	} else if c.IsTmdbEpisode(options, data) {
-		//fmt.Println("episode export by format tmdb")
-		findDuplicates = append(findDuplicates, *data.Episode.IDs.Tmdb)
-
-		if len(*data.Episode.Title) == consts.ZeroValue {
-			notitle := consts.NoEpisodeTitle
-			data.Episode.Title = &notitle
-		}
-
-		if len(*data.Show.Title) == consts.ZeroValue {
-			notitle := consts.NoShowTitle
-			data.Show.Title = &notitle
-		}
-
-		emap := str.ExportlistItemJSON{
-			Tmdb:  data.Episode.IDs.Tmdb,
-			Trakt: data.Episode.IDs.Trakt}
-		c.Uptime(&emap, options, data)
-
-		emap.Season = &str.Season{Number: data.Episode.Season}
-		emap.Episode = &str.Episode{Number: data.Episode.Number, Title: data.Episode.Title}
-		emap.Show = &str.Show{Title: data.Show.Title}
-
-		exportJSON = append(exportJSON, emap)
+	switch {
+	case c.IsImdbMovie(options, data):
+		handler = handlers.ImdbMovieHandler{}
+	case c.IsImdbShow(options, data):
+		handler = handlers.ImdbShowHandler{}
+	case c.IsTmdbMovie(options, data):
+		handler = handlers.TmdbMovieHandler{}
+	case c.IsTmdbShow(options, data):
+		handler = handlers.TmdbShowHandler{}
+	case c.IsTvdbEpisode(options, data):
+		handler = handlers.TvdbEpisodeHandler{}
+	case c.IsImdbEpisode(options, data):
+		handler = handlers.ImdbEpisodeHandler{}
+	case c.IsTmdbEpisode(options, data):
+		handler = handlers.TmdbEpisodeHandler{}
+	default:
+		return nil, nil, fmt.Errorf("unknown items handler")
 	}
 
-	return findDuplicates, exportJSON
+	return handler.Handle(options, data, findDuplicates, exportJSON)
 }
 
 // PrepareQueryString for remove or replace unwanted signs from query string
@@ -442,7 +324,7 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 	if len(*_output) > consts.ZeroValue {
 		options.Output = *_output
 	} else {
-		options.Output = cfg.GetOutputForModule(options)	
+		options.Output = cfg.GetOutputForModule(options)
 	}
 
 	return options
