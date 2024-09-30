@@ -66,7 +66,7 @@ func AddQuery(s string, opts interface{}) (string, error) {
 }
 
 // CustomTypeHandler defines the function signature for handling custom types
-type CustomTypeHandler func(reflect.Value, *url.Values, string)
+type CustomTypeHandler func(reflect.Value, *url.Values, string) error
 
 // customTypeHandlers maps custom types to their corresponding handling functions
 var customTypeHandlers = map[reflect.Type]CustomTypeHandler{
@@ -77,58 +77,67 @@ var customTypeHandlers = map[reflect.Type]CustomTypeHandler{
 	reflect.TypeOf(RatingRangeFloat{}): handleMetaCriticRange,
 }
 
-// handleFloatRange handles the FloatRange custom type
-func handleRatingRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) {
-	rr := fieldValue.Interface().(RatingRange)
+func correctFieldTag(fieldTag string, fieldTagValue string) bool {
+	return fieldTag != consts.EmptyString && len(fieldTagValue) > consts.ZeroValue
+}
 
-	if fieldTag != consts.EmptyString && len(rr.String()) > consts.ZeroValue {
+// handleFloatRange handles the FloatRange custom type
+func handleRatingRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) error {
+	if rr, ok := fieldValue.Interface().(RatingRange); ok && correctFieldTag(fieldTag, rr.String()) {
 		// Remove omitempty tag from the field tag
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
+		return nil
+	} else {
+		return fmt.Errorf("rating range error")
 	}
 }
 
 // handleVotesRange handles the VotesRange custom type
-func handleVotesRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) {
-	rr := fieldValue.Interface().(VotesRange)
-
-	if fieldTag != consts.EmptyString && len(rr.String()) > consts.ZeroValue {
+func handleVotesRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) error {
+	if rr, ok := fieldValue.Interface().(VotesRange); ok && correctFieldTag(fieldTag, rr.String()) {
 		// Remove omitempty tag from the field tag
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
+		return nil
+	} else {
+		return fmt.Errorf("votes range error")
 	}
 }
 
 // handleTmdbRatingRange handles the TmdbRatingRange custom type
-func handleTmdbRatingRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) {
-	rr := fieldValue.Interface().(TmdbRatingRange)
-
-	if fieldTag != consts.EmptyString && len(rr.String()) > consts.ZeroValue {
+func handleTmdbRatingRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) error {
+	if rr, ok := fieldValue.Interface().(TmdbRatingRange); ok && correctFieldTag(fieldTag, rr.String()) {
 		// Remove omitempty tag from the field tag
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
+		return nil
+	} else {
+		return fmt.Errorf("votes range error")
 	}
 }
 
 // handleImdbVotesRange handles the ImdbVotesRange custom type
-func handleImdbVotesRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) {
-	rr := fieldValue.Interface().(ImdbVotesRange)
-
-	if fieldTag != consts.EmptyString && len(rr.String()) > consts.ZeroValue {
+func handleImdbVotesRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) error {
+	if rr, ok := fieldValue.Interface().(ImdbVotesRange); ok && correctFieldTag(fieldTag, rr.String()) {
 		// Remove omitempty tag from the field tag
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
+		return nil
+	} else {
+		return fmt.Errorf("imdb votes range error")
 	}
 }
 
 // handleMetaCriticRange handles the RatingRangeFloat custom type
-func handleMetaCriticRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) {
-	rr := fieldValue.Interface().(RatingRangeFloat)
-
-	if fieldTag != consts.EmptyString && len(rr.String()) > consts.ZeroValue {
+func handleMetaCriticRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) error {
+	if rr, ok := fieldValue.Interface().(RatingRangeFloat); ok && correctFieldTag(fieldTag, rr.String()) {
 		// Remove omitempty tag from the field tag
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
+		return nil
+	} else {
+		return fmt.Errorf("rating range float error")
 	}
 }
 

@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"fmt"
-	"github.com/mfederowicz/trakt-sync/str"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"strings"
 	"testing"
+
+	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/stretchr/testify/assert"
 )
 
 const (
@@ -142,8 +144,9 @@ func TestBareDo_rate_limit_reset(t *testing.T) {
 	_, errBare := client.BareDo(ctx, reqNext)
 	if errBare != nil {
 		// Update rate limit reset.
-		rerr, _ := errBare.(*AbuseRateLimitError)
-		if !strings.Contains(rerr.Message, "API rate limit exceeded until") {
+		err, ok := errBare.(*AbuseRateLimitError)
+		assert.Equal(t, ok, true)
+		if !strings.Contains(err.Message, "API rate limit exceeded until") {
 			t.Fatal("Rate Limit Error msg not valid")
 		}
 	}
