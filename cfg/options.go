@@ -4,6 +4,8 @@ package cfg
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -262,4 +264,74 @@ func GetOptionTime(options *str.Options) string {
 	}
 
 	return options.Time
+}
+
+// GetOutputForModule generates output value depends on module name
+func GetOutputForModule(options *str.Options) string {
+	switch options.Module {
+	case "calendars":
+		switch options.Action {
+		case "my-shows", "all-shows":
+			options.Output = fmt.Sprintf(
+				consts.DefaultOutputFormat3,
+				options.Module,
+				"shows",
+				strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+		case "my-new-shows", "all-new-shows":
+			options.Output = fmt.Sprintf(
+				consts.DefaultOutputFormat3,
+				options.Module,
+				"new_shows",
+				strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+		case "my-season-premieres", "all-season-premieres":
+			options.Output = fmt.Sprintf(
+				consts.DefaultOutputFormat3,
+				options.Module,
+				"season_premieres",
+				strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+		case "my-finales", "all-finales":
+			options.Output = fmt.Sprintf(
+				consts.DefaultOutputFormat3,
+				options.Module,
+				"finales",
+				strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+		case "my-movies", "all-movies":
+			options.Output = fmt.Sprintf(
+				consts.DefaultOutputFormat3,
+				options.Module,
+				"movies",
+				strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+		case "my-dvd", "all-dvd":
+			options.Output = fmt.Sprintf(
+				consts.DefaultOutputFormat3,
+				options.Module,
+				"dvd",
+				strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+
+		default:
+			options.Output = fmt.Sprintf(consts.DefaultOutputFormat1, options.Module)
+		}
+	case "search":
+		switch options.Action {
+		case "text-query":
+			options.Output = fmt.Sprintf(
+				consts.DefaultOutputFormat3,
+				options.Module,
+				"query",
+				strings.ReplaceAll(options.Type, ",", consts.EmptyString))
+		case "id-lookup":
+			options.Output = fmt.Sprintf(
+				consts.DefaultOutputFormat3,
+				options.Module,
+				"lookup",
+				strings.ReplaceAll(options.SearchIDType, ",", consts.EmptyString))
+		default:
+			options.Output = fmt.Sprintf(consts.DefaultOutputFormat1, options.Module)
+		}
+
+	default:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Type, options.Format)
+	}
+
+	return options.Output
 }

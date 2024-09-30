@@ -77,6 +77,11 @@ func (c *Client) UpdateHeaders(headers map[string]any) {
 	c.headers = headers
 }
 
+// HavePages checks if we have available pages to fetch
+func (c *Client) HavePages(page int, pages int) bool {
+	return page != pages && pages > consts.ZeroValue
+}
+
 // initialize sets default values and initializes services.
 func (c *Client) initialize() {
 	if c.client == nil {
@@ -197,8 +202,8 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 
 		// If the error type is *url.Error, sanitize its URL before returning.
 		if e, ok := err.(*url.Error); ok {
-			if url, err := url.Parse(e.URL); err == nil {
-				e.URL = uri.SanitizeURL(url).String()
+			if u, err := url.Parse(e.URL); err == nil {
+				e.URL = uri.SanitizeURL(u).String()
 				return nil, e
 			}
 		}

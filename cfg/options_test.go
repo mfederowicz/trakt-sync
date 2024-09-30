@@ -8,7 +8,8 @@ func TestIsValidConfigTypeSlice(t *testing.T) {
 	t.Helper()
 
 	got := IsValidConfigTypeSlice([]string{"movie","show"}, []string{"xxx"})
-	if bool(got) != false {
+	if bool(got) {
 		t.Fatalf("Expected %v, got %v", false, bool(got))
 	}
+
 }

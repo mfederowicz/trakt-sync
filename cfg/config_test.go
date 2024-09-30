@@ -18,7 +18,7 @@ var (
 	configFileName     = "/trakt-sync.toml"
 	configDirPath      = "/tmp-iofs/home/tester/.config"
 	tokenFile          = "/token.json"
-	bufferClientId     = "client_id = \"xxxxxxxxxxxxxxxxxxx\"\n"
+	bufferClientID     = "client_id = \"xxxxxxxxxxxxxxxxxxx\"\n"
 	bufferClientSecret = "client_secret = \"xxxxxxxxxxxxxxxxxxxxxxxxxxxx\"\n"
 	bufferTokenPath    = "token_path = \"\"\n"
 	bufferPerPage      = "per_page = 50\n"
@@ -152,7 +152,7 @@ func TestInitConfigPerPageValue(t *testing.T) {
 	var buffer bytes.Buffer
 
 	// Write each line individually
-	buffer.WriteString(bufferClientId)
+	buffer.WriteString(bufferClientID)
 	buffer.WriteString(bufferClientSecret)
 	buffer.WriteString("token_path = \"" + filenameToken + "\"\n")
 	buffer.WriteString(bufferPerPage)
@@ -226,7 +226,7 @@ func TestInitConfigNoTokenPath(t *testing.T) {
 	var buffer bytes.Buffer
 
 	// Write each line individually
-	buffer.WriteString(bufferClientId)
+	buffer.WriteString(bufferClientID)
 	buffer.WriteString(bufferClientSecret)
 	buffer.WriteString(bufferTokenPath)
 	buffer.WriteString(bufferPerPage)

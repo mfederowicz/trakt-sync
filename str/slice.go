@@ -9,10 +9,10 @@ type Slice []string
 // Get string value of slice
 func (i *Slice) String() string {
 	const (
-		EmptySliceLen = 0
+		emptySliceLen = 0
 	)
 
-	if len(*i) == EmptySliceLen {
+	if len(*i) == emptySliceLen {
 		return ""
 	}
 

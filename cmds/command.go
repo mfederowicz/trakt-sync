@@ -88,7 +88,7 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	options, err := cfg.SyncOptionsFromFlags(fs, c.Config, m)
 
 	if err != nil {
-		return fmt.Errorf("error command exec: %w", err)
+		return fmt.Errorf("%s", err)
 	}
 
 	options.Type = *_strType
@@ -146,7 +146,7 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	err = c.Run(c, c.Flag.Args()...)
 
 	if err != nil {
-		return fmt.Errorf("error command run: %w", err)
+		return fmt.Errorf("%s", err)
 	}
 
 	return nil
@@ -224,8 +224,8 @@ func argsToMap(args []string) map[string]bool {
 
 // ValidFlags validate if flag is in our list
 func (c *Command) ValidFlags() bool {
-	for flag := range argsToMap(flag.Args()) {
-		if _, ok := Avflags[flag]; !ok {
+	for f := range argsToMap(flag.Args()) {
+		if _, ok := Avflags[f]; !ok {
 			return false
 		}
 	}
@@ -442,70 +442,7 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 	if len(*_output) > consts.ZeroValue {
 		options.Output = *_output
 	} else {
-		switch options.Module {
-		case "calendars":
-			switch options.Action {
-			case "my-shows", "all-shows":
-				options.Output = fmt.Sprintf(
-					consts.DefaultOutputFormat3,
-					options.Module,
-					"shows",
-					strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
-			case "my-new-shows", "all-new-shows":
-				options.Output = fmt.Sprintf(
-					consts.DefaultOutputFormat3,
-					options.Module,
-					"new_shows",
-					strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
-			case "my-season-premieres", "all-season-premieres":
-				options.Output = fmt.Sprintf(
-					consts.DefaultOutputFormat3,
-					options.Module,
-					"season_premieres",
-					strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
-			case "my-finales", "all-finales":
-				options.Output = fmt.Sprintf(
-					consts.DefaultOutputFormat3,
-					options.Module,
-					"finales",
-					strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
-			case "my-movies", "all-movies":
-				options.Output = fmt.Sprintf(
-					consts.DefaultOutputFormat3,
-					options.Module,
-					"movies",
-					strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
-			case "my-dvd", "all-dvd":
-				options.Output = fmt.Sprintf(
-					consts.DefaultOutputFormat3,
-					options.Module,
-					"dvd",
-					strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
-
-			default:
-				options.Output = fmt.Sprintf(consts.DefaultOutputFormat1, options.Module)
-			}
-		case "search":
-			switch options.Action {
-			case "text-query":
-				options.Output = fmt.Sprintf(
-					consts.DefaultOutputFormat3,
-					options.Module,
-					"query",
-					strings.ReplaceAll(options.Type, ",", consts.EmptyString))
-			case "id-lookup":
-				options.Output = fmt.Sprintf(
-					consts.DefaultOutputFormat3,
-					options.Module,
-					"lookup",
-					strings.ReplaceAll(options.SearchIDType, ",", consts.EmptyString))
-			default:
-				options.Output = fmt.Sprintf(consts.DefaultOutputFormat1, options.Module)
-			}
-
-		default:
-			options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Type, options.Format)
-		}
+		options.Output = cfg.GetOutputForModule(options)	
 	}
 
 	return options

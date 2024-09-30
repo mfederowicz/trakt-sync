@@ -50,50 +50,65 @@ func searchFunc(cmd *Command, _ ...string) error {
 
 	switch options.Action {
 	case "text-query":
-
-		fmt.Println("Get search: " + options.Action)
-		fmt.Printf("search_type: %v\n", options.SearchType.String())
-		fmt.Printf("search_field: %v\n", options.SearchField.String())
-
-		result, err := fetchSearchTextQuery(client, options, consts.DefaultPage)
+		err := runTextQuery(options, client)
 		if err != nil {
-			return fmt.Errorf("fetch "+options.Action+" search error:%w", err)
+			return err
 		}
-
-		if result == nil {
-			return fmt.Errorf("empty result")
-		}
-		fmt.Print("Found " + options.Action + " search data \n")
-		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JsonDataFormat)
-
-		writer.WriteJSON(options, jsonData)
-
 	case "id-lookup":
-
-		fmt.Println("Get sarch: " + options.Action)
-		fmt.Println("search id_type: " + options.SearchIDType)
-		fmt.Println("search id: " + options.ID)
-		fmt.Println("search item_type: " + options.SearchType.String())
-
-		result, err := fetchSearchIDLookup(client, options)
+		err := runIDLookup(options, client)
 		if err != nil {
-			return fmt.Errorf("fetch "+options.Action+" search error:%w", err)
+			return err
 		}
-
-		if result == nil {
-			return fmt.Errorf("empty result")
-		}
-
-		fmt.Print("Found " + options.Action + " search data \n")
-		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, "", "  ")
-
-		writer.WriteJSON(options, jsonData)
 
 	default:
 		fmt.Println("possible actions: text-query, id-lookup")
 	}
+	return nil
+}
+
+func runIDLookup(options *str.Options, client *internal.Client) error {
+	fmt.Println("Get sarch: " + options.Action)
+	fmt.Println("search id_type: " + options.SearchIDType)
+	fmt.Println("search id: " + options.ID)
+	fmt.Println("search item_type: " + options.SearchType.String())
+
+	result, err := fetchSearchIDLookup(client, options)
+	if err != nil {
+		return fmt.Errorf("fetch "+options.Action+" search error:%w", err)
+	}
+
+	if result == nil {
+		return fmt.Errorf("empty result")
+	}
+
+	fmt.Print("Found " + options.Action + " search data \n")
+	print("write data to:" + options.Output)
+	jsonData, _ := json.MarshalIndent(result, "", "  ")
+
+	writer.WriteJSON(options, jsonData)
+	return nil
+}
+
+func runTextQuery(options *str.Options, client *internal.Client) error {
+	fmt.Println("Get search: " + options.Action)
+	fmt.Printf("search_type: %v\n", options.SearchType.String())
+	fmt.Printf("search_field: %v\n", options.SearchField.String())
+	fmt.Println("search id_type: " + options.SearchIDType)
+
+	result, err := fetchSearchTextQuery(client, options, consts.DefaultPage)
+	if err != nil {
+		return fmt.Errorf("fetch "+options.Action+" search error:%s", err)
+	}
+
+	if result == nil {
+		return fmt.Errorf("empty result")
+	}
+	fmt.Print("Found " + options.Action + " search data \n")
+	print("write data to:" + options.Output)
+	jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
+
+	writer.WriteJSON(options, jsonData)
+
 	return nil
 }
 
@@ -109,7 +124,6 @@ func init() {
 
 func fetchSearchTextQuery(client *internal.Client, options *str.Options, page int) ([]*str.SearchListItem, error) {
 	err := checkRequiredFields(options)
-
 	if err != nil {
 		return nil, err
 	}
@@ -117,11 +131,11 @@ func fetchSearchTextQuery(client *internal.Client, options *str.Options, page in
 	searchType := options.SearchType.String()
 	searchField := options.SearchField.String()
 	opts := uri.ListOptions{
-		Page: page, 
-		Limit: options.PerPage, 
-		Extended: options.ExtendedInfo, 
-		Query: options.Query, 
-		Field: searchField}
+		Page:     page,
+		Limit:    options.PerPage,
+		Extended: options.ExtendedInfo,
+		Query:    options.Query,
+		Field:    searchField}
 	list, resp, err := client.Search.GetTextQueryResults(
 		context.Background(),
 		&searchType,
@@ -133,21 +147,18 @@ func fetchSearchTextQuery(client *internal.Client, options *str.Options, page in
 	}
 
 	// Check if there are more pages
-	if pages := resp.Header.Get(internal.HeaderPaginationPageCount); pages != consts.EmptyString {
-		pagesInt, _ := strconv.Atoi(pages)
-		if page != pagesInt && pagesInt > consts.ZeroValue {
-			time.Sleep(time.Duration(2) * time.Second)
-
-			// Fetch items from the next page
-			nextPage := page + consts.NextPageStep
-			nextPageItems, err := fetchSearchTextQuery(client, options, nextPage)
-			if err != nil {
-				return nil, err
-			}
-
-			// Append items from the next page to the current page
-			list = append(list, nextPageItems...)
+	pages, _ := strconv.Atoi(resp.Header.Get(internal.HeaderPaginationPageCount))
+	if client.HavePages(page, pages) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := fetchSearchTextQuery(client, options, nextPage)
+		if err != nil {
+			return nil, err
 		}
+
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
 	}
 
 	return list, nil
@@ -177,18 +188,15 @@ func fetchSearchIDLookup(client *internal.Client, options *str.Options) ([]*str.
 	return list, nil
 }
 
-func checkRequiredFields(options *str.Options) error {
-	// Check if the provided module exists in ModuleConfig
-	moduleConfig, ok := cfg.ModuleConfig[options.Module]
-	if !ok {
-		return fmt.Errorf("not found config for module '%s'", options.Module)
-	}
-	// Check search_type flag slice
-	if (options.Action == "text-query" && len(options.SearchType) == consts.ZeroValue) ||
-		!cfg.IsValidConfigTypeSlice(moduleConfig.SearchType, options.SearchType) {
-		return fmt.Errorf("invalid -t flag values: %v, avaliable values: %v", options.SearchType, moduleConfig.SearchType)
-	}
-	// Check search_field flag slice
+func noSearchTypeOrInvalidConfigTypeSlice(options *str.Options, slice []string) bool {
+	return (options.Action == "text-query" && len(options.SearchType) == consts.ZeroValue) || !cfg.IsValidConfigTypeSlice(slice, options.SearchType)
+}
+
+func validSearchIDTypes(options *str.Options, slice []string) bool {
+	return len(options.SearchIDType) > consts.ZeroValue && !cfg.IsValidConfigType(slice, options.SearchIDType)
+}
+
+func checkSearchFieldFlag(options *str.Options) error {
 	if len(options.SearchType) > consts.ZeroValue {
 		for _, stype := range options.SearchType {
 			if !cfg.IsValidConfigTypeSlice(cfg.SearchFieldConfig[stype], options.SearchField) {
@@ -198,12 +206,30 @@ func checkRequiredFields(options *str.Options) error {
 		}
 	}
 
+	return nil
+}
+
+func checkRequiredFields(options *str.Options) error {
+	// Check if the provided module exists in ModuleConfig
+	moduleConfig, ok := cfg.ModuleConfig[options.Module]
+	if !ok {
+		return fmt.Errorf("not found config for module '%s'", options.Module)
+	}
+
+	// Check search_type flag slice
+	if noSearchTypeOrInvalidConfigTypeSlice(options, moduleConfig.SearchType) {
+		return fmt.Errorf("invalid -t flag values: %v, avaliable values: %v", options.SearchType, moduleConfig.SearchType)
+	}
+
+	// Check search_field flag slice
+	sfError := checkSearchFieldFlag(options)
+	if sfError != nil {
+		return fmt.Errorf("field error:%s", sfError)
+	}
+
 	// Check id_type values
-	if len(options.SearchIDType) > consts.ZeroValue {
-		if !cfg.IsValidConfigType(moduleConfig.SearchIDType, options.SearchIDType) {
-			return fmt.Errorf("invalid --id_type flag value: %v avalable values:%v",
-				options.SearchIDType, moduleConfig.SearchIDType)
-		}
+	if validSearchIDTypes(options, moduleConfig.SearchIDType) {
+		return fmt.Errorf("invalid --id_type flag value: %v avalable values:%v", options.SearchIDType, moduleConfig.SearchIDType)
 	}
 
 	return nil

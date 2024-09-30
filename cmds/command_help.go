@@ -77,14 +77,14 @@ func init() {
 
 func tabify(w io.Writer) *tabwriter.Writer {	
 	const (
-		WriterMinWidth = 0
-		WriterTabWidth = 0
-		WriterPadding  = 1
-		WriterPadChar  = ' '
-		WriterFlags    = 0
+		writerMinWidth = 0
+		writerTabWidth = 0
+		writerPadding  = 1
+		writerPadChar  = ' '
+		writerFlags    = 0
 	)
 
-	return tabwriter.NewWriter(w, WriterMinWidth, WriterTabWidth, WriterPadding, WriterPadChar, WriterFlags)
+	return tabwriter.NewWriter(w, writerMinWidth, writerTabWidth, writerPadding, writerPadChar, writerFlags)
 }
 
 var templateFuncs = template.FuncMap{

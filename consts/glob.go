@@ -1,3 +1,4 @@
+// Package consts used to store const for application
 package consts
 
 // usage strings
@@ -22,7 +23,7 @@ const (
 	ActionTypeAll        = "all"
 	NoShowTitle          = "no show title"
 	NoEpisodeTitle       = "no episode title"
-	EmptyPersonIdMsg     = "set personId ie: -i john-wayne"
+	EmptyPersonIDMsg     = "set personId ie: -i john-wayne"
 	ErrorRender          = "error render: %w"
 	CMD                  = "cmd"
 	RatingRageMin        = 0
@@ -38,6 +39,7 @@ const (
 	X644                 = 0644
 	X755                 = 0755
 	NextPageStep         = 1
+	SleepNumberOfSeconds = 2
 	OneValue             = 1
 	BaseInt              = 10
 	BitSize              = 64
@@ -53,7 +55,7 @@ const (
 	RangeFormatFloats    = "%.1f-%.1f"
 	EmptyString          = ""
 	SeparatorString      = ","
-	JsonDataFormat       = "  "
+	JSONDataFormat       = "  "
 	EpisodesType         = "episodes"
 	TmdbFormat           = "tmdb"
 	TvdbFormat           = "tvdb"
@@ -64,5 +66,5 @@ const (
 	DefaultOutputFormat1 = "export_%s.json"
 	DefaultOutputFormat2 = "export_%s_%s.json"
 	DefaultOutputFormat3 = "export_%s_%s_%s.json"
-	NewLine = "\n"
+	NewLine              = "\n"
 )

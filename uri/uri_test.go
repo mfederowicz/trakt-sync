@@ -22,18 +22,18 @@ var (
 )
 
 const (
-	BaseUrl  = "http://example.com"
+	BaseURL  = "http://example.com"
 	Expected = "Expected %q, got %q"
 )
 
 func TestBuildQueryBasic(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseUrl + "?extended=full&limit=10&page=1"
+	expectedURL := BaseURL + "?extended=full&limit=10&page=1"
 
 	list := ListOptionsBasic
 
-	got, _ := AddQuery(BaseUrl, list)
+	got, _ := AddQuery(BaseURL, list)
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
@@ -42,8 +42,8 @@ func TestBuildQueryBasic(t *testing.T) {
 func testBuildQueryCommonFilters(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseUrl + "?years=2016&genres=action,adventure,comedy&studio_ids=1,2,3"
-	got, _ := AddQuery(BaseUrl, ListOptionsCommon)
+	expectedURL := BaseURL + "?years=2016&genres=action,adventure,comedy&studio_ids=1,2,3"
+	got, _ := AddQuery(BaseURL, ListOptionsCommon)
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
@@ -52,8 +52,8 @@ func testBuildQueryCommonFilters(t *testing.T) {
 func TestBuildQueryRatingFiltersRatings(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseUrl + "?ratings=10-45"
-	got, _ := AddQuery(BaseUrl, ListOptionsRatings)
+	expectedURL := BaseURL + "?ratings=10-45"
+	got, _ := AddQuery(BaseURL, ListOptionsRatings)
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
@@ -62,18 +62,18 @@ func TestBuildQueryRatingFiltersRatings(t *testing.T) {
 func TestBuildQueryRatingFiltersInvalidRatings(t *testing.T) {
 	t.Helper()
 
-	got, _ := AddQuery(BaseUrl, ListOptionsInvalidRatings)
-	if string(got) != BaseUrl {
-		t.Fatalf(Expected, BaseUrl, string(got))
+	got, _ := AddQuery(BaseURL, ListOptionsInvalidRatings)
+	if string(got) != BaseURL {
+		t.Fatalf(Expected, BaseURL, string(got))
 	}
 }
 
 func TestBuildQueryRatingFiltersVotes(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseUrl + "?votes=10-45"
+	expectedURL := BaseURL + "?votes=10-45"
 
-	got, _ := AddQuery(BaseUrl, ListOptionsVotes)
+	got, _ := AddQuery(BaseURL, ListOptionsVotes)
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
@@ -82,9 +82,9 @@ func TestBuildQueryRatingFiltersVotes(t *testing.T) {
 func TestBuildQueryRatingFiltersTmdbRatings(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseUrl + "?tmdb_ratings=5.5-10.0"
+	expectedURL := BaseURL + "?tmdb_ratings=5.5-10.0"
 
-	got, _ := AddQuery(BaseUrl, ListOptionsTmdbRatingsFilters)
+	got, _ := AddQuery(BaseURL, ListOptionsTmdbRatingsFilters)
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
@@ -93,9 +93,9 @@ func TestBuildQueryRatingFiltersTmdbRatings(t *testing.T) {
 func TestBuildQueryRatingFiltersTmdbVotes(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseUrl + "?tmdb_votes=25-40"
+	expectedURL := BaseURL + "?tmdb_votes=25-40"
 
-	got, _ := AddQuery(BaseUrl, ListOptionsTmdbVotes)
+	got, _ := AddQuery(BaseURL, ListOptionsTmdbVotes)
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
@@ -104,9 +104,9 @@ func TestBuildQueryRatingFiltersTmdbVotes(t *testing.T) {
 func TestBuildQueryRatingFiltersImdb(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseUrl + "?imdb_ratings=3-6&imdb_votes=10-25"
+	expectedURL := BaseURL + "?imdb_ratings=3-6&imdb_votes=10-25"
 
-	got, _ := AddQuery(BaseUrl, ListOptionsImdbVotes)
+	got, _ := AddQuery(BaseURL, ListOptionsImdbVotes)
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
@@ -114,8 +114,8 @@ func TestBuildQueryRatingFiltersImdb(t *testing.T) {
 func TestBuildQueryRatingFiltersRt(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseUrl + "?rt_meters=55-100&rt_user_meters=65-100"
-	got, _ := AddQuery(BaseUrl, ListOptionsRt)
+	expectedURL := BaseURL + "?rt_meters=55-100&rt_user_meters=65-100"
+	got, _ := AddQuery(BaseURL, ListOptionsRt)
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
@@ -124,9 +124,9 @@ func TestBuildQueryRatingFiltersRt(t *testing.T) {
 func TestBuildQueryRatingFiltersMeta(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseUrl + "?metascores=55.0-100.0"
+	expectedURL := BaseURL + "?metascores=55.0-100.0"
 
-	got, _ := AddQuery(BaseUrl, ListOptionsMetascores)
+	got, _ := AddQuery(BaseURL, ListOptionsMetascores)
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
@@ -135,9 +135,9 @@ func TestBuildQueryRatingFiltersMeta(t *testing.T) {
 func TestBuildQueryCertificationsFilters(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseUrl + "?certifications=pg-13,pg-16"
+	expectedURL := BaseURL + "?certifications=pg-13,pg-16"
 
-	got, _ := AddQuery(BaseUrl, ListOptionsCertificationsFilters)
+	got, _ := AddQuery(BaseURL, ListOptionsCertificationsFilters)
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
@@ -146,9 +146,9 @@ func TestBuildQueryCertificationsFilters(t *testing.T) {
 func TestBuildQueryShowFilters(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseUrl + "?certifications=pg-13,pg-16&network_ids=1,2,45&status=pilot,ended"
+	expectedURL := BaseURL + "?certifications=pg-13,pg-16&network_ids=1,2,45&status=pilot,ended"
 
-	got, _ := AddQuery(BaseUrl, ListOptionsShowsFilters)
+	got, _ := AddQuery(BaseURL, ListOptionsShowsFilters)
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
@@ -157,9 +157,9 @@ func TestBuildQueryShowFilters(t *testing.T) {
 func TestBuildQueryEpisodeFilters(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseUrl + "?certifications=pg-13,pg-16&episode_types=standard,series_premiere&network_ids=1,2,45"
+	expectedURL := BaseURL + "?certifications=pg-13,pg-16&episode_types=standard,series_premiere&network_ids=1,2,45"
 
-	got, _ := AddQuery(BaseUrl, ListOptionsEpisodesFilters)
+	got, _ := AddQuery(BaseURL, ListOptionsEpisodesFilters)
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
