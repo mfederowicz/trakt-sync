@@ -101,7 +101,7 @@ func (c *Client) initialize() {
 }
 
 // NewRequest creates an API request.
-func (c *Client) NewRequest(method, urlStr string, body interface{}, opts ...RequestOption) (*http.Request, error) {
+func (c *Client) NewRequest(method, urlStr string, body any, opts ...RequestOption) (*http.Request, error) {
 	if !strings.HasSuffix(c.BaseURL.Path, "/") {
 		return nil, fmt.Errorf("BaseURL must have a trailing slash, but %q does not", c.BaseURL)
 	}
@@ -149,7 +149,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}, opts ...Req
 // Do sends an API request and returns the API response. The API response is
 // JSON decoded and stored in the value pointed to by v, or returned as an
 // error if an API error has occurred
-func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*str.Response, error) {
+func (c *Client) Do(ctx context.Context, req *http.Request, v any) (*str.Response, error) {
 	resp, err := c.BareDo(ctx, req)
 	if err != nil {
 		return resp, err

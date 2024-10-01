@@ -5,8 +5,10 @@ import (
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
+// ImdbShowHandler struct for handler
 type ImdbShowHandler struct{}
 
+// Handle to handle json list item
 func (h ImdbShowHandler) Handle(options *str.Options, data *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
 	// show-specific logic
 	findDuplicates = append(findDuplicates, *data.Show.IDs.Imdb)

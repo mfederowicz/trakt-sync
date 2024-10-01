@@ -44,10 +44,6 @@ func collectionFunc(cmd *Command, _ ...string) error {
 	findDuplicates := []any{}
 	for _, data := range collection {
 		findDuplicates, exportJSON, err = cmd.ExportListProcess(data, options, findDuplicates, exportJSON)
-		if err != nil {
-			return fmt.Errorf("collection error")
-		}
-
 	}
 
 	if len(exportJSON) == consts.ZeroValue {

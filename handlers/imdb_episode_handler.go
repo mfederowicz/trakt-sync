@@ -6,10 +6,12 @@ import (
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
+// ImdbEpisodeHandler struct for handler
 type ImdbEpisodeHandler struct{}
 
+// Handle to handle json list item
 func (h ImdbEpisodeHandler) Handle(options *str.Options, data *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
-	//fmt.Println("episode export by format imdb")
+	// episode export by format imdb
 	findDuplicates = append(findDuplicates, *data.Episode.IDs.Imdb)
 
 	if len(*data.Episode.Title) == consts.ZeroValue {
@@ -34,5 +36,3 @@ func (h ImdbEpisodeHandler) Handle(options *str.Options, data *str.ExportlistIte
 	exportJSON = append(exportJSON, emap)
 	return findDuplicates, exportJSON, nil
 }
-
-

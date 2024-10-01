@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/afero"
 )
 
-func TestHelp(t *testing.T) {	
+func TestHelp(t *testing.T) {
 	AppFs = afero.NewMemMapFs()
 	tmpPath := "/tmp-iofs/"
 	AppFs.MkdirAll(tmpPath, consts.X755)
@@ -70,7 +70,11 @@ func TestHelp(t *testing.T) {
 	for _, test := range tests {
 		buf := new(bytes.Buffer)
 		stdout = buf
-		HelpCmd.Exec(test.Fs, test.Client, test.Config, test.Args)
+		err := HelpCmd.Exec(test.Fs, test.Client, test.Config, test.Args)
+		if err != nil {
+			t.Errorf("%s", err)
+		}
+
 		out := buf.String()
 		for i, r := range test.Regex {
 			matched, err := regexp.MatchString(r, out)

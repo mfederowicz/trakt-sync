@@ -45,11 +45,7 @@ func watchlistFunc(cmd *Command, _ ...string) error {
 	exportJSON := []str.ExportlistItemJSON{}
 	findDuplicates := []any{}
 	for _, data := range watchlist {
-		findDuplicates, exportJSON, err = cmd.ExportListProcess(data, options, findDuplicates, exportJSON)
-		if err != nil {
-			return fmt.Errorf("watch list error")
-		}
-
+		findDuplicates, exportJSON, err = cmd.ExportListProcess(data, options, findDuplicates, exportJSON)	
 	}
 
 	if len(exportJSON) == consts.ZeroValue {

@@ -67,4 +67,5 @@ const (
 	DefaultOutputFormat2 = "export_%s_%s.json"
 	DefaultOutputFormat3 = "export_%s_%s_%s.json"
 	NewLine              = "\n"
+	EmptyBuildInfoLen    = 0
 )

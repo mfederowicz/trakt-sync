@@ -23,14 +23,13 @@ var Commands = []*Command{
 	CalendarsCmd,
 	SearchCmd,
 }
-
+// runtime consts
 const (
 	FoundOne = 1
 	NotFound = 0
 )
 
 func runFoundedModule(cmd *Command, fs afero.Fs, client *internal.Client, config *cfg.Config, args []string) {
-
 	err := cmd.Exec(fs, client, config, args)
 	if err != nil {
 		fmt.Println(err)
