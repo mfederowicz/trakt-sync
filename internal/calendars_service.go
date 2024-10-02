@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -25,7 +26,7 @@ func (c *CalendarsService) GetDVDReleases(ctx context.Context, actionType *strin
 		return nil, nil, err
 	}
 
-	fmt.Println("fetch dvd calendars url:" + url)
+	printer.Println("fetch dvd calendars url:" + url)
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -35,7 +36,7 @@ func (c *CalendarsService) GetDVDReleases(ctx context.Context, actionType *strin
 	resp, err := c.client.Do(ctx, req, &list)
 
 	if err != nil {
-		fmt.Println("fetch dvd calendars err:" + err.Error())
+		printer.Println("fetch dvd calendars err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -53,7 +54,7 @@ func (c *CalendarsService) GetMovies(ctx context.Context, actionType *string, st
 		return nil, nil, err
 	}
 
-	fmt.Println("fetch movies calendars url:" + url)
+	printer.Println("fetch movies calendars url:" + url)
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -63,7 +64,7 @@ func (c *CalendarsService) GetMovies(ctx context.Context, actionType *string, st
 	resp, err := c.client.Do(ctx, req, &list)
 
 	if err != nil {
-		fmt.Println("fetch movies calendars err:" + err.Error())
+		printer.Println("fetch movies calendars err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -82,7 +83,7 @@ func (c *CalendarsService) GetSeasonPremieres(ctx context.Context, actionType *s
 		return nil, nil, err
 	}
 
-	fmt.Println("fetch season premieres url:" + url)
+	printer.Println("fetch season premieres url:" + url)
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -92,7 +93,7 @@ func (c *CalendarsService) GetSeasonPremieres(ctx context.Context, actionType *s
 	resp, err := c.client.Do(ctx, req, &list)
 
 	if err != nil {
-		fmt.Println("fetch season premieres err:" + err.Error())
+		printer.Println("fetch season premieres err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -111,7 +112,7 @@ func (c *CalendarsService) GetShows(ctx context.Context, actionType *string, sta
 		return nil, nil, err
 	}
 
-	fmt.Println("fetch shows calendars url:" + url)
+	printer.Println("fetch shows calendars url:" + url)
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -121,7 +122,7 @@ func (c *CalendarsService) GetShows(ctx context.Context, actionType *string, sta
 	resp, err := c.client.Do(ctx, req, &list)
 
 	if err != nil {
-		fmt.Println("fetch shows calendars err:" + err.Error())
+		printer.Println("fetch shows calendars err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -139,7 +140,7 @@ func (c *CalendarsService) GetNewShows(ctx context.Context, actionType *string, 
 		return nil, nil, err
 	}
 
-	fmt.Println("fetch new shows calendars url:" + url)
+	printer.Println("fetch new shows calendars url:" + url)
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -149,7 +150,7 @@ func (c *CalendarsService) GetNewShows(ctx context.Context, actionType *string, 
 	resp, err := c.client.Do(ctx, req, &list)
 
 	if err != nil {
-		fmt.Println("fetch new shows calendars err:" + err.Error())
+		printer.Println("fetch new shows calendars err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -167,7 +168,7 @@ func (c *CalendarsService) GetFinales(ctx context.Context, actionType *string, s
 		return nil, nil, err
 	}
 
-	fmt.Println("fetch finales calendars url:" + url)
+	printer.Println("fetch finales calendars url:" + url)
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -177,7 +178,7 @@ func (c *CalendarsService) GetFinales(ctx context.Context, actionType *string, s
 	resp, err := c.client.Do(ctx, req, &list)
 
 	if err != nil {
-		fmt.Println("fetch finales calendars err:" + err.Error())
+		printer.Println("fetch finales calendars err:" + err.Error())
 		return nil, resp, err
 	}
 

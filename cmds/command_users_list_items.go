@@ -11,6 +11,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -35,7 +36,7 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 	client := cmd.Client
 	intID, _ := strconv.Atoi(*_listID)
 
-	fmt.Println("fetch private lists for:" + options.UserName)
+	printer.Println("fetch private lists for:" + options.UserName)
 
 	username = options.UserName
 	personalLists, _, err := fetchUsersPersonalLists(client, &username)
@@ -47,12 +48,12 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 		return fmt.Errorf("empty personal lists")
 	}
 
-	fmt.Printf("Found %d user list\n", len(personalLists))
+	printer.Printf("Found %d user list\n", len(personalLists))
 
 	var avLists []int
 
 	for _, data := range personalLists {
-		fmt.Printf("Found list id %d name '%s' with %d items own by %s\n", *data.IDs.Trakt, *data.Name, *data.ItemCount, *data.User.Name)
+		printer.Printf("Found list id %d name '%s' with %d items own by %s\n", *data.IDs.Trakt, *data.Name, *data.ItemCount, *data.User.Name)
 		avLists = append(avLists, int(*data.IDs.Trakt))
 	}
 
@@ -64,7 +65,7 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 		return fmt.Errorf("unknown listid:%d", intID)
 	}
 
-	fmt.Printf("ListId to fetch:%d\n", intID)
+	printer.Printf("ListId to fetch:%d\n", intID)
 
 	if len(*_output) > consts.ZeroValue {
 		options.Output = *_output
@@ -77,14 +78,14 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 		itemsExportData, _, itemsErr := fetchUsersPersonalList(client, options)
 		if itemsErr == nil {
 			if len(itemsExportData) > consts.ZeroValue {
-				fmt.Printf("Found %d items \n", len(itemsExportData))
+				printer.Printf("Found %d items \n", len(itemsExportData))
 				exportJSON := []*str.UserListItem{}
 				exportJSON = append(exportJSON, itemsExportData...)
 				print("write data to:" + options.Output)
 				jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
 				writer.WriteJSON(options, jsonData)
 			} else {
-				fmt.Printf("No %s items in list %d to fetch\n", options.Type, intID)
+				printer.Printf("No %s items in list %d to fetch\n", options.Type, intID)
 			}
 		}
 	}

@@ -2,7 +2,6 @@ package internal
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -10,6 +9,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/stretchr/testify/assert"
 )
@@ -78,7 +78,7 @@ func TestBareDo_returnsOpenBody(t *testing.T) {
 
 	mux.HandleFunc("/test-url", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, http.MethodGet)
-		fmt.Fprint(w, expectedBody)
+		printer.Fprint(w, expectedBody)
 	})
 
 	ctx := context.Background()
@@ -114,7 +114,7 @@ func TestBareDo_rate_limit_reset(t *testing.T) {
 		testMethod(t, r, http.MethodGet)
 		w.Header().Add(HeaderRetryAfter, "100")
 		w.WriteHeader(http.StatusTooManyRequests)
-		fmt.Fprint(w, expectedBody)
+		printer.Fprint(w, expectedBody)
 	})
 
 	ctx := context.Background()
@@ -137,7 +137,7 @@ func TestBareDo_rate_limit_reset(t *testing.T) {
 
 	mux.HandleFunc("/test-url-next", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, http.MethodGet)
-		fmt.Fprint(w, "Body")
+		printer.Fprint(w, "Body")
 	})
 
 	reqNext, errNext := client.NewRequest(http.MethodGet, "test-url-next", nil)

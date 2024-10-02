@@ -11,7 +11,5 @@ type DefaultHandler struct{}
 // Handle to handle json list item
 func (h DefaultHandler) Handle(options *str.Options, data *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
 	// movie or show by format imdb
-	// fmt.Println("default handler")
-
 	return findDuplicates, exportJSON, nil
 }

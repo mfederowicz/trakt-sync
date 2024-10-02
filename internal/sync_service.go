@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -31,7 +32,7 @@ func (s *SyncService) GetCollection(ctx context.Context, types *string, opts *ur
 		return nil, nil, err
 	}
 
-	fmt.Println("fetch collection url:" + url)
+	printer.Println("fetch collection url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -41,7 +42,7 @@ func (s *SyncService) GetCollection(ctx context.Context, types *string, opts *ur
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		fmt.Println("fetch lists err:" + err.Error())
+		printer.Println("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -64,7 +65,7 @@ func (s *SyncService) GetWatchedHistory(ctx context.Context, types *string, opts
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println("fetch history url:" + url)
+	printer.Println("fetch history url:" + url)
 	req, err := s.client.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -74,7 +75,7 @@ func (s *SyncService) GetWatchedHistory(ctx context.Context, types *string, opts
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		fmt.Println("fetch lists err:" + err.Error())
+		printer.Println("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -96,7 +97,7 @@ func (s *SyncService) GetWatchlist(ctx context.Context, types *string, sort *str
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println("fetch watchlist url:" + url)
+	printer.Println("fetch watchlist url:" + url)
 	req, err := s.client.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -106,7 +107,7 @@ func (s *SyncService) GetWatchlist(ctx context.Context, types *string, sort *str
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		fmt.Println("fetch lists err:" + err.Error())
+		printer.Println("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 

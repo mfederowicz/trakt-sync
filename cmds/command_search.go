@@ -11,6 +11,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
@@ -46,7 +47,7 @@ func searchFunc(cmd *Command, _ ...string) error {
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
 
-	fmt.Println("action:", options.Action)
+	printer.Println("action:", options.Action)
 
 	switch options.Action {
 	case "text-query":
@@ -61,16 +62,16 @@ func searchFunc(cmd *Command, _ ...string) error {
 		}
 
 	default:
-		fmt.Println("possible actions: text-query, id-lookup")
+		printer.Println("possible actions: text-query, id-lookup")
 	}
 	return nil
 }
 
 func runIDLookup(options *str.Options, client *internal.Client) error {
-	fmt.Println("Get sarch: " + options.Action)
-	fmt.Println("search id_type: " + options.SearchIDType)
-	fmt.Println("search id: " + options.ID)
-	fmt.Println("search item_type: " + options.SearchType.String())
+	printer.Println("Get sarch: " + options.Action)
+	printer.Println("search id_type: " + options.SearchIDType)
+	printer.Println("search id: " + options.ID)
+	printer.Println("search item_type: " + options.SearchType.String())
 
 	result, err := fetchSearchIDLookup(client, options)
 	if err != nil {
@@ -81,7 +82,7 @@ func runIDLookup(options *str.Options, client *internal.Client) error {
 		return fmt.Errorf("empty result")
 	}
 
-	fmt.Print("Found " + options.Action + " search data \n")
+	printer.Print("Found " + options.Action + " search data \n")
 	print("write data to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(result, "", "  ")
 
@@ -90,10 +91,10 @@ func runIDLookup(options *str.Options, client *internal.Client) error {
 }
 
 func runTextQuery(options *str.Options, client *internal.Client) error {
-	fmt.Println("Get search: " + options.Action)
-	fmt.Printf("search_type: %v\n", options.SearchType.String())
-	fmt.Printf("search_field: %v\n", options.SearchField.String())
-	fmt.Println("search id_type: " + options.SearchIDType)
+	printer.Println("Get search: " + options.Action)
+	printer.Printf("search_type: %v\n", options.SearchType.String())
+	printer.Printf("search_field: %v\n", options.SearchField.String())
+	printer.Println("search id_type: " + options.SearchIDType)
 
 	result, err := fetchSearchTextQuery(client, options, consts.DefaultPage)
 	if err != nil {
@@ -103,7 +104,7 @@ func runTextQuery(options *str.Options, client *internal.Client) error {
 	if result == nil {
 		return fmt.Errorf("empty result")
 	}
-	fmt.Print("Found " + options.Action + " search data \n")
+	printer.Print("Found " + options.Action + " search data \n")
 	print("write data to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
 

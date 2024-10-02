@@ -11,6 +11,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
@@ -29,7 +30,7 @@ func historyFunc(cmd *Command, _ ...string) error {
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
 
-	fmt.Println("fetch history lists for:" + options.UserName)
+	printer.Println("fetch history lists for:" + options.UserName)
 
 	historyLists, err := fetchHistoryList(client, options, consts.DefaultPage)
 	if err != nil {
@@ -40,7 +41,7 @@ func historyFunc(cmd *Command, _ ...string) error {
 		return fmt.Errorf("empty history lists")
 	}
 
-	fmt.Printf("Found %d history elements\n", len(historyLists))
+	printer.Printf("Found %d history elements\n", len(historyLists))
 	options.Time = cfg.GetOptionTime(options)
 	exportJSON := []str.ExportlistItemJSON{}
 	findDuplicates := []any{}

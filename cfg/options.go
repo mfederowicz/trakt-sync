@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/mfederowicz/trakt-sync/consts"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 
 	"github.com/spf13/afero"
@@ -153,7 +154,7 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 	moduleConfig, ok := ModuleConfig[options.Module]
 	if !ok {
 		options.Module = "history"
-		fmt.Println("Forcing module to history")
+		printer.Println("Forcing module to history")
 	}
 
 	// Check if the provided type is valid for the selected module
@@ -163,12 +164,12 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 
 	if !IsValidConfigType(moduleConfig.Format, options.Format) {
 		options.Format = "imdb"
-		fmt.Println("Forcing format to imdb")
+		printer.Println("Forcing format to imdb")
 	}
 
 	if !IsValidConfigType(moduleConfig.Sort, options.Sort) {
 		options.Sort = "rank"
-		fmt.Println("Forcing sort to rank")
+		printer.Println("Forcing sort to rank")
 	}
 
 	if len(options.Output) == consts.ZeroValue && options.Module == "lists" {
@@ -184,7 +185,7 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 
 	if options.Type == "episodes" && options.Format == "imdb" {
 		options.Format = "tmdb"
-		fmt.Println("Forcing format to tmdb for type episode")
+		printer.Println("Forcing format to tmdb for type episode")
 	}
 
 	if len(str.Headers["Authorization"].(string)) == consts.ZeroValue && len(str.Headers["trakt-api-key"].(string)) == consts.ZeroValue {

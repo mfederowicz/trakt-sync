@@ -8,6 +8,7 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/test"
+	"github.com/mfederowicz/trakt-sync/writer"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -41,9 +42,9 @@ func emptyFlagset() *flag.FlagSet {
 }
 
 func TestMain(m *testing.M) {
-	os.Unsetenv("HOME")
-	os.Unsetenv("XDG_CONFIG_HOME")
-	os.Unsetenv("FORK")
+	_ = os.Unsetenv("HOME")
+	_ = os.Unsetenv("XDG_CONFIG_HOME")
+	_ = os.Unsetenv("FORK")
 	AppFs = afero.NewMemMapFs()
 	os.Exit(m.Run())
 }
@@ -151,10 +152,11 @@ func TestInitConfigPerPageValue(t *testing.T) {
 	var buffer bytes.Buffer
 
 	// Write each line individually
-	buffer.WriteString(bufferClientID)
-	buffer.WriteString(bufferClientSecret)
-	buffer.WriteString("token_path = \"" + filenameToken + "\"\n")
-	buffer.WriteString(bufferPerPage)
+
+	writer.WriteToBuffer(&buffer, []byte(bufferClientID))
+	writer.WriteToBuffer(&buffer, []byte(bufferClientSecret))
+	writer.WriteToBuffer(&buffer, []byte("token_path = \""+filenameToken+"\"\n"))
+	writer.WriteToBuffer(&buffer, []byte(bufferPerPage))
 
 	// Convert the buffer to a []byte
 	data := buffer.Bytes()
@@ -180,7 +182,7 @@ func TestInitConfigNoClient(t *testing.T) {
 
 	AppFs.MkdirAll(configDirPath, consts.X755)
 
-	filenameToken := configDirPath + tokenFile 
+	filenameToken := configDirPath + tokenFile
 
 	afero.WriteFile(AppFs, filenameToken, []byte("\n"), consts.X644)
 
@@ -188,10 +190,10 @@ func TestInitConfigNoClient(t *testing.T) {
 	var buffer bytes.Buffer
 
 	// Write each line individually
-	buffer.WriteString("client_id = \"\"\n")
-	buffer.WriteString(bufferClientSecret)
-	buffer.WriteString("token_path = \"" + filenameToken + "\"\n")
-	buffer.WriteString(bufferPerPage)
+	writer.WriteToBuffer(&buffer, []byte("client_id = \"\"\n"))
+	writer.WriteToBuffer(&buffer, []byte(bufferClientSecret))
+	writer.WriteToBuffer(&buffer, []byte("token_path = \""+filenameToken+"\"\n"))
+	writer.WriteToBuffer(&buffer, []byte(bufferPerPage))
 
 	// Convert the buffer to a []byte
 	data := buffer.Bytes()
@@ -225,10 +227,10 @@ func TestInitConfigNoTokenPath(t *testing.T) {
 	var buffer bytes.Buffer
 
 	// Write each line individually
-	buffer.WriteString(bufferClientID)
-	buffer.WriteString(bufferClientSecret)
-	buffer.WriteString(bufferTokenPath)
-	buffer.WriteString(bufferPerPage)
+	writer.WriteToBuffer(&buffer, []byte(bufferClientID))
+	writer.WriteToBuffer(&buffer, []byte(bufferClientSecret))
+	writer.WriteToBuffer(&buffer, []byte(bufferTokenPath))
+	writer.WriteToBuffer(&buffer, []byte(bufferPerPage))
 
 	// Convert the buffer to a []byte
 	data := buffer.Bytes()

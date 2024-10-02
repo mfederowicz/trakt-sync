@@ -9,6 +9,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
@@ -27,7 +28,7 @@ func collectionFunc(cmd *Command, _ ...string) error {
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
 
-	fmt.Println("fetch collection lists for:" + options.UserName)
+	printer.Println("fetch collection lists for:" + options.UserName)
 
 	collection, err := fetchCollectionList(client, options)
 	if err != nil {
@@ -38,12 +39,15 @@ func collectionFunc(cmd *Command, _ ...string) error {
 		return fmt.Errorf("empty collection")
 	}
 
-	fmt.Printf("Found %d collection elements\n", len(collection))
+	printer.Printf("Found %d collection elements\n", len(collection))
 	options.Time = cfg.GetOptionTime(options)
 	exportJSON := []str.ExportlistItemJSON{}
 	findDuplicates := []any{}
 	for _, data := range collection {
 		findDuplicates, exportJSON, err = cmd.ExportListProcess(data, options, findDuplicates, exportJSON)
+		if err != nil {
+			return fmt.Errorf("collection error")
+		}
 	}
 
 	if len(exportJSON) == consts.ZeroValue {

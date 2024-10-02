@@ -229,11 +229,11 @@ func EncodeParams(values url.Values) string {
 		vs := values[k]
 		for _, v := range vs {
 			if buf.Len() > consts.ZeroValue {
-				buf.WriteByte('&')
+				_ = buf.WriteByte('&')
 			}
-			buf.WriteString(k)
-			buf.WriteByte('=')
-			buf.WriteString(v)
+			_, _ = buf.WriteString(k)
+			_ = buf.WriteByte('=')
+			_, _ = buf.WriteString(v)
 		}
 	}
 	return buf.String()
