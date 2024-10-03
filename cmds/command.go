@@ -151,7 +151,7 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	err = c.Run(c, c.Flag.Args()...)
 
 	if err != nil {
-		return fmt.Errorf(".%s", err)
+		return fmt.Errorf("%s", err)
 	}
 
 	return nil
@@ -196,29 +196,33 @@ func (c *Command) fetchFlagsMap() map[string]string {
 func cleanKey(arg string) string {
 	return strings.TrimLeft(arg, "-")
 }
+func processArgsItem(arg string, key string, argMap map[string]bool) (string, map[string]bool) {
+	// If the argument starts with "-", consider it a key
+	if arg[consts.FirstArgElement] == '-' {
+		// If we already have a key, it means it's a single argument without a value
+		if key != "" {
+			argMap[cleanKey(key)] = true // Set the key to true for bool map
+		}
+		key = arg
+	} else {
+		// If we have a key, assign the value to it
+		if key != "" {
+			argMap[cleanKey(key)] = true // Set the key to true for bool map
+			key = consts.EmptyString
+		} else {
+			// If we don't have a key, consider it a standalone argument
+			argMap[arg] = true // Set the key to true for bool map
+		}
+	}
 
+	return key, argMap
+}
 func argsToMap(args []string) map[string]bool {
 	argMap := make(map[string]bool)
 	var key string
 
 	for _, arg := range args {
-		// If the argument starts with "-", consider it a key
-		if arg[consts.FirstArgElement] == '-' {
-			// If we already have a key, it means it's a single argument without a value
-			if key != "" {
-				argMap[cleanKey(key)] = true // Set the key to true for bool map
-			}
-			key = arg
-		} else {
-			// If we have a key, assign the value to it
-			if key != "" {
-				argMap[cleanKey(key)] = true // Set the key to true for bool map
-				key = consts.EmptyString
-			} else {
-				// If we don't have a key, consider it a standalone argument
-				argMap[arg] = true // Set the key to true for bool map
-			}
-		}
+		key, argMap = processArgsItem(arg, key, argMap)
 	}
 
 	// If we still have a key at the end, it means it's a single argument without a value
@@ -230,7 +234,7 @@ func argsToMap(args []string) map[string]bool {
 }
 
 // ValidFlags validate if flag is in our list
-func (_ *Command) ValidFlags() bool {
+func (*Command) ValidFlags() bool {
 	for f := range argsToMap(flag.Args()) {
 		if _, ok := Avflags[f]; !ok {
 			return false
@@ -239,7 +243,7 @@ func (_ *Command) ValidFlags() bool {
 	return true
 }
 
-func (_ *Command) registerGlobalFlagsInSet(fset *flag.FlagSet) {
+func (*Command) registerGlobalFlagsInSet(fset *flag.FlagSet) {
 	flag.VisitAll(func(f *flag.Flag) {
 		if fset.Lookup(f.Name) == nil {
 			fset.Var(f.Value, f.Name, f.Usage)
@@ -248,40 +252,40 @@ func (_ *Command) registerGlobalFlagsInSet(fset *flag.FlagSet) {
 }
 
 // IsImdbMovie check movie imdb format
-func (_ *Command) IsImdbMovie(options *str.Options, data *str.ExportlistItem) bool {
+func (*Command) IsImdbMovie(options *str.Options, data *str.ExportlistItem) bool {
 	return options.Type != consts.EpisodesType && data.Movie != nil && options.Format == consts.ImdbFormat
 }
 
 // IsImdbShow check show imdb format
-func (_ *Command) IsImdbShow(options *str.Options, data *str.ExportlistItem) bool {
+func (*Command) IsImdbShow(options *str.Options, data *str.ExportlistItem) bool {
 	return options.Type != consts.EpisodesType && data.Show != nil && data.Show.IDs.HaveID(consts.ImdbIDFormat) &&
 		options.Format == consts.ImdbFormat
 }
 
 // IsImdbEpisode check episode imdb format
-func (_ *Command) IsImdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
+func (*Command) IsImdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
 	return data.Episode != nil && data.Episode.IDs.HaveID(consts.ImdbIDFormat) && options.Format == consts.ImdbFormat
 }
 
 // IsTmdbMovie check movie tmdb format
-func (_ *Command) IsTmdbMovie(options *str.Options, data *str.ExportlistItem) bool {
+func (*Command) IsTmdbMovie(options *str.Options, data *str.ExportlistItem) bool {
 	return options.Type != consts.EpisodesType && data.Movie != nil &&
 		data.Movie.IDs.HaveID(consts.TmdbIDFormat) && options.Format == consts.TmdbFormat
 }
 
 // IsTmdbShow check show tmdb format
-func (_ *Command) IsTmdbShow(options *str.Options, data *str.ExportlistItem) bool {
+func (*Command) IsTmdbShow(options *str.Options, data *str.ExportlistItem) bool {
 	return options.Type != consts.EpisodesType && data.Show != nil &&
 		data.Show.IDs.HaveID(consts.TmdbIDFormat) && options.Format == consts.TmdbFormat
 }
 
 // IsTmdbEpisode check episode tmdb format
-func (_ *Command) IsTmdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
+func (*Command) IsTmdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
 	return data.Episode.IDs.HaveID(consts.TmdbIDFormat) && options.Format == consts.TmdbFormat
 }
 
 // IsTvdbEpisode check episode tvdb format
-func (_ *Command) IsTvdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
+func (*Command) IsTvdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
 	return data.Episode.IDs.HaveID("Tvdb") && options.Format == "tvdb"
 }
 
@@ -314,7 +318,7 @@ func (c *Command) ExportListProcess(
 }
 
 // PrepareQueryString for remove or replace unwanted signs from query string
-func (_ *Command) PrepareQueryString(q string) *string {
+func (*Command) PrepareQueryString(q string) *string {
 	return &q
 }
 

@@ -78,7 +78,7 @@ func (c *Client) UpdateHeaders(headers map[string]any) {
 }
 
 // HavePages checks if we have available pages to fetch
-func (_ *Client) HavePages(page int, pages int) bool {
+func (*Client) HavePages(page int, pages int) bool {
 	return page != pages && pages > consts.ZeroValue
 }
 
@@ -126,24 +126,30 @@ func (c *Client) NewRequest(method, urlStr string, body any, opts ...RequestOpti
 	if err != nil {
 		return nil, err
 	}
-
-	if body != nil {
-		req.Header.Set("Content-Type", "application/json")
-	}
-
-	if c.headers["Authorization"] != nil {
-		req.Header.Set("Authorization", c.headers["Authorization"].(string))
-	}
-
-	if c.headers["trakt-api-key"] != nil {
-		req.Header.Set("trakt-api-key", c.headers["trakt-api-key"].(string))
-	}
-
+	
+	req = c.requestSetHeaders(req, body)
+	
 	for _, opt := range opts {
 		opt(req)
 	}
 
 	return req, nil
+}
+
+func (c *Client) requestSetHeaders(r *http.Request, body any) *http.Request {
+	if body != nil {
+		r.Header.Set("Content-Type", "application/json")
+	}
+
+	if c.headers["Authorization"] != nil {
+		r.Header.Set("Authorization", c.headers["Authorization"].(string))
+	}
+
+	if c.headers["trakt-api-key"] != nil {
+		r.Header.Set("trakt-api-key", c.headers["trakt-api-key"].(string))
+	}
+	
+	return r
 }
 
 // Do sends an API request and returns the API response. The API response is
@@ -248,19 +254,22 @@ func (c *Client) CheckResponse(r *http.Response) error {
 	r.Body = io.NopCloser(bytes.NewBuffer(data))
 	switch r.StatusCode {
 	case http.StatusTooManyRequests:
-		abuseRateLimitError := &AbuseRateLimitError{
-			Response: errorResponse.Response,
-			Message:  errorResponse.Message,
-		}
-		if retryAfter := c.ParseRateLimit(r); retryAfter != nil {
-			abuseRateLimitError.RetryAfter = retryAfter
-			return abuseRateLimitError
-		}
-		return nil
-
+		return c.genRateLimitError(r, errorResponse)
 	default:
 		return errorResponse
 	}
+}
+
+func (c *Client) genRateLimitError(r *http.Response, errorResponse *str.ErrorResponse) *AbuseRateLimitError {
+	abuseRateLimitError := &AbuseRateLimitError{
+		Response: errorResponse.Response,
+		Message:  errorResponse.Message,
+	}
+	if retryAfter := c.ParseRateLimit(r); retryAfter != nil {
+		abuseRateLimitError.RetryAfter = retryAfter
+		return abuseRateLimitError
+	}
+	return nil
 }
 
 // CheckRetryAfter check Retry After header.
@@ -290,12 +299,12 @@ func (c *Client) CheckRetryAfter(req *http.Request) *AbuseRateLimitError {
 }
 
 // WithContext pass context to request
-func (_ *Client) WithContext(ctx context.Context, req *http.Request) *http.Request {
+func (*Client) WithContext(ctx context.Context, req *http.Request) *http.Request {
 	return req.WithContext(ctx)
 }
 
 // ParseRate parses the rate related headers.
-func (_ *Client) ParseRate(r *http.Response) str.Rate {
+func (*Client) ParseRate(r *http.Response) str.Rate {
 	var rate str.Rate
 	if limit := r.Header.Get(HeaderRateLimit); limit != emptyLimit {
 		rate.Limit, _ = strconv.Atoi(limit)
@@ -313,7 +322,7 @@ func (c *Client) NewResponse(r *http.Response) *str.Response {
 }
 
 // ParseRateLimit parses related headers, and returns the time to retry after.
-func (_ *Client) ParseRateLimit(r *http.Response) *time.Duration {
+func (*Client) ParseRateLimit(r *http.Response) *time.Duration {
 	// number of seconds that one should
 	// wait before resuming making requests.
 	if v := r.Header.Get(HeaderRetryAfter); v != "" {

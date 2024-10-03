@@ -9,7 +9,7 @@ import (
 type DefaultHandler struct{}
 
 // Handle to handle json list item
-func (_ DefaultHandler) Handle(options *str.Options, data *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
+func (DefaultHandler) Handle(_ *str.Options, _ *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
 	// movie or show by format imdb
 	return findDuplicates, exportJSON, nil
 }

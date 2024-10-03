@@ -1,11 +1,13 @@
+// Package buffer used to write buffer bytes and printout logs if exists
 package buffer
+
 
 import (
 	"bytes"
 	"log"
 )
 
-// WriteToBuffer writes to bytes.Buffer and logs any error.
+// Write writes to bytes.Buffer and logs any error.
 func Write(buffer *bytes.Buffer, value string) {
 	_, err := buffer.Write([]byte(value))
 	if err != nil {

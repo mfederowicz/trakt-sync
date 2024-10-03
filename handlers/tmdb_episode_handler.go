@@ -10,7 +10,7 @@ import (
 type TmdbEpisodeHandler struct{}
 
 // Handle to handle json list item
-func (_ TmdbEpisodeHandler) Handle(options *str.Options, data *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
+func (TmdbEpisodeHandler) Handle(options *str.Options, data *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
 	// episode export by format tmdb
 	findDuplicates = append(findDuplicates, *data.Episode.IDs.Tmdb)
 

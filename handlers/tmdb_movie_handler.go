@@ -9,7 +9,7 @@ import (
 type TmdbMovieHandler struct{}
 
 // Handle to handle json list item
-func (_ TmdbMovieHandler) Handle(options *str.Options, data *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
+func (TmdbMovieHandler) Handle(options *str.Options, data *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
 	findDuplicates = append(findDuplicates, *data.Movie.IDs.Tmdb)
 	emap := str.ExportlistItemJSON{
 		Tmdb:  data.Movie.IDs.Tmdb,

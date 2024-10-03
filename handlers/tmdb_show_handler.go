@@ -9,7 +9,7 @@ import (
 type TmdbShowHandler struct{}
 
 // Handle to handle json list item
-func (_ TmdbShowHandler) Handle(options *str.Options, data *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
+func (TmdbShowHandler) Handle(options *str.Options, data *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
 	findDuplicates = append(findDuplicates, *data.Show.IDs.Tmdb)
 	emap := str.ExportlistItemJSON{
 		Tmdb:  data.Show.IDs.Tmdb,
