@@ -4,7 +4,6 @@ package cli
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 	"os/exec"
@@ -14,11 +13,12 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
 func fail(err string) {
-	fmt.Fprintln(os.Stderr, err)
+	printer.Fprintln(os.Stderr, err)
 }
 
 // open browser for https://trakt.tv/activate code activation
@@ -44,7 +44,7 @@ func deviceCodeVerification(deviceToken *str.NewDeviceToken, oauth *internal.Oau
 	token, resp, err := oauth.PoolForTheAccessToken(context.Background(), deviceToken)
 
 	if err != nil {
-		fmt.Println("Error:", err)
+		printer.Println("Error:", err)
 		return false
 	}
 
@@ -56,7 +56,7 @@ func deviceCodeVerification(deviceToken *str.NewDeviceToken, oauth *internal.Oau
 	if resp.StatusCode == http.StatusOK {
 		tokenjson, _ := json.Marshal(token)
 		if err := os.WriteFile(config.TokenPath, tokenjson, consts.X644); err != nil {
-			fmt.Println(err.Error())
+			printer.Println(err.Error())
 		}
 	}
 
@@ -70,7 +70,7 @@ func fetchNewDeviceCodeForClient(config *cfg.Config, oauth *internal.OauthServic
 		&str.NewDeviceCode{ClientID: &config.ClientID})
 
 	if err != nil {
-		return nil, fmt.Errorf("Error generate new device code:" + err.Error())
+		return nil, printer.Errorf("Error generate new device code:" + err.Error())
 	}
 
 	if resp.StatusCode == http.StatusOK {
@@ -82,11 +82,11 @@ func fetchNewDeviceCodeForClient(config *cfg.Config, oauth *internal.OauthServic
 
 // PoolNewDeviceCode pool new device code (open browser and wait for correct code activation)
 func PoolNewDeviceCode(config *cfg.Config, oauth *internal.OauthService) error {
-	fmt.Println("Polling for new device code...")
+	printer.Println("Polling for new device code...")
 
 	device, err := fetchNewDeviceCodeForClient(config, oauth)
 	if err != nil {
-		return fmt.Errorf("Error generate new device code:" + err.Error())
+		return printer.Errorf("Error generate new device code:" + err.Error())
 	}
 
 	showCodeAndOpenBrowser(device)
@@ -98,8 +98,8 @@ func PoolNewDeviceCode(config *cfg.Config, oauth *internal.OauthService) error {
 
 // show new device code to stdout and open browser
 func showCodeAndOpenBrowser(device *str.DeviceCode) {
-	fmt.Println("Go to:" + device.VerificationURL)
-	fmt.Println("Enter code: " + device.UserCode)
+	printer.Println("Go to:" + device.VerificationURL)
+	printer.Println("Enter code: " + device.UserCode)
 
 	browserErr := openBrowser(device.VerificationURL)
 	if browserErr != nil {
@@ -121,12 +121,12 @@ func verifyCode(device *str.DeviceCode, config *cfg.Config, oauth *internal.Oaut
 			ClientSecret: &config.ClientSecret,
 		}
 		if verified := deviceCodeVerification(token, oauth, config); verified {
-			fmt.Println("Device code verified!")
+			printer.Println("Device code verified!")
 			break
 		}
 		count -= device.Interval
 		if count == counterNoSeconds {
-			fmt.Println("Time out!")
+			printer.Println("Time out!")
 			break
 		}
 		time.Sleep(time.Duration(device.Interval) * time.Second)

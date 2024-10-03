@@ -11,6 +11,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
@@ -37,7 +38,7 @@ func peopleFunc(cmd *Command, _ ...string) error {
 
 	switch options.Action {
 	case "updates":
-		fmt.Println("Get recently updated people")
+		printer.Println("Get recently updated people")
 		date := time.Now().Format("2006-01-02T15:00Z")
 		updates, err := fetchPeoplesUpdates(client, options, date, consts.DefaultPage)
 		if err != nil {
@@ -49,18 +50,18 @@ func peopleFunc(cmd *Command, _ ...string) error {
 		}
 
 		if len(updates) > consts.ZeroValue {
-			fmt.Printf("Found %d items \n", len(updates))
+			printer.Printf("Found %d items \n", len(updates))
 			exportJSON := []*str.PersonItem{}
 			exportJSON = append(exportJSON, updates...)
 			print("write data to:" + options.Output)
 			jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
 			writer.WriteJSON(options, jsonData)
 		} else {
-			fmt.Print("No update items to fetch\n")
+			printer.Print("No update items to fetch\n")
 		}
 
 	case "updated_ids":
-		fmt.Println("Get recently updated people Trakt IDs")
+		printer.Println("Get recently updated people Trakt IDs")
 		date := time.Now().Format("2006-01-02T15:00Z")
 		updates, err := fetchPeoplesUpdatedIDs(client, options, date, consts.DefaultPage)
 		if err != nil {
@@ -72,7 +73,7 @@ func peopleFunc(cmd *Command, _ ...string) error {
 		}
 
 		if len(updates) > consts.ZeroValue {
-			fmt.Printf("Found %d items \n", len(updates))
+			printer.Printf("Found %d items \n", len(updates))
 			exportJSON := []*int{}
 			exportJSON = append(exportJSON, updates...)
 			print("write data to:" + options.Output)
@@ -80,14 +81,14 @@ func peopleFunc(cmd *Command, _ ...string) error {
 
 			writer.WriteJSON(options, jsonData)
 		} else {
-			fmt.Print("No update items to fetch\n")
+			printer.Print("No update items to fetch\n")
 		}
 
 	case "summary":
 		if len(*_personID) == consts.ZeroValue {
 			return fmt.Errorf("set personId ie: -i john-wayne")
 		}
-		fmt.Println("Get a single person")
+		printer.Println("Get a single person")
 		result, err := fetchSinglePerson(client, options)
 		if err != nil {
 			return fmt.Errorf("fetch single person error:%w", err)
@@ -97,7 +98,7 @@ func peopleFunc(cmd *Command, _ ...string) error {
 			return fmt.Errorf("empty result")
 		}
 
-		fmt.Print("Found person \n")
+		printer.Print("Found person \n")
 		print("write data to:" + options.Output)
 		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
 
@@ -107,7 +108,7 @@ func peopleFunc(cmd *Command, _ ...string) error {
 		if len(*_personID) == consts.ZeroValue {
 			return fmt.Errorf("set personId ie: -i john-wayne")
 		}
-		fmt.Println("Get movie credits")
+		printer.Println("Get movie credits")
 		result, err := fetchMovieCredits(client, options)
 		if err != nil {
 			return fmt.Errorf("fetch movie credits error:%v", err)
@@ -117,7 +118,7 @@ func peopleFunc(cmd *Command, _ ...string) error {
 			return fmt.Errorf("empty result")
 		}
 
-		fmt.Print("Found movie credits data \n")
+		printer.Print("Found movie credits data \n")
 		print("write data to:" + options.Output)
 		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
 		writer.WriteJSON(options, jsonData)
@@ -126,7 +127,7 @@ func peopleFunc(cmd *Command, _ ...string) error {
 		if len(*_personID) == consts.ZeroValue {
 			return fmt.Errorf(consts.EmptyPersonIDMsg)
 		}
-		fmt.Println("Get show credits")
+		printer.Println("Get show credits")
 		result, err := fetchShowCredits(client, options)
 		if err != nil {
 			return fmt.Errorf("fetch show credits error:%w", err)
@@ -136,7 +137,7 @@ func peopleFunc(cmd *Command, _ ...string) error {
 			return fmt.Errorf(consts.EmptyResult)
 		}
 
-		fmt.Print("Found show credits data \n")
+		printer.Print("Found show credits data \n")
 		print("write data to:" + options.Output)
 		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
 
@@ -146,7 +147,7 @@ func peopleFunc(cmd *Command, _ ...string) error {
 		if len(*_personID) == consts.ZeroValue {
 			return fmt.Errorf(consts.EmptyPersonIDMsg)
 		}
-		fmt.Println("Get lists containing this person")
+		printer.Println("Get lists containing this person")
 		result, err := fetchListsContainingThisPerson(client, options, consts.DefaultPage)
 		if err != nil {
 			return fmt.Errorf("fetch lists error:%v", err)
@@ -156,7 +157,7 @@ func peopleFunc(cmd *Command, _ ...string) error {
 			return fmt.Errorf("empty lists")
 		}
 
-		fmt.Printf("Found %d result \n", len(result))
+		printer.Printf("Found %d result \n", len(result))
 		exportJSON := []*str.PersonalList{}
 		exportJSON = append(exportJSON, result...)
 		print("write data to:" + options.Output)
@@ -165,7 +166,7 @@ func peopleFunc(cmd *Command, _ ...string) error {
 		writer.WriteJSON(options, jsonData)
 
 	default:
-		fmt.Println("possible actions: updates, updated_ids, summary, movies, shows, lists")
+		printer.Println("possible actions: updates, updated_ids, summary, movies, shows, lists")
 	}
 	return nil
 }

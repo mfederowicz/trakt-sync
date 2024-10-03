@@ -3,13 +3,13 @@ package main
 
 import (
 	"flag"
-	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/cmds"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 
 	"github.com/spf13/afero"
@@ -26,13 +26,13 @@ func main() {
 	fs := afero.NewOsFs()
 	config, err := cfg.InitConfig(fs)
 	if err != nil {
-		fmt.Printf("Error: %v\n", err)
+		printer.Printf("Error: %v\n", err)
 		return
 	}
 	client := internal.NewClient(nil)
 	options, err := cfg.OptionsFromConfig(fs, config)
 	if err != nil {
-		fmt.Printf("Error: %v\n", err)
+		printer.Printf("Error: %v\n", err)
 		return
 	}
 	client.UpdateHeaders(options.Headers)
@@ -43,7 +43,7 @@ func main() {
 	flag.Parse()
 
 	if *_version {
-		fmt.Println(cli.GenAppVersion())
+		printer.Println(cli.GenAppVersion())
 		return
 	}
 

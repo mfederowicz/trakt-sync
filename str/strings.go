@@ -3,10 +3,11 @@ package str
 
 import (
 	"bytes"
-	"fmt"
 	"reflect"
 
+	"github.com/mfederowicz/trakt-sync/buffer"
 	"github.com/mfederowicz/trakt-sync/consts"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/wissance/stringFormatter"
 )
 
@@ -26,7 +27,7 @@ func Stringify(message any) string {
 // stringifyValue was heavily inspired by the goprotobuf library.
 func stringifyValue(w *bytes.Buffer, val reflect.Value) {
 	if val.Kind() == reflect.Ptr && val.IsNil() {
-		w.Write([]byte("<nil>"))
+		buffer.Write(w, "<nil>")
 		return
 	}
 
@@ -34,32 +35,29 @@ func stringifyValue(w *bytes.Buffer, val reflect.Value) {
 
 	switch v.Kind() {
 	case reflect.String:
-		fmt.Fprintf(w, `"%s"`, v)
+		printer.Fprintf(w, `"%s"`, v)
 	case reflect.Slice:
-		w.Write([]byte{'['})
+		buffer.Write(w, "[")
 		for i := consts.ZeroValue; i < v.Len(); i++ {
 			if i > consts.ZeroValue {
-				w.Write([]byte{' '})
+				buffer.Write(w, " ")
 			}
 
 			stringifyValue(w, v.Index(i))
 		}
-
-		w.Write([]byte{']'})
+		buffer.Write(w, "]")
 		return
 	case reflect.Struct:
 		if v.Type().Name() != "" {
-			w.Write([]byte(v.Type().String()))
+			buffer.Write(w, v.Type().String())
 		}
 
 		// special handling of Timestamp values
 		if v.Type() == timestampType {
-			fmt.Fprintf(w, "{%s}", v.Interface())
+			printer.Fprintf(w, "{%s}", v.Interface())
 			return
 		}
-
-		w.Write([]byte{'{'})
-
+		buffer.Write(w, "{")
 		var sep bool
 		for i := consts.ZeroValue; i < v.NumField(); i++ {
 			fv := v.Field(i)
@@ -74,23 +72,22 @@ func stringifyValue(w *bytes.Buffer, val reflect.Value) {
 			}
 
 			if sep {
-				w.Write([]byte(", "))
+				buffer.Write(w, ", ")
 			} else {
 				sep = true
 			}
-
-			w.Write([]byte(v.Type().Field(i).Name))
-			w.Write([]byte{':'})
+			buffer.Write(w, v.Type().Field(i).Name)
+			buffer.Write(w, ":")
 			stringifyValue(w, fv)
 		}
-
-		w.Write([]byte{'}'})
+		buffer.Write(w, "}")
 	default:
 		if v.CanInterface() {
-			fmt.Fprint(w, v.Interface())
+			printer.Fprint(w, v.Interface())
 		}
 	}
 }
+
 // ContainString check if string exists in slice
 func ContainString(key string, s []string) bool {
 	for _, v := range s {
@@ -113,7 +110,7 @@ func ContainInt(key int, s []int) bool {
 	return false
 }
 
-// Formatc helper function for FormatComplex in stringFormatter 
+// Formatc helper function for FormatComplex in stringFormatter
 func Formatc(pattern string, data map[string]any) string {
 	return stringFormatter.FormatComplex(pattern, data)
 }

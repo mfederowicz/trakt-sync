@@ -11,6 +11,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/handlers"
 	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 
 	"github.com/spf13/afero"
@@ -83,11 +84,11 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	c.Flag.Usage = func() {
 		err := HelpFunc(c, c.Name)
 		if err != nil {
-			fmt.Printf("error:%s", err)
+			printer.Printf("error:%s", err)
 		}
 	}
 	c.registerGlobalFlagsInSet(&c.Flag)
-	c.Flag.Parse(args)
+	_ = c.Flag.Parse(args)
 	m := c.fetchFlagsMap()
 	options, err := cfg.SyncOptionsFromFlags(fs, c.Config, m)
 
@@ -125,14 +126,14 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	}
 
 	if options.Verbose {
-		fmt.Println("Authorization header:" + options.Headers["Authorization"].(string))
-		fmt.Println("trakt-api-key header:" + options.Headers["trakt-api-key"].(string))
-		fmt.Println("token expiration in seconds:" + strconv.Itoa(options.Token.ExpiritySeconds()))
-		fmt.Println("Extended info:" + *_extendedInfo)
+		printer.Println("Authorization header:" + options.Headers["Authorization"].(string))
+		printer.Println("trakt-api-key header:" + options.Headers["trakt-api-key"].(string))
+		printer.Println("token expiration in seconds:" + strconv.Itoa(options.Token.ExpiritySeconds()))
+		printer.Println("Extended info:" + *_extendedInfo)
 		if len(options.Module) > consts.ZeroValue {
-			fmt.Println("selected module:" + options.Module)
+			printer.Println("selected module:" + options.Module)
 		}
-		fmt.Println(
+		printer.Println(
 			str.Format("selected user: {0}, module: {1}, type: {2}, per_page: {3}, format: {4}, action: {5}, sort: {6}",
 				options.UserName, options.Module, options.Type, options.PerPage, options.Format, options.Action, options.Sort),
 		)
@@ -158,16 +159,16 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 
 // BadArgs shows error if command have invalid arguments
 func (c *Command) BadArgs(errFormat string, args ...any) {
-	fmt.Fprintf(stdout, "error: "+errFormat+"\n\n", args...)
+	printer.Fprintf(stdout, "error: "+errFormat+"\n\n", args...)
 	err := HelpFunc(c, c.Name)
 	if err != nil {
-		fmt.Printf("error:%s", err)
+		printer.Printf("error:%s", err)
 	}
 }
 
 // Errorf prints out a formatted error with the right prefixes.
 func (c *Command) Errorf(errFormat string, args ...any) {
-	fmt.Fprintf(stdout, c.Name+": error: "+errFormat+"\n", args...)
+	printer.Fprintf(stdout, c.Name+": error: "+errFormat+"\n", args...)
 	if c.exit == consts.ZeroValue {
 		c.exit = consts.DefaultExitCode
 	}

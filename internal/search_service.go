@@ -4,6 +4,8 @@ package internal
 import (
 	"context"
 	"fmt"
+
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -25,7 +27,7 @@ func (s *SearchService) GetTextQueryResults(ctx context.Context, searchType *str
 		return nil, nil, err
 	}
 
-	fmt.Println("fetch text search url:" + url)
+	printer.Println("fetch text search url:" + url)
 	req, err := s.client.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -35,7 +37,7 @@ func (s *SearchService) GetTextQueryResults(ctx context.Context, searchType *str
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		fmt.Println("fetch text search err:" + err.Error())
+		printer.Println("fetch text search err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -55,7 +57,7 @@ func (s *SearchService) GetIDLookupResults(ctx context.Context, formatType *stri
 		return nil, nil, err
 	}
 
-	fmt.Println("fetch id lookup search url:" + url)
+	printer.Println("fetch id lookup search url:" + url)
 	req, err := s.client.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -65,7 +67,7 @@ func (s *SearchService) GetIDLookupResults(ctx context.Context, formatType *stri
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		fmt.Println("fetch lookup search err:" + err.Error())
+		printer.Println("fetch lookup search err:" + err.Error())
 		return nil, resp, err
 	}
 

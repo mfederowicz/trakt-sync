@@ -4,13 +4,13 @@ package cli
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
@@ -18,19 +18,19 @@ import (
 func ValidAccessToken(config *cfg.Config, oauth *internal.OauthService) bool {
 	token, err := ReadTokenFromFile(config.TokenPath)
 	if err != nil {
-		fmt.Println("Error reading token:", err)
+		printer.Println("Error reading token:", err)
 		return false
 	}
 
 	if token.Expired() {
 		if refreshed := refreshToken(config, oauth); refreshed {
-			fmt.Println("Token refresed!")
+			printer.Println("Token refresed!")
 		}
 
 		// Reload the updated token from the file
 		token, err = ReadTokenFromFile(config.TokenPath)
 		if err != nil {
-			fmt.Println("Error reading updated token:", err)
+			printer.Println("Error reading updated token:", err)
 			return false
 		}
 	}
@@ -57,7 +57,7 @@ func ReadTokenFromFile(filePath string) (*str.Token, error) {
 func refreshToken(config *cfg.Config, oauth *internal.OauthService) bool {
 	token, err := ReadTokenFromFile(config.TokenPath)
 	if err != nil {
-		fmt.Println("Error reading token:", err)
+		printer.Println("Error reading token:", err)
 		return false
 	}
 
@@ -77,14 +77,14 @@ func refreshToken(config *cfg.Config, oauth *internal.OauthService) bool {
 	)
 
 	if err != nil {
-		fmt.Println("Error exchange token:", err)
+		printer.Println("Error exchange token:", err)
 		return false
 	}
 
 	if resp.StatusCode == http.StatusOK {
 		tokenjson, _ := json.Marshal(newToken)
 		if err := os.WriteFile(config.TokenPath, tokenjson, consts.X644); err != nil {
-			fmt.Println(err.Error())
+			printer.Println(err.Error())
 			return false
 		}
 

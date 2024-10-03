@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
@@ -34,7 +35,7 @@ func (u *UsersService) GetItemstOnAPersonalList(ctx context.Context, id *string,
 	resp, err := u.client.Do(ctx, req, &lists)
 
 	if err != nil {
-		fmt.Println("fetch lists err:" + err.Error())
+		printer.Println("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -62,7 +63,7 @@ func (u *UsersService) GetUsersPersonalLists(ctx context.Context, id *string) ([
 	resp, err := u.client.Do(ctx, req, &lists)
 
 	if err != nil {
-		fmt.Println("fetch lists err:" + err.Error())
+		printer.Println("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 

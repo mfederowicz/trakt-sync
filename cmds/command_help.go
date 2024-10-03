@@ -12,6 +12,7 @@ import (
 	"text/template"
 
 	"github.com/mfederowicz/trakt-sync/consts"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/spf13/afero"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -51,7 +52,7 @@ func HelpFunc(_ *Command, args ...string) error {
 			return fmt.Errorf(consts.ErrorRender, result)
 		}
 	case len(selected) < len(args):
-		fmt.Fprintf(stdout, "error: unknown command %q\n", args[0])
+		printer.Fprintf(stdout, "error: unknown command %q\n", args[0])
 		result := render(stdout, helpTemplate, HelpCmd)
 		if result != nil {
 			return fmt.Errorf(consts.ErrorRender, result)
@@ -105,14 +106,14 @@ var templateFuncs = template.FuncMap{
 			case f.DefValue == "":
 				eq = ""
 			}
-			fmt.Fprintf(w, "%s%s%s\t%s\t   %s\n", prefix, dash, f.Name, eq, f.Usage)
+			printer.Fprintf(w, "%s%s%s\t%s\t   %s\n", prefix, dash, f.Name, eq, f.Usage)
 		}
 		if len(args) == 0 {
 			flag.VisitAll(visit)
 		} else {
 			args[0].(*Command).Flag.VisitAll(visit)
 		}
-		w.Flush()
+		_ = w.Flush()
 		if b.Len() == 0 {
 			return ""
 		}
