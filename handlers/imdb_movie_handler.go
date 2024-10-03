@@ -9,7 +9,7 @@ import (
 type ImdbMovieHandler struct{}
 
 // Handle to handle json list item
-func (h ImdbMovieHandler) Handle(options *str.Options, data *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
+func (_ ImdbMovieHandler) Handle(options *str.Options, data *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
 	// movie or show by format imdb
 	if !data.Movie.IDs.HaveID("Imdb") {
 		noImdb := "no-imdb"

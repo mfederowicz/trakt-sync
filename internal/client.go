@@ -78,7 +78,7 @@ func (c *Client) UpdateHeaders(headers map[string]any) {
 }
 
 // HavePages checks if we have available pages to fetch
-func (c *Client) HavePages(page int, pages int) bool {
+func (_ *Client) HavePages(page int, pages int) bool {
 	return page != pages && pages > consts.ZeroValue
 }
 
@@ -290,12 +290,12 @@ func (c *Client) CheckRetryAfter(req *http.Request) *AbuseRateLimitError {
 }
 
 // WithContext pass context to request
-func (c *Client) WithContext(ctx context.Context, req *http.Request) *http.Request {
+func (_ *Client) WithContext(ctx context.Context, req *http.Request) *http.Request {
 	return req.WithContext(ctx)
 }
 
 // ParseRate parses the rate related headers.
-func (c *Client) ParseRate(r *http.Response) str.Rate {
+func (_ *Client) ParseRate(r *http.Response) str.Rate {
 	var rate str.Rate
 	if limit := r.Header.Get(HeaderRateLimit); limit != emptyLimit {
 		rate.Limit, _ = strconv.Atoi(limit)
@@ -313,7 +313,7 @@ func (c *Client) NewResponse(r *http.Response) *str.Response {
 }
 
 // ParseRateLimit parses related headers, and returns the time to retry after.
-func (c *Client) ParseRateLimit(r *http.Response) *time.Duration {
+func (_ *Client) ParseRateLimit(r *http.Response) *time.Duration {
 	// number of seconds that one should
 	// wait before resuming making requests.
 	if v := r.Header.Get(HeaderRetryAfter); v != "" {
