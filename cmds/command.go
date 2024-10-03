@@ -230,7 +230,7 @@ func argsToMap(args []string) map[string]bool {
 }
 
 // ValidFlags validate if flag is in our list
-func (c *Command) ValidFlags() bool {
+func (_ *Command) ValidFlags() bool {
 	for f := range argsToMap(flag.Args()) {
 		if _, ok := Avflags[f]; !ok {
 			return false
@@ -239,7 +239,7 @@ func (c *Command) ValidFlags() bool {
 	return true
 }
 
-func (c *Command) registerGlobalFlagsInSet(fset *flag.FlagSet) {
+func (_ *Command) registerGlobalFlagsInSet(fset *flag.FlagSet) {
 	flag.VisitAll(func(f *flag.Flag) {
 		if fset.Lookup(f.Name) == nil {
 			fset.Var(f.Value, f.Name, f.Usage)
@@ -248,40 +248,40 @@ func (c *Command) registerGlobalFlagsInSet(fset *flag.FlagSet) {
 }
 
 // IsImdbMovie check movie imdb format
-func (c *Command) IsImdbMovie(options *str.Options, data *str.ExportlistItem) bool {
+func (_ *Command) IsImdbMovie(options *str.Options, data *str.ExportlistItem) bool {
 	return options.Type != consts.EpisodesType && data.Movie != nil && options.Format == consts.ImdbFormat
 }
 
 // IsImdbShow check show imdb format
-func (c *Command) IsImdbShow(options *str.Options, data *str.ExportlistItem) bool {
+func (_ *Command) IsImdbShow(options *str.Options, data *str.ExportlistItem) bool {
 	return options.Type != consts.EpisodesType && data.Show != nil && data.Show.IDs.HaveID(consts.ImdbIDFormat) &&
 		options.Format == consts.ImdbFormat
 }
 
 // IsImdbEpisode check episode imdb format
-func (c *Command) IsImdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
+func (_ *Command) IsImdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
 	return data.Episode != nil && data.Episode.IDs.HaveID(consts.ImdbIDFormat) && options.Format == consts.ImdbFormat
 }
 
 // IsTmdbMovie check movie tmdb format
-func (c *Command) IsTmdbMovie(options *str.Options, data *str.ExportlistItem) bool {
+func (_ *Command) IsTmdbMovie(options *str.Options, data *str.ExportlistItem) bool {
 	return options.Type != consts.EpisodesType && data.Movie != nil &&
 		data.Movie.IDs.HaveID(consts.TmdbIDFormat) && options.Format == consts.TmdbFormat
 }
 
 // IsTmdbShow check show tmdb format
-func (c *Command) IsTmdbShow(options *str.Options, data *str.ExportlistItem) bool {
+func (_ *Command) IsTmdbShow(options *str.Options, data *str.ExportlistItem) bool {
 	return options.Type != consts.EpisodesType && data.Show != nil &&
 		data.Show.IDs.HaveID(consts.TmdbIDFormat) && options.Format == consts.TmdbFormat
 }
 
 // IsTmdbEpisode check episode tmdb format
-func (c *Command) IsTmdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
+func (_ *Command) IsTmdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
 	return data.Episode.IDs.HaveID(consts.TmdbIDFormat) && options.Format == consts.TmdbFormat
 }
 
 // IsTvdbEpisode check episode tvdb format
-func (c *Command) IsTvdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
+func (_ *Command) IsTvdbEpisode(options *str.Options, data *str.ExportlistItem) bool {
 	return data.Episode.IDs.HaveID("Tvdb") && options.Format == "tvdb"
 }
 
@@ -314,7 +314,7 @@ func (c *Command) ExportListProcess(
 }
 
 // PrepareQueryString for remove or replace unwanted signs from query string
-func (c *Command) PrepareQueryString(q string) *string {
+func (_ *Command) PrepareQueryString(q string) *string {
 	return &q
 }
 

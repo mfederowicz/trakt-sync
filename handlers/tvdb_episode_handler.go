@@ -10,7 +10,7 @@ import (
 type TvdbEpisodeHandler struct{}
 
 // Handle to handle json list item
-func (h TvdbEpisodeHandler) Handle(options *str.Options, data *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
+func (_ TvdbEpisodeHandler) Handle(options *str.Options, data *str.ExportlistItem, findDuplicates []any, exportJSON []str.ExportlistItemJSON) ([]any, []str.ExportlistItemJSON, error) {
 	// episode export by format tvdb
 	findDuplicates = append(findDuplicates, *data.Episode.IDs.Tvdb)
 
