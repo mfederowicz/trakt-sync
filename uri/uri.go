@@ -78,13 +78,14 @@ var customTypeHandlers = map[reflect.Type]CustomTypeHandler{
 	reflect.TypeOf(RatingRangeFloat{}): handleMetaCriticRange,
 }
 
-func correctFieldTag(fieldTag string, fieldTagValue string) bool {
+// isCorrectFieldTag check if fieldTag and value not empty
+func isCorrectFieldTag(fieldTag string, fieldTagValue string) bool {
 	return fieldTag != consts.EmptyString && len(fieldTagValue) > consts.ZeroValue
 }
 
 // handleFloatRange handles the FloatRange custom type
 func handleRatingRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) error {
-	if rr, ok := fieldValue.Interface().(RatingRange); ok && correctFieldTag(fieldTag, rr.String()) {
+	if rr, ok := fieldValue.Interface().(RatingRange); ok && isCorrectFieldTag(fieldTag, rr.String()) {
 		// Remove omitempty tag from the field tag
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
@@ -95,7 +96,7 @@ func handleRatingRange(fieldValue reflect.Value, qs *url.Values, fieldTag string
 
 // handleVotesRange handles the VotesRange custom type
 func handleVotesRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) error {
-	if rr, ok := fieldValue.Interface().(VotesRange); ok && correctFieldTag(fieldTag, rr.String()) {
+	if rr, ok := fieldValue.Interface().(VotesRange); ok && isCorrectFieldTag(fieldTag, rr.String()) {
 		// Remove omitempty tag from the field tag
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
@@ -105,7 +106,7 @@ func handleVotesRange(fieldValue reflect.Value, qs *url.Values, fieldTag string)
 
 // handleTmdbRatingRange handles the TmdbRatingRange custom type
 func handleTmdbRatingRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) error {
-	if rr, ok := fieldValue.Interface().(TmdbRatingRange); ok && correctFieldTag(fieldTag, rr.String()) {
+	if rr, ok := fieldValue.Interface().(TmdbRatingRange); ok && isCorrectFieldTag(fieldTag, rr.String()) {
 		// Remove omitempty tag from the field tag
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
@@ -115,7 +116,7 @@ func handleTmdbRatingRange(fieldValue reflect.Value, qs *url.Values, fieldTag st
 
 // handleImdbVotesRange handles the ImdbVotesRange custom type
 func handleImdbVotesRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) error {
-	if rr, ok := fieldValue.Interface().(ImdbVotesRange); ok && correctFieldTag(fieldTag, rr.String()) {
+	if rr, ok := fieldValue.Interface().(ImdbVotesRange); ok && isCorrectFieldTag(fieldTag, rr.String()) {
 		// Remove omitempty tag from the field tag
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
@@ -125,14 +126,14 @@ func handleImdbVotesRange(fieldValue reflect.Value, qs *url.Values, fieldTag str
 
 // handleMetaCriticRange handles the RatingRangeFloat custom type
 func handleMetaCriticRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) error {
-	if rr, ok := fieldValue.Interface().(RatingRangeFloat); ok && correctFieldTag(fieldTag, rr.String()) {
+	if rr, ok := fieldValue.Interface().(RatingRangeFloat); ok && isCorrectFieldTag(fieldTag, rr.String()) {
 		// Remove omitempty tag from the field tag
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())
 	}
 	return nil
 }
-
+// flatOptsStruct flats structures to key=value format
 func flatOptsStruct(v reflect.Value, qs *url.Values) error {
 	// Check if the value is a pointer
 	if v.Kind() == reflect.Ptr {
@@ -170,25 +171,7 @@ func flatOptsStruct(v reflect.Value, qs *url.Values) error {
 				var value string
 				switch fieldValue.Kind() {
 				case reflect.Slice, reflect.Array:
-					if fieldValue.Len() == consts.ZeroValue {
-						value = consts.EmptyString // If the slice is empty, return an empty string
-					}
-					var values []string
-					for i := consts.ZeroValue; i < fieldValue.Len(); i++ {
-						switch fieldValue.Index(i).Kind() {
-						case reflect.String:
-							values = append(values, fieldValue.Index(i).String())
-						case reflect.Int:
-							values = append(values, strconv.FormatInt(fieldValue.Index(i).Int(), consts.BaseInt))
-						}
-					}
-					// Join the string slice into a single comma-separated string
-					if len(values) > consts.ZeroValue {
-						value = strings.Join(values, consts.SeparatorString)
-					} else {
-						value = consts.EmptyString
-					}
-
+					value = flatSliceArray(fieldValue)
 				case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 					value = fmt.Sprintf("%d", fieldValue.Int())
 				case reflect.Float32, reflect.Float64:
@@ -206,6 +189,30 @@ func flatOptsStruct(v reflect.Value, qs *url.Values) error {
 	}
 	return nil
 }
+// flatSliceArray flats slice/array struct to comm-separated format
+func flatSliceArray(fieldValue reflect.Value) string {
+	var value string
+	if fieldValue.Len() == consts.ZeroValue {
+		value = consts.EmptyString // If the slice is empty, return an empty string
+	}
+	var values []string
+	for i := consts.ZeroValue; i < fieldValue.Len(); i++ {
+		switch fieldValue.Index(i).Kind() {
+		case reflect.String:
+			values = append(values, fieldValue.Index(i).String())
+		case reflect.Int:
+			values = append(values, strconv.FormatInt(fieldValue.Index(i).Int(), consts.BaseInt))
+		}
+	}
+	// Join the string slice into a single comma-separated string
+	if len(values) > consts.ZeroValue {
+		value = strings.Join(values, consts.SeparatorString)
+	} else {
+		value = consts.EmptyString
+	}
+
+	return value
+}
 
 // isEmptyValue checks if a reflect.Value represents the zero value of its type
 func isEmptyValue(v reflect.Value) bool {
@@ -218,13 +225,16 @@ func EncodeParams(values url.Values) string {
 	if len(values) == consts.ZeroValue {
 		return consts.EmptyString
 	}
-
-	var buf strings.Builder
 	keys := make([]string, consts.ZeroValue, len(values))
 	for k := range values {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
+	return convertKeysToString(keys, values)
+}
+
+func convertKeysToString(keys []string, values url.Values) string {
+	var buf strings.Builder
 	for _, k := range keys {
 		vs := values[k]
 		for _, v := range vs {

@@ -2,19 +2,12 @@
 package cmds
 
 import (
-	"context"
-	"encoding/json"
 	"fmt"
-	"strconv"
-	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/handlers"
 	"github.com/mfederowicz/trakt-sync/printer"
-	"github.com/mfederowicz/trakt-sync/str"
-	"github.com/mfederowicz/trakt-sync/uri"
-	"github.com/mfederowicz/trakt-sync/writer"
 )
 
 var (
@@ -35,139 +28,28 @@ func peopleFunc(cmd *Command, _ ...string) error {
 	options := cmd.Options
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
-
+	var handler handlers.PeopleHandler
 	switch options.Action {
 	case "updates":
-		printer.Println("Get recently updated people")
-		date := time.Now().Format("2006-01-02T15:00Z")
-		updates, err := fetchPeoplesUpdates(client, options, date, consts.DefaultPage)
-		if err != nil {
-			return fmt.Errorf("fetch peoples updates error:%w", err)
-		}
-
-		if len(updates) == consts.ZeroValue {
-			return fmt.Errorf("empty updates lists")
-		}
-
-		if len(updates) > consts.ZeroValue {
-			printer.Printf("Found %d items \n", len(updates))
-			exportJSON := []*str.PersonItem{}
-			exportJSON = append(exportJSON, updates...)
-			print("write data to:" + options.Output)
-			jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
-			writer.WriteJSON(options, jsonData)
-		} else {
-			printer.Print("No update items to fetch\n")
-		}
-
+		handler = handlers.PeopleUpdatesHandler{}
 	case "updated_ids":
-		printer.Println("Get recently updated people Trakt IDs")
-		date := time.Now().Format("2006-01-02T15:00Z")
-		updates, err := fetchPeoplesUpdatedIDs(client, options, date, consts.DefaultPage)
-		if err != nil {
-			return fmt.Errorf("fetch peoples updated ids error:%w", err)
-		}
-
-		if len(updates) == consts.ZeroValue {
-			return fmt.Errorf("empty updates lists")
-		}
-
-		if len(updates) > consts.ZeroValue {
-			printer.Printf("Found %d items \n", len(updates))
-			exportJSON := []*int{}
-			exportJSON = append(exportJSON, updates...)
-			print("write data to:" + options.Output)
-			jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
-
-			writer.WriteJSON(options, jsonData)
-		} else {
-			printer.Print("No update items to fetch\n")
-		}
-
+		handler = handlers.PeopleUpdatedIDsHandler{}
 	case "summary":
-		if len(*_personID) == consts.ZeroValue {
-			return fmt.Errorf("set personId ie: -i john-wayne")
-		}
-		printer.Println("Get a single person")
-		result, err := fetchSinglePerson(client, options)
-		if err != nil {
-			return fmt.Errorf("fetch single person error:%w", err)
-		}
-
-		if result == nil {
-			return fmt.Errorf("empty result")
-		}
-
-		printer.Print("Found person \n")
-		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
-
-		writer.WriteJSON(options, jsonData)
-
+		handler = handlers.PeopleSummaryHandler{}
 	case "movies":
-		if len(*_personID) == consts.ZeroValue {
-			return fmt.Errorf("set personId ie: -i john-wayne")
-		}
-		printer.Println("Get movie credits")
-		result, err := fetchMovieCredits(client, options)
-		if err != nil {
-			return fmt.Errorf("fetch movie credits error:%v", err)
-		}
-
-		if result == nil {
-			return fmt.Errorf("empty result")
-		}
-
-		printer.Print("Found movie credits data \n")
-		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
-		writer.WriteJSON(options, jsonData)
-
+		handler = handlers.PeopleMoviesHandler{}
 	case "shows":
-		if len(*_personID) == consts.ZeroValue {
-			return fmt.Errorf(consts.EmptyPersonIDMsg)
-		}
-		printer.Println("Get show credits")
-		result, err := fetchShowCredits(client, options)
-		if err != nil {
-			return fmt.Errorf("fetch show credits error:%w", err)
-		}
-
-		if result == nil {
-			return fmt.Errorf(consts.EmptyResult)
-		}
-
-		printer.Print("Found show credits data \n")
-		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
-
-		writer.WriteJSON(options, jsonData)
-
+		handler = handlers.PeopleShowsHandler{}
 	case "lists":
-		if len(*_personID) == consts.ZeroValue {
-			return fmt.Errorf(consts.EmptyPersonIDMsg)
-		}
-		printer.Println("Get lists containing this person")
-		result, err := fetchListsContainingThisPerson(client, options, consts.DefaultPage)
-		if err != nil {
-			return fmt.Errorf("fetch lists error:%v", err)
-		}
-
-		if len(result) == consts.ZeroValue {
-			return fmt.Errorf("empty lists")
-		}
-
-		printer.Printf("Found %d result \n", len(result))
-		exportJSON := []*str.PersonalList{}
-		exportJSON = append(exportJSON, result...)
-		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
-
-		writer.WriteJSON(options, jsonData)
-
+		handler = handlers.PeopleListsHandler{}
 	default:
 		printer.Println("possible actions: updates, updated_ids, summary, movies, shows, lists")
 	}
+	err := handler.Handle(options, client)
+	if err != nil {
+		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s",err)
+	}
+
 	return nil
 }
 
@@ -177,141 +59,4 @@ var (
 
 func init() {
 	PeopleCmd.Run = peopleFunc
-}
-
-func fetchPeoplesUpdates(client *internal.Client, options *str.Options, startDate string, page int) ([]*str.PersonItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
-	list, resp, err := client.People.GetRecentlyUpdatedPeople(
-		context.Background(),
-		&startDate,
-		&opts,
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	// Check if there are more pages
-	pages, _ := strconv.Atoi(resp.Header.Get(internal.HeaderPaginationPageCount))
-	if client.HavePages(page, pages) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
-
-		// Fetch items from the next page
-		nextPage := page + consts.NextPageStep
-		nextPageItems, err := fetchPeoplesUpdates(client, options, startDate, nextPage)
-		if err != nil {
-			return nil, err
-		}
-
-		// Append items from the next page to the current page
-		list = append(list, nextPageItems...)
-	}
-
-	return list, nil
-}
-
-func fetchPeoplesUpdatedIDs(client *internal.Client, options *str.Options, startDate string, page int) ([]*int, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
-	list, resp, err := client.People.GetRecentlyUpdatedPeopleTraktIDs(
-		context.Background(),
-		&startDate,
-		&opts,
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	// Check if there are more pages
-	pages, _ := strconv.Atoi(resp.Header.Get(internal.HeaderPaginationPageCount))
-	if client.HavePages(page, pages) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
-
-		// Fetch items from the next page
-		nextPage := page + consts.NextPageStep
-		nextPageItems, err := fetchPeoplesUpdatedIDs(client, options, startDate, nextPage)
-		if err != nil {
-			return nil, err
-		}
-
-		// Append items from the next page to the current page
-		list = append(list, nextPageItems...)
-	}
-
-	return list, nil
-}
-
-func fetchSinglePerson(client *internal.Client, options *str.Options) (*str.Person, error) {
-	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	result, _, err := client.People.GetSinglePerson(
-		context.Background(),
-		&options.ID,
-		&opts,
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return result, nil
-}
-
-func fetchMovieCredits(client *internal.Client, options *str.Options) (*str.PersonMovies, error) {
-	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	result, _, err := client.People.GetMovieCredits(
-		context.Background(),
-		&options.ID,
-		&opts,
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return result, nil
-}
-
-func fetchShowCredits(client *internal.Client, options *str.Options) (*str.PersonShows, error) {
-	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	result, _, err := client.People.GetShowCredits(
-		context.Background(),
-		&options.ID,
-		&opts,
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return result, nil
-}
-
-func fetchListsContainingThisPerson(client *internal.Client, options *str.Options, page int) ([]*str.PersonalList, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
-	list, resp, err := client.People.GetListsContainingThisPerson(
-		context.Background(),
-		&options.ID,
-		&options.Type,
-		&options.Sort,
-		&opts,
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	pages, _ := strconv.Atoi(resp.Header.Get(internal.HeaderPaginationPageCount))
-	// Check if there are more pages
-	if client.HavePages(page, pages) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
-		// Fetch items from the next page
-		nextPage := page + consts.NextPageStep
-		nextPageItems, err := fetchListsContainingThisPerson(client, options, nextPage)
-		if err != nil {
-			return nil, err
-		}
-		// Append items from the next page to the current page
-		list = append(list, nextPageItems...)
-	}
-	return list, nil
 }
