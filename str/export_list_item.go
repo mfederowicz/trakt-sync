@@ -27,7 +27,7 @@ func (i ExportlistItemJSON) String() string {
 }
 
 // Uptime update item time fields
-func (i ExportlistItemJSON) Uptime(options *Options, data *ExportlistItem) {
+func (i *ExportlistItemJSON) Uptime(options *Options, data *ExportlistItem) {
 	switch options.Time {
 	case "watched_at":
 		i.WatchedAt = data.WatchedAt
