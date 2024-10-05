@@ -33,17 +33,8 @@ var HelpCmd = &Command{
 var helpDump = HelpCmd.Flag.Bool("godoc", false, "Dump the godoc output for the command(s)")
 
 // HelpFunc shows help message for command
-func HelpFunc(_ *Command, args ...string) error {
-	var selected []*Command
-
-	if len(args) > consts.ZeroValue {
-		want := strings.ToLower(args[0])
-		for _, cmd := range Commands {
-			if cmd.Name == want {
-				selected = append(selected, cmd)
-			}
-		}
-	}
+func HelpFunc(_ *Command, args ...string) error {	
+	selected := getSelectedFromArgs(args)
 
 	switch {
 	case *helpDump:
@@ -72,11 +63,26 @@ func HelpFunc(_ *Command, args ...string) error {
 	return nil
 }
 
+func getSelectedFromArgs(args []string) []*Command {
+	var selected []*Command
+
+	if len(args) > consts.ZeroValue {
+		want := strings.ToLower(args[0])
+		for _, cmd := range Commands {
+			if cmd.Name == want {
+				selected = append(selected, cmd)
+			}
+		}
+	}
+
+	return selected
+}
+
 func init() {
 	HelpCmd.Run = HelpFunc
 }
 
-func tabify(w io.Writer) *tabwriter.Writer {	
+func tabify(w io.Writer) *tabwriter.Writer {
 	const (
 		writerMinWidth = 0
 		writerTabWidth = 0

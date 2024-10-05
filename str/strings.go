@@ -37,15 +37,7 @@ func stringifyValue(w *bytes.Buffer, val reflect.Value) {
 	case reflect.String:
 		printer.Fprintf(w, `"%s"`, v)
 	case reflect.Slice:
-		buffer.Write(w, "[")
-		for i := consts.ZeroValue; i < v.Len(); i++ {
-			if i > consts.ZeroValue {
-				buffer.Write(w, " ")
-			}
-
-			stringifyValue(w, v.Index(i))
-		}
-		buffer.Write(w, "]")
+		stringifyvalueSlice(w, v)
 		return
 	case reflect.Struct:
 		if v.Type().Name() != "" {
@@ -57,35 +49,52 @@ func stringifyValue(w *bytes.Buffer, val reflect.Value) {
 			printer.Fprintf(w, "{%s}", v.Interface())
 			return
 		}
-		buffer.Write(w, "{")
-		var sep bool
-		for i := consts.ZeroValue; i < v.NumField(); i++ {
-			fv := v.Field(i)
-			if fv.Kind() == reflect.Ptr && fv.IsNil() {
-				continue
-			}
-			if fv.Kind() == reflect.Slice && fv.IsNil() {
-				continue
-			}
-			if fv.Kind() == reflect.Map && fv.IsNil() {
-				continue
-			}
+		stringifyValueStruct(w, v)
 
-			if sep {
-				buffer.Write(w, ", ")
-			} else {
-				sep = true
-			}
-			buffer.Write(w, v.Type().Field(i).Name)
-			buffer.Write(w, ":")
-			stringifyValue(w, fv)
-		}
-		buffer.Write(w, "}")
 	default:
 		if v.CanInterface() {
 			printer.Fprint(w, v.Interface())
 		}
 	}
+}
+
+func stringifyvalueSlice(w *bytes.Buffer, v reflect.Value) {
+	buffer.Write(w, "[")
+	for i := consts.ZeroValue; i < v.Len(); i++ {
+		if i > consts.ZeroValue {
+			buffer.Write(w, " ")
+		}
+
+		stringifyValue(w, v.Index(i))
+	}
+	buffer.Write(w, "]")
+}
+
+func stringifyValueStruct(w *bytes.Buffer, v reflect.Value) {
+	buffer.Write(w, "{")
+	var sep bool
+	for i := consts.ZeroValue; i < v.NumField(); i++ {
+		fv := v.Field(i)
+		if fv.Kind() == reflect.Ptr && fv.IsNil() {
+			continue
+		}
+		if fv.Kind() == reflect.Slice && fv.IsNil() {
+			continue
+		}
+		if fv.Kind() == reflect.Map && fv.IsNil() {
+			continue
+		}
+
+		if sep {
+			buffer.Write(w, ", ")
+		} else {
+			sep = true
+		}
+		buffer.Write(w, v.Type().Field(i).Name)
+		buffer.Write(w, ":")
+		stringifyValue(w, fv)
+	}
+	buffer.Write(w, "}")
 }
 
 // ContainString check if string exists in slice

@@ -98,26 +98,7 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 
 	options.Type = *_strType
 	options.Module = c.Name
-	switch c.Name {
-	case "people":
-		options.Action = *_action
-		options.ID = *_personID
-		options.Type = *_action
-	case "calendars":
-		options.Action = *_calAction
-		options.StartDate = *_calStartDate
-		options.Days = *_calDays
-	case "search":
-		options.Action = *_searchAction
-		options.SearchType = _searchType
-		options.SearchField = _searchField
-		options.ID = *_searchID
-		options.SearchIDType = *_searchIDType
-	case "watchlist":
-	case "collection":
-	case "history":
-		options.Format = *_format
-	}
+	options = setOptionsDependsOnModule(c.Name, options)
 
 	c.Options = &options
 
@@ -155,6 +136,31 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	}
 
 	return nil
+}
+
+func setOptionsDependsOnModule(module string, options str.Options) str.Options {
+	switch module {
+	case "people":
+		options.Action = *_action
+		options.ID = *_personID
+		options.Type = *_action
+	case "calendars":
+		options.Action = *_calAction
+		options.StartDate = *_calStartDate
+		options.Days = *_calDays
+	case "search":
+		options.Action = *_searchAction
+		options.SearchType = _searchType
+		options.SearchField = _searchField
+		options.ID = *_searchID
+		options.SearchIDType = *_searchIDType
+	case "watchlist":
+	case "collection":
+	case "history":
+		options.Format = *_format
+	}
+
+	return options
 }
 
 // BadArgs shows error if command have invalid arguments

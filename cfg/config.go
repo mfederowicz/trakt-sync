@@ -83,155 +83,29 @@ func GenUsedFlagMap() map[string]bool {
 // MergeConfigs from two sources file and flags
 func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string) (*Config, error) {
 	flagset := GenUsedFlagMap()
-	// Use values from fileConfig if present
-	if len(fileConfig.ClientID) > consts.ZeroValue && fileConfig.ClientID != defaultConfig.ClientID {
-		defaultConfig.ClientID = fileConfig.ClientID
-	}
 
-	if len(fileConfig.ClientSecret) > consts.ZeroValue && fileConfig.ClientSecret != defaultConfig.ClientSecret {
-		defaultConfig.ClientSecret = fileConfig.ClientSecret
-	}
-
-	if len(fileConfig.RedirectURI) > consts.ZeroValue && fileConfig.RedirectURI != defaultConfig.RedirectURI {
-		defaultConfig.RedirectURI = fileConfig.RedirectURI
-	}
-
-	if len(fileConfig.TokenPath) > consts.ZeroValue && fileConfig.TokenPath != defaultConfig.TokenPath {
-		defaultConfig.TokenPath = fileConfig.TokenPath
-	}
-
-	tokenPath, err := expandTilde(defaultConfig.TokenPath)
+	tokenPath, err := processOptionTokenPath(defaultConfig, fileConfig, flagConfig, flagset)
 	if err != nil {
-		return nil, fmt.Errorf("failed to expand tilde from tokenPath: %w", err)
+		return nil, fmt.Errorf("config error : %w", err)
 	}
 	defaultConfig.TokenPath = tokenPath
-
-	if len(fileConfig.ConfigPath) > consts.ZeroValue && fileConfig.ConfigPath != defaultConfig.ConfigPath {
-		defaultConfig.ConfigPath = fileConfig.ConfigPath
-	}
-
-	if len(fileConfig.Output) > consts.ZeroValue && fileConfig.Output != defaultConfig.Output {
-		defaultConfig.Output = fileConfig.Output
-	}
-
-	if len(fileConfig.Action) > consts.ZeroValue && fileConfig.Action != defaultConfig.Action {
-		defaultConfig.Action = fileConfig.Action
-	}
-
-	if fileConfig.ErrorCode != consts.ZeroValue {
-		defaultConfig.ErrorCode = fileConfig.ErrorCode
-	}
-
-	if fileConfig.WarningCode != consts.ZeroValue {
-		defaultConfig.WarningCode = fileConfig.WarningCode
-	}
-
-	if fileConfig.Verbose {
-		defaultConfig.Verbose = fileConfig.Verbose
-	}
-
-	if len(fileConfig.Type) > consts.ZeroValue && fileConfig.Type != defaultConfig.Type {
-		defaultConfig.Type = fileConfig.Type
-	}
-
-	if len(fileConfig.Sort) > consts.ZeroValue && fileConfig.Sort != defaultConfig.Sort {
-		defaultConfig.Sort = fileConfig.Sort
-	}
-
-	if len(fileConfig.Module) > consts.ZeroValue && fileConfig.Module != defaultConfig.Module {
-		defaultConfig.Module = fileConfig.Module
-	}
-
-	if len(fileConfig.Format) > consts.ZeroValue && fileConfig.Format != defaultConfig.Format {
-		defaultConfig.Format = fileConfig.Format
-	}
-
-	if len(fileConfig.UserName) > consts.ZeroValue && fileConfig.UserName != defaultConfig.UserName {
-		defaultConfig.UserName = fileConfig.UserName
-	}
-
-	if len(fileConfig.List) > consts.ZeroValue && fileConfig.List != defaultConfig.List {
-		defaultConfig.List = fileConfig.List
-	}
-
-	if fileConfig.ID == consts.EmptyString && fileConfig.ID != defaultConfig.ID {
-		defaultConfig.ID = fileConfig.ID
-	}
-
-	if fileConfig.PerPage > consts.ZeroValue && fileConfig.PerPage != defaultConfig.PerPage {
-		defaultConfig.PerPage = fileConfig.PerPage
-	}
-
-	// Override with values from flagConfig, if present
-	boolValue, err := strconv.ParseBool(flagConfig["v"])
-	if err == nil {
-		defaultConfig.Verbose = boolValue
-	}
-
-	f := "c"
-	if flagset[f] && flagConfig[f] != consts.EmptyString {
-		defaultConfig.ConfigPath = flagConfig[f]
-	} else if fileConfig.ConfigPath != consts.EmptyString {
-		defaultConfig.ConfigPath = fileConfig.ConfigPath
-	}
-
-	f = "o"
-	if flagset[f] && flagConfig[f] != consts.EmptyString {
-		defaultConfig.Output = flagConfig[f]
-	} else if fileConfig.Output != consts.EmptyString {
-		defaultConfig.Output = fileConfig.Output
-	}
-	f = "t"
-	if flagset[f] && flagConfig[f] != consts.EmptyString {
-		defaultConfig.Type = flagConfig[f]
-	} else if fileConfig.Type != consts.EmptyString {
-		defaultConfig.Type = fileConfig.Type
-	}
-
-	f = "f"
-	if flagset[f] && flagConfig[f] != consts.EmptyString {
-		defaultConfig.Format = flagConfig[f]
-	} else if fileConfig.Format != consts.EmptyString {
-		defaultConfig.Format = fileConfig.Format
-	}
-
-	f = "u"
-	if flagset[f] && flagConfig[f] != consts.EmptyString {
-		defaultConfig.UserName = flagConfig[f]
-	} else if fileConfig.UserName != consts.EmptyString {
-		defaultConfig.UserName = fileConfig.UserName
-	}
-
-	f = "l"
-	if flagset[f] && flagConfig[f] != consts.EmptyString {
-		defaultConfig.List = flagConfig[f]
-	} else if fileConfig.List != consts.EmptyString {
-		defaultConfig.List = fileConfig.List
-	}
-	f = "i"
-	if flagset[f] && flagConfig[f] != consts.EmptyString {
-		defaultConfig.ID = flagConfig[f]
-	} else if fileConfig.ID != consts.EmptyString {
-		defaultConfig.ID = fileConfig.ID
-	}
-	f = "m"
-	if flagset[f] && flagConfig[f] != consts.EmptyString {
-		defaultConfig.Module = flagConfig[f]
-	} else if fileConfig.Module != consts.EmptyString {
-		defaultConfig.Module = fileConfig.Module
-	}
-	f = "a"
-	if flagset[f] && flagConfig[f] != consts.EmptyString {
-		defaultConfig.Action = flagConfig[f]
-	} else if fileConfig.Action != consts.EmptyString {
-		defaultConfig.Action = fileConfig.Action
-	}
-	f = "s"
-	if flagset[f] && flagConfig[f] != consts.EmptyString {
-		defaultConfig.Sort = flagConfig[f]
-	} else if fileConfig.Sort != consts.EmptyString {
-		defaultConfig.Sort = fileConfig.Sort
-	}
+	defaultConfig.ClientID = processOptionClientID(defaultConfig, fileConfig, flagConfig, flagset)
+	defaultConfig.ClientSecret = processOptionClientSecret(defaultConfig, fileConfig, flagConfig, flagset)
+	defaultConfig.RedirectURI = processOptionRedirectURI(defaultConfig, fileConfig, flagConfig, flagset)
+	defaultConfig.ErrorCode = processOptionErrorCode(defaultConfig, fileConfig, flagConfig, flagset)
+	defaultConfig.WarningCode = processOptionWarningCode(defaultConfig, fileConfig, flagConfig, flagset)
+	defaultConfig.PerPage = processOptionPerPage(defaultConfig, fileConfig, flagConfig, flagset)
+	defaultConfig.Verbose = processOptionVerbose(defaultConfig, fileConfig, flagConfig, flagset)
+	defaultConfig.ConfigPath = processOptionConfigPath(defaultConfig, fileConfig, flagConfig, flagset)
+	defaultConfig.Output = processOptionOutput(defaultConfig, fileConfig, flagConfig, flagset)
+	defaultConfig.Type = processOptionType(defaultConfig, fileConfig, flagConfig, flagset)
+	defaultConfig.Format = processOptionFormat(defaultConfig, fileConfig, flagConfig, flagset)
+	defaultConfig.UserName = processOptionUsername(defaultConfig, fileConfig, flagConfig, flagset)
+	defaultConfig.List = processOptionList(defaultConfig, fileConfig, flagConfig, flagset)
+	defaultConfig.ID = processOptionID(defaultConfig, fileConfig, flagConfig, flagset)
+	defaultConfig.Module = processOptionModule(defaultConfig, fileConfig, flagConfig, flagset)
+	defaultConfig.Action = processOptionAction(defaultConfig, fileConfig, flagConfig, flagset)
+	defaultConfig.Sort = processOptionSort(defaultConfig, fileConfig, flagConfig, flagset)
 
 	err = normalizeConfig(defaultConfig)
 	if err != nil {
@@ -239,6 +113,232 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 	}
 
 	return defaultConfig, nil
+}
+
+func processOptionClientID(defaultConfig *Config, fileConfig *Config, _ map[string]string, _ map[string]bool) string {
+	// Use values from fileConfig if present
+	if len(fileConfig.ClientID) > consts.ZeroValue && fileConfig.ClientID != defaultConfig.ClientID {
+		defaultConfig.ClientID = fileConfig.ClientID
+	}
+	return defaultConfig.ClientID
+}
+
+func processOptionClientSecret(defaultConfig *Config, fileConfig *Config, _ map[string]string, _ map[string]bool) string {
+	// process if field is set in config file
+	if len(fileConfig.ClientSecret) > consts.ZeroValue && fileConfig.ClientSecret != defaultConfig.ClientSecret {
+		defaultConfig.ClientSecret = fileConfig.ClientSecret
+	}
+	return defaultConfig.ClientSecret
+}
+
+func processOptionRedirectURI(defaultConfig *Config, fileConfig *Config, _ map[string]string, _ map[string]bool) string {
+	// process if field is set in config file
+	if len(fileConfig.RedirectURI) > consts.ZeroValue && fileConfig.RedirectURI != defaultConfig.RedirectURI {
+		defaultConfig.RedirectURI = fileConfig.RedirectURI
+	}
+	return defaultConfig.RedirectURI
+}
+
+func processOptionErrorCode(defaultConfig *Config, fileConfig *Config, _ map[string]string, _ map[string]bool) int {
+	// process if field is set in config file
+	if fileConfig.ErrorCode != consts.ZeroValue {
+		defaultConfig.ErrorCode = fileConfig.ErrorCode
+	}
+	return defaultConfig.ErrorCode
+}
+
+func processOptionWarningCode(defaultConfig *Config, fileConfig *Config, _ map[string]string, _ map[string]bool) int {
+	// process if field is set in config file
+	if fileConfig.WarningCode != consts.ZeroValue {
+		defaultConfig.WarningCode = fileConfig.WarningCode
+	}
+	return defaultConfig.WarningCode
+}
+
+func processOptionPerPage(defaultConfig *Config, fileConfig *Config, _ map[string]string, _ map[string]bool) int {
+	// process if field is set in config file
+	if fileConfig.PerPage > consts.ZeroValue && fileConfig.PerPage != defaultConfig.PerPage {
+		defaultConfig.PerPage = fileConfig.PerPage
+	}
+	return defaultConfig.PerPage
+}
+
+func processOptionTokenPath(defaultConfig *Config, fileConfig *Config, _ map[string]string, _ map[string]bool) (string, error) {
+	// process if field is set in config file
+	if len(fileConfig.TokenPath) > consts.ZeroValue && fileConfig.TokenPath != defaultConfig.TokenPath {
+		defaultConfig.TokenPath = fileConfig.TokenPath
+	}
+
+	tokenPath, err := expandTilde(defaultConfig.TokenPath)
+	if err != nil {
+		return "", fmt.Errorf("failed to expand tilde from tokenPath: %w", err)
+	}
+	return tokenPath, nil
+}
+
+func processOptionVerbose(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string, _ map[string]bool) bool {
+	// process if field is set in config file
+	if fileConfig.Verbose {
+		defaultConfig.Verbose = fileConfig.Verbose
+	}
+	// process if flag is set
+	f := "v"
+	boolValue, err := strconv.ParseBool(flagConfig[f])
+	if err == nil {
+		defaultConfig.Verbose = boolValue
+	}
+	return defaultConfig.Verbose
+}
+
+func processOptionSort(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string, flagset map[string]bool) string {
+	// process if field is set in config file
+	if len(fileConfig.Sort) > consts.ZeroValue && fileConfig.Sort != defaultConfig.Sort {
+		defaultConfig.Sort = fileConfig.Sort
+	}
+	// process if flag is set
+	f := "s"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.Sort = flagConfig[f]
+	} else if fileConfig.Sort != consts.EmptyString {
+		defaultConfig.Sort = fileConfig.Sort
+	}
+	return defaultConfig.Sort
+}
+
+func processOptionAction(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string, flagset map[string]bool) string {
+	// process if field is set in config file
+	if len(fileConfig.Action) > consts.ZeroValue && fileConfig.Action != defaultConfig.Action {
+		defaultConfig.Action = fileConfig.Action
+	}
+	// process if flag is set
+	f := "a"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.Action = flagConfig[f]
+	} else if fileConfig.Action != consts.EmptyString {
+		defaultConfig.Action = fileConfig.Action
+	}
+	return defaultConfig.Action
+}
+
+func processOptionModule(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string, flagset map[string]bool) string {
+	// process if field is set in config file
+	if len(fileConfig.Module) > consts.ZeroValue && fileConfig.Module != defaultConfig.Module {
+		defaultConfig.Module = fileConfig.Module
+	}
+	// process if flag is set
+	f := "m"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.Module = flagConfig[f]
+	} else if fileConfig.Module != consts.EmptyString {
+		defaultConfig.Module = fileConfig.Module
+	}
+	return defaultConfig.Module
+}
+
+func processOptionID(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string, flagset map[string]bool) string {
+	// process if field is set in config file
+	if fileConfig.ID == consts.EmptyString && fileConfig.ID != defaultConfig.ID {
+		defaultConfig.ID = fileConfig.ID
+	}
+	// process if flag is set
+	f := "i"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.ID = flagConfig[f]
+	} else if fileConfig.ID != consts.EmptyString {
+		defaultConfig.ID = fileConfig.ID
+	}
+	return defaultConfig.ID
+}
+
+func processOptionList(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string, flagset map[string]bool) string {
+	// process if field is set in config file
+	if len(fileConfig.List) > consts.ZeroValue && fileConfig.List != defaultConfig.List {
+		defaultConfig.List = fileConfig.List
+	}
+	// process if flag is set
+	f := "l"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.List = flagConfig[f]
+	} else if fileConfig.List != consts.EmptyString {
+		defaultConfig.List = fileConfig.List
+	}
+	return defaultConfig.List
+}
+
+func processOptionUsername(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string, flagset map[string]bool) string {
+	// process if field is set in config file
+	if len(fileConfig.UserName) > consts.ZeroValue && fileConfig.UserName != defaultConfig.UserName {
+		defaultConfig.UserName = fileConfig.UserName
+	}
+	// process if flag is set
+	f := "u"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.UserName = flagConfig[f]
+	} else if fileConfig.UserName != consts.EmptyString {
+		defaultConfig.UserName = fileConfig.UserName
+	}
+
+	return defaultConfig.UserName
+}
+
+func processOptionFormat(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string, flagset map[string]bool) string {
+	// process if field is set in config file
+	if len(fileConfig.Format) > consts.ZeroValue && fileConfig.Format != defaultConfig.Format {
+		defaultConfig.Format = fileConfig.Format
+	}
+	// process if flag is set
+	f := "f"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.Format = flagConfig[f]
+	} else if fileConfig.Format != consts.EmptyString {
+		defaultConfig.Format = fileConfig.Format
+	}
+	return defaultConfig.Format
+}
+
+func processOptionType(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string, flagset map[string]bool) string {
+	// process if field is set in config file
+	if len(fileConfig.Type) > consts.ZeroValue && fileConfig.Type != defaultConfig.Type {
+		defaultConfig.Type = fileConfig.Type
+	}
+	// process if flag is set
+	f := "t"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.Type = flagConfig[f]
+	} else if fileConfig.Type != consts.EmptyString {
+		defaultConfig.Type = fileConfig.Type
+	}
+	return defaultConfig.Type
+}
+
+func processOptionOutput(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string, flagset map[string]bool) string {
+	// process if field is set in config file
+	if len(fileConfig.Output) > consts.ZeroValue && fileConfig.Output != defaultConfig.Output {
+		defaultConfig.Output = fileConfig.Output
+	}
+	// process if flag is set
+	f := "o"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.Output = flagConfig[f]
+	} else if fileConfig.Output != consts.EmptyString {
+		defaultConfig.Output = fileConfig.Output
+	}
+	return defaultConfig.Output
+}
+
+func processOptionConfigPath(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string, flagset map[string]bool) string {
+	// process if field is set in config file
+	if len(fileConfig.ConfigPath) > consts.ZeroValue && fileConfig.ConfigPath != defaultConfig.ConfigPath {
+		defaultConfig.ConfigPath = fileConfig.ConfigPath
+	}
+	// process if flag is set
+	f := "c"
+	if flagset[f] && flagConfig[f] != consts.EmptyString {
+		defaultConfig.ConfigPath = flagConfig[f]
+	} else if fileConfig.ConfigPath != consts.EmptyString {
+		defaultConfig.ConfigPath = fileConfig.ConfigPath
+	}
+	return defaultConfig.ConfigPath
 }
 
 // ReadConfigFromFile reads config from file stored on disc
