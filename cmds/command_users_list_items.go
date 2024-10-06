@@ -50,12 +50,7 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 
 	printer.Printf("Found %d user list\n", len(personalLists))
 
-	var avLists []int
-
-	for _, data := range personalLists {
-		printer.Printf("Found list id %d name '%s' with %d items own by %s\n", *data.IDs.Trakt, *data.Name, *data.ItemCount, *data.User.Name)
-		avLists = append(avLists, int(*data.IDs.Trakt))
-	}
+	avLists := getAvlistsFromPersonals(personalLists)
 
 	if intID == consts.ZeroValue {
 		return fmt.Errorf("please set personal listid")
@@ -90,6 +85,16 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 		}
 	}
 	return nil
+}
+
+func getAvlistsFromPersonals(personalLists []*str.PersonalList) []int {
+	var avLists []int
+
+	for _, data := range personalLists {
+		printer.Printf("Found list id %d name '%s' with %d items own by %s\n", *data.IDs.Trakt, *data.Name, *data.ItemCount, *data.User.Name)
+		avLists = append(avLists, int(*data.IDs.Trakt))
+	}
+	return avLists
 }
 
 var (

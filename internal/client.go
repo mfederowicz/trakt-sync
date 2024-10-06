@@ -126,9 +126,9 @@ func (c *Client) NewRequest(method, urlStr string, body any, opts ...RequestOpti
 	if err != nil {
 		return nil, err
 	}
-	
+
 	req = c.requestSetHeaders(req, body)
-	
+
 	for _, opt := range opts {
 		opt(req)
 	}
@@ -148,7 +148,7 @@ func (c *Client) requestSetHeaders(r *http.Request, body any) *http.Request {
 	if c.headers["trakt-api-key"] != nil {
 		r.Header.Set("trakt-api-key", c.headers["trakt-api-key"].(string))
 	}
-	
+
 	return r
 }
 
@@ -186,13 +186,9 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 
 	req = c.WithContext(ctx, req)
 
-	if skip := ctx.Value(skipRateLimitCheck); skip == nil {
-		// don't make further requests before Retry After.
-		if err := c.CheckRetryAfter(req); err != nil {
-			return &str.Response{
-				Response: err.Response,
-			}, err
-		}
+	skipResp, skipErr := c.skipCheck(ctx, req)
+	if skipErr != nil {
+		return skipResp, skipErr
 	}
 
 	resp, err := c.client.Do(req)
@@ -207,13 +203,10 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 		}
 
 		// If the error type is *url.Error, sanitize its URL before returning.
-		if e, ok := err.(*url.Error); ok {
-			if u, err := url.Parse(e.URL); err == nil {
-				e.URL = uri.SanitizeURL(u).String()
-				return nil, e
-			}
+		errURL := stanitizeURL(err)
+		if errURL != nil {
+			return nil, errURL
 		}
-
 		return nil, err
 	}
 
@@ -233,6 +226,27 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 	}
 
 	return response, nil
+}
+func (c *Client) skipCheck(ctx context.Context, req *http.Request) (*str.Response, error) {
+	if skip := ctx.Value(skipRateLimitCheck); skip == nil {
+		// don't make further requests before Retry After.
+		if err := c.CheckRetryAfter(req); err != nil {
+			return &str.Response{
+				Response: err.Response,
+			}, err
+		}
+	}
+	return nil, nil
+}
+
+func stanitizeURL(err error) error {
+	if e, ok := err.(*url.Error); ok {
+		if u, err := url.Parse(e.URL); err == nil {
+			e.URL = uri.SanitizeURL(u).String()
+			return e
+		}
+	}
+	return nil
 }
 
 // CheckResponse checks if api response have errors.

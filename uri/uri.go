@@ -133,6 +133,7 @@ func handleMetaCriticRange(fieldValue reflect.Value, qs *url.Values, fieldTag st
 	}
 	return nil
 }
+
 // flatOptsStruct flats structures to key=value format
 func flatOptsStruct(v reflect.Value, qs *url.Values) error {
 	// Check if the value is a pointer
@@ -166,29 +167,33 @@ func flatOptsStruct(v reflect.Value, qs *url.Values) error {
 			if fieldTag != consts.EmptyString {
 				// Remove omitempty tag from the field tag
 				fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
-
-				// Convert field value to string based on its type
-				var value string
-				switch fieldValue.Kind() {
-				case reflect.Slice, reflect.Array:
-					value = flatSliceArray(fieldValue)
-				case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-					value = fmt.Sprintf("%d", fieldValue.Int())
-				case reflect.Float32, reflect.Float64:
-					value = fmt.Sprintf("%.2f", fieldValue.Float())
-				case reflect.String:
-					value = fieldValue.String()
-				}
-
-				// Add field to query string only if it's non-empty
-				if value != consts.EmptyString && !isEmptyValue(fieldValue) {
-					qs.Add(fieldTag, value)
-				}
+				flatOptsOtherTypes(qs, fieldTag, fieldValue)
 			}
 		}
 	}
 	return nil
 }
+
+func flatOptsOtherTypes(qs *url.Values, fieldTag string, fieldValue reflect.Value) {
+	// Convert field value to string based on its type
+	var value string
+	switch fieldValue.Kind() {
+	case reflect.Slice, reflect.Array:
+		value = flatSliceArray(fieldValue)
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		value = fmt.Sprintf("%d", fieldValue.Int())
+	case reflect.Float32, reflect.Float64:
+		value = fmt.Sprintf("%.2f", fieldValue.Float())
+	case reflect.String:
+		value = fieldValue.String()
+	}
+
+	// Add field to query string only if it's non-empty
+	if value != consts.EmptyString && !isEmptyValue(fieldValue) {
+		qs.Add(fieldTag, value)
+	}
+}
+
 // flatSliceArray flats slice/array struct to comm-separated format
 func flatSliceArray(fieldValue reflect.Value) string {
 	var value string
