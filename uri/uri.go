@@ -158,21 +158,46 @@ func flatOptsStruct(v reflect.Value, qs *url.Values) error {
 		}
 
 		// Process struct types
-		if fieldValue.Kind() == reflect.Struct {
-			if err := flatOptsStruct(fieldValue, qs); err != nil {
-				return err
-			}
-		} else {
-			fieldTag := fieldType.Tag.Get("url")
-			if fieldTag != consts.EmptyString {
-				// Remove omitempty tag from the field tag
-				fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
-				flatOptsOtherTypes(qs, fieldTag, fieldValue)
-			}
-		}
+		processStructTypes(fieldValue,fieldType,qs)
 	}
 	return nil
 }
+
+func processStructTypes(fieldValue reflect.Value, fieldType reflect.StructField, qs *url.Values) error {
+    if isStruct(fieldValue) {
+        return processStructField(fieldValue, qs)
+    }
+    processOtherFieldTypes(fieldValue, fieldType, qs)
+    return nil
+}
+
+// Helper function to process non-struct fields
+func processOtherFieldTypes(fieldValue reflect.Value, fieldType reflect.StructField, qs *url.Values) {
+    fieldTag := fieldType.Tag.Get("url")
+    if fieldTag != consts.EmptyString {
+        fieldTag = sanitizeFieldTag(fieldTag)
+        flatOptsOtherTypes(qs, fieldTag, fieldValue)
+    }
+}
+
+// Helper function to sanitize the field tag (removes "omitempty" and similar parts)
+func sanitizeFieldTag(fieldTag string) string {
+    return strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
+}
+
+// Helper function to process struct fields
+func processStructField(fieldValue reflect.Value, qs *url.Values) error {
+    if err := flatOptsStruct(fieldValue, qs); err != nil {
+        return err
+    }
+    return nil
+}
+
+// Helper function to check if the field is a struct
+func isStruct(fieldValue reflect.Value) bool {
+    return fieldValue.Kind() == reflect.Struct
+}
+
 
 func flatOptsOtherTypes(qs *url.Values, fieldTag string, fieldValue reflect.Value) {
 	// Convert field value to string based on its type

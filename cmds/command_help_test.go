@@ -13,6 +13,15 @@ import (
 	"github.com/spf13/afero"
 )
 
+type TestsList struct {
+	Fs     afero.Fs
+	Desc   string
+	Client *internal.Client
+	Config *cfg.Config
+	Args   []string
+	Regex  []string
+}
+
 func TestHelp(t *testing.T) {
 	AppFs = afero.NewMemMapFs()
 	tmpPath := "/tmp-iofs/"
@@ -24,14 +33,39 @@ func TestHelp(t *testing.T) {
 	c.ClientID = "a"
 	c.ClientSecret = "b"
 	c.TokenPath = tmpPath + "/token.json"
-	tests := []struct {
-		Fs     afero.Fs
-		Desc   string
-		Client *internal.Client
-		Config *cfg.Config
-		Args   []string
-		Regex  []string
-	}{
+	tests := genTestsList(c)
+	processTests(t, tests)
+}
+
+func processTests(t *testing.T, tests []TestsList) {
+	for _, test := range tests {
+		buf := new(bytes.Buffer)
+		stdout = buf
+		err := HelpCmd.Exec(test.Fs, test.Client, test.Config, test.Args)
+		if err != nil {
+			t.Errorf("%s", err)
+		}
+
+		out := buf.String()
+		processTestRegexp(test, t, out)
+	}
+}
+
+func processTestRegexp(test TestsList, t *testing.T, out string) {
+	for i, r := range test.Regex {
+		matched, err := regexp.MatchString(r, out)
+		if err != nil {
+			t.Errorf("%s: %q: %s", r, err, r)
+		}
+		if !matched {
+			t.Errorf("%s: regexp[%d] failed: %q\nOutput:\n%s", test.Desc, i, r, out)
+		}
+	}
+}
+
+func genTestsList(c *cfg.Config) []TestsList {
+
+	return []TestsList{
 		{
 			Fs:     AppFs,
 			Desc:   "Usage",
@@ -67,23 +101,4 @@ func TestHelp(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
-		buf := new(bytes.Buffer)
-		stdout = buf
-		err := HelpCmd.Exec(test.Fs, test.Client, test.Config, test.Args)
-		if err != nil {
-			t.Errorf("%s", err)
-		}
-
-		out := buf.String()
-		for i, r := range test.Regex {
-			matched, err := regexp.MatchString(r, out)
-			if err != nil {
-				t.Errorf("%s: %q: %s", r, err, r)
-			}
-			if !matched {
-				t.Errorf("%s: regexp[%d] failed: %q\nOutput:\n%s", test.Desc, i, r, out)
-			}
-		}
-	}
 }

@@ -150,6 +150,10 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 	str.Headers["Authorization"] = "Bearer " + token.AccessToken
 	str.Headers["trakt-api-key"] = config.ClientID
 
+	if len(str.Headers["Authorization"].(string)) == consts.ZeroValue && len(str.Headers["trakt-api-key"].(string)) == consts.ZeroValue {
+		return str.Options{}, fmt.Errorf("no valid Authorization header")
+	}
+
 	// Check if the provided module exists in ModuleConfig
 	moduleConfig, ok := ModuleConfig[options.Module]
 	if !ok {
@@ -161,7 +165,15 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 	if !IsValidConfigType(moduleConfig.Type, options.Type) {
 		return str.Options{}, fmt.Errorf("type '%s' is not valid for module '%s'", options.Type, options.Module)
 	}
+	options = optionsFromModuleConfig(moduleConfig, options)
+	options.Headers = str.Headers
+	options.Token = *token
+	options.Output = optionsFromConfigOutput(options)
 
+	return *options, nil
+}
+
+func optionsFromModuleConfig(moduleConfig OptionsConfig, options *str.Options) *str.Options {
 	if !IsValidConfigType(moduleConfig.Format, options.Format) {
 		options.Format = "imdb"
 		printer.Println("Forcing format to imdb")
@@ -172,21 +184,11 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 		printer.Println("Forcing sort to rank")
 	}
 
-	options.Output = optionsFromConfigOutput(options)
-
 	if options.Type == "episodes" && options.Format == "imdb" {
 		options.Format = "tmdb"
 		printer.Println("Forcing format to tmdb for type episode")
 	}
-
-	if len(str.Headers["Authorization"].(string)) == consts.ZeroValue && len(str.Headers["trakt-api-key"].(string)) == consts.ZeroValue {
-		return str.Options{}, fmt.Errorf("no valid Authorization header")
-	}
-
-	options.Headers = str.Headers
-	options.Token = *token
-
-	return *options, nil
+	return options
 }
 
 func optionsFromConfigOutput(options *str.Options) string {
@@ -261,16 +263,16 @@ func readTokenFromFile(fs afero.Fs, filePath string) (*str.Token, error) {
 
 // GetOptionTime config Time depends on Module name
 func GetOptionTime(options *str.Options) string {
-	if options.Module == "history" {
+	switch options.Module {
+	case "history":
 		options.Time = "watched_at"
-	} else if options.Module == "watchlist" {
+	case "watchlist", "collection":
 		options.Time = "listed_at"
-	} else if options.Module == "collection" {
-		options.Time = "collected_at"
-	} else if options.UserName != "" {
-		options.Time = "listed_at"
+	default:
+		if options.UserName != "" {
+			options.Time = "listed_at"
+		}
 	}
-
 	return options.Time
 }
 

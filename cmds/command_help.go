@@ -33,31 +33,20 @@ var HelpCmd = &Command{
 var helpDump = HelpCmd.Flag.Bool("godoc", false, "Dump the godoc output for the command(s)")
 
 // HelpFunc shows help message for command
-func HelpFunc(_ *Command, args ...string) error {	
+func HelpFunc(_ *Command, args ...string) error {
 	selected := getSelectedFromArgs(args)
 
 	switch {
 	case *helpDump:
-		result := render(stdout, docTemplate, Commands)
-		if result != nil {
-			return fmt.Errorf(consts.ErrorRender, result)
-		}
+		return render(stdout, docTemplate, Commands)
 	case len(selected) < len(args):
 		printer.Fprintf(stdout, "error: unknown command %q\n", args[0])
-		result := render(stdout, helpTemplate, HelpCmd)
-		if result != nil {
-			return fmt.Errorf(consts.ErrorRender, result)
-		}
+		return render(stdout, helpTemplate, HelpCmd)
 	case len(selected) == consts.ZeroValue:
-		result := render(stdout, usageTemplate, Commands)
-		if result != nil {
-			return fmt.Errorf(consts.ErrorRender, result)
-		}
+		return render(stdout, usageTemplate, Commands)
 	case len(selected) == consts.OneValue:
-		result := render(stdout, helpTemplate, selected[0])
-		if result != nil {
-			return fmt.Errorf("error render: %w", result)
-		}
+		return render(stdout, helpTemplate, selected[0])
+
 	}
 
 	return nil
