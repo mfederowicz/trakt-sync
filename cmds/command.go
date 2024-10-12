@@ -119,23 +119,19 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 				options.UserName, options.Module, options.Type, options.PerPage, options.Format, options.Action, options.Sort),
 		)
 	}
-	defer func() error {
+	defer func() {
 		if r := recover(); r != nil {
 			if _, ok := r.(fatal); ok {
-				return fmt.Errorf("fatal error")
+				err = fmt.Errorf("fatal error")
+			} else {
+				err = fmt.Errorf("panic error:%s", r)
 			}
-			return fmt.Errorf("panic error:%s", r)
 		}
-		return nil
 	}()
 
 	err = c.Run(c, c.Flag.Args()...)
 
-	if err != nil {
-		return fmt.Errorf("%s", err)
-	}
-
-	return nil
+	return err
 }
 
 func setOptionsDependsOnModule(module string, options str.Options) str.Options {
