@@ -20,12 +20,19 @@ const (
 	clientNewRequestFatal = "client.NewRequest returned error: %v"
 )
 
+type TestSetup struct {
+    Client    *Client
+    Mux       *http.ServeMux
+    ServerURL string
+    Teardown  func()
+}
+
 // setup sets up a test HTTP server along with a trakt.Client that is
 // configured to talk to that test server. Tests should register handlers on
 // mux which provide mock responses for the API method being tested.
-func setup() (client *Client, mux *http.ServeMux, serverURL string, teardown func()) {
+func setup() *TestSetup {
 	// mux is the HTTP request multiplexer used with the test server.
-	mux = http.NewServeMux()
+	mux := http.NewServeMux()
 	apiHandler := http.NewServeMux()
 	apiHandler.Handle(baseURLPath+"/", http.StripPrefix(baseURLPath, mux))
 	apiHandler.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
@@ -37,11 +44,17 @@ func setup() (client *Client, mux *http.ServeMux, serverURL string, teardown fun
 
 	// client is the Trakt client being tested and is
 	// configured to use test server.
-	client = NewClient(nil)
+	client := NewClient(nil)
 	uri, _ := url.Parse(server.URL + baseURLPath + "/")
 	client.BaseURL = uri
 
-	return client, mux, server.URL, server.Close
+	return &TestSetup{
+        Client:    client,
+        Mux:       mux,
+        ServerURL: server.URL,
+        Teardown:  server.Close,
+    }
+	
 }
 
 func TestNewRequest(t *testing.T) {
@@ -71,7 +84,11 @@ func testMethod(t *testing.T, r *http.Request, want string) {
 }
 
 func TestBareDo_returnsOpenBody(t *testing.T) {
-	client, mux, _, teardown := setup()
+	testSetup := setup()
+	client := testSetup.Client
+	mux := testSetup.Mux 
+	teardown := testSetup.Teardown
+	
 	defer teardown()
 
 	expectedBody := "Hello from the other side !"
@@ -105,7 +122,11 @@ func TestBareDo_returnsOpenBody(t *testing.T) {
 }
 
 func TestBareDo_rate_limit_reset(t *testing.T) {
-	client, mux, _, teardown := setup()
+	testSetup := setup()
+	client := testSetup.Client
+	mux := testSetup.Mux 
+	teardown := testSetup.Teardown
+
 	defer teardown()
 
 	expectedBody := "Hello from the other side !"
