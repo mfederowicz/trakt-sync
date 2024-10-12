@@ -62,29 +62,36 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 
 	printer.Printf("ListId to fetch:%d\n", intID)
 
+	options.Output = getOutputForUsersListItems(options)
+
+	options.ID = strconv.Itoa(intID)
+	itemsExportData, _, itemsErr := fetchUsersPersonalList(client, options)
+	
+	if itemsErr != nil {
+		return fmt.Errorf("Users personal list error %s\n", itemsErr)
+	}
+
+	if len(itemsExportData) == consts.ZeroValue {
+		return fmt.Errorf("No %s items in list %d to fetch\n", options.Type, intID)
+	}
+
+	printer.Printf("Found %d items \n", len(itemsExportData))
+	exportJSON := []*str.UserListItem{}
+	exportJSON = append(exportJSON, itemsExportData...)
+	print("write data to:" + options.Output)
+	jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
+	writer.WriteJSON(options, jsonData)
+
+	return nil
+}
+
+func getOutputForUsersListItems(options *str.Options) string {
 	if len(*_output) > consts.ZeroValue {
 		options.Output = *_output
 	} else {
 		options.Output = fmt.Sprintf("export_%s_%s.json", options.Module, options.Type)
 	}
-
-	if intID > consts.ZeroValue && str.ContainInt(intID, avLists) {
-		options.ID = strconv.Itoa(intID)
-		itemsExportData, _, itemsErr := fetchUsersPersonalList(client, options)
-		if itemsErr == nil {
-			if len(itemsExportData) > consts.ZeroValue {
-				printer.Printf("Found %d items \n", len(itemsExportData))
-				exportJSON := []*str.UserListItem{}
-				exportJSON = append(exportJSON, itemsExportData...)
-				print("write data to:" + options.Output)
-				jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
-				writer.WriteJSON(options, jsonData)
-			} else {
-				printer.Printf("No %s items in list %d to fetch\n", options.Type, intID)
-			}
-		}
-	}
-	return nil
+	return options.Output
 }
 
 func getAvlistsFromPersonals(personalLists []*str.PersonalList) []int {

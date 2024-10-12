@@ -26,7 +26,8 @@ func Stringify(message any) string {
 
 // stringifyValue was heavily inspired by the goprotobuf library.
 func stringifyValue(w *bytes.Buffer, val reflect.Value) {
-	if val.Kind() == reflect.Ptr && val.IsNil() {
+	// Handle nil pointers
+	if isNilPointer(val) {
 		buffer.Write(w, "<nil>")
 		return
 	}
@@ -40,22 +41,31 @@ func stringifyValue(w *bytes.Buffer, val reflect.Value) {
 		stringifyvalueSlice(w, v)
 		return
 	case reflect.Struct:
-		if v.Type().Name() != "" {
-			buffer.Write(w, v.Type().String())
-		}
-
-		// special handling of Timestamp values
-		if v.Type() == timestampType {
-			printer.Fprintf(w, "{%s}", v.Interface())
-			return
-		}
-		stringifyValueStruct(w, v)
-
+		stringifyStructValue(w, v)
 	default:
 		if v.CanInterface() {
 			printer.Fprint(w, v.Interface())
 		}
 	}
+}
+
+func stringifyStructValue(w *bytes.Buffer, v reflect.Value) {
+	if v.Type().Name() != "" {
+		buffer.Write(w, v.Type().String())
+	}
+
+	// special handling of Timestamp values
+	if v.Type() == timestampType {
+		printer.Fprintf(w, "{%s}", v.Interface())
+		return
+	}
+	stringifyValueStruct(w, v)
+
+}
+
+// Helper function to check if a value is a nil pointer
+func isNilPointer(val reflect.Value) bool {
+	return val.Kind() == reflect.Ptr && val.IsNil()
 }
 
 func stringifyvalueSlice(w *bytes.Buffer, v reflect.Value) {
@@ -75,13 +85,8 @@ func stringifyValueStruct(w *bytes.Buffer, v reflect.Value) {
 	var sep bool
 	for i := consts.ZeroValue; i < v.NumField(); i++ {
 		fv := v.Field(i)
-		if fv.Kind() == reflect.Ptr && fv.IsNil() {
-			continue
-		}
-		if fv.Kind() == reflect.Slice && fv.IsNil() {
-			continue
-		}
-		if fv.Kind() == reflect.Map && fv.IsNil() {
+		// Skip nil fields
+		if isNilValue(fv) {
 			continue
 		}
 
@@ -95,6 +100,15 @@ func stringifyValueStruct(w *bytes.Buffer, v reflect.Value) {
 		stringifyValue(w, fv)
 	}
 	buffer.Write(w, "}")
+}
+
+func isNilValue(fv reflect.Value) bool {
+	switch fv.Kind() {
+	case reflect.Ptr, reflect.Slice, reflect.Map:
+		return fv.IsNil()
+	default:
+		return false
+	}
 }
 
 // ContainString check if string exists in slice

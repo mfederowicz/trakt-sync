@@ -77,15 +77,19 @@ type Command struct {
 	exit    int
 }
 
+// Helper function to handle the error
+func handleHelpError(err error) {
+	if err != nil {
+		printer.Printf("error:%s", err)
+	}
+}
+
 // Exec core command function
 func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config, args []string) error {
 	c.Client = client
 	c.Config = config
 	c.Flag.Usage = func() {
-		err := HelpFunc(c, c.Name)
-		if err != nil {
-			printer.Printf("error:%s", err)
-		}
+		handleHelpError(HelpFunc(c, c.Name))
 	}
 	c.registerGlobalFlagsInSet(&c.Flag)
 	_ = c.Flag.Parse(args)
@@ -105,20 +109,9 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	if !c.ValidFlags() {
 		return fmt.Errorf("invalid flags")
 	}
-
-	if options.Verbose {
-		printer.Println("Authorization header:" + options.Headers["Authorization"].(string))
-		printer.Println("trakt-api-key header:" + options.Headers["trakt-api-key"].(string))
-		printer.Println("token expiration in seconds:" + strconv.Itoa(options.Token.ExpiritySeconds()))
-		printer.Println("Extended info:" + *_extendedInfo)
-		if len(options.Module) > consts.ZeroValue {
-			printer.Println("selected module:" + options.Module)
-		}
-		printer.Println(
-			str.Format("selected user: {0}, module: {1}, type: {2}, per_page: {3}, format: {4}, action: {5}, sort: {6}",
-				options.UserName, options.Module, options.Type, options.PerPage, options.Format, options.Action, options.Sort),
-		)
-	}
+	
+	processVerbose(&options)
+	
 	defer func() {
 		if r := recover(); r != nil {
 			if _, ok := r.(fatal); ok {
@@ -132,6 +125,23 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	err = c.Run(c, c.Flag.Args()...)
 
 	return err
+}
+
+func processVerbose(options *str.Options) {
+	if options.Verbose {
+		printer.Println("Authorization header:" + options.Headers["Authorization"].(string))
+		printer.Println("trakt-api-key header:" + options.Headers["trakt-api-key"].(string))
+		printer.Println("token expiration in seconds:" + strconv.Itoa(options.Token.ExpiritySeconds()))
+		printer.Println("Extended info:" + *_extendedInfo)
+		if len(options.Module) > consts.ZeroValue {
+			printer.Println("selected module:" + options.Module)
+		}
+		printer.Println(
+			str.Format("selected user: {0}, module: {1}, type: {2}, per_page: {3}, format: {4}, action: {5}, sort: {6}",
+				options.UserName, options.Module, options.Type, options.PerPage, options.Format, options.Action, options.Sort),
+		)
+	}
+
 }
 
 func setOptionsDependsOnModule(module string, options str.Options) str.Options {
