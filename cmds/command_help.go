@@ -46,9 +46,7 @@ func HelpFunc(_ *Command, args ...string) error {
 		return render(stdout, usageTemplate, Commands)
 	case len(selected) == consts.OneValue:
 		return render(stdout, helpTemplate, selected[0])
-
 	}
-
 	return nil
 }
 

@@ -60,7 +60,6 @@ func stringifyStructValue(w *bytes.Buffer, v reflect.Value) {
 		return
 	}
 	stringifyValueStruct(w, v)
-
 }
 
 // Helper function to check if a value is a nil pointer

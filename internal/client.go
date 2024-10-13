@@ -221,7 +221,6 @@ func handleBareDoError(ctx context.Context, err error) (*str.Response, error) {
 
 	// Return the original error if URL sanitization fails.
 	return nil, err
-
 }
 
 func updateRateLimitReset(c *Client, errCheck error) {

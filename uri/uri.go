@@ -137,67 +137,86 @@ func handleMetaCriticRange(fieldValue reflect.Value, qs *url.Values, fieldTag st
 // flatOptsStruct flats structures to key=value format
 func flatOptsStruct(v reflect.Value, qs *url.Values) error {
 	// Check if the value is a pointer
-	if v.Kind() == reflect.Ptr {
-		// Dereference the pointer to get the underlying value
-		v = v.Elem()
-	}
+	v = checkValue(v)
 
 	for i := consts.ZeroValue; i < v.NumField(); i++ {
 		fieldValue := v.Field(i)
 		fieldType := v.Type().Field(i)
 
 		// Check if the field value is a custom type
-		if handler, ok := customTypeHandlers[fieldValue.Type()]; ok {
-			fieldTag := fieldType.Tag.Get("url")
-			err := handler(fieldValue, qs, fieldTag)
-			if err != nil {
-				return err
-			}
+		handled, err := processCustomType(fieldValue, fieldType, qs)
+		if err != nil {
+			return err
+		}
 
+		// If the custom type was handled, continue to the next field
+		if handled {
 			continue
 		}
 
 		// Process struct types
-		processStructTypes(fieldValue,fieldType,qs)
+		if err := processStructTypes(fieldValue, fieldType, qs); err != nil {
+			return err
+		}
 	}
 	return nil
 }
 
+func processCustomType(fieldValue reflect.Value, fieldType reflect.StructField, qs *url.Values) (bool, error) {
+	if handler, ok := customTypeHandlers[fieldValue.Type()]; ok {
+		fieldTag := fieldType.Tag.Get("url")
+		if err := handler(fieldValue, qs, fieldTag); err != nil {
+			return false, err
+		}
+		return true, nil // returns true indicating the custom type was handled
+	}
+	return false, nil // returns false if the custom type was not handled
+}
+
+func checkValue(v reflect.Value) reflect.Value {
+	if v.Kind() == reflect.Ptr {
+		// Dereference the pointer to get the underlying value
+		v = v.Elem()
+	}
+
+	return v
+}
+
 func processStructTypes(fieldValue reflect.Value, fieldType reflect.StructField, qs *url.Values) error {
-    if isStruct(fieldValue) {
-        return processStructField(fieldValue, qs)
-    }
-    processOtherFieldTypes(fieldValue, fieldType, qs)
-    return nil
+	if isStruct(fieldValue) {
+		return processStructField(fieldValue, qs)
+	}
+	processOtherFieldTypes(fieldValue, fieldType, qs)
+	return nil
 }
 
 // Helper function to process non-struct fields
 func processOtherFieldTypes(fieldValue reflect.Value, fieldType reflect.StructField, qs *url.Values) {
-    fieldTag := fieldType.Tag.Get("url")
-    if fieldTag != consts.EmptyString {
-        fieldTag = sanitizeFieldTag(fieldTag)
-        flatOptsOtherTypes(qs, fieldTag, fieldValue)
-    }
+	fieldTag := fieldType.Tag.Get("url")
+	if fieldTag != consts.EmptyString {
+		fieldTag = sanitizeFieldTag(fieldTag)
+		flatOptsOtherTypes(qs, fieldTag, fieldValue)
+	}
 }
 
 // Helper function to sanitize the field tag (removes "omitempty" and similar parts)
 func sanitizeFieldTag(fieldTag string) string {
-    return strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
+	return strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 }
 
 // Helper function to process struct fields
 func processStructField(fieldValue reflect.Value, qs *url.Values) error {
-    if err := flatOptsStruct(fieldValue, qs); err != nil {
-        return err
-    }
-    return nil
+	err := flatOptsStruct(fieldValue, qs)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // Helper function to check if the field is a struct
 func isStruct(fieldValue reflect.Value) bool {
-    return fieldValue.Kind() == reflect.Struct
+	return fieldValue.Kind() == reflect.Struct
 }
-
 
 func flatOptsOtherTypes(qs *url.Values, fieldTag string, fieldValue reflect.Value) {
 	// Convert field value to string based on its type

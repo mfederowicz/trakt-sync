@@ -141,7 +141,6 @@ func processVerbose(options *str.Options) {
 				options.UserName, options.Module, options.Type, options.PerPage, options.Format, options.Action, options.Sort),
 		)
 	}
-
 }
 
 func setOptionsDependsOnModule(module string, options str.Options) str.Options {
