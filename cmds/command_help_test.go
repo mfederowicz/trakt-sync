@@ -64,7 +64,6 @@ func processTestRegexp(test TestsList, t *testing.T, out string) {
 }
 
 func genTestsList(c *cfg.Config) []TestsList {
-
 	return []TestsList{
 		{
 			Fs:     AppFs,
@@ -100,5 +99,4 @@ func genTestsList(c *cfg.Config) []TestsList {
 			},
 		},
 	}
-
 }

@@ -53,8 +53,7 @@ func setup() *TestSetup {
         Mux:       mux,
         ServerURL: server.URL,
         Teardown:  server.Close,
-    }
-	
+    }	
 }
 
 func TestNewRequest(t *testing.T) {

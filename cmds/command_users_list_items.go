@@ -68,11 +68,11 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 	itemsExportData, _, itemsErr := fetchUsersPersonalList(client, options)
 	
 	if itemsErr != nil {
-		return fmt.Errorf("Users personal list error %s\n", itemsErr)
+		return fmt.Errorf("users personal list error %s", itemsErr)
 	}
 
 	if len(itemsExportData) == consts.ZeroValue {
-		return fmt.Errorf("No %s items in list %d to fetch\n", options.Type, intID)
+		return fmt.Errorf("no %s items in list %d to fetch", options.Type, intID)
 	}
 
 	printer.Printf("Found %d items \n", len(itemsExportData))
