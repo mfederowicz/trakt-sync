@@ -194,20 +194,7 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 	resp, err := c.client.Do(req)
 
 	if err != nil {
-		// If we got an error, and the context has been canceled,
-		// the context's error is probably more useful.
-		select {
-		case <-ctx.Done():
-			return nil, ctx.Err()
-		default:
-		}
-
-		// If the error type is *url.Error, sanitize its URL before returning.
-		errURL := stanitizeURL(err)
-		if errURL != nil {
-			return nil, errURL
-		}
-		return nil, err
+		return handleBareDoError(ctx, err)
 	}
 
 	response := c.NewResponse(resp)
@@ -215,17 +202,35 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 	errCheck := c.CheckResponse(resp)
 	if errCheck != nil {
 		defer resp.Body.Close()
-
-		// Update rate limit reset.
-		rerr, ok := errCheck.(*AbuseRateLimitError)
-		if ok && rerr.RetryAfter != nil {
-			c.rateMu.Lock()
-			c.RateLimitReset = time.Now().Add(*rerr.RetryAfter)
-			c.rateMu.Unlock()
-		}
+		updateRateLimitReset(c, errCheck)
 	}
 
 	return response, nil
+}
+
+func handleBareDoError(ctx context.Context, err error) (*str.Response, error) {
+	// If the context has been canceled, return its error.
+	if ctx.Err() != nil {
+		return nil, ctx.Err()
+	}
+
+	// Try to sanitize the URL in the error and return the sanitized error if successful.
+	if sanitizedErr := sanitizeURL(err); sanitizedErr != nil {
+		return nil, sanitizedErr
+	}
+
+	// Return the original error if URL sanitization fails.
+	return nil, err
+
+}
+
+func updateRateLimitReset(c *Client, errCheck error) {
+	rerr, ok := errCheck.(*AbuseRateLimitError)
+	if ok && rerr.RetryAfter != nil {
+		c.rateMu.Lock()
+		c.RateLimitReset = time.Now().Add(*rerr.RetryAfter)
+		c.rateMu.Unlock()
+	}
 }
 func (c *Client) skipCheck(ctx context.Context, req *http.Request) (*str.Response, error) {
 	if skip := ctx.Value(skipRateLimitCheck); skip == nil {
@@ -239,7 +244,7 @@ func (c *Client) skipCheck(ctx context.Context, req *http.Request) (*str.Respons
 	return nil, nil
 }
 
-func stanitizeURL(err error) error {
+func sanitizeURL(err error) error {
 	if e, ok := err.(*url.Error); ok {
 		if u, err := url.Parse(e.URL); err == nil {
 			e.URL = uri.SanitizeURL(u).String()
