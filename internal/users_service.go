@@ -25,7 +25,7 @@ func (u *UsersService) GetItemstOnAPersonalList(ctx context.Context, id *string,
 	} else {
 		url = "users/me/lists/watchlist/items/movies"
 	}
-
+	printer.Println("personal list url:" + url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err

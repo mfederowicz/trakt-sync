@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -109,9 +110,9 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	if !c.ValidFlags() {
 		return fmt.Errorf("invalid flags")
 	}
-	
+
 	processVerbose(&options)
-	
+
 	defer func() {
 		if r := recover(); r != nil {
 			if _, ok := r.(fatal); ok {
@@ -335,6 +336,10 @@ func (*Command) PrepareQueryString(q string) *string {
 
 // UpdateOptionsWithCommandFlags update options depends on command flags
 func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Options {
+	if len(*_userName) > consts.ZeroValue {
+		options.UserName = *_userName
+	}
+
 	if len(*_searchQuery) > consts.ZeroValue {
 		options.Query = *c.PrepareQueryString(*_searchQuery)
 	}
@@ -353,5 +358,42 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		options.Output = cfg.GetOutputForModule(options)
 	}
 
+	if len(*_startDate) > consts.ZeroValue {
+		options.StartDate = convertDateString(*_startDate, "2006-01-02T15:00Z")
+	} else {
+		options.StartDate = time.Now().Format("2006-01-02T15:00Z")
+	}
+
 	return options
 }
+
+// convertDateString takes a date string and converts it to date time format,
+// if empty return current date
+func convertDateString(dateStr string, outputFormat string) string {
+	// Parse the input date string using YYYY-MM-DD
+	parsedDate, err := time.Parse("2006-01-02", dateStr)
+	if err != nil {
+		return time.Now().Format("2006-01-02T15:00Z")
+	}
+
+	// Get the current time
+	currentTime := time.Now()
+
+	// Combine the parsed date with the current time's hour, minute, second
+	finalDateTime := time.Date(
+		parsedDate.Year(),
+		parsedDate.Month(),
+		parsedDate.Day(),
+		currentTime.Hour(),
+		currentTime.Minute(),
+		currentTime.Second(),
+		currentTime.Nanosecond(),
+		currentTime.Location(),
+	)
+	
+
+	// Format the parsed time into the output format
+	formattedDate := finalDateTime.Format(outputFormat)
+	return formattedDate
+}
+

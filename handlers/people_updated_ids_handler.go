@@ -21,8 +21,8 @@ type PeopleUpdatedIDsHandler struct{}
 
 // Handle to handle people: updated_ids action
 func (p PeopleUpdatedIDsHandler) Handle(options *str.Options, client *internal.Client) error {
-	printer.Println("Get recently updated people Trakt IDs")
-	date := time.Now().Format("2006-01-02T15:00Z")
+	printer.Println("Get recently updated people Trakt IDs for date:"+options.StartDate)
+	date := options.StartDate
 	updates, err := p.fetchPeoplesUpdatedIDs(client, options, date, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("fetch peoples updated ids error:%w", err)
