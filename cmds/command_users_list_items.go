@@ -35,7 +35,7 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 	options := cmd.Options
 	client := cmd.Client
 	intID, _ := strconv.Atoi(*_listID)
-
+	options = cmd.UpdateOptionsWithCommandFlags(options)
 	printer.Println("fetch private lists for:" + options.UserName)
 
 	username = options.UserName
@@ -66,7 +66,7 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 
 	options.ID = strconv.Itoa(intID)
 	itemsExportData, _, itemsErr := fetchUsersPersonalList(client, options)
-	
+
 	if itemsErr != nil {
 		return fmt.Errorf("users personal list error %s", itemsErr)
 	}

@@ -55,34 +55,85 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 
 ### Sample export usage
 
-#### Export all movies from watchlist:
-
-```console
-$ ./trakt-sync watchlist -t movies -f tmdb -> export_watchlist_movies_tmdb.json 
-$ ./trakt-sync watchlist -t movies -f imdb -> export_watchlist_movies_imdb.json
-```
-
 #### Export all tvshows from the watching history:
-
 ```console
 $ ./trakt-sync history -t shows -> export_history_shows_imdb.json
 ```
 
 #### Export all episodes from the watching history:
-
 ```console
 $ ./trakt-sync history -t episodes -f tmdb -> export_history_episodes_tmdb.json
+```
+```console
 $ ./trakt-sync history -t episodes -f imdb -> export_history_episodes_imdb.json
 ```
 
+#### Export all movies from watchlist:
+
+```console
+$ ./trakt-sync watchlist -t movies -f tmdb -> export_watchlist_movies_tmdb.json 
+```
+```console
+$ ./trakt-sync watchlist -t movies -f imdb -> export_watchlist_movies_imdb.json
+```
+#### Export movies or shows from collection extended with metadata:
+```console
+$ ./trakt-sync collection -t movies --ex metadata
+```
+```console
+$ ./trakt-sync collection -t shows --ex metadata
+```
+#### Export movies or shows or episodes from user lists:
+```console
+$ ./trakt-sync lists -u username -i 123456 -t episodes
+```
+```console
+$ ./trakt-sync lists -u username -i 123456 -t shows
+```
+```console
+$ ./trakt-sync lists -u username -i 123456 -t movies
+```
+#### Fetch lists for selected user:
+```console
+$ ./trakt-sync lists -u username 
+```
+#### Export people data:
+```console
+$ ./trakt-sync people -a updates -start_date 2024-10-13
+```
+```console
+$ ./trakt-sync people -a updated_ids -start_date 2024-10-13
+```
+```console
+$ ./trakt-sync people -a summary -i john-wayne
+```
+```console
+$ ./trakt-sync people -a movies -i john-wayne
+```
+```console
+$ ./trakt-sync people -a shows -i john-wayne
+```
+```console
+$ ./trakt-sync people -a lists -i john-wayne
+```
 #### Export all or my calendars:
 
 ```console
 $ ./trakt-sync calendars -a all-shows -> export_calendars_shows_20240707_7.json
+```
+```console
 $ ./trakt-sync calendars -a all-new-shows -> export_calendars_new_shows_20240707_7.json
+```
+```console
 $ ./trakt-sync calendars -a all-season-premieres -> export_calendars_season_premieres_20240707_7.json
+```
+```console
 $ ./trakt-sync calendars -a all-finales -> export_calendars_finales_20240707_7.json 
+```
+```console
 $ ./trakt-sync calendars -a all-movies -> export_calendars_movies_20240707_7.json  
+```
+```console
 $ ./trakt-sync calendars -a all-dvd -> export_calendars_dvd_20240707_7.json
 ```
 
@@ -90,10 +141,20 @@ $ ./trakt-sync calendars -a all-dvd -> export_calendars_dvd_20240707_7.json
 
 ```console
 $  ./trakt-sync search -a text-query -t movie -q freddy --field title
+```
+```console
 $  ./trakt-sync search -a text-query -t movie -t show -q freddy --field tagline
+```
+```console
 $  ./trakt-sync search -a text-query -t movie -t show -t list -q freddy --field name
+```
+```console
 $  ./trakt-sync search -a text-query -t movie -t show -t list -q freddy --field title
+```
+```console
 $  ./trakt-sync search -a text-query -t person -t list -q freddy --field name
+```
+```console
 $  ./trakt-sync search -a text-query -t movie -t show -t list -q freddy --field title
 ```
 
@@ -101,14 +162,32 @@ $  ./trakt-sync search -a text-query -t movie -t show -t list -q freddy --field 
 
 ```console
 $ ./trakt-sync search -a id-lookup -i 12601 -t movie -t show
+```
+```console
 $ ./trakt-sync search -a id-lookup --id_type tvdb -i 12601 -t movie -t show
+```
+```console
 $ ./trakt-sync search -a id-lookup --id_type imdb -i 12601 -t movie
+```
+```console
 $ ./trakt-sync search -a id-lookup --id_type imdb -i 12601 -t podcast
+```
+```console
 $ ./trakt-sync search -a id-lookup --id_type imdb -i tt0266697
+```
+```console
 $ ./trakt-sync search -a id-lookup --id_type tvdb -i 75725
+```
+```console
 $ ./trakt-sync search -a id-lookup --id_type tvdb -i 75725 -t podcast
+```
+```console
 $ ./trakt-sync search -a id-lookup -i 75725 
+```
+```console
 $ ./trakt-sync search -a id-lookup -i 75725 -t episode
+```
+```console
 $ ./trakt-sync search -a id-lookup --id_type tmdb -i 254265
 ```
 ## License
