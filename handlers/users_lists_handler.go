@@ -1,14 +1,12 @@
-// Package cmds used for commands modules
-package cmds
+// Package handlers used to handle module actions
+package handlers
 
 import (
 	"context"
 	"encoding/json"
-	"flag"
 	"fmt"
 	"strconv"
 
-	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
@@ -16,29 +14,14 @@ import (
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
-var (
-	username   = "me"
-	exportData []*str.PersonalList
+// UsersListsHandler struct for handler
+type UsersListsHandler struct{}
 
-	_listID = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
-)
-
-// UsersListItemsCmd Returns all personal lists for a user.
-var UsersListItemsCmd = &Command{
-	Name:    "lists",
-	Usage:   "",
-	Summary: "Returns all personal lists for a user.",
-	Help:    `lists command`,
-}
-
-func usersListItemsFunc(cmd *Command, _ ...string) error {
-	options := cmd.Options
-	client := cmd.Client
-	intID, _ := strconv.Atoi(*_listID)
-	options = cmd.UpdateOptionsWithCommandFlags(options)
+// Handle to handle users: lists action
+func (UsersListsHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("fetch private lists for:" + options.UserName)
 
-	username = options.UserName
+	username := options.UserName
 	personalLists, _, err := fetchUsersPersonalLists(client, &username)
 	if err != nil {
 		return fmt.Errorf("fetch user list error:%w", err)
@@ -52,6 +35,7 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 
 	avLists := getAvlistsFromPersonals(personalLists)
 
+	intID, _ := strconv.Atoi(options.ID)
 	if intID == consts.ZeroValue {
 		return fmt.Errorf("please set personal listid")
 	}
@@ -62,9 +46,6 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 
 	printer.Printf("ListId to fetch:%d\n", intID)
 
-	options.Output = getOutputForUsersListItems(options)
-
-	options.ID = strconv.Itoa(intID)
 	itemsExportData, _, itemsErr := fetchUsersPersonalList(client, options)
 
 	if itemsErr != nil {
@@ -85,15 +66,6 @@ func usersListItemsFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-func getOutputForUsersListItems(options *str.Options) string {
-	if len(*_output) > consts.ZeroValue {
-		options.Output = *_output
-	} else {
-		options.Output = fmt.Sprintf("export_%s_%s.json", options.Module, options.Type)
-	}
-	return options.Output
-}
-
 func getAvlistsFromPersonals(personalLists []*str.PersonalList) []int {
 	var avLists []int
 
@@ -104,13 +76,6 @@ func getAvlistsFromPersonals(personalLists []*str.PersonalList) []int {
 	return avLists
 }
 
-var (
-	usersListItemsDumpTemplate = `{{.Head}} {{.Pattern}}{{end}}`
-)
-
-func init() {
-	UsersListItemsCmd.Run = usersListItemsFunc
-}
 
 func fetchUsersPersonalLists(client *internal.Client, username *string) ([]*str.PersonalList, *str.Response, error) {
 	lists, resp, err := client.Users.GetUsersPersonalLists(
@@ -123,6 +88,7 @@ func fetchUsersPersonalLists(client *internal.Client, username *string) ([]*str.
 
 func fetchUsersPersonalList(client *internal.Client, options *str.Options) ([]*str.UserListItem, *str.Response, error) {
 	listIDString := options.ID
+	username := options.UserName
 	lists, resp, err := client.Users.GetItemstOnAPersonalList(
 		context.Background(),
 		&username,

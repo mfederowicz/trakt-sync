@@ -85,17 +85,21 @@ $ ./trakt-sync collection -t shows --ex metadata
 ```
 #### Export movies or shows or episodes from user lists:
 ```console
-$ ./trakt-sync lists -u username -i 123456 -t episodes
+$ ./trakt-sync users -a lists -u username -i 123456 -t episodes
 ```
 ```console
-$ ./trakt-sync lists -u username -i 123456 -t shows
+$ ./trakt-sync users -a lists -u username -i 123456 -t shows
 ```
 ```console
-$ ./trakt-sync lists -u username -i 123456 -t movies
+$ ./trakt-sync users -a lists -u username -i 123456 -t movies
 ```
 #### Fetch lists for selected user:
 ```console
-$ ./trakt-sync lists -u username 
+$ ./trakt-sync users -a lists -u username 
+```
+#### Fetch saved filters for selected user:
+```console
+$ ./trakt-sync users -a saved_filters -u username 
 ```
 #### Export people data:
 ```console

@@ -18,7 +18,7 @@ var Commands = []*Command{
 	HistoryCmd,
 	WatchlistCmd,
 	CollectionCmd,
-	UsersListItemsCmd,
+	UsersCmd,
 	PeopleCmd,
 	CalendarsCmd,
 	SearchCmd,

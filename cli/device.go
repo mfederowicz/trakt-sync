@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"os"
-	"os/exec"
-	"runtime"
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
@@ -19,24 +17,6 @@ import (
 
 func fail(err string) {
 	printer.Fprintln(os.Stderr, err)
-}
-
-// open browser for https://trakt.tv/activate code activation
-func openBrowser(url string) error {
-	var cmd *exec.Cmd
-
-	switch runtime.GOOS {
-	case "darwin": // macOS
-		cmd = exec.Command("open", url)
-	case "linux":
-		cmd = exec.Command("xdg-open", url)
-	case "windows":
-		cmd = exec.Command("cmd", "/c", "start", url)
-	default:
-		return os.ErrNotExist
-	}
-
-	return cmd.Start()
 }
 
 // check if user accept device code or not
@@ -101,7 +81,7 @@ func showCodeAndOpenBrowser(device *str.DeviceCode) {
 	printer.Println("Go to:" + device.VerificationURL)
 	printer.Println("Enter code: " + device.UserCode)
 
-	browserErr := openBrowser(device.VerificationURL)
+	browserErr := OpenBrowser(device.VerificationURL)
 	if browserErr != nil {
 		fail("Error opening browser:" + browserErr.Error())
 	}
