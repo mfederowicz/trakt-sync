@@ -96,3 +96,27 @@ func (u *UsersService) GetUserProfile(ctx context.Context, id *string) (*str.Use
 
 	return profile, resp, nil
 }
+
+// GetSavedFilters Get all saved filters a users has created.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/users/saved-filters/get-saved-filters
+func (u *UsersService) GetSavedFilters(ctx context.Context, section *string) ([]*str.SavedFilter, *str.Response, error) {
+	var url string
+
+	url = fmt.Sprintf("users/saved_filters/%s", *section)
+	
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	lists := []*str.SavedFilter{}
+	resp, err := u.client.Do(ctx, req, &lists)
+
+	if err != nil {
+		printer.Println("fetch lists err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return lists, resp, nil
+}

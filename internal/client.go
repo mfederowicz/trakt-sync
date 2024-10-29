@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -24,9 +25,11 @@ import (
 const (
 	Version                   = "2"
 	defaultBaseURL            = "https://api.trakt.tv/"
+	upgradeURL                = "https://trakt.tv/vip"
 	HeaderRateLimit           = "X-RateLimit"
 	HeaderRetryAfter          = "Retry-After"
 	HeaderPaginationPageCount = "X-Pagination-Page-Count"
+	HeaderUpgradeURL          = "X-Upgrade-URL"
 
 	skipRateLimitCheck requestContext = iota
 	emptyLimit                        = ""
@@ -53,6 +56,22 @@ func (r *AbuseRateLimitError) Error() string {
 	)
 }
 
+// UpgradeRequiredError occurs when trakt.tv returns 426 user must upgrade to vip header
+type UpgradeRequiredError struct {
+	Response   *http.Response
+	UpgradeURL *url.URL
+	Message    string `json:"message"`
+}
+
+func (r *UpgradeRequiredError) Error() string {
+	return fmt.Sprintf("%v %v: %d %v",
+		r.Response.Request.Method,
+		uri.SanitizeURL(r.Response.Request.URL),
+		r.Response.StatusCode,
+		r.Message,
+	)
+}
+
 // RequestOption represents an option that can modify an http.Request.
 type RequestOption func(req *http.Request)
 
@@ -61,6 +80,7 @@ type Client struct {
 	RateLimitReset time.Time
 	client         *http.Client
 	BaseURL        *url.URL
+	UpgradeURL     *url.URL
 	headers        map[string]any
 	common         Service
 	Oauth          *OauthService
@@ -202,10 +222,26 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 	errCheck := c.CheckResponse(resp)
 	if errCheck != nil {
 		defer resp.Body.Close()
-		updateRateLimitReset(c, errCheck)
+		switch e := errCheck.(type) {
+		case *AbuseRateLimitError:
+			updateRateLimitReset(c, e)
+		case *UpgradeRequiredError:
+			upgradeAccountRequired(c, e)
+		default:
+			printer.Println("General error occurred:", errCheck)
+		}
 	}
 
 	return response, nil
+}
+
+func upgradeAccountRequired(c *Client, errCheck error) {
+	rerr, ok := errCheck.(*UpgradeRequiredError)
+	if ok && rerr.UpgradeURL != nil {
+		c.rateMu.Lock()
+		c.UpgradeURL = rerr.UpgradeURL
+		c.rateMu.Unlock()
+	}
 }
 
 func handleBareDoError(ctx context.Context, err error) (*str.Response, error) {
@@ -273,9 +309,23 @@ func (c *Client) CheckResponse(r *http.Response) error {
 	switch r.StatusCode {
 	case http.StatusTooManyRequests:
 		return c.genRateLimitError(r, errorResponse)
+	case http.StatusUpgradeRequired:
+		return c.genUpgradeRequiredError(r, errorResponse)
 	default:
 		return errorResponse
 	}
+}
+
+func (c *Client) genUpgradeRequiredError(r *http.Response, errorResponse *str.ErrorResponse) *UpgradeRequiredError {
+	upgradeRequiredError := &UpgradeRequiredError{
+		Response: errorResponse.Response,
+		Message:  errorResponse.Message,
+	}
+	if upgradeURL := c.ParseUpgradeUser(r); upgradeURL != nil {
+		upgradeRequiredError.UpgradeURL = upgradeURL
+		return upgradeRequiredError
+	}
+	return nil
 }
 
 func (c *Client) genRateLimitError(r *http.Response, errorResponse *str.ErrorResponse) *AbuseRateLimitError {
@@ -347,6 +397,18 @@ func (*Client) ParseRateLimit(r *http.Response) *time.Duration {
 		retryAfterSeconds, _ := strconv.ParseInt(v, consts.BaseInt, consts.BitSize) // Error handling is noop.
 		retryAfter := time.Duration(retryAfterSeconds) * time.Second
 		return &retryAfter
+	}
+
+	return nil
+}
+
+// ParseUpgradeUser parses related headers, and returns upgradeUrl.
+func (*Client) ParseUpgradeUser(r *http.Response) *url.URL {
+	// number of seconds that one should
+	// wait before resuming making requests.
+	if v := r.Header.Get(HeaderUpgradeURL); v != "" {
+		u,_ := url.Parse(v)
+		return u
 	}
 
 	return nil

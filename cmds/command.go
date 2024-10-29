@@ -56,6 +56,7 @@ var Avflags = map[string]bool{
 	"start_date": true,
 	"t":          true,
 	"u":          true,
+	"users":      true,
 	"v":          true,
 	"version":    true,
 	"watchlist":  true,
@@ -146,6 +147,8 @@ func processVerbose(options *str.Options) {
 
 func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	switch module {
+	case "users":
+		options.Action = *_usersAction	
 	case "people":
 		options.Action = *_action
 		options.ID = *_personID
@@ -359,9 +362,13 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 	}
 
 	if len(*_startDate) > consts.ZeroValue {
-		options.StartDate = convertDateString(*_startDate, "2006-01-02T15:00Z")
+		options.StartDate = convertDateString(*_startDate, consts.DefaultStartDateFormat)
 	} else {
-		options.StartDate = time.Now().Format("2006-01-02T15:00Z")
+		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
+	}
+
+	if len(*_listID) > consts.ZeroValue {
+		options.ID = *_listID
 	}
 
 	return options
@@ -373,7 +380,7 @@ func convertDateString(dateStr string, outputFormat string) string {
 	// Parse the input date string using YYYY-MM-DD
 	parsedDate, err := time.Parse("2006-01-02", dateStr)
 	if err != nil {
-		return time.Now().Format("2006-01-02T15:00Z")
+		return time.Now().Format(consts.DefaultStartDateFormat)
 	}
 
 	// Get the current time
@@ -390,10 +397,8 @@ func convertDateString(dateStr string, outputFormat string) string {
 		currentTime.Nanosecond(),
 		currentTime.Location(),
 	)
-	
 
 	// Format the parsed time into the output format
 	formattedDate := finalDateTime.Format(outputFormat)
 	return formattedDate
 }
-

@@ -283,9 +283,32 @@ func GetOutputForModule(options *str.Options) string {
 		options.Output = getOutputForModuleCalendars(options)
 	case "search":
 		options.Output = getOutputForModuleSearch(options)
+	case "users":
+		options.Output = getOutputForModuleUsers(options)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Type, options.Format)
 	}
+	return options.Output
+}
+
+func getOutputForModuleUsers(options *str.Options) string {
+	switch options.Action {
+	case "lists":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat3,
+			options.Module,
+			options.Action,
+			strings.ReplaceAll(options.Type, ",", consts.EmptyString))
+	case "saved_filters":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat3,
+			options.Module,
+			options.Action,
+			strings.ReplaceAll(options.Type, ",", consts.EmptyString))
+	default:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
+	}
+
 	return options.Output
 }
 

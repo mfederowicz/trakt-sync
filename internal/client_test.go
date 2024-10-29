@@ -9,6 +9,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/stretchr/testify/assert"
@@ -21,10 +22,10 @@ const (
 )
 
 type TestSetup struct {
-    Client    *Client
-    Mux       *http.ServeMux
-    ServerURL string
-    Teardown  func()
+	Client    *Client
+	Mux       *http.ServeMux
+	ServerURL string
+	Teardown  func()
 }
 
 // setup sets up a test HTTP server along with a trakt.Client that is
@@ -49,11 +50,11 @@ func setup() *TestSetup {
 	client.BaseURL = uri
 
 	return &TestSetup{
-        Client:    client,
-        Mux:       mux,
-        ServerURL: server.URL,
-        Teardown:  server.Close,
-    }	
+		Client:    client,
+		Mux:       mux,
+		ServerURL: server.URL,
+		Teardown:  server.Close,
+	}
 }
 
 func TestNewRequest(t *testing.T) {
@@ -85,20 +86,20 @@ func testMethod(t *testing.T, r *http.Request, want string) {
 func TestBareDo_returnsOpenBody(t *testing.T) {
 	testSetup := setup()
 	client := testSetup.Client
-	mux := testSetup.Mux 
+	mux := testSetup.Mux
 	teardown := testSetup.Teardown
-	
+
 	defer teardown()
 
 	expectedBody := "Hello from the other side !"
 
-	mux.HandleFunc("/test-url", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/"+consts.TestURL, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, http.MethodGet)
 		printer.Fprint(w, expectedBody)
 	})
 
 	ctx := context.Background()
-	req, err := client.NewRequest(http.MethodGet, "test-url", nil)
+	req, err := client.NewRequest(http.MethodGet, consts.TestURL, nil)
 	if err != nil {
 		t.Fatalf(clientNewRequestFatal, err)
 	}
@@ -123,7 +124,7 @@ func TestBareDo_returnsOpenBody(t *testing.T) {
 func TestBareDo_rate_limit_reset(t *testing.T) {
 	testSetup := setup()
 	client := testSetup.Client
-	mux := testSetup.Mux 
+	mux := testSetup.Mux
 	teardown := testSetup.Teardown
 
 	defer teardown()
@@ -148,19 +149,19 @@ func TestBareDo_rate_limit_reset(t *testing.T) {
 		t.Fatalf("client.BareDo returned error: %s", err)
 	}
 	assert.Equal(t, resp.StatusCode, http.StatusTooManyRequests)
-	
+
 	reset := client.RateLimitReset
 
 	if reset.IsZero() {
 		t.Fatalf("client.RateLimitReset is zero")
 	}
 
-	mux.HandleFunc("/test-url-next", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/"+consts.TestURLNext, func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, http.MethodGet)
 		printer.Fprint(w, "Body")
 	})
 
-	reqNext, errNext := client.NewRequest(http.MethodGet, "test-url-next", nil)
+	reqNext, errNext := client.NewRequest(http.MethodGet, consts.TestURLNext, nil)
 	if errNext != nil {
 		t.Fatalf(clientNewRequestFatal, err)
 	}
@@ -174,4 +175,39 @@ func TestBareDo_rate_limit_reset(t *testing.T) {
 			t.Fatal("Rate Limit Error msg not valid")
 		}
 	}
+}
+
+func TestBareDo_upgrade_required(t *testing.T) {
+	testSetup := setup()
+	client := testSetup.Client
+	mux := testSetup.Mux
+	teardown := testSetup.Teardown
+
+	defer teardown()
+
+	expectedBody := "Hello vip!"
+
+	mux.HandleFunc("/"+consts.TestURL, func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, http.MethodGet)
+		w.Header().Add(HeaderUpgradeURL, upgradeURL)
+		w.WriteHeader(http.StatusUpgradeRequired)
+		printer.Fprint(w, expectedBody)
+	})
+
+	ctx := context.Background()
+
+	var emptyURL *url.URL
+	assert.Equal(t, client.UpgradeURL, emptyURL)
+
+	req, err := client.NewRequest(http.MethodGet, consts.TestURL, nil)
+	if err != nil {
+		t.Fatalf(clientNewRequestFatal, err)
+	}
+
+	resp, err := client.BareDo(ctx, req)
+	if err != nil {
+		t.Fatalf("client.BareDo returned error: %s", err)
+	}
+	assert.Equal(t, resp.StatusCode, http.StatusUpgradeRequired)
+	assert.Equal(t, client.UpgradeURL.String(), "https://trakt.tv/vip")
 }
