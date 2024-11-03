@@ -48,7 +48,7 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 - `history` - returns movies and episodes that a user has watched, sorted by most recent.
 - `watchlist` - Returns all items in a user's watchlist filtered by type.
 - `collection` - Get all collected items in a user's collection.
-- `lists` - Returns all personal lists for a user.
+- `users` - Returns all data for a user.
 - `people` - Returns all data for selected person.
 - `calendars` - By default, the calendar will return all shows or movies for the specified time period and can be global or user specific.
 - `search` - Searches can use queries or ID lookups.
