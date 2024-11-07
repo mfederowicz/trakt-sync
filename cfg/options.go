@@ -293,18 +293,24 @@ func GetOutputForModule(options *str.Options) string {
 
 func getOutputForModuleUsers(options *str.Options) string {
 	switch options.Action {
+	case "stats":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			options.Action)
+
 	case "lists":
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
 			options.Action,
-			strings.ReplaceAll(options.Type, ",", consts.EmptyString))
+			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
 	case "saved_filters":
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
 			options.Action,
-			strings.ReplaceAll(options.Type, ",", consts.EmptyString))
+			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
 	}
@@ -319,13 +325,13 @@ func getOutputForModuleSearch(options *str.Options) string {
 			consts.DefaultOutputFormat3,
 			options.Module,
 			"query",
-			strings.ReplaceAll(options.Type, ",", consts.EmptyString))
+			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
 	case "id-lookup":
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
 			"lookup",
-			strings.ReplaceAll(options.SearchIDType, ",", consts.EmptyString))
+			strings.ReplaceAll(options.SearchIDType, consts.CommaString, consts.EmptyString))
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat1, options.Module)
 	}

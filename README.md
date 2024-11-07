@@ -101,6 +101,10 @@ $ ./trakt-sync users -a lists -u username
 ```console
 $ ./trakt-sync users -a saved_filters -u username 
 ```
+#### Fetch stats for selected user:
+```console
+$ ./trakt-sync users -a stats -u sean 
+```
 #### Export people data:
 ```console
 $ ./trakt-sync people -a updates -start_date 2024-10-13

@@ -54,7 +54,7 @@ func (u *UsersService) GetUsersPersonalLists(ctx context.Context, id *string) ([
 		url = "users/me/lists"
 	}
 
-	req, err := u.client.NewRequest("GET", url, nil)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -82,7 +82,7 @@ func (u *UsersService) GetUserProfile(ctx context.Context, id *string) (*str.Use
 		url = "user/me"
 	}
 
-	req, err := u.client.NewRequest("GET", url, nil)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -120,3 +120,31 @@ func (u *UsersService) GetSavedFilters(ctx context.Context, section *string) ([]
 
 	return lists, resp, nil
 }
+
+// GetStats Returns stats about the movies, shows, and episodes a user has watched, collected, and rated.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/users/stats/get-stats
+func (u *UsersService) GetStats(ctx context.Context, id *string) (*str.UserStats, *str.Response, error) {
+	var url string
+
+	if id != nil {
+		url = fmt.Sprintf("users/%s/stats", *id)
+	} else {
+		url = "users/me/stats"
+	}
+
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	stats := new(str.UserStats)
+	resp, err := u.client.Do(ctx, req, &stats)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return stats, resp, nil
+}
+

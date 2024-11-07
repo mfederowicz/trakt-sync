@@ -56,7 +56,8 @@ const (
 	RangeFormatDigits      = "%d-%d"
 	RangeFormatFloats      = "%.1f-%.1f"
 	EmptyString            = ""
-	SeparatorString        = ","
+	CommaString            = ","
+	SeparatorString        = CommaString
 	JSONDataFormat         = "  "
 	DefaultStartDateFormat = "2006-01-02T15:00Z"
 	EpisodesType           = "episodes"

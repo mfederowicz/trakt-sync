@@ -38,8 +38,10 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		handler = handlers.UsersListsHandler{}
 	case "saved_filters":
 		handler = handlers.UsersSavedFiltersHandler{}
+	case "stats":
+		handler = handlers.UsersStatsHandler{}
 	default:
-		printer.Println("possible actions: lists, saved_filters")
+		printer.Println("possible actions: lists, saved_filters, stats")
 	}
 	err := handler.Handle(options, client)
 	if err != nil {
