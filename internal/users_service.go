@@ -8,6 +8,7 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/uri"
 )
 
 // UsersService  handles communication with the users related
@@ -104,7 +105,7 @@ func (u *UsersService) GetSavedFilters(ctx context.Context, section *string) ([]
 	var url string
 
 	url = fmt.Sprintf("users/saved_filters/%s", *section)
-	
+
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -148,3 +149,33 @@ func (u *UsersService) GetStats(ctx context.Context, id *string) (*str.UserStats
 	return stats, resp, nil
 }
 
+// GetWatched Returns all movies or shows a user has watched sorted by most plays.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/users/watched/get-watched
+func (u *UsersService) GetWatched(ctx context.Context, id *string, watchType *string, opts *uri.ListOptions) ([]*str.UserWatched, *str.Response, error) {
+	var url string
+
+	if id != nil {
+		url = fmt.Sprintf("users/%s/watched/%s", *id, *watchType)
+	} else {
+		url = fmt.Sprintf("users/me/watched/%s", *watchType)
+	}
+	
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	watched := []*str.UserWatched{}
+	resp, err := u.client.Do(ctx, req, &watched)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return watched, resp, nil
+}

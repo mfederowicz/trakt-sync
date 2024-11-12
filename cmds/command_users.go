@@ -16,7 +16,7 @@ var (
 	username   = "me"
 	exportData []*str.PersonalList
 
-	_listID = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
+	_listID      = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
 	_usersAction = UsersCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
 )
 
@@ -40,8 +40,14 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		handler = handlers.UsersSavedFiltersHandler{}
 	case "stats":
 		handler = handlers.UsersStatsHandler{}
+	case "watched":
+		err := cmd.ValidType(options)
+		if err != nil {
+			return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
+		}
+		handler = handlers.UsersWatchedHandler{}
 	default:
-		printer.Println("possible actions: lists, saved_filters, stats")
+		printer.Println("possible actions: lists, saved_filters, stats, watched")
 	}
 	err := handler.Handle(options, client)
 	if err != nil {

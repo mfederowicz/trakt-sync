@@ -90,6 +90,16 @@ var ModuleConfig = map[string]OptionsConfig{
 		Format:       []string{"imdb", "tmdb", "tvdb", "tvrage", "trakt"},
 		Action:       []string{},
 	},
+	"users": {
+		SearchIDType: []string{},
+		SearchType:   []string{},
+		SearchField:  []string{},
+		Type:         []string{"movies", "shows"},
+		Sort:         []string{},
+		Format:       []string{},
+		Action:       []string{},
+	},
+
 }
 
 // ValidateConfig validates if the provided configuration is allowed for the given module
@@ -293,12 +303,17 @@ func GetOutputForModule(options *str.Options) string {
 
 func getOutputForModuleUsers(options *str.Options) string {
 	switch options.Action {
+	case "watched":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat3,
+			options.Module,
+			options.Action,
+			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
 	case "stats":
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
 			options.Action)
-
 	case "lists":
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,

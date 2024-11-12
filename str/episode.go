@@ -5,6 +5,7 @@ package str
 type Episode struct {
 	Season                *int       `json:"season,omitempty"`
 	Number                *int       `json:"number,omitempty"`
+	Plays                 *int       `json:"plays,omitempty"`
 	Title                 *string    `json:"title,omitempty"`
 	IDs                   *IDs       `json:"ids,omitempty"`
 	NumberAbs             *int       `json:"number_abs,omitempty"`
@@ -13,6 +14,7 @@ type Episode struct {
 	Votes                 *int       `json:"votes,omitempty"`
 	CommentCount          *int       `json:"comment_count,omitempty"`
 	FirstAired            *Timestamp `json:"first_aired,omitempty"`
+	LastWatchedAt         *Timestamp `json:"last_watched_at,omitempty"`
 	UpdatedAt             *Timestamp `json:"updated_at,omitempty"`
 	AvailableTranslations *[]string  `json:"available_translations,omitempty"`
 	Runtime               *int       `json:"runtime,omitempty"`
