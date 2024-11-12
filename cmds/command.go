@@ -105,7 +105,6 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	options.Type = *_strType
 	options.Module = c.Name
 	options = setOptionsDependsOnModule(c.Name, options)
-
 	c.Options = &options
 
 	if !c.ValidFlags() {
@@ -148,7 +147,7 @@ func processVerbose(options *str.Options) {
 func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	switch module {
 	case "users":
-		options.Action = *_usersAction	
+		options.Action = *_usersAction
 	case "people":
 		options.Action = *_action
 		options.ID = *_personID
@@ -335,6 +334,21 @@ func (c *Command) ExportListProcess(
 // PrepareQueryString for remove or replace unwanted signs from query string
 func (*Command) PrepareQueryString(q string) *string {
 	return &q
+}
+
+// ValidType check if type is valid
+func (*Command) ValidType(options *str.Options) error {
+	// Check if the provided module exists in ModuleConfig
+	moduleConfig, ok := cfg.ModuleConfig[options.Module]
+	if !ok {
+		return fmt.Errorf("not found config for module '%s'", options.Module)
+	}
+	// Check if the provided type is valid for the selected module
+	if !cfg.IsValidConfigType(moduleConfig.Type, options.Type) {
+		return fmt.Errorf("type '%s' is not valid for module '%s' and action '%s', avaliable types:%s", options.Type, options.Module, options.Action, moduleConfig.Type)
+	}
+
+	return nil
 }
 
 // UpdateOptionsWithCommandFlags update options depends on command flags

@@ -3,8 +3,9 @@ package str
 
 // Season represents JSON season object
 type Season struct {
-	Number *int `json:"number,omitempty"`
-	IDs    *IDs `json:"ids,omitempty"`
+	Number   *int       `json:"number,omitempty"`
+	Episodes []*Episode `json:"episodes,omitempty"`
+	IDs      *IDs       `json:"ids,omitempty"`
 }
 
 func (s Season) String() string {

@@ -105,6 +105,19 @@ $ ./trakt-sync users -a saved_filters -u username
 ```console
 $ ./trakt-sync users -a stats -u sean 
 ```
+#### Fetch watched movies for selected user:
+```console
+$ ./trakt-sync users -a watched -t movies -u sean 
+```
+#### Fetch watched shows for selected user:
+```console
+$ ./trakt-sync users -a watched -t shows -u sean 
+```
+#### Fetch watched shows for selected user without seasons:
+```console
+$ ./trakt-sync users -a watched -t shows -u sean --ex noseasons
+```
+
 #### Export people data:
 ```console
 $ ./trakt-sync people -a updates -start_date 2024-10-13
