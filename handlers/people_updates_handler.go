@@ -4,6 +4,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strconv"
 	"time"
@@ -29,7 +30,7 @@ func (p PeopleUpdatesHandler) Handle(options *str.Options, client *internal.Clie
 	}
 
 	if len(updates) == consts.ZeroValue {
-		return fmt.Errorf("empty updates lists")
+		return errors.New("empty updates lists")
 	}
 
 	if len(updates) > consts.ZeroValue {

@@ -57,7 +57,7 @@ func InitConfig(fs afero.Fs) (*Config, error) {
 	})
 
 	if len(flagMap["c"]) == consts.ZeroValue {
-		return nil, fmt.Errorf("config file not exists")
+		return nil, errors.New("config file not exists")
 	}
 
 	configFromFile, err := ReadConfigFromFile(fs, flagMap["c"])
@@ -352,7 +352,7 @@ func ReadConfigFromFile(fs afero.Fs, filename string) (*Config, error) {
 	}
 
 	if len(string(file)) == consts.ZeroValue {
-		return nil, fmt.Errorf("empty file content")
+		return nil, errors.New("empty file content")
 	}
 
 	_, err = toml.Decode(string(file), &config)
@@ -427,11 +427,11 @@ func DefaultConfig() *Config {
 
 func normalizeConfig(config *Config) error {
 	if len(config.ClientID) == consts.ZeroValue || len(config.ClientSecret) == consts.ZeroValue {
-		return fmt.Errorf("client_id and client_secret are required fields, update your config file")
+		return errors.New("client_id and client_secret are required fields, update your config file")
 	}
 
 	if len(config.TokenPath) == consts.ZeroValue || (config.TokenPath != consts.EmptyString && !strings.HasSuffix(config.TokenPath, "json")) {
-		return fmt.Errorf("token_path should be json file, update your config file")
+		return errors.New("token_path should be json file, update your config file")
 	}
 
 	return nil

@@ -4,6 +4,7 @@ package cmds
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strconv"
 	"time"
@@ -79,7 +80,7 @@ func runIDLookup(options *str.Options, client *internal.Client) error {
 	}
 
 	if result == nil {
-		return fmt.Errorf("empty result")
+		return errors.New("empty result")
 	}
 
 	printer.Print("Found " + options.Action + " search data \n")
@@ -102,7 +103,7 @@ func runTextQuery(options *str.Options, client *internal.Client) error {
 	}
 
 	if result == nil {
-		return fmt.Errorf("empty result")
+		return errors.New("empty result")
 	}
 	printer.Print("Found " + options.Action + " search data \n")
 	print("write data to:" + options.Output)

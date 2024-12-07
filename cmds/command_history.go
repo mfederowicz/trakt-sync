@@ -4,6 +4,7 @@ package cmds
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strconv"
 	"time"
@@ -38,7 +39,7 @@ func historyFunc(cmd *Command, _ ...string) error {
 	}
 
 	if len(historyLists) == consts.ZeroValue {
-		return fmt.Errorf("empty history lists")
+		return errors.New("empty history lists")
 	}
 
 	printer.Printf("Found %d history elements\n", len(historyLists))
@@ -50,7 +51,7 @@ func historyFunc(cmd *Command, _ ...string) error {
 	}
 
 	if len(exportJSON) == consts.ZeroValue {
-		return fmt.Errorf("warning no data to export, probably a bug")
+		return errors.New("warning no data to export, probably a bug")
 	}
 
 	print("write data to:" + options.Output)

@@ -4,6 +4,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -20,7 +21,7 @@ type PeopleShowsHandler struct{}
 // Handle to handle people: shows action
 func (p PeopleShowsHandler) Handle(options *str.Options, client *internal.Client) error {
 	if len(options.ID) == consts.ZeroValue {
-		return fmt.Errorf(consts.EmptyPersonIDMsg)
+		return errors.New(consts.EmptyPersonIDMsg)
 	}
 	printer.Println("Get show credits")
 	result, err := p.fetchShowCredits(client, options)
@@ -29,7 +30,7 @@ func (p PeopleShowsHandler) Handle(options *str.Options, client *internal.Client
 	}
 
 	if result == nil {
-		return fmt.Errorf(consts.EmptyResult)
+		return errors.New(consts.EmptyResult)
 	}
 
 	printer.Print("Found show credits data \n")

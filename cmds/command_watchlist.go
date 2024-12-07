@@ -4,6 +4,7 @@ package cmds
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strconv"
 	"time"
@@ -38,7 +39,7 @@ func watchlistFunc(cmd *Command, _ ...string) error {
 	}
 
 	if len(watchlist) == consts.ZeroValue {
-		return fmt.Errorf("empty watchlist")
+		return errors.New("empty watchlist")
 	}
 
 	printer.Printf("Found %d watchlist elements\n", len(watchlist))
@@ -50,7 +51,7 @@ func watchlistFunc(cmd *Command, _ ...string) error {
 	}
 
 	if len(exportJSON) == consts.ZeroValue {
-		return fmt.Errorf("warning no data to export, probably a bug")
+		return errors.New("warning no data to export, probably a bug")
 	}
 
 	print("write data to:" + options.Output)

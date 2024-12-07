@@ -4,6 +4,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strconv"
 
@@ -28,7 +29,7 @@ func (UsersListsHandler) Handle(options *str.Options, client *internal.Client) e
 	}
 
 	if len(personalLists) == consts.ZeroValue {
-		return fmt.Errorf("empty personal lists")
+		return errors.New("empty personal lists")
 	}
 
 	printer.Printf("Found %d user list\n", len(personalLists))
@@ -37,7 +38,7 @@ func (UsersListsHandler) Handle(options *str.Options, client *internal.Client) e
 
 	intID, _ := strconv.Atoi(options.ID)
 	if intID == consts.ZeroValue {
-		return fmt.Errorf("please set personal listid")
+		return errors.New("please set personal listid")
 	}
 
 	if !str.ContainInt(intID, avLists) {

@@ -4,6 +4,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/internal"
@@ -25,7 +26,7 @@ func (CalendarsShowsHandler) Handle(options *str.Options, client *internal.Clien
 	}
 
 	if result == nil {
-		return fmt.Errorf("empty result")
+		return errors.New("empty result")
 	}
 
 	printer.Print("Found " + options.Action + " calendar data \n")
