@@ -4,6 +4,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -26,7 +27,7 @@ func (CalendarsDvdHandler) Handle(options *str.Options, client *internal.Client)
 		}
 
 		if result == nil {
-			return fmt.Errorf(consts.EmptyResult)
+			return errors.New(consts.EmptyResult)
 		}
 
 		printer.Print("Found " + options.Action + " calendar data \n")

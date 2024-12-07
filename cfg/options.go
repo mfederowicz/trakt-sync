@@ -3,6 +3,7 @@ package cfg
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -161,7 +162,7 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 	str.Headers["trakt-api-key"] = config.ClientID
 
 	if len(str.Headers["Authorization"].(string)) == consts.ZeroValue && len(str.Headers["trakt-api-key"].(string)) == consts.ZeroValue {
-		return str.Options{}, fmt.Errorf("no valid Authorization header")
+		return str.Options{}, errors.New("no valid Authorization header")
 	}
 
 	// Check if the provided module exists in ModuleConfig

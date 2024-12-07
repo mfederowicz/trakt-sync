@@ -4,6 +4,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -20,7 +21,7 @@ type PeopleSummaryHandler struct{}
 // Handle to handle people: summary action
 func (p PeopleSummaryHandler) Handle(options *str.Options, client *internal.Client) error {
 	if len(options.ID) == consts.ZeroValue {
-		return fmt.Errorf("set personId ie: -i john-wayne")
+		return errors.New("set personId ie: -i john-wayne")
 	}
 	printer.Println("Get a single person")
 	result, err := p.fetchSinglePerson(client, options)
@@ -29,7 +30,7 @@ func (p PeopleSummaryHandler) Handle(options *str.Options, client *internal.Clie
 	}
 
 	if result == nil {
-		return fmt.Errorf("empty result")
+		return errors.New("empty result")
 	}
 
 	printer.Print("Found person \n")

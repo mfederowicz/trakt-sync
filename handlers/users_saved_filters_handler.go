@@ -4,6 +4,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -31,11 +32,11 @@ func (UsersSavedFiltersHandler) Handle(options *str.Options, client *internal.Cl
 		upgradeURL := resp.Header.Get("X-Upgrade-URL")
 		printer.Println("user account upgrade required")
 		cli.OpenBrowser(upgradeURL)
-		return fmt.Errorf("browser opened:"+upgradeURL)
+		return errors.New("browser opened:"+upgradeURL)
 	}
 
 	if len(filters) == consts.ZeroValue {
-		return fmt.Errorf("empty list of filters")
+		return errors.New("empty list of filters")
 	}
 
 	printer.Print("Found " + options.Action + " data \n")

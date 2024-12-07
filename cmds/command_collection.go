@@ -4,6 +4,7 @@ package cmds
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
@@ -36,7 +37,7 @@ func collectionFunc(cmd *Command, _ ...string) error {
 	}
 
 	if len(collection) == consts.ZeroValue {
-		return fmt.Errorf("empty collection")
+		return errors.New("empty collection")
 	}
 
 	printer.Printf("Found %d collection elements\n", len(collection))
@@ -46,12 +47,12 @@ func collectionFunc(cmd *Command, _ ...string) error {
 	for _, data := range collection {
 		findDuplicates, exportJSON, err = cmd.ExportListProcess(data, options, findDuplicates, exportJSON)
 		if err != nil {
-			return fmt.Errorf("collection error")
+			return errors.New("collection error")
 		}
 	}
 
 	if len(exportJSON) == consts.ZeroValue {
-		return fmt.Errorf("warning no data to export, probably a bug")
+		return errors.New("warning no data to export, probably a bug")
 	}
 
 	print("write data to:" + options.Output)

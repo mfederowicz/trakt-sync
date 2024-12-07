@@ -2,6 +2,7 @@
 package cmds
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"strconv"
@@ -108,7 +109,7 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	c.Options = &options
 
 	if !c.ValidFlags() {
-		return fmt.Errorf("invalid flags")
+		return errors.New("invalid flags")
 	}
 
 	processVerbose(&options)
@@ -116,7 +117,7 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	defer func() {
 		if r := recover(); r != nil {
 			if _, ok := r.(fatal); ok {
-				err = fmt.Errorf("fatal error")
+				err = errors.New("fatal error")
 			} else {
 				err = fmt.Errorf("panic error:%s", r)
 			}

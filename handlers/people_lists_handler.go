@@ -4,6 +4,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strconv"
 	"time"
@@ -22,7 +23,7 @@ type PeopleListsHandler struct{}
 // Handle to handle people: shows action
 func (p PeopleListsHandler) Handle(options *str.Options, client *internal.Client) error {
 	if len(options.ID) == consts.ZeroValue {
-		return fmt.Errorf(consts.EmptyPersonIDMsg)
+		return errors.New(consts.EmptyPersonIDMsg)
 	}
 	printer.Println("Get lists containing this person")
 	result, err := p.fetchListsContainingThisPerson(client, options, consts.DefaultPage)
@@ -31,7 +32,7 @@ func (p PeopleListsHandler) Handle(options *str.Options, client *internal.Client
 	}
 
 	if len(result) == consts.ZeroValue {
-		return fmt.Errorf("empty lists")
+		return errors.New("empty lists")
 	}
 
 	printer.Printf("Found %d result \n", len(result))
