@@ -89,6 +89,7 @@ type Client struct {
 	People         *PeopleService
 	Calendars      *CalendarsService
 	Search         *SearchService
+	Lists          *ListsService
 	rateMu         sync.Mutex
 }
 
@@ -118,6 +119,7 @@ func (c *Client) initialize() {
 	c.People = (*PeopleService)(&c.common)
 	c.Calendars = (*CalendarsService)(&c.common)
 	c.Search = (*SearchService)(&c.common)
+	c.Lists = (*ListsService)(&c.common)
 }
 
 // NewRequest creates an API request.
@@ -407,7 +409,7 @@ func (*Client) ParseUpgradeUser(r *http.Response) *url.URL {
 	// number of seconds that one should
 	// wait before resuming making requests.
 	if v := r.Header.Get(HeaderUpgradeURL); v != "" {
-		u,_ := url.Parse(v)
+		u, _ := url.Parse(v)
 		return u
 	}
 

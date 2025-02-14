@@ -147,6 +147,9 @@ func processVerbose(options *str.Options) {
 
 func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	switch module {
+	case "lists":
+		options.Action = *_listsAction
+		options.Type = *_action
 	case "users":
 		options.Action = *_usersAction
 	case "people":

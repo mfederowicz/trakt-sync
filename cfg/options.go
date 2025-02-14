@@ -296,9 +296,25 @@ func GetOutputForModule(options *str.Options) string {
 		options.Output = getOutputForModuleSearch(options)
 	case "users":
 		options.Output = getOutputForModuleUsers(options)
+	case "lists":
+		options.Output = getOutputForModuleLists(options)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Type, options.Format)
 	}
+	return options.Output
+}
+
+func getOutputForModuleLists(options *str.Options) string {
+	switch options.Action {	
+	case "trending":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			options.Action)	
+	default:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
+	}
+
 	return options.Output
 }
 
