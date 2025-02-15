@@ -24,6 +24,7 @@ const (
 	NoShowTitle            = "no show title"
 	NoEpisodeTitle         = "no episode title"
 	EmptyPersonIDMsg       = "set personId ie: -i john-wayne"
+	EmptyListIDMsg         = "set traktId ie: -trakt_id 55"
 	ErrorRender            = "error render: %w"
 	CMD                    = "cmd"
 	TestURL                = "test-url"

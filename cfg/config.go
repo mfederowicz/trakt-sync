@@ -42,6 +42,7 @@ type Config struct {
 	ErrorCode    int       `toml:"errorCode"`
 	Days         int       `toml:"days"`
 	PerPage      int       `toml:"per_page"`
+	TraktID      int       `toml:"trakt_id"`
 	Verbose      bool      `toml:"verbose"`
 }
 

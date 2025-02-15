@@ -48,6 +48,7 @@ var Avflags = map[string]bool{
 	"help":       true,
 	"history":    true,
 	"i":          true,
+	"trakt_id":   true,
 	"id_type":    true,
 	"lists":      true,
 	"o":          true,
@@ -150,6 +151,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	case "lists":
 		options.Action = *_listsAction
 		options.Type = *_action
+		options.TraktID = *_listTraktID
 	case "users":
 		options.Action = *_usersAction
 	case "people":
@@ -385,8 +387,12 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
 	}
 
-	if len(*_listID) > consts.ZeroValue {
-		options.ID = *_listID
+	if len(*_usersListID) > consts.ZeroValue {
+		options.ID = *_usersListID
+	}
+
+	if *_listTraktID > consts.ZeroValue {
+		options.TraktID = *_listTraktID
 	}
 
 	return options

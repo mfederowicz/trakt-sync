@@ -312,7 +312,13 @@ func getOutputForModuleLists(options *str.Options) string {
 			consts.DefaultOutputFormat2,
 			options.Module,
 			options.Action)	
-	default:
+	case "list":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			fmt.Sprintf("%s%d", "trakt_", options.TraktID),
+		)
+		default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
 	}
 

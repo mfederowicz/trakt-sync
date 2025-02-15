@@ -23,6 +23,7 @@ type Options struct {
 	Token        Token
 	PerPage      int
 	Days         int
+	TraktID      int
 	Verbose      bool
 	Version      bool
 }

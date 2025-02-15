@@ -3,6 +3,7 @@ package internal
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/printer"
@@ -64,6 +65,28 @@ func (l *ListsService) GetPopularLists(ctx context.Context, opts *uri.ListOption
 
 	if err != nil {
 		printer.Println("fetch lists err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// GetList Returns a single list. Use the /lists/:id/items method to get the actual items this list contains.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/lists/list/get-list
+func (l *ListsService) GetList(ctx context.Context, id *int) (*str.PersonalList, *str.Response, error) {
+	var url = fmt.Sprintf("lists/%d", *id)
+	printer.Println("fetch single list:" + url)
+	req, err := l.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := new(str.PersonalList)
+	resp, err := l.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch list err:" + err.Error())
 		return nil, resp, err
 	}
 
