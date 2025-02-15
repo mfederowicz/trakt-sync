@@ -307,6 +307,7 @@ func GetOutputForModule(options *str.Options) string {
 func getOutputForModuleLists(options *str.Options) string {
 	switch options.Action {	
 	case "trending":
+	case "popular":
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
