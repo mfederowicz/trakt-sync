@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -60,9 +59,8 @@ func (p PeopleListsHandler) fetchListsContainingThisPerson(client *internal.Clie
 		return nil, err
 	}
 
-	pages, _ := strconv.Atoi(resp.Header.Get(internal.HeaderPaginationPageCount))
 	// Check if there are more pages
-	if client.HavePages(page, pages) {
+	if client.HavePages(page, resp) {
 		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep

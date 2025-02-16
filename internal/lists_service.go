@@ -45,9 +45,9 @@ func (l *ListsService) GetTrendingLists(ctx context.Context, opts *uri.ListOptio
 
 // GetPopularLists Returns the most popular lists. Popularity is calculated using total number of likes and comments..
 //
-// API docs: https://trakt.docs.apiary.io/#reference/lists/popular/get-popular-lists 
+// API docs: https://trakt.docs.apiary.io/#reference/lists/popular/get-popular-lists
 func (l *ListsService) GetPopularLists(ctx context.Context, opts *uri.ListOptions) ([]*str.List, *str.Response, error) {
-	var url string
+	var url string	
 
 	url = "lists/popular"
 	url, err := uri.AddQuery(url, opts)
@@ -87,6 +87,32 @@ func (l *ListsService) GetList(ctx context.Context, id *int) (*str.PersonalList,
 
 	if err != nil {
 		printer.Println("fetch list err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// GetAllUsersWhoLikedList Returns all users who liked a list.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/lists/list-likes/get-all-users-who-liked-a-list
+func (l *ListsService) GetAllUsersWhoLikedList(ctx context.Context, opts *uri.ListOptions, id *int) ([]*str.UserLike, *str.Response, error) {
+	var url = fmt.Sprintf("lists/%d/likes", *id)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch likes url:" + url)
+	req, err := l.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.UserLike{}
+	resp, err := l.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 

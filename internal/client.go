@@ -28,6 +28,7 @@ const (
 	upgradeURL                = "https://trakt.tv/vip"
 	HeaderRateLimit           = "X-RateLimit"
 	HeaderRetryAfter          = "Retry-After"
+	HeaderPaginationPage      = "X-Pagination-Page"
 	HeaderPaginationPageCount = "X-Pagination-Page-Count"
 	HeaderUpgradeURL          = "X-Upgrade-URL"
 
@@ -99,8 +100,10 @@ func (c *Client) UpdateHeaders(headers map[string]any) {
 }
 
 // HavePages checks if we have available pages to fetch
-func (*Client) HavePages(page int, pages int) bool {
-	return page != pages && pages > consts.ZeroValue
+func (*Client) HavePages(page int, resp *str.Response) bool {
+	_, pageHeader := resp.Header[HeaderPaginationPage]
+	pages, _ := strconv.Atoi(resp.Header.Get(HeaderPaginationPageCount))
+	return pageHeader && page != pages && pages > consts.ZeroValue
 }
 
 // initialize sets default values and initializes services.

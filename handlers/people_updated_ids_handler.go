@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -61,8 +60,7 @@ func (p PeopleUpdatedIDsHandler) fetchPeoplesUpdatedIDs(client *internal.Client,
 	}
 
 	// Check if there are more pages
-	pages, _ := strconv.Atoi(resp.Header.Get(internal.HeaderPaginationPageCount))
-	if client.HavePages(page, pages) {
+	if client.HavePages(page, resp) {
 		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
 
 		// Fetch items from the next page

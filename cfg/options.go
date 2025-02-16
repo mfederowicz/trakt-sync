@@ -100,7 +100,6 @@ var ModuleConfig = map[string]OptionsConfig{
 		Format:       []string{},
 		Action:       []string{},
 	},
-
 }
 
 // ValidateConfig validates if the provided configuration is allowed for the given module
@@ -305,20 +304,27 @@ func GetOutputForModule(options *str.Options) string {
 }
 
 func getOutputForModuleLists(options *str.Options) string {
-	switch options.Action {	
+	switch options.Action {
 	case "trending":
 	case "popular":
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
-			options.Action)	
+			options.Action)
 	case "list":
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
 			fmt.Sprintf("%s%d", "trakt_", options.TraktID),
 		)
-		default:
+
+	case "likes":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			fmt.Sprintf("%s%d", "likes_trakt_", options.TraktID),
+		)
+	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
 	}
 
