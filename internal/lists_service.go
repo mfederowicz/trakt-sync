@@ -118,3 +118,23 @@ func (l *ListsService) GetAllUsersWhoLikedList(ctx context.Context, opts *uri.Li
 
 	return list, resp, nil
 }
+
+// LikeList Votes help determine popular lists. Only one like is allowed per list per user.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/lists/list-like/like-a-list 
+func (l *ListsService) LikeList(ctx context.Context, id *int) (*str.Response, error) {
+	var url = fmt.Sprintf("lists/%d/like", *id)
+	printer.Println("send like for single list:" + url)
+	req, err := l.client.NewRequest("POST", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := l.client.Do(ctx, req, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
