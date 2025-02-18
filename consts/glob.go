@@ -14,6 +14,7 @@ const (
 	StartDateUsage         = "allow to overwrite start_date"
 	DaysUsage              = "allow to overwrite days"
 	ListIDUsage            = "allow to export a specific custom list"
+	ListLikeRemoveUsage    = "allow remove like for list"
 	ModuleUsage            = "allow use selected module"
 	ActionUsage            = "allow use selected action"
 	QueryUsage             = "allow use selected query"

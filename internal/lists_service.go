@@ -125,7 +125,26 @@ func (l *ListsService) GetAllUsersWhoLikedList(ctx context.Context, opts *uri.Li
 func (l *ListsService) LikeList(ctx context.Context, id *int) (*str.Response, error) {
 	var url = fmt.Sprintf("lists/%d/like", *id)
 	printer.Println("send like for single list:" + url)
-	req, err := l.client.NewRequest("POST", url, nil)
+	req, err := l.client.NewRequest(http.MethodPost, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := l.client.Do(ctx, req, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// RemoveLikeList Remove a like on a list.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/lists/list-like/remove-like-on-a-list 
+func (l *ListsService) RemoveLikeList(ctx context.Context, id *int) (*str.Response, error) {
+	var url = fmt.Sprintf("lists/%d/like", *id)
+	printer.Println("remove like for single list:" + url)
+	req, err := l.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
 	}

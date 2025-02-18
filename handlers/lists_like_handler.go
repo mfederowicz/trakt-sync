@@ -23,6 +23,7 @@ func (h ListsLikeHandler) Handle(options *str.Options, client *internal.Client) 
 	}
 
 	resp, _ := h.likeSingleList(client, options)
+
 	if resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found list for:%d", options.TraktID)
 	}
@@ -36,7 +37,16 @@ func (h ListsLikeHandler) Handle(options *str.Options, client *internal.Client) 
 
 func (ListsLikeHandler) likeSingleList(client *internal.Client, options *str.Options) (*str.Response, error) {
 	listID := options.TraktID
-	resp, err := client.Lists.LikeList(
+	
+	if !options.Remove {
+		resp, err := client.Lists.LikeList(
+			context.Background(),
+			&listID,
+		)
+		return resp, err
+	}
+	
+	resp, err := client.Lists.RemoveLikeList(
 		context.Background(),
 		&listID,
 	)

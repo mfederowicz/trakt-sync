@@ -13,6 +13,7 @@ import (
 var (
 	_listsAction    = ListsCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
 	_listTraktID    = ListsCmd.Flag.Int("trakt_id", cfg.DefaultConfig().TraktID, consts.ListIDUsage)
+	_listLikeRemove = ListsCmd.Flag.Bool("remove", cfg.DefaultConfig().Remove, consts.ListLikeRemoveUsage)
 )
 
 // ListsCmd returns movies and episodes that a user has watched, sorted by most recent.

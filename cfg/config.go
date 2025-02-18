@@ -43,6 +43,7 @@ type Config struct {
 	Days         int       `toml:"days"`
 	PerPage      int       `toml:"per_page"`
 	TraktID      int       `toml:"trakt_id"`
+	Remove       bool      `toml:"remove"`
 	Verbose      bool      `toml:"verbose"`
 }
 
@@ -423,6 +424,7 @@ func DefaultConfig() *Config {
 		UserName:     "me",
 		ID:           consts.EmptyString,
 		PerPage:      consts.DefaultPerPage,
+		Remove:       false,
 	}
 }
 

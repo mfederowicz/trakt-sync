@@ -54,6 +54,7 @@ var Avflags = map[string]bool{
 	"o":          true,
 	"people":     true,
 	"q":          true,
+	"remove":     true,
 	"search":     true,
 	"start_date": true,
 	"t":          true,
@@ -393,6 +394,10 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 
 	if *_listTraktID > consts.ZeroValue {
 		options.TraktID = *_listTraktID
+	}
+
+	if *_listLikeRemove {
+		options.Remove = *_listLikeRemove
 	}
 
 	return options

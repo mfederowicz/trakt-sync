@@ -26,4 +26,5 @@ type Options struct {
 	TraktID      int
 	Verbose      bool
 	Version      bool
+	Remove       bool
 }
