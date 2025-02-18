@@ -106,8 +106,9 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	}
 
 	options.Type = *_strType
+	
 	options.Module = c.Name
-	options = setOptionsDependsOnModule(c.Name, options)
+	options = setOptionsDependsOnModule(c.Name, options)	
 	c.Options = &options
 
 	if !c.ValidFlags() {
@@ -151,7 +152,6 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	switch module {
 	case "lists":
 		options.Action = *_listsAction
-		options.Type = *_action
 		options.TraktID = *_listTraktID
 	case "users":
 		options.Action = *_usersAction

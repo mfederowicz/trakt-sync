@@ -40,7 +40,6 @@ func (h ListsPopularHandler) Handle(options *str.Options, client *internal.Clien
 	writer.WriteJSON(options, jsonData)
 
 	return nil
-
 }
 
 func (h ListsPopularHandler) fetchListsPopular(client *internal.Client, options *str.Options, page int) ([]*str.List, error) {

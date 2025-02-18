@@ -56,6 +56,7 @@ const (
 	DefaultPage            = 1
 	EmptyResult            = "empty result"
 	RangeFormatDigits      = "%d-%d"
+	StringDigit            = "%s%d"
 	RangeFormatFloats      = "%.1f-%.1f"
 	EmptyString            = ""
 	CommaString            = ","

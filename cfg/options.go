@@ -315,15 +315,22 @@ func getOutputForModuleLists(options *str.Options) string {
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
-			fmt.Sprintf("%s%d", "trakt_", options.TraktID),
+			fmt.Sprintf(consts.StringDigit, "trakt_", options.TraktID),
 		)
 
 	case "likes":
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
-			fmt.Sprintf("%s%d", "likes_trakt_", options.TraktID),
+			fmt.Sprintf(consts.StringDigit, "likes_trakt_", options.TraktID),
 		)
+	case "items":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			fmt.Sprintf(consts.StringDigit, "items_trakt_", options.TraktID),
+		)
+
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
 	}

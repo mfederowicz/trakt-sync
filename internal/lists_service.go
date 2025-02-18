@@ -157,3 +157,37 @@ func (l *ListsService) RemoveLikeList(ctx context.Context, id *int) (*str.Respon
 	return resp, nil
 }
 
+// GetListItems Returns items from single list.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/lists/list-items/get-items-on-a-list
+func (l *ListsService) GetListItems(ctx context.Context, id *int, t *string, opts *uri.ListOptions) ([]*str.UserListItem, *str.Response, error) {	
+	var url string
+
+	if t != nil {
+		url = fmt.Sprintf("lists/%d/items/%s", *id, *t)
+	} else {
+		url = fmt.Sprintf("lists/%d/items", *id)
+	}
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("list url:" + url)
+	req, err := l.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	lists := []*str.UserListItem{}
+	resp, err := l.client.Do(ctx, req, &lists)
+
+	if err != nil {
+		printer.Println("fetch lists err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return lists, resp, nil
+}
+
+
