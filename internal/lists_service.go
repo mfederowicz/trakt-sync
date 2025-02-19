@@ -47,7 +47,7 @@ func (l *ListsService) GetTrendingLists(ctx context.Context, opts *uri.ListOptio
 //
 // API docs: https://trakt.docs.apiary.io/#reference/lists/popular/get-popular-lists
 func (l *ListsService) GetPopularLists(ctx context.Context, opts *uri.ListOptions) ([]*str.List, *str.Response, error) {
-	var url string	
+	var url string
 
 	url = "lists/popular"
 	url, err := uri.AddQuery(url, opts)
@@ -121,7 +121,7 @@ func (l *ListsService) GetAllUsersWhoLikedList(ctx context.Context, opts *uri.Li
 
 // LikeList Votes help determine popular lists. Only one like is allowed per list per user.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/lists/list-like/like-a-list 
+// API docs: https://trakt.docs.apiary.io/#reference/lists/list-like/like-a-list
 func (l *ListsService) LikeList(ctx context.Context, id *int) (*str.Response, error) {
 	var url = fmt.Sprintf("lists/%d/like", *id)
 	printer.Println("send like for single list:" + url)
@@ -140,7 +140,7 @@ func (l *ListsService) LikeList(ctx context.Context, id *int) (*str.Response, er
 
 // RemoveLikeList Remove a like on a list.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/lists/list-like/remove-like-on-a-list 
+// API docs: https://trakt.docs.apiary.io/#reference/lists/list-like/remove-like-on-a-list
 func (l *ListsService) RemoveLikeList(ctx context.Context, id *int) (*str.Response, error) {
 	var url = fmt.Sprintf("lists/%d/like", *id)
 	printer.Println("remove like for single list:" + url)
@@ -160,7 +160,7 @@ func (l *ListsService) RemoveLikeList(ctx context.Context, id *int) (*str.Respon
 // GetListItems Returns items from single list.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/lists/list-items/get-items-on-a-list
-func (l *ListsService) GetListItems(ctx context.Context, id *int, t *string, opts *uri.ListOptions) ([]*str.UserListItem, *str.Response, error) {	
+func (l *ListsService) GetListItems(ctx context.Context, id *int, t *string, opts *uri.ListOptions) ([]*str.UserListItem, *str.Response, error) {
 	var url string
 
 	if t != nil {
@@ -190,4 +190,36 @@ func (l *ListsService) GetListItems(ctx context.Context, id *int, t *string, opt
 	return lists, resp, nil
 }
 
+// GetListComments Returns comments from single list.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/lists/list-comments/get-all-list-comments
+func (l *ListsService) GetListComments(ctx context.Context, id *int, sort *string, opts *uri.ListOptions) ([]*str.ListComment, *str.Response, error) {
+	var url string
 
+	if sort != nil {
+		url = fmt.Sprintf("lists/%d/comments/%s", *id, *sort)
+	} else {
+		url = fmt.Sprintf("lists/%d/comments", *id)
+	}
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("list url:" + url)
+	req, err := l.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	lists := []*str.ListComment{}
+	resp, err := l.client.Do(ctx, req, &lists)
+
+	if err != nil {
+		// if it's just a 404, don't return that as an error
+		_, err = parseBoolResponse(err)
+		return nil, resp, err
+	}
+
+	return lists, resp, nil
+}

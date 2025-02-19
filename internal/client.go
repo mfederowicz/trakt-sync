@@ -73,6 +73,21 @@ func (r *UpgradeRequiredError) Error() string {
 	)
 }
 
+// NotFoundError occurs when trakt.tv returns 404 error
+type NotFoundError struct {
+	Response *http.Response
+	Message  string `json:"message"`
+}
+
+func (r *NotFoundError) Error() string {
+	return fmt.Sprintf("%v %v: %d %v",
+		r.Response.Request.Method,
+		uri.SanitizeURL(r.Response.Request.URL),
+		r.Response.StatusCode,
+		r.Message,
+	)
+}
+
 // RequestOption represents an option that can modify an http.Request.
 type RequestOption func(req *http.Request)
 
@@ -232,6 +247,8 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 			updateRateLimitReset(c, e)
 		case *UpgradeRequiredError:
 			upgradeAccountRequired(c, e)
+		case *NotFoundError:
+			return nil, errors.New(e.Error())
 		default:
 			printer.Println("General error occurred:", errCheck)
 		}
@@ -294,6 +311,20 @@ func sanitizeURL(err error) error {
 	return nil
 }
 
+func parseBoolResponse(err error) (bool, error) {
+	if err == nil {
+		return true, nil
+	}
+
+	if err, ok := err.(*NotFoundError); ok && err.Response.StatusCode == http.StatusNotFound {
+		// Simply false. In this one case, we do not pass the error through.
+		return false, nil
+	}
+
+	// some other real error occurred
+	return false, err
+}
+
 // CheckResponse checks if api response have errors.
 func (c *Client) CheckResponse(r *http.Response) error {
 	if c := r.StatusCode; http.StatusOK <= c && c <= consts.MaxAcceptedStatus {
@@ -316,11 +347,23 @@ func (c *Client) CheckResponse(r *http.Response) error {
 		return c.genRateLimitError(r, errorResponse)
 	case http.StatusUpgradeRequired:
 		return c.genUpgradeRequiredError(r, errorResponse)
+	case http.StatusNotFound:
+		return c.genNotFoundError(r, errorResponse)
 	default:
 		return errorResponse
 	}
 }
 
+func (*Client) genNotFoundError(r *http.Response, errorResponse *str.ErrorResponse) *NotFoundError {
+	notFoundError := &NotFoundError{
+		Response: errorResponse.Response,
+		Message:  errorResponse.Message,
+	}
+	if r.StatusCode == http.StatusNotFound {
+		return notFoundError
+	}
+	return nil
+}
 func (c *Client) genUpgradeRequiredError(r *http.Response, errorResponse *str.ErrorResponse) *UpgradeRequiredError {
 	upgradeRequiredError := &UpgradeRequiredError{
 		Response: errorResponse.Response,

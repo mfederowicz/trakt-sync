@@ -35,6 +35,7 @@ type Config struct {
 	Query        string    `toml:"query"`
 	Field        string    `toml:"field"`
 	Sort         string    `toml:"sort"`
+	CommentsSort string    `toml:"sort"`
 	Module       string    `toml:"module"`
 	SearchField  str.Slice `toml:"search_field"`
 	SearchType   str.Slice `toml:"search_type"`
@@ -420,6 +421,7 @@ func DefaultConfig() *Config {
 		SearchType:   []string{},
 		SearchField:  []string{},
 		Sort:         "rank",
+		CommentsSort: "newest",
 		List:         "history",
 		UserName:     "me",
 		ID:           consts.EmptyString,

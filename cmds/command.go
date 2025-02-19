@@ -153,6 +153,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	case "lists":
 		options.Action = *_listsAction
 		options.TraktID = *_listTraktID
+		options.Sort = *_listSort
 	case "users":
 		options.Action = *_usersAction
 	case "people":
@@ -398,6 +399,10 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 
 	if *_listLikeRemove {
 		options.Remove = *_listLikeRemove
+	}
+
+	if len(*_listSort) > consts.ZeroValue {
+		options.CommentsSort = *_listSort
 	}
 
 	return options
