@@ -21,7 +21,7 @@ import (
 var HistoryCmd = &Command{
 	Name:    "history",
 	Usage:   "",
-	Summary: "returns movies and episodes that a user has watched, sorted by most recent.",
+	Summary: "Returns movies and episodes that a user has watched, sorted by most recent.",
 	Help:    `history command`,
 }
 
