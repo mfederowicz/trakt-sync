@@ -49,7 +49,7 @@ type AbuseRateLimitError struct {
 }
 
 func (r *AbuseRateLimitError) Error() string {
-	return fmt.Sprintf("%v %v: %d %v",
+	return fmt.Sprintf(consts.ErrorsPlaceholders,
 		r.Response.Request.Method,
 		uri.SanitizeURL(r.Response.Request.URL),
 		r.Response.StatusCode,
@@ -65,7 +65,7 @@ type UpgradeRequiredError struct {
 }
 
 func (r *UpgradeRequiredError) Error() string {
-	return fmt.Sprintf("%v %v: %d %v",
+	return fmt.Sprintf(consts.ErrorsPlaceholders,
 		r.Response.Request.Method,
 		uri.SanitizeURL(r.Response.Request.URL),
 		r.Response.StatusCode,
@@ -80,7 +80,7 @@ type NotFoundError struct {
 }
 
 func (r *NotFoundError) Error() string {
-	return fmt.Sprintf("%v %v: %d %v",
+	return fmt.Sprintf(consts.ErrorsPlaceholders,
 		r.Response.Request.Method,
 		uri.SanitizeURL(r.Response.Request.URL),
 		r.Response.StatusCode,

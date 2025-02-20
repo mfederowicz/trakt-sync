@@ -58,6 +58,7 @@ const (
 	EmptyResult            = "empty result"
 	RangeFormatDigits      = "%d-%d"
 	StringDigit            = "%s%d"
+	ErrorsPlaceholders     = "%v %v: %d %v"
 	RangeFormatFloats      = "%.1f-%.1f"
 	EmptyString            = ""
 	CommaString            = ","
