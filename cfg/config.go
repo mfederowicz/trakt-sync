@@ -35,6 +35,7 @@ type Config struct {
 	Query        string    `toml:"query"`
 	Field        string    `toml:"field"`
 	Sort         string    `toml:"sort"`
+	CommentsSort string    `toml:"sort"`
 	Module       string    `toml:"module"`
 	SearchField  str.Slice `toml:"search_field"`
 	SearchType   str.Slice `toml:"search_type"`
@@ -42,6 +43,8 @@ type Config struct {
 	ErrorCode    int       `toml:"errorCode"`
 	Days         int       `toml:"days"`
 	PerPage      int       `toml:"per_page"`
+	TraktID      int       `toml:"trakt_id"`
+	Remove       bool      `toml:"remove"`
 	Verbose      bool      `toml:"verbose"`
 }
 
@@ -418,10 +421,12 @@ func DefaultConfig() *Config {
 		SearchType:   []string{},
 		SearchField:  []string{},
 		Sort:         "rank",
+		CommentsSort: "newest",
 		List:         "history",
 		UserName:     "me",
 		ID:           consts.EmptyString,
 		PerPage:      consts.DefaultPerPage,
+		Remove:       false,
 	}
 }
 

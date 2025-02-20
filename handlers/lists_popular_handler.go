@@ -16,16 +16,13 @@ import (
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
-// PeopleListsHandler struct for handler
-type PeopleListsHandler struct{}
+// ListsPopularHandler struct for handler
+type ListsPopularHandler struct{}
 
-// Handle to handle people: shows action
-func (p PeopleListsHandler) Handle(options *str.Options, client *internal.Client) error {
-	if len(options.ID) == consts.ZeroValue {
-		return errors.New(consts.EmptyPersonIDMsg)
-	}
-	printer.Println("Get lists containing this person")
-	result, err := p.fetchListsContainingThisPerson(client, options, consts.DefaultPage)
+// Handle to handle lists: popular action
+func (h ListsPopularHandler) Handle(options *str.Options, client *internal.Client) error {
+	printer.Println("Returns the most popular lists. Popularity is calculated using total number of likes and comments.")
+	result, err := h.fetchListsPopular(client, options, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("fetch lists error:%v", err)
 	}
@@ -35,7 +32,7 @@ func (p PeopleListsHandler) Handle(options *str.Options, client *internal.Client
 	}
 
 	printer.Printf("Found %d result \n", len(result))
-	exportJSON := []*str.PersonalList{}
+	exportJSON := []*str.List{}
 	exportJSON = append(exportJSON, result...)
 	print("write data to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
@@ -45,13 +42,10 @@ func (p PeopleListsHandler) Handle(options *str.Options, client *internal.Client
 	return nil
 }
 
-func (p PeopleListsHandler) fetchListsContainingThisPerson(client *internal.Client, options *str.Options, page int) ([]*str.PersonalList, error) {
+func (h ListsPopularHandler) fetchListsPopular(client *internal.Client, options *str.Options, page int) ([]*str.List, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
-	list, resp, err := client.People.GetListsContainingThisPerson(
+	list, resp, err := client.Lists.GetPopularLists(
 		context.Background(),
-		&options.ID,
-		&options.Type,
-		&options.Sort,
 		&opts,
 	)
 
@@ -62,14 +56,17 @@ func (p PeopleListsHandler) fetchListsContainingThisPerson(client *internal.Clie
 	// Check if there are more pages
 	if client.HavePages(page, resp) {
 		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
-		nextPageItems, err := p.fetchListsContainingThisPerson(client, options, nextPage)
+		nextPageItems, err := h.fetchListsPopular(client, options, nextPage)
 		if err != nil {
 			return nil, err
 		}
+
 		// Append items from the next page to the current page
 		list = append(list, nextPageItems...)
 	}
+
 	return list, nil
 }

@@ -100,7 +100,6 @@ var ModuleConfig = map[string]OptionsConfig{
 		Format:       []string{},
 		Action:       []string{},
 	},
-
 }
 
 // ValidateConfig validates if the provided configuration is allowed for the given module
@@ -296,9 +295,52 @@ func GetOutputForModule(options *str.Options) string {
 		options.Output = getOutputForModuleSearch(options)
 	case "users":
 		options.Output = getOutputForModuleUsers(options)
+	case "lists":
+		options.Output = getOutputForModuleLists(options)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Type, options.Format)
 	}
+	return options.Output
+}
+
+func getOutputForModuleLists(options *str.Options) string {
+	switch options.Action {
+	case "trending":
+	case "popular":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			options.Action)
+	case "list":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			fmt.Sprintf(consts.StringDigit, "trakt_", options.TraktID),
+		)
+
+	case "likes":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			fmt.Sprintf(consts.StringDigit, "likes_trakt_", options.TraktID),
+		)
+	case "items":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			fmt.Sprintf(consts.StringDigit, "items_trakt_", options.TraktID),
+		)
+	case "comments":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			fmt.Sprintf(consts.StringDigit, "comments_trakt_", options.TraktID),
+		)
+
+	default:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
+	}
+
 	return options.Output
 }
 

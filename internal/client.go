@@ -28,6 +28,7 @@ const (
 	upgradeURL                = "https://trakt.tv/vip"
 	HeaderRateLimit           = "X-RateLimit"
 	HeaderRetryAfter          = "Retry-After"
+	HeaderPaginationPage      = "X-Pagination-Page"
 	HeaderPaginationPageCount = "X-Pagination-Page-Count"
 	HeaderUpgradeURL          = "X-Upgrade-URL"
 
@@ -48,7 +49,7 @@ type AbuseRateLimitError struct {
 }
 
 func (r *AbuseRateLimitError) Error() string {
-	return fmt.Sprintf("%v %v: %d %v",
+	return fmt.Sprintf(consts.ErrorsPlaceholders,
 		r.Response.Request.Method,
 		uri.SanitizeURL(r.Response.Request.URL),
 		r.Response.StatusCode,
@@ -64,7 +65,22 @@ type UpgradeRequiredError struct {
 }
 
 func (r *UpgradeRequiredError) Error() string {
-	return fmt.Sprintf("%v %v: %d %v",
+	return fmt.Sprintf(consts.ErrorsPlaceholders,
+		r.Response.Request.Method,
+		uri.SanitizeURL(r.Response.Request.URL),
+		r.Response.StatusCode,
+		r.Message,
+	)
+}
+
+// NotFoundError occurs when trakt.tv returns 404 error
+type NotFoundError struct {
+	Response *http.Response
+	Message  string `json:"message"`
+}
+
+func (r *NotFoundError) Error() string {
+	return fmt.Sprintf(consts.ErrorsPlaceholders,
 		r.Response.Request.Method,
 		uri.SanitizeURL(r.Response.Request.URL),
 		r.Response.StatusCode,
@@ -89,6 +105,7 @@ type Client struct {
 	People         *PeopleService
 	Calendars      *CalendarsService
 	Search         *SearchService
+	Lists          *ListsService
 	rateMu         sync.Mutex
 }
 
@@ -98,8 +115,10 @@ func (c *Client) UpdateHeaders(headers map[string]any) {
 }
 
 // HavePages checks if we have available pages to fetch
-func (*Client) HavePages(page int, pages int) bool {
-	return page != pages && pages > consts.ZeroValue
+func (*Client) HavePages(page int, resp *str.Response) bool {
+	_, pageHeader := resp.Header[HeaderPaginationPage]
+	pages, _ := strconv.Atoi(resp.Header.Get(HeaderPaginationPageCount))
+	return pageHeader && page != pages && pages > consts.ZeroValue
 }
 
 // initialize sets default values and initializes services.
@@ -118,6 +137,7 @@ func (c *Client) initialize() {
 	c.People = (*PeopleService)(&c.common)
 	c.Calendars = (*CalendarsService)(&c.common)
 	c.Search = (*SearchService)(&c.common)
+	c.Lists = (*ListsService)(&c.common)
 }
 
 // NewRequest creates an API request.
@@ -227,6 +247,8 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 			updateRateLimitReset(c, e)
 		case *UpgradeRequiredError:
 			upgradeAccountRequired(c, e)
+		case *NotFoundError:
+			return nil, errors.New(e.Error())
 		default:
 			printer.Println("General error occurred:", errCheck)
 		}
@@ -289,6 +311,20 @@ func sanitizeURL(err error) error {
 	return nil
 }
 
+func parseBoolResponse(err error) (bool, error) {
+	if err == nil {
+		return true, nil
+	}
+
+	if err, ok := err.(*NotFoundError); ok && err.Response.StatusCode == http.StatusNotFound {
+		// Simply false. In this one case, we do not pass the error through.
+		return false, nil
+	}
+
+	// some other real error occurred
+	return false, err
+}
+
 // CheckResponse checks if api response have errors.
 func (c *Client) CheckResponse(r *http.Response) error {
 	if c := r.StatusCode; http.StatusOK <= c && c <= consts.MaxAcceptedStatus {
@@ -311,11 +347,23 @@ func (c *Client) CheckResponse(r *http.Response) error {
 		return c.genRateLimitError(r, errorResponse)
 	case http.StatusUpgradeRequired:
 		return c.genUpgradeRequiredError(r, errorResponse)
+	case http.StatusNotFound:
+		return c.genNotFoundError(r, errorResponse)
 	default:
 		return errorResponse
 	}
 }
 
+func (*Client) genNotFoundError(r *http.Response, errorResponse *str.ErrorResponse) *NotFoundError {
+	notFoundError := &NotFoundError{
+		Response: errorResponse.Response,
+		Message:  errorResponse.Message,
+	}
+	if r.StatusCode == http.StatusNotFound {
+		return notFoundError
+	}
+	return nil
+}
 func (c *Client) genUpgradeRequiredError(r *http.Response, errorResponse *str.ErrorResponse) *UpgradeRequiredError {
 	upgradeRequiredError := &UpgradeRequiredError{
 		Response: errorResponse.Response,
@@ -407,7 +455,7 @@ func (*Client) ParseUpgradeUser(r *http.Response) *url.URL {
 	// number of seconds that one should
 	// wait before resuming making requests.
 	if v := r.Header.Get(HeaderUpgradeURL); v != "" {
-		u,_ := url.Parse(v)
+		u, _ := url.Parse(v)
 		return u
 	}
 

@@ -211,6 +211,35 @@ $ ./trakt-sync search -a id-lookup -i 75725 -t episode
 ```console
 $ ./trakt-sync search -a id-lookup --id_type tmdb -i 254265
 ```
+#### Export lists data:
+```console
+$ ./trakt-sync lists -a trending
+```
+```console
+$ ./trakt-sync lists -a popular
+```
+```console
+$ ./trakt-sync lists -a list -trakt_id 2142753
+```
+```console
+$ ./trakt-sync lists -a likes -trakt_id 2142753
+```
+```console
+$ ./trakt-sync lists -a like -trakt_id 2142753
+```
+```console
+$ ./trakt-sync lists -a like -trakt_id 2142753 -remove
+```
+```console
+$ ./trakt-sync lists -a items -trakt_id 2142753
+```
+```console
+$ ./trakt-sync lists -a items -trakt_id 2142753 -t movie,show
+```
+```console
+$ ./trakt-sync lists -a comments -trakt_id 2142753 (temp not working - problems with api endpoint)
+```
+
 ## License
 
 [MIT](./LICENSE)

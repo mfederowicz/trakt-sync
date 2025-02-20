@@ -16,7 +16,7 @@ var (
 	username   = "me"
 	exportData []*str.PersonalList
 
-	_listID      = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
+	_usersListID      = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
 	_usersAction = UsersCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
 )
 

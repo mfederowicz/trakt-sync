@@ -36,7 +36,7 @@ func (c *CalendarsService) GetDVDReleases(ctx context.Context, actionType *strin
 	resp, err := c.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch dvd calendars err:" + err.Error())
+		printer.Println("fetch dvd calendars err:", err.Error())
 		return nil, resp, err
 	}
 

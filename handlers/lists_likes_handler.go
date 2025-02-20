@@ -16,26 +16,26 @@ import (
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
-// PeopleListsHandler struct for handler
-type PeopleListsHandler struct{}
+// ListsLikesHandler struct for handler
+type ListsLikesHandler struct{}
 
-// Handle to handle people: shows action
-func (p PeopleListsHandler) Handle(options *str.Options, client *internal.Client) error {
-	if len(options.ID) == consts.ZeroValue {
-		return errors.New(consts.EmptyPersonIDMsg)
+// Handle to handle lists: likes action
+func (h ListsLikesHandler) Handle(options *str.Options, client *internal.Client) error {
+	if options.TraktID == consts.ZeroValue {
+		return errors.New(consts.EmptyListIDMsg)
 	}
-	printer.Println("Get lists containing this person")
-	result, err := p.fetchListsContainingThisPerson(client, options, consts.DefaultPage)
+	printer.Println("Returns all users who liked a list.")
+	result, err := h.fetchListsLikes(client, options, consts.DefaultPage)
 	if err != nil {
-		return fmt.Errorf("fetch lists error:%v", err)
+		return fmt.Errorf("fetch users error:%v", err)
 	}
 
 	if len(result) == consts.ZeroValue {
-		return errors.New("empty lists")
+		return errors.New("empty users")
 	}
 
 	printer.Printf("Found %d result \n", len(result))
-	exportJSON := []*str.PersonalList{}
+	exportJSON := []*str.UserLike{}
 	exportJSON = append(exportJSON, result...)
 	print("write data to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
@@ -45,14 +45,12 @@ func (p PeopleListsHandler) Handle(options *str.Options, client *internal.Client
 	return nil
 }
 
-func (p PeopleListsHandler) fetchListsContainingThisPerson(client *internal.Client, options *str.Options, page int) ([]*str.PersonalList, error) {
+func (h ListsLikesHandler) fetchListsLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
-	list, resp, err := client.People.GetListsContainingThisPerson(
+	list, resp, err := client.Lists.GetAllUsersWhoLikedList(
 		context.Background(),
-		&options.ID,
-		&options.Type,
-		&options.Sort,
 		&opts,
+		&options.TraktID,
 	)
 
 	if err != nil {
@@ -62,14 +60,17 @@ func (p PeopleListsHandler) fetchListsContainingThisPerson(client *internal.Clie
 	// Check if there are more pages
 	if client.HavePages(page, resp) {
 		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
-		nextPageItems, err := p.fetchListsContainingThisPerson(client, options, nextPage)
+		nextPageItems, err := h.fetchListsLikes(client, options, nextPage)
 		if err != nil {
 			return nil, err
 		}
+
 		// Append items from the next page to the current page
 		list = append(list, nextPageItems...)
 	}
+
 	return list, nil
 }

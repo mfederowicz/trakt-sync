@@ -11,6 +11,7 @@ type Options struct {
 	StartDate    string
 	Query        string
 	Sort         string
+	CommentsSort string
 	Module       string
 	Action       string
 	Format       string
@@ -23,6 +24,8 @@ type Options struct {
 	Token        Token
 	PerPage      int
 	Days         int
+	TraktID      int
 	Verbose      bool
 	Version      bool
+	Remove       bool
 }

@@ -22,7 +22,10 @@ var Commands = []*Command{
 	PeopleCmd,
 	CalendarsCmd,
 	SearchCmd,
+	ListsCmd,
+
 }
+
 // runtime consts
 const (
 	FoundOne = 1

@@ -48,11 +48,13 @@ var Avflags = map[string]bool{
 	"help":       true,
 	"history":    true,
 	"i":          true,
+	"trakt_id":   true,
 	"id_type":    true,
 	"lists":      true,
 	"o":          true,
 	"people":     true,
 	"q":          true,
+	"remove":     true,
 	"search":     true,
 	"start_date": true,
 	"t":          true,
@@ -104,8 +106,9 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	}
 
 	options.Type = *_strType
+	
 	options.Module = c.Name
-	options = setOptionsDependsOnModule(c.Name, options)
+	options = setOptionsDependsOnModule(c.Name, options)	
 	c.Options = &options
 
 	if !c.ValidFlags() {
@@ -147,6 +150,10 @@ func processVerbose(options *str.Options) {
 
 func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	switch module {
+	case "lists":
+		options.Action = *_listsAction
+		options.TraktID = *_listTraktID
+		options.Sort = *_listSort
 	case "users":
 		options.Action = *_usersAction
 	case "people":
@@ -382,8 +389,20 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
 	}
 
-	if len(*_listID) > consts.ZeroValue {
-		options.ID = *_listID
+	if len(*_usersListID) > consts.ZeroValue {
+		options.ID = *_usersListID
+	}
+
+	if *_listTraktID > consts.ZeroValue {
+		options.TraktID = *_listTraktID
+	}
+
+	if *_listLikeRemove {
+		options.Remove = *_listLikeRemove
+	}
+
+	if len(*_listSort) > consts.ZeroValue {
+		options.CommentsSort = *_listSort
 	}
 
 	return options
