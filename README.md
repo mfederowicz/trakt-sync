@@ -45,14 +45,14 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 `trakt-sync` accepts the following command line commands/modules:
 
 - `help` - Help on the trakt-sync command and subcommands.
-- `history` - returns movies and episodes that a user has watched, sorted by most recent.
+- `history` - Returns movies and episodes that a user has watched, sorted by most recent.
 - `watchlist` - Returns all items in a user's watchlist filtered by type.
 - `collection` - Get all collected items in a user's collection.
 - `users` - Returns all data for a user.
 - `people` - Returns all data for selected person.
 - `calendars` - By default, the calendar will return all shows or movies for the specified time period and can be global or user specific.
 - `search` - Searches can use queries or ID lookups.
-
+- `lists` - Returns data about lists: trending, popular, list, likes, like, items, comments.
 ### Sample export usage
 
 #### Export all tvshows from the watching history:
@@ -236,8 +236,10 @@ $ ./trakt-sync lists -a items -trakt_id 2142753
 ```console
 $ ./trakt-sync lists -a items -trakt_id 2142753 -t movie,show
 ```
+
+-- (temp not working - problems with api endpoint)
 ```console
-$ ./trakt-sync lists -a comments -trakt_id 2142753 (temp not working - problems with api endpoint)
+$ ./trakt-sync lists -a comments -trakt_id 2142753 
 ```
 
 ## License
