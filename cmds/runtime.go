@@ -14,16 +14,15 @@ import (
 
 // Commands is list of all commands
 var Commands = []*Command{
+	CalendarsCmd,
+	CollectionCmd,
 	HelpCmd,
 	HistoryCmd,
-	WatchlistCmd,
-	CollectionCmd,
-	UsersCmd,
-	PeopleCmd,
-	CalendarsCmd,
-	SearchCmd,
 	ListsCmd,
-
+	PeopleCmd,
+	SearchCmd,
+	UsersCmd,
+	WatchlistCmd,
 }
 
 // runtime consts
