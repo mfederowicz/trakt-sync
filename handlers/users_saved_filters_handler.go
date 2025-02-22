@@ -29,10 +29,7 @@ func (UsersSavedFiltersHandler) Handle(options *str.Options, client *internal.Cl
 	}
 
 	if resp.StatusCode == http.StatusUpgradeRequired {
-		upgradeURL := resp.Header.Get("X-Upgrade-URL")
-		printer.Println("user account upgrade required")
-		cli.OpenBrowser(upgradeURL)
-		return errors.New("browser opened:"+upgradeURL)
+		return cli.HandleUpgrade(resp)	
 	}
 
 	if len(filters) == consts.ZeroValue {

@@ -184,3 +184,24 @@ func (p *PeopleService) GetRecentlyUpdatedPeopleTraktIDs(ctx context.Context, st
 
 	return list, resp, nil
 }
+
+// RefreshPersonMetadata Queue this person for a full metadata and image refresh. 
+// It might take up to 8 hours for the updated metadata to be availabe through the API. 
+//
+// API docs: https://trakt.docs.apiary.io/#reference/people/refresh/refresh-person-metadata
+func (p *PeopleService) RefreshPersonMetadata(ctx context.Context, id *string) (*str.Response, error) {
+	var url = fmt.Sprintf("people/%s/refresh", *id)
+	printer.Println("refresh people:" + url)
+	req, err := p.client.NewRequest(http.MethodPost, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := p.client.Do(ctx, req, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
