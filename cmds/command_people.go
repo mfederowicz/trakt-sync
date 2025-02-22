@@ -42,8 +42,10 @@ func peopleFunc(cmd *Command, _ ...string) error {
 		handler = handlers.PeopleShowsHandler{}
 	case "lists":
 		handler = handlers.PeopleListsHandler{}
+	case "refresh":
+		handler = handlers.PeopleRefreshHandler{}
 	default:
-		printer.Println("possible actions: updates, updated_ids, summary, movies, shows, lists")
+		printer.Println("possible actions: updates, updated_ids, summary, movies, shows, lists, refresh")
 	}
 	err := handler.Handle(options, client)
 	if err != nil {
