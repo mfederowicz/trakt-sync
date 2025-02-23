@@ -160,7 +160,7 @@ func (u *UsersService) GetWatched(ctx context.Context, id *string, watchType *st
 	} else {
 		url = fmt.Sprintf("users/me/watched/%s", *watchType)
 	}
-	
+
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -178,4 +178,24 @@ func (u *UsersService) GetWatched(ctx context.Context, id *string, watchType *st
 	}
 
 	return watched, resp, nil
+}
+
+// RetrieveSettings Get the user's settings so you can align your app's experience with what they're used to on the trakt website.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/users/settings/retrieve-settings
+func (u *UsersService) RetrieveSettings(ctx context.Context) (*str.UserSettings, *str.Response, error) {
+	url := "users/settings"
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	settings := new(str.UserSettings)
+	resp, err := u.client.Do(ctx, req, &settings)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return settings, resp, nil
 }
