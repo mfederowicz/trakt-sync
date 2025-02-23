@@ -105,6 +105,10 @@ $ ./trakt-sync users -a saved_filters -u username
 ```console
 $ ./trakt-sync users -a stats -u sean 
 ```
+#### Fetch settings for current user:
+```console
+$ ./trakt-sync users -a settings 
+```
 #### Fetch watched movies for selected user:
 ```console
 $ ./trakt-sync users -a watched -t movies -u sean 

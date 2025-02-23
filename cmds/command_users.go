@@ -34,6 +34,8 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 	options = cmd.UpdateOptionsWithCommandFlags(options)
 	var handler handlers.UsersHandler
 	switch options.Action {
+	case "settings":
+		handler = handlers.UsersSettingsHandler{}
 	case "lists":
 		handler = handlers.UsersListsHandler{}
 	case "saved_filters":
