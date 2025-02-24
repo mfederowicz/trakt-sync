@@ -18,6 +18,8 @@ const (
 	ListCommentSortUsage   = "allow to overwrite comments sort"
 	ModuleUsage            = "allow use selected module"
 	ActionUsage            = "allow use selected action"
+	TraktIDUsage            = "allow to overwrite trakt_id"
+	DeleteUsage            = "allow delete item"
 	QueryUsage             = "allow use selected query"
 	FieldUsage             = "allow use selected field"
 	SortUsage              = "allow to overwrite sort"

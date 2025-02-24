@@ -45,6 +45,7 @@ type Config struct {
 	PerPage      int       `toml:"per_page"`
 	TraktID      int       `toml:"trakt_id"`
 	Remove       bool      `toml:"remove"`
+	Delete       bool      `toml:"delete"`
 	Verbose      bool      `toml:"verbose"`
 }
 
@@ -427,6 +428,7 @@ func DefaultConfig() *Config {
 		ID:           consts.EmptyString,
 		PerPage:      consts.DefaultPerPage,
 		Remove:       false,
+		Delete:       false,
 	}
 }
 

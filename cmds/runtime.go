@@ -15,6 +15,7 @@ import (
 // Commands is list of all commands
 var Commands = []*Command{
 	CalendarsCmd,
+	CheckinCmd,
 	CollectionCmd,
 	HelpCmd,
 	HistoryCmd,

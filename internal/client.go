@@ -104,6 +104,7 @@ type Client struct {
 	Sync           *SyncService
 	People         *PeopleService
 	Calendars      *CalendarsService
+	Checkin        *CheckinService
 	Search         *SearchService
 	Lists          *ListsService
 	rateMu         sync.Mutex
@@ -136,6 +137,7 @@ func (c *Client) initialize() {
 	c.Sync = (*SyncService)(&c.common)
 	c.People = (*PeopleService)(&c.common)
 	c.Calendars = (*CalendarsService)(&c.common)
+	c.Checkin = (*CheckinService)(&c.common)
 	c.Search = (*SearchService)(&c.common)
 	c.Lists = (*ListsService)(&c.common)
 }

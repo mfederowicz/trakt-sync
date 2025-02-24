@@ -39,8 +39,10 @@ var Avflags = map[string]bool{
 	"a":          true,
 	"c":          true,
 	"calendars":  true,
+	"checkin":    true,
 	"collection": true,
 	"days":       true,
+	"delete":     true,
 	"ex":         true,
 	"f":          true,
 	"field":      true,
@@ -106,9 +108,9 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	}
 
 	options.Type = *_strType
-	
+
 	options.Module = c.Name
-	options = setOptionsDependsOnModule(c.Name, options)	
+	options = setOptionsDependsOnModule(c.Name, options)
 	c.Options = &options
 
 	if !c.ValidFlags() {
@@ -150,6 +152,9 @@ func processVerbose(options *str.Options) {
 
 func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	switch module {
+	case "checkin":
+		options.Action = *_checkinAction
+		options.TraktID = *_checkinTraktID
 	case "lists":
 		options.Action = *_listsAction
 		options.TraktID = *_listTraktID
