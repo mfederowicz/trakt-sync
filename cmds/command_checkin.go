@@ -13,6 +13,7 @@ import (
 var (
 	_checkinAction  = CheckinCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
 	_checkinTraktID = CheckinCmd.Flag.Int("trakt_id", cfg.DefaultConfig().TraktID, consts.TraktIDUsage)
+	_checkinMsg = CheckinCmd.Flag.String("msg", cfg.DefaultConfig().Msg, consts.CheckInMsgUsage)
 	_checkinDelete  = CheckinCmd.Flag.Bool("delete", cfg.DefaultConfig().Delete, consts.DeleteUsage)
 )
 

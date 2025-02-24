@@ -53,6 +53,7 @@ var Avflags = map[string]bool{
 	"trakt_id":   true,
 	"id_type":    true,
 	"lists":      true,
+	"msg":        true,
 	"o":          true,
 	"people":     true,
 	"q":          true,
@@ -410,6 +411,9 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		options.CommentsSort = *_listSort
 	}
 
+	if len(*_checkinMsg) > consts.ZeroValue {
+		options.Msg = *_checkinMsg
+	}
 	return options
 }
 

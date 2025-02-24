@@ -107,6 +107,7 @@ type Client struct {
 	Checkin        *CheckinService
 	Search         *SearchService
 	Lists          *ListsService
+	Movies         *MoviesService
 	rateMu         sync.Mutex
 }
 
@@ -140,6 +141,7 @@ func (c *Client) initialize() {
 	c.Checkin = (*CheckinService)(&c.common)
 	c.Search = (*SearchService)(&c.common)
 	c.Lists = (*ListsService)(&c.common)
+	c.Movies = (*MoviesService)(&c.common)
 }
 
 // NewRequest creates an API request.

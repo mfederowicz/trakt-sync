@@ -25,6 +25,7 @@ type Options struct {
 	PerPage      int
 	Days         int
 	TraktID      int
+	Msg          string
 	Verbose      bool
 	Version      bool
 	Remove       bool
