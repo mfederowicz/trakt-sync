@@ -5,6 +5,7 @@ package str
 type CheckIn struct {
 	ID      *int64     `json:"id,omitempty"`
 	Watched *Timestamp `json:"watched,omitempty"`
+	Expires *Timestamp `json:"expires_at,omitempty"`
 	Movie   *Movie     `json:"movie,omitempty"`
 	Show    *Show      `json:"show,omitempty"`
 	Episode *Episode   `json:"episode,omitempty"`

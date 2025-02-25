@@ -44,6 +44,10 @@ type Config struct {
 	Days         int       `toml:"days"`
 	PerPage      int       `toml:"per_page"`
 	TraktID      int       `toml:"trakt_id"`
+	EpisodeAbs   int       `toml:"episode_abs"`
+	EpisodeCode  string    `toml:"episode_code"`
+	Episode      int       `toml:"episode"`
+	Season       int       `toml:"season"`
 	Msg          string    `toml:"msg"`
 	Remove       bool      `toml:"remove"`
 	Delete       bool      `toml:"delete"`

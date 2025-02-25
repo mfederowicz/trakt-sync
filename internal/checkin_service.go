@@ -46,7 +46,7 @@ func (c *CheckinService) CheckintoAnItem(ctx context.Context, checkin *str.Check
 	ch := new(str.CheckIn)
 	resp, err := c.client.Do(ctx, req, ch)
 	if err != nil {
-		return nil, resp, err
+		return ch, resp, err
 	}
 
 	return ch, resp, nil

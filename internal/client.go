@@ -88,6 +88,22 @@ func (r *NotFoundError) Error() string {
 	)
 }
 
+// ConflictError occurs when trakt.tv returns 409 error
+type ConflictError struct {
+	Response *http.Response
+	Message  string `json:"message"`
+}
+
+func (r *ConflictError) Error() string {
+	return fmt.Sprintf(consts.ErrorsPlaceholders,
+		r.Response.Request.Method,
+		uri.SanitizeURL(r.Response.Request.URL),
+		r.Response.StatusCode,
+		r.Message,
+	)
+}
+
+
 // RequestOption represents an option that can modify an http.Request.
 type RequestOption func(req *http.Request)
 
@@ -109,6 +125,7 @@ type Client struct {
 	Lists          *ListsService
 	Movies         *MoviesService
 	Episodes       *EpisodesService
+	Shows          *ShowsService
 	rateMu         sync.Mutex
 }
 
@@ -144,6 +161,7 @@ func (c *Client) initialize() {
 	c.Lists = (*ListsService)(&c.common)
 	c.Movies = (*MoviesService)(&c.common)
 	c.Episodes = (*EpisodesService)(&c.common)
+	c.Shows = (*ShowsService)(&c.common)
 }
 
 // NewRequest creates an API request.
@@ -254,7 +272,8 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 		case *UpgradeRequiredError:
 			upgradeAccountRequired(c, e)
 		case *NotFoundError:
-			return nil, errors.New(e.Error())
+			return response, errors.New(e.Error())
+		case *ConflictError:
 		default:
 			printer.Println("General error occurred:", errCheck)
 		}
@@ -355,9 +374,22 @@ func (c *Client) CheckResponse(r *http.Response) error {
 		return c.genUpgradeRequiredError(r, errorResponse)
 	case http.StatusNotFound:
 		return c.genNotFoundError(r, errorResponse)
+	case http.StatusConflict:
+		return c.genConflictError(r, errorResponse)
 	default:
 		return errorResponse
 	}
+}
+
+func (*Client) genConflictError(r *http.Response, errorResponse *str.ErrorResponse) *ConflictError {
+	conflictError := &ConflictError{
+		Response: errorResponse.Response,
+		Message:  errorResponse.Message,
+	}
+	if r.StatusCode == http.StatusConflict {
+		return conflictError
+	}
+	return nil
 }
 
 func (*Client) genNotFoundError(r *http.Response, errorResponse *str.ErrorResponse) *NotFoundError {

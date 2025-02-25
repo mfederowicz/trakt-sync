@@ -29,4 +29,8 @@ type Options struct {
 	Verbose      bool
 	Version      bool
 	Remove       bool
+	EpisodeAbs   int
+	EpisodeCode  string
+	Episode      int
+	Season       int
 }
