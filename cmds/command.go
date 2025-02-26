@@ -36,33 +36,38 @@ var (
 
 // Avflags contains all available flags
 var Avflags = map[string]bool{
-	"a":          true,
-	"c":          true,
-	"calendars":  true,
-	"collection": true,
-	"days":       true,
-	"ex":         true,
-	"f":          true,
-	"field":      true,
-	"godoc":      true,
-	"help":       true,
-	"history":    true,
-	"i":          true,
-	"trakt_id":   true,
-	"id_type":    true,
-	"lists":      true,
-	"o":          true,
-	"people":     true,
-	"q":          true,
-	"remove":     true,
-	"search":     true,
-	"start_date": true,
-	"t":          true,
-	"u":          true,
-	"users":      true,
-	"v":          true,
-	"version":    true,
-	"watchlist":  true,
+	"a":            true,
+	"c":            true,
+	"calendars":    true,
+	"checkin":      true,
+	"collection":   true,
+	"days":         true,
+	"delete":       true,
+	"ex":           true,
+	"f":            true,
+	"field":        true,
+	"godoc":        true,
+	"help":         true,
+	"history":      true,
+	"i":            true,
+	"trakt_id":     true,
+	"episode_code": true,
+	"episode_abs":  true,
+	"id_type":      true,
+	"lists":        true,
+	"msg":          true,
+	"o":            true,
+	"people":       true,
+	"q":            true,
+	"remove":       true,
+	"search":       true,
+	"start_date":   true,
+	"t":            true,
+	"u":            true,
+	"users":        true,
+	"v":            true,
+	"version":      true,
+	"watchlist":    true,
 }
 
 type fatal struct{}
@@ -106,9 +111,9 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	}
 
 	options.Type = *_strType
-	
+
 	options.Module = c.Name
-	options = setOptionsDependsOnModule(c.Name, options)	
+	options = setOptionsDependsOnModule(c.Name, options)
 	c.Options = &options
 
 	if !c.ValidFlags() {
@@ -150,6 +155,9 @@ func processVerbose(options *str.Options) {
 
 func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	switch module {
+	case "checkin":
+		options.Action = *_checkinAction
+		options.TraktID = *_checkinTraktID
 	case "lists":
 		options.Action = *_listsAction
 		options.TraktID = *_listTraktID
@@ -403,6 +411,18 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 
 	if len(*_listSort) > consts.ZeroValue {
 		options.CommentsSort = *_listSort
+	}
+
+	if len(*_checkinMsg) > consts.ZeroValue {
+		options.Msg = *_checkinMsg
+	}
+
+	if *_checkinEpisodeAbs > consts.ZeroValue {
+		options.EpisodeAbs = *_checkinEpisodeAbs
+	}
+	
+	if len(*_checkinEpisodeCode) > consts.ZeroValue {
+		options.EpisodeCode = *_checkinEpisodeCode
 	}
 
 	return options

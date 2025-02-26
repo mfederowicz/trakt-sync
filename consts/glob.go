@@ -18,6 +18,11 @@ const (
 	ListCommentSortUsage   = "allow to overwrite comments sort"
 	ModuleUsage            = "allow use selected module"
 	ActionUsage            = "allow use selected action"
+	TraktIDUsage           = "allow to overwrite trakt_id"
+	CheckInMsgUsage        = "allow to overwrite msg"
+	DeleteUsage            = "allow delete item"
+	EpisodeCodeUsage       = "episode_code format 01x24"
+	EpisodeAbsUsage        = "episode_abs 1234"
 	QueryUsage             = "allow use selected query"
 	FieldUsage             = "allow use selected field"
 	SortUsage              = "allow to overwrite sort"
@@ -27,6 +32,7 @@ const (
 	NoEpisodeTitle         = "no episode title"
 	EmptyPersonIDMsg       = "set personId ie: -i john-wayne"
 	EmptyListIDMsg         = "set traktId ie: -trakt_id 55"
+	EmptyTraktIDMsg        = "set traktId ie: -trakt_id 55"
 	ErrorRender            = "error render: %w"
 	CMD                    = "cmd"
 	TestURL                = "test-url"
@@ -52,6 +58,8 @@ const (
 	DefaultPerPage         = 100
 	PerPage                = 50
 	ZeroValue              = 0
+	TwoValue               = 2
+	MinSeasonNumberLength = 3
 	DefaultExitCode        = 0
 	FirstArgElement        = 0
 	DefaultPage            = 1

@@ -161,6 +161,23 @@ $ ./trakt-sync calendars -a all-movies -> export_calendars_movies_20240707_7.jso
 ```console
 $ ./trakt-sync calendars -a all-dvd -> export_calendars_dvd_20240707_7.json
 ```
+#### Manage checkin:
+
+```console
+$ ./trakt-sync checkin -a movie -trakt_id 28 -msg "super movie"
+```
+```console
+$ ./trakt-sync checkin -a episode -trakt_id 3190486 -msg "super episode"
+```
+```console
+$ ./trakt-sync checkin -a show_episode -trakt_id 37696 -episode_abs 6 -msg "super episode"
+```
+```console
+$ ./trakt-sync checkin -a show_episode -trakt_id 136121 -episode_code 1x5 -msg "super episode"
+```
+```console
+$ ./trakt-sync checkin -a delete 
+```
 
 #### Export search result by Text Query:
 
