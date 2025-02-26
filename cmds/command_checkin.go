@@ -23,7 +23,7 @@ var (
 var CheckinCmd = &Command{
 	Name:    "checkin",
 	Usage:   "",
-	Summary: "Checkin movie,show,episode",
+	Summary: "Checkin movie,episode,show_episode,delete",
 	Help:    `checkin command`,
 }
 
