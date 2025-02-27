@@ -291,6 +291,8 @@ func GetOutputForModule(options *str.Options) string {
 	switch options.Module {
 	case "calendars":
 		options.Output = getOutputForModuleCalendars(options)
+	case "certifications":
+		options.Output = getOutputForModuleCertifications(options)
 	case "search":
 		options.Output = getOutputForModuleSearch(options)
 	case "users":
@@ -444,5 +446,19 @@ func getOutputForModuleCalendars(options *str.Options) string {
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat1, options.Module)
 	}
+	return options.Output
+}
+
+func getOutputForModuleCertifications(options *str.Options) string {
+	switch options.Type {
+	case "movies", "shows":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			options.Type)
+	default:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat1, options.Module)
+	}
+
 	return options.Output
 }
