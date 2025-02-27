@@ -103,7 +103,6 @@ func (r *ConflictError) Error() string {
 	)
 }
 
-
 // RequestOption represents an option that can modify an http.Request.
 type RequestOption func(req *http.Request)
 
@@ -120,6 +119,7 @@ type Client struct {
 	Sync           *SyncService
 	People         *PeopleService
 	Calendars      *CalendarsService
+	Certifications *CertificationsService
 	Checkin        *CheckinService
 	Search         *SearchService
 	Lists          *ListsService
@@ -156,6 +156,7 @@ func (c *Client) initialize() {
 	c.Sync = (*SyncService)(&c.common)
 	c.People = (*PeopleService)(&c.common)
 	c.Calendars = (*CalendarsService)(&c.common)
+	c.Certifications = (*CertificationsService)(&c.common)
 	c.Checkin = (*CheckinService)(&c.common)
 	c.Search = (*SearchService)(&c.common)
 	c.Lists = (*ListsService)(&c.common)
@@ -169,7 +170,6 @@ func (c *Client) NewRequest(method, urlStr string, body any, opts ...RequestOpti
 	if !strings.HasSuffix(c.BaseURL.Path, "/") {
 		return nil, fmt.Errorf("BaseURL must have a trailing slash, but %q does not", c.BaseURL)
 	}
-
 	u, err := c.BaseURL.Parse(urlStr)
 	if err != nil {
 		return nil, err

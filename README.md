@@ -44,15 +44,17 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 
 `trakt-sync` accepts the following command line commands/modules:
 
+- `calendars` - By default, the calendar will return all shows or movies for the specified time period and can be global or user specific.
+- `certifications` - Certifications list
+- `checkin` - Checkin movie,episode,show_episode,delete
+- `collection` - Get all collected items in a user's collection.
 - `help` - Help on the trakt-sync command and subcommands.
 - `history` - Returns movies and episodes that a user has watched, sorted by most recent.
-- `watchlist` - Returns all items in a user's watchlist filtered by type.
-- `collection` - Get all collected items in a user's collection.
-- `users` - Returns all data for a user.
-- `people` - Returns all data for selected person.
-- `calendars` - By default, the calendar will return all shows or movies for the specified time period and can be global or user specific.
-- `search` - Searches can use queries or ID lookups.
 - `lists` - Returns data about lists: trending, popular, list, likes, like, items, comments.
+- `people` - Returns all data for selected person.
+- `search` - Searches can use queries or ID lookups.
+- `users` - Returns all data for a user.
+- `watchlist` - Returns all items in a user's watchlist filtered by type.
 ### Sample export usage
 
 #### Export all tvshows from the watching history:
@@ -161,6 +163,17 @@ $ ./trakt-sync calendars -a all-movies -> export_calendars_movies_20240707_7.jso
 ```console
 $ ./trakt-sync calendars -a all-dvd -> export_calendars_dvd_20240707_7.json
 ```
+#### Export certifications for movies or shows:
+```console
+$ ./trakt-sync certifications -> export_certifications_movies.json
+```
+```console
+$ ./trakt-sync certifications -t movies -> export_certifications_movies.json
+```
+```console
+$ ./trakt-sync certifications -t shows -> export_certifications_shows.json
+```
+
 #### Manage checkin:
 
 ```console
