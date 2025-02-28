@@ -6,10 +6,8 @@ import (
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
-
-
 // CommentsLikeHandler struct for handler
-type CommentsLikeHandler struct {}
+type CommentsLikeHandler struct{}
 
 // Handle to handle comments: like action
 func (h CommentsLikeHandler) Handle(options *str.Options, client *internal.Client) error {

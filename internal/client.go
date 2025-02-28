@@ -121,6 +121,7 @@ type Client struct {
 	Calendars      *CalendarsService
 	Certifications *CertificationsService
 	Checkin        *CheckinService
+	Comments       *CommentsService
 	Search         *SearchService
 	Lists          *ListsService
 	Movies         *MoviesService
@@ -158,6 +159,7 @@ func (c *Client) initialize() {
 	c.Calendars = (*CalendarsService)(&c.common)
 	c.Certifications = (*CertificationsService)(&c.common)
 	c.Checkin = (*CheckinService)(&c.common)
+	c.Comments = (*CommentsService)(&c.common)
 	c.Search = (*SearchService)(&c.common)
 	c.Lists = (*ListsService)(&c.common)
 	c.Movies = (*MoviesService)(&c.common)

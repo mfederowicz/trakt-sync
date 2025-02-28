@@ -26,9 +26,11 @@ type Options struct {
 	Days         int
 	TraktID      int
 	Msg          string
+	Comment      string
 	Verbose      bool
 	Version      bool
 	Remove       bool
+	Spoiler      bool
 	EpisodeAbs   int
 	EpisodeCode  string
 	Episode      int

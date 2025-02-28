@@ -49,8 +49,10 @@ type Config struct {
 	Episode      int       `toml:"episode"`
 	Season       int       `toml:"season"`
 	Msg          string    `toml:"msg"`
+	Comment      string    `toml:"comment"`
 	Remove       bool      `toml:"remove"`
 	Delete       bool      `toml:"delete"`
+	Spoiler      bool      `toml:"spoiler"`
 	Verbose      bool      `toml:"verbose"`
 }
 
@@ -434,6 +436,7 @@ func DefaultConfig() *Config {
 		PerPage:      consts.DefaultPerPage,
 		Remove:       false,
 		Delete:       false,
+		Spoiler:      false,
 		Msg:          "",
 	}
 }

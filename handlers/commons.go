@@ -21,6 +21,7 @@ type CommonInterface interface {
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
 	CheckSeasonNumber(code *string) (*string, *string, error)
 	Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error)
+	Comment(client *internal.Client, checkin *str.Comment) (*str.Comment, *str.Response, error)
 }
 
 // CommonLogic struct for common methods
@@ -76,6 +77,16 @@ func (*CommonLogic) Checkin(client *internal.Client, checkin *str.CheckIn) (*str
 	result, resp, err := client.Checkin.CheckintoAnItem(
 		context.Background(),
 		checkin,
+	)
+
+	return result, resp, err
+}
+
+// Comment helper function to post comment object
+func (*CommonLogic) Comment(client *internal.Client, comment *str.Comment) (*str.Comment, *str.Response, error) {
+	result, resp, err := client.Comments.PostAComment(
+		context.Background(),
+		comment,
 	)
 
 	return result, resp, err
