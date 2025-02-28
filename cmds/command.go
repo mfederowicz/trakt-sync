@@ -40,6 +40,7 @@ var Avflags = map[string]bool{
 	"c":              true,
 	"calendars":      true,
 	"certifications": true,
+	"comments":       true,
 	"checkin":        true,
 	"collection":     true,
 	"days":           true,
@@ -156,6 +157,9 @@ func processVerbose(options *str.Options) {
 
 func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	switch module {
+	case "comments":
+		options.Action = *_commentsAction
+		options.TraktID = *_commentsTraktID
 	case "checkin":
 		options.Action = *_checkinAction
 		options.TraktID = *_checkinTraktID
