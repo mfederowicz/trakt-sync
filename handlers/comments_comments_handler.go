@@ -14,10 +14,10 @@ type CommentsCommentsHandler struct{}
 
 // Handle to handle checkin: checkin action
 func (h CommentsCommentsHandler) Handle(options *str.Options, client *internal.Client) error {
-	printer.Println("generate comment:",options.Type)
-	
+	printer.Println("generate comment:", options.Type)
+
 	var handler CommentsHandler
-switch options.Type {
+	switch options.Type {
 	case "movie":
 		handler = CommentsCommentsMovieHandler{}
 	case "show":
@@ -27,7 +27,7 @@ switch options.Type {
 	case "episode":
 		handler = CommentsCommentsEpisodeHandler{}
 	case "list":
-		handler = CommentsCommentsListHandler{}	
+		handler = CommentsCommentsListHandler{}
 	default:
 		printer.Println("possible types: movie,show,season,episode,list")
 	}

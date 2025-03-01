@@ -17,6 +17,7 @@ import (
 type CommonInterface interface {
 	FetchMovie(client *internal.Client, options *str.Options) (*str.Movie, error)
 	FetchShow(client *internal.Client, id *int) (*str.Show, error)
+	FetchSeason(client *internal.Client, id *int) (*str.Season, error)
 	FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error)
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
 	CheckSeasonNumber(code *string) (*string, *string, error)
@@ -46,6 +47,19 @@ func (*CommonLogic) FetchShow(client *internal.Client, options *str.Options) (*s
 	result, _, err := client.Shows.GetShow(
 		context.Background(),
 		&showID,
+		&opts,
+	)
+
+	return result, err
+}
+
+// FetchSeason helper function to fetch season object
+func (*CommonLogic) FetchSeason(client *internal.Client, options *str.Options) (*str.Season, error) {
+	opts := uri.ListOptions{Extended: options.ExtendedInfo}
+	seasonID := options.TraktID
+	result, _, err := client.Seasons.GetSeason(
+		context.Background(),
+		&seasonID,
 		&opts,
 	)
 
