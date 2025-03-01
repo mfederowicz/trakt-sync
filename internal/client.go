@@ -103,6 +103,22 @@ func (r *ConflictError) Error() string {
 	)
 }
 
+// ValidationError occurs when trakt.tv returns 422 error
+type ValidationError struct {
+	Response *http.Response
+	Message  string      `json:"message"`
+	Errors   *str.Errors `json:"errors,omitempty"`
+}
+
+func (r *ValidationError) Error() string {
+	return fmt.Sprintf(consts.ErrorsPlaceholders,
+		r.Response.Request.Method,
+		uri.SanitizeURL(r.Response.Request.URL),
+		r.Response.StatusCode,
+		r.Message,
+	)
+}
+
 // RequestOption represents an option that can modify an http.Request.
 type RequestOption func(req *http.Request)
 
@@ -276,6 +292,9 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 		case *NotFoundError:
 			return response, errors.New(e.Error())
 		case *ConflictError:
+		case *ValidationError:
+			response.Errors = e.Errors
+			return response, errors.New("validation error")
 		default:
 			printer.Println("General error occurred:", errCheck)
 		}
@@ -378,9 +397,23 @@ func (c *Client) CheckResponse(r *http.Response) error {
 		return c.genNotFoundError(r, errorResponse)
 	case http.StatusConflict:
 		return c.genConflictError(r, errorResponse)
+	case http.StatusUnprocessableEntity:
+		return c.genValidationError(r, errorResponse)
 	default:
 		return errorResponse
 	}
+}
+
+func (*Client) genValidationError(r *http.Response, errorResponse *str.ErrorResponse) *ValidationError {
+	validationError := &ValidationError{
+		Response: errorResponse.Response,
+		Message:  errorResponse.Message,
+		Errors:   errorResponse.Errors,
+	}
+	if r.StatusCode == http.StatusUnprocessableEntity {
+		return validationError
+	}
+	return nil
 }
 
 func (*Client) genConflictError(r *http.Response, errorResponse *str.ErrorResponse) *ConflictError {

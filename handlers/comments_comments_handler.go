@@ -33,7 +33,7 @@ switch options.Type {
 	}
 	err := handler.Handle(options, client)
 	if err != nil {
-		return fmt.Errorf("comments/"+options.Type+":%s", err)
+		return fmt.Errorf(options.Type+":%s", err)
 	}
 
 	return nil

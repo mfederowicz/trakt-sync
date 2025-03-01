@@ -88,7 +88,6 @@ func (*CommonLogic) Comment(client *internal.Client, comment *str.Comment) (*str
 		context.Background(),
 		comment,
 	)
-
 	return result, resp, err
 }
 

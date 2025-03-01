@@ -17,8 +17,6 @@ type CommentsCommentsMovieHandler struct{ common CommonLogic }
 
 // Handle to handle comments: movie type
 func (h CommentsCommentsMovieHandler) Handle(options *str.Options, client *internal.Client) error {
-	printer.Println("generate comment:", options.Type)
-
 	if options.TraktID == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
