@@ -13,7 +13,7 @@ import (
 type CommentsCommentsHandler struct{}
 
 // Handle to handle checkin: checkin action
-func (h CommentsCommentsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (CommentsCommentsHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("generate comment:", options.Type)
 
 	var handler CommentsHandler

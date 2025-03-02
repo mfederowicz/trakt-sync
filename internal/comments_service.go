@@ -4,6 +4,7 @@ package internal
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/printer"
@@ -32,4 +33,27 @@ func (c *CommentsService) PostAComment(ctx context.Context, comment *str.Comment
 	}
 
 	return com, resp, nil
+}
+
+// GetComment Returns comment object.
+func (c *CommentsService) GetComment(ctx context.Context, id *int) (*str.Comment, *str.Response, error) {
+	var url = fmt.Sprintf("comments/%d", *id)
+	printer.Println("fetch comment url:" + url)
+	req, err := c.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.Comment)
+	resp, err := c.client.Do(ctx, req, &result)
+	
+	if resp.StatusCode == http.StatusNotFound {
+		err = fmt.Errorf("comment not found with commentId:%d", *id)
+	}
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
 }

@@ -293,6 +293,8 @@ func GetOutputForModule(options *str.Options) string {
 		options.Output = getOutputForModuleCalendars(options)
 	case "certifications":
 		options.Output = getOutputForModuleCertifications(options)
+	case "comments":
+		options.Output = getOutputForModuleComments(options)
 	case "search":
 		options.Output = getOutputForModuleSearch(options)
 	case "users":
@@ -458,6 +460,21 @@ func getOutputForModuleCertifications(options *str.Options) string {
 			options.Type)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat1, options.Module)
+	}
+
+	return options.Output
+}
+
+func getOutputForModuleComments(options *str.Options) string {
+	switch options.Action {
+	case "comment":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			fmt.Sprintf(consts.StringDigit, "comment_", options.CommentID),
+		)
+	default:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
 	}
 
 	return options.Output

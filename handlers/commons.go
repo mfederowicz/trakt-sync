@@ -20,6 +20,7 @@ type CommonInterface interface {
 	FetchSeason(client *internal.Client, id *int) (*str.Season, error)
 	FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error)
 	FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error)
+	FetchComment(client *internal.Client, options *str.Options) (*str.Comment, error)
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
 	CheckSeasonNumber(code *string) (*string, *string, error)
 	Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error)
@@ -84,6 +85,17 @@ func (*CommonLogic) FetchList(client *internal.Client, options *str.Options) (*s
 	result, _, err := client.Lists.GetList(
 		context.Background(),
 		&listID,
+	)
+
+	return result, err
+}
+
+// FetchComment helper function to fetch comment object
+func (*CommonLogic) FetchComment(client *internal.Client, options *str.Options) (*str.Comment, error) {
+	commentID := options.CommentID
+	result, _, err := client.Comments.GetComment(
+		context.Background(),
+		&commentID,
 	)
 
 	return result, err

@@ -44,6 +44,7 @@ type Config struct {
 	Days         int       `toml:"days"`
 	PerPage      int       `toml:"per_page"`
 	TraktID      int       `toml:"trakt_id"`
+	CommentID    int       `toml:"comment_id"`
 	EpisodeAbs   int       `toml:"episode_abs"`
 	EpisodeCode  string    `toml:"episode_code"`
 	Episode      int       `toml:"episode"`

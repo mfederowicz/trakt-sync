@@ -53,6 +53,7 @@ var Avflags = map[string]bool{
 	"history":        true,
 	"i":              true,
 	"trakt_id":       true,
+	"comment_id":     true,
 	"episode_code":   true,
 	"episode_abs":    true,
 	"id_type":        true,
@@ -161,6 +162,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	case "comments":
 		options.Action = *_commentsAction
 		options.TraktID = *_commentsTraktID
+		options.CommentID = *_commentsCommentID
 	case "checkin":
 		options.Action = *_checkinAction
 		options.TraktID = *_checkinTraktID
@@ -435,6 +437,10 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		options.Comment = *_commentsComment
 	}
 
+	if *_commentsCommentID > consts.ZeroValue {
+		options.CommentID = *_commentsCommentID
+	}
+	
 	return options
 }
 

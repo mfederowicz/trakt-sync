@@ -25,6 +25,7 @@ type Options struct {
 	PerPage      int
 	Days         int
 	TraktID      int
+	CommentID    int
 	Msg          string
 	Comment      string
 	Verbose      bool
