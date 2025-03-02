@@ -23,6 +23,18 @@ func (h CommentsCommentHandler) Handle(options *str.Options, client *internal.Cl
 		return errors.New(consts.EmptyCommentIDMsg)
 	}
 
+	if options.Delete {
+		resp, err := h.common.DeleteComment(client, options)
+		if err != nil {
+			return fmt.Errorf("delete comment error:%w", err)
+		}
+
+		if resp.StatusCode == http.StatusNoContent {
+			printer.Printf("result: success, remove comment:%d \n", options.CommentID)
+		}
+		return nil
+	}
+
 	if len(options.Comment) > consts.ZeroValue {
 		c := new(str.Comment)
 		c.Comment = &options.Comment

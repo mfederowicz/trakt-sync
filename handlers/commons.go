@@ -22,6 +22,7 @@ type CommonInterface interface {
 	FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error)
 	FetchComment(client *internal.Client, options *str.Options) (*str.Comment, error)
 	UpdateComment(client *internal.Client, options *str.Options) (*str.Comment, error)
+	DeleteComment(client *internal.Client, options *str.Options) (*str.Comment, *str.Response, error)
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
 	CheckSeasonNumber(code *string) (*string, *string, error)
 	Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error)
@@ -102,7 +103,7 @@ func (*CommonLogic) FetchComment(client *internal.Client, options *str.Options) 
 	return result, err
 }
 
-// UpdateComment helper function to put checkin object
+// UpdateComment helper function to put comment object
 func (*CommonLogic) UpdateComment(client *internal.Client, options *str.Options, comment *str.Comment) (*str.Comment, *str.Response, error) {
 	commentID := options.CommentID
 	result, resp, err := client.Comments.UpdateComment(
@@ -114,6 +115,16 @@ func (*CommonLogic) UpdateComment(client *internal.Client, options *str.Options,
 	return result, resp, err
 }
 
+// DeleteComment helper function to delete comment object
+func (*CommonLogic) DeleteComment(client *internal.Client, options *str.Options) (*str.Response, error) {
+	commentID := options.CommentID
+	resp, err := client.Comments.DeleteComment(
+		context.Background(),
+		&commentID,
+	)
+
+	return resp, err
+}
 
 
 

@@ -31,6 +31,7 @@ type Options struct {
 	Verbose      bool
 	Version      bool
 	Remove       bool
+	Delete       bool
 	Spoiler      bool
 	EpisodeAbs   int
 	EpisodeCode  string
