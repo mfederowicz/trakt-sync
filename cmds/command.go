@@ -40,6 +40,7 @@ var Avflags = map[string]bool{
 	"c":              true,
 	"calendars":      true,
 	"certifications": true,
+	"comments":       true,
 	"checkin":        true,
 	"collection":     true,
 	"days":           true,
@@ -61,6 +62,7 @@ var Avflags = map[string]bool{
 	"people":         true,
 	"q":              true,
 	"remove":         true,
+	"comment":        true,
 	"search":         true,
 	"start_date":     true,
 	"t":              true,
@@ -156,6 +158,9 @@ func processVerbose(options *str.Options) {
 
 func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	switch module {
+	case "comments":
+		options.Action = *_commentsAction
+		options.TraktID = *_commentsTraktID
 	case "checkin":
 		options.Action = *_checkinAction
 		options.TraktID = *_checkinTraktID
@@ -424,6 +429,10 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 
 	if len(*_checkinEpisodeCode) > consts.ZeroValue {
 		options.EpisodeCode = *_checkinEpisodeCode
+	}
+
+	if len(*_commentsComment) > consts.ZeroValue {
+		options.Comment = *_commentsComment
 	}
 
 	return options

@@ -21,6 +21,8 @@ const (
 	TraktIDUsage           = "allow to overwrite trakt_id"
 	CheckInMsgUsage        = "allow to overwrite msg"
 	DeleteUsage            = "allow delete item"
+	SpoilerUsage           = "allow to overwrite spoiler"
+	CommentUsage           = "allow to overwrite comment"
 	EpisodeCodeUsage       = "episode_code format 01x24"
 	EpisodeAbsUsage        = "episode_abs 1234"
 	QueryUsage             = "allow use selected query"
@@ -59,7 +61,7 @@ const (
 	PerPage                = 50
 	ZeroValue              = 0
 	TwoValue               = 2
-	MinSeasonNumberLength = 3
+	MinSeasonNumberLength  = 3
 	DefaultExitCode        = 0
 	FirstArgElement        = 0
 	DefaultPage            = 1

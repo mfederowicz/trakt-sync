@@ -17,10 +17,13 @@ import (
 type CommonInterface interface {
 	FetchMovie(client *internal.Client, options *str.Options) (*str.Movie, error)
 	FetchShow(client *internal.Client, id *int) (*str.Show, error)
+	FetchSeason(client *internal.Client, id *int) (*str.Season, error)
 	FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error)
+	FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error)
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
 	CheckSeasonNumber(code *string) (*string, *string, error)
 	Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error)
+	Comment(client *internal.Client, checkin *str.Comment) (*str.Comment, *str.Response, error)
 }
 
 // CommonLogic struct for common methods
@@ -51,12 +54,36 @@ func (*CommonLogic) FetchShow(client *internal.Client, options *str.Options) (*s
 	return result, err
 }
 
+// FetchSeason helper function to fetch season object
+func (*CommonLogic) FetchSeason(client *internal.Client, options *str.Options) (*str.Season, error) {
+	opts := uri.ListOptions{Extended: options.ExtendedInfo}
+	seasonID := options.TraktID
+	result, _, err := client.Seasons.GetSeason(
+		context.Background(),
+		&seasonID,
+		&opts,
+	)
+
+	return result, err
+}
+
 // FetchEpisode helper function to fetch episode object
 func (*CommonLogic) FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error) {
 	episodeID := options.TraktID
 	result, _, err := client.Episodes.GetEpisode(
 		context.Background(),
 		&episodeID,
+	)
+
+	return result, err
+}
+
+// FetchList helper function to fetch list object
+func (*CommonLogic) FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error) {
+	listID := options.TraktID
+	result, _, err := client.Lists.GetList(
+		context.Background(),
+		&listID,
 	)
 
 	return result, err
@@ -78,6 +105,15 @@ func (*CommonLogic) Checkin(client *internal.Client, checkin *str.CheckIn) (*str
 		checkin,
 	)
 
+	return result, resp, err
+}
+
+// Comment helper function to post comment object
+func (*CommonLogic) Comment(client *internal.Client, comment *str.Comment) (*str.Comment, *str.Response, error) {
+	result, resp, err := client.Comments.PostAComment(
+		context.Background(),
+		comment,
+	)
 	return result, resp, err
 }
 
