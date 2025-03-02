@@ -83,10 +83,13 @@ func (l *ListsService) GetList(ctx context.Context, id *int) (*str.PersonalList,
 	}
 
 	list := new(str.PersonalList)
-	resp, err := l.client.Do(ctx, req, &list)
+	resp, err := l.client.Do(ctx, req, &list)	
+	
+	if resp.StatusCode == http.StatusNotFound {
+		err = fmt.Errorf("list not found with traktId:%d", *id)
+	}
 
 	if err != nil {
-		printer.Println("fetch list err:" + err.Error())
 		return nil, resp, err
 	}
 

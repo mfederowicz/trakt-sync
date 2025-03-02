@@ -19,6 +19,7 @@ type CommonInterface interface {
 	FetchShow(client *internal.Client, id *int) (*str.Show, error)
 	FetchSeason(client *internal.Client, id *int) (*str.Season, error)
 	FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error)
+	FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error)
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
 	CheckSeasonNumber(code *string) (*string, *string, error)
 	Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error)
@@ -72,6 +73,17 @@ func (*CommonLogic) FetchEpisode(client *internal.Client, options *str.Options) 
 	result, _, err := client.Episodes.GetEpisode(
 		context.Background(),
 		&episodeID,
+	)
+
+	return result, err
+}
+
+// FetchList helper function to fetch list object
+func (*CommonLogic) FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error) {
+	listID := options.TraktID
+	result, _, err := client.Lists.GetList(
+		context.Background(),
+		&listID,
 	)
 
 	return result, err
