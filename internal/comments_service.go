@@ -35,6 +35,26 @@ func (c *CommentsService) PostAComment(ctx context.Context, comment *str.Comment
 	return com, resp, nil
 }
 
+// UpdateComment to update a single comment. 
+// API docs: https://trakt.docs.apiary.io/#reference/comments/comment/update-a-comment-or-reply
+func (c *CommentsService) UpdateComment(ctx context.Context, id *int, comment *str.Comment) (*str.Comment, *str.Response, error) {
+	var url = fmt.Sprintf("comments/%d", *id)
+	printer.Println("update comment")
+	req, err := c.client.NewRequest(http.MethodPut, url, comment)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	com := new(str.Comment)
+	resp, err := c.client.Do(ctx, req, com)
+	if err != nil {
+		return nil, nil, errors.Join(resp.Errors.GetComments())
+	}
+
+	return com, resp, nil
+}
+
+
 // GetComment Returns comment object.
 func (c *CommentsService) GetComment(ctx context.Context, id *int) (*str.Comment, *str.Response, error) {
 	var url = fmt.Sprintf("comments/%d", *id)

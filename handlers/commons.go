@@ -21,6 +21,7 @@ type CommonInterface interface {
 	FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error)
 	FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error)
 	FetchComment(client *internal.Client, options *str.Options) (*str.Comment, error)
+	UpdateComment(client *internal.Client, options *str.Options) (*str.Comment, error)
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
 	CheckSeasonNumber(code *string) (*string, *string, error)
 	Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error)
@@ -100,6 +101,21 @@ func (*CommonLogic) FetchComment(client *internal.Client, options *str.Options) 
 
 	return result, err
 }
+
+// UpdateComment helper function to put checkin object
+func (*CommonLogic) UpdateComment(client *internal.Client, options *str.Options, comment *str.Comment) (*str.Comment, *str.Response, error) {
+	commentID := options.CommentID
+	result, resp, err := client.Comments.UpdateComment(
+		context.Background(),
+		&commentID,
+		comment,
+	)
+
+	return result, resp, err
+}
+
+
+
 
 // FetchUserConnections helper function to fetch connections object
 func (*CommonLogic) FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error) {
