@@ -9,6 +9,7 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/uri"
 )
 
 // CommentsService  handles communication with the comments related
@@ -97,4 +98,29 @@ func (c *CommentsService) DeleteComment(ctx context.Context, id *int) (*str.Resp
 	}
 
 	return resp, nil
+}
+
+// GetRepliesForComment Returns all replies for a comment.
+// API docs: https://trakt.docs.apiary.io/#reference/comments/replies/get-replies-for-a-comment
+func (c *CommentsService) GetRepliesForComment(ctx context.Context, opts *uri.ListOptions, id *int) ([]*str.Comment, *str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/replies", *id)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch replies url:" + url)
+	req, err := c.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Comment{}
+	resp, err := c.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch replies err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
 }
