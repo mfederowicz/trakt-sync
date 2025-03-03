@@ -124,3 +124,28 @@ func (c *CommentsService) GetRepliesForComment(ctx context.Context, opts *uri.Li
 
 	return list, resp, nil
 }
+
+// ReplyAComment Add a new reply to an existing comment.
+// API docs:https://trakt.docs.apiary.io/#reference/comments/replies/post-a-reply-for-a-comment 
+func (c *CommentsService) ReplyAComment(ctx context.Context, id *int, reply *str.Comment) (*str.Comment, *str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/replies", *id)
+	printer.Println("reply comment")
+	req, err := c.client.NewRequest(http.MethodPost, url, reply)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	com := new(str.Comment)
+	resp, err := c.client.Do(ctx, req, com)
+
+	if resp.StatusCode == http.StatusNotFound {
+		err = fmt.Errorf("comment not found with commentId:%d", *id)
+	}
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return com, resp, nil
+}
+

@@ -17,6 +17,7 @@ var (
 	_commentsDelete    = CommentsCmd.Flag.Bool("delete", cfg.DefaultConfig().Delete, consts.DeleteUsage)
 	_commentsSpoiler   = CommentsCmd.Flag.Bool("spoiler", cfg.DefaultConfig().Spoiler, consts.SpoilerUsage)
 	_commentsComment   = CommentsCmd.Flag.String("comment", cfg.DefaultConfig().Comment, consts.CommentUsage)
+	_commentsReply     = CommentsCmd.Flag.String("reply", cfg.DefaultConfig().Reply, consts.ReplyUsage)
 )
 
 // CommentsCmd manage all types of comments:movie, show, season, episode, or list.

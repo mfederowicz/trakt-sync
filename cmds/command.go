@@ -63,6 +63,7 @@ var Avflags = map[string]bool{
 	"people":         true,
 	"q":              true,
 	"remove":         true,
+	"reply":          true,
 	"comment":        true,
 	"search":         true,
 	"start_date":     true,
@@ -444,7 +445,11 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 	if *_commentsCommentID > consts.ZeroValue {
 		options.CommentID = *_commentsCommentID
 	}
-	
+
+	if len(*_commentsReply) > consts.ZeroValue {
+		options.Reply = *_commentsReply
+	}
+
 	return options
 }
 

@@ -28,6 +28,7 @@ type Options struct {
 	CommentID    int
 	Msg          string
 	Comment      string
+	Reply        string
 	Verbose      bool
 	Version      bool
 	Remove       bool

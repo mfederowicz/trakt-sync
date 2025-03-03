@@ -26,7 +26,8 @@ type CommonInterface interface {
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
 	CheckSeasonNumber(code *string) (*string, *string, error)
 	Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error)
-	Comment(client *internal.Client, checkin *str.Comment) (*str.Comment, *str.Response, error)
+	Comment(client *internal.Client, comment *str.Comment) (*str.Comment, *str.Response, error)
+	Reply(client *internal.Client, id *int, comment *str.Comment) (*str.Comment, *str.Response, error)
 }
 
 // CommonLogic struct for common methods
@@ -126,8 +127,6 @@ func (*CommonLogic) DeleteComment(client *internal.Client, options *str.Options)
 	return resp, err
 }
 
-
-
 // FetchUserConnections helper function to fetch connections object
 func (*CommonLogic) FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error) {
 	result, _, err := client.Users.RetrieveSettings(
@@ -152,6 +151,16 @@ func (*CommonLogic) Comment(client *internal.Client, comment *str.Comment) (*str
 	result, resp, err := client.Comments.PostAComment(
 		context.Background(),
 		comment,
+	)
+	return result, resp, err
+}
+
+// Reply helper function to post reply object
+func (*CommonLogic) Reply(client *internal.Client, id *int, reply *str.Comment) (*str.Comment, *str.Response, error) {
+	result, resp, err := client.Comments.ReplyAComment(
+		context.Background(),
+		id,
+		reply,
 	)
 	return result, resp, err
 }

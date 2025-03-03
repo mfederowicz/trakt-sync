@@ -24,6 +24,7 @@ const (
 	DeleteUsage            = "allow delete item"
 	SpoilerUsage           = "allow to overwrite spoiler"
 	CommentUsage           = "allow to overwrite comment"
+	ReplyUsage             = "allow to overwrite reply"
 	EpisodeCodeUsage       = "episode_code format 01x24"
 	EpisodeAbsUsage        = "episode_abs 1234"
 	QueryUsage             = "allow use selected query"

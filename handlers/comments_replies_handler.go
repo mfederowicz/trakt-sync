@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -17,7 +18,7 @@ import (
 )
 
 // CommentsRepliesHandler struct for handler
-type CommentsRepliesHandler struct{}
+type CommentsRepliesHandler struct{ common CommonLogic }
 
 // Handle to handle comments: replies action
 func (h CommentsRepliesHandler) Handle(options *str.Options, client *internal.Client) error {
@@ -25,6 +26,14 @@ func (h CommentsRepliesHandler) Handle(options *str.Options, client *internal.Cl
 		return errors.New(consts.EmptyCommentIDMsg)
 	}
 
+	if len(options.Reply) > consts.ZeroValue {
+		return h.replyForComment(client, options)
+	}
+
+	return h.allCommentReplies(client, options)
+}
+
+func (h CommentsRepliesHandler) allCommentReplies(client *internal.Client, options *str.Options) error {
 	printer.Println("Returns all replies for a comment.")
 	result, err := h.fetchCommentReplies(client, options, consts.DefaultPage)
 	if err != nil {
@@ -73,4 +82,20 @@ func (h CommentsRepliesHandler) fetchCommentReplies(client *internal.Client, opt
 	}
 
 	return list, nil
+}
+
+func (h CommentsRepliesHandler) replyForComment(client *internal.Client, options *str.Options) error {
+	c := new(str.Comment)
+	c.Comment = &options.Reply
+	c.Spoiler = &options.Spoiler
+	result, resp, err := h.common.Reply(client, &options.CommentID, c)
+	if err != nil {
+		return fmt.Errorf("reply comment error:%w", err)
+	}
+
+	if resp.StatusCode == http.StatusCreated {
+		printer.Printf("result: success, reply comment:%d \n", result.ID)
+	}
+
+	return nil
 }

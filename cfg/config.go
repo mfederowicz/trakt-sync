@@ -51,6 +51,7 @@ type Config struct {
 	Season       int       `toml:"season"`
 	Msg          string    `toml:"msg"`
 	Comment      string    `toml:"comment"`
+	Reply        string    `toml:"reply"`
 	Remove       bool      `toml:"remove"`
 	Delete       bool      `toml:"delete"`
 	Spoiler      bool      `toml:"spoiler"`
