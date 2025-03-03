@@ -40,6 +40,7 @@ var Avflags = map[string]bool{
 	"c":              true,
 	"calendars":      true,
 	"certifications": true,
+	"comments":       true,
 	"checkin":        true,
 	"collection":     true,
 	"days":           true,
@@ -52,6 +53,7 @@ var Avflags = map[string]bool{
 	"history":        true,
 	"i":              true,
 	"trakt_id":       true,
+	"comment_id":     true,
 	"episode_code":   true,
 	"episode_abs":    true,
 	"id_type":        true,
@@ -61,6 +63,8 @@ var Avflags = map[string]bool{
 	"people":         true,
 	"q":              true,
 	"remove":         true,
+	"reply":          true,
+	"comment":        true,
 	"search":         true,
 	"start_date":     true,
 	"t":              true,
@@ -156,6 +160,10 @@ func processVerbose(options *str.Options) {
 
 func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	switch module {
+	case "comments":
+		options.Action = *_commentsAction
+		options.TraktID = *_commentsTraktID
+		options.CommentID = *_commentsCommentID
 	case "checkin":
 		options.Action = *_checkinAction
 		options.TraktID = *_checkinTraktID
@@ -410,6 +418,10 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		options.Remove = *_listLikeRemove
 	}
 
+	if *_commentsDelete {
+		options.Delete = *_commentsDelete
+	}
+
 	if len(*_listSort) > consts.ZeroValue {
 		options.CommentsSort = *_listSort
 	}
@@ -424,6 +436,18 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 
 	if len(*_checkinEpisodeCode) > consts.ZeroValue {
 		options.EpisodeCode = *_checkinEpisodeCode
+	}
+
+	if len(*_commentsComment) > consts.ZeroValue {
+		options.Comment = *_commentsComment
+	}
+
+	if *_commentsCommentID > consts.ZeroValue {
+		options.CommentID = *_commentsCommentID
+	}
+
+	if len(*_commentsReply) > consts.ZeroValue {
+		options.Reply = *_commentsReply
 	}
 
 	return options

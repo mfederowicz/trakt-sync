@@ -25,10 +25,15 @@ type Options struct {
 	PerPage      int
 	Days         int
 	TraktID      int
+	CommentID    int
 	Msg          string
+	Comment      string
+	Reply        string
 	Verbose      bool
 	Version      bool
 	Remove       bool
+	Delete       bool
+	Spoiler      bool
 	EpisodeAbs   int
 	EpisodeCode  string
 	Episode      int
