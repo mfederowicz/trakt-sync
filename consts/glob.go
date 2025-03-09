@@ -22,6 +22,7 @@ const (
 	CommentIDUsage         = "allow to overwrite comment_id"
 	CheckInMsgUsage        = "allow to overwrite msg"
 	DeleteUsage            = "allow delete item"
+	RemoveUsage            = "allow remove item"
 	SpoilerUsage           = "allow to overwrite spoiler"
 	CommentUsage           = "allow to overwrite comment"
 	ReplyUsage             = "allow to overwrite reply"

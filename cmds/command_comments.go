@@ -15,6 +15,7 @@ var (
 	_commentsTraktID   = CommentsCmd.Flag.Int("trakt_id", cfg.DefaultConfig().TraktID, consts.TraktIDUsage)
 	_commentsCommentID = CommentsCmd.Flag.Int("comment_id", cfg.DefaultConfig().CommentID, consts.CommentIDUsage)
 	_commentsDelete    = CommentsCmd.Flag.Bool("delete", cfg.DefaultConfig().Delete, consts.DeleteUsage)
+	_commentsRemove    = CommentsCmd.Flag.Bool("remove", cfg.DefaultConfig().Remove, consts.RemoveUsage)
 	_commentsSpoiler   = CommentsCmd.Flag.Bool("spoiler", cfg.DefaultConfig().Spoiler, consts.SpoilerUsage)
 	_commentsComment   = CommentsCmd.Flag.String("comment", cfg.DefaultConfig().Comment, consts.CommentUsage)
 	_commentsReply     = CommentsCmd.Flag.String("reply", cfg.DefaultConfig().Reply, consts.ReplyUsage)

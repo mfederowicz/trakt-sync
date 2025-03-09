@@ -422,6 +422,10 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		options.Delete = *_commentsDelete
 	}
 
+	if *_commentsRemove {
+		options.Remove = *_commentsRemove
+	}
+
 	if len(*_listSort) > consts.ZeroValue {
 		options.CommentsSort = *_listSort
 	}

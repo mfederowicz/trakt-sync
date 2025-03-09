@@ -179,6 +179,44 @@ func (c *CommentsService) GetCommentUserLikes(ctx context.Context, id *int, opts
 	return list, resp, nil
 }
 
+// LikeComment Votes help determine popular comments. Only one like is allowed per comment per user.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/comments/like/like-a-comment 
+func (c *CommentsService) LikeComment(ctx context.Context, id *int) (*str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/like", *id)
+	printer.Println("send like for single comment:" + url)
+	req, err := c.client.NewRequest(http.MethodPost, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.client.Do(ctx, req, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// RemoveLikeComment Remove a like on a comment.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/comments/like/remove-like-on-a-comment 
+func (c *CommentsService) RemoveLikeComment(ctx context.Context, id *int) (*str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/like", *id)
+	printer.Println("remove like for single comment:" + url)
+	req, err := c.client.NewRequest(http.MethodDelete, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.client.Do(ctx, req, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
 // ReplyAComment Add a new reply to an existing comment.
 // API docs:https://trakt.docs.apiary.io/#reference/comments/replies/post-a-reply-for-a-comment
 func (c *CommentsService) ReplyAComment(ctx context.Context, id *int, reply *str.Comment) (*str.Comment, *str.Response, error) {
