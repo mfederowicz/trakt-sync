@@ -479,6 +479,13 @@ func getOutputForModuleComments(options *str.Options) string {
 			options.Module,
 			fmt.Sprintf(consts.StringDigit, "replies_", options.CommentID),
 		)
+	case "item":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			fmt.Sprintf(consts.StringDigit, "item_", options.CommentID),
+		)
+
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
 	}

@@ -78,6 +78,35 @@ func (c *CommentsService) GetComment(ctx context.Context, id *int) (*str.Comment
 	return result, resp, nil
 }
 
+// GetCommentItem Returns comment media item object.
+// API docs: https://trakt.docs.apiary.io/#reference/comments/item/get-the-attached-media-item
+func (c *CommentsService) GetCommentItem(ctx context.Context, id *int, opts *uri.ListOptions) (*str.CommentMediaItem, *str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/item", *id)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch comment madia item url:" + url)
+	req, err := c.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.CommentMediaItem)
+	resp, err := c.client.Do(ctx, req, &result)
+
+	if resp.StatusCode == http.StatusNotFound {
+		err = fmt.Errorf("comment item not found with commentId:%d", *id)
+	}
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
 // DeleteComment to delete a single comment.
 // API docs: https://trakt.docs.apiary.io/#reference/comments/comment/delete-a-comment-or-reply
 func (c *CommentsService) DeleteComment(ctx context.Context, id *int) (*str.Response, error) {
@@ -126,7 +155,7 @@ func (c *CommentsService) GetRepliesForComment(ctx context.Context, opts *uri.Li
 }
 
 // ReplyAComment Add a new reply to an existing comment.
-// API docs:https://trakt.docs.apiary.io/#reference/comments/replies/post-a-reply-for-a-comment 
+// API docs:https://trakt.docs.apiary.io/#reference/comments/replies/post-a-reply-for-a-comment
 func (c *CommentsService) ReplyAComment(ctx context.Context, id *int, reply *str.Comment) (*str.Comment, *str.Response, error) {
 	var url = fmt.Sprintf("comments/%d/replies", *id)
 	printer.Println("reply comment")
@@ -148,4 +177,3 @@ func (c *CommentsService) ReplyAComment(ctx context.Context, id *int, reply *str
 
 	return com, resp, nil
 }
-

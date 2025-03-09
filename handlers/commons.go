@@ -21,6 +21,7 @@ type CommonInterface interface {
 	FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error)
 	FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error)
 	FetchComment(client *internal.Client, options *str.Options) (*str.Comment, error)
+	FetchCommentItem(client *internal.Client, options *str.Options) (*str.CommentMediaItem, error)
 	UpdateComment(client *internal.Client, options *str.Options) (*str.Comment, error)
 	DeleteComment(client *internal.Client, options *str.Options) (*str.Comment, *str.Response, error)
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
@@ -99,6 +100,19 @@ func (*CommonLogic) FetchComment(client *internal.Client, options *str.Options) 
 	result, _, err := client.Comments.GetComment(
 		context.Background(),
 		&commentID,
+	)
+
+	return result, err
+}
+
+// FetchCommentItem helper function to fetch comment media item object
+func (*CommonLogic) FetchCommentItem(client *internal.Client, options *str.Options) (*str.CommentMediaItem, error) {
+	opts := uri.ListOptions{Extended: options.ExtendedInfo}
+	commentID := options.CommentID
+	result, _, err := client.Comments.GetCommentItem(
+		context.Background(),
+		&commentID,
+		&opts,
 	)
 
 	return result, err
