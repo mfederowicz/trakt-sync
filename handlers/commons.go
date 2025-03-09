@@ -6,6 +6,7 @@ import (
 	"errors"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
@@ -22,6 +23,7 @@ type CommonInterface interface {
 	FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error)
 	FetchComment(client *internal.Client, options *str.Options) (*str.Comment, error)
 	FetchCommentItem(client *internal.Client, options *str.Options) (*str.CommentMediaItem, error)
+	FetchCommentUserLikes(client *internal.Client, options *str.Options) (*str.CommentUserLike, error)
 	UpdateComment(client *internal.Client, options *str.Options) (*str.Comment, error)
 	DeleteComment(client *internal.Client, options *str.Options) (*str.Comment, *str.Response, error)
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
@@ -117,6 +119,37 @@ func (*CommonLogic) FetchCommentItem(client *internal.Client, options *str.Optio
 
 	return result, err
 }
+
+// FetchCommentUserLikes helper function to fetch comment user like object
+func (c *CommonLogic) FetchCommentUserLikes(client *internal.Client, options *str.Options, page int) ([]*str.CommentUserLike, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	commentID := options.CommentID
+	list, resp, err := client.Comments.GetCommentUserLikes(
+		context.Background(),
+		&commentID,
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchCommentUserLikes(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+	return list, nil
+}
+
+
 
 // UpdateComment helper function to put comment object
 func (*CommonLogic) UpdateComment(client *internal.Client, options *str.Options, comment *str.Comment) (*str.Comment, *str.Response, error) {

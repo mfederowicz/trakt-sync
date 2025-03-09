@@ -154,6 +154,31 @@ func (c *CommentsService) GetRepliesForComment(ctx context.Context, opts *uri.Li
 	return list, resp, nil
 }
 
+// GetCommentUserLikes Returns all users who liked a comment.
+// API docs: https://trakt.docs.apiary.io/#reference/comments/item/get-all-users-who-liked-a-comment 
+func (c *CommentsService) GetCommentUserLikes(ctx context.Context, id *int, opts *uri.ListOptions) ([]*str.CommentUserLike, *str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/likes", *id)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch likes url:" + url)
+	req, err := c.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.CommentUserLike{}
+	resp, err := c.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch likes err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
 // ReplyAComment Add a new reply to an existing comment.
 // API docs:https://trakt.docs.apiary.io/#reference/comments/replies/post-a-reply-for-a-comment
 func (c *CommentsService) ReplyAComment(ctx context.Context, id *int, reply *str.Comment) (*str.Comment, *str.Response, error) {
