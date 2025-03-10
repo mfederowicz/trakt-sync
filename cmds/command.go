@@ -36,43 +36,45 @@ var (
 
 // Avflags contains all available flags
 var Avflags = map[string]bool{
-	"a":              true,
-	"c":              true,
-	"calendars":      true,
-	"certifications": true,
-	"comments":       true,
-	"checkin":        true,
-	"collection":     true,
-	"days":           true,
-	"delete":         true,
-	"ex":             true,
-	"f":              true,
-	"field":          true,
-	"godoc":          true,
-	"help":           true,
-	"history":        true,
-	"i":              true,
-	"trakt_id":       true,
-	"comment_id":     true,
-	"episode_code":   true,
-	"episode_abs":    true,
-	"id_type":        true,
-	"lists":          true,
-	"msg":            true,
-	"o":              true,
-	"people":         true,
-	"q":              true,
-	"remove":         true,
-	"reply":          true,
-	"comment":        true,
-	"search":         true,
-	"start_date":     true,
-	"t":              true,
-	"u":              true,
-	"users":          true,
-	"v":              true,
-	"version":        true,
-	"watchlist":      true,
+	"a":               true,
+	"c":               true,
+	"calendars":       true,
+	"certifications":  true,
+	"comments":        true,
+	"comment_type":    true,
+	"checkin":         true,
+	"collection":      true,
+	"days":            true,
+	"delete":          true,
+	"ex":              true,
+	"f":               true,
+	"field":           true,
+	"godoc":           true,
+	"help":            true,
+	"history":         true,
+	"i":               true,
+	"include_replies": true,
+	"trakt_id":        true,
+	"comment_id":      true,
+	"episode_code":    true,
+	"episode_abs":     true,
+	"id_type":         true,
+	"lists":           true,
+	"msg":             true,
+	"o":               true,
+	"people":          true,
+	"q":               true,
+	"remove":          true,
+	"reply":           true,
+	"comment":         true,
+	"search":          true,
+	"start_date":      true,
+	"t":               true,
+	"u":               true,
+	"users":           true,
+	"v":               true,
+	"version":         true,
+	"watchlist":       true,
 }
 
 type fatal struct{}
@@ -164,6 +166,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		options.Action = *_commentsAction
 		options.TraktID = *_commentsTraktID
 		options.CommentID = *_commentsCommentID
+		options.CommentType = *_commentsCommentType
 	case "checkin":
 		options.Action = *_checkinAction
 		options.TraktID = *_checkinTraktID
@@ -452,6 +455,10 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 
 	if len(*_commentsReply) > consts.ZeroValue {
 		options.Reply = *_commentsReply
+	}
+
+	if len(*_commentsIncludeReplies) > consts.ZeroValue {
+		options.IncludeReplies = *_commentsIncludeReplies
 	}
 
 	return options

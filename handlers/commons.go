@@ -24,6 +24,7 @@ type CommonInterface interface {
 	FetchComment(client *internal.Client, options *str.Options) (*str.Comment, error)
 	FetchCommentItem(client *internal.Client, options *str.Options) (*str.CommentMediaItem, error)
 	FetchCommentUserLikes(client *internal.Client, options *str.Options) (*str.CommentUserLike, error)
+	FetchTrendingComments(client *internal.Client, options *str.Options) (*str.CommentTrendingItem, error)
 	UpdateComment(client *internal.Client, options *str.Options) (*str.Comment, error)
 	DeleteComment(client *internal.Client, options *str.Options) (*str.Comment, *str.Response, error)
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
@@ -149,7 +150,36 @@ func (c *CommonLogic) FetchCommentUserLikes(client *internal.Client, options *st
 	return list, nil
 }
 
+// FetchTrendingComments helper function to fetch tending comments object
+func (c *CommonLogic) FetchTrendingComments(client *internal.Client, options *str.Options, page int) ([]*str.CommentTrendingItem, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, IncludeReplies: options.IncludeReplies}
+	commentType := options.CommentType
+	strType := options.Type
+	list, resp, err := client.Comments.GetTrendingComments(
+		context.Background(),
+		&commentType,
+		&strType,
+		&opts,
+	)
 
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp) && page < options.PagesLimit {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchTrendingComments(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+	return list, nil
+}
 
 // UpdateComment helper function to put comment object
 func (*CommonLogic) UpdateComment(client *internal.Client, options *str.Options, comment *str.Comment) (*str.Comment, *str.Response, error) {

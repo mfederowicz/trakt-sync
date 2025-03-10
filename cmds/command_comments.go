@@ -11,14 +11,16 @@ import (
 )
 
 var (
-	_commentsAction    = CommentsCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
-	_commentsTraktID   = CommentsCmd.Flag.Int("trakt_id", cfg.DefaultConfig().TraktID, consts.TraktIDUsage)
-	_commentsCommentID = CommentsCmd.Flag.Int("comment_id", cfg.DefaultConfig().CommentID, consts.CommentIDUsage)
-	_commentsDelete    = CommentsCmd.Flag.Bool("delete", cfg.DefaultConfig().Delete, consts.DeleteUsage)
-	_commentsRemove    = CommentsCmd.Flag.Bool("remove", cfg.DefaultConfig().Remove, consts.RemoveUsage)
-	_commentsSpoiler   = CommentsCmd.Flag.Bool("spoiler", cfg.DefaultConfig().Spoiler, consts.SpoilerUsage)
-	_commentsComment   = CommentsCmd.Flag.String("comment", cfg.DefaultConfig().Comment, consts.CommentUsage)
-	_commentsReply     = CommentsCmd.Flag.String("reply", cfg.DefaultConfig().Reply, consts.ReplyUsage)
+	_commentsAction         = CommentsCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_commentsTraktID        = CommentsCmd.Flag.Int("trakt_id", cfg.DefaultConfig().TraktID, consts.TraktIDUsage)
+	_commentsCommentID      = CommentsCmd.Flag.Int("comment_id", cfg.DefaultConfig().CommentID, consts.CommentIDUsage)
+	_commentsDelete         = CommentsCmd.Flag.Bool("delete", cfg.DefaultConfig().Delete, consts.DeleteUsage)
+	_commentsRemove         = CommentsCmd.Flag.Bool("remove", cfg.DefaultConfig().Remove, consts.RemoveUsage)
+	_commentsSpoiler        = CommentsCmd.Flag.Bool("spoiler", cfg.DefaultConfig().Spoiler, consts.SpoilerUsage)
+	_commentsIncludeReplies = CommentsCmd.Flag.String("include_replies", cfg.DefaultConfig().IncludeReplies, consts.IncludeRepliesUsage)
+	_commentsComment        = CommentsCmd.Flag.String("comment", cfg.DefaultConfig().Comment, consts.CommentUsage)
+	_commentsCommentType    = CommentsCmd.Flag.String("comment_type", cfg.DefaultConfig().CommentType, consts.CommentTypeUsage)
+	_commentsReply          = CommentsCmd.Flag.String("reply", cfg.DefaultConfig().Reply, consts.ReplyUsage)
 )
 
 // CommentsCmd manage all types of comments:movie, show, season, episode, or list.
@@ -48,6 +50,11 @@ func commentsFunc(cmd *Command, _ ...string) error {
 	case "like":
 		handler = handlers.CommentsLikeHandler{}
 	case "trending":
+		err := cmd.ValidType(options)
+		if err != nil {
+			return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
+		}
+
 		handler = handlers.CommentsTrendingHandler{}
 	case "recent":
 		handler = handlers.CommentsRecentHandler{}

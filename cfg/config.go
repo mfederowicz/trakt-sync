@@ -19,43 +19,46 @@ import (
 
 // Config struct for app.
 type Config struct {
-	UserName     string    `toml:"username"`
-	ConfigPath   string    `toml:"config_path"`
-	Action       string    `toml:"action"`
-	TokenPath    string    `toml:"token_path"`
-	Type         string    `toml:"type"`
-	Output       string    `toml:"output"`
-	ID           string    `toml:"id"`
-	SearchIDType string    `toml:"search_id_type"`
-	RedirectURI  string    `toml:"redirect_uri"`
-	ClientSecret string    `toml:"client_secret"`
-	List         string    `toml:"list"`
-	Format       string    `toml:"format"`
-	ClientID     string    `toml:"client_id"`
-	Query        string    `toml:"query"`
-	Field        string    `toml:"field"`
-	Sort         string    `toml:"sort"`
-	CommentsSort string    `toml:"sort"`
-	Module       string    `toml:"module"`
-	SearchField  str.Slice `toml:"search_field"`
-	SearchType   str.Slice `toml:"search_type"`
-	WarningCode  int       `toml:"warningCode"`
-	ErrorCode    int       `toml:"errorCode"`
-	Days         int       `toml:"days"`
-	PerPage      int       `toml:"per_page"`
-	TraktID      int       `toml:"trakt_id"`
-	CommentID    int       `toml:"comment_id"`
-	EpisodeAbs   int       `toml:"episode_abs"`
-	EpisodeCode  string    `toml:"episode_code"`
-	Episode      int       `toml:"episode"`
-	Season       int       `toml:"season"`
-	Msg          string    `toml:"msg"`
-	Comment      string    `toml:"comment"`
-	Reply        string    `toml:"reply"`
-	Remove       bool      `toml:"remove"`
-	Delete       bool      `toml:"delete"`
-	Spoiler      bool      `toml:"spoiler"`
-	Verbose      bool      `toml:"verbose"`
+	UserName       string    `toml:"username"`
+	ConfigPath     string    `toml:"config_path"`
+	Action         string    `toml:"action"`
+	TokenPath      string    `toml:"token_path"`
+	Type           string    `toml:"type"`
+	Output         string    `toml:"output"`
+	ID             string    `toml:"id"`
+	SearchIDType   string    `toml:"search_id_type"`
+	RedirectURI    string    `toml:"redirect_uri"`
+	ClientSecret   string    `toml:"client_secret"`
+	List           string    `toml:"list"`
+	Format         string    `toml:"format"`
+	ClientID       string    `toml:"client_id"`
+	Query          string    `toml:"query"`
+	Field          string    `toml:"field"`
+	Sort           string    `toml:"sort"`
+	CommentsSort   string    `toml:"sort"`
+	Module         string    `toml:"module"`
+	SearchField    str.Slice `toml:"search_field"`
+	SearchType     str.Slice `toml:"search_type"`
+	WarningCode    int       `toml:"warningCode"`
+	ErrorCode      int       `toml:"errorCode"`
+	Days           int       `toml:"days"`
+	PerPage        int       `toml:"per_page"`
+	PagesLimit     int       `toml:"pages_limit"`
+	TraktID        int       `toml:"trakt_id"`
+	CommentID      int       `toml:"comment_id"`
+	EpisodeAbs     int       `toml:"episode_abs"`
+	EpisodeCode    string    `toml:"episode_code"`
+	Episode        int       `toml:"episode"`
+	Season         int       `toml:"season"`
+	Msg            string    `toml:"msg"`
+	Comment        string    `toml:"comment"`
+	CommentType    string    `toml:"comment_type"`
+	Reply          string    `toml:"reply"`
+	Remove         bool      `toml:"remove"`
+	Delete         bool      `toml:"delete"`
+	Spoiler        bool      `toml:"spoiler"`
+	IncludeReplies string    `toml:"include_replies"`
+	Verbose        bool      `toml:"verbose"`
 }
 
 var (
@@ -414,32 +417,35 @@ func parseConfig(fs afero.Fs, path string, config *Config) error {
 // DefaultConfig config with default values
 func DefaultConfig() *Config {
 	return &Config{
-		ClientID:     consts.EmptyString,
-		ClientSecret: consts.EmptyString,
-		RedirectURI:  consts.EmptyString,
-		WarningCode:  consts.ZeroValue,
-		ErrorCode:    consts.ZeroValue,
-		Verbose:      false,
-		TokenPath:    consts.EmptyString,
-		ConfigPath:   buildDefaultConfigPath(),
-		Output:       consts.EmptyString,
-		Format:       "imdb",
-		Module:       "history",
-		Action:       consts.EmptyString,
-		Type:         "movies",
-		SearchIDType: "trakt",
-		SearchType:   []string{},
-		SearchField:  []string{},
-		Sort:         "rank",
-		CommentsSort: "newest",
-		List:         "history",
-		UserName:     "me",
-		ID:           consts.EmptyString,
-		PerPage:      consts.DefaultPerPage,
-		Remove:       false,
-		Delete:       false,
-		Spoiler:      false,
-		Msg:          "",
+		ClientID:       consts.EmptyString,
+		ClientSecret:   consts.EmptyString,
+		RedirectURI:    consts.EmptyString,
+		WarningCode:    consts.ZeroValue,
+		ErrorCode:      consts.ZeroValue,
+		Verbose:        false,
+		TokenPath:      consts.EmptyString,
+		ConfigPath:     buildDefaultConfigPath(),
+		Output:         consts.EmptyString,
+		Format:         "imdb",
+		Module:         "history",
+		Action:         consts.EmptyString,
+		Type:           "movies",
+		CommentType:    "all",
+		SearchIDType:   "trakt",
+		SearchType:     []string{},
+		SearchField:    []string{},
+		Sort:           "rank",
+		CommentsSort:   "newest",
+		List:           "history",
+		UserName:       "me",
+		ID:             consts.EmptyString,
+		PerPage:        consts.DefaultPerPage,
+		PagesLimit:     consts.PagesLimit,
+		Remove:         false,
+		Delete:         false,
+		Spoiler:        false,
+		IncludeReplies: "",
+		Msg:            "",
 	}
 }
 
