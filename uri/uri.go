@@ -46,6 +46,7 @@ type ListOptions struct {
 	Limit          int              `url:"limit,omitempty"`
 	Metascores     RatingRangeFloat `url:"metascores,omitempty"`
 	TmdbRatings    TmdbRatingRange  `url:"tmdb_ratings,omitempty"`
+	IncludeReplies string           `url:"include_replies,omitempty"`
 }
 
 // AddQuery adds query parameters to s.

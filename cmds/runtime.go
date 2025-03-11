@@ -17,6 +17,7 @@ var Commands = []*Command{
 	CalendarsCmd,
 	CertificationsCmd,
 	CheckinCmd,
+	CommentsCmd,
 	CollectionCmd,
 	HelpCmd,
 	HistoryCmd,

@@ -19,8 +19,15 @@ const (
 	ModuleUsage            = "allow use selected module"
 	ActionUsage            = "allow use selected action"
 	TraktIDUsage           = "allow to overwrite trakt_id"
+	CommentIDUsage         = "allow to overwrite comment_id"
 	CheckInMsgUsage        = "allow to overwrite msg"
 	DeleteUsage            = "allow delete item"
+	RemoveUsage            = "allow remove item"
+	SpoilerUsage           = "allow to overwrite spoiler"
+	CommentUsage           = "allow to overwrite comment"
+	CommentTypeUsage       = "allow to overwrite comment_type"
+	IncludeRepliesUsage    = "allow to overwrite include_replies"
+	ReplyUsage             = "allow to overwrite reply"
 	EpisodeCodeUsage       = "episode_code format 01x24"
 	EpisodeAbsUsage        = "episode_abs 1234"
 	QueryUsage             = "allow use selected query"
@@ -33,6 +40,8 @@ const (
 	EmptyPersonIDMsg       = "set personId ie: -i john-wayne"
 	EmptyListIDMsg         = "set traktId ie: -trakt_id 55"
 	EmptyTraktIDMsg        = "set traktId ie: -trakt_id 55"
+	EmptyCommentIDMsg      = "set commentId ie: -comment_id 123"
+	EmptyIncludeReplies    = "set includeReplies ie: -include_replies true or false"
 	ErrorRender            = "error render: %w"
 	CMD                    = "cmd"
 	TestURL                = "test-url"
@@ -56,10 +65,11 @@ const (
 	BitSize                = 64
 	MaxAcceptedStatus      = 299
 	DefaultPerPage         = 100
+	PagesLimit             = 2
 	PerPage                = 50
 	ZeroValue              = 0
 	TwoValue               = 2
-	MinSeasonNumberLength = 3
+	MinSeasonNumberLength  = 3
 	DefaultExitCode        = 0
 	FirstArgElement        = 0
 	DefaultPage            = 1
@@ -84,5 +94,8 @@ const (
 	DefaultOutputFormat2   = "export_%s_%s.json"
 	DefaultOutputFormat3   = "export_%s_%s_%s.json"
 	NewLine                = "\n"
+	Trending               = "trending"
+	Recent                 = "recent"
+	Updates                = "updates"
 	EmptyBuildInfoLen      = 0
 )

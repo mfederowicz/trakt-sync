@@ -48,6 +48,7 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 - `certifications` - Certifications list
 - `checkin` - Checkin movie,episode,show_episode,delete
 - `collection` - Get all collected items in a user's collection.
+- `comments` - Comments comments,comment,replies,item,likes,like,trending,recent,updates.
 - `help` - Help on the trakt-sync command and subcommands.
 - `history` - Returns movies and episodes that a user has watched, sorted by most recent.
 - `lists` - Returns data about lists: trending, popular, list, likes, like, items, comments.
@@ -85,6 +86,48 @@ $ ./trakt-sync collection -t movies --ex metadata
 ```console
 $ ./trakt-sync collection -t shows --ex metadata
 ```
+#### Manage comments:
+
+```console
+$ ./trakt-sync comments -a comment -comment_id 779883 -comment "minions,minions,minions movie ever ok" 
+```
+```console
+$ ./trakt-sync comments -a comment -comment_id 779883 -delete
+```
+```console
+$ ./trakt-sync comments -a comments -t episode -trakt_id 172245 -comment "super episode, interesting plot ok" 
+```
+```console
+$ ./trakt-sync comments -a replies -comment_id 779896 -reply "reply msg min 5 words" -spoiler 
+```
+```console
+$ ./trakt-sync comments -a replies -comment_id 71340
+```
+```console
+$ ./trakt-sync comments -a item -comment_id 664237 -ex full
+```
+```console
+$ ./trakt-sync comments -a likes -comment_id 773108 -remove
+```
+```console
+$ ./trakt-sync comments -a like -comment_id 773108
+```
+```console
+$ ./trakt-sync comments -a like -comment_id 773108 -remove
+```
+```console
+$ ./trakt-sync comments -a trending -comment_type reviews
+```
+```console
+$ ./trakt-sync comments -a recent -include_replies false
+```
+```console
+$ ./trakt-sync comments -a recent -include_replies true
+```
+```console
+$ ./trakt-sync comments -a updates -include_replies false
+```
+
 #### Export movies or shows or episodes from user lists:
 ```console
 $ ./trakt-sync users -a lists -u username -i 123456 -t episodes

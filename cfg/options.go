@@ -18,6 +18,7 @@ import (
 // OptionsConfig represents the configuration options for each module
 type OptionsConfig struct {
 	SearchIDType []string
+	CommentType  []string
 	SearchType   []string
 	SearchField  []string
 	Type         []string
@@ -55,6 +56,17 @@ var ModuleConfig = map[string]OptionsConfig{
 		Format:       []string{"imdb", "tmdb", "tvdb", "tvrage", "trakt"},
 		Action:       []string{},
 	},
+	"comments": {
+		SearchIDType: []string{},
+		SearchType:   []string{},
+		CommentType:  []string{"all", "review", "shouts"},
+		SearchField:  []string{},
+		Type:         []string{"all", "movies", "shows", "seasons", "episodes", "lists"},
+		Sort:         []string{"rank", "added", "released", "title"},
+		Format:       []string{"imdb", "tmdb", "tvdb", "tvrage", "trakt"},
+		Action:       []string{},
+	},
+
 	"history": {
 		SearchIDType: []string{},
 		SearchType:   []string{},
@@ -151,6 +163,7 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 	options.PerPage = config.PerPage
 	options.Sort = config.Sort
 	options.Action = config.Action
+	options.PagesLimit = config.PagesLimit
 
 	token, err := readTokenFromFile(fs, config.TokenPath)
 	if err != nil {
@@ -293,6 +306,8 @@ func GetOutputForModule(options *str.Options) string {
 		options.Output = getOutputForModuleCalendars(options)
 	case "certifications":
 		options.Output = getOutputForModuleCertifications(options)
+	case "comments":
+		options.Output = getOutputForModuleComments(options)
 	case "search":
 		options.Output = getOutputForModuleSearch(options)
 	case "users":
@@ -458,6 +473,58 @@ func getOutputForModuleCertifications(options *str.Options) string {
 			options.Type)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat1, options.Module)
+	}
+
+	return options.Output
+}
+
+func getOutputForModuleComments(options *str.Options) string {
+	switch options.Action {
+	case "comment":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			fmt.Sprintf(consts.StringDigit, "comment_", options.CommentID),
+		)
+	case "replies":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			fmt.Sprintf(consts.StringDigit, "replies_", options.CommentID),
+		)
+	case "item":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			fmt.Sprintf(consts.StringDigit, "item_", options.CommentID),
+		)
+	case "likes":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			fmt.Sprintf(consts.StringDigit, "likes_", options.CommentID),
+		)
+	case "trending":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			consts.Trending,
+		)
+	case "recent":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			consts.Recent,
+		)
+	case "updates":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			consts.Updates,
+		)
+
+	default:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
 	}
 
 	return options.Output
