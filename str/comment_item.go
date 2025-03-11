@@ -1,8 +1,8 @@
 // Package str used for structs
 package str
 
-// CommentTrendingItem represents JSON comment trending object
-type CommentTrendingItem struct {
+// CommentItem represents JSON comment item object
+type CommentItem struct {
 	Type    *string  `json:"type,omitempty"`
 	Movie   *Movie   `json:"movie,omitempty"`
 	Season  *Season  `json:"season,omitempty"`
@@ -12,6 +12,6 @@ type CommentTrendingItem struct {
 	Comment *Comment `json:"comment,omitempty"`
 }
 
-func (c CommentTrendingItem) String() string {
+func (c CommentItem) String() string {
 	return Stringify(c)
 }

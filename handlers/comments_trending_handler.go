@@ -30,7 +30,7 @@ func (h CommentsTrendingHandler) Handle(options *str.Options, client *internal.C
 	}
 	
 	printer.Printf("Found %d result \n", len(result))
-	exportJSON := []*str.CommentTrendingItem{}
+	exportJSON := []*str.CommentItem{}
 	exportJSON = append(exportJSON, result...)
 	print("write data to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)

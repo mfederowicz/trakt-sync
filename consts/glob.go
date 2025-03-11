@@ -95,5 +95,6 @@ const (
 	DefaultOutputFormat3   = "export_%s_%s_%s.json"
 	NewLine                = "\n"
 	Trending               = "trending"
+	Recent                 = "recent"
 	EmptyBuildInfoLen      = 0
 )

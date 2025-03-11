@@ -54,9 +54,12 @@ func commentsFunc(cmd *Command, _ ...string) error {
 		if err != nil {
 			return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
 		}
-
 		handler = handlers.CommentsTrendingHandler{}
 	case "recent":
+		err := cmd.ValidType(options)
+		if err != nil {
+			return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
+		}
 		handler = handlers.CommentsRecentHandler{}
 	case "updates":
 		handler = handlers.CommentsUpdatesHandler{}

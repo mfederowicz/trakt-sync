@@ -243,7 +243,7 @@ func (c *CommentsService) ReplyAComment(ctx context.Context, id *int, reply *str
 
 // GetTrendingComments Returns all comments with the most likes and replies over the last 7 days.
 // API docs: https://trakt.docs.apiary.io/#reference/comments/trending/get-trending-comments 
-func (c *CommentsService) GetTrendingComments(ctx context.Context, contentType *string, strType *string, opts *uri.ListOptions) ([]*str.CommentTrendingItem, *str.Response, error) {
+func (c *CommentsService) GetTrendingComments(ctx context.Context, contentType *string, strType *string, opts *uri.ListOptions) ([]*str.CommentItem, *str.Response, error) {
 	var url = fmt.Sprintf("comments/trending/%s/%s", *contentType, *strType)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
@@ -255,11 +255,36 @@ func (c *CommentsService) GetTrendingComments(ctx context.Context, contentType *
 		return nil, nil, err
 	}
 
-	list := []*str.CommentTrendingItem{}
+	list := []*str.CommentItem{}
 	resp, err := c.client.Do(ctx, req, &list)
 
 	if err != nil {
 		printer.Println("fetch trending err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// GetRecentComments Returns the most recently written comments across all of Trakt.
+// API docs: https://trakt.docs.apiary.io/#reference/comments/recent/get-recently-created-comments
+func (c *CommentsService) GetRecentComments(ctx context.Context, contentType *string, strType *string, opts *uri.ListOptions) ([]*str.CommentItem, *str.Response, error) {
+	var url = fmt.Sprintf("comments/recent/%s/%s", *contentType, *strType)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch recent url:" + url)
+	req, err := c.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.CommentItem{}
+	resp, err := c.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch recent err:" + err.Error())
 		return nil, resp, err
 	}
 
