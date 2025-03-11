@@ -291,3 +291,28 @@ func (c *CommentsService) GetRecentComments(ctx context.Context, contentType *st
 	return list, resp, nil
 }
 
+// GetUpdatedComments Returns the most recently updated comments across all of Trakt.
+// API docs: https://trakt.docs.apiary.io/#reference/comments/updates/get-recently-updated-comments
+func (c *CommentsService) GetUpdatedComments(ctx context.Context, contentType *string, strType *string, opts *uri.ListOptions) ([]*str.CommentItem, *str.Response, error) {
+	var url = fmt.Sprintf("comments/updates/%s/%s", *contentType, *strType)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch updated url:" + url)
+	req, err := c.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.CommentItem{}
+	resp, err := c.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch updated err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+

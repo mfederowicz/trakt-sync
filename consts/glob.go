@@ -96,5 +96,6 @@ const (
 	NewLine                = "\n"
 	Trending               = "trending"
 	Recent                 = "recent"
+	Updates                = "updates"
 	EmptyBuildInfoLen      = 0
 )

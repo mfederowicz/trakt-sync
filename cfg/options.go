@@ -516,6 +516,12 @@ func getOutputForModuleComments(options *str.Options) string {
 			options.Module,
 			consts.Recent,
 		)
+	case "updates":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			consts.Updates,
+		)
 
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
