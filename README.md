@@ -25,6 +25,7 @@ token_path = "~/.config/trakt-sync/token.json"
 errorCode = 0
 warningCode = 0
 per_page = 500
+pages_limit = 10
 ```
 
 ## Usage

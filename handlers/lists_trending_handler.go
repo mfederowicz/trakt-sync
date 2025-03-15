@@ -55,7 +55,7 @@ func (h ListsTrendingHandler) fetchListsTrending(client *internal.Client, option
 	}
 
 	// Check if there are more pages
-	if client.HavePages(page, resp) {
+	if client.HavePages(page, resp, options.PagesLimit) {
 		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
 
 		// Fetch items from the next page
