@@ -147,7 +147,7 @@ func SyncOptionsFromFlags(fs afero.Fs, config *Config, flagMap map[string]string
 	return OptionsFromConfig(fs, cfg)
 }
 
-// OptionsFromConfig reads optionf from config file
+// OptionsFromConfig reads options from config file
 func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 	options := &str.Options{}
 	options.Verbose = config.Verbose
@@ -164,7 +164,7 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 	options.Sort = config.Sort
 	options.Action = config.Action
 	options.PagesLimit = config.PagesLimit
-
+	
 	token, err := readTokenFromFile(fs, config.TokenPath)
 	if err != nil {
 		return str.Options{}, fmt.Errorf("error reading token:%w", err)

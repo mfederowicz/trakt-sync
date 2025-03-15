@@ -138,7 +138,7 @@ func (c *CommonLogic) FetchCommentUserLikes(client *internal.Client, options *st
 	}
 
 	// Check if there are more pages
-	if client.HavePages(page, resp) {
+	if client.HavePages(page, resp, options.PagesLimit) {
 		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
@@ -169,7 +169,7 @@ func (c *CommonLogic) FetchTrendingComments(client *internal.Client, options *st
 	}
 
 	// Check if there are more pages
-	if client.HavePages(page, resp) && page < options.PagesLimit {
+	if client.HavePages(page, resp, options.PagesLimit) {
 		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
@@ -200,7 +200,7 @@ func (c *CommonLogic) FetchRecentComments(client *internal.Client, options *str.
 	}
 
 	// Check if there are more pages
-	if client.HavePages(page, resp) && page < options.PagesLimit {
+	if client.HavePages(page, resp, options.PagesLimit) {
 		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
@@ -231,7 +231,7 @@ func (c *CommonLogic) FetchUpdatedComments(client *internal.Client, options *str
 	}
 
 	// Check if there are more pages
-	if client.HavePages(page, resp) && page < options.PagesLimit {
+	if client.HavePages(page, resp, options.PagesLimit) {
 		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep

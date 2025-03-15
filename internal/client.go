@@ -153,10 +153,14 @@ func (c *Client) UpdateHeaders(headers map[string]any) {
 }
 
 // HavePages checks if we have available pages to fetch
-func (*Client) HavePages(page int, resp *str.Response) bool {
+func (*Client) HavePages(page int, resp *str.Response, limit int) bool {
 	_, pageHeader := resp.Header[HeaderPaginationPage]
 	pages, _ := strconv.Atoi(resp.Header.Get(HeaderPaginationPageCount))
-	return pageHeader && page != pages && pages > consts.ZeroValue
+	base := pageHeader && page != pages && pages > consts.ZeroValue
+	if limit > consts.ZeroValue {
+		return base && page < limit
+	}
+	return base
 }
 
 // initialize sets default values and initializes services.

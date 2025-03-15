@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -19,6 +20,11 @@ const (
 	// baseURLPath is a non-empty Client.BaseURL path to use during tests,
 	baseURLPath           = "/trakt"
 	clientNewRequestFatal = "client.NewRequest returned error: %v"
+	firstPage             = 1
+	allPages              = 10
+	pagesLimit            = 2
+	pagesNolimit          = 0
+	havePagesErrorStr     = "HavePages: %v, want %v"
 )
 
 type TestSetup struct {
@@ -80,6 +86,56 @@ func testMethod(t *testing.T, r *http.Request, want string) {
 	t.Helper()
 	if got := r.Method; got != want {
 		t.Errorf("Request method: %v, want %v", got, want)
+	}
+}
+
+func TestHavePages(t *testing.T) {
+	t.Helper()
+	testSetup := setup()
+	client := testSetup.Client
+	resp := &str.Response{Response: &http.Response{Header: http.Header{}}}
+	resp.Header.Set(HeaderPaginationPage, strconv.Itoa(firstPage))
+	resp.Header.Set(HeaderPaginationPageCount, strconv.Itoa(allPages))
+	want := true
+	if got := client.HavePages(firstPage, resp, pagesLimit); got != want {
+		t.Errorf(havePagesErrorStr, got, want)
+	}
+}
+
+func TestHavePagesNoHeaders(t *testing.T) {
+	t.Helper()
+	testSetup := setup()
+	client := testSetup.Client
+	resp := &str.Response{Response: &http.Response{Header: http.Header{}}}
+	want := false
+	if got := client.HavePages(firstPage, resp, pagesLimit); got != want {
+		t.Errorf(havePagesErrorStr, got, want)
+	}
+}
+
+func TestHavePagesNoLimit(t *testing.T) {
+	t.Helper()
+	testSetup := setup()
+	client := testSetup.Client
+	resp := &str.Response{Response: &http.Response{Header: http.Header{}}}
+	resp.Header.Set(HeaderPaginationPage, strconv.Itoa(firstPage))
+	resp.Header.Set(HeaderPaginationPageCount, strconv.Itoa(allPages))
+	want := true
+	if got := client.HavePages(firstPage, resp, pagesNolimit); got != want {
+		t.Errorf(havePagesErrorStr, got, want)
+	}
+}
+
+func TestHavePagesWithNoNext(t *testing.T) {
+	t.Helper()
+	testSetup := setup()
+	client := testSetup.Client
+	resp := &str.Response{Response: &http.Response{Header: http.Header{}}}
+	resp.Header.Set(HeaderPaginationPage, strconv.Itoa(allPages))
+	resp.Header.Set(HeaderPaginationPageCount, strconv.Itoa(allPages))
+	want := false
+	if got := client.HavePages(allPages, resp, pagesNolimit); got != want {
+		t.Errorf(havePagesErrorStr, got, want)
 	}
 }
 

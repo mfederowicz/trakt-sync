@@ -111,6 +111,7 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 	defaultConfig.ErrorCode = processOptionErrorCode(defaultConfig, fileConfig, flagConfig, flagset)
 	defaultConfig.WarningCode = processOptionWarningCode(defaultConfig, fileConfig, flagConfig, flagset)
 	defaultConfig.PerPage = processOptionPerPage(defaultConfig, fileConfig, flagConfig, flagset)
+	defaultConfig.PagesLimit = processOptionPagesLimit(defaultConfig, fileConfig, flagConfig, flagset)
 	defaultConfig.Verbose = processOptionVerbose(defaultConfig, fileConfig, flagConfig, flagset)
 	defaultConfig.ConfigPath = processOptionConfigPath(defaultConfig, fileConfig, flagConfig, flagset)
 	defaultConfig.Output = processOptionOutput(defaultConfig, fileConfig, flagConfig, flagset)
@@ -129,6 +130,14 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 	}
 
 	return defaultConfig, nil
+}
+
+func processOptionPagesLimit(defaultConfig *Config, fileConfig *Config, _ map[string]string, _ map[string]bool) int {
+	// process if field is set in config file
+	if fileConfig.PagesLimit > consts.ZeroValue && fileConfig.PagesLimit != defaultConfig.PagesLimit {
+		defaultConfig.PagesLimit = fileConfig.PagesLimit
+	}
+	return defaultConfig.PagesLimit
 }
 
 func processOptionClientID(defaultConfig *Config, fileConfig *Config, _ map[string]string, _ map[string]bool) string {
