@@ -190,3 +190,28 @@ func (m *MoviesService) GetCollectedMovies(ctx context.Context, opts *uri.ListOp
 
 	return list, resp, nil
 }
+
+// GetAnticipatedMovies Returns the most anticipated movies based on the number of lists a movie appears on.  
+// API docs: https://trakt.docs.apiary.io/#reference/movies/anticipated/get-the-most-anticipated-movies
+func (m *MoviesService) GetAnticipatedMovies(ctx context.Context, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
+	var url = "movies/anticipated"
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch movies url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.MoviesItem{}
+	resp, err := m.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch movies err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

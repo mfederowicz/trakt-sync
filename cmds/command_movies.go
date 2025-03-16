@@ -58,7 +58,8 @@ func moviesFunc(cmd *Command, _ ...string) error {
 			return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
 		}
 		handler = handlers.MoviesCollectedHandler{}
-
+	case "anticipated":
+		handler = handlers.MoviesAnticipatedHandler{}
 	default:
 		printer.Println("possible actions: trending, popular, favorited, played, watched, collected,")
 		printer.Println("anticipated, box_office, updated, updated_ids,summary,aliases,releases,")
