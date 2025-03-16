@@ -32,7 +32,7 @@ func (h MoviesFavoritedHandler) Handle(options *str.Options, client *internal.Cl
 	}
 
 	printer.Printf("Found %d result \n", len(result))
-	exportJSON := []*str.FavoritedMovie{}
+	exportJSON := []*str.MoviesItem{}
 	exportJSON = append(exportJSON, result...)
 	print("write data to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
@@ -42,7 +42,7 @@ func (h MoviesFavoritedHandler) Handle(options *str.Options, client *internal.Cl
 	return nil
 }
 
-func (h MoviesFavoritedHandler) fetchMoviesFavorited(client *internal.Client, options *str.Options, page int) ([]*str.FavoritedMovie, error) {
+func (h MoviesFavoritedHandler) fetchMoviesFavorited(client *internal.Client, options *str.Options, page int) ([]*str.MoviesItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	period := options.Period
 	list, resp, err := client.Movies.GetFavoritedMovies(

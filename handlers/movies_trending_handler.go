@@ -32,7 +32,7 @@ func (h MoviesTrendingHandler) Handle(options *str.Options, client *internal.Cli
 	}
 
 	printer.Printf("Found %d result \n", len(result))
-	exportJSON := []*str.TrendingMovie{}
+	exportJSON := []*str.MoviesItem{}
 	exportJSON = append(exportJSON, result...)
 	print("write data to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
@@ -42,7 +42,7 @@ func (h MoviesTrendingHandler) Handle(options *str.Options, client *internal.Cli
 	return nil
 }
 
-func (h MoviesTrendingHandler) fetchMoviesTrending(client *internal.Client, options *str.Options, page int) ([]*str.TrendingMovie, error) {
+func (h MoviesTrendingHandler) fetchMoviesTrending(client *internal.Client, options *str.Options, page int) ([]*str.MoviesItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Movies.GetTrendingMovies(
 		context.Background(),
