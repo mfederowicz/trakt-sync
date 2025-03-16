@@ -51,6 +51,7 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 - `collection` - Get all collected items in a user's collection.
 - `comments` - Comments comments,comment,replies,item,likes,like,trending,recent,updates.
 - `countries` - Get a list of all countries, including names and codes.
+- `genres` - Get a list of all genres, including names and slugs.
 - `help` - Help on the trakt-sync command and subcommands.
 - `history` - Returns movies and episodes that a user has watched, sorted by most recent.
 - `lists` - Returns data about lists: trending, popular, list, likes, like, items, comments.
@@ -139,6 +140,17 @@ $ ./trakt-sync countries -t movies -> export_countries_movies.json
 ```
 ```console
 $ ./trakt-sync countries -t shows -> export_countries_shows.json
+```
+
+#### Export genres list for movies or shows:
+```console
+$ ./trakt-sync genres -> export_genres_movies.json
+```
+```console
+$ ./trakt-sync genres -t movies -> export_genres_movies.json
+```
+```console
+$ ./trakt-sync genres -t shows -> export_genres_shows.json
 ```
 
 #### Export movies or shows or episodes from user lists:
