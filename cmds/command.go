@@ -61,6 +61,7 @@ var Avflags = map[string]bool{
 	"episode_code":    true,
 	"episode_abs":     true,
 	"id_type":         true,
+	"languages":       true,
 	"lists":           true,
 	"msg":             true,
 	"o":               true,
