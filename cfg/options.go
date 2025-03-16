@@ -343,8 +343,11 @@ func GetOutputForModule(options *str.Options) string {
 
 func getOutputForModuleMovies(options *str.Options) string {
 	switch options.Action {
-	case "trending", "popular", "favorited":
+	case "trending", "popular":
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
+	case "favorited":
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.Period)
+
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
 	}

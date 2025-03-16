@@ -396,7 +396,7 @@ func (*Command) ValidPeriod(options *str.Options) error {
 	}
 	// Check if the provided period is valid for the selected module
 	if !cfg.IsValidConfigType(moduleConfig.Period, options.Period) {
-		return fmt.Errorf("period '%s' is not valid for module '%s' and action '%s', avaliable types:%s", options.Period, options.Module, options.Action, moduleConfig.Period)
+		return fmt.Errorf("period '%s' is not valid for module '%s' and action '%s', avaliable periods:%s", options.Period, options.Module, options.Action, moduleConfig.Period)
 	}
 
 	return nil
