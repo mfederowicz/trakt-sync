@@ -45,6 +45,7 @@ type Config struct {
 	PerPage        int       `toml:"per_page"`
 	PagesLimit     int       `toml:"pages_limit"`
 	TraktID        int       `toml:"trakt_id"`
+	MoviesPeriod   string    `toml:"period"`
 	CommentID      int       `toml:"comment_id"`
 	EpisodeAbs     int       `toml:"episode_abs"`
 	EpisodeCode    string    `toml:"episode_code"`
@@ -445,6 +446,7 @@ func DefaultConfig() *Config {
 		SearchField:    []string{},
 		Sort:           "rank",
 		CommentsSort:   "newest",
+		MoviesPeriod:   "weekly",
 		List:           "history",
 		UserName:       "me",
 		ID:             consts.EmptyString,

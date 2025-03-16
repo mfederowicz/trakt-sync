@@ -18,6 +18,7 @@ const (
 	ListCommentSortUsage   = "allow to overwrite comments sort"
 	ModuleUsage            = "allow use selected module"
 	ActionUsage            = "allow use selected action"
+	MoviesPeriodUsage      = "allow to overwrite period"
 	TraktIDUsage           = "allow to overwrite trakt_id"
 	CommentIDUsage         = "allow to overwrite comment_id"
 	CheckInMsgUsage        = "allow to overwrite msg"

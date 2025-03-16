@@ -22,6 +22,7 @@ type OptionsConfig struct {
 	SearchType   []string
 	SearchField  []string
 	Type         []string
+	Period       []string
 	Sort         []string
 	Format       []string
 	Action       []string
@@ -85,6 +86,18 @@ var ModuleConfig = map[string]OptionsConfig{
 		Format:       []string{"imdb", "tmdb", "tvdb", "tvrage", "trakt"},
 		Action:       []string{},
 	},
+	"movies": {
+		SearchIDType: []string{},
+		SearchType:   []string{},
+		CommentType:  []string{"all", "review", "shouts"},
+		SearchField:  []string{},
+		Type:         []string{"all", "movies", "shows", "seasons", "episodes", "lists"},
+		Period:       []string{"all", "daily", "weekly", "monthly"},
+		Sort:         []string{"rank", "added", "released", "title"},
+		Format:       []string{"imdb", "tmdb", "tvdb", "tvrage", "trakt"},
+		Action:       []string{},
+	},
+
 	"people": {
 		SearchIDType: []string{},
 		SearchType:   []string{},
@@ -320,9 +333,22 @@ func GetOutputForModule(options *str.Options) string {
 		options.Output = getOutputForModuleUsers(options)
 	case "lists":
 		options.Output = getOutputForModuleLists(options)
+	case "movies":
+		options.Output = getOutputForModuleMovies(options)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Type, options.Format)
 	}
+	return options.Output
+}
+
+func getOutputForModuleMovies(options *str.Options) string {
+	switch options.Action {
+	case "trending", "popular", "favorited":
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
+	default:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
+	}
+
 	return options.Output
 }
 

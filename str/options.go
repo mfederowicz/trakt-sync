@@ -11,6 +11,7 @@ type Options struct {
 	StartDate      string
 	Query          string
 	Sort           string
+	Period         string
 	CommentsSort   string
 	CommentType    string
 	Module         string
