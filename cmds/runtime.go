@@ -19,6 +19,7 @@ var Commands = []*Command{
 	CheckinCmd,
 	CommentsCmd,
 	CollectionCmd,
+	CountriesCmd,
 	HelpCmd,
 	HistoryCmd,
 	ListsCmd,

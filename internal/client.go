@@ -136,6 +136,7 @@ type Client struct {
 	People         *PeopleService
 	Calendars      *CalendarsService
 	Certifications *CertificationsService
+	Countries      *CountriesService
 	Checkin        *CheckinService
 	Comments       *CommentsService
 	Search         *SearchService
@@ -179,6 +180,7 @@ func (c *Client) initialize() {
 	c.People = (*PeopleService)(&c.common)
 	c.Calendars = (*CalendarsService)(&c.common)
 	c.Certifications = (*CertificationsService)(&c.common)
+	c.Countries = (*CountriesService)(&c.common)
 	c.Checkin = (*CheckinService)(&c.common)
 	c.Comments = (*CommentsService)(&c.common)
 	c.Search = (*SearchService)(&c.common)
