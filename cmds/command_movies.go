@@ -52,6 +52,12 @@ func moviesFunc(cmd *Command, _ ...string) error {
 			return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
 		}
 		handler = handlers.MoviesWatchedHandler{}
+	case "collected":
+		err := cmd.ValidPeriod(options)
+		if err != nil {
+			return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
+		}
+		handler = handlers.MoviesCollectedHandler{}
 
 	default:
 		printer.Println("possible actions: trending, popular, favorited, played, watched, collected,")

@@ -164,3 +164,29 @@ func (m *MoviesService) GetWatchedMovies(ctx context.Context, opts *uri.ListOpti
 
 	return list, resp, nil
 }
+
+// GetCollectedMovies Returns the most collected (unique users) movies in the specified time period, defaulting to weekly. 
+// All stats are relative to the specific time period.
+// API docs: https://trakt.docs.apiary.io/#reference/movies/collected/get-the-most-collected-movies
+func (m *MoviesService) GetCollectedMovies(ctx context.Context, opts *uri.ListOptions, period *string) ([]*str.MoviesItem, *str.Response, error) {
+	var url = fmt.Sprintf("movies/collected/%s", *period)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch movies url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.MoviesItem{}
+	resp, err := m.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch movies err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
