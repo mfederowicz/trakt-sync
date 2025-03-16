@@ -23,6 +23,7 @@ var Commands = []*Command{
 	GenresCmd,
 	HelpCmd,
 	HistoryCmd,
+	LanguagesCmd,
 	ListsCmd,
 	PeopleCmd,
 	SearchCmd,

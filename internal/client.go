@@ -141,6 +141,7 @@ type Client struct {
 	Comments       *CommentsService
 	Genres         *GenresService
 	Search         *SearchService
+	Languages      *LanguagesService
 	Lists          *ListsService
 	Movies         *MoviesService
 	Episodes       *EpisodesService
@@ -186,6 +187,7 @@ func (c *Client) initialize() {
 	c.Comments = (*CommentsService)(&c.common)
 	c.Genres = (*GenresService)(&c.common)
 	c.Search = (*SearchService)(&c.common)
+	c.Languages = (*LanguagesService)(&c.common)
 	c.Lists = (*ListsService)(&c.common)
 	c.Movies = (*MoviesService)(&c.common)
 	c.Episodes = (*EpisodesService)(&c.common)
