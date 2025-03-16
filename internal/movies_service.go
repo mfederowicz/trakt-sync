@@ -138,3 +138,29 @@ func (m *MoviesService) GetPlayedMovies(ctx context.Context, opts *uri.ListOptio
 
 	return list, resp, nil
 }
+
+// GetWatchedMovies  Returns the most watched (unique users) movies in the specified time period, defaulting to weekly. 
+// All stats are relative to the specific time period.
+// API docs: https://trakt.docs.apiary.io/#reference/movies/watched/get-the-most-watched-movies
+func (m *MoviesService) GetWatchedMovies(ctx context.Context, opts *uri.ListOptions, period *string) ([]*str.MoviesItem, *str.Response, error) {
+	var url = fmt.Sprintf("movies/watched/%s", *period)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch movies url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.MoviesItem{}
+	resp, err := m.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch movies err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
