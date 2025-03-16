@@ -51,6 +51,7 @@ var Avflags = map[string]bool{
 	"f":               true,
 	"field":           true,
 	"godoc":           true,
+	"genres":          true,
 	"help":            true,
 	"history":         true,
 	"i":               true,
