@@ -42,6 +42,7 @@ var Avflags = map[string]bool{
 	"certifications":  true,
 	"comments":        true,
 	"comment_type":    true,
+	"countries":       true,
 	"checkin":         true,
 	"collection":      true,
 	"days":            true,

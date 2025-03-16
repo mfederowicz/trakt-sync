@@ -164,7 +164,7 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 	options.Sort = config.Sort
 	options.Action = config.Action
 	options.PagesLimit = config.PagesLimit
-	
+
 	token, err := readTokenFromFile(fs, config.TokenPath)
 	if err != nil {
 		return str.Options{}, fmt.Errorf("error reading token:%w", err)
@@ -308,6 +308,8 @@ func GetOutputForModule(options *str.Options) string {
 		options.Output = getOutputForModuleCertifications(options)
 	case "comments":
 		options.Output = getOutputForModuleComments(options)
+	case "countries":
+		options.Output = getOutputForModuleCountries(options)
 	case "search":
 		options.Output = getOutputForModuleSearch(options)
 	case "users":
@@ -317,6 +319,20 @@ func GetOutputForModule(options *str.Options) string {
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Type, options.Format)
 	}
+	return options.Output
+}
+
+func getOutputForModuleCountries(options *str.Options) string {
+	switch options.Type {
+	case "movies", "shows":
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			options.Type)
+	default:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat1, options.Module)
+	}
+
 	return options.Output
 }
 
