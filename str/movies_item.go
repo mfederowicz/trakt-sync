@@ -3,6 +3,7 @@ package str
 
 // MoviesItem represents JSON movies item object
 type MoviesItem struct {
+	Revenue        *int   `json:"revenue,omitempty"`
 	UserCount      *int   `json:"user_count,omitempty"`
 	WatcherCount   *int   `json:"watcher_count,omitempty"`
 	PlayCount      *int   `json:"play_count,omitempty"`

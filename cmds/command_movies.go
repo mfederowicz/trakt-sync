@@ -60,9 +60,12 @@ func moviesFunc(cmd *Command, _ ...string) error {
 		handler = handlers.MoviesCollectedHandler{}
 	case "anticipated":
 		handler = handlers.MoviesAnticipatedHandler{}
+	case "boxoffice":
+		handler = handlers.MoviesBoxofficeHandler{}
+
 	default:
 		printer.Println("possible actions: trending, popular, favorited, played, watched, collected,")
-		printer.Println("anticipated, box_office, updated, updated_ids,summary,aliases,releases,")
+		printer.Println("anticipated, boxoffice, updated, updated_ids,summary,aliases,releases,")
 		printer.Println("translations,comments,lists,people,ratings,releated,stats,studios,watiching,videos,refresh")
 	}
 	err := handler.Handle(options, client)

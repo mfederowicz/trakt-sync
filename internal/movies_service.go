@@ -215,3 +215,28 @@ func (m *MoviesService) GetAnticipatedMovies(ctx context.Context, opts *uri.List
 
 	return list, resp, nil
 }
+
+// GetBoxoffice Returns the top 10 grossing movies in the U.S. box office last weekend. Updated every Monday morning.  
+// API docs: https://trakt.docs.apiary.io/#reference/movies/box-office/get-the-weekend-box-office
+func (m *MoviesService) GetBoxoffice(ctx context.Context, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
+	var url = "movies/boxoffice"
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch movies url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.MoviesItem{}
+	resp, err := m.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch movies err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
