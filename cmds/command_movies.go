@@ -11,8 +11,9 @@ import (
 )
 
 var (
-	_moviesAction = MoviesCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
-	_moviesPeriod = MoviesCmd.Flag.String("period", cfg.DefaultConfig().MoviesPeriod, consts.MoviesPeriodUsage)
+	_moviesAction    = MoviesCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_moviesPeriod    = MoviesCmd.Flag.String("period", cfg.DefaultConfig().MoviesPeriod, consts.MoviesPeriodUsage)
+	_moviesStartDate = MoviesCmd.Flag.String("start_date", "", consts.StartDateUsage)
 )
 
 // MoviesCmd returns movies and episodes that a user has watched, sorted by most recent.
@@ -62,6 +63,10 @@ func moviesFunc(cmd *Command, _ ...string) error {
 		handler = handlers.MoviesAnticipatedHandler{}
 	case "boxoffice":
 		handler = handlers.MoviesBoxofficeHandler{}
+	case "updates":
+		handler = handlers.MoviesUpdatesHandler{}
+	case "updated_ids":
+		handler = handlers.MoviesUpdatedIDsHandler{}
 
 	default:
 		printer.Println("possible actions: trending, popular, favorited, played, watched, collected,")

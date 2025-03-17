@@ -240,3 +240,61 @@ func (m *MoviesService) GetBoxoffice(ctx context.Context, opts *uri.ListOptions)
 
 	return list, resp, nil
 }
+
+// GetRecentlyUpdatedMovies Returns all movies updated since the specified UTC date and time.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/movies/updates/get-recently-updated-movies
+func (m *MoviesService) GetRecentlyUpdatedMovies(ctx context.Context, startDate *string, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
+	var url string
+
+	url = fmt.Sprintf("movies/updates/%s", *startDate)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch updates url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.MoviesItem{}
+	resp, err := m.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch updates err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// GetRecentlyUpdatedMoviesTraktIDs Returns all movie Trakt IDs updated since the specified UTC date and time.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/movies/updated-ids/get-recently-updated-movie-trakt-ids
+func (m *MoviesService) GetRecentlyUpdatedMoviesTraktIDs(ctx context.Context, startDate *string, opts *uri.ListOptions) ([]*int, *str.Response, error) {
+	var url string
+
+	url = fmt.Sprintf("movies/updates/id/%s", *startDate)
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch updates url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*int{}
+	resp, err := m.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch updates err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
