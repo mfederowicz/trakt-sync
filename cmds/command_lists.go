@@ -12,7 +12,8 @@ import (
 
 var (
 	_listsAction    = ListsCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
-	_listTraktID    = ListsCmd.Flag.Int("trakt_id", cfg.DefaultConfig().TraktID, consts.ListIDUsage)
+	_listTraktID    = ListsCmd.Flag.String("trakt_id", cfg.DefaultConfig().InternalID, consts.ListIDUsage)
+	_listInternalID = ListsCmd.Flag.String("i", cfg.DefaultConfig().InternalID, consts.ListIDUsage)
 	_listSort       = ListsCmd.Flag.String("s", cfg.DefaultConfig().CommentsSort, consts.ListCommentSortUsage)
 	_listLikeRemove = ListsCmd.Flag.Bool("remove", cfg.DefaultConfig().Remove, consts.ListLikeRemoveUsage)
 )

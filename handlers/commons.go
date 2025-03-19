@@ -92,7 +92,7 @@ func (*CommonLogic) FetchEpisode(client *internal.Client, options *str.Options) 
 
 // FetchList helper function to fetch list object
 func (*CommonLogic) FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error) {
-	listID := options.TraktID
+	listID := options.InternalID
 	result, _, err := client.Lists.GetList(
 		context.Background(),
 		&listID,

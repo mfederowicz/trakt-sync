@@ -165,17 +165,20 @@ func processVerbose(options *str.Options) {
 	}
 }
 
+func selectFirstNonEmpty(values ...string) string {
+	for _, v := range values {
+		if len(v) > consts.ZeroValue {
+			return v
+		}
+	}
+	return ""
+}
+
 func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	switch module {
 	case "comments":
 		options.Action = *_commentsAction
-		if len(*_commentsTraktID) > consts.ZeroValue {
-			options.InternalID = *_commentsTraktID
-		}
-		if len(*_commentsInternalID) > consts.ZeroValue {
-			options.InternalID = *_commentsInternalID
-		}
-
+		options.InternalID = selectFirstNonEmpty(*_commentsTraktID, *_commentsInternalID)
 		options.CommentID = *_commentsCommentID
 		options.CommentType = *_commentsCommentType
 	case "checkin":
@@ -183,7 +186,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		options.TraktID = *_checkinTraktID
 	case "lists":
 		options.Action = *_listsAction
-		options.TraktID = *_listTraktID
+		options.InternalID = selectFirstNonEmpty(*_listTraktID, *_listInternalID)
 		options.Sort = *_listSort
 	case "movies":
 		options.Action = *_moviesAction
@@ -444,8 +447,8 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		options.ID = *_usersListID
 	}
 
-	if *_listTraktID > consts.ZeroValue {
-		options.TraktID = *_listTraktID
+	if len(*_listTraktID) > consts.ZeroValue || len(*_listInternalID) > consts.ZeroValue {
+		options.InternalID = selectFirstNonEmpty(*_listTraktID,*_listInternalID) 
 	}
 
 	if *_listLikeRemove {
