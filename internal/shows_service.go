@@ -16,8 +16,8 @@ import (
 type ShowsService Service
 
 // GetShow Returns episode object.
-func (s *ShowsService) GetShow(ctx context.Context, id *int, opts *uri.ListOptions) (*str.Show, *str.Response, error) {
-	var url = fmt.Sprintf("shows/%d", *id)
+func (s *ShowsService) GetShow(ctx context.Context, id *string, opts *uri.ListOptions) (*str.Show, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s", *id)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -33,7 +33,7 @@ func (s *ShowsService) GetShow(ctx context.Context, id *int, opts *uri.ListOptio
 	resp, err := s.client.Do(ctx, req, &result)
 	
 	if resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf("show not found with traktId:%d", *id)
+		err = fmt.Errorf("show not found with traktId:%s", *id)
 	}
 
 	if err != nil {

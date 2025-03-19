@@ -17,7 +17,7 @@ type CommentsCommentsMovieHandler struct{ common CommonLogic }
 
 // Handle to handle comments: movie type
 func (h CommentsCommentsMovieHandler) Handle(options *str.Options, client *internal.Client) error {
-	if options.TraktID == consts.ZeroValue {
+	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
 	connections, _ := h.common.FetchUserConnections(client, options)

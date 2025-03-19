@@ -169,7 +169,13 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	switch module {
 	case "comments":
 		options.Action = *_commentsAction
-		options.TraktID = *_commentsTraktID
+		if len(*_commentsTraktID) > consts.ZeroValue {
+			options.InternalID = *_commentsTraktID
+		}
+		if len(*_commentsInternalID) > consts.ZeroValue {
+			options.InternalID = *_commentsInternalID
+		}
+
 		options.CommentID = *_commentsCommentID
 		options.CommentType = *_commentsCommentType
 	case "checkin":

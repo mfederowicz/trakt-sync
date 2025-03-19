@@ -55,7 +55,7 @@ func (*CommonLogic) FetchMovie(client *internal.Client, options *str.Options) (*
 // FetchShow helper function to fetch show object
 func (*CommonLogic) FetchShow(client *internal.Client, options *str.Options) (*str.Show, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	showID := options.TraktID
+	showID := options.InternalID
 
 	result, _, err := client.Shows.GetShow(
 		context.Background(),
