@@ -60,6 +60,7 @@ type Config struct {
 	Spoiler        bool      `toml:"spoiler"`
 	IncludeReplies string    `toml:"include_replies"`
 	Verbose        bool      `toml:"verbose"`
+	InternalID     string    `toml:"trakt_id"`
 }
 
 var (
@@ -457,6 +458,7 @@ func DefaultConfig() *Config {
 		Spoiler:        false,
 		IncludeReplies: "",
 		Msg:            "",
+		InternalID:     "",
 	}
 }
 

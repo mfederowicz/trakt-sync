@@ -183,6 +183,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		options.Action = *_moviesAction
 		options.Period = *_moviesPeriod
 		options.StartDate = *_moviesStartDate
+		options.InternalID = *_moviesMovieIDAction
 	case "users":
 		options.Action = *_usersAction
 	case "people":
@@ -497,6 +498,10 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		options.StartDate = convertDateString(*_moviesStartDate, consts.DefaultStartDateFormat)
 	} else {
 		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
+	}
+
+	if len(*_moviesMovieIDAction) > consts.ZeroValue {
+		options.InternalID = *_moviesMovieIDAction
 	}
 
 	return options

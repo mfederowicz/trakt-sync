@@ -40,14 +40,16 @@ type CommonInterface interface {
 type CommonLogic struct{}
 
 // FetchMovie helper function to fetch movie object
-func (*CommonLogic) FetchMovie(client *internal.Client, options *str.Options) (*str.Movie, error) {
-	movieID := options.TraktID
-	result, _, err := client.Movies.GetMovie(
+func (*CommonLogic) FetchMovie(client *internal.Client, options *str.Options) (*str.Movie, *str.Response, error) {
+	movieID := options.InternalID
+	opts := uri.ListOptions{Extended: options.ExtendedInfo}
+	result, resp, err := client.Movies.GetMovie(
 		context.Background(),
 		&movieID,
+		&opts,
 	)
 
-	return result, err
+	return result, resp, err
 }
 
 // FetchShow helper function to fetch show object

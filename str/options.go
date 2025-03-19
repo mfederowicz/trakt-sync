@@ -20,6 +20,7 @@ type Options struct {
 	UserName       string
 	Time           string
 	ID             string
+	InternalID     string
 	Output         string
 	SearchType     Slice
 	SearchField    Slice
