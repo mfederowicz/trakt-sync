@@ -305,3 +305,25 @@ func (m *MoviesService) GetRecentlyUpdatedMoviesTraktIDs(ctx context.Context, st
 
 	return list, resp, nil
 }
+
+// GetAllMovieAliases Returns all title aliases for a movie. Includes country where name is different.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/movies/aliases/get-all-movie-aliases
+func (m *MoviesService) GetAllMovieAliases(ctx context.Context, id *string) ([]*str.Alias, *str.Response, error) {
+	url := fmt.Sprintf("movies/%s/aliases", *id)
+	printer.Println("fetch aliases url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Alias{}
+	resp, err := m.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch aliases err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

@@ -70,6 +70,9 @@ func moviesFunc(cmd *Command, _ ...string) error {
 		handler = handlers.MoviesUpdatedIDsHandler{}
 	case "summary":
 		handler = handlers.MoviesSummaryHandler{}
+	case "aliases":
+		handler = handlers.MoviesAliasesHandler{}
+
 	default:
 		printer.Println("possible actions: trending, popular, favorited, played, watched, collected,")
 		printer.Println("anticipated, boxoffice, updated, updated_ids,summary,aliases,releases,")
