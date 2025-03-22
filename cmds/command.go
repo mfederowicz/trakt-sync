@@ -99,6 +99,33 @@ type Command struct {
 	exit    int
 }
 
+// ValidPeriodForModule valid period options depends on action value
+func (c *Command) ValidPeriodForModule(options *str.Options) error {
+	switch options.Action {
+	case "favorited":
+		err := c.ValidPeriod(options)
+		if err != nil {
+			return errors.New(err.Error())
+		}
+	case "played":
+		err := c.ValidPeriod(options)
+		if err != nil {
+			return errors.New(err.Error())
+		}
+	case "watched":
+		err := c.ValidPeriod(options)
+		if err != nil {
+			return errors.New(err.Error())
+		}
+	case "collected":
+		err := c.ValidPeriod(options)
+		if err != nil {
+			return errors.New(err.Error())
+		}
+	}
+	return nil
+}
+
 // Helper function to handle the error
 func handleHelpError(err error) {
 	if err != nil {
@@ -448,7 +475,7 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 	}
 
 	if len(*_listTraktID) > consts.ZeroValue || len(*_listInternalID) > consts.ZeroValue {
-		options.InternalID = selectFirstNonEmpty(*_listTraktID,*_listInternalID) 
+		options.InternalID = selectFirstNonEmpty(*_listTraktID, *_listInternalID)
 	}
 
 	if *_listLikeRemove {
