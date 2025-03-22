@@ -23,7 +23,7 @@ func (h CheckinMovieHandler) Handle(options *str.Options, client *internal.Clien
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
 	connections, _ := h.common.FetchUserConnections(client, options)
-	movie, _ := h.common.FetchMovie(client, options)
+	movie, _, _ := h.common.FetchMovie(client, options)
 	c := new(str.CheckIn)
 	c.Movie = movie
 	if len(options.Msg) > consts.ZeroValue {

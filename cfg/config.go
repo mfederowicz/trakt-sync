@@ -45,6 +45,7 @@ type Config struct {
 	PerPage        int       `toml:"per_page"`
 	PagesLimit     int       `toml:"pages_limit"`
 	TraktID        int       `toml:"trakt_id"`
+	MoviesPeriod   string    `toml:"period"`
 	CommentID      int       `toml:"comment_id"`
 	EpisodeAbs     int       `toml:"episode_abs"`
 	EpisodeCode    string    `toml:"episode_code"`
@@ -59,6 +60,7 @@ type Config struct {
 	Spoiler        bool      `toml:"spoiler"`
 	IncludeReplies string    `toml:"include_replies"`
 	Verbose        bool      `toml:"verbose"`
+	InternalID     string    `toml:"trakt_id"`
 }
 
 var (
@@ -445,6 +447,7 @@ func DefaultConfig() *Config {
 		SearchField:    []string{},
 		Sort:           "rank",
 		CommentsSort:   "newest",
+		MoviesPeriod:   "weekly",
 		List:           "history",
 		UserName:       "me",
 		ID:             consts.EmptyString,
@@ -455,6 +458,7 @@ func DefaultConfig() *Config {
 		Spoiler:        false,
 		IncludeReplies: "",
 		Msg:            "",
+		InternalID:     "",
 	}
 }
 

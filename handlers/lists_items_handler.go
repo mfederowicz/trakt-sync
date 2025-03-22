@@ -21,7 +21,7 @@ type ListsItemsHandler struct{}
 
 // Handle to handle lists: items action
 func (h ListsItemsHandler) Handle(options *str.Options, client *internal.Client) error {
-	if options.TraktID == consts.ZeroValue {
+	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyListIDMsg)
 	}
 	printer.Println("Get all items on a list.")
@@ -49,7 +49,7 @@ func (h ListsItemsHandler) fetchListItems(client *internal.Client, options *str.
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Lists.GetListItems(
 		context.Background(),
-		&options.TraktID,
+		&options.InternalID,
 		&options.Type,
 		&opts,
 	)

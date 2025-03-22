@@ -11,6 +11,7 @@ type Options struct {
 	StartDate      string
 	Query          string
 	Sort           string
+	Period         string
 	CommentsSort   string
 	CommentType    string
 	Module         string
@@ -19,6 +20,7 @@ type Options struct {
 	UserName       string
 	Time           string
 	ID             string
+	InternalID     string
 	Output         string
 	SearchType     Slice
 	SearchField    Slice

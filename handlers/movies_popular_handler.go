@@ -16,26 +16,23 @@ import (
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
-// ListsLikesHandler struct for handler
-type ListsLikesHandler struct{}
+// MoviesPopularHandler struct for handler
+type MoviesPopularHandler struct{}
 
-// Handle to handle lists: likes action
-func (h ListsLikesHandler) Handle(options *str.Options, client *internal.Client) error {
-	if len(options.InternalID) == consts.ZeroValue {
-		return errors.New(consts.EmptyListIDMsg)
-	}
-	printer.Println("Returns all users who liked a list.")
-	result, err := h.fetchListsLikes(client, options, consts.DefaultPage)
+// Handle to handle lists: popular action
+func (h MoviesPopularHandler) Handle(options *str.Options, client *internal.Client) error {
+	printer.Println("Returns the most popular lists. Popularity is calculated using total number of likes and comments.")
+	result, err := h.fetchMoviesPopular(client, options, consts.DefaultPage)
 	if err != nil {
-		return fmt.Errorf("fetch users error:%v", err)
+		return fmt.Errorf("fetch lists error:%v", err)
 	}
 
 	if len(result) == consts.ZeroValue {
-		return errors.New("empty users")
+		return errors.New("empty lists")
 	}
 
 	printer.Printf("Found %d result \n", len(result))
-	exportJSON := []*str.UserLike{}
+	exportJSON := []*str.Movie{}
 	exportJSON = append(exportJSON, result...)
 	print("write data to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
@@ -45,12 +42,11 @@ func (h ListsLikesHandler) Handle(options *str.Options, client *internal.Client)
 	return nil
 }
 
-func (h ListsLikesHandler) fetchListsLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error) {
+func (h MoviesPopularHandler) fetchMoviesPopular(client *internal.Client, options *str.Options, page int) ([]*str.Movie, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
-	list, resp, err := client.Lists.GetAllUsersWhoLikedList(
+	list, resp, err := client.Movies.GetPopularMovies(
 		context.Background(),
 		&opts,
-		&options.InternalID,
 	)
 
 	if err != nil {
@@ -63,7 +59,7 @@ func (h ListsLikesHandler) fetchListsLikes(client *internal.Client, options *str
 
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
-		nextPageItems, err := h.fetchListsLikes(client, options, nextPage)
+		nextPageItems, err := h.fetchMoviesPopular(client, options, nextPage)
 		if err != nil {
 			return nil, err
 		}

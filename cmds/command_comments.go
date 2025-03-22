@@ -12,7 +12,8 @@ import (
 
 var (
 	_commentsAction         = CommentsCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
-	_commentsTraktID        = CommentsCmd.Flag.Int("trakt_id", cfg.DefaultConfig().TraktID, consts.TraktIDUsage)
+	_commentsInternalID        = CommentsCmd.Flag.String("i", cfg.DefaultConfig().InternalID, consts.TraktIDUsage)
+	_commentsTraktID        = CommentsCmd.Flag.String("trakt_id", cfg.DefaultConfig().InternalID, consts.TraktIDUsage)
 	_commentsCommentID      = CommentsCmd.Flag.Int("comment_id", cfg.DefaultConfig().CommentID, consts.CommentIDUsage)
 	_commentsDelete         = CommentsCmd.Flag.Bool("delete", cfg.DefaultConfig().Delete, consts.DeleteUsage)
 	_commentsRemove         = CommentsCmd.Flag.Bool("remove", cfg.DefaultConfig().Remove, consts.RemoveUsage)

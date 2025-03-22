@@ -64,8 +64,10 @@ var Avflags = map[string]bool{
 	"languages":       true,
 	"lists":           true,
 	"msg":             true,
+	"movies":          true,
 	"o":               true,
 	"people":          true,
+	"period":          true,
 	"q":               true,
 	"remove":          true,
 	"reply":           true,
@@ -163,11 +165,20 @@ func processVerbose(options *str.Options) {
 	}
 }
 
+func selectFirstNonEmpty(values ...string) string {
+	for _, v := range values {
+		if len(v) > consts.ZeroValue {
+			return v
+		}
+	}
+	return ""
+}
+
 func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	switch module {
 	case "comments":
 		options.Action = *_commentsAction
-		options.TraktID = *_commentsTraktID
+		options.InternalID = selectFirstNonEmpty(*_commentsTraktID, *_commentsInternalID)
 		options.CommentID = *_commentsCommentID
 		options.CommentType = *_commentsCommentType
 	case "checkin":
@@ -175,8 +186,13 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		options.TraktID = *_checkinTraktID
 	case "lists":
 		options.Action = *_listsAction
-		options.TraktID = *_listTraktID
+		options.InternalID = selectFirstNonEmpty(*_listTraktID, *_listInternalID)
 		options.Sort = *_listSort
+	case "movies":
+		options.Action = *_moviesAction
+		options.Period = *_moviesPeriod
+		options.StartDate = *_moviesStartDate
+		options.InternalID = *_moviesMovieIDAction
 	case "users":
 		options.Action = *_usersAction
 	case "people":
@@ -382,6 +398,21 @@ func (*Command) ValidType(options *str.Options) error {
 	return nil
 }
 
+// ValidPeriod check if period is valid
+func (*Command) ValidPeriod(options *str.Options) error {
+	// Check if the provided module exists in ModuleConfig
+	moduleConfig, ok := cfg.ModuleConfig[options.Module]
+	if !ok {
+		return fmt.Errorf("not found config for module '%s'", options.Module)
+	}
+	// Check if the provided period is valid for the selected module
+	if !cfg.IsValidConfigType(moduleConfig.Period, options.Period) {
+		return fmt.Errorf("period '%s' is not valid for module '%s' and action '%s', avaliable periods:%s", options.Period, options.Module, options.Action, moduleConfig.Period)
+	}
+
+	return nil
+}
+
 // UpdateOptionsWithCommandFlags update options depends on command flags
 func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Options {
 	if len(*_userName) > consts.ZeroValue {
@@ -416,8 +447,8 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		options.ID = *_usersListID
 	}
 
-	if *_listTraktID > consts.ZeroValue {
-		options.TraktID = *_listTraktID
+	if len(*_listTraktID) > consts.ZeroValue || len(*_listInternalID) > consts.ZeroValue {
+		options.InternalID = selectFirstNonEmpty(*_listTraktID,*_listInternalID) 
 	}
 
 	if *_listLikeRemove {
@@ -462,6 +493,24 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 
 	if len(*_commentsIncludeReplies) > consts.ZeroValue {
 		options.IncludeReplies = *_commentsIncludeReplies
+	}
+
+	if len(*_moviesAction) > consts.ZeroValue {
+		options.Action = *_moviesAction
+	}
+
+	if len(*_moviesPeriod) > consts.ZeroValue {
+		options.Period = *_moviesPeriod
+	}
+
+	if len(*_moviesStartDate) > consts.ZeroValue {
+		options.StartDate = convertDateString(*_moviesStartDate, consts.DefaultStartDateFormat)
+	} else {
+		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
+	}
+
+	if len(*_moviesMovieIDAction) > consts.ZeroValue {
+		options.InternalID = *_moviesMovieIDAction
 	}
 
 	return options

@@ -16,26 +16,23 @@ import (
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
-// ListsLikesHandler struct for handler
-type ListsLikesHandler struct{}
+// MoviesAnticipatedHandler struct for handler
+type MoviesAnticipatedHandler struct{}
 
-// Handle to handle lists: likes action
-func (h ListsLikesHandler) Handle(options *str.Options, client *internal.Client) error {
-	if len(options.InternalID) == consts.ZeroValue {
-		return errors.New(consts.EmptyListIDMsg)
-	}
-	printer.Println("Returns all users who liked a list.")
-	result, err := h.fetchListsLikes(client, options, consts.DefaultPage)
+// Handle to handle movies: trending action
+func (h MoviesAnticipatedHandler) Handle(options *str.Options, client *internal.Client) error {
+	printer.Println("Returns the most anticipated movies based on the number of lists a movie appears on.")
+	result, err := h.fetchMoviesAnticipated(client, options, consts.DefaultPage)
 	if err != nil {
-		return fmt.Errorf("fetch users error:%v", err)
+		return fmt.Errorf("fetch movies error:%v", err)
 	}
 
 	if len(result) == consts.ZeroValue {
-		return errors.New("empty users")
+		return errors.New("empty movies")
 	}
 
 	printer.Printf("Found %d result \n", len(result))
-	exportJSON := []*str.UserLike{}
+	exportJSON := []*str.MoviesItem{}
 	exportJSON = append(exportJSON, result...)
 	print("write data to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
@@ -45,12 +42,11 @@ func (h ListsLikesHandler) Handle(options *str.Options, client *internal.Client)
 	return nil
 }
 
-func (h ListsLikesHandler) fetchListsLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error) {
+func (h MoviesAnticipatedHandler) fetchMoviesAnticipated(client *internal.Client, options *str.Options, page int) ([]*str.MoviesItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
-	list, resp, err := client.Lists.GetAllUsersWhoLikedList(
+	list, resp, err := client.Movies.GetAnticipatedMovies(
 		context.Background(),
 		&opts,
-		&options.InternalID,
 	)
 
 	if err != nil {
@@ -63,7 +59,7 @@ func (h ListsLikesHandler) fetchListsLikes(client *internal.Client, options *str
 
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
-		nextPageItems, err := h.fetchListsLikes(client, options, nextPage)
+		nextPageItems, err := h.fetchMoviesAnticipated(client, options, nextPage)
 		if err != nil {
 			return nil, err
 		}

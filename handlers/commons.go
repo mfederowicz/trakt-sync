@@ -40,20 +40,22 @@ type CommonInterface interface {
 type CommonLogic struct{}
 
 // FetchMovie helper function to fetch movie object
-func (*CommonLogic) FetchMovie(client *internal.Client, options *str.Options) (*str.Movie, error) {
-	movieID := options.TraktID
-	result, _, err := client.Movies.GetMovie(
+func (*CommonLogic) FetchMovie(client *internal.Client, options *str.Options) (*str.Movie, *str.Response, error) {
+	movieID := options.InternalID
+	opts := uri.ListOptions{Extended: options.ExtendedInfo}
+	result, resp, err := client.Movies.GetMovie(
 		context.Background(),
 		&movieID,
+		&opts,
 	)
 
-	return result, err
+	return result, resp, err
 }
 
 // FetchShow helper function to fetch show object
 func (*CommonLogic) FetchShow(client *internal.Client, options *str.Options) (*str.Show, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	showID := options.TraktID
+	showID := options.InternalID
 
 	result, _, err := client.Shows.GetShow(
 		context.Background(),
@@ -90,7 +92,7 @@ func (*CommonLogic) FetchEpisode(client *internal.Client, options *str.Options) 
 
 // FetchList helper function to fetch list object
 func (*CommonLogic) FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error) {
-	listID := options.TraktID
+	listID := options.InternalID
 	result, _, err := client.Lists.GetList(
 		context.Background(),
 		&listID,

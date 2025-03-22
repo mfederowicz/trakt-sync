@@ -20,16 +20,16 @@ type ListsListHandler struct{}
 
 // Handle to handle lists: list action
 func (h ListsListHandler) Handle(options *str.Options, client *internal.Client) error {
-	if options.TraktID == consts.ZeroValue {
+	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyListIDMsg)
 	}
 
 	result, resp, _ := h.fetchSingleList(client, options)
 	if resp.StatusCode == http.StatusNotFound {
-		return fmt.Errorf("not found list for:%d", options.TraktID)
+		return fmt.Errorf("not found list for:%s", options.InternalID)
 	}
 
-	printer.Printf("Found list for traktId:%d and name:%s \n", options.TraktID, *result.Name)
+	printer.Printf("Found list for traktId:%s and name:%s \n", options.InternalID, *result.Name)
 
 	print("write data to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(result, "", "  ")
@@ -38,7 +38,7 @@ func (h ListsListHandler) Handle(options *str.Options, client *internal.Client) 
 }
 
 func (ListsListHandler) fetchSingleList(client *internal.Client, options *str.Options) (*str.PersonalList, *str.Response, error) {
-	listID := options.TraktID
+	listID := options.InternalID
 	result, resp, err := client.Lists.GetList(
 		context.Background(),
 		&listID,

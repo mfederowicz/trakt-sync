@@ -18,7 +18,7 @@ type ListsLikeHandler struct{}
 
 // Handle to handle lists: like action
 func (h ListsLikeHandler) Handle(options *str.Options, client *internal.Client) error {
-	if options.TraktID == consts.ZeroValue {
+	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyListIDMsg)
 	}
 
@@ -36,7 +36,7 @@ func (h ListsLikeHandler) Handle(options *str.Options, client *internal.Client) 
 }
 
 func (ListsLikeHandler) likeSingleList(client *internal.Client, options *str.Options) (*str.Response, error) {
-	listID := options.TraktID
+	listID := options.InternalID
 	
 	if !options.Remove {
 		resp, err := client.Lists.LikeList(

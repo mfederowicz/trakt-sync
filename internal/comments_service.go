@@ -29,6 +29,11 @@ func (c *CommentsService) PostAComment(ctx context.Context, comment *str.Comment
 
 	com := new(str.Comment)
 	resp, err := c.client.Do(ctx, req, com)
+
+	if resp.StatusCode == http.StatusInternalServerError {
+		return nil, nil, errors.New("500 Internal server error")
+	}
+
 	if err != nil {
 		return nil, nil, errors.Join(resp.Errors.GetComments())
 	}
@@ -155,7 +160,7 @@ func (c *CommentsService) GetRepliesForComment(ctx context.Context, opts *uri.Li
 }
 
 // GetCommentUserLikes Returns all users who liked a comment.
-// API docs: https://trakt.docs.apiary.io/#reference/comments/item/get-all-users-who-liked-a-comment 
+// API docs: https://trakt.docs.apiary.io/#reference/comments/item/get-all-users-who-liked-a-comment
 func (c *CommentsService) GetCommentUserLikes(ctx context.Context, id *int, opts *uri.ListOptions) ([]*str.CommentUserLike, *str.Response, error) {
 	var url = fmt.Sprintf("comments/%d/likes", *id)
 	url, err := uri.AddQuery(url, opts)
@@ -181,7 +186,7 @@ func (c *CommentsService) GetCommentUserLikes(ctx context.Context, id *int, opts
 
 // LikeComment Votes help determine popular comments. Only one like is allowed per comment per user.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/comments/like/like-a-comment 
+// API docs: https://trakt.docs.apiary.io/#reference/comments/like/like-a-comment
 func (c *CommentsService) LikeComment(ctx context.Context, id *int) (*str.Response, error) {
 	var url = fmt.Sprintf("comments/%d/like", *id)
 	printer.Println("send like for single comment:" + url)
@@ -200,7 +205,7 @@ func (c *CommentsService) LikeComment(ctx context.Context, id *int) (*str.Respon
 
 // RemoveLikeComment Remove a like on a comment.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/comments/like/remove-like-on-a-comment 
+// API docs: https://trakt.docs.apiary.io/#reference/comments/like/remove-like-on-a-comment
 func (c *CommentsService) RemoveLikeComment(ctx context.Context, id *int) (*str.Response, error) {
 	var url = fmt.Sprintf("comments/%d/like", *id)
 	printer.Println("remove like for single comment:" + url)
@@ -242,7 +247,7 @@ func (c *CommentsService) ReplyAComment(ctx context.Context, id *int, reply *str
 }
 
 // GetTrendingComments Returns all comments with the most likes and replies over the last 7 days.
-// API docs: https://trakt.docs.apiary.io/#reference/comments/trending/get-trending-comments 
+// API docs: https://trakt.docs.apiary.io/#reference/comments/trending/get-trending-comments
 func (c *CommentsService) GetTrendingComments(ctx context.Context, contentType *string, strType *string, opts *uri.ListOptions) ([]*str.CommentItem, *str.Response, error) {
 	var url = fmt.Sprintf("comments/trending/%s/%s", *contentType, *strType)
 	url, err := uri.AddQuery(url, opts)
@@ -315,4 +320,3 @@ func (c *CommentsService) GetUpdatedComments(ctx context.Context, contentType *s
 
 	return list, resp, nil
 }
-
