@@ -25,7 +25,7 @@ var MoviesCmd = &Command{
 	Help:    `movies command`,
 }
 
-func moviesFunc(cmd *Command, _ ...string) error {	
+func moviesFunc(cmd *Command, _ ...string) error {
 	options := cmd.Options
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
@@ -36,7 +36,7 @@ func moviesFunc(cmd *Command, _ ...string) error {
 	}
 
 	var handler handlers.MoviesHandler
-	
+
 	switch options.Action {
 	case "trending":
 		handler = handlers.MoviesTrendingHandler{}
@@ -62,13 +62,15 @@ func moviesFunc(cmd *Command, _ ...string) error {
 		handler = handlers.MoviesSummaryHandler{}
 	case "aliases":
 		handler = handlers.MoviesAliasesHandler{}
+	case "releases":
+		handler = handlers.MoviesReleasesHandler{}
 
 	default:
 		printer.Println("possible actions: trending, popular, favorited, played, watched, collected,")
 		printer.Println("anticipated, boxoffice, updated, updated_ids,summary,aliases,releases,")
 		printer.Println("translations,comments,lists,people,ratings,releated,stats,studios,watiching,videos,refresh")
 	}
-	
+
 	err = handler.Handle(options, client)
 	if err != nil {
 		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)

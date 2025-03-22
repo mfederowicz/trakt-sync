@@ -17,7 +17,7 @@ import (
 // MoviesSummaryHandler struct for handler
 type MoviesSummaryHandler struct{}
 
-// Handle to handle people: updated_ids action
+// Handle to handle movies: summary action
 func (m MoviesSummaryHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("Returns a single movie details")
 	if len(options.InternalID) == consts.ZeroValue {

@@ -17,7 +17,7 @@ import (
 // MoviesBoxofficeHandler struct for handler
 type MoviesBoxofficeHandler struct{}
 
-// Handle to handle movies: trending action
+// Handle to handle movies: boxoffice action
 func (h MoviesBoxofficeHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("Returns the top 10 grossing movies in the U.S. box office last weekend. Updated every Monday morning.")
 	result, err := h.fetchMoviesBoxoffice(client, options)

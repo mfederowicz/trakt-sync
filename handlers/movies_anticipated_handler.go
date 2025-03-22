@@ -19,7 +19,7 @@ import (
 // MoviesAnticipatedHandler struct for handler
 type MoviesAnticipatedHandler struct{}
 
-// Handle to handle movies: trending action
+// Handle to handle movies: anticipated action
 func (h MoviesAnticipatedHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("Returns the most anticipated movies based on the number of lists a movie appears on.")
 	result, err := h.fetchMoviesAnticipated(client, options, consts.DefaultPage)
