@@ -17,7 +17,7 @@ type CommentsCommentsListHandler struct{ common CommonLogic }
 
 // Handle to handle comments: list type
 func (h CommentsCommentsListHandler) Handle(options *str.Options, client *internal.Client) error {
-	if options.TraktID == consts.ZeroValue {
+	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
 	connections, _ := h.common.FetchUserConnections(client, options)
