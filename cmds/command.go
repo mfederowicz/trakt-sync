@@ -74,6 +74,7 @@ var Avflags = map[string]bool{
 	"remove":          true,
 	"releases":        true,
 	"reply":           true,
+	"s":               true,
 	"comment":         true,
 	"search":          true,
 	"start_date":      true,
@@ -223,9 +224,10 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		options.Action = *_moviesAction
 		options.Period = *_moviesPeriod
 		options.StartDate = *_moviesStartDate
-		options.InternalID = *_moviesMovieIDAction
+		options.InternalID = *_moviesInternalID
 		options.Country = *_moviesCountry
 		options.Language = *_moviesLanguage
+		options.Sort = *_moviesSort
 	case "users":
 		options.Action = *_usersAction
 	case "people":
@@ -431,6 +433,21 @@ func (*Command) ValidType(options *str.Options) error {
 	return nil
 }
 
+// ValidSort check if sort is valid
+func (*Command) ValidSort(options *str.Options) error {
+	// Check if the provided module exists in ModuleConfig
+	moduleConfig, ok := cfg.ModuleConfig[options.Module]
+	if !ok {
+		return fmt.Errorf("not found config for module '%s'", options.Module)
+	}
+	// Check if the provided sort is valid for the selected module
+	if !cfg.IsValidConfigType(moduleConfig.Sort, options.Sort) {
+		return fmt.Errorf("sort '%s' is not valid for module '%s' and action '%s', avaliable sort:%s", options.Sort, options.Module, options.Action, moduleConfig.Sort)
+	}
+
+	return nil
+}
+
 // ValidPeriod check if period is valid
 func (*Command) ValidPeriod(options *str.Options) error {
 	// Check if the provided module exists in ModuleConfig
@@ -542,8 +559,12 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
 	}
 
-	if len(*_moviesMovieIDAction) > consts.ZeroValue {
-		options.InternalID = *_moviesMovieIDAction
+	if len(*_moviesInternalID) > consts.ZeroValue {
+		options.InternalID = *_moviesInternalID
+	}
+
+	if len(*_moviesSort) > consts.ZeroValue {
+		options.Sort = *_moviesSort
 	}
 
 	return options

@@ -11,12 +11,13 @@ import (
 )
 
 var (
-	_moviesAction        = MoviesCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
-	_moviesMovieIDAction = MoviesCmd.Flag.String("i", cfg.DefaultConfig().InternalID, consts.MovieIDUsage)
-	_moviesPeriod        = MoviesCmd.Flag.String("period", cfg.DefaultConfig().MoviesPeriod, consts.MoviesPeriodUsage)
-	_moviesCountry       = MoviesCmd.Flag.String("country", cfg.DefaultConfig().MoviesCountry, consts.MoviesCountryUsage)
-	_moviesLanguage      = MoviesCmd.Flag.String("language", cfg.DefaultConfig().MoviesLanguage, consts.MoviesLanguageUsage)
-	_moviesStartDate     = MoviesCmd.Flag.String("start_date", "", consts.StartDateUsage)
+	_moviesAction     = MoviesCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_moviesInternalID = MoviesCmd.Flag.String("i", cfg.DefaultConfig().InternalID, consts.MovieIDUsage)
+	_moviesPeriod     = MoviesCmd.Flag.String("period", cfg.DefaultConfig().MoviesPeriod, consts.MoviesPeriodUsage)
+	_moviesCountry    = MoviesCmd.Flag.String("country", cfg.DefaultConfig().MoviesCountry, consts.MoviesCountryUsage)
+	_moviesLanguage   = MoviesCmd.Flag.String("language", cfg.DefaultConfig().MoviesLanguage, consts.MoviesLanguageUsage)
+	_moviesSort       = MoviesCmd.Flag.String("s", cfg.DefaultConfig().MoviesSort, consts.MoviesSortUsage)
+	_moviesStartDate  = MoviesCmd.Flag.String("start_date", "", consts.StartDateUsage)
 )
 
 // MoviesCmd returns movies and episodes that a user has watched, sorted by most recent.
@@ -33,6 +34,11 @@ func moviesFunc(cmd *Command, _ ...string) error {
 	options = cmd.UpdateOptionsWithCommandFlags(options)
 
 	err := cmd.ValidPeriodForModule(options)
+	if err != nil {
+		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
+	}
+
+	err = cmd.ValidSort(options)
 	if err != nil {
 		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
 	}
@@ -68,7 +74,8 @@ func moviesFunc(cmd *Command, _ ...string) error {
 		handler = handlers.MoviesReleasesHandler{}
 	case "translations":
 		handler = handlers.MoviesTranslationsHandler{}
-
+	case "comments":
+		handler = handlers.MoviesCommentsHandler{}
 	default:
 		printer.Println("possible actions: trending, popular, favorited, played, watched, collected,")
 		printer.Println("anticipated, boxoffice, updated, updated_ids,summary,aliases,releases,")

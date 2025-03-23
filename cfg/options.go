@@ -93,7 +93,7 @@ var ModuleConfig = map[string]OptionsConfig{
 		SearchField:  []string{},
 		Type:         []string{"all", "movies", "shows", "seasons", "episodes", "lists"},
 		Period:       []string{"all", "daily", "weekly", "monthly"},
-		Sort:         []string{"rank", "added", "released", "title"},
+		Sort:         []string{"newest", "oldest", "likes", "replies", "highest", "lowest", "plays"},
 		Format:       []string{"imdb", "tmdb", "tvdb", "tvrage", "trakt"},
 		Action:       []string{},
 	},
@@ -347,7 +347,7 @@ func getOutputForModuleMovies(options *str.Options) string {
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
 	case "favorited", "played", "watched", "collected":
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.Period)
-	case "summary", "aliases", "releases","translations":
+	case "summary", "aliases", "releases", "translations", "comments":
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.InternalID)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)

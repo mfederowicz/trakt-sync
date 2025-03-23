@@ -384,3 +384,39 @@ func (m *MoviesService) GetAllMovieTranslations(ctx context.Context, id *string,
 
 	return list, resp, nil
 }
+
+// GetAllMovieComments Returns all top level comments for a movie. 
+// By default, the newest comments are returned first. 
+// Other sorting options include oldest, most likes, most replies, highest rated, lowest rated, and most plays..
+//
+// API docs: https://trakt.docs.apiary.io/#reference/movies/comments/get-all-movie-comments
+func (m *MoviesService) GetAllMovieComments(ctx context.Context, id *string, sort *string, opts *uri.ListOptions) ([]*str.Comment, *str.Response, error) {
+	var url string
+	if *sort != consts.EmptyString {
+		url = fmt.Sprintf("movies/%s/comments/%s", *id, *sort)
+	} else {
+		url = fmt.Sprintf("movies/%s/comments", *id)
+	}
+
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch comments url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Comment{}
+	resp, err := m.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch comments err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
