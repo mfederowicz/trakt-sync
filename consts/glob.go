@@ -20,6 +20,7 @@ const (
 	ActionUsage            = "allow use selected action"
 	MoviesPeriodUsage      = "allow to overwrite period"
 	MoviesCountryUsage     = "allow to overwrite country"
+	MoviesLanguageUsage    = "allow to overwrite language"
 	MovieIDUsage           = "allow to overwrite movieID"
 	TraktIDUsage           = "allow to overwrite trakt_id"
 	CommentIDUsage         = "allow to overwrite comment_id"

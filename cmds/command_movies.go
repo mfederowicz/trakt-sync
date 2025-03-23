@@ -15,6 +15,7 @@ var (
 	_moviesMovieIDAction = MoviesCmd.Flag.String("i", cfg.DefaultConfig().InternalID, consts.MovieIDUsage)
 	_moviesPeriod        = MoviesCmd.Flag.String("period", cfg.DefaultConfig().MoviesPeriod, consts.MoviesPeriodUsage)
 	_moviesCountry       = MoviesCmd.Flag.String("country", cfg.DefaultConfig().MoviesCountry, consts.MoviesCountryUsage)
+	_moviesLanguage      = MoviesCmd.Flag.String("language", cfg.DefaultConfig().MoviesLanguage, consts.MoviesLanguageUsage)
 	_moviesStartDate     = MoviesCmd.Flag.String("start_date", "", consts.StartDateUsage)
 )
 
@@ -65,6 +66,8 @@ func moviesFunc(cmd *Command, _ ...string) error {
 		handler = handlers.MoviesAliasesHandler{}
 	case "releases":
 		handler = handlers.MoviesReleasesHandler{}
+	case "translations":
+		handler = handlers.MoviesTranslationsHandler{}
 
 	default:
 		printer.Println("possible actions: trending, popular, favorited, played, watched, collected,")

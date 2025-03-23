@@ -21,6 +21,7 @@ type Options struct {
 	Time           string
 	ID             string
 	InternalID     string
+	Language       string
 	Output         string
 	SearchType     Slice
 	SearchField    Slice

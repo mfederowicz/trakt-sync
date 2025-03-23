@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
@@ -350,6 +351,34 @@ func (m *MoviesService) GetAllMovieReleases(ctx context.Context, id *string, cou
 
 	if err != nil {
 		printer.Println("fetch releases err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// GetAllMovieTranslations Returns all translations for a movie, including language and translated values for title, tagline and overview.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/movies/translations/get-all-movie-translations
+func (m *MoviesService) GetAllMovieTranslations(ctx context.Context, id *string, language *string) ([]*str.Translation, *str.Response, error) {
+	var url string
+	if *language != consts.EmptyString {
+		url = fmt.Sprintf("movies/%s/translations/%s", *id, *language)
+	} else {
+		url = fmt.Sprintf("movies/%s/translations", *id)
+	}
+
+	printer.Println("fetch translations url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Translation{}
+	resp, err := m.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch translations err:" + err.Error())
 		return nil, resp, err
 	}
 

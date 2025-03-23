@@ -62,6 +62,7 @@ var Avflags = map[string]bool{
 	"episode_code":    true,
 	"episode_abs":     true,
 	"id_type":         true,
+	"language":        true,
 	"languages":       true,
 	"lists":           true,
 	"msg":             true,
@@ -77,6 +78,7 @@ var Avflags = map[string]bool{
 	"search":          true,
 	"start_date":      true,
 	"t":               true,
+	"translations":    true,
 	"u":               true,
 	"users":           true,
 	"v":               true,
@@ -223,6 +225,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		options.StartDate = *_moviesStartDate
 		options.InternalID = *_moviesMovieIDAction
 		options.Country = *_moviesCountry
+		options.Language = *_moviesLanguage
 	case "users":
 		options.Action = *_usersAction
 	case "people":
