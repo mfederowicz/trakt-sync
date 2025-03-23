@@ -41,6 +41,7 @@ type Options struct {
 	IncludeReplies string
 	EpisodeAbs     int
 	EpisodeCode    string
+	Country        string
 	Episode        int
 	Season         int
 }

@@ -14,6 +14,7 @@ var (
 	_moviesAction        = MoviesCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
 	_moviesMovieIDAction = MoviesCmd.Flag.String("i", cfg.DefaultConfig().InternalID, consts.MovieIDUsage)
 	_moviesPeriod        = MoviesCmd.Flag.String("period", cfg.DefaultConfig().MoviesPeriod, consts.MoviesPeriodUsage)
+	_moviesCountry       = MoviesCmd.Flag.String("country", cfg.DefaultConfig().MoviesCountry, consts.MoviesCountryUsage)
 	_moviesStartDate     = MoviesCmd.Flag.String("start_date", "", consts.StartDateUsage)
 )
 

@@ -19,6 +19,7 @@ const (
 	ModuleUsage            = "allow use selected module"
 	ActionUsage            = "allow use selected action"
 	MoviesPeriodUsage      = "allow to overwrite period"
+	MoviesCountryUsage     = "allow to overwrite country"
 	MovieIDUsage           = "allow to overwrite movieID"
 	TraktIDUsage           = "allow to overwrite trakt_id"
 	CommentIDUsage         = "allow to overwrite comment_id"

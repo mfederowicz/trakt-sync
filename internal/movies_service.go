@@ -327,3 +327,31 @@ func (m *MoviesService) GetAllMovieAliases(ctx context.Context, id *string) ([]*
 
 	return list, resp, nil
 }
+
+// GetAllMovieReleases Returns all releases for a movie including country, certification, release date, release type, and note.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/movies/releases/get-all-movie-releases
+func (m *MoviesService) GetAllMovieReleases(ctx context.Context, id *string, country *string) ([]*str.Release, *str.Response, error) {
+	var url string
+	if country != nil {
+		url = fmt.Sprintf("movies/%s/releases/%s", *id, *country)
+	} else {
+		url = fmt.Sprintf("movies/%s/releases", *id)
+	}
+
+	printer.Println("fetch releases url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Release{}
+	resp, err := m.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch releases err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

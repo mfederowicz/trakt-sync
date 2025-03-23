@@ -43,6 +43,7 @@ var Avflags = map[string]bool{
 	"comments":        true,
 	"comment_type":    true,
 	"countries":       true,
+	"country":         true,
 	"checkin":         true,
 	"collection":      true,
 	"days":            true,
@@ -70,6 +71,7 @@ var Avflags = map[string]bool{
 	"period":          true,
 	"q":               true,
 	"remove":          true,
+	"releases":        true,
 	"reply":           true,
 	"comment":         true,
 	"search":          true,
@@ -220,6 +222,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		options.Period = *_moviesPeriod
 		options.StartDate = *_moviesStartDate
 		options.InternalID = *_moviesMovieIDAction
+		options.Country = *_moviesCountry
 	case "users":
 		options.Action = *_usersAction
 	case "people":
