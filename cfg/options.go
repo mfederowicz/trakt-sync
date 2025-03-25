@@ -359,7 +359,7 @@ func getOutputForModuleMovies(options *str.Options) string {
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
 	case "favorited", "played", "watched", "collected":
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.Period)
-	case "summary", "aliases", "releases", "translations", "comments", "lists", "people", "ratings", "related", "stats", "studios":
+	case "summary", "aliases", "releases", "translations", "comments", "lists", "people", "ratings", "related", "stats", "studios", "watching":
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.InternalID)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)

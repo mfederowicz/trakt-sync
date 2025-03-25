@@ -595,12 +595,9 @@ func (m *MoviesService) GetMovieStats(ctx context.Context, id *string) (*str.Mov
 
 // GetMovieStudios Returns all studios for movie.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/movies/studios/get-movie-studios 
+// API docs: https://trakt.docs.apiary.io/#reference/movies/studios/get-movie-studios
 func (m *MoviesService) GetMovieStudios(ctx context.Context, id *string) ([]*str.Studio, *str.Response, error) {
-	var url string
-	url = fmt.Sprintf("movies/%s/studios", *id)
-	
-
+	var url = fmt.Sprintf("movies/%s/studios", *id)
 	printer.Println("fetch studios url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -622,3 +619,34 @@ func (m *MoviesService) GetMovieStudios(ctx context.Context, id *string) ([]*str
 	return list, resp, nil
 }
 
+// GetMovieWatching Returns all users watching this movie right now.
+//
+// API docs:  https://trakt.docs.apiary.io/#reference/movies/studios/get-users-watching-right-now
+func (m *MoviesService) GetMovieWatching(ctx context.Context, id *string, opts *uri.ListOptions) ([]*str.UserProfile, *str.Response, error) {
+	var url = fmt.Sprintf("movies/%s/watching", *id)
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch watching url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.UserProfile{}
+	resp, err := m.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found watching for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch watching err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
