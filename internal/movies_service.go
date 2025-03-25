@@ -485,3 +485,27 @@ func (m *MoviesService) GetAllPeopleForMovie(ctx context.Context, id *string, op
 
 	return result, resp, nil
 }
+
+// GetMovieRatings Returns rating (between 0 and 10) and distribution for a movie.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/movies/ratings/get-movie-ratings
+func (m *MoviesService) GetMovieRatings(ctx context.Context, id *string) (*str.MovieRatings, *str.Response, error) {
+	var url string
+
+	url = fmt.Sprintf("movies/%s/ratings", *id)	
+
+	printer.Println("fetch ratings url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := new(str.MovieRatings)
+	resp, err := m.client.Do(ctx, req, &result)
+
+	if err != nil {
+		printer.Println("fetch ratings err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
