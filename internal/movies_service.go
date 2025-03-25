@@ -385,8 +385,8 @@ func (m *MoviesService) GetAllMovieTranslations(ctx context.Context, id *string,
 	return list, resp, nil
 }
 
-// GetAllMovieComments Returns all top level comments for a movie. 
-// By default, the newest comments are returned first. 
+// GetAllMovieComments Returns all top level comments for a movie.
+// By default, the newest comments are returned first.
 // Other sorting options include oldest, most likes, most replies, highest rated, lowest rated, and most plays..
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/comments/get-all-movie-comments
@@ -421,8 +421,8 @@ func (m *MoviesService) GetAllMovieComments(ctx context.Context, id *string, sor
 	return list, resp, nil
 }
 
-// GetListsContainingMovie Returns all lists that contain this movie. 
-// By default, personal lists are returned sorted by the most popular. 
+// GetListsContainingMovie Returns all lists that contain this movie.
+// By default, personal lists are returned sorted by the most popular.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/lists/get-lists-containing-this-movie
 func (m *MoviesService) GetListsContainingMovie(ctx context.Context, id *string, t *string, sort *string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
@@ -454,4 +454,34 @@ func (m *MoviesService) GetListsContainingMovie(ctx context.Context, id *string,
 	}
 
 	return list, resp, nil
+}
+
+// GetAllPeopleForMovie Returns all cast and crew for a movie.
+// Each cast member will have a characters array and a standard person object.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/movies/people/get-all-people-for-a-movie
+func (m *MoviesService) GetAllPeopleForMovie(ctx context.Context, id *string, opts *uri.ListOptions) (*str.MoviePeople, *str.Response, error) {
+	var url string
+
+	url = fmt.Sprintf("movies/%s/people", *id)
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch people url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := new(str.MoviePeople)
+	resp, err := m.client.Do(ctx, req, &result)
+
+	if err != nil {
+		printer.Println("fetch people err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
 }

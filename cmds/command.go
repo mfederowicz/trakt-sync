@@ -463,8 +463,7 @@ func (*Command) ValidSort(options *str.Options) error {
 	}
 	// Check if the provided sort is valid for the selected module
 	prefix := options.Module + ":" + options.Action
-
-	if !cfg.IsValidConfigType(cfg.TypeSortConfig[prefix].Sort, options.Sort) {
+	if len(cfg.TypeSortConfig[prefix].Sort) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.TypeSortConfig[prefix].Sort, options.Sort) {
 		return fmt.Errorf("sort '%s' is not valid for module '%s' and action '%s', avaliable sort:%s", options.Sort, options.Module, options.Action, cfg.TypeSortConfig[prefix].Sort)
 	}
 
