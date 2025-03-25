@@ -321,6 +321,10 @@ func (m *MoviesService) GetAllMovieAliases(ctx context.Context, id *string) ([]*
 	list := []*str.Alias{}
 	resp, err := m.client.Do(ctx, req, &list)
 
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found aliases for id/slug:%s", *id)
+	}
+
 	if err != nil {
 		printer.Println("fetch aliases err:" + err.Error())
 		return nil, resp, err
@@ -349,6 +353,10 @@ func (m *MoviesService) GetAllMovieReleases(ctx context.Context, id *string, cou
 	list := []*str.Release{}
 	resp, err := m.client.Do(ctx, req, &list)
 
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found releases for id/slug:%s", *id)
+	}
+
 	if err != nil {
 		printer.Println("fetch releases err:" + err.Error())
 		return nil, resp, err
@@ -376,6 +384,10 @@ func (m *MoviesService) GetAllMovieTranslations(ctx context.Context, id *string,
 
 	list := []*str.Translation{}
 	resp, err := m.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found translations for id/slug:%s", *id)
+	}
 
 	if err != nil {
 		printer.Println("fetch translations err:" + err.Error())
@@ -413,6 +425,10 @@ func (m *MoviesService) GetAllMovieComments(ctx context.Context, id *string, sor
 	list := []*str.Comment{}
 	resp, err := m.client.Do(ctx, req, &list)
 
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found comments for id/slug:%s", *id)
+	}
+
 	if err != nil {
 		printer.Println("fetch comments err:" + err.Error())
 		return nil, resp, err
@@ -448,6 +464,10 @@ func (m *MoviesService) GetListsContainingMovie(ctx context.Context, id *string,
 	list := []*str.PersonalList{}
 	resp, err := m.client.Do(ctx, req, &list)
 
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found lists for id/slug:%s", *id)
+	}
+
 	if err != nil {
 		printer.Println("fetch lists err:" + err.Error())
 		return nil, resp, err
@@ -478,6 +498,10 @@ func (m *MoviesService) GetAllPeopleForMovie(ctx context.Context, id *string, op
 	result := new(str.MoviePeople)
 	resp, err := m.client.Do(ctx, req, &result)
 
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found people for id/slug:%s", *id)
+	}
+
 	if err != nil {
 		printer.Println("fetch people err:" + err.Error())
 		return nil, resp, err
@@ -490,10 +514,7 @@ func (m *MoviesService) GetAllPeopleForMovie(ctx context.Context, id *string, op
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/ratings/get-movie-ratings
 func (m *MoviesService) GetMovieRatings(ctx context.Context, id *string) (*str.MovieRatings, *str.Response, error) {
-	var url string
-
-	url = fmt.Sprintf("movies/%s/ratings", *id)	
-
+	url := fmt.Sprintf("movies/%s/ratings", *id)
 	printer.Println("fetch ratings url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -502,10 +523,47 @@ func (m *MoviesService) GetMovieRatings(ctx context.Context, id *string) (*str.M
 	result := new(str.MovieRatings)
 	resp, err := m.client.Do(ctx, req, &result)
 
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found ratings for id/slug:%s", *id)
+	}
+
 	if err != nil {
 		printer.Println("fetch ratings err:" + err.Error())
 		return nil, resp, err
 	}
 
 	return result, resp, nil
+}
+
+// GetRelatedMovies Returns related and similar movies.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/movies/related/get-related-movies
+func (m *MoviesService) GetRelatedMovies(ctx context.Context, id *string, opts *uri.ListOptions) ([]*str.Movie, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("movies/%s/related", *id)
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch related url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Movie{}
+	resp, err := m.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found related for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch related err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
 }

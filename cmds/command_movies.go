@@ -34,7 +34,7 @@ func moviesFunc(cmd *Command, _ ...string) error {
 	options := cmd.Options
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
-	
+
 	err := cmd.ValidPeriodForModule(options)
 	if err != nil {
 		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
@@ -84,6 +84,8 @@ func moviesFunc(cmd *Command, _ ...string) error {
 		handler = handlers.MoviesPeopleHandler{}
 	case "ratings":
 		handler = handlers.MoviesRatingsHandler{}
+	case "related":
+		handler = handlers.MoviesRelatedHandler{}
 
 	default:
 		printer.Println("possible actions: trending, popular, favorited, played, watched, collected,")
