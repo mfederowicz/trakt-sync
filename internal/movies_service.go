@@ -593,3 +593,32 @@ func (m *MoviesService) GetMovieStats(ctx context.Context, id *string) (*str.Mov
 	return result, resp, nil
 }
 
+// GetMovieStudios Returns all studios for movie.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/movies/studios/get-movie-studios 
+func (m *MoviesService) GetMovieStudios(ctx context.Context, id *string) ([]*str.Studio, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("movies/%s/studios", *id)
+	
+
+	printer.Println("fetch studios url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Studio{}
+	resp, err := m.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found studios for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch studios err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
