@@ -86,6 +86,8 @@ func moviesFunc(cmd *Command, _ ...string) error {
 		handler = handlers.MoviesRatingsHandler{}
 	case "related":
 		handler = handlers.MoviesRelatedHandler{}
+	case "stats":
+		handler = handlers.MoviesStatsHandler{}
 
 	default:
 		printer.Println("possible actions: trending, popular, favorited, played, watched, collected,")

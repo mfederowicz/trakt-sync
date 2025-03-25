@@ -567,3 +567,29 @@ func (m *MoviesService) GetRelatedMovies(ctx context.Context, id *string, opts *
 
 	return list, resp, nil
 }
+
+// GetMovieStats Returns lots of movie stats.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/movies/stats/get-movie-stats
+func (m *MoviesService) GetMovieStats(ctx context.Context, id *string) (*str.MovieStats, *str.Response, error) {
+	url := fmt.Sprintf("movies/%s/stats", *id)
+	printer.Println("fetch stats url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := new(str.MovieStats)
+	resp, err := m.client.Do(ctx, req, &result)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found stats for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch stats err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
