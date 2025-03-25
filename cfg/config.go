@@ -49,6 +49,7 @@ type Config struct {
 	MoviesCountry  string    `toml:"country"`
 	MoviesLanguage string    `toml:"language"`
 	MoviesSort     string    `toml:"sort"`
+	MoviesType     string    `toml:"type"`
 	CommentID      int       `toml:"comment_id"`
 	EpisodeAbs     int       `toml:"episode_abs"`
 	EpisodeCode    string    `toml:"episode_code"`
@@ -449,7 +450,8 @@ func DefaultConfig() *Config {
 		SearchType:     []string{},
 		SearchField:    []string{},
 		Sort:           "rank",
-		MoviesSort:     "newest",
+		MoviesSort:     consts.EmptyString,
+		MoviesType:     consts.EmptyString,
 		MoviesPeriod:   "weekly",
 		MoviesCountry:  consts.EmptyString,
 		MoviesLanguage: consts.EmptyString,

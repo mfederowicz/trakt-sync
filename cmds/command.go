@@ -104,6 +104,26 @@ type Command struct {
 	exit    int
 }
 
+// UpdateMovieFlagsValues update movies flags values only in command
+func (*Command) UpdateMovieFlagsValues() {
+	if *_moviesSort == "" {
+		switch *_moviesAction {
+		case "comments":
+			*_moviesSort = "newest"
+		case "lists":
+			*_moviesSort = "popular"
+		}
+	}
+	if *_moviesType == "" {
+		switch *_moviesAction {
+		case "comments":
+			*_moviesType = ""
+		case "lists":
+			*_moviesType = "personal"
+		}
+	}
+}
+
 // ValidPeriodForModule valid period options depends on action value
 func (c *Command) ValidPeriodForModule(options *str.Options) error {
 	switch options.Action {
@@ -228,6 +248,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		options.Country = *_moviesCountry
 		options.Language = *_moviesLanguage
 		options.Sort = *_moviesSort
+		options.Type = *_moviesType
 	case "users":
 		options.Action = *_usersAction
 	case "people":
@@ -436,13 +457,15 @@ func (*Command) ValidType(options *str.Options) error {
 // ValidSort check if sort is valid
 func (*Command) ValidSort(options *str.Options) error {
 	// Check if the provided module exists in ModuleConfig
-	moduleConfig, ok := cfg.ModuleConfig[options.Module]
+	_, ok := cfg.ModuleConfig[options.Module]
 	if !ok {
 		return fmt.Errorf("not found config for module '%s'", options.Module)
 	}
 	// Check if the provided sort is valid for the selected module
-	if !cfg.IsValidConfigType(moduleConfig.Sort, options.Sort) {
-		return fmt.Errorf("sort '%s' is not valid for module '%s' and action '%s', avaliable sort:%s", options.Sort, options.Module, options.Action, moduleConfig.Sort)
+	prefix := options.Module + ":" + options.Action
+
+	if !cfg.IsValidConfigType(cfg.TypeSortConfig[prefix].Sort, options.Sort) {
+		return fmt.Errorf("sort '%s' is not valid for module '%s' and action '%s', avaliable sort:%s", options.Sort, options.Module, options.Action, cfg.TypeSortConfig[prefix].Sort)
 	}
 
 	return nil
@@ -565,6 +588,10 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 
 	if len(*_moviesSort) > consts.ZeroValue {
 		options.Sort = *_moviesSort
+	}
+
+	if len(*_moviesType) > consts.ZeroValue {
+		options.Type = *_moviesType
 	}
 
 	return options

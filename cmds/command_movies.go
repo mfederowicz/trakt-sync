@@ -17,6 +17,7 @@ var (
 	_moviesCountry    = MoviesCmd.Flag.String("country", cfg.DefaultConfig().MoviesCountry, consts.MoviesCountryUsage)
 	_moviesLanguage   = MoviesCmd.Flag.String("language", cfg.DefaultConfig().MoviesLanguage, consts.MoviesLanguageUsage)
 	_moviesSort       = MoviesCmd.Flag.String("s", cfg.DefaultConfig().MoviesSort, consts.MoviesSortUsage)
+	_moviesType       = MoviesCmd.Flag.String("t", cfg.DefaultConfig().MoviesType, consts.MoviesTypeUsage)
 	_moviesStartDate  = MoviesCmd.Flag.String("start_date", "", consts.StartDateUsage)
 )
 
@@ -29,10 +30,11 @@ var MoviesCmd = &Command{
 }
 
 func moviesFunc(cmd *Command, _ ...string) error {
+	cmd.UpdateMovieFlagsValues()
 	options := cmd.Options
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
-
+	
 	err := cmd.ValidPeriodForModule(options)
 	if err != nil {
 		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
@@ -76,6 +78,8 @@ func moviesFunc(cmd *Command, _ ...string) error {
 		handler = handlers.MoviesTranslationsHandler{}
 	case "comments":
 		handler = handlers.MoviesCommentsHandler{}
+	case "lists":
+		handler = handlers.MoviesListsHandler{}
 	default:
 		printer.Println("possible actions: trending, popular, favorited, played, watched, collected,")
 		printer.Println("anticipated, boxoffice, updated, updated_ids,summary,aliases,releases,")

@@ -37,6 +37,18 @@ var SearchFieldConfig = map[string][]string{
 	"list":    {"name", "description"},
 }
 
+// TypeSortConfig represents the configuration options for type depens on module:action key
+var TypeSortConfig = map[string]OptionsConfig{
+	"movies:comments": {
+		Type: []string{},
+		Sort: []string{"newest", "oldest", "likes", "replies", "highest", "lowest", "plays"},
+	},
+	"movies:lists": {
+		Type: []string{"all", "personal", "official", "watchlists", "favorites"},
+		Sort: []string{"popular", "likes", "comments", "items", "added", "updated"},
+	},
+}
+
 // ModuleConfig represents the configuration options for all modules
 var ModuleConfig = map[string]OptionsConfig{
 	"watchlist": {
@@ -347,7 +359,7 @@ func getOutputForModuleMovies(options *str.Options) string {
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
 	case "favorited", "played", "watched", "collected":
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.Period)
-	case "summary", "aliases", "releases", "translations", "comments":
+	case "summary", "aliases", "releases", "translations", "comments", "lists":
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.InternalID)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)

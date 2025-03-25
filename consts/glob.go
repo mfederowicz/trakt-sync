@@ -22,6 +22,7 @@ const (
 	MoviesCountryUsage     = "allow to overwrite country"
 	MoviesLanguageUsage    = "allow to overwrite language"
 	MoviesSortUsage        = "allow to overwrite sort"
+	MoviesTypeUsage        = "allow to overwrite type"
 	MovieIDUsage           = "allow to overwrite movieID"
 	TraktIDUsage           = "allow to overwrite trakt_id"
 	CommentIDUsage         = "allow to overwrite comment_id"

@@ -4,10 +4,12 @@ package handlers
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -34,6 +36,7 @@ type CommonInterface interface {
 	Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error)
 	Comment(client *internal.Client, comment *str.Comment) (*str.Comment, *str.Response, error)
 	Reply(client *internal.Client, id *int, comment *str.Comment) (*str.Comment, *str.Response, error)
+	CheckSortAndTypes(options *str.Options) error
 }
 
 // CommonLogic struct for common methods
@@ -321,4 +324,24 @@ func (*CommonLogic) CheckSeasonNumber(code string) (season *int, episode *int, e
 	}
 
 	return nil, nil, errors.New("invalid episode_code format")
+}
+
+// CheckSortAndTypes helper function to validate sort and type field depends on module
+func (*CommonLogic) CheckSortAndTypes(options *str.Options) error {
+	// Check if the provided module exists in ModuleConfig
+	_, ok := cfg.ModuleConfig[options.Module]
+	if !ok {
+		return fmt.Errorf("not found config for module '%s'", options.Module)
+	}
+	prefix := options.Module + ":" + options.Action
+	if !cfg.IsValidConfigType(cfg.TypeSortConfig[prefix].Type, options.Type) {
+		return fmt.Errorf("not found type for module '%s'", options.Module)
+	}
+	
+	if !cfg.IsValidConfigType(cfg.TypeSortConfig[prefix].Sort, options.Sort) {
+		return fmt.Errorf("not found sort for module '%s'", options.Module)
+	}
+
+	// Check id_type values
+	return nil
 }
