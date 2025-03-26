@@ -56,6 +56,7 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 - `history` - Returns movies and episodes that a user has watched, sorted by most recent.
 - `languages` - Get a list of all laguages, including names and codes.
 - `lists` - Returns data about lists: trending, popular, list, likes, like, items, comments.
+- `movies` - Returns data about movies: trending, popular, list, likes, like, items, comments etc...
 - `people` - Returns all data for selected person.
 - `search` - Searches can use queries or ID lookups.
 - `users` - Returns all data for a user.
@@ -354,6 +355,102 @@ $ ./trakt-sync lists -a items -trakt_id 2142753 -t movie,show
 -- (temp not working - problems with api endpoint)
 ```console
 $ ./trakt-sync lists -a comments -trakt_id 2142753 
+```
+#### Export movies data:
+```console
+$ ./trakt-sync movies -a trending
+```
+```console
+$ ./trakt-sync movies -a popular
+```
+```console
+$ ./trakt-sync movies -a favorited -period daily
+$ ./trakt-sync movies -a favorited -period weekly
+$ ./trakt-sync movies -a favorited -period monthly
+$ ./trakt-sync movies -a favorited -period all
+```
+```console
+$ ./trakt-sync movies -a played -period daily
+$ ./trakt-sync movies -a played -period weekly
+$ ./trakt-sync movies -a played -period monthly
+$ ./trakt-sync movies -a played -period all
+```
+```console
+$ ./trakt-sync movies -a watched -period daily
+$ ./trakt-sync movies -a watched -period weekly
+$ ./trakt-sync movies -a watched -period monthly
+$ ./trakt-sync movies -a watched -period all
+```
+```console
+$ ./trakt-sync movies -a collected -period daily
+$ ./trakt-sync movies -a collected -period weekly
+$ ./trakt-sync movies -a collected -period monthly
+$ ./trakt-sync movies -a collected -period all
+```
+```console
+$ ./trakt-sync movies -a anticipated
+```
+```console
+$ ./trakt-sync movies -a boxoffice
+```
+```console
+$ ./trakt-sync movies -a updates -start_date YYYY-MM-DD
+```
+```console
+$ ./trakt-sync movies -a updated_ids -start_date YYYY-MM-DD
+```
+```console
+$ ./trakt-sync movies -a summary -i tron-legacy-2010
+```
+```console
+$ ./trakt-sync movies -a aliases -i tron-legacy-2010
+```
+```console
+$ ./trakt-sync movies -a releases -i tron-legacy-2010 -country us
+```
+```console
+$ ./trakt-sync movies -a translations -i tron-legacy-2010 -language es
+```
+```console
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s newest
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s oldest
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s likes
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s replies
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s highest
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s lowest
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s plays
+```
+```console
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s popular
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s likes
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s comments
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s items
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s added
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s updated
+```
+```console
+$ ./trakt-sync movies -a people -i tron-legacy-2010
+```
+```console
+$ ./trakt-sync movies -a ratings -i tron-legacy-2010
+```
+```console
+$ ./trakt-sync movies -a related -i tron-legacy-2010
+```
+```console
+$ ./trakt-sync movies -a stats -i tron-legacy-2010
+```
+```console
+$ ./trakt-sync movies -a studios -i tron-legacy-2010
+```
+```console
+$ ./trakt-sync movies -a watching -i tron-legacy-2010
+```
+```console
+$ ./trakt-sync movies -a videos -i tron-legacy-2010
+```
+```console
+$ ./trakt-sync movies -a refresh -i tron-legacy-2010
 ```
 
 ## License

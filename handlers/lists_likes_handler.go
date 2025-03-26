@@ -21,7 +21,7 @@ type ListsLikesHandler struct{}
 
 // Handle to handle lists: likes action
 func (h ListsLikesHandler) Handle(options *str.Options, client *internal.Client) error {
-	if options.TraktID == consts.ZeroValue {
+	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyListIDMsg)
 	}
 	printer.Println("Returns all users who liked a list.")
@@ -50,7 +50,7 @@ func (h ListsLikesHandler) fetchListsLikes(client *internal.Client, options *str
 	list, resp, err := client.Lists.GetAllUsersWhoLikedList(
 		context.Background(),
 		&opts,
-		&options.TraktID,
+		&options.InternalID,
 	)
 
 	if err != nil {

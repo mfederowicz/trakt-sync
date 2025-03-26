@@ -88,6 +88,21 @@ func (r *NotFoundError) Error() string {
 	)
 }
 
+// InternalServerError occurs when trakt.tv returns 500 error
+type InternalServerError struct {
+	Response *http.Response
+	Message  string `json:"message"`
+}
+
+func (r *InternalServerError) Error() string {
+	return fmt.Sprintf(consts.ErrorsPlaceholders,
+		r.Response.Request.Method,
+		uri.SanitizeURL(r.Response.Request.URL),
+		r.Response.StatusCode,
+		r.Message,
+	)
+}
+
 // ConflictError occurs when trakt.tv returns 409 error
 type ConflictError struct {
 	Response *http.Response
@@ -303,6 +318,8 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 			upgradeAccountRequired(c, e)
 		case *NotFoundError:
 			return response, errors.New(e.Error())
+		case *InternalServerError:
+			return response, errors.New(e.Error())
 		case *ConflictError:
 		case *ValidationError:
 			response.Errors = e.Errors
@@ -407,6 +424,8 @@ func (c *Client) CheckResponse(r *http.Response) error {
 		return c.genUpgradeRequiredError(r, errorResponse)
 	case http.StatusNotFound:
 		return c.genNotFoundError(r, errorResponse)
+	case http.StatusInternalServerError:
+		return c.genInternalServerError(r, errorResponse)
 	case http.StatusConflict:
 		return c.genConflictError(r, errorResponse)
 	case http.StatusUnprocessableEntity:
@@ -414,6 +433,17 @@ func (c *Client) CheckResponse(r *http.Response) error {
 	default:
 		return errorResponse
 	}
+}
+
+func (*Client) genInternalServerError(r *http.Response, errorResponse *str.ErrorResponse) error {
+	internalServerError := &InternalServerError{
+		Response: errorResponse.Response,
+		Message:  errorResponse.Message,
+	}
+	if r.StatusCode == http.StatusInternalServerError {
+		return internalServerError
+	}
+	return nil
 }
 
 func (*Client) genValidationError(r *http.Response, errorResponse *str.ErrorResponse) *ValidationError {

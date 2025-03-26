@@ -21,7 +21,6 @@ type ListsTrendingHandler struct{}
 
 // Handle to handle lists: trending action
 func (h ListsTrendingHandler) Handle(options *str.Options, client *internal.Client) error {
-
 	printer.Println("Returns all lists with the most likes and comments over the last 7 days.")
 	result, err := h.fetchListsTrending(client, options, consts.DefaultPage)
 	if err != nil {

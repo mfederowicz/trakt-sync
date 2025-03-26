@@ -21,7 +21,7 @@ type ListsCommentsHandler struct{}
 
 // Handle to handle lists: comments action
 func (h ListsCommentsHandler) Handle(options *str.Options, client *internal.Client) error {
-	if options.TraktID == consts.ZeroValue {
+	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyListIDMsg)
 	}
 	printer.Println("Returns all top level comments for a list.")
@@ -49,7 +49,7 @@ func (h ListsCommentsHandler) fetchListComments(client *internal.Client, options
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Lists.GetListComments(
 		context.Background(),
-		&options.TraktID,
+		&options.InternalID,
 		&options.Sort,
 		&opts,
 	)

@@ -43,6 +43,7 @@ var Avflags = map[string]bool{
 	"comments":        true,
 	"comment_type":    true,
 	"countries":       true,
+	"country":         true,
 	"checkin":         true,
 	"collection":      true,
 	"days":            true,
@@ -61,18 +62,24 @@ var Avflags = map[string]bool{
 	"episode_code":    true,
 	"episode_abs":     true,
 	"id_type":         true,
+	"language":        true,
 	"languages":       true,
 	"lists":           true,
 	"msg":             true,
+	"movies":          true,
 	"o":               true,
 	"people":          true,
+	"period":          true,
 	"q":               true,
 	"remove":          true,
+	"releases":        true,
 	"reply":           true,
+	"s":               true,
 	"comment":         true,
 	"search":          true,
 	"start_date":      true,
 	"t":               true,
+	"translations":    true,
 	"u":               true,
 	"users":           true,
 	"v":               true,
@@ -95,6 +102,53 @@ type Command struct {
 	Help    string
 	Abbrev  string
 	exit    int
+}
+
+// UpdateMovieFlagsValues update movies flags values only in command
+func (*Command) UpdateMovieFlagsValues() {
+	if *_moviesSort == "" {
+		switch *_moviesAction {
+		case "comments":
+			*_moviesSort = "newest"
+		case "lists":
+			*_moviesSort = "popular"
+		}
+	}
+	if *_moviesType == "" {
+		switch *_moviesAction {
+		case "comments":
+			*_moviesType = ""
+		case "lists":
+			*_moviesType = "personal"
+		}
+	}
+}
+
+// ValidPeriodForModule valid period options depends on action value
+func (c *Command) ValidPeriodForModule(options *str.Options) error {
+	switch options.Action {
+	case "favorited":
+		err := c.ValidPeriod(options)
+		if err != nil {
+			return errors.New(err.Error())
+		}
+	case "played":
+		err := c.ValidPeriod(options)
+		if err != nil {
+			return errors.New(err.Error())
+		}
+	case "watched":
+		err := c.ValidPeriod(options)
+		if err != nil {
+			return errors.New(err.Error())
+		}
+	case "collected":
+		err := c.ValidPeriod(options)
+		if err != nil {
+			return errors.New(err.Error())
+		}
+	}
+	return nil
 }
 
 // Helper function to handle the error
@@ -163,11 +217,20 @@ func processVerbose(options *str.Options) {
 	}
 }
 
+func selectFirstNonEmpty(values ...string) string {
+	for _, v := range values {
+		if len(v) > consts.ZeroValue {
+			return v
+		}
+	}
+	return ""
+}
+
 func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	switch module {
 	case "comments":
 		options.Action = *_commentsAction
-		options.TraktID = *_commentsTraktID
+		options.InternalID = selectFirstNonEmpty(*_commentsTraktID, *_commentsInternalID)
 		options.CommentID = *_commentsCommentID
 		options.CommentType = *_commentsCommentType
 	case "checkin":
@@ -175,8 +238,17 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		options.TraktID = *_checkinTraktID
 	case "lists":
 		options.Action = *_listsAction
-		options.TraktID = *_listTraktID
+		options.InternalID = selectFirstNonEmpty(*_listTraktID, *_listInternalID)
 		options.Sort = *_listSort
+	case "movies":
+		options.Action = *_moviesAction
+		options.Period = *_moviesPeriod
+		options.StartDate = *_moviesStartDate
+		options.InternalID = *_moviesInternalID
+		options.Country = *_moviesCountry
+		options.Language = *_moviesLanguage
+		options.Sort = *_moviesSort
+		options.Type = *_moviesType
 	case "users":
 		options.Action = *_usersAction
 	case "people":
@@ -382,6 +454,37 @@ func (*Command) ValidType(options *str.Options) error {
 	return nil
 }
 
+// ValidSort check if sort is valid
+func (*Command) ValidSort(options *str.Options) error {
+	// Check if the provided module exists in ModuleConfig
+	_, ok := cfg.ModuleConfig[options.Module]
+	if !ok {
+		return fmt.Errorf("not found config for module '%s'", options.Module)
+	}
+	// Check if the provided sort is valid for the selected module
+	prefix := options.Module + ":" + options.Action
+	if len(cfg.TypeSortConfig[prefix].Sort) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.TypeSortConfig[prefix].Sort, options.Sort) {
+		return fmt.Errorf("sort '%s' is not valid for module '%s' and action '%s', avaliable sort:%s", options.Sort, options.Module, options.Action, cfg.TypeSortConfig[prefix].Sort)
+	}
+
+	return nil
+}
+
+// ValidPeriod check if period is valid
+func (*Command) ValidPeriod(options *str.Options) error {
+	// Check if the provided module exists in ModuleConfig
+	moduleConfig, ok := cfg.ModuleConfig[options.Module]
+	if !ok {
+		return fmt.Errorf("not found config for module '%s'", options.Module)
+	}
+	// Check if the provided period is valid for the selected module
+	if !cfg.IsValidConfigType(moduleConfig.Period, options.Period) {
+		return fmt.Errorf("period '%s' is not valid for module '%s' and action '%s', avaliable periods:%s", options.Period, options.Module, options.Action, moduleConfig.Period)
+	}
+
+	return nil
+}
+
 // UpdateOptionsWithCommandFlags update options depends on command flags
 func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Options {
 	if len(*_userName) > consts.ZeroValue {
@@ -416,8 +519,8 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		options.ID = *_usersListID
 	}
 
-	if *_listTraktID > consts.ZeroValue {
-		options.TraktID = *_listTraktID
+	if len(*_listTraktID) > consts.ZeroValue || len(*_listInternalID) > consts.ZeroValue {
+		options.InternalID = selectFirstNonEmpty(*_listTraktID, *_listInternalID)
 	}
 
 	if *_listLikeRemove {
@@ -464,6 +567,32 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		options.IncludeReplies = *_commentsIncludeReplies
 	}
 
+	if len(*_moviesAction) > consts.ZeroValue {
+		options.Action = *_moviesAction
+	}
+
+	if len(*_moviesPeriod) > consts.ZeroValue {
+		options.Period = *_moviesPeriod
+	}
+
+	if len(*_moviesStartDate) > consts.ZeroValue {
+		options.StartDate = convertDateString(*_moviesStartDate, consts.DefaultStartDateFormat)
+	} else {
+		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
+	}
+
+	if len(*_moviesInternalID) > consts.ZeroValue {
+		options.InternalID = *_moviesInternalID
+	}
+
+	if len(*_moviesSort) > consts.ZeroValue {
+		options.Sort = *_moviesSort
+	}
+
+	if len(*_moviesType) > consts.ZeroValue {
+		options.Type = *_moviesType
+	}
+
 	return options
 }
 
@@ -494,4 +623,13 @@ func convertDateString(dateStr string, outputFormat string) string {
 	// Format the parsed time into the output format
 	formattedDate := finalDateTime.Format(outputFormat)
 	return formattedDate
+}
+
+// GenActionsUsage prints a usage message when an invalid action is provided.
+func (c *Command) GenActionsUsage(actions []string) {
+	printer.Println("Usage: ./trakt-sync "+c.Name+" -a [action]")
+	printer.Println("Available actions:")
+	for _, action := range actions {
+		printer.Printf("  - %s\n", action)
+	}
 }

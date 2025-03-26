@@ -11,6 +11,7 @@ type Options struct {
 	StartDate      string
 	Query          string
 	Sort           string
+	Period         string
 	CommentsSort   string
 	CommentType    string
 	Module         string
@@ -19,6 +20,8 @@ type Options struct {
 	UserName       string
 	Time           string
 	ID             string
+	InternalID     string
+	Language       string
 	Output         string
 	SearchType     Slice
 	SearchField    Slice
@@ -39,6 +42,7 @@ type Options struct {
 	IncludeReplies string
 	EpisodeAbs     int
 	EpisodeCode    string
+	Country        string
 	Episode        int
 	Season         int
 }

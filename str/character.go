@@ -5,6 +5,7 @@ package str
 type Character struct {
 	Character     *string   `json:"character,omitempty"`
 	Characters    *[]string `json:"characters,omitempty"`
+	Person        *Person   `json:"person,omitempty"`
 	EpisodeCount  *int      `json:"episode_count,omitempty"`
 	SeriesRegular *bool     `json:"series_regular,omitempty"`
 	Movie         *Movie    `json:"movie,omitempty"`
