@@ -650,3 +650,35 @@ func (m *MoviesService) GetMovieWatching(ctx context.Context, id *string, opts *
 
 	return list, resp, nil
 }
+
+// GetMovieVideos Returns all videos including trailers, teasers, clips, and featurettes.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/movies/videos/get-all-videos 
+func (m *MoviesService) GetMovieVideos(ctx context.Context, id *string, opts *uri.ListOptions) ([]*str.Video, *str.Response, error) {
+	var url = fmt.Sprintf("movies/%s/videos", *id)
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch video url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Video{}
+	resp, err := m.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found video for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch video err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
