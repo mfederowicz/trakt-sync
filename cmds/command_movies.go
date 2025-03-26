@@ -100,7 +100,7 @@ func moviesFunc(cmd *Command, _ ...string) error {
 	default:
 		printer.Println("possible actions: trending, popular, favorited, played, watched, collected,")
 		printer.Println("anticipated, boxoffice, updated, updated_ids,summary,aliases,releases,")
-		printer.Println("translations,comments,lists,people,ratings,releated,stats,studios,watiching,videos,refresh")
+		printer.Println("translations, comments, lists, people, ratings, releated, stats, studios, watching, videos, refresh")
 	}
 
 	err = handler.Handle(options, client)
