@@ -25,7 +25,7 @@ var (
 var MoviesCmd = &Command{
 	Name:    "movies",
 	Usage:   "",
-	Summary: "Returns data about movies: trending, popular, list, likes, like, items, comments.",
+	Summary: "Returns data about movies: trending, popular, list, likes, like, items, comments etc...",
 	Help:    `movies command`,
 }
 
