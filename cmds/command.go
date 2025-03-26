@@ -624,3 +624,12 @@ func convertDateString(dateStr string, outputFormat string) string {
 	formattedDate := finalDateTime.Format(outputFormat)
 	return formattedDate
 }
+
+// GenActionsUsage prints a usage message when an invalid action is provided.
+func (c *Command) GenActionsUsage(actions []string) {
+	printer.Println("Usage: ./trakt-sync "+c.Name+" -a [action]")
+	printer.Println("Available actions:")
+	for _, action := range actions {
+		printer.Printf("  - %s\n", action)
+	}
+}

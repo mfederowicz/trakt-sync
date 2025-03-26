@@ -2,12 +2,12 @@
 package cmds
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/handlers"
-	"github.com/mfederowicz/trakt-sync/printer"
 )
 
 var (
@@ -47,60 +47,11 @@ func moviesFunc(cmd *Command, _ ...string) error {
 
 	var handler handlers.MoviesHandler
 
-	switch options.Action {
-	case "trending":
-		handler = handlers.MoviesTrendingHandler{}
-	case "popular":
-		handler = handlers.MoviesPopularHandler{}
-	case "favorited":
-		handler = handlers.MoviesFavoritedHandler{}
-	case "played":
-		handler = handlers.MoviesPlayedHandler{}
-	case "watched":
-		handler = handlers.MoviesWatchedHandler{}
-	case "collected":
-		handler = handlers.MoviesCollectedHandler{}
-	case "anticipated":
-		handler = handlers.MoviesAnticipatedHandler{}
-	case "boxoffice":
-		handler = handlers.MoviesBoxofficeHandler{}
-	case "updates":
-		handler = handlers.MoviesUpdatesHandler{}
-	case "updated_ids":
-		handler = handlers.MoviesUpdatedIDsHandler{}
-	case "summary":
-		handler = handlers.MoviesSummaryHandler{}
-	case "aliases":
-		handler = handlers.MoviesAliasesHandler{}
-	case "releases":
-		handler = handlers.MoviesReleasesHandler{}
-	case "translations":
-		handler = handlers.MoviesTranslationsHandler{}
-	case "comments":
-		handler = handlers.MoviesCommentsHandler{}
-	case "lists":
-		handler = handlers.MoviesListsHandler{}
-	case "people":
-		handler = handlers.MoviesPeopleHandler{}
-	case "ratings":
-		handler = handlers.MoviesRatingsHandler{}
-	case "related":
-		handler = handlers.MoviesRelatedHandler{}
-	case "stats":
-		handler = handlers.MoviesStatsHandler{}
-	case "studios":
-		handler = handlers.MoviesStudiosHandler{}
-	case "watching":
-		handler = handlers.MoviesWatchingHandler{}
-	case "videos":
-		handler = handlers.MoviesVideosHandler{}
-	case "refresh":
-		handler = handlers.MoviesRefreshHandler{}
+	handler, err = getHandlerFromAction(options.Action)
 
-	default:
-		printer.Println("possible actions: trending, popular, favorited, played, watched, collected,")
-		printer.Println("anticipated, boxoffice, updated, updated_ids,summary,aliases,releases,")
-		printer.Println("translations, comments, lists, people, ratings, releated, stats, studios, watching, videos, refresh")
+	if err != nil {
+		cmd.GenActionsUsage(validActions)
+		return nil
 	}
 
 	err = handler.Handle(options, client)
@@ -109,6 +60,50 @@ func moviesFunc(cmd *Command, _ ...string) error {
 	}
 
 	return nil
+}
+
+// validActions holds the list of acceptable actions.
+var validActions = []string{
+	"trending", "popular", "favorited", "played", "watched", "collected",
+	"anticipated", "boxoffice", "updated", "updated_ids", "summary", "aliases",
+	"releases", "translations", "comments", "lists", "people", "ratings",
+	"releated", "stats", "studios", "watching", "videos", "refresh"}
+
+// getHandlerFromAction choose handler from all
+func getHandlerFromAction(action string) (handlers.MoviesHandler, error) {
+	allHandlers := map[string]handlers.MoviesHandler{
+		"trending":     handlers.MoviesTrendingHandler{},
+		"popular":      handlers.MoviesPopularHandler{},
+		"favorited":    handlers.MoviesFavoritedHandler{},
+		"played":       handlers.MoviesPlayedHandler{},
+		"watched":      handlers.MoviesWatchedHandler{},
+		"collected":    handlers.MoviesCollectedHandler{},
+		"anticipated":  handlers.MoviesAnticipatedHandler{},
+		"boxoffice":    handlers.MoviesBoxofficeHandler{},
+		"updates":      handlers.MoviesUpdatesHandler{},
+		"updated_ids":  handlers.MoviesUpdatedIDsHandler{},
+		"summary":      handlers.MoviesSummaryHandler{},
+		"aliases":      handlers.MoviesAliasesHandler{},
+		"releases":     handlers.MoviesReleasesHandler{},
+		"translations": handlers.MoviesTranslationsHandler{},
+		"comments":     handlers.MoviesCommentsHandler{},
+		"lists":        handlers.MoviesListsHandler{},
+		"people":       handlers.MoviesPeopleHandler{},
+		"ratings":      handlers.MoviesRatingsHandler{},
+		"related":      handlers.MoviesRelatedHandler{},
+		"stats":        handlers.MoviesStatsHandler{},
+		"studios":      handlers.MoviesStudiosHandler{},
+		"watching":     handlers.MoviesWatchingHandler{},
+		"videos":       handlers.MoviesVideosHandler{},
+		"refresh":      handlers.MoviesRefreshHandler{},
+	}
+
+	// Lookup and execute handler
+	if handler, found := allHandlers[action]; found {
+		return handler, nil
+	}
+
+	return nil, errors.New("unknown handler")
 }
 
 var (
