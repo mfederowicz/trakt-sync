@@ -452,6 +452,10 @@ $ ./trakt-sync movies -a videos -i tron-legacy-2010
 ```console
 $ ./trakt-sync movies -a refresh -i tron-legacy-2010
 ```
+#### Export tv networks:
+```console
+$ ./trakt-sync networks -a list
+```
 
 ## License
 
