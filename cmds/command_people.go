@@ -7,7 +7,6 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/handlers"
-	"github.com/mfederowicz/trakt-sync/printer"
 )
 
 var (
@@ -29,27 +28,25 @@ func peopleFunc(cmd *Command, _ ...string) error {
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
 	var handler handlers.PeopleHandler
-	switch options.Action {
-	case "updates":
-		handler = handlers.PeopleUpdatesHandler{}
-	case "updated_ids":
-		handler = handlers.PeopleUpdatedIDsHandler{}
-	case "summary":
-		handler = handlers.PeopleSummaryHandler{}
-	case "movies":
-		handler = handlers.PeopleMoviesHandler{}
-	case "shows":
-		handler = handlers.PeopleShowsHandler{}
-	case "lists":
-		handler = handlers.PeopleListsHandler{}
-	case "refresh":
-		handler = handlers.PeopleRefreshHandler{}
-	default:
-		printer.Println("possible actions: updates, updated_ids, summary, movies, shows, lists, refresh")
+	var allHandlers = map[string]handlers.Handler{
+		"updates":     handlers.PeopleUpdatesHandler{},
+		"updated_ids": handlers.PeopleUpdatedIDsHandler{},
+		"summary":     handlers.PeopleSummaryHandler{},
+		"movies":      handlers.PeopleMoviesHandler{},
+		"shows":       handlers.PeopleShowsHandler{},
+		"lists":       handlers.PeopleListsHandler{},
+		"refresh":     handlers.PeopleRefreshHandler{},
 	}
-	err := handler.Handle(options, client)
+	handler, err := cmd.GetHandlerForMap(options.Action, allHandlers)
+
 	if err != nil {
-		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s",err)
+		cmd.GenActionsUsage([]string{"updates", "updated_ids", "summary", "movies","shows", "lists", "refresh"})
+		return nil
+	}
+
+	err = handler.Handle(options, client)
+	if err != nil {
+		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
 	}
 
 	return nil

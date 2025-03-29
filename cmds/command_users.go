@@ -8,7 +8,6 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/handlers"
-	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
@@ -16,7 +15,7 @@ var (
 	username   = "me"
 	exportData []*str.PersonalList
 
-	_usersListID      = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
+	_usersListID = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
 	_usersAction = UsersCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
 )
 
@@ -32,26 +31,28 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 	options := cmd.Options
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
-	var handler handlers.UsersHandler
-	switch options.Action {
-	case "settings":
-		handler = handlers.UsersSettingsHandler{}
-	case "lists":
-		handler = handlers.UsersListsHandler{}
-	case "saved_filters":
-		handler = handlers.UsersSavedFiltersHandler{}
-	case "stats":
-		handler = handlers.UsersStatsHandler{}
-	case "watched":
-		err := cmd.ValidType(options)
-		if err != nil {
-			return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
-		}
-		handler = handlers.UsersWatchedHandler{}
-	default:
-		printer.Println("possible actions: lists, saved_filters, stats, watched")
+	err := cmd.ValidModuleActionType(options)
+	if err != nil {
+		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
 	}
-	err := handler.Handle(options, client)
+	var handler handlers.UsersHandler
+	allHandlers := map[string]handlers.Handler{
+		"settings":      handlers.UsersSettingsHandler{},
+		"lists":         handlers.UsersListsHandler{},
+		"saved_filters": handlers.UsersSavedFiltersHandler{},
+		"stats":         handlers.UsersStatsHandler{},
+		"watched":       handlers.UsersWatchedHandler{},
+	}
+
+	handler, err = cmd.GetHandlerForMap(options.Action, allHandlers)
+
+	validActions = []string{"lists", "saved_filters", "stats", "watched"}
+	if err != nil {
+		cmd.GenActionsUsage(validActions)
+		return nil
+	}
+
+	err = handler.Handle(options, client)
 	if err != nil {
 		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
 	}

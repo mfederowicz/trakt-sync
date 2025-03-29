@@ -35,23 +35,30 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 	printer.Println("start_date:", options.StartDate)
 	printer.Println("days:", options.Days)
 	var handler handlers.CalendarsHandler
-	switch options.Action {
-	case "my-shows", "all-shows":
-		handler = handlers.CalendarsShowsHandler{}
-	case "my-new-shows", "all-new-shows":
-		handler = handlers.CalendarsNewShowsHandler{}
-	case "my-season-premieres", "all-season-premieres":
-		handler = handlers.CalendarsSeasonPremieresHandler{}
-	case "my-finales", "all-finales":
-		handler = handlers.CalendarsFinalesHandler{}
-	case "my-movies", "all-movies":
-		handler = handlers.CalendarsMoviesHandler{}
-	case "my-dvd", "all-dvd":
-		handler = handlers.CalendarsDvdHandler{}
-	default:
-		printer.Println("possible actions: {my,all}-shows,{my,all}-new-shows,{my,all}-season-premieres,{my,all}-finales,{my,all}-movies,{my,all}-dvd")
+	allHandlers := map[string]handlers.Handler{
+		"my-shows":  handlers.CalendarsShowsHandler{},
+		"all-shows": handlers.CalendarsShowsHandler{},
+		"my-new-shows":  handlers.CalendarsNewShowsHandler{},
+		"all-new-shows": handlers.CalendarsNewShowsHandler{},
+		"my-season-premieres":  handlers.CalendarsSeasonPremieresHandler{},
+		"all-season-premieres": handlers.CalendarsSeasonPremieresHandler{},
+		"my-finales":  handlers.CalendarsFinalesHandler{},
+		"all-finales": handlers.CalendarsFinalesHandler{},
+		"my-movies":  handlers.CalendarsMoviesHandler{},
+		"all-movies": handlers.CalendarsMoviesHandler{},
+		"my-dvd":  handlers.CalendarsDvdHandler{},
+		"all-dvd": handlers.CalendarsDvdHandler{},
 	}
-	err := handler.Handle(options, client)
+
+	handler, err := cmd.GetHandlerForMap(options.Action, allHandlers)
+
+	validActions = []string{"{my,all}-shows","{my,all}-new-shows","{my,all}-season-premieres","{my,all}-finales","{my,all}-movies","{my,all}-dvd"}
+	if err != nil {
+		cmd.GenActionsUsage(validActions)
+		return nil
+	}
+
+	err = handler.Handle(options, client)
 	if err != nil {
 		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
 	}
