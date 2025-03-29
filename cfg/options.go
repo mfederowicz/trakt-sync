@@ -347,9 +347,22 @@ func GetOutputForModule(options *str.Options) string {
 		options.Output = getOutputForModuleLists(options)
 	case "movies":
 		options.Output = getOutputForModuleMovies(options)
+	case "networks":
+		options.Output = getOutputForModuleNetworks(options)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Type, options.Format)
 	}
+	return options.Output
+}
+
+func getOutputForModuleNetworks(options *str.Options) string {
+	switch options.Action {
+	case "list":
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)	
+	default:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
+	}
+
 	return options.Output
 }
 

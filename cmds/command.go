@@ -67,6 +67,7 @@ var Avflags = map[string]bool{
 	"lists":           true,
 	"msg":             true,
 	"movies":          true,
+	"networks":        true,
 	"o":               true,
 	"people":          true,
 	"period":          true,
@@ -249,6 +250,8 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		options.Language = *_moviesLanguage
 		options.Sort = *_moviesSort
 		options.Type = *_moviesType
+	case "networks":
+		options.Action = *_networksAction
 	case "users":
 		options.Action = *_usersAction
 	case "people":
@@ -627,9 +630,19 @@ func convertDateString(dateStr string, outputFormat string) string {
 
 // GenActionsUsage prints a usage message when an invalid action is provided.
 func (c *Command) GenActionsUsage(actions []string) {
-	printer.Println("Usage: ./trakt-sync "+c.Name+" -a [action]")
+	printer.Println("Usage: ./trakt-sync " + c.Name + " -a [action]")
 	printer.Println("Available actions:")
 	for _, action := range actions {
 		printer.Printf("  - %s\n", action)
 	}
+}
+
+// GetHandlerFromAction choose handler from list
+func (*Command) GetHandlerFromAction(action string, allHandlers map[string]handlers.Handler) (handlers.Handler, error) {
+	// Lookup and execute handler
+	if handler, found := allHandlers[action]; found {
+		return handler, nil
+	}
+
+	return nil, errors.New("unknown handler")
 }

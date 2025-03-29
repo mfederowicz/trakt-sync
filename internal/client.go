@@ -159,6 +159,7 @@ type Client struct {
 	Languages      *LanguagesService
 	Lists          *ListsService
 	Movies         *MoviesService
+	Networks       *NetworksService
 	Episodes       *EpisodesService
 	Shows          *ShowsService
 	Seasons        *SeasonsService
@@ -205,6 +206,7 @@ func (c *Client) initialize() {
 	c.Languages = (*LanguagesService)(&c.common)
 	c.Lists = (*ListsService)(&c.common)
 	c.Movies = (*MoviesService)(&c.common)
+	c.Networks = (*NetworksService)(&c.common)
 	c.Episodes = (*EpisodesService)(&c.common)
 	c.Shows = (*ShowsService)(&c.common)
 	c.Seasons = (*SeasonsService)(&c.common)
