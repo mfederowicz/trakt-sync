@@ -50,11 +50,11 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 		"all-dvd": handlers.CalendarsDvdHandler{},
 	}
 
-	handler, err := cmd.GetHandlerForMap(options.Action, allHandlers)
+	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	validActions = []string{"{my,all}-shows","{my,all}-new-shows","{my,all}-season-premieres","{my,all}-finales","{my,all}-movies","{my,all}-dvd"}
 	if err != nil {
-		cmd.GenActionsUsage(validActions)
+		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil
 	}
 

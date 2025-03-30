@@ -12,6 +12,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -344,4 +345,32 @@ func (*CommonLogic) CheckSortAndTypes(options *str.Options) error {
 
 	// Check id_type values
 	return nil
+}
+
+// GenActionsUsage prints a usage message when an invalid action is provided.
+func (*CommonLogic) GenActionsUsage(name string, actions []string) {
+	printer.Println("Usage: ./trakt-sync " + name + " -a [action]")
+	printer.Println("Available actions:")
+	for _, action := range actions {
+		printer.Printf("  - %s\n", action)
+	}
+}
+
+// GenTypeUsage prints a usage message when an invalid type is provided.
+func (*CommonLogic) GenTypeUsage(name string, types []string) {
+	printer.Println("Usage: ./trakt-sync " + name + " -t [type]")
+	printer.Println("Available types:")
+	for _, t := range types {
+		printer.Printf("  - %s\n", t)
+	}
+}
+
+// GetHandlerForMap choose handler from map
+func (*CommonLogic) GetHandlerForMap(action string, allHandlers map[string]Handler) (Handler, error) {
+	// Lookup and execute handler
+	if handler, found := allHandlers[action]; found {
+		return handler, nil
+	}
+
+	return nil, errors.New("unknown handler")
 }

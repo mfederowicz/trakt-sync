@@ -103,6 +103,7 @@ type Command struct {
 	Help    string
 	Abbrev  string
 	exit    int
+	common handlers.CommonLogic
 }
 
 // UpdateMovieFlagsValues update movies flags values only in command
@@ -645,30 +646,4 @@ func convertDateString(dateStr string, outputFormat string) string {
 	return formattedDate
 }
 
-// GenActionsUsage prints a usage message when an invalid action is provided.
-func (c *Command) GenActionsUsage(actions []string) {
-	printer.Println("Usage: ./trakt-sync " + c.Name + " -a [action]")
-	printer.Println("Available actions:")
-	for _, action := range actions {
-		printer.Printf("  - %s\n", action)
-	}
-}
 
-// GenTypeUsage prints a usage message when an invalid type is provided.
-func (c *Command) GenTypeUsage(types []string) {
-	printer.Println("Usage: ./trakt-sync " + c.Name + " -t [type]")
-	printer.Println("Available types:")
-	for _, t := range types {
-		printer.Printf("  - %s\n", t)
-	}
-}
-
-// GetHandlerForMap choose handler from map
-func (*Command) GetHandlerForMap(action string, allHandlers map[string]handlers.Handler) (handlers.Handler, error) {
-	// Lookup and execute handler
-	if handler, found := allHandlers[action]; found {
-		return handler, nil
-	}
-
-	return nil, errors.New("unknown handler")
-}

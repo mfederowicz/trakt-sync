@@ -77,10 +77,10 @@ func moviesFunc(cmd *Command, _ ...string) error {
 		"videos":       handlers.MoviesVideosHandler{},
 		"refresh":      handlers.MoviesRefreshHandler{},
 	}
-	handler, err = cmd.GetHandlerForMap(options.Action, allHandlers)
+	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	if err != nil {
-		cmd.GenActionsUsage(validActions)
+		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil
 	}
 

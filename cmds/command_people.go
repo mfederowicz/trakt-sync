@@ -37,10 +37,10 @@ func peopleFunc(cmd *Command, _ ...string) error {
 		"lists":       handlers.PeopleListsHandler{},
 		"refresh":     handlers.PeopleRefreshHandler{},
 	}
-	handler, err := cmd.GetHandlerForMap(options.Action, allHandlers)
+	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	if err != nil {
-		cmd.GenActionsUsage([]string{"updates", "updated_ids", "summary", "movies","shows", "lists", "refresh"})
+		cmd.common.GenActionsUsage(cmd.Name, []string{"updates", "updated_ids", "summary", "movies","shows", "lists", "refresh"})
 		return nil
 	}
 

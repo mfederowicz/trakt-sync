@@ -54,14 +54,14 @@ func commentsFunc(cmd *Command, _ ...string) error {
 		"updates":  handlers.CommentsUpdatesHandler{},
 	}
 
-	handler, err = cmd.GetHandlerForMap(options.Action, allHandlers)
+	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	validActions = []string{
 		"comments", "comment", "replies", "item", "likes", "like", 
 		"trending", "recent", "updates",
 	}
 	if err != nil {
-		cmd.GenActionsUsage(validActions)
+		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil
 	}
 

@@ -41,11 +41,11 @@ func listsFunc(cmd *Command, _ ...string) error {
 		"comments": handlers.ListsCommentsHandler{},
 	}
 
-	handler, err := cmd.GetHandlerForMap(options.Action, allHandlers)
+	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	validActions = []string{"trending", "popular", "list", "likes", "like", "items", "comments"}
 	if err != nil {
-		cmd.GenActionsUsage(validActions)
+		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil
 	}
 
