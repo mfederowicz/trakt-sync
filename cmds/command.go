@@ -68,6 +68,7 @@ var Avflags = map[string]bool{
 	"msg":             true,
 	"movies":          true,
 	"networks":        true,
+	"notes":           true,
 	"o":               true,
 	"people":          true,
 	"period":          true,
@@ -103,7 +104,7 @@ type Command struct {
 	Help    string
 	Abbrev  string
 	exit    int
-	common handlers.CommonLogic
+	common  handlers.CommonLogic
 }
 
 // UpdateMovieFlagsValues update movies flags values only in command
@@ -253,6 +254,8 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		options.Type = *_moviesType
 	case "networks":
 		options.Action = *_networksAction
+	case "notes":
+		options.Action = *_notesAction
 	case "users":
 		options.Action = *_usersAction
 	case "people":
@@ -465,7 +468,7 @@ func (*Command) ValidModuleActionType(options *str.Options) error {
 	if !ok {
 		return fmt.Errorf("not found config for module '%s'", options.Module)
 	}
-	
+
 	// Check if the provided type is valid for the selected module
 	prefix := options.Module + ":" + options.Action
 	if len(cfg.ModuleActionConfig[prefix].Type) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].Type, options.Type) {
@@ -645,5 +648,3 @@ func convertDateString(dateStr string, outputFormat string) string {
 	formattedDate := finalDateTime.Format(outputFormat)
 	return formattedDate
 }
-
-
