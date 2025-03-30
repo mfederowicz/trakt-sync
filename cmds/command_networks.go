@@ -29,7 +29,7 @@ func networksFunc(cmd *Command, _ ...string) error {
 	var networksHandlers = map[string]handlers.Handler{
 		"list": handlers.NetworksListsHandler{},
 	}
-	handler, err := cmd.GetHandlerFromAction(options.Action, networksHandlers)
+	handler, err := cmd.GetHandlerForMap(options.Action, networksHandlers)
 
 	if err != nil {
 		cmd.GenActionsUsage([]string{"list"})

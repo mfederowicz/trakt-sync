@@ -334,11 +334,11 @@ func (*CommonLogic) CheckSortAndTypes(options *str.Options) error {
 		return fmt.Errorf("not found config for module '%s'", options.Module)
 	}
 	prefix := options.Module + ":" + options.Action
-	if !cfg.IsValidConfigType(cfg.TypeSortConfig[prefix].Type, options.Type) {
+	if !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].Type, options.Type) {
 		return fmt.Errorf("not found type for module '%s'", options.Module)
 	}
 	
-	if !cfg.IsValidConfigType(cfg.TypeSortConfig[prefix].Sort, options.Sort) {
+	if !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].Sort, options.Sort) {
 		return fmt.Errorf("not found sort for module '%s'", options.Module)
 	}
 

@@ -37,8 +37,17 @@ var SearchFieldConfig = map[string][]string{
 	"list":    {"name", "description"},
 }
 
-// TypeSortConfig represents the configuration options for type depens on module:action key
-var TypeSortConfig = map[string]OptionsConfig{
+// ModuleActionConfig represents the configuration options depens on module:action key
+var ModuleActionConfig = map[string]OptionsConfig{
+
+	"comments:trending": {
+		Type: []string{"all", "movies", "shows", "seasons", "episodes", "lists"},
+		Sort: []string{"newest", "oldest", "likes", "replies", "highest", "lowest", "plays"},
+	},
+	"comments:recent": {
+		Type: []string{"all", "movies", "shows", "seasons", "episodes", "lists"},
+		Sort: []string{"newest", "oldest", "likes", "replies", "highest", "lowest", "plays"},
+	},
 	"movies:comments": {
 		Type: []string{},
 		Sort: []string{"newest", "oldest", "likes", "replies", "highest", "lowest", "plays"},
@@ -46,6 +55,10 @@ var TypeSortConfig = map[string]OptionsConfig{
 	"movies:lists": {
 		Type: []string{"all", "personal", "official", "watchlists", "favorites"},
 		Sort: []string{"popular", "likes", "comments", "items", "added", "updated"},
+	},
+	"users:watched": {
+		Type: []string{"movies", "shows"},
+		Sort: []string{},
 	},
 }
 
@@ -358,7 +371,7 @@ func GetOutputForModule(options *str.Options) string {
 func getOutputForModuleNetworks(options *str.Options) string {
 	switch options.Action {
 	case "list":
-		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)	
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
 	}

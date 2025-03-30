@@ -442,8 +442,8 @@ func (*Command) PrepareQueryString(q string) *string {
 	return &q
 }
 
-// ValidType check if type is valid
-func (*Command) ValidType(options *str.Options) error {
+// ValidModuleType check if type is valid
+func (*Command) ValidModuleType(options *str.Options) error {
 	// Check if the provided module exists in ModuleConfig
 	moduleConfig, ok := cfg.ModuleConfig[options.Module]
 	if !ok {
@@ -452,6 +452,23 @@ func (*Command) ValidType(options *str.Options) error {
 	// Check if the provided type is valid for the selected module
 	if !cfg.IsValidConfigType(moduleConfig.Type, options.Type) {
 		return fmt.Errorf("type '%s' is not valid for module '%s' and action '%s', avaliable types:%s", options.Type, options.Module, options.Action, moduleConfig.Type)
+	}
+
+	return nil
+}
+
+// ValidModuleActionType check if type is valid
+func (*Command) ValidModuleActionType(options *str.Options) error {
+	// Check if the provided module exists in ModuleConfig
+	_, ok := cfg.ModuleConfig[options.Module]
+	if !ok {
+		return fmt.Errorf("not found config for module '%s'", options.Module)
+	}
+	
+	// Check if the provided type is valid for the selected module
+	prefix := options.Module + ":" + options.Action
+	if len(cfg.ModuleActionConfig[prefix].Type) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].Type, options.Type) {
+		return fmt.Errorf("type '%s' is not valid for module '%s' and action '%s', avaliable type:%s", options.Type, options.Module, options.Action, cfg.ModuleActionConfig[prefix].Type)
 	}
 
 	return nil
@@ -466,8 +483,8 @@ func (*Command) ValidSort(options *str.Options) error {
 	}
 	// Check if the provided sort is valid for the selected module
 	prefix := options.Module + ":" + options.Action
-	if len(cfg.TypeSortConfig[prefix].Sort) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.TypeSortConfig[prefix].Sort, options.Sort) {
-		return fmt.Errorf("sort '%s' is not valid for module '%s' and action '%s', avaliable sort:%s", options.Sort, options.Module, options.Action, cfg.TypeSortConfig[prefix].Sort)
+	if len(cfg.ModuleActionConfig[prefix].Sort) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].Sort, options.Sort) {
+		return fmt.Errorf("sort '%s' is not valid for module '%s' and action '%s', avaliable sort:%s", options.Sort, options.Module, options.Action, cfg.ModuleActionConfig[prefix].Sort)
 	}
 
 	return nil
@@ -637,8 +654,17 @@ func (c *Command) GenActionsUsage(actions []string) {
 	}
 }
 
-// GetHandlerFromAction choose handler from list
-func (*Command) GetHandlerFromAction(action string, allHandlers map[string]handlers.Handler) (handlers.Handler, error) {
+// GenTypeUsage prints a usage message when an invalid type is provided.
+func (c *Command) GenTypeUsage(types []string) {
+	printer.Println("Usage: ./trakt-sync " + c.Name + " -t [type]")
+	printer.Println("Available types:")
+	for _, t := range types {
+		printer.Printf("  - %s\n", t)
+	}
+}
+
+// GetHandlerForMap choose handler from map
+func (*Command) GetHandlerForMap(action string, allHandlers map[string]handlers.Handler) (handlers.Handler, error) {
 	// Lookup and execute handler
 	if handler, found := allHandlers[action]; found {
 		return handler, nil

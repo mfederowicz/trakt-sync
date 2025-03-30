@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/handlers"
-	"github.com/mfederowicz/trakt-sync/printer"
 )
 
 // LanguagesCmd create or delete active checkins.
@@ -21,13 +20,20 @@ func languagesFunc(cmd *Command, _ ...string) error {
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
 	var handler handlers.LanguagesHandler
-	switch options.Type {
-	case "movies", "shows":
-		handler = handlers.LanguagesTypesHandler{}
-	default:
-		printer.Println("possible type: movies,shows")
+	allHandlers := map[string]handlers.Handler{
+		"movies": handlers.LanguagesTypesHandler{},
+		"shows":  handlers.LanguagesTypesHandler{},
 	}
-	err := handler.Handle(options, client)
+
+	handler, err := cmd.GetHandlerForMap(options.Type, allHandlers)
+
+	validTypes := []string{"movies", "shows"}
+	if err != nil {
+		cmd.GenTypeUsage(validTypes)
+		return nil
+	}
+
+	err = handler.Handle(options, client)
 	if err != nil {
 		return fmt.Errorf(cmd.Name+"/"+options.Type+":%s", err)
 	}

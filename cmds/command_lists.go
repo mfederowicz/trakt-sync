@@ -7,7 +7,6 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/handlers"
-	"github.com/mfederowicz/trakt-sync/printer"
 )
 
 var (
@@ -32,25 +31,25 @@ func listsFunc(cmd *Command, _ ...string) error {
 	options = cmd.UpdateOptionsWithCommandFlags(options)
 
 	var handler handlers.ListsHandler
-	switch options.Action {
-	case "trending":
-		handler = handlers.ListsTrendingHandler{}
-	case "popular":
-		handler = handlers.ListsPopularHandler{}
-	case "list":
-		handler = handlers.ListsListHandler{}
-	case "likes":
-		handler = handlers.ListsLikesHandler{}
-	case "like":
-		handler = handlers.ListsLikeHandler{}
-	case "items":
-		handler = handlers.ListsItemsHandler{}
-	case "comments":
-		handler = handlers.ListsCommentsHandler{}
-	default:
-		printer.Println("possible actions: trending, popular, list, likes, like, items, comments")
+	allHandlers := map[string]handlers.Handler{
+		"trending": handlers.ListsTrendingHandler{},
+		"popular":  handlers.ListsPopularHandler{},
+		"list":     handlers.ListsListHandler{},
+		"likes":    handlers.ListsLikesHandler{},
+		"like":     handlers.ListsLikeHandler{},
+		"items":    handlers.ListsItemsHandler{},
+		"comments": handlers.ListsCommentsHandler{},
 	}
-	err := handler.Handle(options, client)
+
+	handler, err := cmd.GetHandlerForMap(options.Action, allHandlers)
+
+	validActions = []string{"trending", "popular", "list", "likes", "like", "items", "comments"}
+	if err != nil {
+		cmd.GenActionsUsage(validActions)
+		return nil
+	}
+
+	err = handler.Handle(options, client)
 	if err != nil {
 		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
 	}

@@ -2,7 +2,6 @@
 package cmds
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
@@ -19,6 +18,12 @@ var (
 	_moviesSort       = MoviesCmd.Flag.String("s", cfg.DefaultConfig().MoviesSort, consts.MoviesSortUsage)
 	_moviesType       = MoviesCmd.Flag.String("t", cfg.DefaultConfig().MoviesType, consts.MoviesTypeUsage)
 	_moviesStartDate  = MoviesCmd.Flag.String("start_date", "", consts.StartDateUsage)
+
+	validActions = []string{
+		"trending", "popular", "favorited", "played", "watched", "collected",
+		"anticipated", "boxoffice", "updated", "updated_ids", "summary", "aliases",
+		"releases", "translations", "comments", "lists", "people", "ratings",
+		"releated", "stats", "studios", "watching", "videos", "refresh"}
 )
 
 // MoviesCmd returns movies and episodes that a user has watched, sorted by most recent.
@@ -46,32 +51,7 @@ func moviesFunc(cmd *Command, _ ...string) error {
 	}
 
 	var handler handlers.MoviesHandler
-
-	handler, err = getHandlerFromAction(options.Action)
-
-	if err != nil {
-		cmd.GenActionsUsage(validActions)
-		return nil
-	}
-
-	err = handler.Handle(options, client)
-	if err != nil {
-		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
-	}
-
-	return nil
-}
-
-// validActions holds the list of acceptable actions.
-var validActions = []string{
-	"trending", "popular", "favorited", "played", "watched", "collected",
-	"anticipated", "boxoffice", "updated", "updated_ids", "summary", "aliases",
-	"releases", "translations", "comments", "lists", "people", "ratings",
-	"releated", "stats", "studios", "watching", "videos", "refresh"}
-
-// getHandlerFromAction choose handler from all
-func getHandlerFromAction(action string) (handlers.MoviesHandler, error) {
-	allHandlers := map[string]handlers.MoviesHandler{
+	allHandlers := map[string]handlers.Handler{
 		"trending":     handlers.MoviesTrendingHandler{},
 		"popular":      handlers.MoviesPopularHandler{},
 		"favorited":    handlers.MoviesFavoritedHandler{},
@@ -97,13 +77,19 @@ func getHandlerFromAction(action string) (handlers.MoviesHandler, error) {
 		"videos":       handlers.MoviesVideosHandler{},
 		"refresh":      handlers.MoviesRefreshHandler{},
 	}
+	handler, err = cmd.GetHandlerForMap(options.Action, allHandlers)
 
-	// Lookup and execute handler
-	if handler, found := allHandlers[action]; found {
-		return handler, nil
+	if err != nil {
+		cmd.GenActionsUsage(validActions)
+		return nil
 	}
 
-	return nil, errors.New("unknown handler")
+	err = handler.Handle(options, client)
+	if err != nil {
+		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
+	}
+
+	return nil
 }
 
 var (
