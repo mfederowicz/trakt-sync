@@ -15,6 +15,7 @@ type Notes struct {
 	Show      *Show        `json:"show,omitempty"`
 	Season    *Season      `json:"season,omitempty"`
 	Episode   *Episode     `json:"episode,omitempty"`
+	Person    *Person      `json:"person,omitempty"`
 }
 
 func (n Notes) String() string {

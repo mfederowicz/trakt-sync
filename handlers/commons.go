@@ -23,6 +23,7 @@ type CommonInterface interface {
 	FetchShow(client *internal.Client, id *int) (*str.Show, error)
 	FetchSeason(client *internal.Client, id *int) (*str.Season, error)
 	FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error)
+	FetchPerson(client *internal.Client, options *str.Options) (*str.Person, error)
 	FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error)
 	FetchComment(client *internal.Client, options *str.Options) (*str.Comment, error)
 	FetchCommentItem(client *internal.Client, options *str.Options) (*str.CommentMediaItem, error)
@@ -90,6 +91,20 @@ func (*CommonLogic) FetchEpisode(client *internal.Client, options *str.Options) 
 	result, _, err := client.Episodes.GetEpisode(
 		context.Background(),
 		&episodeID,
+	)
+
+	return result, err
+}
+
+// FetchPerson helper function to fetch person object
+func (*CommonLogic) FetchPerson(client *internal.Client, options *str.Options) (*str.Person, error) {
+	opts := uri.ListOptions{Extended: options.ExtendedInfo}
+	personID := options.InternalID
+	result, _, err := client.People.GetSinglePerson(
+		context.Background(),
+		&personID,
+		&opts,
+
 	)
 
 	return result, err
