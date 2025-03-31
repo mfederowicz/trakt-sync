@@ -74,7 +74,7 @@ func (*CommonLogic) FetchShow(client *internal.Client, options *str.Options) (*s
 // FetchSeason helper function to fetch season object
 func (*CommonLogic) FetchSeason(client *internal.Client, options *str.Options) (*str.Season, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	seasonID := options.TraktID
+	seasonID := options.InternalID
 	result, _, err := client.Seasons.GetSeason(
 		context.Background(),
 		&seasonID,

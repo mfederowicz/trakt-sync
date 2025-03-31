@@ -13,6 +13,7 @@ type Notes struct {
 	User      *UserProfile `json:"user,omitempty"`
 	Movie     *Movie       `json:"movie,omitempty"`
 	Show      *Show        `json:"show,omitempty"`
+	Season    *Season      `json:"season,omitempty"`
 }
 
 func (n Notes) String() string {

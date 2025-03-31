@@ -16,8 +16,8 @@ import (
 type SeasonsService Service
 
 // GetSeason Returns season object.
-func (s *SeasonsService) GetSeason(ctx context.Context, id *int, opts *uri.ListOptions) (*str.Season, *str.Response, error) {
-	var url = fmt.Sprintf("seasons/%d", *id)
+func (s *SeasonsService) GetSeason(ctx context.Context, id *string, opts *uri.ListOptions) (*str.Season, *str.Response, error) {
+	var url = fmt.Sprintf("seasons/%s", *id)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -33,7 +33,7 @@ func (s *SeasonsService) GetSeason(ctx context.Context, id *int, opts *uri.ListO
 	resp, err := s.client.Do(ctx, req, &result)
 	
 	if resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf("season not found with traktId:%d", *id)
+		err = fmt.Errorf("season not found with traktId:%s", *id)
 	}
 
 	if err != nil {
