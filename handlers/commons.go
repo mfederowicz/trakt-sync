@@ -86,7 +86,7 @@ func (*CommonLogic) FetchSeason(client *internal.Client, options *str.Options) (
 
 // FetchEpisode helper function to fetch episode object
 func (*CommonLogic) FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error) {
-	episodeID := options.TraktID
+	episodeID := options.InternalID
 	result, _, err := client.Episodes.GetEpisode(
 		context.Background(),
 		&episodeID,
