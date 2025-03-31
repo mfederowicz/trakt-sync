@@ -36,6 +36,7 @@ type CommonInterface interface {
 	CheckSeasonNumber(code *string) (*string, *string, error)
 	Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error)
 	Comment(client *internal.Client, comment *str.Comment) (*str.Comment, *str.Response, error)
+	Notes(client *internal.Client, notes *str.Notes) (*str.Notes, *str.Response, error)
 	Reply(client *internal.Client, id *int, comment *str.Comment) (*str.Comment, *str.Response, error)
 	CheckSortAndTypes(options *str.Options) error
 }
@@ -298,6 +299,15 @@ func (*CommonLogic) Comment(client *internal.Client, comment *str.Comment) (*str
 	result, resp, err := client.Comments.PostAComment(
 		context.Background(),
 		comment,
+	)
+	return result, resp, err
+}
+
+// Notes helper function to post notes object
+func (*CommonLogic) Notes(client *internal.Client, notes *str.Notes) (*str.Notes, *str.Response, error) {
+	result, resp, err := client.Notes.AddNotes(
+		context.Background(),
+		notes,
 	)
 	return result, resp, err
 }

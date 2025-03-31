@@ -45,4 +45,5 @@ type Options struct {
 	Country        string
 	Episode        int
 	Season         int
+	Notes          string
 }

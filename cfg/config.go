@@ -65,6 +65,8 @@ type Config struct {
 	IncludeReplies string    `toml:"include_replies"`
 	Verbose        bool      `toml:"verbose"`
 	InternalID     string    `toml:"trakt_id"`
+	NotesID        int       `toml:"notes_id"`
+	Notes          string    `toml:"notes"`
 }
 
 var (
@@ -466,6 +468,7 @@ func DefaultConfig() *Config {
 		IncludeReplies: consts.EmptyString,
 		Msg:            consts.EmptyString,
 		InternalID:     consts.EmptyString,
+		NotesID:        consts.ZeroValue,
 	}
 }
 

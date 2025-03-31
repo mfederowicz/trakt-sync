@@ -38,7 +38,7 @@ func (n NotesNotesHandler) Handle(options *str.Options, client *internal.Client)
 
 	err = handler.Handle(options, client)
 	if err != nil {
-		return fmt.Errorf("notes/"+options.Type+":%s", err)
+		return fmt.Errorf(options.Type+":%s", err)
 	}
 
 	return nil

@@ -256,6 +256,8 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		options.Action = *_networksAction
 	case "notes":
 		options.Action = *_notesAction
+		options.InternalID = *_notesInternalID
+		options.Notes = *_notesNotes
 	case "users":
 		options.Action = *_usersAction
 	case "people":

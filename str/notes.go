@@ -3,7 +3,16 @@ package str
 
 // Notes represents JSON notes object
 type Notes struct {
-	ItemCount *int `json:"item_count,omitempty"`
+	ID        *int         `json:"id,omitempty"`
+	Notes     *string      `json:"notes,omitempty"`
+	Privacy   *string      `json:"privacy,omitempty"`
+	ItemCount *int         `json:"item_count,omitempty"`
+	Spoiler   *bool        `json:"spoiler,omitempty"`
+	CreatedAt *Timestamp   `json:"created_at,omitempty"`
+	UpdatedAt *Timestamp   `json:"updated_at,omitempty"`
+	User      *UserProfile `json:"user,omitempty"`
+	Movie     *Movie       `json:"movie,omitempty"`
+	Show      *Show        `json:"show,omitempty"`
 }
 
 func (n Notes) String() string {
