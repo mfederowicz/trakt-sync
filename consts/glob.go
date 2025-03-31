@@ -45,6 +45,7 @@ const (
 	ActionTypeAll          = "all"
 	NoShowTitle            = "no show title"
 	NoEpisodeTitle         = "no episode title"
+	EmptyHistoryIDMsg      = "set historyId ie: -i 12345 from watched history"
 	EmptyPersonIDMsg       = "set personId ie: -i john-wayne"
 	EmptyListIDMsg         = "set traktId ie: -trakt_id 55"
 	EmptyTraktIDMsg        = "set traktId ie: -trakt_id 55"
