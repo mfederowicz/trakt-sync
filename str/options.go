@@ -46,4 +46,5 @@ type Options struct {
 	Episode        int
 	Season         int
 	Notes          string
+	Item           string
 }

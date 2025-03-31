@@ -33,6 +33,7 @@ const (
 	SpoilerUsage           = "allow to overwrite spoiler"
 	CommentUsage           = "allow to overwrite comment"
 	NotesUsage             = "allow to overwrite notes"
+	ItemUsage              = "item type used in collection/rating ie:movie,show,season,episode,person"
 	CommentTypeUsage       = "allow to overwrite comment_type"
 	IncludeRepliesUsage    = "allow to overwrite include_replies"
 	ReplyUsage             = "allow to overwrite reply"

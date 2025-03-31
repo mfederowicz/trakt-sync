@@ -56,6 +56,7 @@ var Avflags = map[string]bool{
 	"help":            true,
 	"history":         true,
 	"i":               true,
+	"item":            true,
 	"include_replies": true,
 	"trakt_id":        true,
 	"comment_id":      true,
@@ -258,6 +259,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		options.Action = *_notesAction
 		options.InternalID = *_notesInternalID
 		options.Notes = *_notesNotes
+		options.Item = *_notesItem
 	case "users":
 		options.Action = *_usersAction
 	case "people":

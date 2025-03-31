@@ -29,11 +29,15 @@ func (n *NotesService) AddNotes(ctx context.Context, notes *str.Notes) (*str.Not
 	resp, err := n.client.Do(ctx, req, note)
 
 	if resp.StatusCode == http.StatusInternalServerError {
-		return nil, nil, errors.New("500 Internal server error")
+		return nil, nil, errors.New("internal server error")
 	}
 
 	if resp.StatusCode == http.StatusUnprocessableEntity {
-		return nil, nil, errors.New("422 validation error")
+		return nil, nil, errors.New("validation error")
+	}
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, errors.New("item not found or doesn't allow notes")
 	}
 
 	if err != nil {

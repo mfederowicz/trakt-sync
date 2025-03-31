@@ -12,6 +12,7 @@ import (
 var (
 	_notesAction     = NotesCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
 	_notesInternalID = NotesCmd.Flag.String("i", cfg.DefaultConfig().InternalID, consts.TraktIDUsage)
+	_notesItem       = NotesCmd.Flag.String("item", cfg.DefaultConfig().Item, consts.ItemUsage)
 	_notesNotesID    = NotesCmd.Flag.Int("notes_id", cfg.DefaultConfig().NotesID, consts.NotesIDUsage)
 	_notesNotes      = NotesCmd.Flag.String("notes", cfg.DefaultConfig().Notes, consts.NotesUsage)
 )

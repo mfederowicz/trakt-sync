@@ -399,6 +399,15 @@ func (*CommonLogic) GenActionTypeUsage(options *str.Options, types []string) {
 	}
 }
 
+// GenActionTypeItemUsage prints a usage message when an invalid item for type is provided.
+func (*CommonLogic) GenActionTypeItemUsage(options *str.Options, items []string) {
+	printer.Println("Usage: ./trakt-sync " + options.Module + " -a " + options.Action + " -t " + options.Type + " -item [item]")
+	printer.Println("Available items:")
+	for _, t := range items {
+		printer.Printf("  - %s\n", t)
+	}
+}
+
 // GetHandlerForMap choose handler from map
 func (*CommonLogic) GetHandlerForMap(action string, allHandlers map[string]Handler) (Handler, error) {
 	// Lookup and execute handler

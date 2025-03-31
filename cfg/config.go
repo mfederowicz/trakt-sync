@@ -67,6 +67,7 @@ type Config struct {
 	InternalID     string    `toml:"trakt_id"`
 	NotesID        int       `toml:"notes_id"`
 	Notes          string    `toml:"notes"`
+	Item           string    `toml:"item"`
 }
 
 var (
@@ -469,6 +470,7 @@ func DefaultConfig() *Config {
 		Msg:            consts.EmptyString,
 		InternalID:     consts.EmptyString,
 		NotesID:        consts.ZeroValue,
+		Item:           consts.EmptyString,
 	}
 }
 
