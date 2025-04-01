@@ -73,6 +73,7 @@ var Avflags = map[string]bool{
 	"o":               true,
 	"people":          true,
 	"period":          true,
+	"privacy":         true,
 	"q":               true,
 	"remove":          true,
 	"releases":        true,
@@ -80,6 +81,7 @@ var Avflags = map[string]bool{
 	"s":               true,
 	"comment":         true,
 	"search":          true,
+	"spoiler":         true,
 	"start_date":      true,
 	"t":               true,
 	"translations":    true,
@@ -260,6 +262,9 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		options.InternalID = *_notesInternalID
 		options.Notes = *_notesNotes
 		options.Item = *_notesItem
+		options.Delete = *_notesDelete
+		options.Spoiler = *_notesSpoiler
+		options.Privacy = *_notesPrivacy
 	case "users":
 		options.Action = *_usersAction
 	case "people":

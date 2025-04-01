@@ -26,13 +26,16 @@ type CommonInterface interface {
 	FetchPerson(client *internal.Client, options *str.Options) (*str.Person, error)
 	FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error)
 	FetchComment(client *internal.Client, options *str.Options) (*str.Comment, error)
+	FetchNotes(client *internal.Client, options *str.Options) (*str.Notes, error)
 	FetchCommentItem(client *internal.Client, options *str.Options) (*str.CommentMediaItem, error)
 	FetchCommentUserLikes(client *internal.Client, options *str.Options) (*str.CommentUserLike, error)
 	FetchTrendingComments(client *internal.Client, options *str.Options) (*str.CommentItem, error)
 	FetchRecentComments(client *internal.Client, options *str.Options) (*str.CommentItem, error)
 	FetchUpdatedComments(client *internal.Client, options *str.Options) (*str.CommentItem, error)
 	UpdateComment(client *internal.Client, options *str.Options) (*str.Comment, error)
+	UpdateNotes(client *internal.Client, options *str.Options) (*str.Notes, error)
 	DeleteComment(client *internal.Client, options *str.Options) (*str.Comment, *str.Response, error)
+	DeleteNotes(client *internal.Client, options *str.Options) (*str.Notes, *str.Response, error)
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
 	CheckSeasonNumber(code *string) (*string, *string, error)
 	Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error)
@@ -127,6 +130,17 @@ func (*CommonLogic) FetchComment(client *internal.Client, options *str.Options) 
 	result, _, err := client.Comments.GetComment(
 		context.Background(),
 		&commentID,
+	)
+
+	return result, err
+}
+
+// FetchNotes helper function to fetch notes object
+func (*CommonLogic) FetchNotes(client *internal.Client, options *str.Options) (*str.Notes, error) {
+	notesID := options.InternalID
+	result, _, err := client.Notes.GetNotes(
+		context.Background(),
+		&notesID,
 	)
 
 	return result, err
@@ -279,12 +293,35 @@ func (*CommonLogic) UpdateComment(client *internal.Client, options *str.Options,
 	return result, resp, err
 }
 
+// UpdateNotes helper function to put notes object
+func (*CommonLogic) UpdateNotes(client *internal.Client, options *str.Options, notes *str.Notes) (*str.Notes, *str.Response, error) {
+	notesID := options.InternalID
+	result, resp, err := client.Notes.UpdateNotes(
+		context.Background(),
+		&notesID,
+		notes,
+	)
+
+	return result, resp, err
+}
+
 // DeleteComment helper function to delete comment object
 func (*CommonLogic) DeleteComment(client *internal.Client, options *str.Options) (*str.Response, error) {
 	commentID := options.CommentID
 	resp, err := client.Comments.DeleteComment(
 		context.Background(),
 		&commentID,
+	)
+
+	return resp, err
+}
+
+// DeleteNotes helper function to delete notes object
+func (*CommonLogic) DeleteNotes(client *internal.Client, options *str.Options) (*str.Response, error) {
+	notesID := options.InternalID
+	resp, err := client.Notes.DeleteNotes(
+		context.Background(),
+		&notesID,
 	)
 
 	return resp, err
@@ -369,6 +406,20 @@ func (*CommonLogic) CheckSortAndTypes(options *str.Options) error {
 	}
 
 	// Check id_type values
+	return nil
+}
+
+// ValidPrivacy helper function to validate privacy field depends on module
+func (*CommonLogic) ValidPrivacy(options *str.Options) error {
+	// Check if the provided module exists in ModuleConfig
+	_, ok := cfg.ModuleConfig[options.Module]
+	if !ok {
+		return fmt.Errorf("not found config for module '%s'", options.Module)
+	}
+	prefix := options.Module + ":" + options.Action
+	if len(options.Privacy) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].Privacy, options.Privacy) {
+		return fmt.Errorf("invalid privacy '%s' for module '%s'", options.Privacy, options.Module)
+	}
 	return nil
 }
 

@@ -26,6 +26,7 @@ type OptionsConfig struct {
 	Sort         []string
 	Format       []string
 	Action       []string
+	Privacy      []string
 }
 
 // SearchFieldConfig represents the configuration options for search_field depens on type
@@ -59,6 +60,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	"users:watched": {
 		Type: []string{"movies", "shows"},
 		Sort: []string{},
+	},
+	"notes:note": {
+		Privacy: []string{"private", "friends", "public"},
 	},
 }
 
@@ -149,6 +153,9 @@ var ModuleConfig = map[string]OptionsConfig{
 		Sort:         []string{},
 		Format:       []string{},
 		Action:       []string{},
+	},
+	"notes": {
+		Privacy: []string{"private","friends","public"},	
 	},
 }
 
@@ -362,6 +369,8 @@ func GetOutputForModule(options *str.Options) string {
 		options.Output = getOutputForModuleMovies(options)
 	case "networks":
 		options.Output = getOutputForModuleNetworks(options)
+	case "notes":
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.InternalID)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Type, options.Format)
 	}
