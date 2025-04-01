@@ -39,10 +39,13 @@ type Options struct {
 	Remove         bool
 	Delete         bool
 	Spoiler        bool
+	Privacy        string
 	IncludeReplies string
 	EpisodeAbs     int
 	EpisodeCode    string
 	Country        string
 	Episode        int
 	Season         int
+	Notes          string
+	Item           string
 }

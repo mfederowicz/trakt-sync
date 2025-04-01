@@ -63,8 +63,12 @@ type Config struct {
 	Delete         bool      `toml:"delete"`
 	Spoiler        bool      `toml:"spoiler"`
 	IncludeReplies string    `toml:"include_replies"`
+	Privacy        string    `toml:"privacy"`
 	Verbose        bool      `toml:"verbose"`
 	InternalID     string    `toml:"trakt_id"`
+	NotesID        int       `toml:"notes_id"`
+	Notes          string    `toml:"notes"`
+	Item           string    `toml:"item"`
 }
 
 var (
@@ -463,9 +467,12 @@ func DefaultConfig() *Config {
 		Remove:         false,
 		Delete:         false,
 		Spoiler:        false,
+		Privacy:        "private",
 		IncludeReplies: consts.EmptyString,
 		Msg:            consts.EmptyString,
 		InternalID:     consts.EmptyString,
+		NotesID:        consts.ZeroValue,
+		Item:           consts.EmptyString,
 	}
 }
 

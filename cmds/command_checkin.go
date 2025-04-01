@@ -39,11 +39,11 @@ func checkinFunc(cmd *Command, _ ...string) error {
 		"delete":       handlers.CheckinDeleteHandler{},
 	}
 
-	handler, err := cmd.GetHandlerForMap(options.Action, allHandlers)
+	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	validActions = []string{"movie", "episode", "show_episode", "delete"}
 	if err != nil {
-		cmd.GenActionsUsage(validActions)
+		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil
 	}
 

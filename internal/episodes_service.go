@@ -15,8 +15,8 @@ import (
 type EpisodesService Service
 
 // GetEpisode Returns episode object.
-func (m *EpisodesService) GetEpisode(ctx context.Context, id *int) (*str.Episode, *str.Response, error) {
-	var url = fmt.Sprintf("episodes/%d", *id)
+func (m *EpisodesService) GetEpisode(ctx context.Context, id *string) (*str.Episode, *str.Response, error) {
+	var url = fmt.Sprintf("episodes/%s", *id)
 	printer.Println("fetch episode url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {

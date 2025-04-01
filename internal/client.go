@@ -73,6 +73,21 @@ func (r *UpgradeRequiredError) Error() string {
 	)
 }
 
+// InvalidUserError occurs when trakt.tv returns 401 error
+type InvalidUserError struct {
+	Response *http.Response
+	Message  string `json:"message"`
+}
+
+func (r *InvalidUserError) Error() string {
+	return fmt.Sprintf(consts.ErrorsPlaceholders,
+		r.Response.Request.Method,
+		uri.SanitizeURL(r.Response.Request.URL),
+		r.Response.StatusCode,
+		r.Message,
+	)
+}
+
 // NotFoundError occurs when trakt.tv returns 404 error
 type NotFoundError struct {
 	Response *http.Response
@@ -160,6 +175,7 @@ type Client struct {
 	Lists          *ListsService
 	Movies         *MoviesService
 	Networks       *NetworksService
+	Notes          *NotesService
 	Episodes       *EpisodesService
 	Shows          *ShowsService
 	Seasons        *SeasonsService
@@ -207,6 +223,7 @@ func (c *Client) initialize() {
 	c.Lists = (*ListsService)(&c.common)
 	c.Movies = (*MoviesService)(&c.common)
 	c.Networks = (*NetworksService)(&c.common)
+	c.Notes = (*NotesService)(&c.common)
 	c.Episodes = (*EpisodesService)(&c.common)
 	c.Shows = (*ShowsService)(&c.common)
 	c.Seasons = (*SeasonsService)(&c.common)
@@ -318,6 +335,8 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 			updateRateLimitReset(c, e)
 		case *UpgradeRequiredError:
 			upgradeAccountRequired(c, e)
+		case *InvalidUserError:
+			return response, errors.New(e.Error())
 		case *NotFoundError:
 			return response, errors.New(e.Error())
 		case *InternalServerError:
@@ -428,6 +447,8 @@ func (c *Client) CheckResponse(r *http.Response) error {
 		return c.genNotFoundError(r, errorResponse)
 	case http.StatusInternalServerError:
 		return c.genInternalServerError(r, errorResponse)
+	case http.StatusUnauthorized:
+		return c.genInvalidUserError(r, errorResponse)
 	case http.StatusConflict:
 		return c.genConflictError(r, errorResponse)
 	case http.StatusUnprocessableEntity:
@@ -481,6 +502,19 @@ func (*Client) genNotFoundError(r *http.Response, errorResponse *str.ErrorRespon
 	}
 	return nil
 }
+
+func (*Client) genInvalidUserError(r *http.Response, errorResponse *str.ErrorResponse) *InvalidUserError {
+	invalidUserError := &InvalidUserError{
+		Response: errorResponse.Response,
+		Message:  errorResponse.Message,
+	}
+	if r.StatusCode == http.StatusUnauthorized {
+		return invalidUserError
+	}
+	return nil
+}
+
+
 func (c *Client) genUpgradeRequiredError(r *http.Response, errorResponse *str.ErrorResponse) *UpgradeRequiredError {
 	upgradeRequiredError := &UpgradeRequiredError{
 		Response: errorResponse.Response,

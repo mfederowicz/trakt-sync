@@ -44,11 +44,11 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"watched":       handlers.UsersWatchedHandler{},
 	}
 
-	handler, err = cmd.GetHandlerForMap(options.Action, allHandlers)
+	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	validActions = []string{"lists", "saved_filters", "stats", "watched"}
 	if err != nil {
-		cmd.GenActionsUsage(validActions)
+		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil
 	}
 

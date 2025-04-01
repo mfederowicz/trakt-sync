@@ -56,6 +56,7 @@ var Avflags = map[string]bool{
 	"help":            true,
 	"history":         true,
 	"i":               true,
+	"item":            true,
 	"include_replies": true,
 	"trakt_id":        true,
 	"comment_id":      true,
@@ -68,9 +69,11 @@ var Avflags = map[string]bool{
 	"msg":             true,
 	"movies":          true,
 	"networks":        true,
+	"notes":           true,
 	"o":               true,
 	"people":          true,
 	"period":          true,
+	"privacy":         true,
 	"q":               true,
 	"remove":          true,
 	"releases":        true,
@@ -78,6 +81,7 @@ var Avflags = map[string]bool{
 	"s":               true,
 	"comment":         true,
 	"search":          true,
+	"spoiler":         true,
 	"start_date":      true,
 	"t":               true,
 	"translations":    true,
@@ -103,6 +107,7 @@ type Command struct {
 	Help    string
 	Abbrev  string
 	exit    int
+	common  handlers.CommonLogic
 }
 
 // UpdateMovieFlagsValues update movies flags values only in command
@@ -252,6 +257,14 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		options.Type = *_moviesType
 	case "networks":
 		options.Action = *_networksAction
+	case "notes":
+		options.Action = *_notesAction
+		options.InternalID = *_notesInternalID
+		options.Notes = *_notesNotes
+		options.Item = *_notesItem
+		options.Delete = *_notesDelete
+		options.Spoiler = *_notesSpoiler
+		options.Privacy = *_notesPrivacy
 	case "users":
 		options.Action = *_usersAction
 	case "people":
@@ -464,7 +477,7 @@ func (*Command) ValidModuleActionType(options *str.Options) error {
 	if !ok {
 		return fmt.Errorf("not found config for module '%s'", options.Module)
 	}
-	
+
 	// Check if the provided type is valid for the selected module
 	prefix := options.Module + ":" + options.Action
 	if len(cfg.ModuleActionConfig[prefix].Type) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].Type, options.Type) {
@@ -643,32 +656,4 @@ func convertDateString(dateStr string, outputFormat string) string {
 	// Format the parsed time into the output format
 	formattedDate := finalDateTime.Format(outputFormat)
 	return formattedDate
-}
-
-// GenActionsUsage prints a usage message when an invalid action is provided.
-func (c *Command) GenActionsUsage(actions []string) {
-	printer.Println("Usage: ./trakt-sync " + c.Name + " -a [action]")
-	printer.Println("Available actions:")
-	for _, action := range actions {
-		printer.Printf("  - %s\n", action)
-	}
-}
-
-// GenTypeUsage prints a usage message when an invalid type is provided.
-func (c *Command) GenTypeUsage(types []string) {
-	printer.Println("Usage: ./trakt-sync " + c.Name + " -t [type]")
-	printer.Println("Available types:")
-	for _, t := range types {
-		printer.Printf("  - %s\n", t)
-	}
-}
-
-// GetHandlerForMap choose handler from map
-func (*Command) GetHandlerForMap(action string, allHandlers map[string]handlers.Handler) (handlers.Handler, error) {
-	// Lookup and execute handler
-	if handler, found := allHandlers[action]; found {
-		return handler, nil
-	}
-
-	return nil, errors.New("unknown handler")
 }

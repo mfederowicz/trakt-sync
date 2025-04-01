@@ -27,6 +27,7 @@ var Commands = []*Command{
 	ListsCmd,
 	MoviesCmd,
 	NetworksCmd,
+	NotesCmd,
 	PeopleCmd,
 	SearchCmd,
 	UsersCmd,

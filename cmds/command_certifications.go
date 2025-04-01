@@ -25,11 +25,11 @@ func certificationsFunc(cmd *Command, _ ...string) error {
 		"shows":handlers.CertificationsTypesHandler{},	
 	}
 
-	handler, err := cmd.GetHandlerForMap(options.Type, allHandlers)
+	handler, err := cmd.common.GetHandlerForMap(options.Type, allHandlers)
 
 	validTypes := []string{"movies","shows"}
 	if err != nil {
-		cmd.GenTypeUsage(validTypes)
+		cmd.common.GenTypeUsage(cmd.Name, validTypes)
 		return nil
 	}
 
