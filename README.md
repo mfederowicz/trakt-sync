@@ -57,6 +57,8 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 - `languages` - Get a list of all laguages, including names and codes.
 - `lists` - Returns data about lists: trending, popular, list, likes, like, items, comments.
 - `movies` - Returns data about movies: trending, popular, list, likes, like, items, comments etc...
+- `networks` - Get a list of all TV networks
+- `notes` - Manage notes created by user
 - `people` - Returns all data for selected person.
 - `search` - Searches can use queries or ID lookups.
 - `users` - Returns all data for a user.
@@ -455,6 +457,37 @@ $ ./trakt-sync movies -a refresh -i tron-legacy-2010
 #### Export tv networks:
 ```console
 $ ./trakt-sync networks -a list
+```
+
+#### Manage notes:
+##### adding notes for media types:
+```console 
+$ ./trakt-sync notes -a notes -t movie -i tron-legacy-2010 -notes "xyz"
+$ ./trakt-sync notes -a notes -t show -i breaking-bad -notes "greate show"
+$ ./trakt-sync notes -a notes -t season -i 250341 -notes "greate season"
+$ ./trakt-sync notes -a notes -t episode -i 250341 -notes "greate episode"
+$ ./trakt-sync notes -a notes -t person -i john-wayne -notes "greate person"
+$ ./trakt-sync notes -a notes -t history -i 1234567 -notes "history note"
+```
+##### adding notes depends on activities:
+```console 
+$ ./trakt-sync notes -a notes -t collection -item episode -i 73629 -notes "great episode"
+$ ./trakt-sync notes -a notes -t collection -item movie -i despicable-me-4-2024 -notes "great animation"
+$ ./trakt-sync notes -a notes -t rating -item movie -i despicable-me-4-2024 -notes "great animation"
+$ ./trakt-sync notes -a notes -t rating -item episode -i 73629 -notes "overall 10/10"
+$ ./trakt-sync notes -a notes -t rating -item movie -i the-gorge-2025 -notes "overall 7/10"
+$ ./trakt-sync notes -a notes -t rating -item season -i 3961 -notes "overall 9/10"
+$ ./trakt-sync notes -a notes -t rating -item show -i the-sopranos -notes "overall 9/10"
+```
+##### manage notes get/modify/delete:
+```console
+./trakt-sync notes -a note -i 97857
+./trakt-sync notes -a note -i 97857 -notes "super 10/10" -privacy public -spoiler
+./trakt-sync notes -a note -i 97857 -delete
+```
+##### get items attachment to note:
+```console
+./trakt-sync notes -a item -i 97854
 ```
 
 ## License

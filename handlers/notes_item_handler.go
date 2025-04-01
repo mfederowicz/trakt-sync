@@ -17,7 +17,7 @@ type NotesItemHandler struct{ common CommonLogic }
 
 // Handle to handle notes: item action
 func (n NotesItemHandler) Handle(options *str.Options, client *internal.Client) error {
-if len(options.InternalID) == consts.ZeroValue {
+	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyNotesIDMsg)
 	}
 
