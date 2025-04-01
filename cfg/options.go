@@ -64,6 +64,10 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	"notes:note": {
 		Privacy: []string{"private", "friends", "public"},
 	},
+	"notes:item": {
+		Privacy: []string{"private", "friends", "public"},
+	},
+
 }
 
 // ModuleConfig represents the configuration options for all modules

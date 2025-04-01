@@ -27,6 +27,7 @@ type CommonInterface interface {
 	FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error)
 	FetchComment(client *internal.Client, options *str.Options) (*str.Comment, error)
 	FetchNotes(client *internal.Client, options *str.Options) (*str.Notes, error)
+	FetchNotesItem(client *internal.Client, options *str.Options) (*str.NotesItem, error)
 	FetchCommentItem(client *internal.Client, options *str.Options) (*str.CommentMediaItem, error)
 	FetchCommentUserLikes(client *internal.Client, options *str.Options) (*str.CommentUserLike, error)
 	FetchTrendingComments(client *internal.Client, options *str.Options) (*str.CommentItem, error)
@@ -139,6 +140,17 @@ func (*CommonLogic) FetchComment(client *internal.Client, options *str.Options) 
 func (*CommonLogic) FetchNotes(client *internal.Client, options *str.Options) (*str.Notes, error) {
 	notesID := options.InternalID
 	result, _, err := client.Notes.GetNotes(
+		context.Background(),
+		&notesID,
+	)
+
+	return result, err
+}
+
+// FetchNotesItem helper function to fetch notes attached item object
+func (*CommonLogic) FetchNotesItem(client *internal.Client, options *str.Options) (*str.NotesItem, error) {
+	notesID := options.InternalID
+	result, _, err := client.Notes.GetNotesItem(
 		context.Background(),
 		&notesID,
 	)

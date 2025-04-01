@@ -124,3 +124,32 @@ func (n *NotesService) GetNotes(ctx context.Context, id *string) (*str.Notes, *s
 
 	return result, resp, nil
 }
+
+// GetNotesItem Returns the item this note is attached_to.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/notes/item/get-the-attached-item 
+func (n *NotesService) GetNotesItem(ctx context.Context, id *string) (*str.NotesItem, *str.Response, error) {
+	var url = fmt.Sprintf("notes/%s/item", *id)
+	printer.Println("fetch notes item url:" + url)
+	req, err := n.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.NotesItem)
+	resp, err := n.client.Do(ctx, req, &result)
+
+	if resp.StatusCode == http.StatusUnauthorized {
+		err = fmt.Errorf("invalid user for notes Id:%s", *id)
+	}
+
+	if resp.StatusCode == http.StatusNotFound {
+		err = fmt.Errorf("notes item not found with Id:%s", *id)
+	}
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
