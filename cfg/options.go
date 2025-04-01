@@ -61,6 +61,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 		Type: []string{"movies", "shows"},
 		Sort: []string{},
 	},
+	"notes:notes": {
+		Privacy: []string{"private", "friends", "public"},
+	},
 	"notes:note": {
 		Privacy: []string{"private", "friends", "public"},
 	},
