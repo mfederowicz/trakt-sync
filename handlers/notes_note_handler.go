@@ -26,7 +26,7 @@ func (n NotesNoteHandler) Handle(options *str.Options, client *internal.Client) 
 	if options.Delete {
 		resp, err := n.common.DeleteNotes(client, options)
 		if err != nil {
-			return fmt.Errorf("delete notes error:%w", err)
+			return fmt.Errorf("%w", err)
 		}
 
 		if resp.StatusCode == http.StatusNoContent {
@@ -54,7 +54,7 @@ func (n NotesNoteHandler) Handle(options *str.Options, client *internal.Client) 
 
 	result, err := n.common.FetchNotes(client, options)
 	if err != nil {
-		return fmt.Errorf("fetch notes error:%w", err)
+		return fmt.Errorf("%w", err)
 	}
 	print("write data to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(result, "", "  ")

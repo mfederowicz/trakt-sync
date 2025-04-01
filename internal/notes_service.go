@@ -60,6 +60,11 @@ func (n *NotesService) DeleteNotes(ctx context.Context, id *string) (*str.Respon
 	}
 
 	resp, err := n.client.Do(ctx, req, nil)
+	
+	if resp.StatusCode == http.StatusUnauthorized {
+		err = fmt.Errorf("invalid user for notes Id:%s", *id)
+	}
+
 	if resp.StatusCode == http.StatusNotFound {
 		err = fmt.Errorf("notes not found with Id:%s", *id)
 	}
@@ -104,6 +109,10 @@ func (n *NotesService) GetNotes(ctx context.Context, id *string) (*str.Notes, *s
 
 	result := new(str.Notes)
 	resp, err := n.client.Do(ctx, req, &result)
+
+	if resp.StatusCode == http.StatusUnauthorized {
+		err = fmt.Errorf("invalid user for notes Id:%s", *id)
+	}
 
 	if resp.StatusCode == http.StatusNotFound {
 		err = fmt.Errorf("notes not found with Id:%s", *id)
