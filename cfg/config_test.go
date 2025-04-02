@@ -41,12 +41,11 @@ func emptyFlagset() *flag.FlagSet {
 	return flag.NewFlagSet(consts.EmptyString, flag.ExitOnError)
 }
 
-func TestMain(m *testing.M) {
+func TestMain(_ *testing.M) {
 	_ = os.Unsetenv("HOME")
 	_ = os.Unsetenv("XDG_CONFIG_HOME")
 	_ = os.Unsetenv("FORK")
 	AppFs = afero.NewMemMapFs()
-	os.Exit(m.Run())
 }
 
 func TestGenUsedFlagMap(t *testing.T) {

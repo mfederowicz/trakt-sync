@@ -23,7 +23,7 @@ func (h CheckinDeleteHandler) Handle(options *str.Options, client *internal.Clie
 
 	return nil
 }
-func (CheckinDeleteHandler) deleteActiveCheckins(client *internal.Client, options *str.Options) (*str.Response, error) {
+func (CheckinDeleteHandler) deleteActiveCheckins(client *internal.Client, _ *str.Options) (*str.Response, error) {
 	resp, err := client.Checkin.DeleteAnyActiveCheckins(
 		context.Background(),
 	)

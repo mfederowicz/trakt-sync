@@ -440,7 +440,7 @@ func (*CommonLogic) GenActionsUsage(name string, actions []string) {
 	printer.Println("Usage: ./trakt-sync " + name + " -a [action]")
 	printer.Println("Available actions:")
 	for _, action := range actions {
-		printer.Printf("  - %s\n", action)
+		printer.Printf(consts.ListItem, action)
 	}
 }
 
@@ -449,7 +449,7 @@ func (*CommonLogic) GenTypeUsage(name string, types []string) {
 	printer.Println("Usage: ./trakt-sync " + name + " -t [type]")
 	printer.Println("Available types:")
 	for _, t := range types {
-		printer.Printf("  - %s\n", t)
+		printer.Printf(consts.ListItem, t)
 	}
 }
 
@@ -458,7 +458,7 @@ func (*CommonLogic) GenActionTypeUsage(options *str.Options, types []string) {
 	printer.Println("Usage: ./trakt-sync " + options.Module + " -a " + options.Action + " -t [type]")
 	printer.Println("Available types:")
 	for _, t := range types {
-		printer.Printf("  - %s\n", t)
+		printer.Printf(consts.ListItem, t)
 	}
 }
 

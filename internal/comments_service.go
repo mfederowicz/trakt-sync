@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
@@ -73,7 +74,7 @@ func (c *CommentsService) GetComment(ctx context.Context, id *int) (*str.Comment
 	resp, err := c.client.Do(ctx, req, &result)
 
 	if resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf("comment not found with commentId:%d", *id)
+		err = fmt.Errorf(consts.CommentNotFoundWithID, *id)
 	}
 
 	if err != nil {
@@ -124,7 +125,7 @@ func (c *CommentsService) DeleteComment(ctx context.Context, id *int) (*str.Resp
 
 	resp, err := c.client.Do(ctx, req, nil)
 	if resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf("comment not found with commentId:%d", *id)
+		err = fmt.Errorf(consts.CommentNotFoundWithID, *id)
 	}
 
 	if err != nil {
@@ -236,7 +237,7 @@ func (c *CommentsService) ReplyAComment(ctx context.Context, id *int, reply *str
 	resp, err := c.client.Do(ctx, req, com)
 
 	if resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf("comment not found with commentId:%d", *id)
+		err = fmt.Errorf(consts.CommentNotFoundWithID, *id)
 	}
 
 	if err != nil {

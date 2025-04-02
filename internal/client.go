@@ -41,114 +41,6 @@ var emptyReader = strings.NewReader("")
 
 type requestContext uint8
 
-// AbuseRateLimitError occurs when trakt.tv returns 429 too many requests header
-type AbuseRateLimitError struct {
-	Response   *http.Response
-	RetryAfter *time.Duration
-	Message    string `json:"message"`
-}
-
-func (r *AbuseRateLimitError) Error() string {
-	return fmt.Sprintf(consts.ErrorsPlaceholders,
-		r.Response.Request.Method,
-		uri.SanitizeURL(r.Response.Request.URL),
-		r.Response.StatusCode,
-		r.Message,
-	)
-}
-
-// UpgradeRequiredError occurs when trakt.tv returns 426 user must upgrade to vip header
-type UpgradeRequiredError struct {
-	Response   *http.Response
-	UpgradeURL *url.URL
-	Message    string `json:"message"`
-}
-
-func (r *UpgradeRequiredError) Error() string {
-	return fmt.Sprintf(consts.ErrorsPlaceholders,
-		r.Response.Request.Method,
-		uri.SanitizeURL(r.Response.Request.URL),
-		r.Response.StatusCode,
-		r.Message,
-	)
-}
-
-// InvalidUserError occurs when trakt.tv returns 401 error
-type InvalidUserError struct {
-	Response *http.Response
-	Message  string `json:"message"`
-}
-
-func (r *InvalidUserError) Error() string {
-	return fmt.Sprintf(consts.ErrorsPlaceholders,
-		r.Response.Request.Method,
-		uri.SanitizeURL(r.Response.Request.URL),
-		r.Response.StatusCode,
-		r.Message,
-	)
-}
-
-// NotFoundError occurs when trakt.tv returns 404 error
-type NotFoundError struct {
-	Response *http.Response
-	Message  string `json:"message"`
-}
-
-func (r *NotFoundError) Error() string {
-	return fmt.Sprintf(consts.ErrorsPlaceholders,
-		r.Response.Request.Method,
-		uri.SanitizeURL(r.Response.Request.URL),
-		r.Response.StatusCode,
-		r.Message,
-	)
-}
-
-// InternalServerError occurs when trakt.tv returns 500 error
-type InternalServerError struct {
-	Response *http.Response
-	Message  string `json:"message"`
-}
-
-func (r *InternalServerError) Error() string {
-	return fmt.Sprintf(consts.ErrorsPlaceholders,
-		r.Response.Request.Method,
-		uri.SanitizeURL(r.Response.Request.URL),
-		r.Response.StatusCode,
-		r.Message,
-	)
-}
-
-// ConflictError occurs when trakt.tv returns 409 error
-type ConflictError struct {
-	Response *http.Response
-	Message  string `json:"message"`
-}
-
-func (r *ConflictError) Error() string {
-	return fmt.Sprintf(consts.ErrorsPlaceholders,
-		r.Response.Request.Method,
-		uri.SanitizeURL(r.Response.Request.URL),
-		r.Response.StatusCode,
-		r.Message,
-	)
-}
-
-// ValidationError occurs when trakt.tv returns 422 error
-type ValidationError struct {
-	Response *http.Response
-	Message  string      `json:"message"`
-	Errors   *str.Errors `json:"errors,omitempty"`
-}
-
-func (r *ValidationError) Error() string {
-	return fmt.Sprintf(consts.ErrorsPlaceholders,
-		r.Response.Request.Method,
-		uri.SanitizeURL(r.Response.Request.URL),
-		r.Response.StatusCode,
-		r.Message,
-	)
-}
-
 // RequestOption represents an option that can modify an http.Request.
 type RequestOption func(req *http.Request)
 
@@ -325,8 +217,11 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 		return handleBareDoError(ctx, err)
 	}
 
-	response := c.NewResponse(resp)
+	return prepareResponse(c, resp)
+}
 
+func prepareResponse(c *Client, resp *http.Response) (*str.Response, error) {
+	response := c.NewResponse(resp)
 	errCheck := c.CheckResponse(resp)
 	if errCheck != nil {
 		defer resp.Body.Close()
@@ -339,7 +234,7 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 			return response, errors.New(e.Error())
 		case *NotFoundError:
 			return response, errors.New(e.Error())
-		case *InternalServerError:
+		case *ServerError:
 			return response, errors.New(e.Error())
 		case *ConflictError:
 		case *ValidationError:
@@ -438,28 +333,33 @@ func (c *Client) CheckResponse(r *http.Response) error {
 	}
 
 	r.Body = io.NopCloser(bytes.NewBuffer(data))
+
+	return genErrorResponse(c, r, errorResponse)
+}
+
+func genErrorResponse(c *Client, r *http.Response, e *str.ErrorResponse) error {
 	switch r.StatusCode {
 	case http.StatusTooManyRequests:
-		return c.genRateLimitError(r, errorResponse)
+		return c.genRateLimitError(r, e)
 	case http.StatusUpgradeRequired:
-		return c.genUpgradeRequiredError(r, errorResponse)
+		return c.genUpgradeRequiredError(r, e)
 	case http.StatusNotFound:
-		return c.genNotFoundError(r, errorResponse)
+		return c.genNotFoundError(r, e)
 	case http.StatusInternalServerError:
-		return c.genInternalServerError(r, errorResponse)
+		return c.genServerError(r, e)
 	case http.StatusUnauthorized:
-		return c.genInvalidUserError(r, errorResponse)
+		return c.genInvalidUserError(r, e)
 	case http.StatusConflict:
-		return c.genConflictError(r, errorResponse)
+		return c.genConflictError(r, e)
 	case http.StatusUnprocessableEntity:
-		return c.genValidationError(r, errorResponse)
+		return c.genValidationError(r, e)
 	default:
-		return errorResponse
+		return e
 	}
 }
 
-func (*Client) genInternalServerError(r *http.Response, errorResponse *str.ErrorResponse) error {
-	internalServerError := &InternalServerError{
+func (*Client) genServerError(r *http.Response, errorResponse *str.ErrorResponse) error {
+	internalServerError := &ServerError{
 		Response: errorResponse.Response,
 		Message:  errorResponse.Message,
 	}
@@ -513,7 +413,6 @@ func (*Client) genInvalidUserError(r *http.Response, errorResponse *str.ErrorRes
 	}
 	return nil
 }
-
 
 func (c *Client) genUpgradeRequiredError(r *http.Response, errorResponse *str.ErrorResponse) *UpgradeRequiredError {
 	upgradeRequiredError := &UpgradeRequiredError{
