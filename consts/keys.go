@@ -3,6 +3,7 @@ package consts
 
 // usage strings
 const (
+	ActionTypeAll      = "all"
 	Aliases            = "aliases"
 	AllDvd             = "all-dvd"
 	AllFinales         = "all-finales"
@@ -26,6 +27,8 @@ const (
 	Genres             = "genres"
 	History            = "history"
 	IDLookup           = "id-lookup"
+	ImdbFormat         = "imdb"
+	ImdbIDFormat       = "Imdb"
 	Item               = "item"
 	Items              = "items"
 	Languages          = "languages"
@@ -61,8 +64,14 @@ const (
 	Studios            = "studios"
 	Summary            = "summary"
 	TextQuery          = "text-query"
+	TmdbFormat         = "tmdb"
+	TmdbIDFormat       = "Tmdb"
 	Translations       = "translations"
+	Trending           = "trending"
+	TvdbFormat         = "tvdb"
+	TvdbIDFormat       = "Tvdb"
 	UpdatedIDs         = "updated_ids"
+	Updates            = "updates"
 	Users              = "users"
 	Videos             = "videos"
 	Watched            = "watched"
