@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 )
@@ -62,11 +63,11 @@ func (n *NotesService) DeleteNotes(ctx context.Context, id *string) (*str.Respon
 	resp, err := n.client.Do(ctx, req, nil)
 	
 	if resp.StatusCode == http.StatusUnauthorized {
-		err = fmt.Errorf("invalid user for notes Id:%s", *id)
+		err = fmt.Errorf(consts.InvalidUserForNotes, *id)
 	}
 
 	if resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf("notes not found with Id:%s", *id)
+		err = fmt.Errorf(consts.NotesNotFoundWithID, *id)
 	}
 
 	if err != nil {
@@ -111,11 +112,11 @@ func (n *NotesService) GetNotes(ctx context.Context, id *string) (*str.Notes, *s
 	resp, err := n.client.Do(ctx, req, &result)
 
 	if resp.StatusCode == http.StatusUnauthorized {
-		err = fmt.Errorf("invalid user for notes Id:%s", *id)
+		err = fmt.Errorf(consts.InvalidUserForNotes, *id)
 	}
 
 	if resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf("notes not found with Id:%s", *id)
+		err = fmt.Errorf(consts.NotesNotFoundWithID, *id)
 	}
 
 	if err != nil {
@@ -140,11 +141,11 @@ func (n *NotesService) GetNotesItem(ctx context.Context, id *string) (*str.Notes
 	resp, err := n.client.Do(ctx, req, &result)
 
 	if resp.StatusCode == http.StatusUnauthorized {
-		err = fmt.Errorf("invalid user for notes Id:%s", *id)
+		err = fmt.Errorf(consts.InvalidUserForNotes, *id)
 	}
 
 	if resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf("notes item not found with Id:%s", *id)
+		err = fmt.Errorf(consts.NotesNotFoundWithID, *id)
 	}
 
 	if err != nil {

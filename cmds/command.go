@@ -123,7 +123,7 @@ func (*Command) UpdateMovieFlagsValues() {
 	if *_moviesType == "" {
 		switch *_moviesAction {
 		case "comments":
-			*_moviesType = ""
+			*_moviesType = consts.EmptyString
 		case "lists":
 			*_moviesType = "personal"
 		}
@@ -132,28 +132,17 @@ func (*Command) UpdateMovieFlagsValues() {
 
 // ValidPeriodForModule valid period options depends on action value
 func (c *Command) ValidPeriodForModule(options *str.Options) error {
-	switch options.Action {
-	case "favorited":
-		err := c.ValidPeriod(options)
-		if err != nil {
-			return errors.New(err.Error())
-		}
-	case "played":
-		err := c.ValidPeriod(options)
-		if err != nil {
-			return errors.New(err.Error())
-		}
-	case "watched":
-		err := c.ValidPeriod(options)
-		if err != nil {
-			return errors.New(err.Error())
-		}
-	case "collected":
-		err := c.ValidPeriod(options)
-		if err != nil {
-			return errors.New(err.Error())
-		}
+	allModules := map[string]error{
+		consts.Favorited: c.ValidPeriod(options),
+		consts.Played:    c.ValidPeriod(options),
+		consts.Watched:   c.ValidPeriod(options),
+		consts.Collected: c.ValidPeriod(options),
 	}
+
+	if err, found := allModules[options.Action]; found {
+		return err
+	}
+
 	return nil
 }
 
@@ -229,64 +218,112 @@ func selectFirstNonEmpty(values ...string) string {
 			return v
 		}
 	}
-	return ""
+	return consts.EmptyString
 }
 
 func setOptionsDependsOnModule(module string, options str.Options) str.Options {
-	switch module {
-	case "comments":
-		options.Action = *_commentsAction
-		options.InternalID = selectFirstNonEmpty(*_commentsTraktID, *_commentsInternalID)
-		options.CommentID = *_commentsCommentID
-		options.CommentType = *_commentsCommentType
-	case "checkin":
-		options.Action = *_checkinAction
-		options.TraktID = *_checkinTraktID
-	case "lists":
-		options.Action = *_listsAction
-		options.InternalID = selectFirstNonEmpty(*_listTraktID, *_listInternalID)
-		options.Sort = *_listSort
-	case "movies":
-		options.Action = *_moviesAction
-		options.Period = *_moviesPeriod
-		options.StartDate = *_moviesStartDate
-		options.InternalID = *_moviesInternalID
-		options.Country = *_moviesCountry
-		options.Language = *_moviesLanguage
-		options.Sort = *_moviesSort
-		options.Type = *_moviesType
-	case "networks":
-		options.Action = *_networksAction
-	case "notes":
-		options.Action = *_notesAction
-		options.InternalID = *_notesInternalID
-		options.Notes = *_notesNotes
-		options.Item = *_notesItem
-		options.Delete = *_notesDelete
-		options.Spoiler = *_notesSpoiler
-		options.Privacy = *_notesPrivacy
-	case "users":
-		options.Action = *_usersAction
-	case "people":
-		options.Action = *_action
-		options.ID = *_personID
-		options.Type = *_action
-	case "calendars":
-		options.Action = *_calAction
-		options.StartDate = *_calStartDate
-		options.Days = *_calDays
-	case "search":
-		options.Action = *_searchAction
-		options.SearchType = _searchType
-		options.SearchField = _searchField
-		options.ID = *_searchID
-		options.SearchIDType = *_searchIDType
-	case "watchlist":
-	case "collection":
-	case "history":
-		options.Format = *_format
+	allModules := map[string]str.Options{
+		consts.Comments:   setOptionsDependsOnModuleComments(options),
+		consts.Checkin:    setOptionsDependsOnModuleCheckin(options),
+		consts.Lists:      setOptionsDependsOnModuleLists(options),
+		consts.Movies:     setOptionsDependsOnModuleMovies(options),
+		consts.Networks:   setOptionsDependsOnModuleNetworks(options),
+		consts.Notes:      setOptionsDependsOnModuleNotes(options),
+		consts.Users:      setOptionsDependsOnModuleUsers(options),
+		consts.People:     setOptionsDependsOnModulePeople(options),
+		consts.Calendars:  setOptionsDependsOnModuleCalendars(options),
+		consts.Search:     setOptionsDependsOnModuleSearch(options),
+		consts.Watchlist:  setOptionsDependsOnModuleDefault(options),
+		consts.Collection: setOptionsDependsOnModuleDefault(options),
+		consts.History:    setOptionsDependsOnModuleDefault(options),
 	}
 
+	if opt, found := allModules[module]; found {
+		return opt
+	}
+
+	return options
+}
+
+func setOptionsDependsOnModuleDefault(options str.Options) str.Options {
+	options.Format = *_format
+	return options
+}
+
+func setOptionsDependsOnModuleSearch(options str.Options) str.Options {
+	options.Action = *_searchAction
+	options.SearchType = _searchType
+	options.SearchField = _searchField
+	options.ID = *_searchID
+	options.SearchIDType = *_searchIDType
+	return options
+}
+
+func setOptionsDependsOnModuleCalendars(options str.Options) str.Options {
+	options.Action = *_calAction
+	options.StartDate = *_calStartDate
+	options.Days = *_calDays
+	return options
+}
+
+func setOptionsDependsOnModulePeople(options str.Options) str.Options {
+	options.Action = *_action
+	options.ID = *_personID
+	options.Type = *_action
+	return options
+}
+
+func setOptionsDependsOnModuleUsers(options str.Options) str.Options {
+	options.Action = *_usersAction
+	return options
+}
+
+func setOptionsDependsOnModuleNotes(options str.Options) str.Options {
+	options.Action = *_notesAction
+	options.InternalID = *_notesInternalID
+	options.Notes = *_notesNotes
+	options.Item = *_notesItem
+	options.Delete = *_notesDelete
+	options.Spoiler = *_notesSpoiler
+	options.Privacy = *_notesPrivacy
+	return options
+}
+
+func setOptionsDependsOnModuleNetworks(options str.Options) str.Options {
+	options.Action = *_networksAction
+	return options
+}
+
+func setOptionsDependsOnModuleMovies(options str.Options) str.Options {
+	options.Action = *_moviesAction
+	options.Period = *_moviesPeriod
+	options.StartDate = *_moviesStartDate
+	options.InternalID = *_moviesInternalID
+	options.Country = *_moviesCountry
+	options.Language = *_moviesLanguage
+	options.Sort = *_moviesSort
+	options.Type = *_moviesType
+	return options
+}
+
+func setOptionsDependsOnModuleLists(options str.Options) str.Options {
+	options.Action = *_listsAction
+	options.InternalID = selectFirstNonEmpty(*_listTraktID, *_listInternalID)
+	options.Sort = *_listSort
+	return options
+}
+
+func setOptionsDependsOnModuleCheckin(options str.Options) str.Options {
+	options.Action = *_checkinAction
+	options.TraktID = *_checkinTraktID
+	return options
+}
+
+func setOptionsDependsOnModuleComments(options str.Options) str.Options {
+	options.Action = *_commentsAction
+	options.InternalID = selectFirstNonEmpty(*_commentsTraktID, *_commentsInternalID)
+	options.CommentID = *_commentsCommentID
+	options.CommentType = *_commentsCommentType
 	return options
 }
 
@@ -333,13 +370,13 @@ func processArgsItem(arg string, key string, argMap map[string]bool) (string, ma
 	// If the argument starts with "-", consider it a key
 	if arg[consts.FirstArgElement] == '-' {
 		// If we already have a key, it means it's a single argument without a value
-		if key != "" {
+		if key != consts.EmptyString {
 			argMap[cleanKey(key)] = true // Set the key to true for bool map
 		}
 		key = arg
 	} else {
 		// If we have a key, assign the value to it
-		if key != "" {
+		if key != consts.EmptyString {
 			argMap[cleanKey(key)] = true // Set the key to true for bool map
 			key = consts.EmptyString
 		} else {
@@ -460,7 +497,7 @@ func (*Command) ValidModuleType(options *str.Options) error {
 	// Check if the provided module exists in ModuleConfig
 	moduleConfig, ok := cfg.ModuleConfig[options.Module]
 	if !ok {
-		return fmt.Errorf("not found config for module '%s'", options.Module)
+		return fmt.Errorf(consts.NotFoundConfigForModule, options.Module)
 	}
 	// Check if the provided type is valid for the selected module
 	if !cfg.IsValidConfigType(moduleConfig.Type, options.Type) {
@@ -475,7 +512,7 @@ func (*Command) ValidModuleActionType(options *str.Options) error {
 	// Check if the provided module exists in ModuleConfig
 	_, ok := cfg.ModuleConfig[options.Module]
 	if !ok {
-		return fmt.Errorf("not found config for module '%s'", options.Module)
+		return fmt.Errorf(consts.NotFoundConfigForModule, options.Module)
 	}
 
 	// Check if the provided type is valid for the selected module
@@ -492,7 +529,7 @@ func (*Command) ValidSort(options *str.Options) error {
 	// Check if the provided module exists in ModuleConfig
 	_, ok := cfg.ModuleConfig[options.Module]
 	if !ok {
-		return fmt.Errorf("not found config for module '%s'", options.Module)
+		return fmt.Errorf(consts.NotFoundConfigForModule, options.Module)
 	}
 	// Check if the provided sort is valid for the selected module
 	prefix := options.Module + ":" + options.Action
@@ -508,7 +545,7 @@ func (*Command) ValidPeriod(options *str.Options) error {
 	// Check if the provided module exists in ModuleConfig
 	moduleConfig, ok := cfg.ModuleConfig[options.Module]
 	if !ok {
-		return fmt.Errorf("not found config for module '%s'", options.Module)
+		return fmt.Errorf(consts.NotFoundConfigForModule, options.Module)
 	}
 	// Check if the provided period is valid for the selected module
 	if !cfg.IsValidConfigType(moduleConfig.Period, options.Period) {
@@ -520,12 +557,22 @@ func (*Command) ValidPeriod(options *str.Options) error {
 
 // UpdateOptionsWithCommandFlags update options depends on command flags
 func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Options {
-	if len(*_userName) > consts.ZeroValue {
-		options.UserName = *_userName
-	}
-
 	if len(*_searchQuery) > consts.ZeroValue {
 		options.Query = *c.PrepareQueryString(*_searchQuery)
+	}
+	options = UpdateOptionsCommonFlags(options)
+	options = UpdateOptionsWithCommandListsFlags(options)
+	options = UpdateOptionsWithCommandCheckInFlags(options)
+	options = UpdateOptionsWithCommandCommentsFlags(options)
+	options = UpdateOptionsWithCommandMoviesFlags(options)
+
+	return options
+}
+
+// UpdateOptionsCommonFlags update options depends on common command flags
+func UpdateOptionsCommonFlags(options *str.Options) *str.Options {
+	if len(*_userName) > consts.ZeroValue {
+		options.UserName = *_userName
 	}
 
 	if len(*_extendedInfo) > consts.ZeroValue {
@@ -548,6 +595,11 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
 	}
 
+	return options
+}
+
+// UpdateOptionsWithCommandListsFlags update options depends on lists command flags
+func UpdateOptionsWithCommandListsFlags(options *str.Options) *str.Options {
 	if len(*_usersListID) > consts.ZeroValue {
 		options.ID = *_usersListID
 	}
@@ -560,18 +612,14 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		options.Remove = *_listLikeRemove
 	}
 
-	if *_commentsDelete {
-		options.Delete = *_commentsDelete
-	}
-
-	if *_commentsRemove {
-		options.Remove = *_commentsRemove
-	}
-
 	if len(*_listSort) > consts.ZeroValue {
 		options.CommentsSort = *_listSort
 	}
+	return options
+}
 
+// UpdateOptionsWithCommandCheckInFlags update options depends on checkin command flags
+func UpdateOptionsWithCommandCheckInFlags(options *str.Options) *str.Options {
 	if len(*_checkinMsg) > consts.ZeroValue {
 		options.Msg = *_checkinMsg
 	}
@@ -582,6 +630,18 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 
 	if len(*_checkinEpisodeCode) > consts.ZeroValue {
 		options.EpisodeCode = *_checkinEpisodeCode
+	}
+	return options
+}
+
+// UpdateOptionsWithCommandCommentsFlags update options depends on comments command flags
+func UpdateOptionsWithCommandCommentsFlags(options *str.Options) *str.Options {
+	if *_commentsDelete {
+		options.Delete = *_commentsDelete
+	}
+
+	if *_commentsRemove {
+		options.Remove = *_commentsRemove
 	}
 
 	if len(*_commentsComment) > consts.ZeroValue {
@@ -600,6 +660,11 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 		options.IncludeReplies = *_commentsIncludeReplies
 	}
 
+	return options
+}
+
+// UpdateOptionsWithCommandMoviesFlags update options depends on movies command flags
+func UpdateOptionsWithCommandMoviesFlags(options *str.Options) *str.Options {
 	if len(*_moviesAction) > consts.ZeroValue {
 		options.Action = *_moviesAction
 	}

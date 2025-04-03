@@ -20,5 +20,8 @@ test:
 cover:
 	@go test -cover -coverprofile coverage.out ./...
 
+linter:
+	@revive --formatter friendly ./...
+
 clean:
 	@rm -rf *.json

@@ -24,31 +24,11 @@ func (h CommentsCommentHandler) Handle(options *str.Options, client *internal.Cl
 	}
 
 	if options.Delete {
-		resp, err := h.common.DeleteComment(client, options)
-		if err != nil {
-			return fmt.Errorf("delete comment error:%w", err)
-		}
-
-		if resp.StatusCode == http.StatusNoContent {
-			printer.Printf("result: success, remove comment:%d \n", options.CommentID)
-		}
-		return nil
+		return h.HandleDelete(options, client)
 	}
 
 	if len(options.Comment) > consts.ZeroValue {
-		c := new(str.Comment)
-		c.Comment = &options.Comment
-		c.Spoiler = &options.Spoiler
-		result, resp, err := h.common.UpdateComment(client, options, c)
-		if err != nil {
-			return fmt.Errorf("update comment error:%w", err)
-		}
-
-		if resp.StatusCode == http.StatusOK {
-			printer.Printf("result: success, update comment:%d \n", result.ID)
-		}
-
-		return nil
+		return h.HandleModify(options, client)
 	}
 
 	result, err := h.common.FetchComment(client, options)
@@ -58,5 +38,35 @@ func (h CommentsCommentHandler) Handle(options *str.Options, client *internal.Cl
 	print("write data to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(result, "", "  ")
 	writer.WriteJSON(options, jsonData)
+	return nil
+}
+
+// HandleModify modify exiting comment
+func (h CommentsCommentHandler) HandleModify(options *str.Options, client *internal.Client) error {
+	c := new(str.Comment)
+	c.Comment = &options.Comment
+	c.Spoiler = &options.Spoiler
+	result, resp, err := h.common.UpdateComment(client, options, c)
+	if err != nil {
+		return fmt.Errorf("update comment error:%w", err)
+	}
+
+	if resp.StatusCode == http.StatusOK {
+		printer.Printf("result: success, update comment:%d \n", result.ID)
+	}
+
+	return nil
+}
+
+// HandleDelete handle delete comment
+func (h CommentsCommentHandler) HandleDelete(options *str.Options, client *internal.Client) error {
+	resp, err := h.common.DeleteComment(client, options)
+	if err != nil {
+		return fmt.Errorf("delete comment error:%w", err)
+	}
+
+	if resp.StatusCode == http.StatusNoContent {
+		printer.Printf("result: success, remove comment:%d \n", options.CommentID)
+	}
 	return nil
 }

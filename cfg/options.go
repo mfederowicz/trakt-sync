@@ -70,7 +70,6 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	"notes:item": {
 		Privacy: []string{"private", "friends", "public"},
 	},
-
 }
 
 // ModuleConfig represents the configuration options for all modules
@@ -162,7 +161,7 @@ var ModuleConfig = map[string]OptionsConfig{
 		Action:       []string{},
 	},
 	"notes": {
-		Privacy: []string{"private","friends","public"},	
+		Privacy: []string{"private", "friends", "public"},
 	},
 }
 
@@ -353,40 +352,34 @@ func GetOptionTime(options *str.Options) string {
 
 // GetOutputForModule generates output value depends on module name
 func GetOutputForModule(options *str.Options) string {
-	switch options.Module {
-	case "calendars":
-		options.Output = getOutputForModuleCalendars(options)
-	case "certifications":
-		options.Output = getOutputForModuleCertifications(options)
-	case "comments":
-		options.Output = getOutputForModuleComments(options)
-	case "countries":
-		options.Output = getOutputForModuleCountries(options)
-	case "genres":
-		options.Output = getOutputForModuleGenres(options)
-	case "languages":
-		options.Output = getOutputForModuleLanguages(options)
-	case "search":
-		options.Output = getOutputForModuleSearch(options)
-	case "users":
-		options.Output = getOutputForModuleUsers(options)
-	case "lists":
-		options.Output = getOutputForModuleLists(options)
-	case "movies":
-		options.Output = getOutputForModuleMovies(options)
-	case "networks":
-		options.Output = getOutputForModuleNetworks(options)
-	case "notes":
-		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.InternalID)
-	default:
-		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Type, options.Format)
+	allOutputs := map[string]string{
+		consts.Calendars:      getOutputForModuleCalendars(options),
+		consts.Certifications: getOutputForModuleCertifications(options),
+		consts.Comments:       getOutputForModuleComments(options),
+		consts.Countries:      getOutputForModuleCountries(options),
+		consts.Genres:         getOutputForModuleGenres(options),
+		consts.Languages:      getOutputForModuleLanguages(options),
+		consts.Search:         getOutputForModuleSearch(options),
+		consts.Users:          getOutputForModuleUsers(options),
+		consts.Lists:          getOutputForModuleLists(options),
+		consts.Movies:         getOutputForModuleMovies(options),
+		consts.Networks:       getOutputForModuleNetworks(options),
+		consts.Notes:          getOutputForModuleNotes(options),
 	}
-	return options.Output
+
+	if output, found := allOutputs[options.Module]; found {
+		return output
+	}
+	return fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Type, options.Format)
+}
+
+func getOutputForModuleNotes(options *str.Options) string {
+	return fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.InternalID)
 }
 
 func getOutputForModuleNetworks(options *str.Options) string {
 	switch options.Action {
-	case "list":
+	case consts.Lists:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
@@ -397,11 +390,11 @@ func getOutputForModuleNetworks(options *str.Options) string {
 
 func getOutputForModuleMovies(options *str.Options) string {
 	switch options.Action {
-	case "trending", "popular", "anticipated", "boxoffice", "updates", "updated_ids":
+	case consts.Trending, consts.Popular, consts.Anticipated, consts.Boxoffice, consts.Updates, consts.UpdatedIDs:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
-	case "favorited", "played", "watched", "collected":
+	case consts.Favorited, consts.Played, consts.Watched, consts.Collected:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.Period)
-	case "summary", "aliases", "releases", "translations", "comments", "lists", "people", "ratings", "related", "stats", "studios", "watching", "videos":
+	case consts.Summary, consts.Aliases, consts.Releases, consts.Translations, consts.Comments, consts.Lists, consts.People, consts.Ratings, consts.Related, consts.Stats, consts.Studios, consts.Watching, consts.Videos:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.InternalID)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
@@ -412,7 +405,7 @@ func getOutputForModuleMovies(options *str.Options) string {
 
 func getOutputForModuleLanguages(options *str.Options) string {
 	switch options.Type {
-	case "movies", "shows":
+	case consts.Movies, consts.Shows:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
@@ -426,7 +419,7 @@ func getOutputForModuleLanguages(options *str.Options) string {
 
 func getOutputForModuleGenres(options *str.Options) string {
 	switch options.Type {
-	case "movies", "shows":
+	case consts.Movies, consts.Shows:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
@@ -440,7 +433,7 @@ func getOutputForModuleGenres(options *str.Options) string {
 
 func getOutputForModuleCountries(options *str.Options) string {
 	switch options.Type {
-	case "movies", "shows":
+	case consts.Movies, consts.Shows:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
@@ -454,32 +447,32 @@ func getOutputForModuleCountries(options *str.Options) string {
 
 func getOutputForModuleLists(options *str.Options) string {
 	switch options.Action {
-	case "trending":
-	case "popular":
+	case consts.Trending:
+	case consts.Popular:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
 			options.Action)
-	case "list":
+	case consts.List:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
 			fmt.Sprintf(consts.StringString, "trakt_", options.InternalID),
 		)
 
-	case "likes":
+	case consts.Likes:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
 			fmt.Sprintf(consts.StringString, "likes_trakt_", options.InternalID),
 		)
-	case "items":
+	case consts.Items:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
 			fmt.Sprintf(consts.StringString, "items_trakt_", options.InternalID),
 		)
-	case "comments":
+	case consts.Comments:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
@@ -495,30 +488,30 @@ func getOutputForModuleLists(options *str.Options) string {
 
 func getOutputForModuleUsers(options *str.Options) string {
 	switch options.Action {
-	case "watched":
+	case consts.Watched:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
 			options.Action,
 			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
-	case "stats":
+	case consts.Stats:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
 			options.Action)
-	case "lists":
+	case consts.Lists:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
 			options.Action,
 			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
-	case "saved_filters":
+	case consts.SavedFilters:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
 			options.Action,
 			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
-	case "settings":
+	case consts.Settings:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
@@ -532,17 +525,17 @@ func getOutputForModuleUsers(options *str.Options) string {
 
 func getOutputForModuleSearch(options *str.Options) string {
 	switch options.Action {
-	case "text-query":
+	case consts.TextQuery:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
-			"query",
+			consts.Query,
 			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
-	case "id-lookup":
+	case consts.IDLookup:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
-			"lookup",
+			consts.Lookup,
 			strings.ReplaceAll(options.SearchIDType, consts.CommaString, consts.EmptyString))
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat1, options.Module)
