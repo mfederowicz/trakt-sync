@@ -7,6 +7,25 @@
     - [Command Line Flags](#command-line-flags)
     - [Command Line Commands](#command-line-commands)
     - [Sample export usage](#sample-export-usage) 
+      - [calendars](#calendars)
+      - [certifications](#certifications)
+      - [checkin](#checkin)
+      - [collection](#collection)
+      - [comments](#comments)
+      - [countries](#countries)
+      - [genres](#genres)
+      - [help](#help)
+      - [history](#history)
+      - [languages](#languages)
+      - [lists](#lists)
+      - [movies](#movies)
+      - [networks](#networks)
+      - [notes](#notes)
+      - [people](#people)
+      - [search](#search)
+      - [users](#users)
+      - [watchlist](#watchlist)
+
   - [License](#license)
 
 <!-- /TOC -->
@@ -65,36 +84,59 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 - `watchlist` - Returns all items in a user's watchlist filtered by type.
 ### Sample export usage
 
-#### Export all tvshows from the watching history:
+#### calendars:
 ```console
-$ ./trakt-sync history -t shows -> export_history_shows_imdb.json
-```
-
-#### Export all episodes from the watching history:
-```console
-$ ./trakt-sync history -t episodes -f tmdb -> export_history_episodes_tmdb.json
+$ ./trakt-sync calendars -a all-shows -> export_calendars_shows_20240707_7.json
 ```
 ```console
-$ ./trakt-sync history -t episodes -f imdb -> export_history_episodes_imdb.json
-```
-
-#### Export all movies from watchlist:
-
-```console
-$ ./trakt-sync watchlist -t movies -f tmdb -> export_watchlist_movies_tmdb.json 
+$ ./trakt-sync calendars -a all-new-shows -> export_calendars_new_shows_20240707_7.json
 ```
 ```console
-$ ./trakt-sync watchlist -t movies -f imdb -> export_watchlist_movies_imdb.json
+$ ./trakt-sync calendars -a all-season-premieres -> export_calendars_season_premieres_20240707_7.json
 ```
-#### Export movies or shows from collection extended with metadata:
+```console
+$ ./trakt-sync calendars -a all-finales -> export_calendars_finales_20240707_7.json 
+```
+```console
+$ ./trakt-sync calendars -a all-movies -> export_calendars_movies_20240707_7.json  
+```
+```console
+$ ./trakt-sync calendars -a all-dvd -> export_calendars_dvd_20240707_7.json
+```
+#### certifications:
+```console
+$ ./trakt-sync certifications -> export_certifications_movies.json
+```
+```console
+$ ./trakt-sync certifications -t movies -> export_certifications_movies.json
+```
+```console
+$ ./trakt-sync certifications -t shows -> export_certifications_shows.json
+```
+#### checkin:
+```console
+$ ./trakt-sync checkin -a movie -trakt_id 28 -msg "super movie"
+```
+```console
+$ ./trakt-sync checkin -a episode -trakt_id 3190486 -msg "super episode"
+```
+```console
+$ ./trakt-sync checkin -a show_episode -trakt_id 37696 -episode_abs 6 -msg "super episode"
+```
+```console
+$ ./trakt-sync checkin -a show_episode -trakt_id 136121 -episode_code 1x5 -msg "super episode"
+```
+```console
+$ ./trakt-sync checkin -a delete 
+```
+#### collection:
 ```console
 $ ./trakt-sync collection -t movies --ex metadata
 ```
 ```console
 $ ./trakt-sync collection -t shows --ex metadata
 ```
-#### Manage comments:
-
+#### comments:
 ```console
 $ ./trakt-sync comments -a comment -comment_id 779883 -comment "minions,minions,minions movie ever ok" 
 ```
@@ -134,8 +176,7 @@ $ ./trakt-sync comments -a recent -include_replies true
 ```console
 $ ./trakt-sync comments -a updates -include_replies false
 ```
-
-#### Export countries list for movies or shows:
+#### countries:
 ```console
 $ ./trakt-sync countries -> export_countries_movies.json
 ```
@@ -145,19 +186,7 @@ $ ./trakt-sync countries -t movies -> export_countries_movies.json
 ```console
 $ ./trakt-sync countries -t shows -> export_countries_shows.json
 ```
-
-#### Export languages list for movies or shows:
-```console
-$ ./trakt-sync languages -> export_languages_movies.json
-```
-```console
-$ ./trakt-sync languages -t movies -> export_languages_movies.json
-```
-```console
-$ ./trakt-sync languages -t shows -> export_languages_shows.json
-```
-
-#### Export genres list for movies or shows:
+#### genres:
 ```console
 $ ./trakt-sync genres -> export_genres_movies.json
 ```
@@ -167,47 +196,280 @@ $ ./trakt-sync genres -t movies -> export_genres_movies.json
 ```console
 $ ./trakt-sync genres -t shows -> export_genres_shows.json
 ```
-
-#### Export movies or shows or episodes from user lists:
+#### history:
 ```console
-$ ./trakt-sync users -a lists -u username -i 123456 -t episodes
+$ ./trakt-sync history -t shows -> export_history_shows_imdb.json
 ```
 ```console
-$ ./trakt-sync users -a lists -u username -i 123456 -t shows
+$ ./trakt-sync history -t episodes -f tmdb -> export_history_episodes_tmdb.json
 ```
 ```console
-$ ./trakt-sync users -a lists -u username -i 123456 -t movies
+$ ./trakt-sync history -t episodes -f imdb -> export_history_episodes_imdb.json
 ```
-#### Fetch lists for selected user:
+#### languages:
 ```console
-$ ./trakt-sync users -a lists -u username 
+$ ./trakt-sync languages -> export_languages_movies.json
 ```
-#### Fetch saved filters for selected user:
 ```console
-$ ./trakt-sync users -a saved_filters -u username 
+$ ./trakt-sync languages -t movies -> export_languages_movies.json
 ```
-#### Fetch stats for selected user:
 ```console
-$ ./trakt-sync users -a stats -u sean 
+$ ./trakt-sync languages -t shows -> export_languages_shows.json
 ```
-#### Fetch settings for current user:
+#### lists:
 ```console
-$ ./trakt-sync users -a settings 
+$ ./trakt-sync lists -a trending
 ```
-#### Fetch watched movies for selected user:
 ```console
-$ ./trakt-sync users -a watched -t movies -u sean 
+$ ./trakt-sync lists -a popular
 ```
-#### Fetch watched shows for selected user:
 ```console
-$ ./trakt-sync users -a watched -t shows -u sean 
+$ ./trakt-sync lists -a list -trakt_id 2142753
 ```
-#### Fetch watched shows for selected user without seasons:
 ```console
-$ ./trakt-sync users -a watched -t shows -u sean --ex noseasons
+$ ./trakt-sync lists -a likes -trakt_id 2142753
 ```
-
-#### Export people data:
+```console
+$ ./trakt-sync lists -a like -trakt_id 2142753
+```
+```console
+$ ./trakt-sync lists -a like -trakt_id 2142753 -remove
+```
+```console
+$ ./trakt-sync lists -a items -trakt_id 2142753
+```
+```console
+$ ./trakt-sync lists -a items -trakt_id 2142753 -t movie,show
+```
+-- (temp not working - problems with api endpoint)
+```console
+$ ./trakt-sync lists -a comments -trakt_id 2142753 
+```
+#### movies:
+```console
+$ ./trakt-sync movies -a trending
+```
+```console
+$ ./trakt-sync movies -a popular
+```
+##### Get the most favorited movies
+```console
+$ ./trakt-sync movies -a favorited -period daily
+```
+```console
+$ ./trakt-sync movies -a favorited -period weekly
+```
+```console
+$ ./trakt-sync movies -a favorited -period monthly
+```
+```console
+$ ./trakt-sync movies -a favorited -period all
+```
+##### Get the most played movies
+```console
+$ ./trakt-sync movies -a played -period daily
+```
+```console
+$ ./trakt-sync movies -a played -period weekly
+```
+```console
+$ ./trakt-sync movies -a played -period monthly
+```
+```console
+$ ./trakt-sync movies -a played -period all
+```
+##### Get the most watched movies
+```console
+$ ./trakt-sync movies -a watched -period daily
+```
+```console
+$ ./trakt-sync movies -a watched -period weekly
+```
+```console
+$ ./trakt-sync movies -a watched -period monthly
+```
+```console
+$ ./trakt-sync movies -a watched -period all
+```
+##### Get the most collected movies
+```console
+$ ./trakt-sync movies -a collected -period daily
+```
+```console
+$ ./trakt-sync movies -a collected -period weekly
+```
+```console
+$ ./trakt-sync movies -a collected -period monthly
+```
+```console
+$ ./trakt-sync movies -a collected -period all
+```
+##### Get the most anticipated movies
+```console
+$ ./trakt-sync movies -a anticipated
+```
+##### Get the weekend box office
+```console
+$ ./trakt-sync movies -a boxoffice
+```
+##### Get recenty updated movies 
+```console
+$ ./trakt-sync movies -a updates -start_date YYYY-MM-DD
+```
+##### Get recenty updated movie Trakt IDs 
+```console
+$ ./trakt-sync movies -a updated_ids -start_date YYYY-MM-DD
+```
+##### Get a movie
+```console
+$ ./trakt-sync movies -a summary -i tron-legacy-2010
+```
+##### Get all movie aliases
+```console
+$ ./trakt-sync movies -a aliases -i tron-legacy-2010
+```
+##### Get all movie releases
+```console
+$ ./trakt-sync movies -a releases -i tron-legacy-2010 -country us
+```
+##### Get all movie translations
+```console
+$ ./trakt-sync movies -a translations -i tron-legacy-2010 -language es
+```
+##### Get all movie comments
+```console
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s newest
+```
+```console
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s oldest
+```
+```console
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s likes
+```
+```console
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s replies
+```
+```console
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s highest
+```
+```console
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s lowest
+```
+```console
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s plays
+```
+##### Get lists containing the movie
+```console
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s popular
+```
+```console
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s likes
+```
+```console
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s comments
+```
+```console
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s items
+```
+```console
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s added
+```
+```console
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s updated
+```
+##### Get all people for movie
+```console
+$ ./trakt-sync movies -a people -i tron-legacy-2010
+```
+##### Get movie ratings
+```console
+$ ./trakt-sync movies -a ratings -i tron-legacy-2010
+```
+##### Get related movies
+```console
+$ ./trakt-sync movies -a related -i tron-legacy-2010
+```
+##### Get movies stats
+```console
+$ ./trakt-sync movies -a stats -i tron-legacy-2010
+```
+##### Get movies studios
+```console
+$ ./trakt-sync movies -a studios -i tron-legacy-2010
+```
+##### Get users watching right now
+```console
+$ ./trakt-sync movies -a watching -i tron-legacy-2010
+```
+##### Get all videos
+```console
+$ ./trakt-sync movies -a videos -i tron-legacy-2010
+```
+##### Refresh movie metadata
+```console
+$ ./trakt-sync movies -a refresh -i tron-legacy-2010
+```
+#### networks:
+```console
+$ ./trakt-sync networks -a list
+```
+#### notes:
+##### adding notes for media types:
+```console 
+$ ./trakt-sync notes -a notes -t movie -i tron-legacy-2010 -notes "xyz"
+```
+```console
+$ ./trakt-sync notes -a notes -t show -i breaking-bad -notes "greate show"
+```
+```console
+$ ./trakt-sync notes -a notes -t season -i 250341 -notes "greate season"
+```
+```console
+$ ./trakt-sync notes -a notes -t episode -i 250341 -notes "greate episode"
+```
+```console
+$ ./trakt-sync notes -a notes -t person -i john-wayne -notes "greate person"
+```
+```console
+$ ./trakt-sync notes -a notes -t history -i 1234567 -notes "history note"
+```
+##### adding notes depends on activities:
+```console 
+$ ./trakt-sync notes -a notes -t collection -item episode -i 73629 -notes "great episode"
+```
+```console 
+$ ./trakt-sync notes -a notes -t collection -item movie -i despicable-me-4-2024 -notes "great animation"
+```
+```console 
+$ ./trakt-sync notes -a notes -t rating -item movie -i despicable-me-4-2024 -notes "great animation"
+```
+```console 
+$ ./trakt-sync notes -a notes -t rating -item episode -i 73629 -notes "overall 10/10"
+```
+```console 
+$ ./trakt-sync notes -a notes -t rating -item movie -i the-gorge-2025 -notes "overall 7/10"
+```
+```console 
+$ ./trakt-sync notes -a notes -t rating -item season -i 3961 -notes "overall 9/10"
+```
+```console 
+$ ./trakt-sync notes -a notes -t rating -item show -i the-sopranos -notes "overall 9/10"
+```
+##### manage notes get/modify/delete:
+```console
+./trakt-sync notes -a note -i 97857
+```
+```console
+./trakt-sync notes -a note -i 97857 -notes "super 10/10" -privacy public -spoiler
+```
+```console
+./trakt-sync notes -a note -i 97857 -delete
+```
+##### get items attachment to note:
+```console
+./trakt-sync notes -a item -i 97854
+```
+#### people:
 ```console
 $ ./trakt-sync people -a updates -start_date 2024-10-13
 ```
@@ -226,57 +488,9 @@ $ ./trakt-sync people -a shows -i john-wayne
 ```console
 $ ./trakt-sync people -a lists -i john-wayne
 ```
-#### Export all or my calendars:
+#### search:
 
-```console
-$ ./trakt-sync calendars -a all-shows -> export_calendars_shows_20240707_7.json
-```
-```console
-$ ./trakt-sync calendars -a all-new-shows -> export_calendars_new_shows_20240707_7.json
-```
-```console
-$ ./trakt-sync calendars -a all-season-premieres -> export_calendars_season_premieres_20240707_7.json
-```
-```console
-$ ./trakt-sync calendars -a all-finales -> export_calendars_finales_20240707_7.json 
-```
-```console
-$ ./trakt-sync calendars -a all-movies -> export_calendars_movies_20240707_7.json  
-```
-```console
-$ ./trakt-sync calendars -a all-dvd -> export_calendars_dvd_20240707_7.json
-```
-#### Export certifications for movies or shows:
-```console
-$ ./trakt-sync certifications -> export_certifications_movies.json
-```
-```console
-$ ./trakt-sync certifications -t movies -> export_certifications_movies.json
-```
-```console
-$ ./trakt-sync certifications -t shows -> export_certifications_shows.json
-```
-
-#### Manage checkin:
-
-```console
-$ ./trakt-sync checkin -a movie -trakt_id 28 -msg "super movie"
-```
-```console
-$ ./trakt-sync checkin -a episode -trakt_id 3190486 -msg "super episode"
-```
-```console
-$ ./trakt-sync checkin -a show_episode -trakt_id 37696 -episode_abs 6 -msg "super episode"
-```
-```console
-$ ./trakt-sync checkin -a show_episode -trakt_id 136121 -episode_code 1x5 -msg "super episode"
-```
-```console
-$ ./trakt-sync checkin -a delete 
-```
-
-#### Export search result by Text Query:
-
+##### Export search result by Text Query:
 ```console
 $  ./trakt-sync search -a text-query -t movie -q freddy --field title
 ```
@@ -295,9 +509,7 @@ $  ./trakt-sync search -a text-query -t person -t list -q freddy --field name
 ```console
 $  ./trakt-sync search -a text-query -t movie -t show -t list -q freddy --field title
 ```
-
-#### Export search result by Id lookup:
-
+##### Export search result by Id lookup:
 ```console
 $ ./trakt-sync search -a id-lookup -i 12601 -t movie -t show
 ```
@@ -328,166 +540,54 @@ $ ./trakt-sync search -a id-lookup -i 75725 -t episode
 ```console
 $ ./trakt-sync search -a id-lookup --id_type tmdb -i 254265
 ```
-#### Export lists data:
-```console
-$ ./trakt-sync lists -a trending
-```
-```console
-$ ./trakt-sync lists -a popular
-```
-```console
-$ ./trakt-sync lists -a list -trakt_id 2142753
-```
-```console
-$ ./trakt-sync lists -a likes -trakt_id 2142753
-```
-```console
-$ ./trakt-sync lists -a like -trakt_id 2142753
-```
-```console
-$ ./trakt-sync lists -a like -trakt_id 2142753 -remove
-```
-```console
-$ ./trakt-sync lists -a items -trakt_id 2142753
-```
-```console
-$ ./trakt-sync lists -a items -trakt_id 2142753 -t movie,show
-```
+#### users:
 
--- (temp not working - problems with api endpoint)
+##### Export movies or shows or episodes from user lists:
 ```console
-$ ./trakt-sync lists -a comments -trakt_id 2142753 
-```
-#### Export movies data:
-```console
-$ ./trakt-sync movies -a trending
+$ ./trakt-sync users -a lists -u username -i 123456 -t episodes
 ```
 ```console
-$ ./trakt-sync movies -a popular
+$ ./trakt-sync users -a lists -u username -i 123456 -t shows
 ```
 ```console
-$ ./trakt-sync movies -a favorited -period daily
-$ ./trakt-sync movies -a favorited -period weekly
-$ ./trakt-sync movies -a favorited -period monthly
-$ ./trakt-sync movies -a favorited -period all
+$ ./trakt-sync users -a lists -u username -i 123456 -t movies
 ```
+##### Fetch lists for selected user:
 ```console
-$ ./trakt-sync movies -a played -period daily
-$ ./trakt-sync movies -a played -period weekly
-$ ./trakt-sync movies -a played -period monthly
-$ ./trakt-sync movies -a played -period all
+$ ./trakt-sync users -a lists -u username 
 ```
+##### Fetch saved filters for selected user:
 ```console
-$ ./trakt-sync movies -a watched -period daily
-$ ./trakt-sync movies -a watched -period weekly
-$ ./trakt-sync movies -a watched -period monthly
-$ ./trakt-sync movies -a watched -period all
+$ ./trakt-sync users -a saved_filters -u username 
 ```
+##### Fetch stats for selected user:
 ```console
-$ ./trakt-sync movies -a collected -period daily
-$ ./trakt-sync movies -a collected -period weekly
-$ ./trakt-sync movies -a collected -period monthly
-$ ./trakt-sync movies -a collected -period all
+$ ./trakt-sync users -a stats -u sean 
 ```
+##### Fetch settings for current user:
 ```console
-$ ./trakt-sync movies -a anticipated
+$ ./trakt-sync users -a settings 
 ```
+##### Fetch watched movies for selected user:
 ```console
-$ ./trakt-sync movies -a boxoffice
+$ ./trakt-sync users -a watched -t movies -u sean 
 ```
+##### Fetch watched shows for selected user:
 ```console
-$ ./trakt-sync movies -a updates -start_date YYYY-MM-DD
+$ ./trakt-sync users -a watched -t shows -u sean 
 ```
+##### Fetch watched shows for selected user without seasons:
 ```console
-$ ./trakt-sync movies -a updated_ids -start_date YYYY-MM-DD
+$ ./trakt-sync users -a watched -t shows -u sean --ex noseasons
 ```
-```console
-$ ./trakt-sync movies -a summary -i tron-legacy-2010
-```
-```console
-$ ./trakt-sync movies -a aliases -i tron-legacy-2010
-```
-```console
-$ ./trakt-sync movies -a releases -i tron-legacy-2010 -country us
-```
-```console
-$ ./trakt-sync movies -a translations -i tron-legacy-2010 -language es
-```
-```console
-$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s newest
-$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s oldest
-$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s likes
-$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s replies
-$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s highest
-$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s lowest
-$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s plays
-```
-```console
-$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s popular
-$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s likes
-$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s comments
-$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s items
-$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s added
-$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s updated
-```
-```console
-$ ./trakt-sync movies -a people -i tron-legacy-2010
-```
-```console
-$ ./trakt-sync movies -a ratings -i tron-legacy-2010
-```
-```console
-$ ./trakt-sync movies -a related -i tron-legacy-2010
-```
-```console
-$ ./trakt-sync movies -a stats -i tron-legacy-2010
-```
-```console
-$ ./trakt-sync movies -a studios -i tron-legacy-2010
-```
-```console
-$ ./trakt-sync movies -a watching -i tron-legacy-2010
-```
-```console
-$ ./trakt-sync movies -a videos -i tron-legacy-2010
-```
-```console
-$ ./trakt-sync movies -a refresh -i tron-legacy-2010
-```
-#### Export tv networks:
-```console
-$ ./trakt-sync networks -a list
-```
+#### watchlist
 
-#### Manage notes:
-##### adding notes for media types:
-```console 
-$ ./trakt-sync notes -a notes -t movie -i tron-legacy-2010 -notes "xyz"
-$ ./trakt-sync notes -a notes -t show -i breaking-bad -notes "greate show"
-$ ./trakt-sync notes -a notes -t season -i 250341 -notes "greate season"
-$ ./trakt-sync notes -a notes -t episode -i 250341 -notes "greate episode"
-$ ./trakt-sync notes -a notes -t person -i john-wayne -notes "greate person"
-$ ./trakt-sync notes -a notes -t history -i 1234567 -notes "history note"
-```
-##### adding notes depends on activities:
-```console 
-$ ./trakt-sync notes -a notes -t collection -item episode -i 73629 -notes "great episode"
-$ ./trakt-sync notes -a notes -t collection -item movie -i despicable-me-4-2024 -notes "great animation"
-$ ./trakt-sync notes -a notes -t rating -item movie -i despicable-me-4-2024 -notes "great animation"
-$ ./trakt-sync notes -a notes -t rating -item episode -i 73629 -notes "overall 10/10"
-$ ./trakt-sync notes -a notes -t rating -item movie -i the-gorge-2025 -notes "overall 7/10"
-$ ./trakt-sync notes -a notes -t rating -item season -i 3961 -notes "overall 9/10"
-$ ./trakt-sync notes -a notes -t rating -item show -i the-sopranos -notes "overall 9/10"
-```
-##### manage notes get/modify/delete:
+##### Export all movies from watchlist:
 ```console
-./trakt-sync notes -a note -i 97857
-./trakt-sync notes -a note -i 97857 -notes "super 10/10" -privacy public -spoiler
-./trakt-sync notes -a note -i 97857 -delete
+$ ./trakt-sync watchlist -t movies -f tmdb -> export_watchlist_movies_tmdb.json 
 ```
-##### get items attachment to note:
 ```console
-./trakt-sync notes -a item -i 97854
+$ ./trakt-sync watchlist -t movies -f imdb -> export_watchlist_movies_imdb.json
 ```
 
 ## License
