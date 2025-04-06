@@ -353,24 +353,35 @@ func GetOptionTime(options *str.Options) string {
 // GetOutputForModule generates output value depends on module name
 func GetOutputForModule(options *str.Options) string {
 	allOutputs := map[string]string{
-		consts.Calendars:      getOutputForModuleCalendars(options),
-		consts.Certifications: getOutputForModuleCertifications(options),
-		consts.Comments:       getOutputForModuleComments(options),
-		consts.Countries:      getOutputForModuleCountries(options),
-		consts.Genres:         getOutputForModuleGenres(options),
-		consts.Languages:      getOutputForModuleLanguages(options),
-		consts.Search:         getOutputForModuleSearch(options),
-		consts.Users:          getOutputForModuleUsers(options),
-		consts.Lists:          getOutputForModuleLists(options),
-		consts.Movies:         getOutputForModuleMovies(options),
-		consts.Networks:       getOutputForModuleNetworks(options),
-		consts.Notes:          getOutputForModuleNotes(options),
+		consts.Calendars:       getOutputForModuleCalendars(options),
+		consts.Certifications:  getOutputForModuleCertifications(options),
+		consts.Comments:        getOutputForModuleComments(options),
+		consts.Countries:       getOutputForModuleCountries(options),
+		consts.Genres:          getOutputForModuleGenres(options),
+		consts.Languages:       getOutputForModuleLanguages(options),
+		consts.Search:          getOutputForModuleSearch(options),
+		consts.Users:           getOutputForModuleUsers(options),
+		consts.Lists:           getOutputForModuleLists(options),
+		consts.Movies:          getOutputForModuleMovies(options),
+		consts.Networks:        getOutputForModuleNetworks(options),
+		consts.Notes:           getOutputForModuleNotes(options),
+		consts.Recommendations: getOutputForModuleRecommendations(options),
 	}
 
 	if output, found := allOutputs[options.Module]; found {
 		return output
 	}
 	return fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Type, options.Format)
+}
+
+func getOutputForModuleRecommendations(options *str.Options) string {
+	switch options.Action {
+	case consts.Movies, consts.Shows:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
+	default:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
+	}
+	return options.Output
 }
 
 func getOutputForModuleNotes(options *str.Options) string {

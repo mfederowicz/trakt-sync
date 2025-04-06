@@ -46,32 +46,33 @@ type RequestOption func(req *http.Request)
 
 // A Client manages communication with the trakt.tv API.
 type Client struct {
-	RateLimitReset time.Time
-	client         *http.Client
-	BaseURL        *url.URL
-	UpgradeURL     *url.URL
-	headers        map[string]any
-	common         Service
-	Oauth          *OauthService
-	Users          *UsersService
-	Sync           *SyncService
-	People         *PeopleService
-	Calendars      *CalendarsService
-	Certifications *CertificationsService
-	Countries      *CountriesService
-	Checkin        *CheckinService
-	Comments       *CommentsService
-	Genres         *GenresService
-	Search         *SearchService
-	Languages      *LanguagesService
-	Lists          *ListsService
-	Movies         *MoviesService
-	Networks       *NetworksService
-	Notes          *NotesService
-	Episodes       *EpisodesService
-	Shows          *ShowsService
-	Seasons        *SeasonsService
-	rateMu         sync.Mutex
+	RateLimitReset  time.Time
+	client          *http.Client
+	BaseURL         *url.URL
+	UpgradeURL      *url.URL
+	headers         map[string]any
+	common          Service
+	Oauth           *OauthService
+	Users           *UsersService
+	Sync            *SyncService
+	People          *PeopleService
+	Calendars       *CalendarsService
+	Certifications  *CertificationsService
+	Countries       *CountriesService
+	Checkin         *CheckinService
+	Comments        *CommentsService
+	Genres          *GenresService
+	Search          *SearchService
+	Languages       *LanguagesService
+	Lists           *ListsService
+	Movies          *MoviesService
+	Networks        *NetworksService
+	Notes           *NotesService
+	Episodes        *EpisodesService
+	Recommendations *RecommendationsService
+	Shows           *ShowsService
+	Seasons         *SeasonsService
+	rateMu          sync.Mutex
 }
 
 // UpdateHeaders is for update client headers map
@@ -117,6 +118,7 @@ func (c *Client) initialize() {
 	c.Networks = (*NetworksService)(&c.common)
 	c.Notes = (*NotesService)(&c.common)
 	c.Episodes = (*EpisodesService)(&c.common)
+	c.Recommendations = (*RecommendationsService)(&c.common)
 	c.Shows = (*ShowsService)(&c.common)
 	c.Seasons = (*SeasonsService)(&c.common)
 }

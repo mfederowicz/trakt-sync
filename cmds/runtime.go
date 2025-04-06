@@ -29,6 +29,7 @@ var Commands = []*Command{
 	NetworksCmd,
 	NotesCmd,
 	PeopleCmd,
+	RecommendationsCmd,
 	SearchCmd,
 	UsersCmd,
 	WatchlistCmd,

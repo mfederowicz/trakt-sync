@@ -52,6 +52,7 @@ const (
 	Popular            = "popular"
 	Query              = "query"
 	Ratings            = "ratings"
+	Recommendations    = "recommendations"
 	Related            = "related"
 	Releases           = "releases"
 	Replies            = "replies"
