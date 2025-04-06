@@ -142,7 +142,7 @@ func render(w io.Writer, tpl string, data any) error {
 var generalHelp = `	trakt-sync [<options>] [<command> [<suboptions>] [<arguments> ...]]
 {{flags 2}}
 Commands:{{range .}}
-	{{.Name | printf "%-14s"}} {{.Summary}}{{end}}
+	{{.Name | printf "%-16s"}} {{.Summary}}{{end}}
 
 Use "trakt-sync help <command>" for more help with a command.
 `

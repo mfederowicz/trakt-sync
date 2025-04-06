@@ -33,10 +33,14 @@ type CommonInterface interface {
 	FetchTrendingComments(client *internal.Client, options *str.Options) (*str.CommentItem, error)
 	FetchRecentComments(client *internal.Client, options *str.Options) (*str.CommentItem, error)
 	FetchUpdatedComments(client *internal.Client, options *str.Options) (*str.CommentItem, error)
+	FetchMovieRecommendations(client *internal.Client, options *str.Options) ([]*str.Recommendation, error)
+	FetchShowRecommendations(client *internal.Client, options *str.Options) ([]*str.Recommendation, error)
 	UpdateComment(client *internal.Client, options *str.Options) (*str.Comment, error)
 	UpdateNotes(client *internal.Client, options *str.Options) (*str.Notes, error)
 	DeleteComment(client *internal.Client, options *str.Options) (*str.Comment, *str.Response, error)
 	DeleteNotes(client *internal.Client, options *str.Options) (*str.Notes, *str.Response, error)
+	HideMovieRecommendation(client *internal.Client, options *str.Options) (*str.Response, error)
+	HideShowRecommendation(client *internal.Client, options *str.Options) (*str.Response, error)
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
 	CheckSeasonNumber(code *string) (*string, *string, error)
 	Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error)
@@ -108,7 +112,6 @@ func (*CommonLogic) FetchPerson(client *internal.Client, options *str.Options) (
 		context.Background(),
 		&personID,
 		&opts,
-
 	)
 
 	return result, err
@@ -292,6 +295,59 @@ func (c *CommonLogic) FetchUpdatedComments(client *internal.Client, options *str
 	}
 	return list, nil
 }
+// FetchMovieRecommendations helper function to fetch movie recommendations
+func (c *CommonLogic) FetchMovieRecommendations(client *internal.Client, options *str.Options, page int) ([]*str.Recommendation, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, IgnoreCollected: options.IgnoreCollected, IgnoreWatchlisted: options.IgnoreWatchlisted}
+	list, resp, err := client.Recommendations.GetMovieRecommendations(
+		context.Background(),
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchMovieRecommendations(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+	return list, nil
+}
+
+// FetchShowRecommendations helper function to fetch movie recommendations
+func (c *CommonLogic) FetchShowRecommendations(client *internal.Client, options *str.Options, page int) ([]*str.Recommendation, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, IgnoreCollected: options.IgnoreCollected, IgnoreWatchlisted: options.IgnoreWatchlisted}
+	list, resp, err := client.Recommendations.GetShowRecommendations(
+		context.Background(),
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchShowRecommendations(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+	return list, nil
+}
 
 // UpdateComment helper function to put comment object
 func (*CommonLogic) UpdateComment(client *internal.Client, options *str.Options, comment *str.Comment) (*str.Comment, *str.Response, error) {
@@ -334,6 +390,28 @@ func (*CommonLogic) DeleteNotes(client *internal.Client, options *str.Options) (
 	resp, err := client.Notes.DeleteNotes(
 		context.Background(),
 		&notesID,
+	)
+
+	return resp, err
+}
+
+// HideMovieRecommendation helper function to hide movie recommendations
+func (*CommonLogic) HideMovieRecommendation(client *internal.Client, options *str.Options) (*str.Response, error) {
+	movieID := options.InternalID
+	resp, err := client.Recommendations.HideMovieRecommendation(
+		context.Background(),
+		&movieID,
+	)
+
+	return resp, err
+}
+
+// HideMovieRecommendation helper function to hide movie recommendations
+func (*CommonLogic) HideShowRecommendation(client *internal.Client, options *str.Options) (*str.Response, error) {
+	showID := options.InternalID
+	resp, err := client.Recommendations.HideShowRecommendation(
+		context.Background(),
+		&showID,
 	)
 
 	return resp, err
@@ -412,7 +490,7 @@ func (*CommonLogic) CheckSortAndTypes(options *str.Options) error {
 	if !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].Type, options.Type) {
 		return fmt.Errorf("not found type for module '%s'", options.Module)
 	}
-	
+
 	if !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].Sort, options.Sort) {
 		return fmt.Errorf("not found sort for module '%s'", options.Module)
 	}

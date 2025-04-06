@@ -19,56 +19,59 @@ import (
 
 // Config struct for app.
 type Config struct {
-	UserName       string    `toml:"username"`
-	ConfigPath     string    `toml:"config_path"`
-	Action         string    `toml:"action"`
-	TokenPath      string    `toml:"token_path"`
-	Type           string    `toml:"type"`
-	Output         string    `toml:"output"`
-	ID             string    `toml:"id"`
-	SearchIDType   string    `toml:"search_id_type"`
-	RedirectURI    string    `toml:"redirect_uri"`
-	ClientSecret   string    `toml:"client_secret"`
-	List           string    `toml:"list"`
-	Format         string    `toml:"format"`
-	ClientID       string    `toml:"client_id"`
-	Query          string    `toml:"query"`
-	Field          string    `toml:"field"`
-	Sort           string    `toml:"sort"`
-	CommentsSort   string    `toml:"sort"`
-	Module         string    `toml:"module"`
-	SearchField    str.Slice `toml:"search_field"`
-	SearchType     str.Slice `toml:"search_type"`
-	WarningCode    int       `toml:"warningCode"`
-	ErrorCode      int       `toml:"errorCode"`
-	Days           int       `toml:"days"`
-	PerPage        int       `toml:"per_page"`
-	PagesLimit     int       `toml:"pages_limit"`
-	TraktID        int       `toml:"trakt_id"`
-	MoviesPeriod   string    `toml:"period"`
-	MoviesCountry  string    `toml:"country"`
-	MoviesLanguage string    `toml:"language"`
-	MoviesSort     string    `toml:"sort"`
-	MoviesType     string    `toml:"type"`
-	CommentID      int       `toml:"comment_id"`
-	EpisodeAbs     int       `toml:"episode_abs"`
-	EpisodeCode    string    `toml:"episode_code"`
-	Episode        int       `toml:"episode"`
-	Season         int       `toml:"season"`
-	Msg            string    `toml:"msg"`
-	Comment        string    `toml:"comment"`
-	CommentType    string    `toml:"comment_type"`
-	Reply          string    `toml:"reply"`
-	Remove         bool      `toml:"remove"`
-	Delete         bool      `toml:"delete"`
-	Spoiler        bool      `toml:"spoiler"`
-	IncludeReplies string    `toml:"include_replies"`
-	Privacy        string    `toml:"privacy"`
-	Verbose        bool      `toml:"verbose"`
-	InternalID     string    `toml:"trakt_id"`
-	NotesID        int       `toml:"notes_id"`
-	Notes          string    `toml:"notes"`
-	Item           string    `toml:"item"`
+	Action            string    `toml:"action"`
+	ClientID          string    `toml:"client_id"`
+	ClientSecret      string    `toml:"client_secret"`
+	Comment           string    `toml:"comment"`
+	CommentID         int       `toml:"comment_id"`
+	CommentType       string    `toml:"comment_type"`
+	CommentsSort      string    `toml:"sort"`
+	ConfigPath        string    `toml:"config_path"`
+	Days              int       `toml:"days"`
+	Delete            bool      `toml:"delete"`
+	Episode           int       `toml:"episode"`
+	EpisodeAbs        int       `toml:"episode_abs"`
+	EpisodeCode       string    `toml:"episode_code"`
+	ErrorCode         int       `toml:"errorCode"`
+	Field             string    `toml:"field"`
+	Format            string    `toml:"format"`
+	Hide              bool      `toml:"hide"`
+	ID                string    `toml:"id"`
+	IgnoreCollected   string    `toml:"ignore_collected"`
+	IgnoreWatchlisted string    `toml:"ignore_watchlisted"`
+	IncludeReplies    string    `toml:"include_replies"`
+	InternalID        string    `toml:"trakt_id"`
+	Item              string    `toml:"item"`
+	List              string    `toml:"list"`
+	Module            string    `toml:"module"`
+	MoviesCountry     string    `toml:"country"`
+	MoviesLanguage    string    `toml:"language"`
+	MoviesPeriod      string    `toml:"period"`
+	MoviesSort        string    `toml:"sort"`
+	MoviesType        string    `toml:"type"`
+	Msg               string    `toml:"msg"`
+	Notes             string    `toml:"notes"`
+	NotesID           int       `toml:"notes_id"`
+	Output            string    `toml:"output"`
+	PagesLimit        int       `toml:"pages_limit"`
+	PerPage           int       `toml:"per_page"`
+	Privacy           string    `toml:"privacy"`
+	Query             string    `toml:"query"`
+	RedirectURI       string    `toml:"redirect_uri"`
+	Remove            bool      `toml:"remove"`
+	Reply             string    `toml:"reply"`
+	SearchField       str.Slice `toml:"search_field"`
+	SearchIDType      string    `toml:"search_id_type"`
+	SearchType        str.Slice `toml:"search_type"`
+	Season            int       `toml:"season"`
+	Sort              string    `toml:"sort"`
+	Spoiler           bool      `toml:"spoiler"`
+	TokenPath         string    `toml:"token_path"`
+	TraktID           int       `toml:"trakt_id"`
+	Type              string    `toml:"type"`
+	UserName          string    `toml:"username"`
+	Verbose           bool      `toml:"verbose"`
+	WarningCode       int       `toml:"warningCode"`
 }
 
 var (
@@ -461,6 +464,7 @@ func DefaultConfig() *Config {
 		MoviesLanguage: consts.EmptyString,
 		List:           "history",
 		UserName:       "me",
+		Hide:           false,
 		ID:             consts.EmptyString,
 		PerPage:        consts.DefaultPerPage,
 		PagesLimit:     consts.PagesLimit,

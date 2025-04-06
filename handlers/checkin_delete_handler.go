@@ -15,7 +15,7 @@ type CheckinDeleteHandler struct{}
 
 // Handle to handle checkin: episode action
 func (h CheckinDeleteHandler) Handle(options *str.Options, client *internal.Client) error {
-	resp, _ := h.deleteActiveCheckins(client, options)	
+	resp, _ := h.deleteActiveCheckins(client, options)
 
 	if resp.StatusCode == http.StatusNoContent {
 		printer.Print("result: success \n")

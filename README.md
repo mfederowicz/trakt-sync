@@ -22,6 +22,7 @@
       - [networks](#networks)
       - [notes](#notes)
       - [people](#people)
+      - [recommendations](#recommendations)
       - [search](#search)
       - [users](#users)
       - [watchlist](#watchlist)
@@ -79,6 +80,7 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 - `networks` - Get a list of all TV networks
 - `notes` - Manage notes created by user
 - `people` - Returns all data for selected person.
+- `recommendations` - Recommendations manage movie and shows recommendations for user
 - `search` - Searches can use queries or ID lookups.
 - `users` - Returns all data for a user.
 - `watchlist` - Returns all items in a user's watchlist filtered by type.
@@ -487,6 +489,29 @@ $ ./trakt-sync people -a shows -i john-wayne
 ```
 ```console
 $ ./trakt-sync people -a lists -i john-wayne
+```
+#### recommendations:
+##### hide movie recommendations:
+```console
+$ ./trakt-sync recommendations -a movies -i black-bag-2025 -hide                                                                                                              
+```
+##### movies recommendations:
+```console
+$ ./trakt-sync recommendations -a movies                                                                                      
+```
+```console
+$ ./trakt-sync recommendations -a movies -ignore_collected true -ignore_watchlisted true                                                                                      
+```
+##### hide show recommendations:
+```console
+$ ./trakt-sync recommendations -a shows -i wellington-paranormal -hide
+```
+##### movies recommendations:
+```console
+$ ./trakt-sync recommendations -a shows                                                                                      
+```
+```console
+$ ./trakt-sync recommendations -a shows -ignore_collected false -ignore_watchlisted false                                                                                     
 ```
 #### search:
 

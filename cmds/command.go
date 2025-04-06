@@ -36,60 +36,64 @@ var (
 
 // Avflags contains all available flags
 var Avflags = map[string]bool{
-	"a":               true,
-	"c":               true,
-	"calendars":       true,
-	"certifications":  true,
-	"comments":        true,
-	"comment_type":    true,
-	"countries":       true,
-	"country":         true,
-	"checkin":         true,
-	"collection":      true,
-	"days":            true,
-	"delete":          true,
-	"ex":              true,
-	"f":               true,
-	"field":           true,
-	"godoc":           true,
-	"genres":          true,
-	"help":            true,
-	"history":         true,
-	"i":               true,
-	"item":            true,
-	"include_replies": true,
-	"trakt_id":        true,
-	"comment_id":      true,
-	"episode_code":    true,
-	"episode_abs":     true,
-	"id_type":         true,
-	"language":        true,
-	"languages":       true,
-	"lists":           true,
-	"msg":             true,
-	"movies":          true,
-	"networks":        true,
-	"notes":           true,
-	"o":               true,
-	"people":          true,
-	"period":          true,
-	"privacy":         true,
-	"q":               true,
-	"remove":          true,
-	"releases":        true,
-	"reply":           true,
-	"s":               true,
-	"comment":         true,
-	"search":          true,
-	"spoiler":         true,
-	"start_date":      true,
-	"t":               true,
-	"translations":    true,
-	"u":               true,
-	"users":           true,
-	"v":               true,
-	"version":         true,
-	"watchlist":       true,
+	"a":                  true,
+	"c":                  true,
+	"calendars":          true,
+	"certifications":     true,
+	"checkin":            true,
+	"collection":         true,
+	"comment_type":       true,
+	"comments":           true,
+	"countries":          true,
+	"country":            true,
+	"days":               true,
+	"delete":             true,
+	"ex":                 true,
+	"f":                  true,
+	"field":              true,
+	"genres":             true,
+	"godoc":              true,
+	"help":               true,
+	"hide":               true,
+	"history":            true,
+	"i":                  true,
+	"item":               true,
+	"include_replies":    true,
+	"ignore_collected":   true,
+	"ignore_watchlisted": true,
+	"trakt_id":           true,
+	"comment_id":         true,
+	"episode_code":       true,
+	"episode_abs":        true,
+	"id_type":            true,
+	"language":           true,
+	"languages":          true,
+	"lists":              true,
+	"msg":                true,
+	"movies":             true,
+	"networks":           true,
+	"notes":              true,
+	"o":                  true,
+	"people":             true,
+	"period":             true,
+	"privacy":            true,
+	"q":                  true,
+	"recommendations":    true,
+	"remove":             true,
+	"releases":           true,
+	"reply":              true,
+	"s":                  true,
+	"comment":            true,
+	"search":             true,
+	"spoiler":            true,
+	"start_date":         true,
+	"t":                  true,
+	"translations":       true,
+	"u":                  true,
+	"users":              true,
+	"v":                  true,
+	"version":            true,
+	"watchlist":          true,
 }
 
 type fatal struct{}
@@ -223,25 +227,33 @@ func selectFirstNonEmpty(values ...string) string {
 
 func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	allModules := map[string]str.Options{
-		consts.Comments:   setOptionsDependsOnModuleComments(options),
-		consts.Checkin:    setOptionsDependsOnModuleCheckin(options),
-		consts.Lists:      setOptionsDependsOnModuleLists(options),
-		consts.Movies:     setOptionsDependsOnModuleMovies(options),
-		consts.Networks:   setOptionsDependsOnModuleNetworks(options),
-		consts.Notes:      setOptionsDependsOnModuleNotes(options),
-		consts.Users:      setOptionsDependsOnModuleUsers(options),
-		consts.People:     setOptionsDependsOnModulePeople(options),
-		consts.Calendars:  setOptionsDependsOnModuleCalendars(options),
-		consts.Search:     setOptionsDependsOnModuleSearch(options),
-		consts.Watchlist:  setOptionsDependsOnModuleDefault(options),
-		consts.Collection: setOptionsDependsOnModuleDefault(options),
-		consts.History:    setOptionsDependsOnModuleDefault(options),
+		consts.Comments:        setOptionsDependsOnModuleComments(options),
+		consts.Checkin:         setOptionsDependsOnModuleCheckin(options),
+		consts.Lists:           setOptionsDependsOnModuleLists(options),
+		consts.Movies:          setOptionsDependsOnModuleMovies(options),
+		consts.Networks:        setOptionsDependsOnModuleNetworks(options),
+		consts.Notes:           setOptionsDependsOnModuleNotes(options),
+		consts.Users:           setOptionsDependsOnModuleUsers(options),
+		consts.People:          setOptionsDependsOnModulePeople(options),
+		consts.Recommendations: setOptionsDependsOnModuleRecommendations(options),
+		consts.Calendars:       setOptionsDependsOnModuleCalendars(options),
+		consts.Search:          setOptionsDependsOnModuleSearch(options),
+		consts.Watchlist:       setOptionsDependsOnModuleDefault(options),
+		consts.Collection:      setOptionsDependsOnModuleDefault(options),
+		consts.History:         setOptionsDependsOnModuleDefault(options),
 	}
 
 	if opt, found := allModules[module]; found {
 		return opt
 	}
 
+	return options
+}
+
+func setOptionsDependsOnModuleRecommendations(options str.Options) str.Options {
+	options.Action = *_recommendationsAction
+	options.Hide = *_recommendationsHide
+	options.InternalID = *_recommendationsInternalID
 	return options
 }
 
@@ -565,6 +577,20 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 	options = UpdateOptionsWithCommandCheckInFlags(options)
 	options = UpdateOptionsWithCommandCommentsFlags(options)
 	options = UpdateOptionsWithCommandMoviesFlags(options)
+	options = UpdateOptionsWithCommandRecommendationsFlags(options)
+
+	return options
+}
+
+// UpdateOptionsWithCommandRecommendationsFlags update options depends on recommendations command flags
+func UpdateOptionsWithCommandRecommendationsFlags(options *str.Options) *str.Options {
+	if len(*_recommendationsIgnoreCollected) > consts.ZeroValue {
+		options.IgnoreCollected = *_recommendationsIgnoreCollected
+	}
+
+	if len(*_recommendationsIgnoreWatchlisted) > consts.ZeroValue {
+		options.IgnoreWatchlisted = *_recommendationsIgnoreWatchlisted
+	}
 
 	return options
 }
@@ -631,6 +657,11 @@ func UpdateOptionsWithCommandCheckInFlags(options *str.Options) *str.Options {
 	if len(*_checkinEpisodeCode) > consts.ZeroValue {
 		options.EpisodeCode = *_checkinEpisodeCode
 	}
+
+	if *_checkinDelete {
+		options.Delete = *_checkinDelete
+	}
+
 	return options
 }
 
