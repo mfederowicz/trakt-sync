@@ -43,6 +43,9 @@ type CommonInterface interface {
 	HideShowRecommendation(client *internal.Client, options *str.Options) (*str.Response, error)
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
 	CheckSeasonNumber(code *string) (*string, *string, error)
+	StartScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error)
+	StopScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error)
+	PauseScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error)
 	Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error)
 	Comment(client *internal.Client, comment *str.Comment) (*str.Comment, *str.Response, error)
 	Notes(client *internal.Client, notes *str.Notes) (*str.Notes, *str.Response, error)
@@ -426,6 +429,36 @@ func (*CommonLogic) FetchUserConnections(client *internal.Client, _ *str.Options
 	return result.Connections, err
 }
 
+// StartScrobble helper function to start scrobble
+func (*CommonLogic) StartScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error) {
+	result, resp, err := client.Scrobble.StartScrobble(
+		context.Background(),
+		scrobble,
+	)
+
+	return result, resp, err
+}
+
+// StopScrobble helper function to stop scrobble
+func (*CommonLogic) StopScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error) {
+	result, resp, err := client.Scrobble.StopScrobble(
+		context.Background(),
+		scrobble,
+	)
+
+	return result, resp, err
+}
+
+// PauseScrobble helper function to pause scrobble
+func (*CommonLogic) PauseScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error) {
+	result, resp, err := client.Scrobble.PauseScrobble(
+		context.Background(),
+		scrobble,
+	)
+
+	return result, resp, err
+}
+
 // Checkin helper function to post checkin object
 func (*CommonLogic) Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error) {
 	result, resp, err := client.Checkin.CheckintoAnItem(
@@ -435,6 +468,7 @@ func (*CommonLogic) Checkin(client *internal.Client, checkin *str.CheckIn) (*str
 
 	return result, resp, err
 }
+
 
 // Comment helper function to post comment object
 func (*CommonLogic) Comment(client *internal.Client, comment *str.Comment) (*str.Comment, *str.Response, error) {

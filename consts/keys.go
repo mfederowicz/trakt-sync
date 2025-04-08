@@ -57,6 +57,7 @@ const (
 	Releases           = "releases"
 	Replies            = "replies"
 	SavedFilters       = "saved_filters"
+	Scrobble           = "scrobble"
 	Search             = "search"
 	SeasonPremieres    = "season_premieres"
 	Settings           = "settings"

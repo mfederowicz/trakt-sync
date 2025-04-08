@@ -29,6 +29,7 @@ const (
 	EmptyString                  = ""
 	EmptyTraktIDMsg              = "set traktId ie: -trakt_id 55"
 	EpisodeAbsUsage              = "episode_abs 1234"
+	ProgressUsage                = "progress 12.56"
 	EpisodeCodeUsage             = "episode_code format 01x24"
 	EpisodesType                 = "episodes"
 	ErrorRender                  = "error render: %w"

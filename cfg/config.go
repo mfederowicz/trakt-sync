@@ -56,6 +56,7 @@ type Config struct {
 	PagesLimit        int       `toml:"pages_limit"`
 	PerPage           int       `toml:"per_page"`
 	Privacy           string    `toml:"privacy"`
+	Progress          float64   `toml:"progress"`
 	Query             string    `toml:"query"`
 	RedirectURI       string    `toml:"redirect_uri"`
 	Remove            bool      `toml:"remove"`
@@ -468,6 +469,7 @@ func DefaultConfig() *Config {
 		ID:             consts.EmptyString,
 		PerPage:        consts.DefaultPerPage,
 		PagesLimit:     consts.PagesLimit,
+		Progress:       consts.DefaultProgress,
 		Remove:         false,
 		Delete:         false,
 		Spoiler:        false,
