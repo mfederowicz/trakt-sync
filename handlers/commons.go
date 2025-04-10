@@ -46,6 +46,7 @@ type CommonInterface interface {
 	StartScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error)
 	StopScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error)
 	PauseScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error)
+	CreateScrobble(client *internal.Client, options *str.Options) (*str.Scrobble, *str.Response, error)
 	Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error)
 	Comment(client *internal.Client, comment *str.Comment) (*str.Comment, *str.Response, error)
 	Notes(client *internal.Client, notes *str.Notes) (*str.Notes, *str.Response, error)
