@@ -8,6 +8,7 @@ const (
 	DefaultExitCode       = 0
 	DefaultPage           = 1
 	DefaultPerPage        = 100
+	DefaultProgress       = 0.00
 	EmptyBuildInfoLen     = 0
 	FirstArgElement       = 0
 	ImdbVotesRangeMax     = 3000000
@@ -31,4 +32,5 @@ const (
 	X644                  = 0644
 	X755                  = 0755
 	ZeroValue             = 0
+	ZeroValueFloat        = float64(0)
 )

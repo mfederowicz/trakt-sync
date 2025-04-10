@@ -71,6 +71,7 @@ type Client struct {
 	Episodes        *EpisodesService
 	Recommendations *RecommendationsService
 	Shows           *ShowsService
+	Scrobble        *ScrobbleService
 	Seasons         *SeasonsService
 	rateMu          sync.Mutex
 }
@@ -120,6 +121,7 @@ func (c *Client) initialize() {
 	c.Episodes = (*EpisodesService)(&c.common)
 	c.Recommendations = (*RecommendationsService)(&c.common)
 	c.Shows = (*ShowsService)(&c.common)
+	c.Scrobble = (*ScrobbleService)(&c.common)
 	c.Seasons = (*SeasonsService)(&c.common)
 }
 

@@ -23,6 +23,7 @@
       - [notes](#notes)
       - [people](#people)
       - [recommendations](#recommendations)
+      - [scrobble](#scrobble)
       - [search](#search)
       - [users](#users)
       - [watchlist](#watchlist)
@@ -81,6 +82,7 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 - `notes` - Manage notes created by user
 - `people` - Returns all data for selected person.
 - `recommendations` - Recommendations manage movie and shows recommendations for user
+- `scrobble` - Scrobble for start/pause/stop movie,show,episode 
 - `search` - Searches can use queries or ID lookups.
 - `users` - Returns all data for a user.
 - `watchlist` - Returns all items in a user's watchlist filtered by type.
@@ -513,8 +515,48 @@ $ ./trakt-sync recommendations -a shows
 ```console
 $ ./trakt-sync recommendations -a shows -ignore_collected false -ignore_watchlisted false                                                                                     
 ```
+#### scrobble:
+##### scrobble start/pause/stop movie:
+```console
+$ ./trakt-sync scrobble -a start -t movie -progress 3.45 -i guardians-of-the-galaxy-2014
+```
+```console
+$ ./trakt-sync scrobble -a pause -t movie -progress 3.45 -i guardians-of-the-galaxy-2014
+```
+```console
+$ ./trakt-sync scrobble -a stop -t movie -progress 3.45 -i guardians-of-the-galaxy-2014
+```
+##### scrobble start/pause/stop episode:
+```console
+$ ./trakt-sync scrobble -a start -t episode -i 73629 -progress 10.25
+```
+```console
+$ ./trakt-sync scrobble -a pause -t episode -i 73629 -progress 10.25
+```
+```console
+$ ./trakt-sync scrobble -a stop -t episode -i 73629 -progress 50.25
+```
+##### scrobble start/pause/stop show by episode code (format season x episode):
+```console
+$ ./trakt-sync scrobble -a start -t show_episode -i 136121 -episode_code 1x5 -progress 3.45
+```
+```console
+$ ./trakt-sync scrobble -a pause -t show_episode -i 136121 -episode_code 1x5 -progress 3.45
+```
+```console
+$ ./trakt-sync scrobble -a stop -t show_episode -i 136121 -episode_code 1x5 -progress 3.45
+```
+##### scrobble start/pause/stop show by episode abs number (useful for Anime and Donghua):
+```console
+$ ./trakt-sync scrobble -a start -t show_episode -i 37696 -episode_abs 164 -progress 50
+```
+```console
+$ ./trakt-sync scrobble -a pause -t show_episode -i 37696 -episode_abs 164 -progress 50
+```
+```console
+$ ./trakt-sync scrobble -a stop -t show_episode -i 37696 -episode_abs 164 -progress 60
+```
 #### search:
-
 ##### Export search result by Text Query:
 ```console
 $  ./trakt-sync search -a text-query -t movie -q freddy --field title

@@ -42,12 +42,16 @@ var Avflags = map[string]bool{
 	"certifications":     true,
 	"checkin":            true,
 	"collection":         true,
+	"comment":            true,
+	"comment_id":         true,
 	"comment_type":       true,
 	"comments":           true,
 	"countries":          true,
 	"country":            true,
 	"days":               true,
 	"delete":             true,
+	"episode_abs":        true,
+	"episode_code":       true,
 	"ex":                 true,
 	"f":                  true,
 	"field":              true,
@@ -57,37 +61,38 @@ var Avflags = map[string]bool{
 	"hide":               true,
 	"history":            true,
 	"i":                  true,
-	"item":               true,
-	"include_replies":    true,
+	"id_type":            true,
 	"ignore_collected":   true,
 	"ignore_watchlisted": true,
-	"trakt_id":           true,
-	"comment_id":         true,
-	"episode_code":       true,
-	"episode_abs":        true,
-	"id_type":            true,
+	"include_replies":    true,
+	"item":               true,
 	"language":           true,
 	"languages":          true,
 	"lists":              true,
-	"msg":                true,
 	"movies":             true,
+	"msg":                true,
 	"networks":           true,
 	"notes":              true,
 	"o":                  true,
+	"pause":              true,
 	"people":             true,
 	"period":             true,
 	"privacy":            true,
+	"progress":           true,
 	"q":                  true,
 	"recommendations":    true,
-	"remove":             true,
 	"releases":           true,
+	"remove":             true,
 	"reply":              true,
 	"s":                  true,
-	"comment":            true,
+	"scrobble":           true,
 	"search":             true,
 	"spoiler":            true,
+	"start":              true,
 	"start_date":         true,
+	"stop":               true,
 	"t":                  true,
+	"trakt_id":           true,
 	"translations":       true,
 	"u":                  true,
 	"users":              true,
@@ -236,6 +241,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		consts.Users:           setOptionsDependsOnModuleUsers(options),
 		consts.People:          setOptionsDependsOnModulePeople(options),
 		consts.Recommendations: setOptionsDependsOnModuleRecommendations(options),
+		consts.Scrobble:        setOptionsDependsOnModuleScrobble(options),
 		consts.Calendars:       setOptionsDependsOnModuleCalendars(options),
 		consts.Search:          setOptionsDependsOnModuleSearch(options),
 		consts.Watchlist:       setOptionsDependsOnModuleDefault(options),
@@ -247,6 +253,13 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		return opt
 	}
 
+	return options
+}
+
+func setOptionsDependsOnModuleScrobble(options str.Options) str.Options {
+	options.Action = *_scrobbleAction
+	options.InternalID = *_scrobbleInternalID
+	options.Type = *_scrobbleType
 	return options
 }
 
@@ -578,6 +591,19 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 	options = UpdateOptionsWithCommandCommentsFlags(options)
 	options = UpdateOptionsWithCommandMoviesFlags(options)
 	options = UpdateOptionsWithCommandRecommendationsFlags(options)
+	options = UpdateOptionsWithCommandScrobbleFlags(options)
+
+	return options
+}
+
+// UpdateOptionsWithCommandScrobbleFlags update options depends on scrobble command flags
+func UpdateOptionsWithCommandScrobbleFlags(options *str.Options) *str.Options {
+	if *_scrobbleEpisodeAbs > consts.ZeroValue {
+		options.EpisodeAbs = *_scrobbleEpisodeAbs
+	}
+	if len(*_scrobbleEpisodeCode) > consts.ZeroValue {
+		options.EpisodeCode = *_scrobbleEpisodeCode
+	}
 
 	return options
 }

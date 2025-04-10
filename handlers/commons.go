@@ -43,6 +43,9 @@ type CommonInterface interface {
 	HideShowRecommendation(client *internal.Client, options *str.Options) (*str.Response, error)
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
 	CheckSeasonNumber(code *string) (*string, *string, error)
+	StartScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error)
+	StopScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error)
+	PauseScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error)
 	Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error)
 	Comment(client *internal.Client, comment *str.Comment) (*str.Comment, *str.Response, error)
 	Notes(client *internal.Client, notes *str.Notes) (*str.Notes, *str.Response, error)
@@ -52,6 +55,60 @@ type CommonInterface interface {
 
 // CommonLogic struct for common methods
 type CommonLogic struct{}
+
+// CreateScrobble helper function to create scrobble object
+func (c CommonLogic) CreateScrobble(client *internal.Client, options *str.Options) (*str.Scrobble, error) {
+	scrobble := new(str.Scrobble)
+	switch options.Type {
+	case consts.Movie:
+		movie, _, _ := c.FetchMovie(client, options)
+		scrobble.Movie = movie
+	case consts.Episode:
+		episode, _ := c.FetchEpisode(client, options)
+		scrobble.Episode = new(str.Episode)
+		scrobble.Episode.IDs = new(str.IDs)
+		scrobble.Episode.IDs.Trakt = episode.IDs.Trakt
+	case consts.ShowEpisode:
+		scrobble, err := c.CreateScrobbleShowEpisode(client, options)
+		if err != nil {
+			return nil, fmt.Errorf("check episode error:%w", err)
+		}
+		p := consts.ZeroValueFloat
+		scrobble.Progress = &p
+	}
+
+	if options.Progress > consts.ZeroValue {
+		scrobble.Progress = &options.Progress
+	}
+
+	return scrobble, nil
+}
+
+// CreateScrobbleShowEpisode helper function to create scrobble object
+func (c CommonLogic) CreateScrobbleShowEpisode(client *internal.Client, options *str.Options) (*str.Scrobble, error) {
+	scrobble := new(str.Scrobble)
+	season, number, err := c.CheckSeasonNumber(options.EpisodeCode)
+	if err != nil {
+		return nil, fmt.Errorf("check episode error:%w", err)
+	}
+	show, err := c.FetchShow(client, options)
+	if err != nil {
+		return nil, fmt.Errorf("fetch show error:%w", err)
+	}
+	scrobble.Show = new(str.Show)
+	scrobble.Show = show
+	scrobble.Episode = new(str.Episode)
+
+	if len(options.EpisodeCode) > consts.ZeroValue {
+		scrobble.Episode.Season = season
+		scrobble.Episode.Number = number
+	}
+	if options.EpisodeAbs > consts.ZeroValue {
+		scrobble.Episode.NumberAbs = &options.EpisodeAbs
+	}
+
+	return scrobble, nil
+}
 
 // FetchMovie helper function to fetch movie object
 func (*CommonLogic) FetchMovie(client *internal.Client, options *str.Options) (*str.Movie, *str.Response, error) {
@@ -295,6 +352,7 @@ func (c *CommonLogic) FetchUpdatedComments(client *internal.Client, options *str
 	}
 	return list, nil
 }
+
 // FetchMovieRecommendations helper function to fetch movie recommendations
 func (c *CommonLogic) FetchMovieRecommendations(client *internal.Client, options *str.Options, page int) ([]*str.Recommendation, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, IgnoreCollected: options.IgnoreCollected, IgnoreWatchlisted: options.IgnoreWatchlisted}
@@ -424,6 +482,36 @@ func (*CommonLogic) FetchUserConnections(client *internal.Client, _ *str.Options
 	)
 
 	return result.Connections, err
+}
+
+// StartScrobble helper function to start scrobble
+func (*CommonLogic) StartScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error) {
+	result, resp, err := client.Scrobble.StartScrobble(
+		context.Background(),
+		scrobble,
+	)
+
+	return result, resp, err
+}
+
+// StopScrobble helper function to stop scrobble
+func (*CommonLogic) StopScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error) {
+	result, resp, err := client.Scrobble.StopScrobble(
+		context.Background(),
+		scrobble,
+	)
+
+	return result, resp, err
+}
+
+// PauseScrobble helper function to pause scrobble
+func (*CommonLogic) PauseScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error) {
+	result, resp, err := client.Scrobble.PauseScrobble(
+		context.Background(),
+		scrobble,
+	)
+
+	return result, resp, err
 }
 
 // Checkin helper function to post checkin object
