@@ -56,6 +56,60 @@ type CommonInterface interface {
 // CommonLogic struct for common methods
 type CommonLogic struct{}
 
+// CreateScrobble helper function to create scrobble object
+func (c CommonLogic) CreateScrobble(client *internal.Client, options *str.Options) (*str.Scrobble, error) {
+	scrobble := new(str.Scrobble)
+	switch options.Type {
+	case consts.Movie:
+		movie, _, _ := c.FetchMovie(client, options)
+		scrobble.Movie = movie
+	case consts.Episode:
+		episode, _ := c.FetchEpisode(client, options)
+		scrobble.Episode = new(str.Episode)
+		scrobble.Episode.IDs = new(str.IDs)
+		scrobble.Episode.IDs.Trakt = episode.IDs.Trakt
+	case consts.ShowEpisode:
+		scrobble, err := c.CreateScrobbleShowEpisode(client, options)
+		if err != nil {
+			return nil, fmt.Errorf("check episode error:%w", err)
+		}
+		p := consts.ZeroValueFloat
+		scrobble.Progress = &p
+	}
+
+	if options.Progress > consts.ZeroValue {
+		scrobble.Progress = &options.Progress
+	}
+
+	return scrobble, nil
+}
+
+// CreateScrobbleShowEpisode helper function to create scrobble object
+func (c CommonLogic) CreateScrobbleShowEpisode(client *internal.Client, options *str.Options) (*str.Scrobble, error) {
+	scrobble := new(str.Scrobble)
+	season, number, err := c.CheckSeasonNumber(options.EpisodeCode)
+	if err != nil {
+		return nil, fmt.Errorf("check episode error:%w", err)
+	}
+	show, err := c.FetchShow(client, options)
+	if err != nil {
+		return nil, fmt.Errorf("fetch show error:%w", err)
+	}
+	scrobble.Show = new(str.Show)
+	scrobble.Show = show
+	scrobble.Episode = new(str.Episode)
+
+	if len(options.EpisodeCode) > consts.ZeroValue {
+		scrobble.Episode.Season = season
+		scrobble.Episode.Number = number
+	}
+	if options.EpisodeAbs > consts.ZeroValue {
+		scrobble.Episode.NumberAbs = &options.EpisodeAbs
+	}
+
+	return scrobble, nil
+}
+
 // FetchMovie helper function to fetch movie object
 func (*CommonLogic) FetchMovie(client *internal.Client, options *str.Options) (*str.Movie, *str.Response, error) {
 	movieID := options.InternalID
@@ -298,6 +352,7 @@ func (c *CommonLogic) FetchUpdatedComments(client *internal.Client, options *str
 	}
 	return list, nil
 }
+
 // FetchMovieRecommendations helper function to fetch movie recommendations
 func (c *CommonLogic) FetchMovieRecommendations(client *internal.Client, options *str.Options, page int) ([]*str.Recommendation, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, IgnoreCollected: options.IgnoreCollected, IgnoreWatchlisted: options.IgnoreWatchlisted}
@@ -468,7 +523,6 @@ func (*CommonLogic) Checkin(client *internal.Client, checkin *str.CheckIn) (*str
 
 	return result, resp, err
 }
-
 
 // Comment helper function to post comment object
 func (*CommonLogic) Comment(client *internal.Client, comment *str.Comment) (*str.Comment, *str.Response, error) {

@@ -20,19 +20,14 @@ func (s ScrobblePauseEpisodeHandler) Handle(options *str.Options, client *intern
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
-	episode, _ := s.common.FetchEpisode(client, options)
-	scrobble := new(str.Scrobble)
-	scrobble.Episode = new(str.Episode)
-	scrobble.Episode.IDs = new(str.IDs)
-	scrobble.Episode.IDs.Trakt = episode.IDs.Trakt	
-	
-	if options.Progress > consts.ZeroValue {
-		scrobble.Progress = &options.Progress
+	scrobble, err := s.common.CreateScrobble(client, options)
+	if err != nil {
+		return fmt.Errorf(consts.ScrobbleError, err)
 	}
 
 	result, resp, err := s.common.PauseScrobble(client, scrobble)
 	if err != nil {
-		return fmt.Errorf("scrobble error:%w", err)
+		return fmt.Errorf(consts.ScrobbleError, err)
 	}
 
 	if resp.StatusCode == http.StatusCreated {

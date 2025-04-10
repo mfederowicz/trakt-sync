@@ -20,16 +20,14 @@ func (s ScrobblePauseMovieHandler) Handle(options *str.Options, client *internal
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
-	movie, _, _ := s.common.FetchMovie(client, options)
-	scrobble := new(str.Scrobble)
-	scrobble.Movie = movie
-	if options.Progress > consts.ZeroValue {
-		scrobble.Progress = &options.Progress
+	scrobble, err := s.common.CreateScrobble(client, options)
+	if err != nil {
+		return fmt.Errorf(consts.ScrobbleError, err)
 	}
 
 	result, resp, err := s.common.PauseScrobble(client, scrobble)
 	if err != nil {
-		return fmt.Errorf("scrobble error:%w", err)
+		return fmt.Errorf(consts.ScrobbleError, err)
 	}
 
 	if resp.StatusCode == http.StatusCreated {

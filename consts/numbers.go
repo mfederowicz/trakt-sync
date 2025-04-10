@@ -32,4 +32,5 @@ const (
 	X644                  = 0644
 	X755                  = 0755
 	ZeroValue             = 0
+	ZeroValueFloat        = float64(0)
 )

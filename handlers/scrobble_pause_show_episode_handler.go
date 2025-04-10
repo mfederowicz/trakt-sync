@@ -24,46 +24,31 @@ func (s ScrobblePauseShowEpisodeHandler) Handle(options *str.Options, client *in
 		return errors.New("only episode_abs or episode_code at time")
 	}
 
-	show, err := s.common.FetchShow(client, options)
-	if err != nil {
-		return fmt.Errorf("fetch show error:%w", err)
-	}
-
 	if len(options.EpisodeCode) > consts.ZeroValue {
-		return s.CreatePauseScrobbleForEpisodeCode(options, client, show)
+		return s.CreatePauseScrobbleForEpisodeCode(options, client)
 	}
 
 	if options.EpisodeAbs > consts.ZeroValue {
-		return s.CreatePauseScrobbleForEpisodeAbs(options, client, show)
-	}	
+		return s.CreatePauseScrobbleForEpisodeAbs(options, client)
+	}
 
 	return nil
 }
 
 // CreatePauseScrobbleForEpisodeCode to handle pasue scrobble: episode code
-func (s ScrobblePauseShowEpisodeHandler) CreatePauseScrobbleForEpisodeCode(options *str.Options, client *internal.Client, show *str.Show) error {
-	scrobble := new(str.Scrobble)
-	season, number, err := s.common.CheckSeasonNumber(options.EpisodeCode)
+func (s ScrobblePauseShowEpisodeHandler) CreatePauseScrobbleForEpisodeCode(options *str.Options, client *internal.Client) error {
+	scrobble, err := s.common.CreateScrobble(client, options)
 	if err != nil {
-		return fmt.Errorf("check episode error:%w", err)
+		return fmt.Errorf(consts.ScrobbleError, err)
 	}
-
-	scrobble.Show = new(str.Show)
-	scrobble.Show = show
-	scrobble.Episode = new(str.Episode)
-	scrobble.Episode.Season = season
-	scrobble.Episode.Number = number
-	if options.Progress > consts.ZeroValue {
-		scrobble.Progress = &options.Progress
-	}	
 
 	result, resp, err := s.common.PauseScrobble(client, scrobble)
 	if resp.StatusCode == http.StatusNotFound {
-		return fmt.Errorf("not found episode for show:%s, season:%d, episode:%d", *show.Title, *season, *number)
-	}	
+		return fmt.Errorf("not found episode for show:%s, season:%d, episode:%d", *scrobble.Show.Title, *scrobble.Episode.Season, *scrobble.Episode.Number)
+	}
 
 	if err != nil {
-		return printer.Errorf("scrobble error:%w", err)
+		return printer.Errorf(consts.ScrobbleError, err)
 	}
 
 	if resp.StatusCode == http.StatusCreated {
@@ -74,24 +59,20 @@ func (s ScrobblePauseShowEpisodeHandler) CreatePauseScrobbleForEpisodeCode(optio
 }
 
 // CreatePauseScrobbleForEpisodeAbs to handle pause scrobble: episode abs
-func (s ScrobblePauseShowEpisodeHandler) CreatePauseScrobbleForEpisodeAbs(options *str.Options, client *internal.Client, show *str.Show) error {
-	scrobble := new(str.Scrobble)
-	scrobble.Show = new(str.Show)
-	scrobble.Show = show
-	scrobble.Episode = new(str.Episode)
-	scrobble.Episode.NumberAbs = &options.EpisodeAbs
-	if options.Progress > consts.ZeroValue {
-		scrobble.Progress = &options.Progress
+func (s ScrobblePauseShowEpisodeHandler) CreatePauseScrobbleForEpisodeAbs(options *str.Options, client *internal.Client) error {
+	scrobble, err := s.common.CreateScrobble(client, options)
+	if err != nil {
+		return fmt.Errorf(consts.ScrobbleError, err)
 	}
 
 	result, resp, err := s.common.PauseScrobble(client, scrobble)
 
 	if resp.StatusCode == http.StatusNotFound {
-		return fmt.Errorf("not found episode for show:%s, episode_abs:%d", *show.Title, options.EpisodeAbs)
-	}	
+		return fmt.Errorf("not found episode for show:%s, episode_abs:%d", *scrobble.Show.Title, options.EpisodeAbs)
+	}
 
 	if err != nil {
-		return printer.Errorf("scrobble error:%w", err)
+		return printer.Errorf(consts.ScrobbleError, err)
 	}
 
 	if resp.StatusCode == http.StatusCreated {
