@@ -46,8 +46,11 @@ type CommonInterface interface {
 	StartScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error)
 	StopScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error)
 	PauseScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error)
-	CreateScrobble(client *internal.Client, options *str.Options) (*str.Scrobble, *str.Response, error)
+	CreateScrobble(client *internal.Client, options *str.Options) (*str.Scrobble, error)
+	CreateScrobbleShowEpisode(client *internal.Client, options *str.Options) (*str.Scrobble, error)
 	Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error)
+	CreateCheckin(client *internal.Client, options *str.Options) (*str.CheckIn, error)
+	CreateCheckinShowEpisode(client *internal.Client, options *str.Options) (*str.CheckIn, error)
 	Comment(client *internal.Client, comment *str.Comment) (*str.Comment, *str.Response, error)
 	Notes(client *internal.Client, notes *str.Notes) (*str.Notes, *str.Response, error)
 	Reply(client *internal.Client, id *int, comment *str.Comment) (*str.Comment, *str.Response, error)
@@ -56,6 +59,70 @@ type CommonInterface interface {
 
 // CommonLogic struct for common methods
 type CommonLogic struct{}
+
+// CreateCheckin helper function to create checkin object
+func (c CommonLogic) CreateCheckin(client *internal.Client, options *str.Options) (*str.CheckIn, error) {
+	checkin := new(str.CheckIn)
+	connections, err := c.FetchUserConnections(client, options)
+	if err != nil {
+		return nil, fmt.Errorf(consts.UserConnectionsError, err)
+	}
+	checkin.Sharing = new(str.Sharing)
+	checkin.Sharing.Tumblr = connections.Tumblr
+	checkin.Sharing.Twitter = connections.Twitter
+	checkin.Sharing.Mastodon = connections.Mastodon
+
+	switch options.Action {
+	case consts.Movie:
+		movie, _, _ := c.FetchMovie(client, options)
+		checkin.Movie = movie
+	case consts.Episode:
+		episode, _ := c.FetchEpisode(client, options)
+		checkin.Episode = new(str.Episode)
+		checkin.Episode.IDs = new(str.IDs)
+		checkin.Episode.IDs.Trakt = episode.IDs.Trakt
+	case consts.ShowEpisode:
+		che, err := c.CreateCheckinShowEpisode(client, options)
+		if err != nil {
+		 	return nil, fmt.Errorf(consts.ShowEpisodeErr, err)
+		}
+		checkin.Show = che.Show
+		checkin.Episode = che.Episode
+	default:
+		return nil, errors.New(consts.UnknownCheckinAction)
+	}
+
+	if len(options.Msg) > consts.ZeroValue {
+		checkin.Message = &options.Msg
+	}
+	return checkin, nil
+}
+
+// CreateCheckinShowEpisode helper function to create checkin object for show episode
+func (c CommonLogic) CreateCheckinShowEpisode(client *internal.Client, options *str.Options) (*str.CheckIn, error) {
+	checkin := new(str.CheckIn)
+	show, err := c.FetchShow(client, options)
+	if err != nil {
+		return nil, fmt.Errorf(consts.ShowErr, err)
+	}
+	checkin.Show = new(str.Show)
+	checkin.Show = show
+	checkin.Episode = new(str.Episode)
+
+	if len(options.EpisodeCode) > consts.ZeroValue {
+		season, number, err := c.CheckSeasonNumber(options.EpisodeCode)
+		if err != nil {
+			return nil, fmt.Errorf(consts.EpisodeCodeErr, err)
+		}
+		checkin.Episode.Season = season
+		checkin.Episode.Number = number
+	}
+	if options.EpisodeAbs > consts.ZeroValue {
+		checkin.Episode.NumberAbs = &options.EpisodeAbs
+	}
+
+	return checkin, nil
+}
 
 // CreateScrobble helper function to create scrobble object
 func (c CommonLogic) CreateScrobble(client *internal.Client, options *str.Options) (*str.Scrobble, error) {
@@ -72,7 +139,7 @@ func (c CommonLogic) CreateScrobble(client *internal.Client, options *str.Option
 	case consts.ShowEpisode:
 		scrobble, err := c.CreateScrobbleShowEpisode(client, options)
 		if err != nil {
-			return nil, fmt.Errorf("check episode error:%w", err)
+			return nil, fmt.Errorf(consts.ScrobbleError, err)
 		}
 		p := consts.ZeroValueFloat
 		scrobble.Progress = &p
@@ -88,19 +155,19 @@ func (c CommonLogic) CreateScrobble(client *internal.Client, options *str.Option
 // CreateScrobbleShowEpisode helper function to create scrobble object
 func (c CommonLogic) CreateScrobbleShowEpisode(client *internal.Client, options *str.Options) (*str.Scrobble, error) {
 	scrobble := new(str.Scrobble)
-	season, number, err := c.CheckSeasonNumber(options.EpisodeCode)
-	if err != nil {
-		return nil, fmt.Errorf("check episode error:%w", err)
-	}
 	show, err := c.FetchShow(client, options)
 	if err != nil {
-		return nil, fmt.Errorf("fetch show error:%w", err)
+		return nil, fmt.Errorf(consts.ShowErr, err)
 	}
 	scrobble.Show = new(str.Show)
 	scrobble.Show = show
 	scrobble.Episode = new(str.Episode)
 
 	if len(options.EpisodeCode) > consts.ZeroValue {
+		season, number, err := c.CheckSeasonNumber(options.EpisodeCode)
+		if err != nil {
+			return nil, fmt.Errorf(consts.EpisodeCodeErr, err)
+		}
 		scrobble.Episode.Season = season
 		scrobble.Episode.Number = number
 	}
@@ -481,6 +548,9 @@ func (*CommonLogic) FetchUserConnections(client *internal.Client, _ *str.Options
 	result, _, err := client.Users.RetrieveSettings(
 		context.Background(),
 	)
+	if err != nil {
+		return nil, fmt.Errorf(consts.UserSettingsError, err)
+	}
 
 	return result.Connections, err
 }
@@ -556,7 +626,7 @@ func (*CommonLogic) Reply(client *internal.Client, id *int, reply *str.Comment) 
 // CheckSeasonNumber helper function to convert string to season and episode
 func (*CommonLogic) CheckSeasonNumber(code string) (season *int, episode *int, err error) {
 	if len(code) < int(consts.MinSeasonNumberLength) {
-		return nil, nil, errors.New("invalid episode_code format")
+		return nil, nil, errors.New("invalid length")
 	}
 
 	if parts := strings.Split(code, "x"); len(parts) == consts.TwoValue {
@@ -565,7 +635,7 @@ func (*CommonLogic) CheckSeasonNumber(code string) (season *int, episode *int, e
 		return &season, &episode, nil
 	}
 
-	return nil, nil, errors.New("invalid episode_code format")
+	return nil, nil, errors.New("invalid format")
 }
 
 // CheckSortAndTypes helper function to validate sort and type field depends on module

@@ -22,21 +22,14 @@ func (h CheckinMovieHandler) Handle(options *str.Options, client *internal.Clien
 	if options.TraktID == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
-	connections, _ := h.common.FetchUserConnections(client, options)
-	movie, _, _ := h.common.FetchMovie(client, options)
-	c := new(str.CheckIn)
-	c.Movie = movie
-	if len(options.Msg) > consts.ZeroValue {
-		c.Message = &options.Msg
-	}
-	c.Sharing = new(str.Sharing)
-	c.Sharing.Tumblr = connections.Tumblr
-	c.Sharing.Twitter = connections.Twitter
-	c.Sharing.Mastodon = connections.Mastodon
-
-	result, resp, err := h.common.Checkin(client, c)
+	checkin, err := h.common.CreateCheckin(client, options)
 	if err != nil {
-		return fmt.Errorf("checkin error:%w", err)
+		return fmt.Errorf(consts.CheckinError, err)
+	}
+	
+	result, resp, err := h.common.Checkin(client, checkin)
+	if err != nil {
+		return fmt.Errorf(consts.CheckinError, err)
 	}
 
 	if resp.StatusCode == http.StatusCreated {

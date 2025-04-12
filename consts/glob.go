@@ -4,8 +4,12 @@ package consts
 // usage strings
 const (
 	ActionUsage                  = "allow use selected action"
+	AllPages                     = 10
+	BaseURLPath                  = "/trakt"
 	CMD                          = "cmd"
 	CheckInMsgUsage              = "allow to overwrite msg"
+	CheckinError                 = "checkin error:%w"
+	ClientNewRequestFatal        = "client.NewRequest returned error: %v"
 	CommaString                  = ","
 	CommentIDUsage               = "allow to overwrite comment_id"
 	CommentNotFoundWithID        = "comment not found with commentId:%d"
@@ -30,12 +34,17 @@ const (
 	EmptyTraktIDMsg              = "set traktId ie: -trakt_id 55"
 	EpisodeAbsUsage              = "episode_abs 1234"
 	EpisodeCodeUsage             = "episode_code format 01x24"
+	EpisodeErr                   = "episode error:%w"
+	EpisodeCodeErr               = "episode code error:%w"
+	ShowEpisodeErr               = "show episode error:%w"
 	EpisodesType                 = "episodes"
 	ErrorRender                  = "error render: %w"
 	ErrorsPlaceholders           = "%v %v: %d %v"
 	ExtendedInfoUsage            = "allow to overwrite extended flag"
 	FieldUsage                   = "allow use selected field"
+	FirstPage                    = 1
 	FormatUsage                  = "allow to overwrite default ID type format"
+	HavePagesErrorStr            = "HavePages: %v, want %v"
 	HideUsage                    = "allow to hide movie/show recommendation"
 	IgnoreCollectedUsage         = "allow to overwrite ignore_collected"
 	IgnoreWatchlistedUsage       = "allow to overwrite ignore_watchlisted"
@@ -63,6 +72,7 @@ const (
 	NotesNotFoundWithID          = "notes not found with Id:%s"
 	NotesUsage                   = "allow to overwrite notes"
 	OutputUsage                  = "allow to overwrite default output filename"
+	PagesNoLimit                 = 0
 	PrivacyUsage                 = "allow to overwrite privacy"
 	ProgressUsage                = "progress 12.56"
 	QueryUsage                   = "allow use selected query"
@@ -74,6 +84,7 @@ const (
 	ReplyUsage                   = "allow to overwrite reply"
 	ScrobbleError                = "scrobble error:%w"
 	SeparatorString              = CommaString
+	ShowErr                      = "show error:%w"
 	SortUsage                    = "allow to overwrite sort"
 	SpoilerUsage                 = "allow to overwrite spoiler"
 	StartDateUsage               = "allow to overwrite start_date"
@@ -83,6 +94,9 @@ const (
 	TestURLNext                  = "test-url-next"
 	TraktIDUsage                 = "allow to overwrite trakt_id"
 	TypeUsage                    = "allow to overwrite type"
+	UnknownCheckinAction         = "uknown checkin action"
+	UserConnectionsError         = "user connections error:%w"
+	UserSettingsError            = "user settings error:%w"
 	UserlistUsage                = "allow to export a user custom list"
 	VerboseUsage                 = "print additional verbose information"
 	VersionUsage                 = "get trakt-sync version"

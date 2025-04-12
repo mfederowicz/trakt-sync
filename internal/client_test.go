@@ -4,7 +4,6 @@ import (
 	"context"
 	"io"
 	"net/http"
-	"net/http/httptest"
 	"net/url"
 	"strconv"
 	"strings"
@@ -13,55 +12,9 @@ import (
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/test"
 	"github.com/stretchr/testify/assert"
 )
-
-const (
-	// baseURLPath is a non-empty Client.BaseURL path to use during tests,
-	baseURLPath           = "/trakt"
-	clientNewRequestFatal = "client.NewRequest returned error: %v"
-	firstPage             = 1
-	allPages              = 10
-	pagesLimit            = 2
-	pagesNolimit          = 0
-	havePagesErrorStr     = "HavePages: %v, want %v"
-)
-
-type TestSetup struct {
-	Client    *Client
-	Mux       *http.ServeMux
-	ServerURL string
-	Teardown  func()
-}
-
-// setup sets up a test HTTP server along with a trakt.Client that is
-// configured to talk to that test server. Tests should register handlers on
-// mux which provide mock responses for the API method being tested.
-func setup() *TestSetup {
-	// mux is the HTTP request multiplexer used with the test server.
-	mux := http.NewServeMux()
-	apiHandler := http.NewServeMux()
-	apiHandler.Handle(baseURLPath+"/", http.StripPrefix(baseURLPath, mux))
-	apiHandler.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
-		http.Error(w, "Client.BaseURL path prefix is not preserved in the request URL.", http.StatusInternalServerError)
-	})
-
-	// server is a test HTTP server used to provide mock API responses.
-	server := httptest.NewServer(apiHandler)
-
-	// client is the Trakt client being tested and is
-	// configured to use test server.
-	client := NewClient(nil)
-	uri, _ := url.Parse(server.URL + baseURLPath + "/")
-	client.BaseURL = uri
-
-	return &TestSetup{
-		Client:    client,
-		Mux:       mux,
-		ServerURL: server.URL,
-		Teardown:  server.Close,
-	}
-}
 
 func TestNewRequest(t *testing.T) {
 	c := NewClient(nil)
@@ -82,65 +35,60 @@ func TestNewRequest(t *testing.T) {
 	}
 }
 
-func testMethod(t *testing.T, r *http.Request, want string) {
-	t.Helper()
-	if got := r.Method; got != want {
-		t.Errorf("Request method: %v, want %v", got, want)
-	}
-}
+
 
 func TestHavePages(t *testing.T) {
 	t.Helper()
-	testSetup := setup()
+	testSetup := Setup()
 	client := testSetup.Client
 	resp := &str.Response{Response: &http.Response{Header: http.Header{}}}
-	resp.Header.Set(HeaderPaginationPage, strconv.Itoa(firstPage))
-	resp.Header.Set(HeaderPaginationPageCount, strconv.Itoa(allPages))
+	resp.Header.Set(HeaderPaginationPage, strconv.Itoa(consts.FirstPage))
+	resp.Header.Set(HeaderPaginationPageCount, strconv.Itoa(consts.AllPages))
 	want := true
-	if got := client.HavePages(firstPage, resp, pagesLimit); got != want {
-		t.Errorf(havePagesErrorStr, got, want)
+	if got := client.HavePages(consts.FirstPage, resp, consts.PagesLimit); got != want {
+		t.Errorf(consts.HavePagesErrorStr, got, want)
 	}
 }
 
 func TestHavePagesNoHeaders(t *testing.T) {
 	t.Helper()
-	testSetup := setup()
+	testSetup := Setup()
 	client := testSetup.Client
 	resp := &str.Response{Response: &http.Response{Header: http.Header{}}}
 	want := false
-	if got := client.HavePages(firstPage, resp, pagesLimit); got != want {
-		t.Errorf(havePagesErrorStr, got, want)
+	if got := client.HavePages(consts.FirstPage, resp, consts.PagesLimit); got != want {
+		t.Errorf(consts.HavePagesErrorStr, got, want)
 	}
 }
 
 func TestHavePagesNoLimit(t *testing.T) {
 	t.Helper()
-	testSetup := setup()
+	testSetup := Setup()
 	client := testSetup.Client
 	resp := &str.Response{Response: &http.Response{Header: http.Header{}}}
-	resp.Header.Set(HeaderPaginationPage, strconv.Itoa(firstPage))
-	resp.Header.Set(HeaderPaginationPageCount, strconv.Itoa(allPages))
+	resp.Header.Set(HeaderPaginationPage, strconv.Itoa(consts.FirstPage))
+	resp.Header.Set(HeaderPaginationPageCount, strconv.Itoa(consts.AllPages))
 	want := true
-	if got := client.HavePages(firstPage, resp, pagesNolimit); got != want {
-		t.Errorf(havePagesErrorStr, got, want)
+	if got := client.HavePages(consts.FirstPage, resp, consts.PagesNoLimit); got != want {
+		t.Errorf(consts.HavePagesErrorStr, got, want)
 	}
 }
 
 func TestHavePagesWithNoNext(t *testing.T) {
 	t.Helper()
-	testSetup := setup()
+	testSetup := Setup()
 	client := testSetup.Client
 	resp := &str.Response{Response: &http.Response{Header: http.Header{}}}
-	resp.Header.Set(HeaderPaginationPage, strconv.Itoa(allPages))
-	resp.Header.Set(HeaderPaginationPageCount, strconv.Itoa(allPages))
+	resp.Header.Set(HeaderPaginationPage, strconv.Itoa(consts.AllPages))
+	resp.Header.Set(HeaderPaginationPageCount, strconv.Itoa(consts.AllPages))
 	want := false
-	if got := client.HavePages(allPages, resp, pagesNolimit); got != want {
-		t.Errorf(havePagesErrorStr, got, want)
+	if got := client.HavePages(consts.AllPages, resp, consts.PagesNoLimit); got != want {
+		t.Errorf(consts.HavePagesErrorStr, got, want)
 	}
 }
 
 func TestBareDo_returnsOpenBody(t *testing.T) {
-	testSetup := setup()
+	testSetup := Setup()
 	client := testSetup.Client
 	mux := testSetup.Mux
 	teardown := testSetup.Teardown
@@ -150,14 +98,14 @@ func TestBareDo_returnsOpenBody(t *testing.T) {
 	expectedBody := "Hello from the other side !"
 
 	mux.HandleFunc("/"+consts.TestURL, func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, http.MethodGet)
+		test.TestMethod(t, r, http.MethodGet)
 		printer.Fprint(w, expectedBody)
 	})
 
 	ctx := context.Background()
 	req, err := client.NewRequest(http.MethodGet, consts.TestURL, nil)
 	if err != nil {
-		t.Fatalf(clientNewRequestFatal, err)
+		t.Fatalf(consts.ClientNewRequestFatal, err)
 	}
 
 	resp, err := client.BareDo(ctx, req)
@@ -178,7 +126,7 @@ func TestBareDo_returnsOpenBody(t *testing.T) {
 }
 
 func TestBareDo_rate_limit_reset(t *testing.T) {
-	testSetup := setup()
+	testSetup := Setup()
 	client := testSetup.Client
 	mux := testSetup.Mux
 	teardown := testSetup.Teardown
@@ -188,7 +136,7 @@ func TestBareDo_rate_limit_reset(t *testing.T) {
 	expectedBody := "Hello from the other side !"
 
 	mux.HandleFunc("/test-url", func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, http.MethodGet)
+		test.TestMethod(t, r, http.MethodGet)
 		w.Header().Add(HeaderRetryAfter, "100")
 		w.WriteHeader(http.StatusTooManyRequests)
 		printer.Fprint(w, expectedBody)
@@ -197,7 +145,7 @@ func TestBareDo_rate_limit_reset(t *testing.T) {
 	ctx := context.Background()
 	req, err := client.NewRequest(http.MethodGet, "test-url", nil)
 	if err != nil {
-		t.Fatalf(clientNewRequestFatal, err)
+		t.Fatalf(consts.ClientNewRequestFatal, err)
 	}
 
 	resp, err := client.BareDo(ctx, req)
@@ -213,13 +161,13 @@ func TestBareDo_rate_limit_reset(t *testing.T) {
 	}
 
 	mux.HandleFunc("/"+consts.TestURLNext, func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, http.MethodGet)
+		test.TestMethod(t, r, http.MethodGet)
 		printer.Fprint(w, "Body")
 	})
 
 	reqNext, errNext := client.NewRequest(http.MethodGet, consts.TestURLNext, nil)
 	if errNext != nil {
-		t.Fatalf(clientNewRequestFatal, err)
+		t.Fatalf(consts.ClientNewRequestFatal, err)
 	}
 
 	_, errBare := client.BareDo(ctx, reqNext)
@@ -234,7 +182,7 @@ func TestBareDo_rate_limit_reset(t *testing.T) {
 }
 
 func TestBareDo_upgrade_required(t *testing.T) {
-	testSetup := setup()
+	testSetup := Setup()
 	client := testSetup.Client
 	mux := testSetup.Mux
 	teardown := testSetup.Teardown
@@ -244,7 +192,7 @@ func TestBareDo_upgrade_required(t *testing.T) {
 	expectedBody := "Hello vip!"
 
 	mux.HandleFunc("/"+consts.TestURL, func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, http.MethodGet)
+		test.TestMethod(t, r, http.MethodGet)
 		w.Header().Add(HeaderUpgradeURL, upgradeURL)
 		w.WriteHeader(http.StatusUpgradeRequired)
 		printer.Fprint(w, expectedBody)
@@ -257,7 +205,7 @@ func TestBareDo_upgrade_required(t *testing.T) {
 
 	req, err := client.NewRequest(http.MethodGet, consts.TestURL, nil)
 	if err != nil {
-		t.Fatalf(clientNewRequestFatal, err)
+		t.Fatalf(consts.ClientNewRequestFatal, err)
 	}
 
 	resp, err := client.BareDo(ctx, req)
