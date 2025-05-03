@@ -84,7 +84,7 @@ func (c CommonLogic) CreateCheckin(client *internal.Client, options *str.Options
 	case consts.ShowEpisode:
 		che, err := c.CreateCheckinShowEpisode(client, options)
 		if err != nil {
-		 	return nil, fmt.Errorf(consts.ShowEpisodeErr, err)
+			return nil, fmt.Errorf(consts.ShowEpisodeErr, err)
 		}
 		checkin.Show = che.Show
 		checkin.Episode = che.Episode
@@ -137,12 +137,13 @@ func (c CommonLogic) CreateScrobble(client *internal.Client, options *str.Option
 		scrobble.Episode.IDs = new(str.IDs)
 		scrobble.Episode.IDs.Trakt = episode.IDs.Trakt
 	case consts.ShowEpisode:
-		scrobble, err := c.CreateScrobbleShowEpisode(client, options)
+		sc, err := c.CreateScrobbleShowEpisode(client, options)
 		if err != nil {
 			return nil, fmt.Errorf(consts.ScrobbleError, err)
 		}
-		p := consts.ZeroValueFloat
-		scrobble.Progress = &p
+		scrobble.Episode = sc.Episode
+		scrobble.Show = sc.Show
+
 	}
 
 	if options.Progress > consts.ZeroValue {
