@@ -26,55 +26,35 @@ func (h CheckinShowEpisodeHandler) Handle(options *str.Options, client *internal
 		return errors.New("only episode_abs or episode_code at time")
 	}
 
-	connections, _ := h.common.FetchUserConnections(client, options)
-	show, err := h.common.FetchShow(client, options)
-	if err != nil {
-		return fmt.Errorf("fetch show error:%w", err)
-	}
-
 	if len(options.EpisodeCode) > consts.ZeroValue {
-		return h.CreateCheckinForEpisodeCode(options, client, connections, show)
+		return h.CreateCheckinForEpisodeCode(options, client)
 	}
 
 	if options.EpisodeAbs > consts.ZeroValue {
-		return h.CreateCheckinForEpisodeAbs(options, client, connections, show)
+		return h.CreateCheckinForEpisodeAbs(options, client)
 	}
 
 	return nil
 }
 
 // CreateCheckinForEpisodeCode to handle checkin: episode code
-func (h CheckinShowEpisodeHandler) CreateCheckinForEpisodeCode(options *str.Options, client *internal.Client, connections *str.Connections, show *str.Show) error {
-	c := new(str.CheckIn)
-	season, number, err := h.common.CheckSeasonNumber(options.EpisodeCode)
+func (h CheckinShowEpisodeHandler) CreateCheckinForEpisodeCode(options *str.Options, client *internal.Client) error {
+	checkin, err := h.common.CreateCheckin(client, options)
 	if err != nil {
-		return fmt.Errorf("check episode error:%w", err)
+		return printer.Errorf(consts.CheckinError, err)
 	}
 
-	c.Show = new(str.Show)
-	c.Show = show
-	c.Episode = new(str.Episode)
-	c.Episode.Season = season
-	c.Episode.Number = number
-	if len(options.Msg) > consts.ZeroValue {
-		c.Message = &options.Msg
-	}
-	c.Sharing = new(str.Sharing)
-	c.Sharing.Tumblr = connections.Tumblr
-	c.Sharing.Twitter = connections.Twitter
-	c.Sharing.Mastodon = connections.Mastodon
-
-	result, resp, err := h.common.Checkin(client, c)
+	result, resp, err := h.common.Checkin(client, checkin)
 	if resp.StatusCode == http.StatusNotFound {
-		return fmt.Errorf("not found episode for show:%s, season:%d, episode:%d", *show.Title, *season, *number)
+		return fmt.Errorf("not found episode for show:%s, season:%d, episode:%d", *checkin.Show.Title, *checkin.Episode.Season, *checkin.Episode.Number)
 	}
 
 	if resp.StatusCode == http.StatusConflict {
-		return fmt.Errorf("checkin for show:%s, season:%d, episode:%d exists, expires:%s", *show.Title, *season, *number, result.Expires.Local())
+		return fmt.Errorf("checkin for show:%s, season:%d, episode:%d exists, expires:%s", *checkin.Show.Title, *checkin.Episode.Season, *checkin.Episode.Number, result.Expires.Local())
 	}
 
 	if err != nil {
-		return printer.Errorf("checkin error:%w", err)
+		return printer.Errorf(consts.CheckinError, err)
 	}
 
 	if resp.StatusCode == http.StatusCreated {
@@ -85,31 +65,24 @@ func (h CheckinShowEpisodeHandler) CreateCheckinForEpisodeCode(options *str.Opti
 }
 
 // CreateCheckinForEpisodeAbs to handle checkin: episode abs
-func (h CheckinShowEpisodeHandler) CreateCheckinForEpisodeAbs(options *str.Options, client *internal.Client, connections *str.Connections, show *str.Show) error {
-	c := new(str.CheckIn)
-	c.Show = new(str.Show)
-	c.Show = show
-	c.Episode = new(str.Episode)
-	c.Episode.NumberAbs = &options.EpisodeAbs
-	if len(options.Msg) > consts.ZeroValue {
-		c.Message = &options.Msg
+func (h CheckinShowEpisodeHandler) CreateCheckinForEpisodeAbs(options *str.Options, client *internal.Client) error {
+	checkin, err := h.common.CreateCheckin(client, options)
+	if err != nil {
+		return printer.Errorf(consts.CheckinError, err)
 	}
-	c.Sharing = new(str.Sharing)
-	c.Sharing.Tumblr = connections.Tumblr
-	c.Sharing.Twitter = connections.Twitter
-	c.Sharing.Mastodon = connections.Mastodon
-	result, resp, err := h.common.Checkin(client, c)
+
+	result, resp, err := h.common.Checkin(client, checkin)
 
 	if resp.StatusCode == http.StatusNotFound {
-		return fmt.Errorf("not found episode for show:%s, episode_abs:%d", *show.Title, options.EpisodeAbs)
+		return fmt.Errorf("not found episode for show:%s, episode_abs:%d", *checkin.Show.Title, options.EpisodeAbs)
 	}
 
 	if resp.StatusCode == http.StatusConflict {
-		return fmt.Errorf("checkin for show:%s, episode_abs:%d exists, expires:%s", *show.Title, options.EpisodeAbs, result.Expires.Local())
+		return fmt.Errorf("checkin for show:%s, episode_abs:%d exists, expires:%s", *checkin.Show.Title, options.EpisodeAbs, result.Expires.Local())
 	}
 
 	if err != nil {
-		return printer.Errorf("checkin error:%w", err)
+		return printer.Errorf(consts.CheckinError, err)
 	}
 
 	if resp.StatusCode == http.StatusCreated {

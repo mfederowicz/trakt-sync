@@ -21,29 +21,19 @@ func (h CheckinEpisodeHandler) Handle(options *str.Options, client *internal.Cli
 	if options.TraktID == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
-	connections, _ := h.common.FetchUserConnections(client, options)
-	episode, _ := h.common.FetchEpisode(client, options)
-	c := new(str.CheckIn)
-	c.Episode = new(str.Episode)
-	c.Episode.IDs = new(str.IDs)
-	c.Episode.IDs.Trakt = episode.IDs.Trakt
-	if len(options.Msg) > consts.ZeroValue {
-		c.Message = &options.Msg
-	}
-	c.Sharing = new(str.Sharing)
-	c.Sharing.Tumblr = connections.Tumblr
-	c.Sharing.Twitter = connections.Twitter
-	c.Sharing.Mastodon = connections.Mastodon
-
-	result, resp, err := h.common.Checkin(client, c)
+	checkin, err := h.common.CreateCheckin(client, options)
 	if err != nil {
-		return printer.Errorf("checkin error:%w", err)
+		return printer.Errorf(consts.CheckinError, err)
+	}
+
+	result, resp, err := h.common.Checkin(client, checkin)
+	if err != nil {
+		return printer.Errorf(consts.CheckinError, err)
 	}
 
 	if resp.StatusCode == http.StatusCreated {
 		printer.Printf("result: success, episode checkin number:%d \n", result.ID)
 	}
-
 
 	return nil
 }
