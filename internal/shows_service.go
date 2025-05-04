@@ -242,3 +242,30 @@ func (s *ShowsService) GetAnticipatedShows(ctx context.Context, opts *uri.ListOp
 
 	return list, resp, nil
 }
+
+// GetRecentlyUpdatedShows Returns all shows updated since the specified UTC date and time.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/updates/get-recently-updated-shows
+func (s *ShowsService) GetRecentlyUpdatedShows(ctx context.Context, startDate *string, opts *uri.ListOptions) ([]*str.ShowsItem, *str.Response, error) {
+	var url string
+
+	url = fmt.Sprintf("shows/updates/%s", *startDate)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch updates url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.ShowsItem{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch updates err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

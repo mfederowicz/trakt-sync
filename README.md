@@ -672,6 +672,10 @@ $ ./trakt-sync shows -a collected -period all
 ```console
 $ ./trakt-sync shows -a anticipated
 ```
+##### Get recenty updated shows 
+```console
+$ ./trakt-sync shows -a updates -start_date YYYY-MM-DD
+```
 
 #### users:
 
