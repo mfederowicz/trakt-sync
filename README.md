@@ -84,6 +84,7 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 - `recommendations` - Recommendations manage movie and shows recommendations for user
 - `scrobble` - Scrobble for start/pause/stop movie,show,episode 
 - `search` - Searches can use queries or ID lookups.
+- `shows` - Returns data about movies: trending, popular, list, likes, like, items, comments etc...
 - `users` - Returns all data for a user.
 - `watchlist` - Returns all items in a user's watchlist filtered by type.
 ### Sample export usage
@@ -607,6 +608,26 @@ $ ./trakt-sync search -a id-lookup -i 75725 -t episode
 ```console
 $ ./trakt-sync search -a id-lookup --id_type tmdb -i 254265
 ```
+#### shows:
+```console
+$ ./trakt-sync shows -a trending
+```
+```console
+$ ./trakt-sync shows -a popular
+```
+##### Get the most favorited shows
+```console
+$ ./trakt-sync shows -a favorited -period daily
+```
+```console
+$ ./trakt-sync shows -a favorited -period weekly
+```
+```console
+$ ./trakt-sync shows -a favorited -period monthly
+```
+```console
+$ ./trakt-sync shows -a favorited -period all
+
 #### users:
 
 ##### Export movies or shows or episodes from user lists:

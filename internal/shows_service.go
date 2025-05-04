@@ -64,3 +64,29 @@ func (s *EpisodesService) GetSingleEpisodeForShow(ctx context.Context, id *strin
 
 	return result, resp, nil
 }
+
+// GetTrendingShows Returns the most watched shows over the last 24 hours.
+// Shows with the most watchers are returned first.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/trending/get-trending-shows
+func (s *ShowsService) GetTrendingShows(ctx context.Context, opts *uri.ListOptions) ([]*str.ShowsItem, *str.Response, error) {
+	var url = "shows/trending"
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch shows url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.ShowsItem{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch shows err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

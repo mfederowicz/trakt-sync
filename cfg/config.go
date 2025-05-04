@@ -65,6 +65,11 @@ type Config struct {
 	SearchIDType      string    `toml:"search_id_type"`
 	SearchType        str.Slice `toml:"search_type"`
 	Season            int       `toml:"season"`
+	ShowsCountry      string    `toml:"country"`
+	ShowsLanguage     string    `toml:"language"`
+	ShowsPeriod       string    `toml:"period"`
+	ShowsSort         string    `toml:"sort"`
+	ShowsType         string    `toml:"type"`
 	Sort              string    `toml:"sort"`
 	Spoiler           bool      `toml:"spoiler"`
 	TokenPath         string    `toml:"token_path"`

@@ -87,6 +87,7 @@ var Avflags = map[string]bool{
 	"s":                  true,
 	"scrobble":           true,
 	"search":             true,
+	"shows":              true,
 	"spoiler":            true,
 	"start":              true,
 	"start_date":         true,
@@ -135,6 +136,26 @@ func (*Command) UpdateMovieFlagsValues() {
 			*_moviesType = consts.EmptyString
 		case "lists":
 			*_moviesType = "personal"
+		}
+	}
+}
+
+// UpdateShowFlagsValues update show flags values only in command
+func (*Command) UpdateShowFlagsValues() {
+	if *_showsSort == "" {
+		switch *_showsAction {
+		case "comments":
+			*_showsSort = "newest"
+		case "lists":
+			*_showsSort = "popular"
+		}
+	}
+	if *_showsType == "" {
+		switch *_showsAction {
+		case "comments":
+			*_showsType = consts.EmptyString
+		case "lists":
+			*_showsType = "personal"
 		}
 	}
 }
@@ -244,6 +265,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		consts.Scrobble:        setOptionsDependsOnModuleScrobble(options),
 		consts.Calendars:       setOptionsDependsOnModuleCalendars(options),
 		consts.Search:          setOptionsDependsOnModuleSearch(options),
+		consts.Shows:           setOptionsDependsOnModuleShows(options),
 		consts.Watchlist:       setOptionsDependsOnModuleDefault(options),
 		consts.Collection:      setOptionsDependsOnModuleDefault(options),
 		consts.History:         setOptionsDependsOnModuleDefault(options),
@@ -328,6 +350,18 @@ func setOptionsDependsOnModuleMovies(options str.Options) str.Options {
 	options.Language = *_moviesLanguage
 	options.Sort = *_moviesSort
 	options.Type = *_moviesType
+	return options
+}
+
+func setOptionsDependsOnModuleShows(options str.Options) str.Options {
+	options.Action = *_showsAction
+	options.Period = *_showsPeriod
+	options.StartDate = *_showsStartDate
+	options.InternalID = *_showsInternalID
+	options.Country = *_showsCountry
+	options.Language = *_showsLanguage
+	options.Sort = *_showsSort
+	options.Type = *_showsType
 	return options
 }
 
@@ -590,6 +624,7 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 	options = UpdateOptionsWithCommandCheckInFlags(options)
 	options = UpdateOptionsWithCommandCommentsFlags(options)
 	options = UpdateOptionsWithCommandMoviesFlags(options)
+	options = UpdateOptionsWithCommandShowsFlags(options)
 	options = UpdateOptionsWithCommandRecommendationsFlags(options)
 	options = UpdateOptionsWithCommandScrobbleFlags(options)
 
@@ -746,6 +781,37 @@ func UpdateOptionsWithCommandMoviesFlags(options *str.Options) *str.Options {
 
 	if len(*_moviesType) > consts.ZeroValue {
 		options.Type = *_moviesType
+	}
+
+	return options
+}
+
+// UpdateOptionsWithCommandShowsFlags update options depends on shows command flags
+func UpdateOptionsWithCommandShowsFlags(options *str.Options) *str.Options {
+	if len(*_showsAction) > consts.ZeroValue {
+		options.Action = *_showsAction
+	}
+
+	if len(*_showsPeriod) > consts.ZeroValue {
+		options.Period = *_showsPeriod
+	}
+
+	if len(*_showsStartDate) > consts.ZeroValue {
+		options.StartDate = convertDateString(*_showsStartDate, consts.DefaultStartDateFormat)
+	} else {
+		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
+	}
+
+	if len(*_showsInternalID) > consts.ZeroValue {
+		options.InternalID = *_showsInternalID
+	}
+
+	if len(*_showsSort) > consts.ZeroValue {
+		options.Sort = *_showsSort
+	}
+
+	if len(*_showsType) > consts.ZeroValue {
+		options.Type = *_showsType
 	}
 
 	return options

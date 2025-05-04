@@ -32,6 +32,7 @@ var Commands = []*Command{
 	RecommendationsCmd,
 	ScrobbleCmd,
 	SearchCmd,
+	ShowsCmd,
 	UsersCmd,
 	WatchlistCmd,
 }
