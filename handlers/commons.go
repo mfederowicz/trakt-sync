@@ -532,7 +532,7 @@ func (*CommonLogic) HideMovieRecommendation(client *internal.Client, options *st
 	return resp, err
 }
 
-// HideMovieRecommendation helper function to hide movie recommendations
+// HideShowRecommendation helper function to hide show recommendations
 func (*CommonLogic) HideShowRecommendation(client *internal.Client, options *str.Options) (*str.Response, error) {
 	showID := options.InternalID
 	resp, err := client.Recommendations.HideShowRecommendation(

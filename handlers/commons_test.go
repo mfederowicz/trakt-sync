@@ -54,7 +54,7 @@ func setup(t *testing.T) *TestSetup {
 
 func MuxUserSettings(t *testing.T, mux *http.ServeMux) *http.ServeMux {
 	mux.HandleFunc("/users/settings", func(w http.ResponseWriter, r *http.Request) {
-		test.TestMethod(t, r, "GET")
+		test.AssertMethod(t, r, "GET")
 		s := str.UserSettings{}
 		val := true
 		connections := str.Connections{}
@@ -68,7 +68,7 @@ func MuxUserSettings(t *testing.T, mux *http.ServeMux) *http.ServeMux {
 
 func MuxShow(t *testing.T, mux *http.ServeMux, o *str.Options) *http.ServeMux {
 	mux.HandleFunc("/shows/"+o.InternalID, func(w http.ResponseWriter, r *http.Request) {
-		test.TestMethod(t, r, "GET")
+		test.AssertMethod(t, r, "GET")
 		test.SafeFprint(w,
 			`{
 			  "title": "Test show",
@@ -128,7 +128,7 @@ func TestCreateCheckinForMovie(t *testing.T) {
 	o.Action = consts.Movie
 	o.InternalID = "despicable-me-4-2024"
 	mux.HandleFunc("/movies/despicable-me-4-2024", func(w http.ResponseWriter, r *http.Request) {
-		test.TestMethod(t, r, "GET")
+		test.AssertMethod(t, r, "GET")
 		test.SafeFprint(w,
 			`{
 			  "title": "Despicable Me 4x",
@@ -156,7 +156,7 @@ func TestCreateCheckinForEpisode(t *testing.T) {
 	o.Action = consts.Episode
 	o.InternalID = "12345"
 	mux.HandleFunc("/episodes/12345", func(w http.ResponseWriter, r *http.Request) {
-		test.TestMethod(t, r, "GET")
+		test.AssertMethod(t, r, "GET")
 		test.SafeFprint(w,
 			`{
 				  "season": 6,

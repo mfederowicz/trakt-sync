@@ -98,7 +98,7 @@ func TestBareDo_returnsOpenBody(t *testing.T) {
 	expectedBody := "Hello from the other side !"
 
 	mux.HandleFunc("/"+consts.TestURL, func(w http.ResponseWriter, r *http.Request) {
-		test.TestMethod(t, r, http.MethodGet)
+		test.AssertMethod(t, r, http.MethodGet)
 		printer.Fprint(w, expectedBody)
 	})
 
@@ -136,7 +136,7 @@ func TestBareDo_rate_limit_reset(t *testing.T) {
 	expectedBody := "Hello from the other side !"
 
 	mux.HandleFunc("/test-url", func(w http.ResponseWriter, r *http.Request) {
-		test.TestMethod(t, r, http.MethodGet)
+		test.AssertMethod(t, r, http.MethodGet)
 		w.Header().Add(HeaderRetryAfter, "100")
 		w.WriteHeader(http.StatusTooManyRequests)
 		printer.Fprint(w, expectedBody)
@@ -161,7 +161,7 @@ func TestBareDo_rate_limit_reset(t *testing.T) {
 	}
 
 	mux.HandleFunc("/"+consts.TestURLNext, func(w http.ResponseWriter, r *http.Request) {
-		test.TestMethod(t, r, http.MethodGet)
+		test.AssertMethod(t, r, http.MethodGet)
 		printer.Fprint(w, "Body")
 	})
 
@@ -192,7 +192,7 @@ func TestBareDo_upgrade_required(t *testing.T) {
 	expectedBody := "Hello vip!"
 
 	mux.HandleFunc("/"+consts.TestURL, func(w http.ResponseWriter, r *http.Request) {
-		test.TestMethod(t, r, http.MethodGet)
+		test.AssertMethod(t, r, http.MethodGet)
 		w.Header().Add(HeaderUpgradeURL, upgradeURL)
 		w.WriteHeader(http.StatusUpgradeRequired)
 		printer.Fprint(w, expectedBody)
