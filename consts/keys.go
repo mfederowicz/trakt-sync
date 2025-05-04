@@ -1,6 +1,11 @@
 // Package consts used to store action keys
 package consts
 
+import (
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
+)
+
 // usage strings
 const (
 	ActionTypeAll      = "all"
@@ -82,3 +87,9 @@ const (
 	Watching           = "watching"
 	Watchlist          = "watchlist"
 )
+
+// Fupper helper function to convert string in title format
+func Fupper(in string) string {
+	caser := cases.Title(language.English)
+	return caser.String(in)
+}

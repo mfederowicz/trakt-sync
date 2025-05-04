@@ -7,7 +7,7 @@ const (
 	AllPages                     = 10
 	BaseURLPath                  = "/trakt"
 	CMD                          = "cmd"
-	CheckInMsgUsage              = "allow to overwrite msg"
+	CheckinMsgUsage              = "allow to overwrite msg"
 	CheckinError                 = "checkin error:%w"
 	ClientNewRequestFatal        = "client.NewRequest returned error: %v"
 	CommaString                  = ","
