@@ -90,3 +90,30 @@ func (s *ShowsService) GetTrendingShows(ctx context.Context, opts *uri.ListOptio
 
 	return list, resp, nil
 }
+
+// GetPopularShows Returns the most popular shows.
+// Popularity is calculated using the rating percentage and the number of ratings.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/popular/get-popular-shows
+func (s *ShowsService) GetPopularShows(ctx context.Context, opts *uri.ListOptions) ([]*str.Show, *str.Response, error) {
+	var url = "shows/popular"
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch shows url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Show{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch shows err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+

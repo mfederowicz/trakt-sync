@@ -25,6 +25,7 @@
       - [recommendations](#recommendations)
       - [scrobble](#scrobble)
       - [search](#search)
+      - [shows](#shows)
       - [users](#users)
       - [watchlist](#watchlist)
 
@@ -627,6 +628,7 @@ $ ./trakt-sync shows -a favorited -period monthly
 ```
 ```console
 $ ./trakt-sync shows -a favorited -period all
+```
 
 #### users:
 
