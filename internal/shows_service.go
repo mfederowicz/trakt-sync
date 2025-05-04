@@ -242,4 +242,3 @@ func (s *ShowsService) GetAnticipatedShows(ctx context.Context, opts *uri.ListOp
 
 	return list, resp, nil
 }
-

@@ -57,7 +57,7 @@ func showsFunc(cmd *Command, _ ...string) error {
 		"favorited": handlers.ShowsFavoritedHandler{},
 		"played":    handlers.ShowsPlayedHandler{},
 		"watched":   handlers.ShowsWatchedHandler{},
-		// "collected":    handlers.ShowsCollectedHandler{},
+		"collected": handlers.ShowsCollectedHandler{},
 		// "anticipated":  handlers.ShowsAnticipatedHandler{},
 		// "boxoffice":    handlers.ShowsBoxofficeHandler{},
 		// "updates":      handlers.ShowsUpdatesHandler{},
