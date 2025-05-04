@@ -48,9 +48,9 @@ type CommonInterface interface {
 	PauseScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error)
 	CreateScrobble(client *internal.Client, options *str.Options) (*str.Scrobble, error)
 	CreateScrobbleShowEpisode(client *internal.Client, options *str.Options) (*str.Scrobble, error)
-	Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error)
-	CreateCheckin(client *internal.Client, options *str.Options) (*str.CheckIn, error)
-	CreateCheckinShowEpisode(client *internal.Client, options *str.Options) (*str.CheckIn, error)
+	Checkin(client *internal.Client, checkin *str.Checkin) (*str.Checkin, *str.Response, error)
+	CreateCheckin(client *internal.Client, options *str.Options) (*str.Checkin, error)
+	CreateCheckinShowEpisode(client *internal.Client, options *str.Options) (*str.Checkin, error)
 	Comment(client *internal.Client, comment *str.Comment) (*str.Comment, *str.Response, error)
 	Notes(client *internal.Client, notes *str.Notes) (*str.Notes, *str.Response, error)
 	Reply(client *internal.Client, id *int, comment *str.Comment) (*str.Comment, *str.Response, error)
@@ -61,8 +61,8 @@ type CommonInterface interface {
 type CommonLogic struct{}
 
 // CreateCheckin helper function to create checkin object
-func (c CommonLogic) CreateCheckin(client *internal.Client, options *str.Options) (*str.CheckIn, error) {
-	checkin := new(str.CheckIn)
+func (c CommonLogic) CreateCheckin(client *internal.Client, options *str.Options) (*str.Checkin, error) {
+	checkin := new(str.Checkin)
 	connections, err := c.FetchUserConnections(client, options)
 	if err != nil {
 		return nil, fmt.Errorf(consts.UserConnectionsError, err)
@@ -99,8 +99,8 @@ func (c CommonLogic) CreateCheckin(client *internal.Client, options *str.Options
 }
 
 // CreateCheckinShowEpisode helper function to create checkin object for show episode
-func (c CommonLogic) CreateCheckinShowEpisode(client *internal.Client, options *str.Options) (*str.CheckIn, error) {
-	checkin := new(str.CheckIn)
+func (c CommonLogic) CreateCheckinShowEpisode(client *internal.Client, options *str.Options) (*str.Checkin, error) {
+	checkin := new(str.Checkin)
 	show, err := c.FetchShow(client, options)
 	if err != nil {
 		return nil, fmt.Errorf(consts.ShowErr, err)
@@ -143,7 +143,6 @@ func (c CommonLogic) CreateScrobble(client *internal.Client, options *str.Option
 		}
 		scrobble.Episode = sc.Episode
 		scrobble.Show = sc.Show
-
 	}
 
 	if options.Progress > consts.ZeroValue {
@@ -533,7 +532,7 @@ func (*CommonLogic) HideMovieRecommendation(client *internal.Client, options *st
 	return resp, err
 }
 
-// HideMovieRecommendation helper function to hide movie recommendations
+// HideShowRecommendation helper function to hide show recommendations
 func (*CommonLogic) HideShowRecommendation(client *internal.Client, options *str.Options) (*str.Response, error) {
 	showID := options.InternalID
 	resp, err := client.Recommendations.HideShowRecommendation(
@@ -587,7 +586,7 @@ func (*CommonLogic) PauseScrobble(client *internal.Client, scrobble *str.Scrobbl
 }
 
 // Checkin helper function to post checkin object
-func (*CommonLogic) Checkin(client *internal.Client, checkin *str.CheckIn) (*str.CheckIn, *str.Response, error) {
+func (*CommonLogic) Checkin(client *internal.Client, checkin *str.Checkin) (*str.Checkin, *str.Response, error) {
 	result, resp, err := client.Checkin.CheckintoAnItem(
 		context.Background(),
 		checkin,

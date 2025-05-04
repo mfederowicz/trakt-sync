@@ -2,7 +2,9 @@
 package test
 
 import (
+	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -24,7 +26,8 @@ func MapsStringBoolEqual(a, b map[string]bool) bool {
 	return true
 }
 
-func TestMethod(t *testing.T, r *http.Request, want string) {
+// AssertMethod check request method
+func AssertMethod(t *testing.T, r *http.Request, want string) {
 	t.Helper()
 	if got := r.Method; got != want {
 		t.Errorf("Request method: %v, want %v", got, want)
@@ -37,6 +40,7 @@ func Ptr[T any](v T) *T {
 	return &v
 }
 
+// AssertType check if v is the targetType
 func AssertType(t *testing.T, v any, targetType string) {
 	t.Helper()
 
@@ -57,6 +61,14 @@ func AssertType(t *testing.T, v any, targetType string) {
 	}
 }
 
+// SafeFprint prints msg and handle error if exists
+func SafeFprint(w io.Writer, msg string) {
+	if _, err := fmt.Fprint(w, msg); err != nil {
+		log.Printf("write error: %v", err)
+	}
+}
+
+// AssertNilError checks if error is not nil
 func AssertNilError(t *testing.T, err error) {
 	t.Helper()
 	if err != nil {
@@ -64,6 +76,7 @@ func AssertNilError(t *testing.T, err error) {
 	}
 }
 
+// AssertNoDiff check if vars different
 func AssertNoDiff(t *testing.T, want, got any) {
 	t.Helper()
 	if diff := cmp.Diff(want, got); diff != "" {
@@ -71,20 +84,23 @@ func AssertNoDiff(t *testing.T, want, got any) {
 	}
 }
 
+// AssertWrite check if writer write something
 func AssertWrite(t *testing.T, w io.Writer, data []byte) {
 	t.Helper()
 	_, err := w.Write(data)
 	AssertNilError(t, err)
 }
 
-func TestHeader(t *testing.T, r *http.Request, header string, want string) {
+// AssertHeader helper check if header exists
+func AssertHeader(t *testing.T, r *http.Request, header string, want string) {
 	t.Helper()
 	if got := r.Header.Get(header); got != want {
 		t.Errorf("Header.Get(%q) returned %q, want %q", header, got, want)
 	}
 }
 
-func TestURLParseError(t *testing.T, err error) {
+// AssertURLParseError helper to check url parse error
+func AssertURLParseError(t *testing.T, err error) {
 	t.Helper()
 	if err == nil {
 		t.Errorf("Expected error to be returned")
@@ -96,7 +112,8 @@ func TestURLParseError(t *testing.T, err error) {
 
 type values map[string]string
 
-func TestFormValues(t *testing.T, r *http.Request, values values) {
+// AssertFormValues checks form values
+func AssertFormValues(t *testing.T, r *http.Request, values values) {
 	t.Helper()
 	want := url.Values{}
 	for k, v := range values {
