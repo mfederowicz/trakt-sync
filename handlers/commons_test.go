@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -55,22 +54,22 @@ func setup(t *testing.T) *TestSetup {
 
 func MuxUserSettings(t *testing.T, mux *http.ServeMux) *http.ServeMux {
 	mux.HandleFunc("/users/settings", func(w http.ResponseWriter, r *http.Request) {
-		test.TestMethod(t, r, "GET")
+		test.AssertMethod(t, r, "GET")
 		s := str.UserSettings{}
 		val := true
 		connections := str.Connections{}
 		connections.Facebook = &val
 		s.Connections = &connections
 		user, _ := json.Marshal(s)
-		fmt.Fprint(w, string(user))
+		test.SafeFprint(w, string(user))
 	})
 	return mux
 }
 
 func MuxShow(t *testing.T, mux *http.ServeMux, o *str.Options) *http.ServeMux {
 	mux.HandleFunc("/shows/"+o.InternalID, func(w http.ResponseWriter, r *http.Request) {
-		test.TestMethod(t, r, "GET")
-		fmt.Fprint(w,
+		test.AssertMethod(t, r, "GET")
+		test.SafeFprint(w,
 			`{
 			  "title": "Test show",
 			  "year": 2011,
@@ -84,9 +83,7 @@ func MuxShow(t *testing.T, mux *http.ServeMux, o *str.Options) *http.ServeMux {
 			}`,
 		)
 	})
-
 	return mux
-
 }
 
 func TestEmptyServeMux(t *testing.T) {
@@ -113,7 +110,6 @@ func TestCreateCheckinUserSettingsError(t *testing.T) {
 }
 
 func TestCreateCheckinUnknownAction(t *testing.T) {
-
 	testSetup := setup(t)
 	mux := testSetup.Mux
 	mux = MuxUserSettings(t, mux)
@@ -121,21 +117,19 @@ func TestCreateCheckinUnknownAction(t *testing.T) {
 	o := &str.Options{}
 	_, err := c.CreateCheckin(testSetup.Client, o)
 	assert.Equal(t, err.Error(), "uknown checkin action")
-
 }
 
 func TestCreateCheckinForMovie(t *testing.T) {
-
 	testSetup := setup(t)
 	mux := testSetup.Mux
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
-	o.Action = "movie"
+	o.Action = consts.Movie
 	o.InternalID = "despicable-me-4-2024"
 	mux.HandleFunc("/movies/despicable-me-4-2024", func(w http.ResponseWriter, r *http.Request) {
-		test.TestMethod(t, r, "GET")
-		fmt.Fprint(w,
+		test.AssertMethod(t, r, "GET")
+		test.SafeFprint(w,
 			`{
 			  "title": "Despicable Me 4x",
 			  "year": 2024,
@@ -148,24 +142,22 @@ func TestCreateCheckinForMovie(t *testing.T) {
 			}`,
 		)
 	})
-
 	checkin, _ := c.CreateCheckin(testSetup.Client, o)
-	test.AssertType(t, checkin, "CheckIn")
-	assert.Equal(t, checkin.Movie.IDs.Trakt, test.Ptr(int64(367444)))
+	test.AssertType(t, checkin, consts.Fupper(consts.Checkin))
+	assert.Equal(t, checkin.Movie.IDs.Trakt, test.Ptr(int64(consts.TestMovieTraktID)))
 }
 
 func TestCreateCheckinForEpisode(t *testing.T) {
-
 	testSetup := setup(t)
 	mux := testSetup.Mux
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
-	o.Action = "episode"
+	o.Action = consts.Episode
 	o.InternalID = "12345"
 	mux.HandleFunc("/episodes/12345", func(w http.ResponseWriter, r *http.Request) {
-		test.TestMethod(t, r, "GET")
-		fmt.Fprint(w,
+		test.AssertMethod(t, r, "GET")
+		test.SafeFprint(w,
 			`{
 				  "season": 6,
 				  "number": 21,
@@ -182,18 +174,17 @@ func TestCreateCheckinForEpisode(t *testing.T) {
 	})
 
 	checkin, _ := c.CreateCheckin(testSetup.Client, o)
-	test.AssertType(t, checkin, "CheckIn")
-	assert.Equal(t, checkin.Episode.IDs.Trakt, test.Ptr(int64(73629)))
+	test.AssertType(t, checkin, consts.Fupper(consts.Checkin))
+	assert.Equal(t, checkin.Episode.IDs.Trakt, test.Ptr(int64(consts.TestEpisodeTraktID)))
 }
 
 func TestCreateCheckinForShowEpisodeInvalidLength(t *testing.T) {
-
 	testSetup := setup(t)
 	mux := testSetup.Mux
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
-	o.Action = "show_episode"
+	o.Action = consts.ShowEpisode
 	o.InternalID = "12345"
 	o.EpisodeCode = "12"
 	mux = MuxShow(t, mux, o)
@@ -202,50 +193,46 @@ func TestCreateCheckinForShowEpisodeInvalidLength(t *testing.T) {
 }
 
 func TestCreateCheckinForShowEpisodeInvalidFormat(t *testing.T) {
-
 	testSetup := setup(t)
 	mux := testSetup.Mux
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
-	o.Action = "show_episode"
-	o.EpisodeCode = "12345"
+	o.Action = consts.ShowEpisode
+	o.EpisodeCode = "123456"
 	mux = MuxShow(t, mux, o)
 	_, err := c.CreateCheckin(testSetup.Client, o)
 	assert.Contains(t, err.Error(), "invalid format")
 }
 
 func TestCreateCheckinForShowEpisodeEpisodeCode(t *testing.T) {
-
 	testSetup := setup(t)
 	mux := testSetup.Mux
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
-	o.Action = "show_episode"
+	o.Action = consts.ShowEpisode
 	o.EpisodeCode = "6x10"
 	o.InternalID = "353"
 	mux = MuxShow(t, mux, o)
-	checkin,_ := c.CreateCheckin(testSetup.Client, o)
-	assert.Equal(t, checkin.Episode.Season, test.Ptr(6))
-	assert.Equal(t, checkin.Episode.Number, test.Ptr(10))
-	test.AssertType(t, checkin, "CheckIn")
+	checkin, _ := c.CreateCheckin(testSetup.Client, o)
+	assert.Equal(t, checkin.Episode.Season, test.Ptr(consts.TestEpisodeSeason6))
+	assert.Equal(t, checkin.Episode.Number, test.Ptr(consts.TestEpisodeNumber10))
+	test.AssertType(t, checkin, consts.Fupper(consts.Checkin))
 }
 
 func TestCreateCheckinForShowEpisodeAbs(t *testing.T) {
-
 	testSetup := setup(t)
 	mux := testSetup.Mux
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
-	o.Action = "show_episode"
-	o.EpisodeAbs = 100
+	o.Action = consts.ShowEpisode
+	o.EpisodeAbs = consts.TestEpisodeAbs
 	o.InternalID = "353"
 	mux = MuxShow(t, mux, o)
 
 	checkin, _ := c.CreateCheckin(testSetup.Client, o)
-	assert.Equal(t, checkin.Episode.NumberAbs, test.Ptr(100))
-	test.AssertType(t, checkin, "CheckIn")
-
+	assert.Equal(t, checkin.Episode.NumberAbs, test.Ptr(consts.TestEpisodeAbs))
+	test.AssertType(t, checkin, consts.Fupper(consts.Checkin))
 }

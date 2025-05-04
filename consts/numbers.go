@@ -33,4 +33,9 @@ const (
 	X755                  = 0755
 	ZeroValue             = 0
 	ZeroValueFloat        = float64(0)
+	TestEpisodeAbs        = 100
+	TestEpisodeSeason6    = 6
+	TestEpisodeNumber10   = 10
+	TestMovieTraktID      = 367444
+	TestEpisodeTraktID    = 73629
 )

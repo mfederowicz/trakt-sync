@@ -1,8 +1,8 @@
 // Package str used for structs
 package str
 
-// CheckIn represents JSON checkin object
-type CheckIn struct {
+// Checkin represents JSON checkin object
+type Checkin struct {
 	ID      *int64     `json:"id,omitempty"`
 	Watched *Timestamp `json:"watched,omitempty"`
 	Expires *Timestamp `json:"expires_at,omitempty"`
@@ -13,6 +13,6 @@ type CheckIn struct {
 	Message *string    `json:"message,omitempty"`
 }
 
-func (c CheckIn) String() string {
+func (c Checkin) String() string {
 	return Stringify(c)
 }
