@@ -54,7 +54,7 @@ func showsFunc(cmd *Command, _ ...string) error {
 	allHandlers := map[string]handlers.Handler{
 		"trending":     handlers.ShowsTrendingHandler{},
 		"popular":      handlers.ShowsPopularHandler{},
-		// "favorited":    handlers.ShowsFavoritedHandler{},
+		"favorited":    handlers.ShowsFavoritedHandler{},
 		// "played":       handlers.ShowsPlayedHandler{},
 		// "watched":      handlers.ShowsWatchedHandler{},
 		// "collected":    handlers.ShowsCollectedHandler{},

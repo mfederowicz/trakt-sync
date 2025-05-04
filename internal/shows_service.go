@@ -117,3 +117,29 @@ func (s *ShowsService) GetPopularShows(ctx context.Context, opts *uri.ListOption
 	return list, resp, nil
 }
 
+// GetFavoritedShows Returns the most favorited shows in the specified time period, defaulting to weekly.
+// All stats are relative to the specific time period.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/favorited/get-favorited-shows
+func (s *ShowsService) GetFavoritedShows(ctx context.Context, opts *uri.ListOptions, period *string) ([]*str.ShowsItem, *str.Response, error) {
+	var url = fmt.Sprintf("shows/favorited/%s", *period)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch shows url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.ShowsItem{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch shows err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
