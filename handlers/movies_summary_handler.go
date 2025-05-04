@@ -25,10 +25,10 @@ func (m MoviesSummaryHandler) Handle(options *str.Options, client *internal.Clie
 	}
 
 	result, _, err := m.fetchMoviesSummary(client, options)
-	
+
 	if err != nil {
 		return err
-	}	
+	}
 
 	printer.Printf("Found movie for id:%s and name:%s \n", options.InternalID, *result.Title)
 
@@ -52,4 +52,3 @@ func (MoviesSummaryHandler) fetchMoviesSummary(client *internal.Client, options 
 
 	return movie, resp, nil
 }
-

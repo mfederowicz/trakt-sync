@@ -51,7 +51,7 @@ func TestMain(_ *testing.M) {
 func TestGenUsedFlagMap(t *testing.T) {
 	// Reset the flag.CommandLine and reinitialize your flags
 	flag.CommandLine = emptyFlagset()
-	flagset := make(map[string]bool)
+	flagset := map[string]bool{}
 	got := GenUsedFlagMap()
 	if !test.MapsStringBoolEqual(got, flagset) {
 		t.Errorf("maps should be equal")

@@ -8,5 +8,5 @@ import (
 
 // UsersHandler interface to handle users module action
 type UsersHandler interface {
-	Handle(options *str.Options, client *internal.Client) error 
+	Handle(options *str.Options, client *internal.Client) error
 }

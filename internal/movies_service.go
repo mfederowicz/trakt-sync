@@ -653,7 +653,7 @@ func (m *MoviesService) GetMovieWatching(ctx context.Context, id *string, opts *
 
 // GetMovieVideos Returns all videos including trailers, teasers, clips, and featurettes.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/movies/videos/get-all-videos 
+// API docs: https://trakt.docs.apiary.io/#reference/movies/videos/get-all-videos
 func (m *MoviesService) GetMovieVideos(ctx context.Context, id *string, opts *uri.ListOptions) ([]*str.Video, *str.Response, error) {
 	var url = fmt.Sprintf("movies/%s/videos", *id)
 	url, err := uri.AddQuery(url, opts)
@@ -683,8 +683,8 @@ func (m *MoviesService) GetMovieVideos(ctx context.Context, id *string, opts *ur
 	return list, resp, nil
 }
 
-// RefreshMovieMetadata Queue this movie for a full metadata and image refresh. 
-// It might take up to 8 hours for the updated metadata to be availabe through the API. 
+// RefreshMovieMetadata Queue this movie for a full metadata and image refresh.
+// It might take up to 8 hours for the updated metadata to be availabe through the API.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/refresh/refresh-movie-metadata
 func (m *MoviesService) RefreshMovieMetadata(ctx context.Context, id *string) (*str.Response, error) {
@@ -702,4 +702,3 @@ func (m *MoviesService) RefreshMovieMetadata(ctx context.Context, id *string) (*
 
 	return resp, nil
 }
-

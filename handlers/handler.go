@@ -8,5 +8,5 @@ import (
 
 // Handler interface basic handler
 type Handler interface {
-	Handle(options *str.Options, client *internal.Client) error 
+	Handle(options *str.Options, client *internal.Client) error
 }

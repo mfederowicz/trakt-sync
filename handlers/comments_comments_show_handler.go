@@ -42,7 +42,7 @@ func (h CommentsCommentsShowHandler) Handle(options *str.Options, client *intern
 	if err != nil {
 		return fmt.Errorf("comment error:%w", err)
 	}
-	
+
 	if resp.StatusCode == http.StatusCreated {
 		printer.Printf("result: success, show comment number:%d \n", result.ID)
 	}

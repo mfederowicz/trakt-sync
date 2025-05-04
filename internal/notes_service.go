@@ -61,7 +61,7 @@ func (n *NotesService) DeleteNotes(ctx context.Context, id *string) (*str.Respon
 	}
 
 	resp, err := n.client.Do(ctx, req, nil)
-	
+
 	if resp.StatusCode == http.StatusUnauthorized {
 		err = fmt.Errorf(consts.InvalidUserForNotes, *id)
 	}
@@ -79,7 +79,7 @@ func (n *NotesService) DeleteNotes(ctx context.Context, id *string) (*str.Respon
 
 // UpdateNotes Update a single note (500 maximum characters).
 //
-// API docs:https://trakt.docs.apiary.io/#reference/notes/note/update-a-note 
+// API docs:https://trakt.docs.apiary.io/#reference/notes/note/update-a-note
 func (n *NotesService) UpdateNotes(ctx context.Context, id *string, notes *str.Notes) (*str.Notes, *str.Response, error) {
 	var url = fmt.Sprintf("notes/%s", *id)
 	printer.Println("update notes")
@@ -99,7 +99,7 @@ func (n *NotesService) UpdateNotes(ctx context.Context, id *string, notes *str.N
 
 // GetNotes Return a single note.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/notes/note/get-a-note 
+// API docs:https://trakt.docs.apiary.io/#reference/notes/note/get-a-note
 func (n *NotesService) GetNotes(ctx context.Context, id *string) (*str.Notes, *str.Response, error) {
 	var url = fmt.Sprintf("notes/%s", *id)
 	printer.Println("fetch notes url:" + url)
@@ -128,7 +128,7 @@ func (n *NotesService) GetNotes(ctx context.Context, id *string) (*str.Notes, *s
 
 // GetNotesItem Returns the item this note is attached_to.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/notes/item/get-the-attached-item 
+// API docs:https://trakt.docs.apiary.io/#reference/notes/item/get-the-attached-item
 func (n *NotesService) GetNotesItem(ctx context.Context, id *string) (*str.NotesItem, *str.Response, error) {
 	var url = fmt.Sprintf("notes/%s/item", *id)
 	printer.Println("fetch notes item url:" + url)

@@ -24,10 +24,10 @@ func (m MoviesAliasesHandler) Handle(options *str.Options, client *internal.Clie
 	}
 
 	result, _, err := m.fetchMoviesAliases(client, options)
-	
+
 	if err != nil {
 		return err
-	}	
+	}
 
 	printer.Printf("Found aliases for id:%s\n", options.InternalID)
 
@@ -49,4 +49,3 @@ func (MoviesAliasesHandler) fetchMoviesAliases(client *internal.Client, options 
 
 	return aliases, resp, nil
 }
-

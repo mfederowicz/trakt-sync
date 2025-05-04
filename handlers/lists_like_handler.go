@@ -37,7 +37,7 @@ func (h ListsLikeHandler) Handle(options *str.Options, client *internal.Client) 
 
 func (ListsLikeHandler) likeSingleList(client *internal.Client, options *str.Options) (*str.Response, error) {
 	listID := options.InternalID
-	
+
 	if !options.Remove {
 		resp, err := client.Lists.LikeList(
 			context.Background(),
@@ -45,7 +45,7 @@ func (ListsLikeHandler) likeSingleList(client *internal.Client, options *str.Opt
 		)
 		return resp, err
 	}
-	
+
 	resp, err := client.Lists.RemoveLikeList(
 		context.Background(),
 		&listID,

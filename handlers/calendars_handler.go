@@ -12,5 +12,5 @@ var (
 
 // CalendarsHandler interface to handle calendars module action
 type CalendarsHandler interface {
-	Handle(options *str.Options, client *internal.Client) error 
+	Handle(options *str.Options, client *internal.Client) error
 }

@@ -8,5 +8,5 @@ import (
 
 // CommentsHandler interface to handle comments module action
 type CommentsHandler interface {
-	Handle(options *str.Options, client *internal.Client) error 
+	Handle(options *str.Options, client *internal.Client) error
 }

@@ -14,15 +14,15 @@ import (
 )
 
 // MoviesStatsHandler struct for handler
-type MoviesStatsHandler struct{common CommonLogic}
+type MoviesStatsHandler struct{ common CommonLogic }
 
 // Handle to handle movies: ratings action
 func (m MoviesStatsHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("Returns lots of movie stats.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyMovieIDMsg)
-	}	
-	
+	}
+
 	result, _, err := m.fetchMoviesStats(client, options)
 
 	if err != nil {
@@ -45,7 +45,7 @@ func (MoviesStatsHandler) fetchMoviesStats(client *internal.Client, options *str
 
 	if err != nil {
 		return nil, nil, err
-	}	
+	}
 
 	return result, resp, nil
 }

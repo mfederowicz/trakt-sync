@@ -1,5 +1,5 @@
 // Package internal used for client and services
-package internal 
+package internal
 
 import (
 	"testing"

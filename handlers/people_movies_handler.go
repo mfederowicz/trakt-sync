@@ -20,24 +20,23 @@ type PeopleMoviesHandler struct{}
 
 // Handle to handle people: movies action
 func (p PeopleMoviesHandler) Handle(options *str.Options, client *internal.Client) error {
-		if len(options.ID) == consts.ZeroValue {
-			return errors.New(consts.EmptyPersonIDMsg)
-		}
-		printer.Println("Get movie credits")
-		result, err := p.fetchMovieCredits(client, options)
-		if err != nil {
-			return fmt.Errorf("fetch movie credits error:%v", err)
-		}
+	if len(options.ID) == consts.ZeroValue {
+		return errors.New(consts.EmptyPersonIDMsg)
+	}
+	printer.Println("Get movie credits")
+	result, err := p.fetchMovieCredits(client, options)
+	if err != nil {
+		return fmt.Errorf("fetch movie credits error:%v", err)
+	}
 
-		if result == nil {
-			return errors.New("empty result")
-		}
+	if result == nil {
+		return errors.New("empty result")
+	}
 
-		printer.Print("Found movie credits data \n")
-		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
-		writer.WriteJSON(options, jsonData)
-
+	printer.Print("Found movie credits data \n")
+	print("write data to:" + options.Output)
+	jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
+	writer.WriteJSON(options, jsonData)
 
 	return nil
 }
@@ -56,4 +55,3 @@ func (PeopleMoviesHandler) fetchMovieCredits(client *internal.Client, options *s
 
 	return result, nil
 }
-

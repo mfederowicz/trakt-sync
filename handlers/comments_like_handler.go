@@ -35,7 +35,6 @@ func (h CommentsLikeHandler) Handle(options *str.Options, client *internal.Clien
 	return nil
 }
 
-
 func (CommentsLikeHandler) likeSingleComment(client *internal.Client, options *str.Options) (*str.Response, error) {
 	commentID := options.CommentID
 
@@ -46,7 +45,7 @@ func (CommentsLikeHandler) likeSingleComment(client *internal.Client, options *s
 		)
 		return resp, err
 	}
-	
+
 	resp, err := client.Comments.RemoveLikeComment(
 		context.Background(),
 		&commentID,

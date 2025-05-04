@@ -57,7 +57,7 @@ func commentsFunc(cmd *Command, _ ...string) error {
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	validActions = []string{
-		"comments", "comment", "replies", "item", "likes", "like", 
+		"comments", "comment", "replies", "item", "likes", "like",
 		"trending", "recent", "updates",
 	}
 	if err != nil {

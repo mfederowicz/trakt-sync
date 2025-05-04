@@ -49,7 +49,7 @@ func (MoviesBoxofficeHandler) fetchMoviesBoxoffice(client *internal.Client, opti
 
 	if err != nil {
 		return nil, err
-	}	
+	}
 
 	return list, nil
 }

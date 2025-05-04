@@ -23,4 +23,3 @@ func (r *InvalidUserError) Error() string {
 		r.Message,
 	)
 }
-

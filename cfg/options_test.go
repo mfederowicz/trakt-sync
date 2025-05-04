@@ -31,5 +31,5 @@ func TestModuleConfigTypeUsers(t *testing.T) {
 
 	got := ModuleActionConfig["users:watched"].Type
 
-	assert.Equal(t, got, []string{"movies", "shows"})	
+	assert.Equal(t, got, []string{"movies", "shows"})
 }

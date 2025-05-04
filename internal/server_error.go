@@ -23,4 +23,3 @@ func (r *ServerError) Error() string {
 		r.Message,
 	)
 }
-

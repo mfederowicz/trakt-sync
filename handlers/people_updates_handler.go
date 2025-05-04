@@ -21,7 +21,7 @@ type PeopleUpdatesHandler struct{}
 
 // Handle to handle people: updates action
 func (p PeopleUpdatesHandler) Handle(options *str.Options, client *internal.Client) error {
-	printer.Println("Get recently updated people for date:"+options.StartDate)
+	printer.Println("Get recently updated people for date:" + options.StartDate)
 	date := options.StartDate
 	updates, err := p.fetchPeoplesUpdates(client, options, date, consts.DefaultPage)
 	if err != nil {
@@ -74,4 +74,3 @@ func (p PeopleUpdatesHandler) fetchPeoplesUpdates(client *internal.Client, optio
 
 	return list, nil
 }
-

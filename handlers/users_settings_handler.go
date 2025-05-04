@@ -17,13 +17,13 @@ import (
 type UsersSettingsHandler struct{}
 
 // Handle to handle users: settings action
-func (UsersSettingsHandler) Handle(options *str.Options, client *internal.Client) error {	
+func (UsersSettingsHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("users settings handler:" + options.UserName)
 
 	settings, _, err := fetchUsersSettings(client)
 	if err != nil {
 		return fmt.Errorf("fetch settings error:%w", err)
-	}	
+	}
 
 	printer.Print("Found " + options.Action + " data \n")
 	print("write data to:" + options.Output)
@@ -38,4 +38,3 @@ func fetchUsersSettings(client *internal.Client) (*str.UserSettings, *str.Respon
 
 	return settings, resp, err
 }
-

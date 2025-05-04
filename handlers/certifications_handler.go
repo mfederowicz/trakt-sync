@@ -8,5 +8,5 @@ import (
 
 // CertificationsHandler interface to handle certifications
 type CertificationsHandler interface {
-	Handle(options *str.Options, client *internal.Client) error 
+	Handle(options *str.Options, client *internal.Client) error
 }

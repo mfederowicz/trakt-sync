@@ -14,15 +14,15 @@ import (
 )
 
 // MoviesRatingsHandler struct for handler
-type MoviesRatingsHandler struct{common CommonLogic}
+type MoviesRatingsHandler struct{ common CommonLogic }
 
 // Handle to handle movies: ratings action
 func (m MoviesRatingsHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("Returns rating (between 0 and 10) and distribution for a movie.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyMovieIDMsg)
-	}	
-	
+	}
+
 	result, _, err := m.fetchMoviesRatings(client, options)
 
 	if err != nil {
@@ -45,7 +45,7 @@ func (MoviesRatingsHandler) fetchMoviesRatings(client *internal.Client, options 
 
 	if err != nil {
 		return nil, nil, err
-	}	
+	}
 
 	return result, resp, nil
 }

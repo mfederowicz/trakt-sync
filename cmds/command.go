@@ -377,7 +377,7 @@ func (c *Command) Fatalf(errFormat string, args ...any) {
 }
 
 func (c *Command) fetchFlagsMap() map[string]string {
-	flagMap := make(map[string]string)
+	flagMap := map[string]string{}
 	flag.VisitAll(func(f *flag.Flag) {
 		flagMap[f.Name] = f.Value.String()
 	})
@@ -413,7 +413,7 @@ func processArgsItem(arg string, key string, argMap map[string]bool) (string, ma
 	return key, argMap
 }
 func argsToMap(args []string) map[string]bool {
-	argMap := make(map[string]bool)
+	argMap := map[string]bool{}
 	var key string
 
 	for _, arg := range args {

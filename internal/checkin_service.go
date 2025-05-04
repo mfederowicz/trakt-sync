@@ -51,5 +51,3 @@ func (c *CheckinService) CheckintoAnItem(ctx context.Context, checkin *str.Check
 
 	return ch, resp, nil
 }
-
-

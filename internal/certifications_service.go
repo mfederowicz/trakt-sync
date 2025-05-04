@@ -20,7 +20,7 @@ type CertificationsService Service
 func (c *CertificationsService) GetCertifications(ctx context.Context, strType *string) (*str.Certifications, *str.Response, error) {
 	var url = fmt.Sprintf("certifications/%s", *strType)
 	printer.Println("fetch certifications url:" + url)
-	
+
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -35,5 +35,3 @@ func (c *CertificationsService) GetCertifications(ctx context.Context, strType *
 
 	return result, resp, nil
 }
-
-

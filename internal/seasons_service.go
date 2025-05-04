@@ -24,14 +24,14 @@ func (s *SeasonsService) GetSeason(ctx context.Context, id *string, opts *uri.Li
 	}
 	printer.Println("fetch season url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
-	
+
 	if err != nil {
 		return nil, nil, err
 	}
 
 	result := new(str.Season)
 	resp, err := s.client.Do(ctx, req, &result)
-	
+
 	if resp.StatusCode == http.StatusNotFound {
 		err = fmt.Errorf("season not found with traktId:%s", *id)
 	}

@@ -35,8 +35,6 @@ func TestNewRequest(t *testing.T) {
 	}
 }
 
-
-
 func TestHavePages(t *testing.T) {
 	t.Helper()
 	testSetup := Setup()

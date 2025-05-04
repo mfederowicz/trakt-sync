@@ -36,23 +36,23 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 	printer.Println("days:", options.Days)
 	var handler handlers.CalendarsHandler
 	allHandlers := map[string]handlers.Handler{
-		"my-shows":  handlers.CalendarsShowsHandler{},
-		"all-shows": handlers.CalendarsShowsHandler{},
-		"my-new-shows":  handlers.CalendarsNewShowsHandler{},
-		"all-new-shows": handlers.CalendarsNewShowsHandler{},
+		"my-shows":             handlers.CalendarsShowsHandler{},
+		"all-shows":            handlers.CalendarsShowsHandler{},
+		"my-new-shows":         handlers.CalendarsNewShowsHandler{},
+		"all-new-shows":        handlers.CalendarsNewShowsHandler{},
 		"my-season-premieres":  handlers.CalendarsSeasonPremieresHandler{},
 		"all-season-premieres": handlers.CalendarsSeasonPremieresHandler{},
-		"my-finales":  handlers.CalendarsFinalesHandler{},
-		"all-finales": handlers.CalendarsFinalesHandler{},
-		"my-movies":  handlers.CalendarsMoviesHandler{},
-		"all-movies": handlers.CalendarsMoviesHandler{},
-		"my-dvd":  handlers.CalendarsDvdHandler{},
-		"all-dvd": handlers.CalendarsDvdHandler{},
+		"my-finales":           handlers.CalendarsFinalesHandler{},
+		"all-finales":          handlers.CalendarsFinalesHandler{},
+		"my-movies":            handlers.CalendarsMoviesHandler{},
+		"all-movies":           handlers.CalendarsMoviesHandler{},
+		"my-dvd":               handlers.CalendarsDvdHandler{},
+		"all-dvd":              handlers.CalendarsDvdHandler{},
 	}
 
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
-	validActions = []string{"{my,all}-shows","{my,all}-new-shows","{my,all}-season-premieres","{my,all}-finales","{my,all}-movies","{my,all}-dvd"}
+	validActions = []string{"{my,all}-shows", "{my,all}-new-shows", "{my,all}-season-premieres", "{my,all}-finales", "{my,all}-movies", "{my,all}-dvd"}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

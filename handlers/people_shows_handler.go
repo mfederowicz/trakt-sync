@@ -42,7 +42,7 @@ func (p PeopleShowsHandler) Handle(options *str.Options, client *internal.Client
 	return nil
 }
 
- func (PeopleShowsHandler) fetchShowCredits(client *internal.Client, options *str.Options) (*str.PersonShows, error) {
+func (PeopleShowsHandler) fetchShowCredits(client *internal.Client, options *str.Options) (*str.PersonShows, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetShowCredits(
 		context.Background(),
@@ -56,4 +56,3 @@ func (p PeopleShowsHandler) Handle(options *str.Options, client *internal.Client
 
 	return result, nil
 }
-

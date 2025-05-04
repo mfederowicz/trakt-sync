@@ -24,4 +24,3 @@ func (r TmdbRatingRange) String() string {
 
 	return fmt.Sprintf(consts.RangeFormatFloats, r.Min, r.Max)
 }
-

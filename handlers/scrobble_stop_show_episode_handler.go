@@ -20,10 +20,10 @@ func (s ScrobbleStopShowEpisodeHandler) Handle(options *str.Options, client *int
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
-	
+
 	if options.EpisodeAbs > consts.ZeroValue && len(options.EpisodeCode) > consts.ZeroValue {
 		return errors.New("only episode_abs or episode_code at time")
-	}	
+	}
 
 	if len(options.EpisodeCode) > consts.ZeroValue {
 		return s.CreateStopScrobbleForEpisodeCode(options, client)

@@ -8,5 +8,5 @@ import (
 
 // CountriesHandler interface to handle countries
 type CountriesHandler interface {
-	Handle(options *str.Options, client *internal.Client) error 
+	Handle(options *str.Options, client *internal.Client) error
 }

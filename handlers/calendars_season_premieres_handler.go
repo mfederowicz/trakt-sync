@@ -58,4 +58,3 @@ func fetchCalendarSeasonPremieres(client *internal.Client, options *str.Options)
 
 	return list, nil
 }
-

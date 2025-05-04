@@ -20,7 +20,7 @@ import (
 type UsersSavedFiltersHandler struct{}
 
 // Handle to handle users: saved filters action
-func (UsersSavedFiltersHandler) Handle(options *str.Options, client *internal.Client) error {	
+func (UsersSavedFiltersHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("users saved filters handler:" + options.UserName)
 
 	filters, resp, err := fetchUsersSavedFilters(client, &options.Type)
@@ -29,7 +29,7 @@ func (UsersSavedFiltersHandler) Handle(options *str.Options, client *internal.Cl
 	}
 
 	if resp.StatusCode == http.StatusUpgradeRequired {
-		return cli.HandleUpgrade(resp)	
+		return cli.HandleUpgrade(resp)
 	}
 
 	if len(filters) == consts.ZeroValue {
@@ -52,4 +52,3 @@ func fetchUsersSavedFilters(client *internal.Client, section *string) ([]*str.Sa
 
 	return lists, resp, err
 }
-

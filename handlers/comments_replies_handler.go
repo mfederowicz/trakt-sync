@@ -89,7 +89,7 @@ func (h CommentsRepliesHandler) replyForComment(client *internal.Client, options
 	c.Comment = &options.Reply
 	c.Spoiler = &options.Spoiler
 	result, resp, err := h.common.Reply(client, &options.CommentID, c)
-	
+
 	if err != nil {
 		return fmt.Errorf("reply comment error:%w", err)
 	}

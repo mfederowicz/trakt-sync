@@ -25,4 +25,3 @@ func (r *UpgradeRequiredError) Error() string {
 		r.Message,
 	)
 }
-

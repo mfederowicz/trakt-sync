@@ -25,10 +25,10 @@ func (m MoviesVideosHandler) Handle(options *str.Options, client *internal.Clien
 	}
 
 	result, _, err := m.fetchMoviesVideos(client, options)
-	
+
 	if err != nil {
 		return err
-	}	
+	}
 
 	printer.Printf("Found videos for id:%s\n", options.InternalID)
 
@@ -52,4 +52,3 @@ func (MoviesVideosHandler) fetchMoviesVideos(client *internal.Client, options *s
 
 	return result, resp, nil
 }
-

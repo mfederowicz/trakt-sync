@@ -16,7 +16,7 @@ import (
 )
 
 // MoviesListsHandler struct for handler
-type MoviesListsHandler struct{common CommonLogic}
+type MoviesListsHandler struct{ common CommonLogic }
 
 // Handle to handle movies: lists action
 func (m MoviesListsHandler) Handle(options *str.Options, client *internal.Client) error {
@@ -24,13 +24,13 @@ func (m MoviesListsHandler) Handle(options *str.Options, client *internal.Client
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyMovieIDMsg)
 	}
-	
+
 	err := m.common.CheckSortAndTypes(options)
 
 	if err != nil {
 		return err
 	}
-	
+
 	result, _, err := m.fetchMoviesLists(client, options, consts.DefaultPage)
 
 	if err != nil {

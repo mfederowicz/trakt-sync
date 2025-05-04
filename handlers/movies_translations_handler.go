@@ -24,10 +24,10 @@ func (m MoviesTranslationsHandler) Handle(options *str.Options, client *internal
 	}
 
 	result, _, err := m.fetchMoviesTranslations(client, options)
-	
+
 	if err != nil {
 		return err
-	}	
+	}
 
 	printer.Printf("Found translations for id:%s\n", options.InternalID)
 
@@ -50,4 +50,3 @@ func (MoviesTranslationsHandler) fetchMoviesTranslations(client *internal.Client
 
 	return translations, resp, nil
 }
-

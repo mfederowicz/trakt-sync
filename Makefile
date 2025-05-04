@@ -21,7 +21,10 @@ cover:
 	@go test -cover -coverprofile coverage.out ./...
 
 linter:
-	@revive --formatter friendly ./...
+	@revive --config ./revive.toml --formatter friendly ./...
+
+cleanup:
+	@find . -type f -name '*.go' -exec gofmt -w {} +
 
 clean:
 	@rm -rf *.json
