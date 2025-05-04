@@ -143,3 +143,25 @@ func (s *ShowsService) GetFavoritedShows(ctx context.Context, opts *uri.ListOpti
 	return list, resp, nil
 }
 
+// GetPlayedShows Returns the most played (a single user can watch multiple episode multiple times) shows in the specified time period, defaulting to weekly.
+// All stats are relative to the specific time period.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/played/get-the-most-played-shows
+func (s *ShowsService) GetPlayedShows(ctx context.Context, opts *uri.ListOptions, period *string) ([]*str.ShowsItem, *str.Response, error) {
+	var url = fmt.Sprintf("shows/played/%s", *period)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch shows url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	list := []*str.ShowsItem{}
+	resp, err := s.client.Do(ctx, req, &list)
+	if err != nil {
+		printer.Println("fetch shows err:" + err.Error())
+		return nil, resp, err
+	}
+	return list, resp, nil
+}

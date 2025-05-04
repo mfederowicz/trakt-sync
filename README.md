@@ -629,6 +629,19 @@ $ ./trakt-sync shows -a favorited -period monthly
 ```console
 $ ./trakt-sync shows -a favorited -period all
 ```
+##### Get the most played shows
+```console
+$ ./trakt-sync shows -a played -period daily
+```
+```console
+$ ./trakt-sync shows -a played -period weekly
+```
+```console
+$ ./trakt-sync shows -a played -period monthly
+```
+```console
+$ ./trakt-sync shows -a played -period all
+```
 
 #### users:
 
