@@ -2,7 +2,9 @@
 package test
 
 import (
+	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -37,6 +39,7 @@ func Ptr[T any](v T) *T {
 	return &v
 }
 
+// AssertType check if v is the targetType
 func AssertType(t *testing.T, v any, targetType string) {
 	t.Helper()
 
@@ -55,6 +58,13 @@ func AssertType(t *testing.T, v any, targetType string) {
 	if to.Name() != targetType {
 		t.Errorf("unexpected type: %v", to.Name())
 	}
+}
+
+// SafeFprint prints msg and handle error if exists
+func SafeFprint(w io.Writer, msg string) {
+    if _, err := fmt.Fprint(w, msg); err != nil {
+        log.Printf("write error: %v", err)
+    }
 }
 
 func AssertNilError(t *testing.T, err error) {

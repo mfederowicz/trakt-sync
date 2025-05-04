@@ -4,6 +4,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -62,7 +63,7 @@ func MuxUserSettings(t *testing.T, mux *http.ServeMux) *http.ServeMux {
 		connections.Facebook = &val
 		s.Connections = &connections
 		user, _ := json.Marshal(s)
-		fmt.Fprint(w, string(user))
+		test.SafeFprint(w, string(user))
 	})
 	return mux
 }
@@ -70,7 +71,7 @@ func MuxUserSettings(t *testing.T, mux *http.ServeMux) *http.ServeMux {
 func MuxShow(t *testing.T, mux *http.ServeMux, o *str.Options) *http.ServeMux {
 	mux.HandleFunc("/shows/"+o.InternalID, func(w http.ResponseWriter, r *http.Request) {
 		test.TestMethod(t, r, "GET")
-		fmt.Fprint(w,
+		test.SafeFprint(w,
 			`{
 			  "title": "Test show",
 			  "year": 2011,
@@ -130,7 +131,7 @@ func TestCreateCheckinForMovie(t *testing.T) {
 	o.InternalID = "despicable-me-4-2024"
 	mux.HandleFunc("/movies/despicable-me-4-2024", func(w http.ResponseWriter, r *http.Request) {
 		test.TestMethod(t, r, "GET")
-		fmt.Fprint(w,
+		test.SafeFprint(w,
 			`{
 			  "title": "Despicable Me 4x",
 			  "year": 2024,
@@ -158,7 +159,7 @@ func TestCreateCheckinForEpisode(t *testing.T) {
 	o.InternalID = "12345"
 	mux.HandleFunc("/episodes/12345", func(w http.ResponseWriter, r *http.Request) {
 		test.TestMethod(t, r, "GET")
-		fmt.Fprint(w,
+		test.SafeFprint(w,
 			`{
 				  "season": 6,
 				  "number": 21,
@@ -216,7 +217,7 @@ func TestCreateCheckinForShowEpisodeEpisodeCode(t *testing.T) {
 	o.EpisodeCode = "6x10"
 	o.InternalID = "353"
 	mux = MuxShow(t, mux, o)
-	checkin,_ := c.CreateCheckin(testSetup.Client, o)
+	checkin, _ := c.CreateCheckin(testSetup.Client, o)
 	assert.Equal(t, checkin.Episode.Season, test.Ptr(6))
 	assert.Equal(t, checkin.Episode.Number, test.Ptr(10))
 	test.AssertType(t, checkin, "CheckIn")
