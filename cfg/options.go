@@ -175,7 +175,7 @@ func ValidateConfig(module string, config OptionsConfig) bool {
 
 // isSubset checks if slice a is a subset of slice b
 func isSubset(a, b []string) bool {
-	set := make(map[string]bool)
+	set := map[string]bool{}
 	for _, item := range b {
 		set[item] = true
 	}
@@ -299,13 +299,13 @@ func IsValidConfigTypeSlice(allowedElements []string, userElements str.Slice) bo
 	}
 
 	// Create a map to count occurrences of each element in allowedElements.
-	mainCount := make(map[string]int)
+	mainCount := map[string]int{}
 	for _, element := range allowedElements {
 		mainCount[element]++
 	}
 
 	// Create a map to count occurrences of each element in userElements.
-	subCount := make(map[string]int)
+	subCount := map[string]int{}
 	for _, element := range userElements {
 		subCount[element]++
 	}

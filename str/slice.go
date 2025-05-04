@@ -16,7 +16,7 @@ func (i *Slice) String() string {
 		return ""
 	}
 
-	uniqueValues := make(map[string]struct{})
+	uniqueValues := map[string]struct{}
 	var deduplicated []string
 	for _, item := range *i {
 		if _, seen := uniqueValues[item]; !seen {

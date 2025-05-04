@@ -81,7 +81,7 @@ var (
 
 // InitConfig of app
 func InitConfig(fs afero.Fs) (*Config, error) {
-	flagMap := make(map[string]string)
+	flagMap := map[string]string{}
 	flag.VisitAll(func(f *flag.Flag) {
 		flagMap[f.Name] = f.Value.String()
 	})
@@ -100,7 +100,7 @@ func InitConfig(fs afero.Fs) (*Config, error) {
 
 // GenUsedFlagMap map of used flags
 func GenUsedFlagMap() map[string]bool {
-	flagset := make(map[string]bool)
+	flagset := map[string]bool{}
 
 	flag.Visit(func(f *flag.Flag) {
 		key := string(f.Name[0])
