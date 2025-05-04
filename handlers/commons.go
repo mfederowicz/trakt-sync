@@ -143,7 +143,6 @@ func (c CommonLogic) CreateScrobble(client *internal.Client, options *str.Option
 		}
 		scrobble.Episode = sc.Episode
 		scrobble.Show = sc.Show
-
 	}
 
 	if options.Progress > consts.ZeroValue {

@@ -84,9 +84,7 @@ func MuxShow(t *testing.T, mux *http.ServeMux, o *str.Options) *http.ServeMux {
 			}`,
 		)
 	})
-
 	return mux
-
 }
 
 func TestEmptyServeMux(t *testing.T) {
@@ -113,7 +111,6 @@ func TestCreateCheckinUserSettingsError(t *testing.T) {
 }
 
 func TestCreateCheckinUnknownAction(t *testing.T) {
-
 	testSetup := setup(t)
 	mux := testSetup.Mux
 	mux = MuxUserSettings(t, mux)
@@ -121,11 +118,9 @@ func TestCreateCheckinUnknownAction(t *testing.T) {
 	o := &str.Options{}
 	_, err := c.CreateCheckin(testSetup.Client, o)
 	assert.Equal(t, err.Error(), "uknown checkin action")
-
 }
 
 func TestCreateCheckinForMovie(t *testing.T) {
-
 	testSetup := setup(t)
 	mux := testSetup.Mux
 	mux = MuxUserSettings(t, mux)
@@ -148,14 +143,12 @@ func TestCreateCheckinForMovie(t *testing.T) {
 			}`,
 		)
 	})
-
 	checkin, _ := c.CreateCheckin(testSetup.Client, o)
 	test.AssertType(t, checkin, "CheckIn")
 	assert.Equal(t, checkin.Movie.IDs.Trakt, test.Ptr(int64(367444)))
 }
 
 func TestCreateCheckinForEpisode(t *testing.T) {
-
 	testSetup := setup(t)
 	mux := testSetup.Mux
 	mux = MuxUserSettings(t, mux)
@@ -187,7 +180,6 @@ func TestCreateCheckinForEpisode(t *testing.T) {
 }
 
 func TestCreateCheckinForShowEpisodeInvalidLength(t *testing.T) {
-
 	testSetup := setup(t)
 	mux := testSetup.Mux
 	mux = MuxUserSettings(t, mux)
@@ -202,7 +194,6 @@ func TestCreateCheckinForShowEpisodeInvalidLength(t *testing.T) {
 }
 
 func TestCreateCheckinForShowEpisodeInvalidFormat(t *testing.T) {
-
 	testSetup := setup(t)
 	mux := testSetup.Mux
 	mux = MuxUserSettings(t, mux)
@@ -216,7 +207,6 @@ func TestCreateCheckinForShowEpisodeInvalidFormat(t *testing.T) {
 }
 
 func TestCreateCheckinForShowEpisodeEpisodeCode(t *testing.T) {
-
 	testSetup := setup(t)
 	mux := testSetup.Mux
 	mux = MuxUserSettings(t, mux)
@@ -233,7 +223,6 @@ func TestCreateCheckinForShowEpisodeEpisodeCode(t *testing.T) {
 }
 
 func TestCreateCheckinForShowEpisodeAbs(t *testing.T) {
-
 	testSetup := setup(t)
 	mux := testSetup.Mux
 	mux = MuxUserSettings(t, mux)
@@ -247,5 +236,4 @@ func TestCreateCheckinForShowEpisodeAbs(t *testing.T) {
 	checkin, _ := c.CreateCheckin(testSetup.Client, o)
 	assert.Equal(t, checkin.Episode.NumberAbs, test.Ptr(100))
 	test.AssertType(t, checkin, "CheckIn")
-
 }
