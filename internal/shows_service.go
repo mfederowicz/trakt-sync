@@ -165,3 +165,81 @@ func (s *ShowsService) GetPlayedShows(ctx context.Context, opts *uri.ListOptions
 	}
 	return list, resp, nil
 }
+
+// GetWatchedShows  Returns the most watched (unique users) shows in the specified time period, defaulting to weekly.
+// All stats are relative to the specific time period.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/watched/get-the-most-watched-shows
+func (s *ShowsService) GetWatchedShows(ctx context.Context, opts *uri.ListOptions, period *string) ([]*str.ShowsItem, *str.Response, error) {
+	var url = fmt.Sprintf("shows/watched/%s", *period)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch shows url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.ShowsItem{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch shows err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// GetCollectedShows Returns the most collected (unique users) shows in the specified time period, defaulting to weekly.
+// All stats are relative to the specific time period.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/collected/get-the-most-collected-shows
+func (s *ShowsService) GetCollectedShows(ctx context.Context, opts *uri.ListOptions, period *string) ([]*str.ShowsItem, *str.Response, error) {
+	var url = fmt.Sprintf("shows/collected/%s", *period)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch shows url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.ShowsItem{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch shows err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// GetAnticipatedShows Returns the most anticipated shows based on the number of lists a show appears on.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/anticipated/get-the-most-anticipated-shows
+func (s *ShowsService) GetAnticipatedShows(ctx context.Context, opts *uri.ListOptions) ([]*str.ShowsItem, *str.Response, error) {
+	var url = "shows/anticipated"
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch shows url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.ShowsItem{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch shows err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+

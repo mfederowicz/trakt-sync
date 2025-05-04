@@ -642,7 +642,19 @@ $ ./trakt-sync shows -a played -period monthly
 ```console
 $ ./trakt-sync shows -a played -period all
 ```
-
+##### Get the most watched shows
+```console
+$ ./trakt-sync shows -a watched -period daily
+```
+```console
+$ ./trakt-sync shows -a watched -period weekly
+```
+```console
+$ ./trakt-sync shows -a watched -period monthly
+```
+```console
+$ ./trakt-sync shows -a watched -period all
+```
 #### users:
 
 ##### Export movies or shows or episodes from user lists:
