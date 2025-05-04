@@ -21,13 +21,13 @@ func certificationsFunc(cmd *Command, _ ...string) error {
 	options = cmd.UpdateOptionsWithCommandFlags(options)
 	var handler handlers.CertificationsHandler
 	allHandlers := map[string]handlers.Handler{
-		"movies":handlers.CertificationsTypesHandler{},
-		"shows":handlers.CertificationsTypesHandler{},	
+		"movies": handlers.CertificationsTypesHandler{},
+		"shows":  handlers.CertificationsTypesHandler{},
 	}
 
 	handler, err := cmd.common.GetHandlerForMap(options.Type, allHandlers)
 
-	validTypes := []string{"movies","shows"}
+	validTypes := []string{"movies", "shows"}
 	if err != nil {
 		cmd.common.GenTypeUsage(cmd.Name, validTypes)
 		return nil

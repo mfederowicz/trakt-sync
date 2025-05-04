@@ -21,7 +21,7 @@ type MoviesUpdatesHandler struct{}
 
 // Handle to handle movies: updates action
 func (p MoviesUpdatesHandler) Handle(options *str.Options, client *internal.Client) error {
-	printer.Println("Get recently updated movies for date:"+options.StartDate)
+	printer.Println("Get recently updated movies for date:" + options.StartDate)
 	date := options.StartDate
 	updates, err := p.fetchMoviesUpdates(client, options, date, consts.DefaultPage)
 	if err != nil {
@@ -74,4 +74,3 @@ func (p MoviesUpdatesHandler) fetchMoviesUpdates(client *internal.Client, option
 
 	return list, nil
 }
-

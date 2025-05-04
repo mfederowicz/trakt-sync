@@ -25,10 +25,10 @@ func (m MoviesWatchingHandler) Handle(options *str.Options, client *internal.Cli
 	}
 
 	result, _, err := m.fetchMoviesWatching(client, options)
-	
+
 	if err != nil {
 		return err
-	}	
+	}
 
 	printer.Printf("Found watching for id:%s\n", options.InternalID)
 
@@ -52,4 +52,3 @@ func (MoviesWatchingHandler) fetchMoviesWatching(client *internal.Client, option
 
 	return result, resp, nil
 }
-

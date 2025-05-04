@@ -23,4 +23,3 @@ func (r *ConflictError) Error() string {
 		r.Message,
 	)
 }
-

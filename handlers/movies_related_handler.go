@@ -16,7 +16,7 @@ import (
 )
 
 // MoviesRelatedHandler struct for handler
-type MoviesRelatedHandler struct{common CommonLogic}
+type MoviesRelatedHandler struct{ common CommonLogic }
 
 // Handle to handle movies: related action
 func (m MoviesRelatedHandler) Handle(options *str.Options, client *internal.Client) error {
@@ -24,7 +24,7 @@ func (m MoviesRelatedHandler) Handle(options *str.Options, client *internal.Clie
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyMovieIDMsg)
 	}
-	
+
 	result, _, err := m.fetchMoviesRelated(client, options, consts.DefaultPage)
 
 	if err != nil {

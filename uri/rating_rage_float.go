@@ -23,4 +23,3 @@ func (rr RatingRangeFloat) String() string {
 	}
 	return fmt.Sprintf(consts.RangeFormatFloats, rr.Min, rr.Max)
 }
-

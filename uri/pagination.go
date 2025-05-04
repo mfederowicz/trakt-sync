@@ -8,4 +8,3 @@ type Pagination struct {
 	// For paginated result sets, the number of elements on one page.
 	Limit int `url:"limit,omitempty"`
 }
-

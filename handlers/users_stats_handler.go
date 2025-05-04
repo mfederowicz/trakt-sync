@@ -25,7 +25,7 @@ func (UsersStatsHandler) Handle(options *str.Options, client *internal.Client) e
 	}
 
 	if resp.StatusCode == http.StatusNotFound {
-		return fmt.Errorf("not found user stats for:%s",options.UserName)
+		return fmt.Errorf("not found user stats for:%s", options.UserName)
 	}
 
 	printer.Printf("Found %s user stats\n", options.UserName)

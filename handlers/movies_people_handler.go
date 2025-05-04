@@ -15,15 +15,15 @@ import (
 )
 
 // MoviesPeopleHandler struct for handler
-type MoviesPeopleHandler struct{common CommonLogic}
+type MoviesPeopleHandler struct{ common CommonLogic }
 
 // Handle to handle movies: people action
 func (m MoviesPeopleHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("Returns all people related with movie.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyMovieIDMsg)
-	}	
-	
+	}
+
 	result, _, err := m.fetchMoviesPeople(client, options)
 
 	if err != nil {
@@ -48,7 +48,7 @@ func (MoviesPeopleHandler) fetchMoviesPeople(client *internal.Client, options *s
 
 	if err != nil {
 		return nil, nil, err
-	}	
+	}
 
 	return result, resp, nil
 }

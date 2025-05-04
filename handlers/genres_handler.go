@@ -8,5 +8,5 @@ import (
 
 // GenresHandler interface to handle genres
 type GenresHandler interface {
-	Handle(options *str.Options, client *internal.Client) error 
+	Handle(options *str.Options, client *internal.Client) error
 }

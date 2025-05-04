@@ -10,4 +10,3 @@ type DeviceToken struct {
 	Scope        *string `json:"scope"`
 	CreatedAt    *int    `json:"created_at"`
 }
-

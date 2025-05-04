@@ -8,5 +8,5 @@ import (
 
 // PeopleHandler interface to handle people module action
 type PeopleHandler interface {
-	Handle(options *str.Options, client *internal.Client) error 
+	Handle(options *str.Options, client *internal.Client) error
 }

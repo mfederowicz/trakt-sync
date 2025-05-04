@@ -77,7 +77,6 @@ func getAvlistsFromPersonals(personalLists []*str.PersonalList) []int {
 	return avLists
 }
 
-
 func fetchUsersPersonalLists(client *internal.Client, username *string) ([]*str.PersonalList, *str.Response, error) {
 	lists, resp, err := client.Users.GetUsersPersonalLists(
 		context.Background(),

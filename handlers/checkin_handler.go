@@ -8,5 +8,5 @@ import (
 
 // CheckinHandler interface to handle checkin module action
 type CheckinHandler interface {
-	Handle(options *str.Options, client *internal.Client) error 
+	Handle(options *str.Options, client *internal.Client) error
 }

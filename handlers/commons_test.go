@@ -226,7 +226,7 @@ func TestCreateCheckinForShowEpisodeEpisodeCode(t *testing.T) {
 	o.EpisodeCode = "6x10"
 	o.InternalID = "353"
 	mux = MuxShow(t, mux, o)
-	checkin,_ := c.CreateCheckin(testSetup.Client, o)
+	checkin, _ := c.CreateCheckin(testSetup.Client, o)
 	assert.Equal(t, checkin.Episode.Season, test.Ptr(6))
 	assert.Equal(t, checkin.Episode.Number, test.Ptr(10))
 	test.AssertType(t, checkin, "CheckIn")

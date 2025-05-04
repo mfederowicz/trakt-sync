@@ -11,4 +11,3 @@ type Air struct {
 func (a Air) String() string {
 	return Stringify(a)
 }
-

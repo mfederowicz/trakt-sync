@@ -58,4 +58,3 @@ func fetchCalendarMovies(client *internal.Client, options *str.Options) ([]*str.
 
 	return list, nil
 }
-

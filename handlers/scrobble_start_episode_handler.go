@@ -20,7 +20,7 @@ func (s ScrobbleStartEpisodeHandler) Handle(options *str.Options, client *intern
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
-	
+
 	scrobble, err := s.common.CreateScrobble(client, options)
 	if err != nil {
 		return fmt.Errorf("scrobble error:%w", err)

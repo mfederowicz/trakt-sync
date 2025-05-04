@@ -24,14 +24,14 @@ func (s *ShowsService) GetShow(ctx context.Context, id *string, opts *uri.ListOp
 	}
 	printer.Println("fetch show url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
-	
+
 	if err != nil {
 		return nil, nil, err
 	}
 
 	result := new(str.Show)
 	resp, err := s.client.Do(ctx, req, &result)
-	
+
 	if resp.StatusCode == http.StatusNotFound {
 		err = fmt.Errorf("show not found with traktId:%s", *id)
 	}

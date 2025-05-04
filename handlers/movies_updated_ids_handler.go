@@ -21,7 +21,7 @@ type MoviesUpdatedIDsHandler struct{}
 
 // Handle to handle people: updated_ids action
 func (m MoviesUpdatedIDsHandler) Handle(options *str.Options, client *internal.Client) error {
-	printer.Println("Get recently updated movies Trakt IDs for date:"+options.StartDate)
+	printer.Println("Get recently updated movies Trakt IDs for date:" + options.StartDate)
 	date := options.StartDate
 	updates, err := m.fetchMoviesUpdatedIDs(client, options, date, consts.DefaultPage)
 	if err != nil {
@@ -76,4 +76,3 @@ func (m MoviesUpdatedIDsHandler) fetchMoviesUpdatedIDs(client *internal.Client, 
 
 	return list, nil
 }
-

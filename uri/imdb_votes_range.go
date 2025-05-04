@@ -24,4 +24,3 @@ func (r ImdbVotesRange) String() string {
 
 	return fmt.Sprintf(consts.RangeFormatDigits, r.Min, r.Max)
 }
-

@@ -22,6 +22,7 @@ cover:
 
 linter:
 	@revive --formatter friendly ./...
-
+cleanup:
+	@find . -type f -name '*.go' -exec gofmt -w {} +
 clean:
 	@rm -rf *.json

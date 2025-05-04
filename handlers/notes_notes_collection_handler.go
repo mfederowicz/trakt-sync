@@ -29,10 +29,10 @@ func (h NotesNotesCollectionHandler) Handle(options *str.Options, client *intern
 	switch options.Item {
 	case "movie":
 		movie, _, _ := h.common.FetchMovie(client, options)
-		n.Movie = movie	
+		n.Movie = movie
 	case "episode":
 		episode, _ := h.common.FetchEpisode(client, options)
-		n.Episode = episode	
+		n.Episode = episode
 	default:
 		h.common.GenActionTypeItemUsage(options, []string{"movie", "episode"})
 		return nil

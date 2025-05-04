@@ -1,7 +1,6 @@
 // Package str used for structs
 package str
 
-
 // UserListItem represents JSON user personal list item object
 type UserListItem struct {
 	Rank     *int       `json:"rank,omitempty"`

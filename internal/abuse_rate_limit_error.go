@@ -25,4 +25,3 @@ func (r *AbuseRateLimitError) Error() string {
 		r.Message,
 	)
 }
-

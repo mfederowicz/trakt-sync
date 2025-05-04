@@ -24,10 +24,10 @@ func (m MoviesStudiosHandler) Handle(options *str.Options, client *internal.Clie
 	}
 
 	result, _, err := m.fetchMoviesStudios(client, options)
-	
+
 	if err != nil {
 		return err
-	}	
+	}
 
 	printer.Printf("Found studios for id:%s\n", options.InternalID)
 
@@ -49,4 +49,3 @@ func (MoviesStudiosHandler) fetchMoviesStudios(client *internal.Client, options 
 
 	return result, resp, nil
 }
-

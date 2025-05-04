@@ -15,7 +15,7 @@ import (
 )
 
 // RecommendationsShowsHandler struct for handler
-type RecommendationsShowsHandler struct{common CommonLogic}
+type RecommendationsShowsHandler struct{ common CommonLogic }
 
 // Handle to handle recommendations: shows action
 func (r RecommendationsShowsHandler) Handle(options *str.Options, client *internal.Client) error {

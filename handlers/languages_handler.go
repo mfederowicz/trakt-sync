@@ -8,5 +8,5 @@ import (
 
 // LanguagesHandler interface to handle languages
 type LanguagesHandler interface {
-	Handle(options *str.Options, client *internal.Client) error 
+	Handle(options *str.Options, client *internal.Client) error
 }

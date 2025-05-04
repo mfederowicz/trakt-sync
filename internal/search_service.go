@@ -14,7 +14,6 @@ import (
 // methods of the Trakt API.
 type SearchService Service
 
-
 // GetTextQueryResults Search all text fields that a media object contains
 // (i.e. title, overview, etc). Results are ordered by the most relevant score.
 // Specify the type of results by sending a single value or a comma delimited string for multiple types.

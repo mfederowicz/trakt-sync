@@ -1,7 +1,6 @@
 // Package buffer used to write buffer bytes and printout logs if exists
 package buffer
 
-
 import (
 	"bytes"
 	"log"

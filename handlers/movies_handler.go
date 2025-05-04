@@ -8,5 +8,5 @@ import (
 
 // MoviesHandler interface to handle movies module action
 type MoviesHandler interface {
-	Handle(options *str.Options, client *internal.Client) error 
+	Handle(options *str.Options, client *internal.Client) error
 }

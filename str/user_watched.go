@@ -9,7 +9,7 @@ type UserWatched struct {
 	ResetAt       *Timestamp `json:"reset_at,omitempty"`
 	Movie         *Movie     `json:"movie,omitempty"`
 	Show          *Show      `json:"show,omitempty"`
-	Seasons       *[]Season `json:"seasons,omitempty"`
+	Seasons       *[]Season  `json:"seasons,omitempty"`
 }
 
 func (u UserWatched) String() string {

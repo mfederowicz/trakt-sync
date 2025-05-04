@@ -20,7 +20,7 @@ import (
 type NetworksListsHandler struct{}
 
 // Handle to handle networks: lists action
-func (p NetworksListsHandler) Handle(options *str.Options, client *internal.Client) error {	
+func (p NetworksListsHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("Get a list of all TV networks")
 	result, err := p.fetchNetworksList(client, options, consts.DefaultPage)
 	if err != nil {

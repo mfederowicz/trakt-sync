@@ -24,10 +24,10 @@ func (m MoviesReleasesHandler) Handle(options *str.Options, client *internal.Cli
 	}
 
 	result, _, err := m.fetchMoviesReleases(client, options)
-	
+
 	if err != nil {
 		return err
-	}	
+	}
 
 	printer.Printf("Found releases for id:%s\n", options.InternalID)
 
@@ -50,4 +50,3 @@ func (MoviesReleasesHandler) fetchMoviesReleases(client *internal.Client, option
 
 	return releases, resp, nil
 }
-

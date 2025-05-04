@@ -10,4 +10,3 @@ type SetupData struct {
 	ServerURL string
 	Teardown  func()
 }
-

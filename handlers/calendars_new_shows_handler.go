@@ -56,4 +56,3 @@ func fetchCalendarNewShows(client *internal.Client, options *str.Options) ([]*st
 
 	return list, nil
 }
-
