@@ -668,6 +668,10 @@ $ ./trakt-sync shows -a collected -period monthly
 ```console
 $ ./trakt-sync shows -a collected -period all
 ```
+##### Get the most anticipated shows
+```console
+$ ./trakt-sync shows -a anticipated
+```
 
 #### users:
 
