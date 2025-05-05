@@ -696,6 +696,28 @@ $ ./trakt-sync shows -a certifications -i the-sopranos
 ```console
 $ ./trakt-sync shows -a translations -i the-sopranos -language es
 ```
+##### Get all show comments
+```console
+$ ./trakt-sync shows -a comments -i the-sopranos -s newest
+```
+```console
+$ ./trakt-sync shows -a comments -i the-sopranos -s oldest
+```
+```console
+$ ./trakt-sync shows -a comments -i the-sopranos -s likes
+```
+```console
+$ ./trakt-sync shows -a comments -i the-sopranos -s replies
+```
+```console
+$ ./trakt-sync shows -a comments -i the-sopranos -s highest
+```
+```console
+$ ./trakt-sync shows -a comments -i the-sopranos -s lowest
+```
+```console
+$ ./trakt-sync shows -a comments -i the-sopranos -s plays
+```
 
 #### users:
 

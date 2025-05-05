@@ -65,7 +65,7 @@ func showsFunc(cmd *Command, _ ...string) error {
 		"aliases":        handlers.ShowsAliasesHandler{},
 		"certifications": handlers.ShowsCertificationsHandler{},
 		"translations":   handlers.ShowsTranslationsHandler{},
-		// "comments":     handlers.ShowsCommentsHandler{},
+		"comments":       handlers.ShowsCommentsHandler{},
 		// "lists":        handlers.ShowsListsHandler{},
 		// "people":       handlers.ShowsPeopleHandler{},
 		// "ratings":      handlers.ShowsRatingsHandler{},
