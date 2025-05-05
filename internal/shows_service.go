@@ -269,3 +269,31 @@ func (s *ShowsService) GetRecentlyUpdatedShows(ctx context.Context, startDate *s
 
 	return list, resp, nil
 }
+
+// GetRecentlyUpdatedShowsTraktIDs Returns all show Trakt IDs updated since the specified UTC date and time.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/updated-ids/get-recently-updated-show-trakt-ids
+func (s *ShowsService) GetRecentlyUpdatedShowsTraktIDs(ctx context.Context, startDate *string, opts *uri.ListOptions) ([]*int, *str.Response, error) {
+	var url string
+
+	url = fmt.Sprintf("shows/updates/id/%s", *startDate)
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch updates url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*int{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch updates err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

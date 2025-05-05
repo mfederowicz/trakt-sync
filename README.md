@@ -676,6 +676,10 @@ $ ./trakt-sync shows -a anticipated
 ```console
 $ ./trakt-sync shows -a updates -start_date YYYY-MM-DD
 ```
+##### Get recenty updated show Trakt IDs 
+```console
+$ ./trakt-sync shows -a updated_ids -start_date YYYY-MM-DD
+```
 
 #### users:
 

@@ -60,7 +60,7 @@ func showsFunc(cmd *Command, _ ...string) error {
 		"collected":   handlers.ShowsCollectedHandler{},
 		"anticipated": handlers.ShowsAnticipatedHandler{},
 		"updates":     handlers.ShowsUpdatesHandler{},
-		// "updated_ids":  handlers.ShowsUpdatedIDsHandler{},
+		"updated_ids": handlers.ShowsUpdatedIDsHandler{},
 		// "summary":      handlers.ShowsSummaryHandler{},
 		// "aliases":      handlers.ShowsAliasesHandler{},
 		// "releases":     handlers.ShowsReleasesHandler{},
