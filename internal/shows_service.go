@@ -297,3 +297,28 @@ func (s *ShowsService) GetRecentlyUpdatedShowsTraktIDs(ctx context.Context, star
 
 	return list, resp, nil
 }
+
+// GetAllShowAliases Returns all title aliases for a show. Includes country where name is different.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/aliases/get-all-show-aliases
+func (s *ShowsService) GetAllShowAliases(ctx context.Context, id *string) ([]*str.Alias, *str.Response, error) {
+	url := fmt.Sprintf("shows/%s/aliases", *id)
+	printer.Println("fetch aliases url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Alias{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found aliases for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch aliases err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

@@ -62,7 +62,7 @@ func showsFunc(cmd *Command, _ ...string) error {
 		"updates":     handlers.ShowsUpdatesHandler{},
 		"updated_ids": handlers.ShowsUpdatedIDsHandler{},
 		"summary":     handlers.ShowsSummaryHandler{},
-		// "aliases":      handlers.ShowsAliasesHandler{},
+		"aliases":     handlers.ShowsAliasesHandler{},
 		// "releases":     handlers.ShowsReleasesHandler{},
 		// "translations": handlers.ShowsTranslationsHandler{},
 		// "comments":     handlers.ShowsCommentsHandler{},
