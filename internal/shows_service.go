@@ -422,3 +422,41 @@ func (s *ShowsService) GetAllShowComments(ctx context.Context, id *string, sort 
 
 	return list, resp, nil
 }
+
+// GetListsContainingShow Returns all lists that contain this show.
+// By default, personal lists are returned sorted by the most popular.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/lists/get-lists-containing-this-show
+func (s *ShowsService) GetListsContainingShow(ctx context.Context, id *string, t *string, sort *string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
+	var url string
+	if *t != consts.EmptyString && *sort != consts.EmptyString {
+		url = fmt.Sprintf("shows/%s/lists/%s/%s", *id, *t, *sort)
+	} else {
+		url = fmt.Sprintf("shows/%s/lists", *id)
+	}
+
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch lists url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.PersonalList{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found lists for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch lists err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

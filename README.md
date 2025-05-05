@@ -718,6 +718,25 @@ $ ./trakt-sync shows -a comments -i the-sopranos -s lowest
 ```console
 $ ./trakt-sync shows -a comments -i the-sopranos -s plays
 ```
+##### Get lists containing the show
+```console
+$ ./trakt-sync shows -a lists -i the-sopranos -t all -s popular
+```
+```console
+$ ./trakt-sync shows -a lists -i the-sopranos -t all -s likes
+```
+```console
+$ ./trakt-sync shows -a lists -i the-sopranos -t all -s comments
+```
+```console
+$ ./trakt-sync shows -a lists -i the-sopranos -t all -s items
+```
+```console
+$ ./trakt-sync shows -a lists -i the-sopranos -t all -s added
+```
+```console
+$ ./trakt-sync shows -a lists -i the-sopranos -t all -s updated
+```
 
 #### users:
 

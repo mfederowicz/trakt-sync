@@ -70,6 +70,14 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	"notes:item": {
 		Privacy: []string{"private", "friends", "public"},
 	},
+	"shows:comments": {
+		Type: []string{},
+		Sort: []string{"newest", "oldest", "likes", "replies", "highest", "lowest", "plays"},
+	},
+	"shows:lists": {
+		Type: []string{"all", "personal", "official", "watchlists", "favorites"},
+		Sort: []string{"popular", "likes", "comments", "items", "added", "updated"},
+	},
 }
 
 // ModuleConfig represents the configuration options for all modules
@@ -151,7 +159,6 @@ var ModuleConfig = map[string]OptionsConfig{
 		Format:       []string{"imdb", "tmdb", "tvdb", "tvrage", "trakt"},
 		Action:       []string{},
 	},
-
 	"shows": {
 		SearchIDType: []string{},
 		SearchType:   []string{},
