@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
@@ -346,6 +347,37 @@ func (s *ShowsService) GetAllShowCertifications(ctx context.Context, id *string)
 
 	if err != nil {
 		printer.Println("fetch certifications err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// GetAllShowTranslations Returns all translations for a show, including language and translated values for title, tagline and overview.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/translations/get-all-show-translations
+func (s *ShowsService) GetAllShowTranslations(ctx context.Context, id *string, language *string) ([]*str.Translation, *str.Response, error) {
+	var url string
+	if *language != consts.EmptyString {
+		url = fmt.Sprintf("shows/%s/translations/%s", *id, *language)
+	} else {
+		url = fmt.Sprintf("shows/%s/translations", *id)
+	}
+
+	printer.Println("fetch translations url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Translation{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found translations for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch translations err:" + err.Error())
 		return nil, resp, err
 	}
 
