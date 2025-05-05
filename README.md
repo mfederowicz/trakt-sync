@@ -688,6 +688,10 @@ $ ./trakt-sync shows -a summary -i the-sopranos
 ```console
 $ ./trakt-sync shows -a aliases -i the-sopranos
 ```
+##### Get all show certifications
+```console
+$ ./trakt-sync movies -a certifications -i the-sopranos
+```
 
 #### users:
 

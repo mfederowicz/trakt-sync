@@ -21,7 +21,7 @@ var (
 
 	validShowsActions = []string{
 		"trending", "popular", "favorited", "played", "watched", "collected",
-		"anticipated", "boxoffice", "updated", "updated_ids", "summary", "aliases",
+		"anticipated", "boxoffice", "updated", "updated_ids", "summary", "aliases", "certifications",
 		"releases", "translations", "comments", "lists", "people", "ratings",
 		"releated", "stats", "studios", "watching", "videos", "refresh"}
 )
@@ -52,17 +52,18 @@ func showsFunc(cmd *Command, _ ...string) error {
 
 	var handler handlers.ShowsHandler
 	allHandlers := map[string]handlers.Handler{
-		"trending":    handlers.ShowsTrendingHandler{},
-		"popular":     handlers.ShowsPopularHandler{},
-		"favorited":   handlers.ShowsFavoritedHandler{},
-		"played":      handlers.ShowsPlayedHandler{},
-		"watched":     handlers.ShowsWatchedHandler{},
-		"collected":   handlers.ShowsCollectedHandler{},
-		"anticipated": handlers.ShowsAnticipatedHandler{},
-		"updates":     handlers.ShowsUpdatesHandler{},
-		"updated_ids": handlers.ShowsUpdatedIDsHandler{},
-		"summary":     handlers.ShowsSummaryHandler{},
-		"aliases":     handlers.ShowsAliasesHandler{},
+		"trending":       handlers.ShowsTrendingHandler{},
+		"popular":        handlers.ShowsPopularHandler{},
+		"favorited":      handlers.ShowsFavoritedHandler{},
+		"played":         handlers.ShowsPlayedHandler{},
+		"watched":        handlers.ShowsWatchedHandler{},
+		"collected":      handlers.ShowsCollectedHandler{},
+		"anticipated":    handlers.ShowsAnticipatedHandler{},
+		"updates":        handlers.ShowsUpdatesHandler{},
+		"updated_ids":    handlers.ShowsUpdatedIDsHandler{},
+		"summary":        handlers.ShowsSummaryHandler{},
+		"aliases":        handlers.ShowsAliasesHandler{},
+		"certifications": handlers.ShowsCertificationsHandler{},
 		// "releases":     handlers.ShowsReleasesHandler{},
 		// "translations": handlers.ShowsTranslationsHandler{},
 		// "comments":     handlers.ShowsCommentsHandler{},

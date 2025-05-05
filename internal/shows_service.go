@@ -322,3 +322,32 @@ func (s *ShowsService) GetAllShowAliases(ctx context.Context, id *string) ([]*st
 
 	return list, resp, nil
 }
+
+// GetAllShowCertifications Returns all content certifications for a show, including the country.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/certifications/get-all-show-certifications
+func (s *ShowsService) GetAllShowCertifications(ctx context.Context, id *string) ([]*str.Certification, *str.Response, error) {
+	url := fmt.Sprintf("shows/%s/certifications", *id)
+	printer.Println("fetch certifications url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Certification{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found certifications for id/slug:%s", *id)
+	}
+
+	if resp.StatusCode == http.StatusInternalServerError {
+		return nil, nil, fmt.Errorf("fetch certifications: internal server error for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch certifications err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
