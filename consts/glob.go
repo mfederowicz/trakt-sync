@@ -27,6 +27,7 @@ const (
 	EmptyIncludeReplies          = "set includeReplies ie: -include_replies true or false"
 	EmptyListIDMsg               = "set traktId ie: -trakt_id 55"
 	EmptyMovieIDMsg              = "set Trakt ID, Trakt slug, or IMDB ID Example:  ie: -i 12345 or -i tron-legacy-2010"
+	EmptyShowIDMsg               = "set Trakt ID, Trakt slug, or IMDB ID Example:  ie: -i 12345 or -i tron-legacy-2010"
 	EmptyNotesIDMsg              = "set notesId ie: -i 12345678"
 	EmptyPersonIDMsg             = "set personId ie: -i john-wayne"
 	EmptyResult                  = "empty result"

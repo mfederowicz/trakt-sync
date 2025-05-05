@@ -680,7 +680,10 @@ $ ./trakt-sync shows -a updates -start_date YYYY-MM-DD
 ```console
 $ ./trakt-sync shows -a updated_ids -start_date YYYY-MM-DD
 ```
-
+##### Get a show
+```console
+$ ./trakt-sync shows -a summary -i tron-legacy-2010
+```
 #### users:
 
 ##### Export movies or shows or episodes from user lists:

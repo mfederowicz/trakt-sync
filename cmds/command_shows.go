@@ -61,7 +61,7 @@ func showsFunc(cmd *Command, _ ...string) error {
 		"anticipated": handlers.ShowsAnticipatedHandler{},
 		"updates":     handlers.ShowsUpdatesHandler{},
 		"updated_ids": handlers.ShowsUpdatedIDsHandler{},
-		// "summary":      handlers.ShowsSummaryHandler{},
+		"summary":     handlers.ShowsSummaryHandler{},
 		// "aliases":      handlers.ShowsAliasesHandler{},
 		// "releases":     handlers.ShowsReleasesHandler{},
 		// "translations": handlers.ShowsTranslationsHandler{},
