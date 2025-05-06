@@ -49,6 +49,9 @@ type ListOptions struct {
 	Type              string           `url:"type,omitempty"`
 	Votes             VotesRange       `url:"votes,omitempty"`
 	Years             string           `url:"years,omitempty"`
+	Hidden            string           `url:"hidden,omitempty"`
+	Specials          string           `url:"specials,omitempty"`
+	CountSpecials     string           `url:"count_specials,omitempty"`
 }
 
 // AddQuery adds query parameters to s.

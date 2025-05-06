@@ -23,6 +23,8 @@ const (
 	Checkin            = "checkin"
 	Collected          = "collected"
 	Collection         = "collection"
+	CollectionProgress = "collection_progress"
+	WatchedProgress    = "watched_progress"
 	Comment            = "comment"
 	Comments           = "comments"
 	Countries          = "countries"
