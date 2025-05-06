@@ -25,7 +25,7 @@ var (
 	validShowsActions = []string{
 		"trending", "popular", "favorited", "played", "watched", "collected",
 		"anticipated", "boxoffice", "updated", "updated_ids", "summary", "aliases", "certifications",
-		"collection_progress", "releases", "translations", "comments", "lists", "people", "ratings",
+		"collection_progress", "watched_progress", "releases", "translations", "comments", "lists", "people", "ratings",
 		"releated", "stats", "studios", "watching", "videos", "refresh"}
 )
 
@@ -48,7 +48,6 @@ func showsFunc(cmd *Command, _ ...string) error {
 		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
 	}
 
-	fmt.Println(options.Sort)
 	err = cmd.ValidSort(options)
 	if err != nil {
 		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
@@ -72,6 +71,7 @@ func showsFunc(cmd *Command, _ ...string) error {
 		"comments":            handlers.ShowsCommentsHandler{},
 		"lists":               handlers.ShowsListsHandler{},
 		"collection_progress": handlers.ShowsCollectionProgressHandler{},
+		"watched_progress":    handlers.ShowsWatchedProgressHandler{},
 		// "people":       handlers.ShowsPeopleHandler{},
 		// "ratings":      handlers.ShowsRatingsHandler{},
 		// "related":      handlers.ShowsRelatedHandler{},

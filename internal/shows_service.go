@@ -468,6 +468,11 @@ func (s *ShowsService) GetShowCollectionProgress(ctx context.Context, id *string
 	url = fmt.Sprintf("shows/%s/progress/collection", *id)
 
 	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, err
+	}
+
 	printer.Println("fetch collection progress url:" + url)
 
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
@@ -483,4 +488,33 @@ func (s *ShowsService) GetShowCollectionProgress(ctx context.Context, id *string
 	}
 
 	return collection, nil
+}
+
+// GetShowWatchedProgress Returns watched progress for a show including details on all aired seasons and episodes.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/watched-progress/get-show-watched-progress
+func (s *ShowsService) GetShowWatchedProgress(ctx context.Context, id *string, opts *uri.ListOptions) (*str.WatchedProgress, error) {
+	var url string
+	url = fmt.Sprintf("shows/%s/progress/watched", *id)
+
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, err
+	}
+
+	printer.Println("fetch watched progress url:" + url)
+
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	watched := new(str.WatchedProgress)
+	_, err = s.client.Do(ctx, req, &watched)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return watched, nil
 }

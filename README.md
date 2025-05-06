@@ -745,6 +745,14 @@ $ ./trakt-sync shows -a collection_progress -i the-sopranos -specials false
 $ ./trakt-sync shows -a collection_progress -i the-sopranos -count_specials true
 $ ./trakt-sync shows -a collection_progress -i the-sopranos -hidden true -specials true -count_specials true
 ```
+##### Get show watched progress 
+```console
+$ ./trakt-sync shows -a watched_progress -i the-sopranos
+$ ./trakt-sync shows -a watched_progress -i the-sopranos -hidden false 
+$ ./trakt-sync shows -a watched_progress -i the-sopranos -specials false 
+$ ./trakt-sync shows -a watched_progress -i the-sopranos -count_specials true
+$ ./trakt-sync shows -a watched_progress -i the-sopranos -hidden true -specials true -count_specials true
+```
 
 #### users:
 
