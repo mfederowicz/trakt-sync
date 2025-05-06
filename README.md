@@ -737,6 +737,14 @@ $ ./trakt-sync shows -a lists -i the-sopranos -t all -s added
 ```console
 $ ./trakt-sync shows -a lists -i the-sopranos -t all -s updated
 ```
+##### Get show collection progress 
+```console
+$ ./trakt-sync shows -a collection_progress -i the-sopranos
+$ ./trakt-sync shows -a collection_progress -i the-sopranos -hidden false 
+$ ./trakt-sync shows -a collection_progress -i the-sopranos -specials false 
+$ ./trakt-sync shows -a collection_progress -i the-sopranos -count_specials true
+$ ./trakt-sync shows -a collection_progress -i the-sopranos -hidden true -specials true -count_specials true
+```
 
 #### users:
 

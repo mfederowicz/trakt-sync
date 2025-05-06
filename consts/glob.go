@@ -15,6 +15,7 @@ const (
 	CommentNotFoundWithID        = "comment not found with commentId:%d"
 	CommentTypeUsage             = "allow to overwrite comment_type"
 	CommentUsage                 = "allow to overwrite comment"
+	CollectionProgressError      = "collection progress error:%w"
 	ConfigUsage                  = "allow to overwrite default config filename"
 	DaysUsage                    = "allow to overwrite days"
 	DefaultOutputFormat1         = "export_%s.json"
@@ -86,6 +87,9 @@ const (
 	SeparatorString              = CommaString
 	ShowEpisodeErr               = "show episode error:%w"
 	ShowErr                      = "show error:%w"
+	ShowsHiddenUsage             = "allow to overwrite hidden"
+	ShowsSpecialsUsage           = "allow to overwrite specials"
+	ShowsCountSpecialsUsage      = "allow to overwrite specials"
 	ShowsCountryUsage            = "allow to overwrite country"
 	ShowsLanguageUsage           = "allow to overwrite language"
 	ShowsPeriodUsage             = "allow to overwrite period"

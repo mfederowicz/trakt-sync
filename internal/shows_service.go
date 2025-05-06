@@ -460,3 +460,27 @@ func (s *ShowsService) GetListsContainingShow(ctx context.Context, id *string, t
 
 	return list, resp, nil
 }
+
+// GetShowCollectionProgress Returns collection progress for a show including details on all aired seasons and episodes.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/collection-progress/get-show-collection-progress
+func (s *ShowsService) GetShowCollectionProgress(ctx context.Context, id *string, opts *uri.ListOptions) (*str.CollectionProgress, error) {
+	var url string
+	url = fmt.Sprintf("shows/%s/progress/collection", *id)
+
+	url, err := uri.AddQuery(url, opts)
+	printer.Println("fetch collection progress url:" + url)
+
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	collection := new(str.CollectionProgress)
+	_, err = s.client.Do(ctx, req, &collection)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return collection, nil
+}

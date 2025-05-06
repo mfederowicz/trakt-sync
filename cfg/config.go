@@ -27,6 +27,7 @@ type Config struct {
 	CommentType       string    `toml:"comment_type"`
 	CommentsSort      string    `toml:"sort"`
 	ConfigPath        string    `toml:"config_path"`
+	CountSpecials     string    `toml:"count_specials"`
 	Days              int       `toml:"days"`
 	Delete            bool      `toml:"delete"`
 	Episode           int       `toml:"episode"`
@@ -35,6 +36,7 @@ type Config struct {
 	ErrorCode         int       `toml:"errorCode"`
 	Field             string    `toml:"field"`
 	Format            string    `toml:"format"`
+	Hidden            string    `toml:"hidden"`
 	Hide              bool      `toml:"hide"`
 	ID                string    `toml:"id"`
 	IgnoreCollected   string    `toml:"ignore_collected"`
@@ -71,6 +73,7 @@ type Config struct {
 	ShowsSort         string    `toml:"sort"`
 	ShowsType         string    `toml:"type"`
 	Sort              string    `toml:"sort"`
+	Specials          string    `toml:"specials"`
 	Spoiler           bool      `toml:"spoiler"`
 	TokenPath         string    `toml:"token_path"`
 	TraktID           int       `toml:"trakt_id"`

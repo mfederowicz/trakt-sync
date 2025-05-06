@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -75,6 +76,10 @@ var ModuleActionConfig = map[string]OptionsConfig{
 		Sort: []string{"newest", "oldest", "likes", "replies", "highest", "lowest", "plays"},
 	},
 	"shows:lists": {
+		Type: []string{"all", "personal", "official", "watchlists", "favorites"},
+		Sort: []string{"popular", "likes", "comments", "items", "added", "updated"},
+	},
+	"shows:collection_progress": {
 		Type: []string{"all", "personal", "official", "watchlists", "favorites"},
 		Sort: []string{"popular", "likes", "comments", "items", "added", "updated"},
 	},
@@ -303,12 +308,10 @@ func optionsFromConfigOutput(options *str.Options) string {
 
 // IsValidConfigType checks if the provided type is valid for the module
 func IsValidConfigType(allowedTypes []string, userType string) bool {
-	for _, t := range allowedTypes {
-		if t == userType {
-			return true
-		}
+	if len(userType) == consts.ZeroValue {
+		return true
 	}
-	return false
+	return slices.Contains(allowedTypes, userType)
 }
 
 // IsValidConfigTypeSlice checks if all elements of userElements are in allowedElements,
@@ -441,7 +444,7 @@ func getOutputForModuleShows(options *str.Options) string {
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
 	case consts.Favorited, consts.Played, consts.Watched, consts.Collected:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.Period)
-	case consts.Summary, consts.Aliases, consts.Releases, consts.Translations, consts.Comments, consts.Lists, consts.People, consts.Ratings, consts.Related, consts.Stats, consts.Studios, consts.Watching, consts.Videos:
+	case consts.Summary, consts.Aliases, consts.Releases, consts.Translations, consts.Comments, consts.Lists, consts.CollectionProgress, consts.People, consts.Ratings, consts.Related, consts.Stats, consts.Studios, consts.Watching, consts.Videos:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.InternalID)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)

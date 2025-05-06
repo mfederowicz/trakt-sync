@@ -46,6 +46,7 @@ var Avflags = map[string]bool{
 	"comment_id":         true,
 	"comment_type":       true,
 	"comments":           true,
+	"count_specials":     true,
 	"countries":          true,
 	"country":            true,
 	"days":               true,
@@ -58,6 +59,7 @@ var Avflags = map[string]bool{
 	"genres":             true,
 	"godoc":              true,
 	"help":               true,
+	"hidden":             true,
 	"hide":               true,
 	"history":            true,
 	"i":                  true,
@@ -88,6 +90,7 @@ var Avflags = map[string]bool{
 	"scrobble":           true,
 	"search":             true,
 	"shows":              true,
+	"specials":           true,
 	"spoiler":            true,
 	"start":              true,
 	"start_date":         true,
@@ -359,6 +362,9 @@ func setOptionsDependsOnModuleShows(options str.Options) str.Options {
 	options.StartDate = *_showsStartDate
 	options.InternalID = *_showsInternalID
 	options.Country = *_showsCountry
+	options.Hidden = *_showsHidden
+	options.Specials = *_showsSpecials
+	options.CountSpecials = *_showsCountSpecials
 	options.Language = *_showsLanguage
 	options.Sort = *_showsSort
 	options.Type = *_showsType

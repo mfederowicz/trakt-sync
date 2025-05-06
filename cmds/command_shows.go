@@ -10,19 +10,22 @@ import (
 )
 
 var (
-	_showsAction     = ShowsCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
-	_showsInternalID = ShowsCmd.Flag.String("i", cfg.DefaultConfig().InternalID, consts.MovieIDUsage)
-	_showsPeriod     = ShowsCmd.Flag.String("period", cfg.DefaultConfig().ShowsPeriod, consts.ShowsPeriodUsage)
-	_showsCountry    = ShowsCmd.Flag.String("country", cfg.DefaultConfig().ShowsCountry, consts.ShowsCountryUsage)
-	_showsLanguage   = ShowsCmd.Flag.String("language", cfg.DefaultConfig().ShowsLanguage, consts.ShowsLanguageUsage)
-	_showsSort       = ShowsCmd.Flag.String("s", cfg.DefaultConfig().ShowsSort, consts.ShowsSortUsage)
-	_showsType       = ShowsCmd.Flag.String("t", cfg.DefaultConfig().ShowsType, consts.ShowsTypeUsage)
-	_showsStartDate  = ShowsCmd.Flag.String("start_date", "", consts.StartDateUsage)
+	_showsAction        = ShowsCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_showsInternalID    = ShowsCmd.Flag.String("i", cfg.DefaultConfig().InternalID, consts.MovieIDUsage)
+	_showsPeriod        = ShowsCmd.Flag.String("period", cfg.DefaultConfig().ShowsPeriod, consts.ShowsPeriodUsage)
+	_showsCountry       = ShowsCmd.Flag.String("country", cfg.DefaultConfig().ShowsCountry, consts.ShowsCountryUsage)
+	_showsHidden        = ShowsCmd.Flag.String("hidden", cfg.DefaultConfig().Hidden, consts.ShowsHiddenUsage)
+	_showsSpecials      = ShowsCmd.Flag.String("specials", cfg.DefaultConfig().Specials, consts.ShowsSpecialsUsage)
+	_showsCountSpecials = ShowsCmd.Flag.String("count_specials", cfg.DefaultConfig().CountSpecials, consts.ShowsCountSpecialsUsage)
+	_showsLanguage      = ShowsCmd.Flag.String("language", cfg.DefaultConfig().ShowsLanguage, consts.ShowsLanguageUsage)
+	_showsSort          = ShowsCmd.Flag.String("s", cfg.DefaultConfig().ShowsSort, consts.ShowsSortUsage)
+	_showsType          = ShowsCmd.Flag.String("t", cfg.DefaultConfig().ShowsType, consts.ShowsTypeUsage)
+	_showsStartDate     = ShowsCmd.Flag.String("start_date", "", consts.StartDateUsage)
 
 	validShowsActions = []string{
 		"trending", "popular", "favorited", "played", "watched", "collected",
 		"anticipated", "boxoffice", "updated", "updated_ids", "summary", "aliases", "certifications",
-		"releases", "translations", "comments", "lists", "people", "ratings",
+		"collection_progress", "releases", "translations", "comments", "lists", "people", "ratings",
 		"releated", "stats", "studios", "watching", "videos", "refresh"}
 )
 
@@ -45,6 +48,7 @@ func showsFunc(cmd *Command, _ ...string) error {
 		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
 	}
 
+	fmt.Println(options.Sort)
 	err = cmd.ValidSort(options)
 	if err != nil {
 		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
@@ -52,21 +56,22 @@ func showsFunc(cmd *Command, _ ...string) error {
 
 	var handler handlers.ShowsHandler
 	allHandlers := map[string]handlers.Handler{
-		"trending":       handlers.ShowsTrendingHandler{},
-		"popular":        handlers.ShowsPopularHandler{},
-		"favorited":      handlers.ShowsFavoritedHandler{},
-		"played":         handlers.ShowsPlayedHandler{},
-		"watched":        handlers.ShowsWatchedHandler{},
-		"collected":      handlers.ShowsCollectedHandler{},
-		"anticipated":    handlers.ShowsAnticipatedHandler{},
-		"updates":        handlers.ShowsUpdatesHandler{},
-		"updated_ids":    handlers.ShowsUpdatedIDsHandler{},
-		"summary":        handlers.ShowsSummaryHandler{},
-		"aliases":        handlers.ShowsAliasesHandler{},
-		"certifications": handlers.ShowsCertificationsHandler{},
-		"translations":   handlers.ShowsTranslationsHandler{},
-		"comments":       handlers.ShowsCommentsHandler{},
-		"lists":          handlers.ShowsListsHandler{},
+		"trending":            handlers.ShowsTrendingHandler{},
+		"popular":             handlers.ShowsPopularHandler{},
+		"favorited":           handlers.ShowsFavoritedHandler{},
+		"played":              handlers.ShowsPlayedHandler{},
+		"watched":             handlers.ShowsWatchedHandler{},
+		"collected":           handlers.ShowsCollectedHandler{},
+		"anticipated":         handlers.ShowsAnticipatedHandler{},
+		"updates":             handlers.ShowsUpdatesHandler{},
+		"updated_ids":         handlers.ShowsUpdatedIDsHandler{},
+		"summary":             handlers.ShowsSummaryHandler{},
+		"aliases":             handlers.ShowsAliasesHandler{},
+		"certifications":      handlers.ShowsCertificationsHandler{},
+		"translations":        handlers.ShowsTranslationsHandler{},
+		"comments":            handlers.ShowsCommentsHandler{},
+		"lists":               handlers.ShowsListsHandler{},
+		"collection_progress": handlers.ShowsCollectionProgressHandler{},
 		// "people":       handlers.ShowsPeopleHandler{},
 		// "ratings":      handlers.ShowsRatingsHandler{},
 		// "related":      handlers.ShowsRelatedHandler{},

@@ -8,6 +8,7 @@ type Options struct {
 	CommentID         int
 	CommentType       string
 	CommentsSort      string
+	CountSpecials     string
 	Country           string
 	Days              int
 	Delete            bool
@@ -17,11 +18,12 @@ type Options struct {
 	ExtendedInfo      string
 	Format            string
 	Headers           map[string]any
+	Hidden            string
 	Hide              bool
 	ID                string
-	IncludeReplies    string
 	IgnoreCollected   string
 	IgnoreWatchlisted string
+	IncludeReplies    string
 	InternalID        string
 	Item              string
 	Language          string
@@ -43,6 +45,7 @@ type Options struct {
 	SearchType        Slice
 	Season            int
 	Sort              string
+	Specials          string
 	Spoiler           bool
 	StartDate         string
 	Time              string
