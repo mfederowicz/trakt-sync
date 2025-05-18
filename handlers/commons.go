@@ -55,6 +55,8 @@ type CommonInterface interface {
 	Notes(client *internal.Client, notes *str.Notes) (*str.Notes, *str.Response, error)
 	Reply(client *internal.Client, id *int, comment *str.Comment) (*str.Comment, *str.Response, error)
 	CheckSortAndTypes(options *str.Options) error
+	ToTimestamp(at string) (*str.Timestamp, error)
+	ConvertDateString(date string, out string) string
 }
 
 // CommonLogic struct for common methods
@@ -716,4 +718,44 @@ func (*CommonLogic) GetHandlerForMap(action string, allHandlers map[string]Handl
 	}
 
 	return nil, errors.New("unknown handler")
+}
+
+// ConvertDateString takes a date string and converts it to date time format,
+// if empty return current date
+func (CommonLogic) ConvertDateString(dateStr string, outputFormat string) string {
+	// Parse the input date string using YYYY-MM-DD
+	parsedDate, err := time.Parse("2006-01-02", dateStr)
+	if err != nil {
+		return time.Now().Format(consts.DefaultStartDateFormat)
+	}
+
+	// Get the current time
+	currentTime := time.Now()
+
+	// Combine the parsed date with the current time's hour, minute, second
+	finalDateTime := time.Date(
+		parsedDate.Year(),
+		parsedDate.Month(),
+		parsedDate.Day(),
+		currentTime.Hour(),
+		currentTime.Minute(),
+		currentTime.Second(),
+		currentTime.Nanosecond(),
+		currentTime.Location(),
+	)
+
+	// Format the parsed time into the output format
+	formattedDate := finalDateTime.Format(outputFormat)
+	return formattedDate
+}
+
+// ToTimestamp convert date time string to Timestamp
+func (CommonLogic) ToTimestamp(at string) *str.Timestamp {
+	// Parse the input date string using YYYY-MM-DD
+	parsedDate, err := time.Parse(time.RFC3339, at)
+	if err != nil {
+		return &str.Timestamp{}
+	}
+
+	return &str.Timestamp{Time: parsedDate}
 }

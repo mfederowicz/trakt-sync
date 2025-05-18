@@ -463,17 +463,17 @@ $ ./trakt-sync notes -a notes -t rating -item show -i the-sopranos -notes "overa
 ```
 ##### manage notes get/modify/delete:
 ```console
-./trakt-sync notes -a note -i 97857
+$ ./trakt-sync notes -a note -i 97857
 ```
 ```console
-./trakt-sync notes -a note -i 97857 -notes "super 10/10" -privacy public -spoiler
+$ ./trakt-sync notes -a note -i 97857 -notes "super 10/10" -privacy public -spoiler
 ```
 ```console
-./trakt-sync notes -a note -i 97857 -delete
+$ ./trakt-sync notes -a note -i 97857 -delete
 ```
 ##### get items attachment to note:
 ```console
-./trakt-sync notes -a item -i 97854
+$ ./trakt-sync notes -a item -i 97854
 ```
 #### people:
 ```console
@@ -752,6 +752,14 @@ $ ./trakt-sync shows -a watched_progress -i the-sopranos -hidden false
 $ ./trakt-sync shows -a watched_progress -i the-sopranos -specials false 
 $ ./trakt-sync shows -a watched_progress -i the-sopranos -count_specials true
 $ ./trakt-sync shows -a watched_progress -i the-sopranos -hidden true -specials true -count_specials true
+```
+##### Reset show progress
+```console
+$ ./trakt-sync shows -a reset_show_progress -i the-sopranos
+```
+##### Undo Reset show progress
+```console
+$ ./trakt-sync shows -a reset_show_progress -i the-sopranos -undo
 ```
 
 #### users:

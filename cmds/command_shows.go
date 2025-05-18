@@ -21,6 +21,8 @@ var (
 	_showsSort          = ShowsCmd.Flag.String("s", cfg.DefaultConfig().ShowsSort, consts.ShowsSortUsage)
 	_showsType          = ShowsCmd.Flag.String("t", cfg.DefaultConfig().ShowsType, consts.ShowsTypeUsage)
 	_showsStartDate     = ShowsCmd.Flag.String("start_date", "", consts.StartDateUsage)
+	_showsUndo          = ShowsCmd.Flag.Bool("undo", cfg.DefaultConfig().Undo, consts.UndoUsage)
+	_showsResetAt       = ShowsCmd.Flag.String("reset_at", "", consts.ResetAtUsage)
 
 	validShowsActions = []string{
 		"trending", "popular", "favorited", "played", "watched", "collected",
@@ -72,6 +74,7 @@ func showsFunc(cmd *Command, _ ...string) error {
 		"lists":               handlers.ShowsListsHandler{},
 		"collection_progress": handlers.ShowsCollectionProgressHandler{},
 		"watched_progress":    handlers.ShowsWatchedProgressHandler{},
+		"reset_show_progress": handlers.ShowsResetShowProgressHandler{},
 		// "people":       handlers.ShowsPeopleHandler{},
 		// "ratings":      handlers.ShowsRatingsHandler{},
 		// "related":      handlers.ShowsRelatedHandler{},

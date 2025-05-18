@@ -3,6 +3,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -235,4 +236,14 @@ func TestCreateCheckinForShowEpisodeAbs(t *testing.T) {
 	checkin, _ := c.CreateCheckin(testSetup.Client, o)
 	assert.Equal(t, checkin.Episode.NumberAbs, test.Ptr(consts.TestEpisodeAbs))
 	test.AssertType(t, checkin, consts.Fupper(consts.Checkin))
+}
+
+func TestConvertDateString(t *testing.T) {
+	testSetup := setup(t)
+	mux := testSetup.Mux
+	mux = MuxUserSettings(t, mux)
+	c := &CommonLogic{}
+	o := &str.Options{}
+	out := c.ConvertDateString(o.ResetAt, consts.DefaultStartDateFormat)
+	fmt.Println(out)
 }

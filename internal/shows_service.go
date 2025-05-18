@@ -518,3 +518,40 @@ func (s *ShowsService) GetShowWatchedProgress(ctx context.Context, id *string, o
 
 	return watched, nil
 }
+
+// ResetShowProgress Reset a show's progress when the user started re-watching the show.
+// API docs:https://trakt.docs.apiary.io/#reference/shows/reset-watched-progress/reset-show-progress
+func (s *ShowsService) ResetShowProgress(ctx context.Context, id *string, progress *str.WatchedProgress) (*str.WatchedProgress, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/progress/watched/reset", *id)
+	fmt.Println(progress.ResetAt)
+	req, err := s.client.NewRequest(http.MethodPost, url, progress)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	respProgress := new(str.WatchedProgress)
+	resp, err := s.client.Do(ctx, req, respProgress)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return respProgress, resp, nil
+}
+
+// UndoResetShowProgress Undo the reset and have watched progress use all watched history for the show.
+// API docs:https://trakt.docs.apiary.io/#reference/shows/reset-watched-progress/undo-reset-show-progress
+func (s *ShowsService) UndoResetShowProgress(ctx context.Context, id *string) (*str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/progress/watched/reset", *id)
+	printer.Println("undo reset watched progress")
+	req, err := s.client.NewRequest(http.MethodDelete, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.client.Do(ctx, req, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}

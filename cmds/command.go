@@ -86,6 +86,7 @@ var Avflags = map[string]bool{
 	"releases":           true,
 	"remove":             true,
 	"reply":              true,
+	"reset_at":           true,
 	"s":                  true,
 	"scrobble":           true,
 	"search":             true,
@@ -100,6 +101,7 @@ var Avflags = map[string]bool{
 	"translations":       true,
 	"u":                  true,
 	"users":              true,
+	"undo":               true,
 	"v":                  true,
 	"version":            true,
 	"watchlist":          true,
@@ -368,6 +370,8 @@ func setOptionsDependsOnModuleShows(options str.Options) str.Options {
 	options.Language = *_showsLanguage
 	options.Sort = *_showsSort
 	options.Type = *_showsType
+	options.Delete = *_showsUndo
+	options.ResetAt = *_showsResetAt
 	return options
 }
 
@@ -625,12 +629,12 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 	if len(*_searchQuery) > consts.ZeroValue {
 		options.Query = *c.PrepareQueryString(*_searchQuery)
 	}
-	options = UpdateOptionsCommonFlags(options)
+	options = UpdateOptionsCommonFlags(c, options)
 	options = UpdateOptionsWithCommandListsFlags(options)
 	options = UpdateOptionsWithCommandCheckInFlags(options)
 	options = UpdateOptionsWithCommandCommentsFlags(options)
-	options = UpdateOptionsWithCommandMoviesFlags(options)
-	options = UpdateOptionsWithCommandShowsFlags(options)
+	options = UpdateOptionsWithCommandMoviesFlags(c, options)
+	options = UpdateOptionsWithCommandShowsFlags(c, options)
 	options = UpdateOptionsWithCommandRecommendationsFlags(options)
 	options = UpdateOptionsWithCommandScrobbleFlags(options)
 
@@ -663,7 +667,7 @@ func UpdateOptionsWithCommandRecommendationsFlags(options *str.Options) *str.Opt
 }
 
 // UpdateOptionsCommonFlags update options depends on common command flags
-func UpdateOptionsCommonFlags(options *str.Options) *str.Options {
+func UpdateOptionsCommonFlags(c *Command, options *str.Options) *str.Options {
 	if len(*_userName) > consts.ZeroValue {
 		options.UserName = *_userName
 	}
@@ -683,7 +687,7 @@ func UpdateOptionsCommonFlags(options *str.Options) *str.Options {
 	}
 
 	if len(*_startDate) > consts.ZeroValue {
-		options.StartDate = convertDateString(*_startDate, consts.DefaultStartDateFormat)
+		options.StartDate = c.common.ConvertDateString(*_startDate, consts.DefaultStartDateFormat)
 	} else {
 		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
 	}
@@ -762,7 +766,7 @@ func UpdateOptionsWithCommandCommentsFlags(options *str.Options) *str.Options {
 }
 
 // UpdateOptionsWithCommandMoviesFlags update options depends on movies command flags
-func UpdateOptionsWithCommandMoviesFlags(options *str.Options) *str.Options {
+func UpdateOptionsWithCommandMoviesFlags(c *Command, options *str.Options) *str.Options {
 	if len(*_moviesAction) > consts.ZeroValue {
 		options.Action = *_moviesAction
 	}
@@ -772,7 +776,7 @@ func UpdateOptionsWithCommandMoviesFlags(options *str.Options) *str.Options {
 	}
 
 	if len(*_moviesStartDate) > consts.ZeroValue {
-		options.StartDate = convertDateString(*_moviesStartDate, consts.DefaultStartDateFormat)
+		options.StartDate = c.common.ConvertDateString(*_moviesStartDate, consts.DefaultStartDateFormat)
 	} else {
 		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
 	}
@@ -793,7 +797,7 @@ func UpdateOptionsWithCommandMoviesFlags(options *str.Options) *str.Options {
 }
 
 // UpdateOptionsWithCommandShowsFlags update options depends on shows command flags
-func UpdateOptionsWithCommandShowsFlags(options *str.Options) *str.Options {
+func UpdateOptionsWithCommandShowsFlags(c *Command, options *str.Options) *str.Options {
 	if len(*_showsAction) > consts.ZeroValue {
 		options.Action = *_showsAction
 	}
@@ -803,7 +807,7 @@ func UpdateOptionsWithCommandShowsFlags(options *str.Options) *str.Options {
 	}
 
 	if len(*_showsStartDate) > consts.ZeroValue {
-		options.StartDate = convertDateString(*_showsStartDate, consts.DefaultStartDateFormat)
+		options.StartDate = c.common.ConvertDateString(*_showsStartDate, consts.DefaultStartDateFormat)
 	} else {
 		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
 	}
@@ -820,34 +824,9 @@ func UpdateOptionsWithCommandShowsFlags(options *str.Options) *str.Options {
 		options.Type = *_showsType
 	}
 
-	return options
-}
-
-// convertDateString takes a date string and converts it to date time format,
-// if empty return current date
-func convertDateString(dateStr string, outputFormat string) string {
-	// Parse the input date string using YYYY-MM-DD
-	parsedDate, err := time.Parse("2006-01-02", dateStr)
-	if err != nil {
-		return time.Now().Format(consts.DefaultStartDateFormat)
+	if len(*_showsResetAt) > consts.ZeroValue {
+		options.ResetAt = c.common.ConvertDateString(*_showsResetAt, consts.DefaultStartDateFormat)
 	}
 
-	// Get the current time
-	currentTime := time.Now()
-
-	// Combine the parsed date with the current time's hour, minute, second
-	finalDateTime := time.Date(
-		parsedDate.Year(),
-		parsedDate.Month(),
-		parsedDate.Day(),
-		currentTime.Hour(),
-		currentTime.Minute(),
-		currentTime.Second(),
-		currentTime.Nanosecond(),
-		currentTime.Location(),
-	)
-
-	// Format the parsed time into the output format
-	formattedDate := finalDateTime.Format(outputFormat)
-	return formattedDate
+	return options
 }

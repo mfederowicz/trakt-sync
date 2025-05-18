@@ -78,6 +78,7 @@ type Config struct {
 	TokenPath         string    `toml:"token_path"`
 	TraktID           int       `toml:"trakt_id"`
 	Type              string    `toml:"type"`
+	Undo              bool      `toml:"undo"`
 	UserName          string    `toml:"username"`
 	Verbose           bool      `toml:"verbose"`
 	WarningCode       int       `toml:"warningCode"`
