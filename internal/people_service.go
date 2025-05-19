@@ -44,6 +44,40 @@ func (p *PeopleService) GetListsContainingThisPerson(ctx context.Context, id *st
 	return list, resp, nil
 }
 
+// GetAllPeopleForShow Returns all cast and crew for a show.
+// Each cast member will have a characters array and a standard person object.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/shows/people/get-all-people-for-a-show
+func (p *PeopleService) GetAllPeopleForShow(ctx context.Context, id *string, opts *uri.ListOptions) (*str.ShowPeople, *str.Response, error) {
+	var url string
+
+	url = fmt.Sprintf("shows/%s/people", *id)
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch people url:" + url)
+	req, err := p.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := new(str.ShowPeople)
+	resp, err := p.client.Do(ctx, req, &result)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found people for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch people err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
 // GetMovieCredits Returns all movies where this person is in the cast or crew.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/people/movies/get-movie-credits
