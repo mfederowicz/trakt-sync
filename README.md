@@ -766,6 +766,10 @@ $ ./trakt-sync shows -a reset_show_progress -i the-sopranos -undo
 $ ./trakt-sync shows -a people -i the-sopranos
 $ ./trakt-sync shows -a people -i the-sopranos -ex guest_stars
 ```
+##### Get show ratings
+```console
+$ ./trakt-sync shows -a ratings -i the-sopranos
+```
 
 #### users:
 

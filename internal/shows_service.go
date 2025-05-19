@@ -555,3 +555,27 @@ func (s *ShowsService) UndoResetShowProgress(ctx context.Context, id *string) (*
 
 	return resp, nil
 }
+
+// GetShowRatings Returns rating (between 0 and 10) and distribution for a show.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/ratings/get-show-ratings
+func (s *ShowsService) GetShowRatings(ctx context.Context, id *string) (*str.ShowRatings, *str.Response, error) {
+	url := fmt.Sprintf("shows/%s/ratings", *id)
+	printer.Println("fetch ratings url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := new(str.ShowRatings)
+	resp, err := s.client.Do(ctx, req, &result)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found ratings for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch ratings err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
