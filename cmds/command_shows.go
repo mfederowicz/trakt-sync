@@ -77,7 +77,7 @@ func showsFunc(cmd *Command, _ ...string) error {
 		"reset_show_progress": handlers.ShowsResetShowProgressHandler{},
 		"people":              handlers.ShowsPeopleHandler{},
 		"ratings":             handlers.ShowsRatingsHandler{},
-		// "related":      handlers.ShowsRelatedHandler{},
+		"related":             handlers.ShowsRelatedHandler{},
 		// "stats":        handlers.ShowsStatsHandler{},
 		// "studios":      handlers.ShowsStudiosHandler{},
 		// "watching":     handlers.ShowsWatchingHandler{},

@@ -770,6 +770,10 @@ $ ./trakt-sync shows -a people -i the-sopranos -ex guest_stars
 ```console
 $ ./trakt-sync shows -a ratings -i the-sopranos
 ```
+##### Get related shows
+```console
+$ ./trakt-sync shows -a related -i the-sopranos
+```
 
 #### users:
 
