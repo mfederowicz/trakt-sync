@@ -774,6 +774,10 @@ $ ./trakt-sync shows -a ratings -i the-sopranos
 ```console
 $ ./trakt-sync shows -a related -i the-sopranos
 ```
+##### Get show studios
+```console
+$ ./trakt-sync shows -a studios -i the-sopranos
+```
 
 #### users:
 

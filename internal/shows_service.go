@@ -635,3 +635,28 @@ func (s *ShowsService) GetShowStats(ctx context.Context, id *string) (*str.ShowS
 
 	return result, resp, nil
 }
+
+// GetShowStudios Returns all studios for show.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/studios/get-show-studios
+func (s *ShowsService) GetShowStudios(ctx context.Context, id *string) ([]*str.Studio, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/studios", *id)
+	printer.Println("fetch studios url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Studio{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found studios for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch studios err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
