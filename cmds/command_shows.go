@@ -80,7 +80,7 @@ func showsFunc(cmd *Command, _ ...string) error {
 		"related":             handlers.ShowsRelatedHandler{},
 		"stats":               handlers.ShowsStatsHandler{},
 		"studios":             handlers.ShowsStudiosHandler{},
-		// "watching":     handlers.ShowsWatchingHandler{},
+		"watching":            handlers.ShowsWatchingHandler{},
 		// "videos":       handlers.ShowsVideosHandler{},
 		// "refresh":      handlers.ShowsRefreshHandler{},
 	}

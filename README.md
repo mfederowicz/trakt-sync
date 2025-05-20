@@ -778,6 +778,10 @@ $ ./trakt-sync shows -a related -i the-sopranos
 ```console
 $ ./trakt-sync shows -a studios -i the-sopranos
 ```
+##### Get users watching right now
+```console
+$ ./trakt-sync shows -a watching -i the-sopranos
+```
 
 #### users:
 

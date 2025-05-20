@@ -660,3 +660,34 @@ func (s *ShowsService) GetShowStudios(ctx context.Context, id *string) ([]*str.S
 
 	return list, resp, nil
 }
+
+// GetShowWatching Returns all users watching this show right now.
+// API docs:  https://trakt.docs.apiary.io/#reference/shows/studios/get-users-watching-right-now
+func (s *ShowsService) GetShowWatching(ctx context.Context, id *string, opts *uri.ListOptions) ([]*str.UserProfile, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/watching", *id)
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch watching url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.UserProfile{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found watching for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch watching err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
