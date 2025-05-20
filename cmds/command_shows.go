@@ -78,7 +78,7 @@ func showsFunc(cmd *Command, _ ...string) error {
 		"people":              handlers.ShowsPeopleHandler{},
 		"ratings":             handlers.ShowsRatingsHandler{},
 		"related":             handlers.ShowsRelatedHandler{},
-		// "stats":        handlers.ShowsStatsHandler{},
+		"stats":               handlers.ShowsStatsHandler{},
 		// "studios":      handlers.ShowsStudiosHandler{},
 		// "watching":     handlers.ShowsWatchingHandler{},
 		// "videos":       handlers.ShowsVideosHandler{},

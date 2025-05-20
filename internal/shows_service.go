@@ -582,7 +582,7 @@ func (s *ShowsService) GetShowRatings(ctx context.Context, id *string) (*str.Sho
 
 // GetRelatedShows Returns related and similar shows.
 // API docs: https://trakt.docs.apiary.io/#reference/shows/related/get-related-shows
-func (m *ShowsService) GetRelatedShows(ctx context.Context, id *string, opts *uri.ListOptions) ([]*str.Show, *str.Response, error) {
+func (s *ShowsService) GetRelatedShows(ctx context.Context, id *string, opts *uri.ListOptions) ([]*str.Show, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("shows/%s/related", *id)
 	url, err := uri.AddQuery(url, opts)
@@ -592,13 +592,13 @@ func (m *ShowsService) GetRelatedShows(ctx context.Context, id *string, opts *ur
 	}
 
 	printer.Println("fetch related url:" + url)
-	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	list := []*str.Show{}
-	resp, err := m.client.Do(ctx, req, &list)
+	resp, err := s.client.Do(ctx, req, &list)
 
 	if resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found related for id/slug:%s", *id)
@@ -610,4 +610,28 @@ func (m *ShowsService) GetRelatedShows(ctx context.Context, id *string, opts *ur
 	}
 
 	return list, resp, nil
+}
+
+// GetShowStats Returns lots of show stats.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/stats/get-show-stats
+func (s *ShowsService) GetShowStats(ctx context.Context, id *string) (*str.ShowStats, *str.Response, error) {
+	url := fmt.Sprintf("shows/%s/stats", *id)
+	printer.Println("fetch stats url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := new(str.ShowStats)
+	resp, err := s.client.Do(ctx, req, &result)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found stats for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch stats err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
 }
