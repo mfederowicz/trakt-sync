@@ -25,6 +25,7 @@
       - [recommendations](#recommendations)
       - [scrobble](#scrobble)
       - [search](#search)
+      - [shows](#shows)
       - [users](#users)
       - [watchlist](#watchlist)
 
@@ -84,6 +85,7 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 - `recommendations` - Recommendations manage movie and shows recommendations for user
 - `scrobble` - Scrobble for start/pause/stop movie,show,episode 
 - `search` - Searches can use queries or ID lookups.
+- `shows` - Returns data about movies: trending, popular, list, likes, like, items, comments etc...
 - `users` - Returns all data for a user.
 - `watchlist` - Returns all items in a user's watchlist filtered by type.
 ### Sample export usage
@@ -326,92 +328,92 @@ $ ./trakt-sync movies -a updated_ids -start_date YYYY-MM-DD
 ```
 ##### Get a movie
 ```console
-$ ./trakt-sync movies -a summary -i tron-legacy-2010
+$ ./trakt-sync movies -a summary -i the-sopranos
 ```
 ##### Get all movie aliases
 ```console
-$ ./trakt-sync movies -a aliases -i tron-legacy-2010
+$ ./trakt-sync movies -a aliases -i the-sopranos
 ```
 ##### Get all movie releases
 ```console
-$ ./trakt-sync movies -a releases -i tron-legacy-2010 -country us
+$ ./trakt-sync movies -a releases -i the-sopranos -country us
 ```
 ##### Get all movie translations
 ```console
-$ ./trakt-sync movies -a translations -i tron-legacy-2010 -language es
+$ ./trakt-sync movies -a translations -i the-sopranos -language es
 ```
 ##### Get all movie comments
 ```console
-$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s newest
+$ ./trakt-sync movies -a comments -i the-sopranos -s newest
 ```
 ```console
-$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s oldest
+$ ./trakt-sync movies -a comments -i the-sopranos -s oldest
 ```
 ```console
-$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s likes
+$ ./trakt-sync movies -a comments -i the-sopranos -s likes
 ```
 ```console
-$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s replies
+$ ./trakt-sync movies -a comments -i the-sopranos -s replies
 ```
 ```console
-$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s highest
+$ ./trakt-sync movies -a comments -i the-sopranos -s highest
 ```
 ```console
-$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s lowest
+$ ./trakt-sync movies -a comments -i the-sopranos -s lowest
 ```
 ```console
-$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s plays
+$ ./trakt-sync movies -a comments -i the-sopranos -s plays
 ```
 ##### Get lists containing the movie
 ```console
-$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s popular
+$ ./trakt-sync movies -a lists -i the-sopranos -t all -s popular
 ```
 ```console
-$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s likes
+$ ./trakt-sync movies -a lists -i the-sopranos -t all -s likes
 ```
 ```console
-$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s comments
+$ ./trakt-sync movies -a lists -i the-sopranos -t all -s comments
 ```
 ```console
-$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s items
+$ ./trakt-sync movies -a lists -i the-sopranos -t all -s items
 ```
 ```console
-$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s added
+$ ./trakt-sync movies -a lists -i the-sopranos -t all -s added
 ```
 ```console
-$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s updated
+$ ./trakt-sync movies -a lists -i the-sopranos -t all -s updated
 ```
 ##### Get all people for movie
 ```console
-$ ./trakt-sync movies -a people -i tron-legacy-2010
+$ ./trakt-sync movies -a people -i the-sopranos
 ```
 ##### Get movie ratings
 ```console
-$ ./trakt-sync movies -a ratings -i tron-legacy-2010
+$ ./trakt-sync movies -a ratings -i the-sopranos
 ```
 ##### Get related movies
 ```console
-$ ./trakt-sync movies -a related -i tron-legacy-2010
+$ ./trakt-sync movies -a related -i the-sopranos
 ```
 ##### Get movies stats
 ```console
-$ ./trakt-sync movies -a stats -i tron-legacy-2010
+$ ./trakt-sync movies -a stats -i the-sopranos
 ```
 ##### Get movies studios
 ```console
-$ ./trakt-sync movies -a studios -i tron-legacy-2010
+$ ./trakt-sync movies -a studios -i the-sopranos
 ```
 ##### Get users watching right now
 ```console
-$ ./trakt-sync movies -a watching -i tron-legacy-2010
+$ ./trakt-sync movies -a watching -i the-sopranos
 ```
 ##### Get all videos
 ```console
-$ ./trakt-sync movies -a videos -i tron-legacy-2010
+$ ./trakt-sync movies -a videos -i the-sopranos
 ```
 ##### Refresh movie metadata
 ```console
-$ ./trakt-sync movies -a refresh -i tron-legacy-2010
+$ ./trakt-sync movies -a refresh -i the-sopranos
 ```
 #### networks:
 ```console
@@ -420,7 +422,7 @@ $ ./trakt-sync networks -a list
 #### notes:
 ##### adding notes for media types:
 ```console 
-$ ./trakt-sync notes -a notes -t movie -i tron-legacy-2010 -notes "xyz"
+$ ./trakt-sync notes -a notes -t movie -i the-sopranos -notes "xyz"
 ```
 ```console
 $ ./trakt-sync notes -a notes -t show -i breaking-bad -notes "greate show"
@@ -461,17 +463,17 @@ $ ./trakt-sync notes -a notes -t rating -item show -i the-sopranos -notes "overa
 ```
 ##### manage notes get/modify/delete:
 ```console
-./trakt-sync notes -a note -i 97857
+$ ./trakt-sync notes -a note -i 97857
 ```
 ```console
-./trakt-sync notes -a note -i 97857 -notes "super 10/10" -privacy public -spoiler
+$ ./trakt-sync notes -a note -i 97857 -notes "super 10/10" -privacy public -spoiler
 ```
 ```console
-./trakt-sync notes -a note -i 97857 -delete
+$ ./trakt-sync notes -a note -i 97857 -delete
 ```
 ##### get items attachment to note:
 ```console
-./trakt-sync notes -a item -i 97854
+$ ./trakt-sync notes -a item -i 97854
 ```
 #### people:
 ```console
@@ -607,6 +609,196 @@ $ ./trakt-sync search -a id-lookup -i 75725 -t episode
 ```console
 $ ./trakt-sync search -a id-lookup --id_type tmdb -i 254265
 ```
+#### shows:
+```console
+$ ./trakt-sync shows -a trending
+```
+```console
+$ ./trakt-sync shows -a popular
+```
+##### Get the most favorited shows
+```console
+$ ./trakt-sync shows -a favorited -period daily
+```
+```console
+$ ./trakt-sync shows -a favorited -period weekly
+```
+```console
+$ ./trakt-sync shows -a favorited -period monthly
+```
+```console
+$ ./trakt-sync shows -a favorited -period all
+```
+##### Get the most played shows
+```console
+$ ./trakt-sync shows -a played -period daily
+```
+```console
+$ ./trakt-sync shows -a played -period weekly
+```
+```console
+$ ./trakt-sync shows -a played -period monthly
+```
+```console
+$ ./trakt-sync shows -a played -period all
+```
+##### Get the most watched shows
+```console
+$ ./trakt-sync shows -a watched -period daily
+```
+```console
+$ ./trakt-sync shows -a watched -period weekly
+```
+```console
+$ ./trakt-sync shows -a watched -period monthly
+```
+```console
+$ ./trakt-sync shows -a watched -period all
+```
+##### Get the most collected shows
+```console
+$ ./trakt-sync shows -a collected -period daily
+```
+```console
+$ ./trakt-sync shows -a collected -period weekly
+```
+```console
+$ ./trakt-sync shows -a collected -period monthly
+```
+```console
+$ ./trakt-sync shows -a collected -period all
+```
+##### Get the most anticipated shows
+```console
+$ ./trakt-sync shows -a anticipated
+```
+##### Get recenty updated shows 
+```console
+$ ./trakt-sync shows -a updates -start_date YYYY-MM-DD
+```
+##### Get recenty updated show Trakt IDs 
+```console
+$ ./trakt-sync shows -a updated_ids -start_date YYYY-MM-DD
+```
+##### Get a show
+```console
+$ ./trakt-sync shows -a summary -i the-sopranos
+```
+##### Get all show aliases
+```console
+$ ./trakt-sync shows -a aliases -i the-sopranos
+```
+##### Get all show certifications
+```console
+$ ./trakt-sync shows -a certifications -i the-sopranos
+```
+##### Get all show translations
+```console
+$ ./trakt-sync shows -a translations -i the-sopranos -language es
+```
+##### Get all show comments
+```console
+$ ./trakt-sync shows -a comments -i the-sopranos -s newest
+```
+```console
+$ ./trakt-sync shows -a comments -i the-sopranos -s oldest
+```
+```console
+$ ./trakt-sync shows -a comments -i the-sopranos -s likes
+```
+```console
+$ ./trakt-sync shows -a comments -i the-sopranos -s replies
+```
+```console
+$ ./trakt-sync shows -a comments -i the-sopranos -s highest
+```
+```console
+$ ./trakt-sync shows -a comments -i the-sopranos -s lowest
+```
+```console
+$ ./trakt-sync shows -a comments -i the-sopranos -s plays
+```
+##### Get lists containing the show
+```console
+$ ./trakt-sync shows -a lists -i the-sopranos -t all -s popular
+```
+```console
+$ ./trakt-sync shows -a lists -i the-sopranos -t all -s likes
+```
+```console
+$ ./trakt-sync shows -a lists -i the-sopranos -t all -s comments
+```
+```console
+$ ./trakt-sync shows -a lists -i the-sopranos -t all -s items
+```
+```console
+$ ./trakt-sync shows -a lists -i the-sopranos -t all -s added
+```
+```console
+$ ./trakt-sync shows -a lists -i the-sopranos -t all -s updated
+```
+##### Get show collection progress 
+```console
+$ ./trakt-sync shows -a collection_progress -i the-sopranos
+$ ./trakt-sync shows -a collection_progress -i the-sopranos -hidden false 
+$ ./trakt-sync shows -a collection_progress -i the-sopranos -specials false 
+$ ./trakt-sync shows -a collection_progress -i the-sopranos -count_specials true
+$ ./trakt-sync shows -a collection_progress -i the-sopranos -hidden true -specials true -count_specials true
+```
+##### Get show watched progress 
+```console
+$ ./trakt-sync shows -a watched_progress -i the-sopranos
+$ ./trakt-sync shows -a watched_progress -i the-sopranos -hidden false 
+$ ./trakt-sync shows -a watched_progress -i the-sopranos -specials false 
+$ ./trakt-sync shows -a watched_progress -i the-sopranos -count_specials true
+$ ./trakt-sync shows -a watched_progress -i the-sopranos -hidden true -specials true -count_specials true
+```
+##### Reset show progress
+```console
+$ ./trakt-sync shows -a reset_show_progress -i the-sopranos
+```
+##### Undo Reset show progress
+```console
+$ ./trakt-sync shows -a reset_show_progress -i the-sopranos -undo
+```
+##### Get all people for a show
+```console
+$ ./trakt-sync shows -a people -i the-sopranos
+$ ./trakt-sync shows -a people -i the-sopranos -ex guest_stars
+```
+##### Get show ratings
+```console
+$ ./trakt-sync shows -a ratings -i the-sopranos
+```
+##### Get related shows
+```console
+$ ./trakt-sync shows -a related -i the-sopranos
+```
+##### Get show studios
+```console
+$ ./trakt-sync shows -a studios -i the-sopranos
+```
+##### Get users watching right now
+```console
+$ ./trakt-sync shows -a watching -i the-sopranos
+```
+##### Get next episode
+```console
+$ ./trakt-sync shows -a next_episode -i the-sopranos
+```
+##### Get last episode
+```console
+$ ./trakt-sync shows -a last_episode -i the-sopranos
+```
+##### Get all videos
+```console
+$ ./trakt-sync shows -a videos -i the-sopranos
+```
+##### Refresh show metadata
+```console
+$ ./trakt-sync shows -a refresh -i the-sopranos
+```
+
 #### users:
 
 ##### Export movies or shows or episodes from user lists:

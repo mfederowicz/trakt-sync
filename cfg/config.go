@@ -27,6 +27,7 @@ type Config struct {
 	CommentType       string    `toml:"comment_type"`
 	CommentsSort      string    `toml:"sort"`
 	ConfigPath        string    `toml:"config_path"`
+	CountSpecials     string    `toml:"count_specials"`
 	Days              int       `toml:"days"`
 	Delete            bool      `toml:"delete"`
 	Episode           int       `toml:"episode"`
@@ -35,6 +36,7 @@ type Config struct {
 	ErrorCode         int       `toml:"errorCode"`
 	Field             string    `toml:"field"`
 	Format            string    `toml:"format"`
+	Hidden            string    `toml:"hidden"`
 	Hide              bool      `toml:"hide"`
 	ID                string    `toml:"id"`
 	IgnoreCollected   string    `toml:"ignore_collected"`
@@ -65,11 +67,18 @@ type Config struct {
 	SearchIDType      string    `toml:"search_id_type"`
 	SearchType        str.Slice `toml:"search_type"`
 	Season            int       `toml:"season"`
+	ShowsCountry      string    `toml:"country"`
+	ShowsLanguage     string    `toml:"language"`
+	ShowsPeriod       string    `toml:"period"`
+	ShowsSort         string    `toml:"sort"`
+	ShowsType         string    `toml:"type"`
 	Sort              string    `toml:"sort"`
+	Specials          string    `toml:"specials"`
 	Spoiler           bool      `toml:"spoiler"`
 	TokenPath         string    `toml:"token_path"`
 	TraktID           int       `toml:"trakt_id"`
 	Type              string    `toml:"type"`
+	Undo              bool      `toml:"undo"`
 	UserName          string    `toml:"username"`
 	Verbose           bool      `toml:"verbose"`
 	WarningCode       int       `toml:"warningCode"`
@@ -440,45 +449,50 @@ func parseConfig(fs afero.Fs, path string, config *Config) error {
 // DefaultConfig config with default values
 func DefaultConfig() *Config {
 	return &Config{
+		Action:         consts.EmptyString,
 		ClientID:       consts.EmptyString,
 		ClientSecret:   consts.EmptyString,
-		RedirectURI:    consts.EmptyString,
-		WarningCode:    consts.ZeroValue,
-		ErrorCode:      consts.ZeroValue,
-		Verbose:        false,
-		TokenPath:      consts.EmptyString,
-		ConfigPath:     buildDefaultConfigPath(),
-		Output:         consts.EmptyString,
-		Format:         "imdb",
-		Module:         "history",
-		Action:         consts.EmptyString,
-		Type:           "movies",
 		CommentType:    "all",
-		SearchIDType:   "trakt",
-		SearchType:     []string{},
-		SearchField:    []string{},
-		Sort:           "rank",
-		MoviesSort:     consts.EmptyString,
-		MoviesType:     consts.EmptyString,
-		MoviesPeriod:   "weekly",
-		MoviesCountry:  consts.EmptyString,
-		MoviesLanguage: consts.EmptyString,
-		List:           "history",
-		UserName:       "me",
+		ConfigPath:     buildDefaultConfigPath(),
+		Delete:         false,
+		ErrorCode:      consts.ZeroValue,
+		Format:         "imdb",
 		Hide:           false,
 		ID:             consts.EmptyString,
-		PerPage:        consts.DefaultPerPage,
-		PagesLimit:     consts.PagesLimit,
-		Progress:       consts.DefaultProgress,
-		Remove:         false,
-		Delete:         false,
-		Spoiler:        false,
-		Privacy:        "private",
 		IncludeReplies: consts.EmptyString,
-		Msg:            consts.EmptyString,
 		InternalID:     consts.EmptyString,
-		NotesID:        consts.ZeroValue,
 		Item:           consts.EmptyString,
+		List:           "history",
+		Module:         "history",
+		MoviesCountry:  consts.EmptyString,
+		MoviesLanguage: consts.EmptyString,
+		MoviesPeriod:   "weekly",
+		MoviesSort:     consts.EmptyString,
+		MoviesType:     consts.EmptyString,
+		Msg:            consts.EmptyString,
+		NotesID:        consts.ZeroValue,
+		Output:         consts.EmptyString,
+		PagesLimit:     consts.PagesLimit,
+		PerPage:        consts.DefaultPerPage,
+		Privacy:        "private",
+		Progress:       consts.DefaultProgress,
+		RedirectURI:    consts.EmptyString,
+		Remove:         false,
+		SearchField:    []string{},
+		SearchIDType:   "trakt",
+		SearchType:     []string{},
+		ShowsCountry:   consts.EmptyString,
+		ShowsLanguage:  consts.EmptyString,
+		ShowsPeriod:    "weekly",
+		ShowsSort:      consts.EmptyString,
+		ShowsType:      consts.EmptyString,
+		Sort:           "rank",
+		Spoiler:        false,
+		TokenPath:      consts.EmptyString,
+		Type:           "movies",
+		UserName:       "me",
+		Verbose:        false,
+		WarningCode:    consts.ZeroValue,
 	}
 }
 

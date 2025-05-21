@@ -16,9 +16,12 @@ type Episode struct {
 	FirstAired            *Timestamp `json:"first_aired,omitempty"`
 	LastWatchedAt         *Timestamp `json:"last_watched_at,omitempty"`
 	UpdatedAt             *Timestamp `json:"updated_at,omitempty"`
+	CompletedAt           *Timestamp `json:"completed_at,omitempty"`
+	CollectedAt           *Timestamp `json:"collected_at,omitempty"`
 	AvailableTranslations *[]string  `json:"available_translations,omitempty"`
 	Runtime               *int       `json:"runtime,omitempty"`
 	EpisodeType           *string    `json:"episode_type,omitempty"`
+	Completed             *bool      `json:"completed,omitempty"`
 }
 
 func (s Episode) String() string {
