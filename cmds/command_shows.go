@@ -28,7 +28,7 @@ var (
 		"trending", "popular", "favorited", "played", "watched", "collected",
 		"anticipated", "boxoffice", "updated", "updated_ids", "summary", "aliases", "certifications",
 		"collection_progress", "watched_progress", "releases", "translations", "comments", "lists", "people", "ratings",
-		"releated", "stats", "studios", "watching", "videos", "refresh"}
+		"releated", "stats", "studios", "watching", "next_episode", "last_episode", "videos", "refresh"}
 )
 
 // ShowsCmd returns movies and episodes that a user has watched, sorted by most recent.
@@ -81,6 +81,7 @@ func showsFunc(cmd *Command, _ ...string) error {
 		"stats":               handlers.ShowsStatsHandler{},
 		"studios":             handlers.ShowsStudiosHandler{},
 		"watching":            handlers.ShowsWatchingHandler{},
+		"next_episode":        handlers.ShowsNextEpisodeHandler{},
 		"videos":              handlers.ShowsVideosHandler{},
 		"refresh":             handlers.ShowsRefreshHandler{},
 	}

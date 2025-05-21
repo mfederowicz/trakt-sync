@@ -741,3 +741,24 @@ func (s *ShowsService) RefreshShowMetadata(ctx context.Context, id *string) (*st
 
 	return resp, nil
 }
+
+// GetNextEpisode Returns the next scheduled to air episode.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/next-episode/get-next-episode
+func (s *ShowsService) GetNextEpisode(ctx context.Context, id *string, opts *uri.ListOptions) (*str.Episode, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/next_episode", *id)
+	url, err := uri.AddQuery(url, opts)
+	printer.Println("fetch next episode url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := new(str.Episode)
+	resp, err := s.client.Do(ctx, req, &result)
+
+	if err != nil {
+		printer.Println("fetch next episode err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}

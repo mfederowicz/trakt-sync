@@ -54,6 +54,7 @@ const (
 	MyShows            = "my-shows"
 	Networks           = "networks"
 	NewShows           = "new_shows"
+	NextEpisode        = "next_episode"
 	Notes              = "notes"
 	People             = "people"
 	Played             = "played"

@@ -782,6 +782,10 @@ $ ./trakt-sync shows -a studios -i the-sopranos
 ```console
 $ ./trakt-sync shows -a watching -i the-sopranos
 ```
+##### Get next episode
+```console
+$ ./trakt-sync shows -a next_episode -i the-sopranos
+```
 ##### Get all videos
 ```console
 $ ./trakt-sync shows -a videos -i the-sopranos
