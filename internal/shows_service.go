@@ -762,3 +762,24 @@ func (s *ShowsService) GetNextEpisode(ctx context.Context, id *string, opts *uri
 
 	return result, resp, nil
 }
+
+// GetLastEpisode Returns the most recently aired episode.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/last-episode/get-last-episode
+func (s *ShowsService) GetLastEpisode(ctx context.Context, id *string, opts *uri.ListOptions) (*str.Episode, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/last_episode", *id)
+	url, err := uri.AddQuery(url, opts)
+	printer.Println("fetch last episode url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := new(str.Episode)
+	resp, err := s.client.Do(ctx, req, &result)
+
+	if err != nil {
+		printer.Println("fetch last episode err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}

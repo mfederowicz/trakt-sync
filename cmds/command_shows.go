@@ -82,6 +82,7 @@ func showsFunc(cmd *Command, _ ...string) error {
 		"studios":             handlers.ShowsStudiosHandler{},
 		"watching":            handlers.ShowsWatchingHandler{},
 		"next_episode":        handlers.ShowsNextEpisodeHandler{},
+		"last_episode":        handlers.ShowsLastEpisodeHandler{},
 		"videos":              handlers.ShowsVideosHandler{},
 		"refresh":             handlers.ShowsRefreshHandler{},
 	}

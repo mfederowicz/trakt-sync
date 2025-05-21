@@ -451,7 +451,7 @@ func getOutputForModuleShows(options *str.Options) string {
 	case consts.Summary, consts.Aliases, consts.Releases, consts.Translations,
 		consts.Comments, consts.Lists, consts.CollectionProgress, consts.WatchedProgress,
 		consts.People, consts.Ratings, consts.Related, consts.Stats, consts.Studios,
-		consts.Watching, consts.Videos, consts.NextEpisode:
+		consts.Watching, consts.Videos, consts.NextEpisode, consts.LastEpisode:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.InternalID)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
