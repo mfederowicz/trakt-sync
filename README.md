@@ -786,6 +786,10 @@ $ ./trakt-sync shows -a watching -i the-sopranos
 ```console
 $ ./trakt-sync shows -a videos -i the-sopranos
 ```
+##### Refresh show metadata
+```console
+$ ./trakt-sync shows -a refresh -i the-sopranos
+```
 
 #### users:
 
