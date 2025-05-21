@@ -691,3 +691,34 @@ func (s *ShowsService) GetShowWatching(ctx context.Context, id *string, opts *ur
 
 	return list, resp, nil
 }
+
+// GetShowVideos Returns all videos including trailers, teasers, clips, and featurettes.
+// API docs: https://trakt.docs.apiary.io/#reference/shows/videos/get-all-videos
+func (s *ShowsService) GetShowVideos(ctx context.Context, id *string, opts *uri.ListOptions) ([]*str.Video, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/videos", *id)
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch video url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Video{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found video for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch video err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

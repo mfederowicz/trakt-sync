@@ -782,6 +782,10 @@ $ ./trakt-sync shows -a studios -i the-sopranos
 ```console
 $ ./trakt-sync shows -a watching -i the-sopranos
 ```
+##### Get all videos
+```console
+$ ./trakt-sync shows -a videos -i the-sopranos
+```
 
 #### users:
 

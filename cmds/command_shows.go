@@ -81,7 +81,7 @@ func showsFunc(cmd *Command, _ ...string) error {
 		"stats":               handlers.ShowsStatsHandler{},
 		"studios":             handlers.ShowsStudiosHandler{},
 		"watching":            handlers.ShowsWatchingHandler{},
-		// "videos":       handlers.ShowsVideosHandler{},
+		"videos":              handlers.ShowsVideosHandler{},
 		// "refresh":      handlers.ShowsRefreshHandler{},
 	}
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
