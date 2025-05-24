@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
-	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
@@ -44,15 +43,10 @@ func (m ShowsLastEpisodeHandler) Handle(options *str.Options, client *internal.C
 	return nil
 }
 
-func (ShowsLastEpisodeHandler) fetchShowsLastEpisode(client *internal.Client, options *str.Options) (*str.Episode, *str.Response, error) {	
+func (ShowsLastEpisodeHandler) fetchShowsLastEpisode(client *internal.Client, options *str.Options) (*str.Episode, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	loc, err := time.LoadLocation(*options.UserSettings.Account.Timezone)
-	if err != nil {
-		return nil, nil, errors.New("timezone")
-	}
-	ctx := context.WithValue(context.Background(), internal.TimezoneKey, loc)
 	show, resp, err := client.Shows.GetLastEpisode(
-		ctx,
+		client.BuildCtxFromOptions(context.Background(), options),
 		&options.InternalID,
 		&opts,
 	)
