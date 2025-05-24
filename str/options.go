@@ -16,6 +16,7 @@ type Options struct {
 	EpisodeAbs        int
 	EpisodeCode       string
 	ExtendedInfo      string
+	FullHour          bool
 	Format            string
 	Headers           map[string]any
 	Hidden            string

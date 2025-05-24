@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"testing"
+	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
@@ -244,12 +245,21 @@ func TestConvertDateString(t *testing.T) {
 	c := &CommonLogic{}
 	o := &str.Options{}
 	o.ResetAt = "2025-01-24"
-	out := c.ConvertDateString(o.ResetAt, consts.DefaultStartDateFormat, "Europe/Warsaw")
+	out := c.ConvertDateString(o.ResetAt, consts.DefaultStartDateFormat, "Europe/Warsaw", true)
 	assert.Contains(t, out, o.ResetAt)
 	assert.Contains(t, out, "+01:00")
 	o.ResetAt = "2025-05-24"
-	out = c.ConvertDateString(o.ResetAt, consts.DefaultStartDateFormat, "Europe/Warsaw")
+	out = c.ConvertDateString(o.ResetAt, consts.DefaultStartDateFormat, "Europe/Warsaw", true)
 	assert.Contains(t, out, o.ResetAt)
 	assert.Contains(t, out, "+02:00")
+}
 
+func TestCurrnetDateString(t *testing.T) {
+	testSetup := setup(t)
+	mux := testSetup.Mux
+	mux = MuxUserSettings(t, mux)
+	c := &CommonLogic{}
+	out := c.CurrentDateString(time.UTC.String(), true)
+	currentTime := time.Now().UTC().Truncate(time.Hour)
+	assert.Contains(t, out, currentTime.Format(time.RFC3339))
 }

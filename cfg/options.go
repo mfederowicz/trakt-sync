@@ -249,7 +249,7 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 	if err != nil {
 		return str.Options{}, fmt.Errorf("error reading token:%w", err)
 	}
-	
+
 	settings, err := readUserSettingsFromFile(fs, config.SettingsPath)
 	if err != nil {
 		return str.Options{}, fmt.Errorf("error reading user settings:%w", err)

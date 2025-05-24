@@ -57,6 +57,7 @@ type CommonInterface interface {
 	CheckSortAndTypes(options *str.Options) error
 	ToTimestamp(at string) (*str.Timestamp, error)
 	ConvertDateString(date string, out string) string
+	CurrentDateString(tz string) string
 }
 
 // CommonLogic struct for common methods
@@ -722,7 +723,7 @@ func (*CommonLogic) GetHandlerForMap(action string, allHandlers map[string]Handl
 
 // ConvertDateString takes a date string and converts it to date time format,
 // if empty return current date
-func (CommonLogic) ConvertDateString(dateStr string, outputFormat string, tz string) string {
+func (CommonLogic) ConvertDateString(dateStr string, outputFormat string, tz string, full bool) string {
 	// Parse the input date string using YYYY-MM-DD
 	parsedDate, err := time.Parse("2006-01-02", dateStr)
 	if err != nil {
@@ -749,9 +750,12 @@ func (CommonLogic) ConvertDateString(dateStr string, outputFormat string, tz str
 		finalDateTime = finalDateTime.In(loc)
 	}
 
+	if full {
+		finalDateTime = finalDateTime.Truncate(time.Hour)
+	}
 	// Format the parsed time into the output format
 	formattedDate := finalDateTime.Format(outputFormat)
-	
+
 	return formattedDate
 }
 
@@ -764,4 +768,21 @@ func (CommonLogic) ToTimestamp(at string) *str.Timestamp {
 	}
 
 	return &str.Timestamp{Time: parsedDate.UTC()}
+}
+
+// CurrentDateString return current date string from user timezone
+func (CommonLogic) CurrentDateString(tz string, full bool) string {
+	// Get the current time
+	currentTime := time.Now().UTC()
+
+	if tz != time.UTC.String() {
+		loc, _ := time.LoadLocation(tz)
+		currentTime = currentTime.In(loc)
+	}
+
+	if full {
+		currentTime = currentTime.Truncate(time.Hour)
+	}
+
+	return currentTime.Format(time.RFC3339)
 }
