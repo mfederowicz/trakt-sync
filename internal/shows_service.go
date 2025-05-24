@@ -184,7 +184,6 @@ func (s *ShowsService) GetWatchedShows(ctx context.Context, opts *uri.ListOption
 
 	list := []*str.ShowsItem{}
 	resp, err := s.client.Do(ctx, req, &list)
-
 	if err != nil {
 		printer.Println("fetch shows err:" + err.Error())
 		return nil, resp, err

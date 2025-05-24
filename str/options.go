@@ -40,6 +40,7 @@ type Options struct {
 	Query             string
 	Remove            bool
 	Reply             string
+	ResetAt           string
 	SearchField       Slice
 	SearchIDType      string
 	SearchType        Slice
@@ -48,12 +49,12 @@ type Options struct {
 	Specials          string
 	Spoiler           bool
 	StartDate         string
-	ResetAt           string
 	Time              string
 	Token             Token
 	TraktID           int
 	Type              string
 	UserName          string
+	UserSettings      UserSettings
 	Verbose           bool
 	Version           bool
 }

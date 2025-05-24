@@ -249,6 +249,11 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 	if err != nil {
 		return str.Options{}, fmt.Errorf("error reading token:%w", err)
 	}
+	
+	settings, err := readUserSettingsFromFile(fs, config.SettingsPath)
+	if err != nil {
+		return str.Options{}, fmt.Errorf("error reading user settings:%w", err)
+	}
 
 	str.Headers["Authorization"] = "Bearer " + token.AccessToken
 	str.Headers["trakt-api-key"] = config.ClientID
@@ -271,6 +276,7 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 	options = optionsFromModuleConfig(moduleConfig, options)
 	options.Headers = str.Headers
 	options.Token = *token
+	options.UserSettings = *settings
 	options.Output = optionsFromConfigOutput(options)
 
 	return *options, nil
@@ -360,6 +366,21 @@ func readTokenFromFile(fs afero.Fs, filePath string) (*str.Token, error) {
 	}
 
 	return &token, nil
+}
+
+// readUserSettingsFromFile reads the user settings from the specified file
+func readUserSettingsFromFile(fs afero.Fs, filePath string) (*str.UserSettings, error) {
+	data, err := afero.ReadFile(fs, filePath)
+	if err != nil {
+		return nil, err
+	}
+
+	var settings str.UserSettings
+	if err := json.Unmarshal(data, &settings); err != nil {
+		return nil, err
+	}
+
+	return &settings, nil
 }
 
 // GetOptionTime config Time depends on Module name
