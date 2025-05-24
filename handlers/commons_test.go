@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -244,6 +243,13 @@ func TestConvertDateString(t *testing.T) {
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
-	out := c.ConvertDateString(o.ResetAt, consts.DefaultStartDateFormat)
-	fmt.Println(out)
+	o.ResetAt = "2025-01-24"
+	out := c.ConvertDateString(o.ResetAt, consts.DefaultStartDateFormat, "Europe/Warsaw")
+	assert.Contains(t, out, o.ResetAt)
+	assert.Contains(t, out, "+01:00")
+	o.ResetAt = "2025-05-24"
+	out = c.ConvertDateString(o.ResetAt, consts.DefaultStartDateFormat, "Europe/Warsaw")
+	assert.Contains(t, out, o.ResetAt)
+	assert.Contains(t, out, "+02:00")
+
 }

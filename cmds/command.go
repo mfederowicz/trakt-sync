@@ -687,7 +687,7 @@ func UpdateOptionsCommonFlags(c *Command, options *str.Options) *str.Options {
 	}
 
 	if len(*_startDate) > consts.ZeroValue {
-		options.StartDate = c.common.ConvertDateString(*_startDate, consts.DefaultStartDateFormat)
+		options.StartDate = c.common.ConvertDateString(*_startDate, consts.DefaultStartDateFormat, *options.UserSettings.Account.Timezone)
 	} else {
 		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
 	}
@@ -776,7 +776,7 @@ func UpdateOptionsWithCommandMoviesFlags(c *Command, options *str.Options) *str.
 	}
 
 	if len(*_moviesStartDate) > consts.ZeroValue {
-		options.StartDate = c.common.ConvertDateString(*_moviesStartDate, consts.DefaultStartDateFormat)
+		options.StartDate = c.common.ConvertDateString(*_moviesStartDate, consts.DefaultStartDateFormat, *options.UserSettings.Account.Timezone)
 	} else {
 		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
 	}
@@ -807,7 +807,7 @@ func UpdateOptionsWithCommandShowsFlags(c *Command, options *str.Options) *str.O
 	}
 
 	if len(*_showsStartDate) > consts.ZeroValue {
-		options.StartDate = c.common.ConvertDateString(*_showsStartDate, consts.DefaultStartDateFormat)
+		options.StartDate = c.common.ConvertDateString(*_showsStartDate, consts.DefaultStartDateFormat, *options.UserSettings.Account.Timezone)
 	} else {
 		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
 	}
@@ -825,7 +825,7 @@ func UpdateOptionsWithCommandShowsFlags(c *Command, options *str.Options) *str.O
 	}
 
 	if len(*_showsResetAt) > consts.ZeroValue {
-		options.ResetAt = c.common.ConvertDateString(*_showsResetAt, consts.DefaultStartDateFormat)
+		options.ResetAt = c.common.ConvertDateString(*_showsResetAt, consts.DefaultStartDateFormat, *options.UserSettings.Account.Timezone)
 	}
 
 	return options

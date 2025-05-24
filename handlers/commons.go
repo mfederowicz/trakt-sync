@@ -722,15 +722,15 @@ func (*CommonLogic) GetHandlerForMap(action string, allHandlers map[string]Handl
 
 // ConvertDateString takes a date string and converts it to date time format,
 // if empty return current date
-func (CommonLogic) ConvertDateString(dateStr string, outputFormat string) string {
+func (CommonLogic) ConvertDateString(dateStr string, outputFormat string, tz string) string {
 	// Parse the input date string using YYYY-MM-DD
 	parsedDate, err := time.Parse("2006-01-02", dateStr)
 	if err != nil {
-		return time.Now().Format(consts.DefaultStartDateFormat)
+		parsedDate = time.Now()
 	}
 
 	// Get the current time
-	currentTime := time.Now()
+	currentTime := time.Now().UTC()
 
 	// Combine the parsed date with the current time's hour, minute, second
 	finalDateTime := time.Date(
@@ -744,8 +744,14 @@ func (CommonLogic) ConvertDateString(dateStr string, outputFormat string) string
 		currentTime.Location(),
 	)
 
+	if tz != time.UTC.String() {
+		loc, _ := time.LoadLocation(tz)
+		finalDateTime = finalDateTime.In(loc)
+	}
+
 	// Format the parsed time into the output format
 	formattedDate := finalDateTime.Format(outputFormat)
+	
 	return formattedDate
 }
 
@@ -757,5 +763,5 @@ func (CommonLogic) ToTimestamp(at string) *str.Timestamp {
 		return &str.Timestamp{}
 	}
 
-	return &str.Timestamp{Time: parsedDate}
+	return &str.Timestamp{Time: parsedDate.UTC()}
 }

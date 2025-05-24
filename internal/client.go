@@ -225,7 +225,9 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v any) (*str.Respons
 	}
 	// Adjust all Timestamp fields
 	loc := c.GetTimezone(ctx)
-	c.AdjustTimestamps(reflect.ValueOf(v), loc)
+	if loc != time.UTC {
+		c.AdjustTimestamps(reflect.ValueOf(v), loc)
+	}
 
 	return resp, err
 }

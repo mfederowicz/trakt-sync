@@ -1,6 +1,8 @@
 // Package consts used to store const for application
 package consts
 
+import "time"
+
 // usage strings
 const (
 	ActionUsage                  = "allow use selected action"
@@ -21,7 +23,7 @@ const (
 	DefaultOutputFormat1         = "export_%s.json"
 	DefaultOutputFormat2         = "export_%s_%s.json"
 	DefaultOutputFormat3         = "export_%s_%s_%s.json"
-	DefaultStartDateFormat       = "2006-01-02T15:04:05Z"
+	DefaultStartDateFormat       = time.RFC3339
 	DeleteUsage                  = "allow delete item"
 	EmptyCommentIDMsg            = "set commentId ie: -comment_id 123"
 	EmptyHistoryIDMsg            = "set historyId ie: -i 12345 from watched history"
