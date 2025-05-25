@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -45,7 +44,7 @@ func fetchCalendarMovies(client *internal.Client, options *str.Options) ([]*str.
 
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Calendars.GetMovies(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&actionType,
 		&options.StartDate,
 		&options.Days,

@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -45,7 +44,7 @@ func (h MoviesPopularHandler) Handle(options *str.Options, client *internal.Clie
 func (h MoviesPopularHandler) fetchMoviesPopular(client *internal.Client, options *str.Options, page int) ([]*str.Movie, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Movies.GetPopularMovies(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&opts,
 	)
 

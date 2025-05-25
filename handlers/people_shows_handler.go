@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -45,7 +44,7 @@ func (p PeopleShowsHandler) Handle(options *str.Options, client *internal.Client
 func (PeopleShowsHandler) fetchShowCredits(client *internal.Client, options *str.Options) (*str.PersonShows, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetShowCredits(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.ID,
 		&opts,
 	)

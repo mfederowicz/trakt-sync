@@ -2,7 +2,6 @@
 package cmds
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -73,7 +72,7 @@ func init() {
 func fetchCollectionList(client *internal.Client, options *str.Options) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Sync.GetCollection(
-		client.BuildCtxFromOptions(context.Background(), options),
+		client.BuildCtxFromOptions(options),
 		&options.Type,
 		&opts,
 	)

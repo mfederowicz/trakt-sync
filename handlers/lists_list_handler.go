@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -40,7 +39,7 @@ func (h ListsListHandler) Handle(options *str.Options, client *internal.Client) 
 func (ListsListHandler) fetchSingleList(client *internal.Client, options *str.Options) (*str.PersonalList, *str.Response, error) {
 	listID := options.InternalID
 	result, resp, err := client.Lists.GetList(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&listID,
 	)
 

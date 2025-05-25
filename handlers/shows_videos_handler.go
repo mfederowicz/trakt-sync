@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 
@@ -41,7 +40,7 @@ func (m ShowsVideosHandler) Handle(options *str.Options, client *internal.Client
 func (ShowsVideosHandler) fetchShowsVideos(client *internal.Client, options *str.Options) ([]*str.Video, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Shows.GetShowVideos(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 		&opts,
 	)

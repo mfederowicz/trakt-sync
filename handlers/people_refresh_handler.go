@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"net/http"
@@ -47,7 +46,7 @@ func (h PeopleRefreshHandler) Handle(options *str.Options, client *internal.Clie
 func (PeopleRefreshHandler) refreshPerson(client *internal.Client, options *str.Options) (*str.Response, error) {
 	personID := options.ID
 	resp, err := client.People.RefreshPersonMetadata(
-		client.BuildCtxFromOptions(context.Background(), options),
+		client.BuildCtxFromOptions(options),
 		&personID,
 	)
 	return resp, err

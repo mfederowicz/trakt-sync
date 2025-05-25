@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -48,7 +47,7 @@ func (h ListsCommentsHandler) Handle(options *str.Options, client *internal.Clie
 func (h ListsCommentsHandler) fetchListComments(client *internal.Client, options *str.Options, page int) ([]*str.ListComment, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Lists.GetListComments(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 		&options.Sort,
 		&opts,

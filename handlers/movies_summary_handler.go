@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 
@@ -41,7 +40,7 @@ func (m MoviesSummaryHandler) Handle(options *str.Options, client *internal.Clie
 func (MoviesSummaryHandler) fetchMoviesSummary(client *internal.Client, options *str.Options) (*str.Movie, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	movie, resp, err := client.Movies.GetMovie(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 		&opts,
 	)

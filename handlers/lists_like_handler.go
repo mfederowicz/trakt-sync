@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"net/http"
@@ -40,14 +39,14 @@ func (ListsLikeHandler) likeSingleList(client *internal.Client, options *str.Opt
 
 	if !options.Remove {
 		resp, err := client.Lists.LikeList(
-			context.Background(),
+			client.BuildCtxFromOptions(options),
 			&listID,
 		)
 		return resp, err
 	}
 
 	resp, err := client.Lists.RemoveLikeList(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&listID,
 	)
 

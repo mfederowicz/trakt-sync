@@ -53,8 +53,8 @@ func main() {
 		return
 	}
 
-	if !cli.ValidAccessToken(config, client) {
-		cli.PoolNewDeviceCode(config, client.Oauth)
+	if !cli.ValidAccessToken(config, client, &options) {
+		cli.PoolNewDeviceCode(config, client, &options)
 	}
 
 	cmds.ModulesRuntime(args, config, client, fs)

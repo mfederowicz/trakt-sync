@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 
@@ -39,7 +38,7 @@ func (m MoviesTranslationsHandler) Handle(options *str.Options, client *internal
 
 func (MoviesTranslationsHandler) fetchMoviesTranslations(client *internal.Client, options *str.Options) ([]*str.Translation, *str.Response, error) {
 	translations, resp, err := client.Movies.GetAllMovieTranslations(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 		&options.Language,
 	)

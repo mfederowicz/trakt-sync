@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"time"
@@ -42,7 +41,7 @@ func (m MoviesCommentsHandler) Handle(options *str.Options, client *internal.Cli
 func (m MoviesCommentsHandler) fetchMoviesComments(client *internal.Client, options *str.Options, page int) ([]*str.Comment, *str.Response, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Movies.GetAllMovieComments(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 		&options.Sort,
 		&opts,

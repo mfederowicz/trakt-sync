@@ -2,7 +2,6 @@
 package cli
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"os"
@@ -15,7 +14,7 @@ import (
 )
 
 // ValidAccessToken valid if access_token is expired or not, and refresh if expired
-func ValidAccessToken(config *cfg.Config, client *internal.Client) bool {
+func ValidAccessToken(config *cfg.Config, client *internal.Client, options *str.Options) bool {
 	token, err := ReadTokenFromFile(config.TokenPath)
 	if err != nil {
 		printer.Println("Error reading token:", err)
@@ -23,7 +22,7 @@ func ValidAccessToken(config *cfg.Config, client *internal.Client) bool {
 	}
 
 	if token.Expired() {
-		if refreshed := refreshToken(config, client.Oauth); refreshed {
+		if refreshed := refreshToken(config, client, options); refreshed {
 			printer.Println("Token refreshed!")
 		}
 
@@ -34,7 +33,7 @@ func ValidAccessToken(config *cfg.Config, client *internal.Client) bool {
 			return false
 		}
 
-		if refreshedSettings := RefreshUserSettings(config, client.Users); refreshedSettings {
+		if refreshedSettings := RefreshUserSettings(config, client, options); refreshedSettings {
 			printer.Println("User settings refreshed!")
 		}
 	}
@@ -73,7 +72,7 @@ func ReadTokenFromFile(filePath string) (*str.Token, error) {
 }
 
 // refresh access token to new one
-func refreshToken(config *cfg.Config, oauth *internal.OauthService) bool {
+func refreshToken(config *cfg.Config, client *internal.Client, options *str.Options) bool {
 	token, err := ReadTokenFromFile(config.TokenPath)
 	if err != nil {
 		printer.Println("Error reading token:", err)
@@ -90,8 +89,8 @@ func refreshToken(config *cfg.Config, oauth *internal.OauthService) bool {
 		GrantType:    &grantType,
 	}
 
-	newToken, resp, err := oauth.ExchangeRefreshTokenForAccessToken(
-		context.Background(),
+	newToken, resp, err := client.Oauth.ExchangeRefreshTokenForAccessToken(
+		client.BuildCtxFromOptions(options),
 		currentToken,
 	)
 
@@ -114,9 +113,9 @@ func refreshToken(config *cfg.Config, oauth *internal.OauthService) bool {
 }
 
 // RefreshUserSettings user settings
-func RefreshUserSettings(config *cfg.Config, users *internal.UsersService) bool {
-	newSettings, resp, err := users.RetrieveSettings(
-		context.Background(),
+func RefreshUserSettings(config *cfg.Config, client *internal.Client, options *str.Options) bool {
+	newSettings, resp, err := client.Users.RetrieveSettings(
+		client.BuildCtxFromOptions(options),
 	)
 
 	if err != nil {

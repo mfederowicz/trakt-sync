@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -40,7 +39,7 @@ func (UsersStatsHandler) Handle(options *str.Options, client *internal.Client) e
 func fetchUsersStats(client *internal.Client, options *str.Options) (*str.UserStats, *str.Response, error) {
 	username := options.UserName
 	stats, resp, err := client.Users.GetStats(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&username,
 	)
 

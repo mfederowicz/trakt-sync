@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -45,7 +44,7 @@ func (h ShowsPopularHandler) Handle(options *str.Options, client *internal.Clien
 func (h ShowsPopularHandler) fetchShowsPopular(client *internal.Client, options *str.Options, page int) ([]*str.Show, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetPopularShows(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&opts,
 	)
 

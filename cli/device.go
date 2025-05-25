@@ -2,7 +2,6 @@
 package cli
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"os"
@@ -20,8 +19,8 @@ func fail(err string) {
 }
 
 // check if user accept device code or not
-func deviceCodeVerification(deviceToken *str.NewDeviceToken, oauth *internal.OauthService, config *cfg.Config) bool {
-	token, resp, err := oauth.PoolForTheAccessToken(context.Background(), deviceToken)
+func deviceCodeVerification(deviceToken *str.NewDeviceToken, client *internal.Client, config *cfg.Config, options *str.Options) bool {
+	token, resp, err := client.Oauth.PoolForTheAccessToken(client.BuildCtxFromOptions(options), deviceToken)
 
 	if err != nil {
 		printer.Println("Error:", err)
@@ -44,9 +43,9 @@ func deviceCodeVerification(deviceToken *str.NewDeviceToken, oauth *internal.Oau
 }
 
 // fetch new device code for client
-func fetchNewDeviceCodeForClient(config *cfg.Config, oauth *internal.OauthService) (*str.DeviceCode, error) {
-	code, resp, err := oauth.GenerateNewDeviceCodes(
-		context.Background(),
+func fetchNewDeviceCodeForClient(config *cfg.Config, client *internal.Client, options *str.Options) (*str.DeviceCode, error) {
+	code, resp, err := client.Oauth.GenerateNewDeviceCodes(
+		client.BuildCtxFromOptions(options),
 		&str.NewDeviceCode{ClientID: &config.ClientID})
 
 	if err != nil {
@@ -61,17 +60,17 @@ func fetchNewDeviceCodeForClient(config *cfg.Config, oauth *internal.OauthServic
 }
 
 // PoolNewDeviceCode pool new device code (open browser and wait for correct code activation)
-func PoolNewDeviceCode(config *cfg.Config, oauth *internal.OauthService) error {
+func PoolNewDeviceCode(config *cfg.Config, client *internal.Client, options *str.Options) error {
 	printer.Println("Polling for new device code...")
 
-	device, err := fetchNewDeviceCodeForClient(config, oauth)
+	device, err := fetchNewDeviceCodeForClient(config, client, options)
 	if err != nil {
 		return printer.Errorf("Error generate new device code:" + err.Error())
 	}
 
 	showCodeAndOpenBrowser(device)
 
-	verifyCode(device, config, oauth)
+	verifyCode(device, config, client, options)
 
 	return nil
 }
@@ -88,7 +87,7 @@ func showCodeAndOpenBrowser(device *str.DeviceCode) {
 }
 
 // verify device code in loop with intervals
-func verifyCode(device *str.DeviceCode, config *cfg.Config, oauth *internal.OauthService) {
+func verifyCode(device *str.DeviceCode, config *cfg.Config, client *internal.Client, options *str.Options) {
 	const (
 		counterNoSeconds = 0
 	)
@@ -100,7 +99,7 @@ func verifyCode(device *str.DeviceCode, config *cfg.Config, oauth *internal.Oaut
 			ClientID:     &config.ClientID,
 			ClientSecret: &config.ClientSecret,
 		}
-		if verified := deviceCodeVerification(token, oauth, config); verified {
+		if verified := deviceCodeVerification(token, client, config, options); verified {
 			printer.Println("Device code verified!")
 			break
 		}

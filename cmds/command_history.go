@@ -2,7 +2,6 @@
 package cmds
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -71,7 +70,7 @@ func fetchHistoryList(client *internal.Client, options *str.Options, page int) (
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 
 	list, resp, err := client.Sync.GetWatchedHistory(
-		client.BuildCtxFromOptions(context.Background(), options),
+		client.BuildCtxFromOptions(options),
 		&options.Type,
 		&opts,
 	)

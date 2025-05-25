@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -48,7 +47,7 @@ func (p MoviesUpdatesHandler) Handle(options *str.Options, client *internal.Clie
 func (p MoviesUpdatesHandler) fetchMoviesUpdates(client *internal.Client, options *str.Options, startDate string, page int) ([]*str.MoviesItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Movies.GetRecentlyUpdatedMovies(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&startDate,
 		&opts,
 	)

@@ -80,8 +80,8 @@ type Client struct {
 }
 
 // BuildCtxFromOptions create ctx with custom options
-func (*Client) BuildCtxFromOptions(parent context.Context, options *str.Options) context.Context {
-	ctx := parent
+func (*Client) BuildCtxFromOptions(options *str.Options) context.Context {
+	ctx := context.Background()
 
 	if len(*options.UserSettings.Account.Timezone) > consts.ZeroValue {
 		loc, err := time.LoadLocation(*options.UserSettings.Account.Timezone)

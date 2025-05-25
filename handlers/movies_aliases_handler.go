@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 
@@ -39,7 +38,7 @@ func (m MoviesAliasesHandler) Handle(options *str.Options, client *internal.Clie
 
 func (MoviesAliasesHandler) fetchMoviesAliases(client *internal.Client, options *str.Options) ([]*str.Alias, *str.Response, error) {
 	aliases, resp, err := client.Movies.GetAllMovieAliases(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 	)
 

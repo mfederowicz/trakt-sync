@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"net/http"
@@ -33,7 +32,7 @@ func (m ShowsResetShowProgressHandler) Handle(options *str.Options, client *inte
 
 // HandleDelete process delete
 func (ShowsResetShowProgressHandler) handleUndoResetShowProgress(options *str.Options, client *internal.Client) error {
-	resp, err := client.Shows.UndoResetShowProgress(context.Background(), &options.InternalID)
+	resp, err := client.Shows.UndoResetShowProgress(client.BuildCtxFromOptions(options), &options.InternalID)
 	if err != nil {
 		return fmt.Errorf("%w", err)
 	}
@@ -56,7 +55,7 @@ func (m ShowsResetShowProgressHandler) handleResetShowProgress(options *str.Opti
 		showProgress.ResetAt = m.common.ToTimestamp(options.ResetAt)
 	}
 
-	result, resp, err := client.Shows.ResetShowProgress(context.Background(), &options.InternalID, showProgress)
+	result, resp, err := client.Shows.ResetShowProgress(client.BuildCtxFromOptions(options), &options.InternalID, showProgress)
 	if err != nil {
 		return fmt.Errorf("reset progress error:%w", err)
 	}

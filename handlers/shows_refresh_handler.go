@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"net/http"
@@ -48,7 +47,7 @@ func (h ShowsRefreshHandler) Handle(options *str.Options, client *internal.Clien
 func (ShowsRefreshHandler) refreshShow(client *internal.Client, options *str.Options) (*str.Response, error) {
 	showID := options.InternalID
 	resp, err := client.Shows.RefreshShowMetadata(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&showID,
 	)
 	return resp, err

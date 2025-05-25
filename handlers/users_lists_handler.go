@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -22,8 +21,7 @@ type UsersListsHandler struct{}
 func (UsersListsHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("fetch private lists for:" + options.UserName)
 
-	username := options.UserName
-	personalLists, _, err := fetchUsersPersonalLists(client, &username)
+	personalLists, _, err := fetchUsersPersonalLists(client, options)
 	if err != nil {
 		return fmt.Errorf("fetch user list error:%w", err)
 	}
@@ -77,10 +75,11 @@ func getAvlistsFromPersonals(personalLists []*str.PersonalList) []int {
 	return avLists
 }
 
-func fetchUsersPersonalLists(client *internal.Client, username *string) ([]*str.PersonalList, *str.Response, error) {
+func fetchUsersPersonalLists(client *internal.Client, options *str.Options) ([]*str.PersonalList, *str.Response, error) {
+	username := options.UserName
 	lists, resp, err := client.Users.GetUsersPersonalLists(
-		context.Background(),
-		username,
+		client.BuildCtxFromOptions(options),
+		&username,
 	)
 
 	return lists, resp, err
@@ -90,7 +89,7 @@ func fetchUsersPersonalList(client *internal.Client, options *str.Options) ([]*s
 	listIDString := options.ID
 	username := options.UserName
 	lists, resp, err := client.Users.GetItemstOnAPersonalList(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&username,
 		&listIDString,
 		&options.Type,

@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 
@@ -20,7 +19,7 @@ type GenresTypesHandler struct{}
 func (GenresTypesHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("genres handler:" + options.Type)
 
-	genres, _, err := fetchGenres(client, &options.Type)
+	genres, _, err := fetchGenres(client, options)
 	if err != nil {
 		return fmt.Errorf("fetch genres error:%w", err)
 	}
@@ -33,8 +32,8 @@ func (GenresTypesHandler) Handle(options *str.Options, client *internal.Client) 
 	return nil
 }
 
-func fetchGenres(client *internal.Client, strType *string) ([]*str.Genre, *str.Response, error) {
-	results, resp, err := client.Genres.GetGenres(context.Background(), strType)
+func fetchGenres(client *internal.Client, options *str.Options) ([]*str.Genre, *str.Response, error) {
+	results, resp, err := client.Genres.GetGenres(client.BuildCtxFromOptions(options), &options.Type)
 
 	return results, resp, err
 }

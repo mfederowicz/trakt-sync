@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -48,7 +47,7 @@ func (p PeopleUpdatesHandler) Handle(options *str.Options, client *internal.Clie
 func (p PeopleUpdatesHandler) fetchPeoplesUpdates(client *internal.Client, options *str.Options, startDate string, page int) ([]*str.PersonItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.People.GetRecentlyUpdatedPeople(
-		client.BuildCtxFromOptions(context.Background(), options),
+		client.BuildCtxFromOptions(options),
 		&startDate,
 		&opts,
 	)

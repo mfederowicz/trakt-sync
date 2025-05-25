@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -48,7 +47,7 @@ func (h ListsItemsHandler) Handle(options *str.Options, client *internal.Client)
 func (h ListsItemsHandler) fetchListItems(client *internal.Client, options *str.Options, page int) ([]*str.UserListItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Lists.GetListItems(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 		&options.Type,
 		&opts,

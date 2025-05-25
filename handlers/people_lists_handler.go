@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -48,7 +47,7 @@ func (p PeopleListsHandler) Handle(options *str.Options, client *internal.Client
 func (p PeopleListsHandler) fetchListsContainingThisPerson(client *internal.Client, options *str.Options, page int) ([]*str.PersonalList, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.People.GetListsContainingThisPerson(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.ID,
 		&options.Type,
 		&options.Sort,

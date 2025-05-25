@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 
@@ -20,7 +19,7 @@ type CertificationsTypesHandler struct{}
 func (CertificationsTypesHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("certifications handler:" + options.Type)
 
-	certifications, _, err := fetchCertifications(client, &options.Type)
+	certifications, _, err := fetchCertifications(client, options)
 	if err != nil {
 		return fmt.Errorf("fetch certifications error:%w", err)
 	}
@@ -33,8 +32,8 @@ func (CertificationsTypesHandler) Handle(options *str.Options, client *internal.
 	return nil
 }
 
-func fetchCertifications(client *internal.Client, strType *string) (*str.Certifications, *str.Response, error) {
-	results, resp, err := client.Certifications.GetCertifications(context.Background(), strType)
+func fetchCertifications(client *internal.Client, options *str.Options) (*str.Certifications, *str.Response, error) {
+	results, resp, err := client.Certifications.GetCertifications(client.BuildCtxFromOptions(options), &options.Type)
 
 	return results, resp, err
 }

@@ -2,10 +2,10 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
+
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
@@ -43,7 +43,7 @@ func (h MoviesBoxofficeHandler) Handle(options *str.Options, client *internal.Cl
 func (MoviesBoxofficeHandler) fetchMoviesBoxoffice(client *internal.Client, options *str.Options) ([]*str.MoviesItem, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Movies.GetBoxoffice(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&opts,
 	)
 

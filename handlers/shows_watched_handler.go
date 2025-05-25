@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -46,7 +45,7 @@ func (h ShowsWatchedHandler) fetchShowsWatched(client *internal.Client, options 
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	period := options.Period
 	list, resp, err := client.Shows.GetWatchedShows(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&opts,
 		&period,
 	)

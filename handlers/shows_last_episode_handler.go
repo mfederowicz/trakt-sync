@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -46,7 +45,7 @@ func (m ShowsLastEpisodeHandler) Handle(options *str.Options, client *internal.C
 func (ShowsLastEpisodeHandler) fetchShowsLastEpisode(client *internal.Client, options *str.Options) (*str.Episode, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	show, resp, err := client.Shows.GetLastEpisode(
-		client.BuildCtxFromOptions(context.Background(), options),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 		&opts,
 	)
