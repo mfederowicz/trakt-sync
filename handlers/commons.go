@@ -186,7 +186,7 @@ func (*CommonLogic) FetchMovie(client *internal.Client, options *str.Options) (*
 	movieID := options.InternalID
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Movies.GetMovie(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&movieID,
 		&opts,
 	)
@@ -200,7 +200,7 @@ func (*CommonLogic) FetchShow(client *internal.Client, options *str.Options) (*s
 	showID := options.InternalID
 
 	result, _, err := client.Shows.GetShow(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&showID,
 		&opts,
 	)
@@ -213,7 +213,7 @@ func (*CommonLogic) FetchSeason(client *internal.Client, options *str.Options) (
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	seasonID := options.InternalID
 	result, _, err := client.Seasons.GetSeason(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&seasonID,
 		&opts,
 	)
@@ -225,7 +225,7 @@ func (*CommonLogic) FetchSeason(client *internal.Client, options *str.Options) (
 func (*CommonLogic) FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error) {
 	episodeID := options.InternalID
 	result, _, err := client.Episodes.GetEpisode(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&episodeID,
 	)
 
@@ -237,7 +237,7 @@ func (*CommonLogic) FetchPerson(client *internal.Client, options *str.Options) (
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	personID := options.InternalID
 	result, _, err := client.People.GetSinglePerson(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&personID,
 		&opts,
 	)
@@ -249,7 +249,7 @@ func (*CommonLogic) FetchPerson(client *internal.Client, options *str.Options) (
 func (*CommonLogic) FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error) {
 	listID := options.InternalID
 	result, _, err := client.Lists.GetList(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&listID,
 	)
 
@@ -260,7 +260,7 @@ func (*CommonLogic) FetchList(client *internal.Client, options *str.Options) (*s
 func (*CommonLogic) FetchComment(client *internal.Client, options *str.Options) (*str.Comment, error) {
 	commentID := options.CommentID
 	result, _, err := client.Comments.GetComment(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&commentID,
 	)
 
@@ -271,7 +271,7 @@ func (*CommonLogic) FetchComment(client *internal.Client, options *str.Options) 
 func (*CommonLogic) FetchNotes(client *internal.Client, options *str.Options) (*str.Notes, error) {
 	notesID := options.InternalID
 	result, _, err := client.Notes.GetNotes(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&notesID,
 	)
 
@@ -282,7 +282,7 @@ func (*CommonLogic) FetchNotes(client *internal.Client, options *str.Options) (*
 func (*CommonLogic) FetchNotesItem(client *internal.Client, options *str.Options) (*str.NotesItem, error) {
 	notesID := options.InternalID
 	result, _, err := client.Notes.GetNotesItem(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&notesID,
 	)
 
@@ -294,7 +294,7 @@ func (*CommonLogic) FetchCommentItem(client *internal.Client, options *str.Optio
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	commentID := options.CommentID
 	result, _, err := client.Comments.GetCommentItem(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&commentID,
 		&opts,
 	)
@@ -307,7 +307,7 @@ func (c *CommonLogic) FetchCommentUserLikes(client *internal.Client, options *st
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	commentID := options.CommentID
 	list, resp, err := client.Comments.GetCommentUserLikes(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&commentID,
 		&opts,
 	)
@@ -337,7 +337,7 @@ func (c *CommonLogic) FetchTrendingComments(client *internal.Client, options *st
 	commentType := options.CommentType
 	strType := options.Type
 	list, resp, err := client.Comments.GetTrendingComments(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&commentType,
 		&strType,
 		&opts,
@@ -368,7 +368,7 @@ func (c *CommonLogic) FetchRecentComments(client *internal.Client, options *str.
 	commentType := options.CommentType
 	strType := options.Type
 	list, resp, err := client.Comments.GetRecentComments(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&commentType,
 		&strType,
 		&opts,
@@ -399,7 +399,7 @@ func (c *CommonLogic) FetchUpdatedComments(client *internal.Client, options *str
 	commentType := options.CommentType
 	strType := options.Type
 	list, resp, err := client.Comments.GetUpdatedComments(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&commentType,
 		&strType,
 		&opts,
@@ -428,7 +428,7 @@ func (c *CommonLogic) FetchUpdatedComments(client *internal.Client, options *str
 func (c *CommonLogic) FetchMovieRecommendations(client *internal.Client, options *str.Options, page int) ([]*str.Recommendation, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, IgnoreCollected: options.IgnoreCollected, IgnoreWatchlisted: options.IgnoreWatchlisted}
 	list, resp, err := client.Recommendations.GetMovieRecommendations(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&opts,
 	)
 
@@ -455,7 +455,7 @@ func (c *CommonLogic) FetchMovieRecommendations(client *internal.Client, options
 func (c *CommonLogic) FetchShowRecommendations(client *internal.Client, options *str.Options, page int) ([]*str.Recommendation, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, IgnoreCollected: options.IgnoreCollected, IgnoreWatchlisted: options.IgnoreWatchlisted}
 	list, resp, err := client.Recommendations.GetShowRecommendations(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&opts,
 	)
 
@@ -482,7 +482,7 @@ func (c *CommonLogic) FetchShowRecommendations(client *internal.Client, options 
 func (*CommonLogic) UpdateComment(client *internal.Client, options *str.Options, comment *str.Comment) (*str.Comment, *str.Response, error) {
 	commentID := options.CommentID
 	result, resp, err := client.Comments.UpdateComment(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&commentID,
 		comment,
 	)
@@ -494,7 +494,7 @@ func (*CommonLogic) UpdateComment(client *internal.Client, options *str.Options,
 func (*CommonLogic) UpdateNotes(client *internal.Client, options *str.Options, notes *str.Notes) (*str.Notes, *str.Response, error) {
 	notesID := options.InternalID
 	result, resp, err := client.Notes.UpdateNotes(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&notesID,
 		notes,
 	)
@@ -506,7 +506,7 @@ func (*CommonLogic) UpdateNotes(client *internal.Client, options *str.Options, n
 func (*CommonLogic) DeleteComment(client *internal.Client, options *str.Options) (*str.Response, error) {
 	commentID := options.CommentID
 	resp, err := client.Comments.DeleteComment(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&commentID,
 	)
 
@@ -517,7 +517,7 @@ func (*CommonLogic) DeleteComment(client *internal.Client, options *str.Options)
 func (*CommonLogic) DeleteNotes(client *internal.Client, options *str.Options) (*str.Response, error) {
 	notesID := options.InternalID
 	resp, err := client.Notes.DeleteNotes(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&notesID,
 	)
 
@@ -528,7 +528,7 @@ func (*CommonLogic) DeleteNotes(client *internal.Client, options *str.Options) (
 func (*CommonLogic) HideMovieRecommendation(client *internal.Client, options *str.Options) (*str.Response, error) {
 	movieID := options.InternalID
 	resp, err := client.Recommendations.HideMovieRecommendation(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&movieID,
 	)
 
@@ -539,7 +539,7 @@ func (*CommonLogic) HideMovieRecommendation(client *internal.Client, options *st
 func (*CommonLogic) HideShowRecommendation(client *internal.Client, options *str.Options) (*str.Response, error) {
 	showID := options.InternalID
 	resp, err := client.Recommendations.HideShowRecommendation(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&showID,
 	)
 
@@ -547,9 +547,9 @@ func (*CommonLogic) HideShowRecommendation(client *internal.Client, options *str
 }
 
 // FetchUserConnections helper function to fetch connections object
-func (*CommonLogic) FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error) {
+func (*CommonLogic) FetchUserConnections(client *internal.Client, options *str.Options) (*str.Connections, error) {
 	result, _, err := client.Users.RetrieveSettings(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 	)
 	if err != nil {
 		return nil, fmt.Errorf(consts.UserSettingsError, err)
@@ -559,9 +559,9 @@ func (*CommonLogic) FetchUserConnections(client *internal.Client, _ *str.Options
 }
 
 // StartScrobble helper function to start scrobble
-func (*CommonLogic) StartScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error) {
+func (*CommonLogic) StartScrobble(client *internal.Client, scrobble *str.Scrobble, options *str.Options) (*str.Scrobble, *str.Response, error) {
 	result, resp, err := client.Scrobble.StartScrobble(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		scrobble,
 	)
 
@@ -569,9 +569,9 @@ func (*CommonLogic) StartScrobble(client *internal.Client, scrobble *str.Scrobbl
 }
 
 // StopScrobble helper function to stop scrobble
-func (*CommonLogic) StopScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error) {
+func (*CommonLogic) StopScrobble(client *internal.Client, scrobble *str.Scrobble, options *str.Options) (*str.Scrobble, *str.Response, error) {
 	result, resp, err := client.Scrobble.StopScrobble(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		scrobble,
 	)
 
@@ -579,9 +579,9 @@ func (*CommonLogic) StopScrobble(client *internal.Client, scrobble *str.Scrobble
 }
 
 // PauseScrobble helper function to pause scrobble
-func (*CommonLogic) PauseScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error) {
+func (*CommonLogic) PauseScrobble(client *internal.Client, scrobble *str.Scrobble, options *str.Options) (*str.Scrobble, *str.Response, error) {
 	result, resp, err := client.Scrobble.PauseScrobble(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		scrobble,
 	)
 
@@ -589,9 +589,9 @@ func (*CommonLogic) PauseScrobble(client *internal.Client, scrobble *str.Scrobbl
 }
 
 // Checkin helper function to post checkin object
-func (*CommonLogic) Checkin(client *internal.Client, checkin *str.Checkin) (*str.Checkin, *str.Response, error) {
+func (*CommonLogic) Checkin(client *internal.Client, checkin *str.Checkin, options *str.Options) (*str.Checkin, *str.Response, error) {
 	result, resp, err := client.Checkin.CheckintoAnItem(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		checkin,
 	)
 
@@ -599,27 +599,27 @@ func (*CommonLogic) Checkin(client *internal.Client, checkin *str.Checkin) (*str
 }
 
 // Comment helper function to post comment object
-func (*CommonLogic) Comment(client *internal.Client, comment *str.Comment) (*str.Comment, *str.Response, error) {
+func (*CommonLogic) Comment(client *internal.Client, comment *str.Comment, options *str.Options) (*str.Comment, *str.Response, error) {
 	result, resp, err := client.Comments.PostAComment(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		comment,
 	)
 	return result, resp, err
 }
 
 // Notes helper function to post notes object
-func (*CommonLogic) Notes(client *internal.Client, notes *str.Notes) (*str.Notes, *str.Response, error) {
+func (*CommonLogic) Notes(client *internal.Client, notes *str.Notes, options *str.Options) (*str.Notes, *str.Response, error) {
 	result, resp, err := client.Notes.AddNotes(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		notes,
 	)
 	return result, resp, err
 }
 
 // Reply helper function to post reply object
-func (*CommonLogic) Reply(client *internal.Client, id *int, reply *str.Comment) (*str.Comment, *str.Response, error) {
+func (*CommonLogic) Reply(client *internal.Client, id *int, reply *str.Comment, options *str.Options) (*str.Comment, *str.Response, error) {
 	result, resp, err := client.Comments.ReplyAComment(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		id,
 		reply,
 	)

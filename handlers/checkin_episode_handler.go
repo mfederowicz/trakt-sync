@@ -26,7 +26,7 @@ func (h CheckinEpisodeHandler) Handle(options *str.Options, client *internal.Cli
 		return printer.Errorf(consts.CheckinError, err)
 	}
 
-	result, resp, err := h.common.Checkin(client, checkin)
+	result, resp, err := h.common.Checkin(client, checkin, options)
 	if err != nil {
 		return printer.Errorf(consts.CheckinError, err)
 	}

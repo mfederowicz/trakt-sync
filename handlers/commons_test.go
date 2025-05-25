@@ -106,6 +106,12 @@ func TestCreateCheckinUserSettingsError(t *testing.T) {
 	testSetup := setup(t)
 	c := &CommonLogic{}
 	o := &str.Options{}
+	s := &str.UserSettings{}
+	a := &str.UserAccount{}
+	tz := "Europe/Warsaw"
+	a.Timezone = &tz
+	s.Account = a
+	o.UserSettings = *s
 	_, err := c.CreateCheckin(testSetup.Client, o)
 	assert.Contains(t, err.Error(), "user settings error")
 }
@@ -116,6 +122,12 @@ func TestCreateCheckinUnknownAction(t *testing.T) {
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
+	s := &str.UserSettings{}
+	a := &str.UserAccount{}
+	tz := "Europe/Warsaw"
+	a.Timezone = &tz
+	s.Account = a
+	o.UserSettings = *s
 	_, err := c.CreateCheckin(testSetup.Client, o)
 	assert.Equal(t, err.Error(), "uknown checkin action")
 }
@@ -126,6 +138,12 @@ func TestCreateCheckinForMovie(t *testing.T) {
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
+	s := &str.UserSettings{}
+	a := &str.UserAccount{}
+	tz := "Europe/Warsaw"
+	a.Timezone = &tz
+	s.Account = a
+	o.UserSettings = *s
 	o.Action = consts.Movie
 	o.InternalID = "despicable-me-4-2024"
 	mux.HandleFunc("/movies/despicable-me-4-2024", func(w http.ResponseWriter, r *http.Request) {
@@ -154,6 +172,12 @@ func TestCreateCheckinForEpisode(t *testing.T) {
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
+	s := &str.UserSettings{}
+	a := &str.UserAccount{}
+	tz := "Europe/Warsaw"
+	a.Timezone = &tz
+	s.Account = a
+	o.UserSettings = *s
 	o.Action = consts.Episode
 	o.InternalID = "12345"
 	mux.HandleFunc("/episodes/12345", func(w http.ResponseWriter, r *http.Request) {
@@ -185,6 +209,12 @@ func TestCreateCheckinForShowEpisodeInvalidLength(t *testing.T) {
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
+	s := &str.UserSettings{}
+	a := &str.UserAccount{}
+	tz := "Europe/Warsaw"
+	a.Timezone = &tz
+	s.Account = a
+	o.UserSettings = *s
 	o.Action = consts.ShowEpisode
 	o.InternalID = "12345"
 	o.EpisodeCode = "12"
@@ -199,6 +229,12 @@ func TestCreateCheckinForShowEpisodeInvalidFormat(t *testing.T) {
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
+	s := &str.UserSettings{}
+	a := &str.UserAccount{}
+	tz := "Europe/Warsaw"
+	a.Timezone = &tz
+	s.Account = a
+	o.UserSettings = *s
 	o.Action = consts.ShowEpisode
 	o.EpisodeCode = "123456"
 	mux = MuxShow(t, mux, o)
@@ -212,6 +248,12 @@ func TestCreateCheckinForShowEpisodeEpisodeCode(t *testing.T) {
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
+	s := &str.UserSettings{}
+	a := &str.UserAccount{}
+	tz := "Europe/Warsaw"
+	a.Timezone = &tz
+	s.Account = a
+	o.UserSettings = *s
 	o.Action = consts.ShowEpisode
 	o.EpisodeCode = "6x10"
 	o.InternalID = "353"
@@ -228,6 +270,12 @@ func TestCreateCheckinForShowEpisodeAbs(t *testing.T) {
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
+	s := &str.UserSettings{}
+	a := &str.UserAccount{}
+	tz := "Europe/Warsaw"
+	a.Timezone = &tz
+	s.Account = a
+	o.UserSettings = *s
 	o.Action = consts.ShowEpisode
 	o.EpisodeAbs = consts.TestEpisodeAbs
 	o.InternalID = "353"

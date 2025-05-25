@@ -44,7 +44,7 @@ func (h CheckinShowEpisodeHandler) CreateCheckinForEpisodeCode(options *str.Opti
 		return printer.Errorf(consts.CheckinError, err)
 	}
 
-	result, resp, err := h.common.Checkin(client, checkin)
+	result, resp, err := h.common.Checkin(client, checkin, options)
 	if resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found episode for show:%s, season:%d, episode:%d", *checkin.Show.Title, *checkin.Episode.Season, *checkin.Episode.Number)
 	}
@@ -71,7 +71,7 @@ func (h CheckinShowEpisodeHandler) CreateCheckinForEpisodeAbs(options *str.Optio
 		return printer.Errorf(consts.CheckinError, err)
 	}
 
-	result, resp, err := h.common.Checkin(client, checkin)
+	result, resp, err := h.common.Checkin(client, checkin, options)
 
 	if resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found episode for show:%s, episode_abs:%d", *checkin.Show.Title, options.EpisodeAbs)
