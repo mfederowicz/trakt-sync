@@ -25,7 +25,7 @@ func (s ScrobbleStopMovieHandler) Handle(options *str.Options, client *internal.
 		return fmt.Errorf(consts.ScrobbleError, err)
 	}
 
-	result, resp, err := s.common.StopScrobble(client, scrobble)
+	result, resp, err := s.common.StopScrobble(client, scrobble, options)
 	if err != nil {
 		return fmt.Errorf(consts.ScrobbleError, err)
 	}

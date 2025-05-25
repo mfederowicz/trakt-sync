@@ -37,7 +37,7 @@ func (h CommentsCommentsEpisodeHandler) Handle(options *str.Options, client *int
 	c.Sharing.Twitter = connections.Twitter
 	c.Sharing.Mastodon = connections.Mastodon
 
-	result, resp, err := h.common.Comment(client, c)
+	result, resp, err := h.common.Comment(client, c, options)
 	if err != nil {
 		return fmt.Errorf("comment error:%w", err)
 	}

@@ -45,7 +45,7 @@ func (h NotesNotesRatingHandler) Handle(options *str.Options, client *internal.C
 	}
 	p := "private"
 	n.Privacy = &p
-	result, resp, err := h.common.Notes(client, n)
+	result, resp, err := h.common.Notes(client, n, options)
 	if err != nil {
 		return fmt.Errorf("%w", err)
 	}

@@ -73,7 +73,7 @@ func init() {
 func fetchCollectionList(client *internal.Client, options *str.Options) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Sync.GetCollection(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&options.Type,
 		&opts,
 	)

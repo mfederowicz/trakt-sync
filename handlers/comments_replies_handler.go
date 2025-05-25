@@ -88,7 +88,7 @@ func (h CommentsRepliesHandler) replyForComment(client *internal.Client, options
 	c := new(str.Comment)
 	c.Comment = &options.Reply
 	c.Spoiler = &options.Spoiler
-	result, resp, err := h.common.Reply(client, &options.CommentID, c)
+	result, resp, err := h.common.Reply(client, &options.CommentID, c, options)
 
 	if err != nil {
 		return fmt.Errorf("reply comment error:%w", err)

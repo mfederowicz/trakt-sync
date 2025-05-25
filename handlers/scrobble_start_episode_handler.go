@@ -26,7 +26,7 @@ func (s ScrobbleStartEpisodeHandler) Handle(options *str.Options, client *intern
 		return fmt.Errorf("scrobble error:%w", err)
 	}
 
-	result, resp, err := s.common.StartScrobble(client, scrobble)
+	result, resp, err := s.common.StartScrobble(client, scrobble, options)
 	if err != nil {
 		return fmt.Errorf("scrobble error:%w", err)
 	}

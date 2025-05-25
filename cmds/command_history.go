@@ -69,8 +69,9 @@ func init() {
 
 func fetchHistoryList(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+
 	list, resp, err := client.Sync.GetWatchedHistory(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&options.Type,
 		&opts,
 	)

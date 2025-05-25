@@ -76,6 +76,7 @@ type Config struct {
 	Specials          string    `toml:"specials"`
 	Spoiler           bool      `toml:"spoiler"`
 	TokenPath         string    `toml:"token_path"`
+	SettingsPath      string    `toml:"settings_path"`
 	TraktID           int       `toml:"trakt_id"`
 	Type              string    `toml:"type"`
 	Undo              bool      `toml:"undo"`
@@ -128,6 +129,13 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 		return nil, fmt.Errorf("config error : %w", err)
 	}
 	defaultConfig.TokenPath = tokenPath
+
+	settingsPath, err := processOptionSettingsPath(defaultConfig, fileConfig, flagConfig, flagset)
+	if err != nil {
+		return nil, fmt.Errorf("config error : %w", err)
+	}
+
+	defaultConfig.SettingsPath = settingsPath
 	defaultConfig.ClientID = processOptionClientID(defaultConfig, fileConfig, flagConfig, flagset)
 	defaultConfig.ClientSecret = processOptionClientSecret(defaultConfig, fileConfig, flagConfig, flagset)
 	defaultConfig.RedirectURI = processOptionRedirectURI(defaultConfig, fileConfig, flagConfig, flagset)
@@ -153,6 +161,19 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 	}
 
 	return defaultConfig, nil
+}
+
+func processOptionSettingsPath(defaultConfig *Config, fileConfig *Config, _ map[string]string, _ map[string]bool) (string, error) {
+	// process if field is set in config file
+	if len(fileConfig.SettingsPath) > consts.ZeroValue && fileConfig.SettingsPath != defaultConfig.SettingsPath {
+		defaultConfig.SettingsPath = fileConfig.SettingsPath
+	}
+
+	settingsPath, err := expandTilde(defaultConfig.SettingsPath)
+	if err != nil {
+		return "", fmt.Errorf("failed to expand tilde from settingsPath: %w", err)
+	}
+	return settingsPath, nil
 }
 
 func processOptionPagesLimit(defaultConfig *Config, fileConfig *Config, _ map[string]string, _ map[string]bool) int {

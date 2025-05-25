@@ -3,11 +3,11 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"testing"
+	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
@@ -106,6 +106,12 @@ func TestCreateCheckinUserSettingsError(t *testing.T) {
 	testSetup := setup(t)
 	c := &CommonLogic{}
 	o := &str.Options{}
+	s := &str.UserSettings{}
+	a := &str.UserAccount{}
+	tz := "Europe/Warsaw"
+	a.Timezone = &tz
+	s.Account = a
+	o.UserSettings = *s
 	_, err := c.CreateCheckin(testSetup.Client, o)
 	assert.Contains(t, err.Error(), "user settings error")
 }
@@ -116,6 +122,12 @@ func TestCreateCheckinUnknownAction(t *testing.T) {
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
+	s := &str.UserSettings{}
+	a := &str.UserAccount{}
+	tz := "Europe/Warsaw"
+	a.Timezone = &tz
+	s.Account = a
+	o.UserSettings = *s
 	_, err := c.CreateCheckin(testSetup.Client, o)
 	assert.Equal(t, err.Error(), "uknown checkin action")
 }
@@ -126,6 +138,12 @@ func TestCreateCheckinForMovie(t *testing.T) {
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
+	s := &str.UserSettings{}
+	a := &str.UserAccount{}
+	tz := "Europe/Warsaw"
+	a.Timezone = &tz
+	s.Account = a
+	o.UserSettings = *s
 	o.Action = consts.Movie
 	o.InternalID = "despicable-me-4-2024"
 	mux.HandleFunc("/movies/despicable-me-4-2024", func(w http.ResponseWriter, r *http.Request) {
@@ -154,6 +172,12 @@ func TestCreateCheckinForEpisode(t *testing.T) {
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
+	s := &str.UserSettings{}
+	a := &str.UserAccount{}
+	tz := "Europe/Warsaw"
+	a.Timezone = &tz
+	s.Account = a
+	o.UserSettings = *s
 	o.Action = consts.Episode
 	o.InternalID = "12345"
 	mux.HandleFunc("/episodes/12345", func(w http.ResponseWriter, r *http.Request) {
@@ -185,6 +209,12 @@ func TestCreateCheckinForShowEpisodeInvalidLength(t *testing.T) {
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
+	s := &str.UserSettings{}
+	a := &str.UserAccount{}
+	tz := "Europe/Warsaw"
+	a.Timezone = &tz
+	s.Account = a
+	o.UserSettings = *s
 	o.Action = consts.ShowEpisode
 	o.InternalID = "12345"
 	o.EpisodeCode = "12"
@@ -199,6 +229,12 @@ func TestCreateCheckinForShowEpisodeInvalidFormat(t *testing.T) {
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
+	s := &str.UserSettings{}
+	a := &str.UserAccount{}
+	tz := "Europe/Warsaw"
+	a.Timezone = &tz
+	s.Account = a
+	o.UserSettings = *s
 	o.Action = consts.ShowEpisode
 	o.EpisodeCode = "123456"
 	mux = MuxShow(t, mux, o)
@@ -212,6 +248,12 @@ func TestCreateCheckinForShowEpisodeEpisodeCode(t *testing.T) {
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
+	s := &str.UserSettings{}
+	a := &str.UserAccount{}
+	tz := "Europe/Warsaw"
+	a.Timezone = &tz
+	s.Account = a
+	o.UserSettings = *s
 	o.Action = consts.ShowEpisode
 	o.EpisodeCode = "6x10"
 	o.InternalID = "353"
@@ -228,6 +270,12 @@ func TestCreateCheckinForShowEpisodeAbs(t *testing.T) {
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
+	s := &str.UserSettings{}
+	a := &str.UserAccount{}
+	tz := "Europe/Warsaw"
+	a.Timezone = &tz
+	s.Account = a
+	o.UserSettings = *s
 	o.Action = consts.ShowEpisode
 	o.EpisodeAbs = consts.TestEpisodeAbs
 	o.InternalID = "353"
@@ -244,6 +292,22 @@ func TestConvertDateString(t *testing.T) {
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
-	out := c.ConvertDateString(o.ResetAt, consts.DefaultStartDateFormat)
-	fmt.Println(out)
+	o.ResetAt = "2025-01-24"
+	out := c.ConvertDateString(o.ResetAt, consts.DefaultStartDateFormat, "Europe/Warsaw", true)
+	assert.Contains(t, out, o.ResetAt)
+	assert.Contains(t, out, "+01:00")
+	o.ResetAt = "2025-05-24"
+	out = c.ConvertDateString(o.ResetAt, consts.DefaultStartDateFormat, "Europe/Warsaw", true)
+	assert.Contains(t, out, o.ResetAt)
+	assert.Contains(t, out, "+02:00")
+}
+
+func TestCurrnetDateString(t *testing.T) {
+	testSetup := setup(t)
+	mux := testSetup.Mux
+	mux = MuxUserSettings(t, mux)
+	c := &CommonLogic{}
+	out := c.CurrentDateString(time.UTC.String(), true)
+	currentTime := time.Now().UTC().Truncate(time.Hour)
+	assert.Contains(t, out, currentTime.Format(time.RFC3339))
 }
