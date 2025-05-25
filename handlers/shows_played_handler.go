@@ -46,7 +46,7 @@ func (h ShowsPlayedHandler) fetchShowsPlayed(client *internal.Client, options *s
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	period := options.Period
 	list, resp, err := client.Shows.GetPlayedShows(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&opts,
 		&period,
 	)

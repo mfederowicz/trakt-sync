@@ -46,7 +46,7 @@ func (h ShowsCollectedHandler) fetchShowsCollected(client *internal.Client, opti
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	period := options.Period
 	list, resp, err := client.Shows.GetCollectedShows(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&opts,
 		&period,
 	)

@@ -26,7 +26,7 @@ var (
 
 	validShowsActions = []string{
 		"trending", "popular", "favorited", "played", "watched", "collected",
-		"anticipated", "boxoffice", "updated", "updated_ids", "summary", "aliases", "certifications",
+		"anticipated", "boxoffice", "updates", "updated_ids", "summary", "aliases", "certifications",
 		"collection_progress", "watched_progress", "releases", "translations", "comments", "lists", "people", "ratings",
 		"releated", "stats", "studios", "watching", "next_episode", "last_episode", "videos", "refresh"}
 )

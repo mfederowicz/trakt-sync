@@ -47,7 +47,7 @@ func (h PeopleRefreshHandler) Handle(options *str.Options, client *internal.Clie
 func (PeopleRefreshHandler) refreshPerson(client *internal.Client, options *str.Options) (*str.Response, error) {
 	personID := options.ID
 	resp, err := client.People.RefreshPersonMetadata(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&personID,
 	)
 	return resp, err

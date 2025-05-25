@@ -48,7 +48,7 @@ func (h MoviesRefreshHandler) Handle(options *str.Options, client *internal.Clie
 func (MoviesRefreshHandler) refreshMovie(client *internal.Client, options *str.Options) (*str.Response, error) {
 	movieID := options.InternalID
 	resp, err := client.Movies.RefreshMovieMetadata(
-		context.Background(),
+		client.BuildCtxFromOptions(context.Background(), options),
 		&movieID,
 	)
 	return resp, err
