@@ -408,7 +408,9 @@ func readUserSettingsFromFile(fs afero.Fs, filePath string) (*str.UserSettings, 
 
 	var settings str.UserSettings
 	if err := json.Unmarshal(data, &settings); err != nil {
-		return nil, err
+		genDefaultSettings(filePath)
+		data, _ := afero.ReadFile(fs, filePath)
+		json.Unmarshal(data, &settings)
 	}
 
 	return &settings, nil
