@@ -381,7 +381,9 @@ func readTokenFromFile(fs afero.Fs, filePath string) (*str.Token, error) {
 
 	var token str.Token
 	if err := json.Unmarshal(data, &token); err != nil {
-		return nil, err
+		genDefaultToken(filePath)
+		data, _ := afero.ReadFile(fs, filePath)
+		json.Unmarshal(data, &token)
 	}
 
 	return &token, nil
@@ -408,7 +410,9 @@ func readUserSettingsFromFile(fs afero.Fs, filePath string) (*str.UserSettings, 
 
 	var settings str.UserSettings
 	if err := json.Unmarshal(data, &settings); err != nil {
-		return nil, err
+		genDefaultSettings(filePath)
+		data, _ := afero.ReadFile(fs, filePath)
+		json.Unmarshal(data, &settings)
 	}
 
 	return &settings, nil
