@@ -30,7 +30,7 @@ func (h NotesNotesHistoryHandler) Handle(options *str.Options, client *internal.
 	a.ID = &intID
 	n.AttachedTo = a
 
-	result, resp, err := h.common.Notes(client, n)
+	result, resp, err := h.common.Notes(client, n, options)
 	if err != nil {
 		return fmt.Errorf("notes error:%w", err)
 	}

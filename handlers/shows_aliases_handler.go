@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 
@@ -39,7 +38,7 @@ func (m ShowsAliasesHandler) Handle(options *str.Options, client *internal.Clien
 
 func (ShowsAliasesHandler) fetchShowsAliases(client *internal.Client, options *str.Options) ([]*str.Alias, *str.Response, error) {
 	aliases, resp, err := client.Shows.GetAllShowAliases(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 	)
 

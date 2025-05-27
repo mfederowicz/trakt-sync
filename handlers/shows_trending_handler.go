@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -45,7 +44,7 @@ func (h ShowsTrendingHandler) Handle(options *str.Options, client *internal.Clie
 func (h ShowsTrendingHandler) fetchShowsTrending(client *internal.Client, options *str.Options, page int) ([]*str.ShowsItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetTrendingShows(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&opts,
 	)
 

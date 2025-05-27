@@ -2,7 +2,6 @@
 package cmds
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -138,7 +137,7 @@ func fetchSearchTextQuery(client *internal.Client, options *str.Options, page in
 		Query:    options.Query,
 		Field:    searchField}
 	list, resp, err := client.Search.GetTextQueryResults(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&searchType,
 		&opts,
 	)
@@ -175,7 +174,7 @@ func fetchSearchIDLookup(client *internal.Client, options *str.Options) ([]*str.
 
 	opts := uri.ListOptions{Extended: options.ExtendedInfo, Type: searchType}
 	list, _, err := client.Search.GetIDLookupResults(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.SearchIDType,
 		&options.ID,
 		&opts,

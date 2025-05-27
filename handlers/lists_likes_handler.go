@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -48,7 +47,7 @@ func (h ListsLikesHandler) Handle(options *str.Options, client *internal.Client)
 func (h ListsLikesHandler) fetchListsLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Lists.GetAllUsersWhoLikedList(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&opts,
 		&options.InternalID,
 	)

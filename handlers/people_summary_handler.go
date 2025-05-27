@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -45,7 +44,7 @@ func (p PeopleSummaryHandler) Handle(options *str.Options, client *internal.Clie
 func (PeopleSummaryHandler) fetchSinglePerson(client *internal.Client, options *str.Options) (*str.Person, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetSinglePerson(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 		&opts,
 	)

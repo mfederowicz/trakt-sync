@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -43,7 +42,7 @@ func fetchUsersWatched(client *internal.Client, options *str.Options) ([]*str.Us
 	watchType := options.Type
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	watched, resp, err := client.Users.GetWatched(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&username,
 		&watchType,
 		&opts,

@@ -27,7 +27,7 @@ func (h CheckinMovieHandler) Handle(options *str.Options, client *internal.Clien
 		return fmt.Errorf(consts.CheckinError, err)
 	}
 
-	result, resp, err := h.common.Checkin(client, checkin)
+	result, resp, err := h.common.Checkin(client, checkin, options)
 	if err != nil {
 		return fmt.Errorf(consts.CheckinError, err)
 	}

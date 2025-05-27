@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 
@@ -20,7 +19,7 @@ type LanguagesTypesHandler struct{}
 func (LanguagesTypesHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("languages handler:" + options.Type)
 
-	languages, _, err := fetchLanguages(client, &options.Type)
+	languages, _, err := fetchLanguages(client, options)
 	if err != nil {
 		return fmt.Errorf("fetch languages error:%w", err)
 	}
@@ -33,8 +32,8 @@ func (LanguagesTypesHandler) Handle(options *str.Options, client *internal.Clien
 	return nil
 }
 
-func fetchLanguages(client *internal.Client, strType *string) ([]*str.Language, *str.Response, error) {
-	results, resp, err := client.Languages.GetLanguages(context.Background(), strType)
+func fetchLanguages(client *internal.Client, options *str.Options) ([]*str.Language, *str.Response, error) {
+	results, resp, err := client.Languages.GetLanguages(client.BuildCtxFromOptions(options), &options.Type)
 
 	return results, resp, err
 }

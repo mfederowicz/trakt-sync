@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -48,7 +47,7 @@ func (p ShowsUpdatesHandler) Handle(options *str.Options, client *internal.Clien
 func (p ShowsUpdatesHandler) fetchShowsUpdates(client *internal.Client, options *str.Options, startDate string, page int) ([]*str.ShowsItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetRecentlyUpdatedShows(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&startDate,
 		&opts,
 	)

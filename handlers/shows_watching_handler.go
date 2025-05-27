@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 
@@ -41,7 +40,7 @@ func (m ShowsWatchingHandler) Handle(options *str.Options, client *internal.Clie
 func (ShowsWatchingHandler) fetchShowsWatching(client *internal.Client, options *str.Options) ([]*str.UserProfile, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Shows.GetShowWatching(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 		&opts,
 	)

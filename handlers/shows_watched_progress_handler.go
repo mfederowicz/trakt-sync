@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -49,7 +48,7 @@ func (ShowsWatchedProgressHandler) fetchShowsWatchedProgress(client *internal.Cl
 	opts := uri.ListOptions{Hidden: options.Hidden, Specials: options.Specials, CountSpecials: options.CountSpecials}
 
 	result, err := client.Shows.GetShowWatchedProgress(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 		&opts,
 	)

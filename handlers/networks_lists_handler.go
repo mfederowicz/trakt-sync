@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -45,7 +44,7 @@ func (p NetworksListsHandler) Handle(options *str.Options, client *internal.Clie
 func (p NetworksListsHandler) fetchNetworksList(client *internal.Client, options *str.Options, page int) ([]*str.TvNetwork, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Networks.GetNetworksList(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&opts,
 	)
 

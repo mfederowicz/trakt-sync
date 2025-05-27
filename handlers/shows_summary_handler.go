@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 
@@ -41,7 +40,7 @@ func (m ShowsSummaryHandler) Handle(options *str.Options, client *internal.Clien
 func (ShowsSummaryHandler) fetchShowsSummary(client *internal.Client, options *str.Options) (*str.Show, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	show, resp, err := client.Shows.GetShow(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 		&opts,
 	)

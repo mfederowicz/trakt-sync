@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 
@@ -39,7 +38,7 @@ func (m ShowsStudiosHandler) Handle(options *str.Options, client *internal.Clien
 
 func (ShowsStudiosHandler) fetchShowsStudios(client *internal.Client, options *str.Options) ([]*str.Studio, *str.Response, error) {
 	result, resp, err := client.Shows.GetShowStudios(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 	)
 

@@ -184,7 +184,6 @@ func (s *ShowsService) GetWatchedShows(ctx context.Context, opts *uri.ListOption
 
 	list := []*str.ShowsItem{}
 	resp, err := s.client.Do(ctx, req, &list)
-
 	if err != nil {
 		printer.Println("fetch shows err:" + err.Error())
 		return nil, resp, err
@@ -523,7 +522,6 @@ func (s *ShowsService) GetShowWatchedProgress(ctx context.Context, id *string, o
 // API docs:https://trakt.docs.apiary.io/#reference/shows/reset-watched-progress/reset-show-progress
 func (s *ShowsService) ResetShowProgress(ctx context.Context, id *string, progress *str.WatchedProgress) (*str.WatchedProgress, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/progress/watched/reset", *id)
-	fmt.Println(progress.ResetAt)
 	req, err := s.client.NewRequest(http.MethodPost, url, progress)
 	if err != nil {
 		return nil, nil, err

@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -46,7 +45,7 @@ func (m ShowsNextEpisodeHandler) Handle(options *str.Options, client *internal.C
 func (ShowsNextEpisodeHandler) fetchShowsNextEpisode(client *internal.Client, options *str.Options) (*str.Episode, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	show, resp, err := client.Shows.GetNextEpisode(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 		&opts,
 	)

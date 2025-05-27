@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"time"
@@ -42,7 +41,7 @@ func (m ShowsRelatedHandler) Handle(options *str.Options, client *internal.Clien
 func (m ShowsRelatedHandler) fetchShowsRelated(client *internal.Client, options *str.Options, page int) ([]*str.Show, *str.Response, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetRelatedShows(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 		&opts,
 	)

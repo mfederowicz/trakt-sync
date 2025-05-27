@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"time"
@@ -48,7 +47,7 @@ func (m ShowsListsHandler) Handle(options *str.Options, client *internal.Client)
 func (m ShowsListsHandler) fetchShowsLists(client *internal.Client, options *str.Options, page int) ([]*str.PersonalList, *str.Response, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetListsContainingShow(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 		&options.Type,
 		&options.Sort,

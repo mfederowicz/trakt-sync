@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"time"
@@ -42,7 +41,7 @@ func (m ShowsCommentsHandler) Handle(options *str.Options, client *internal.Clie
 func (m ShowsCommentsHandler) fetchShowsComments(client *internal.Client, options *str.Options, page int) ([]*str.Comment, *str.Response, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetAllShowComments(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 		&options.Sort,
 		&opts,

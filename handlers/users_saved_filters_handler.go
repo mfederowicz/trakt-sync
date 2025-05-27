@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -23,7 +22,7 @@ type UsersSavedFiltersHandler struct{}
 func (UsersSavedFiltersHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("users saved filters handler:" + options.UserName)
 
-	filters, resp, err := fetchUsersSavedFilters(client, &options.Type)
+	filters, resp, err := fetchUsersSavedFilters(client, options)
 	if err != nil {
 		return fmt.Errorf("fetch saved filters error:%w", err)
 	}
@@ -44,10 +43,10 @@ func (UsersSavedFiltersHandler) Handle(options *str.Options, client *internal.Cl
 	return nil
 }
 
-func fetchUsersSavedFilters(client *internal.Client, section *string) ([]*str.SavedFilter, *str.Response, error) {
+func fetchUsersSavedFilters(client *internal.Client, options *str.Options) ([]*str.SavedFilter, *str.Response, error) {
 	lists, resp, err := client.Users.GetSavedFilters(
-		context.Background(),
-		section,
+		client.BuildCtxFromOptions(options),
+		&options.Type,
 	)
 
 	return lists, resp, err

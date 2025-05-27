@@ -42,7 +42,7 @@ func (s ScrobbleStopShowEpisodeHandler) CreateStopScrobbleForEpisodeCode(options
 		return fmt.Errorf(consts.ScrobbleError, err)
 	}
 
-	result, resp, err := s.common.StopScrobble(client, scrobble)
+	result, resp, err := s.common.StopScrobble(client, scrobble, options)
 	if resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found episode for show:%s, season:%d, episode:%d", *scrobble.Show.Title, *scrobble.Episode.Season, *scrobble.Episode.Number)
 	}
@@ -65,7 +65,7 @@ func (s ScrobbleStopShowEpisodeHandler) CreateStopScrobbleForEpisodeAbs(options 
 		return fmt.Errorf(consts.ScrobbleError, err)
 	}
 
-	result, resp, err := s.common.StopScrobble(client, scrobble)
+	result, resp, err := s.common.StopScrobble(client, scrobble, options)
 
 	if resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found episode for show:%s, episode_abs:%d", *scrobble.Show.Title, options.EpisodeAbs)

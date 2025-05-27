@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -57,7 +56,7 @@ func (h CommentsRepliesHandler) allCommentReplies(client *internal.Client, optio
 func (h CommentsRepliesHandler) fetchCommentReplies(client *internal.Client, options *str.Options, page int) ([]*str.Comment, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Comments.GetRepliesForComment(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&opts,
 		&options.CommentID,
 	)
@@ -88,7 +87,7 @@ func (h CommentsRepliesHandler) replyForComment(client *internal.Client, options
 	c := new(str.Comment)
 	c.Comment = &options.Reply
 	c.Spoiler = &options.Spoiler
-	result, resp, err := h.common.Reply(client, &options.CommentID, c)
+	result, resp, err := h.common.Reply(client, &options.CommentID, c, options)
 
 	if err != nil {
 		return fmt.Errorf("reply comment error:%w", err)

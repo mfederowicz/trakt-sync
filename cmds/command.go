@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -629,6 +628,7 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 	if len(*_searchQuery) > consts.ZeroValue {
 		options.Query = *c.PrepareQueryString(*_searchQuery)
 	}
+	options.FullHour = false
 	options = UpdateOptionsCommonFlags(c, options)
 	options = UpdateOptionsWithCommandListsFlags(options)
 	options = UpdateOptionsWithCommandCheckInFlags(options)
@@ -686,11 +686,13 @@ func UpdateOptionsCommonFlags(c *Command, options *str.Options) *str.Options {
 		options.Output = cfg.GetOutputForModule(options)
 	}
 
+	options.FullHour = true
 	if len(*_startDate) > consts.ZeroValue {
-		options.StartDate = c.common.ConvertDateString(*_startDate, consts.DefaultStartDateFormat)
+		options.StartDate = c.common.ConvertDateString(*_startDate, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
 	} else {
-		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
+		options.StartDate = c.common.CurrentDateString(options.Timezone, options.FullHour)
 	}
+	options.FullHour = true
 
 	return options
 }
@@ -775,11 +777,13 @@ func UpdateOptionsWithCommandMoviesFlags(c *Command, options *str.Options) *str.
 		options.Period = *_moviesPeriod
 	}
 
+	options.FullHour = true
 	if len(*_moviesStartDate) > consts.ZeroValue {
-		options.StartDate = c.common.ConvertDateString(*_moviesStartDate, consts.DefaultStartDateFormat)
+		options.StartDate = c.common.ConvertDateString(*_moviesStartDate, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
 	} else {
-		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
+		options.StartDate = c.common.CurrentDateString(options.Timezone, options.FullHour)
 	}
+	options.FullHour = false
 
 	if len(*_moviesInternalID) > consts.ZeroValue {
 		options.InternalID = *_moviesInternalID
@@ -806,11 +810,13 @@ func UpdateOptionsWithCommandShowsFlags(c *Command, options *str.Options) *str.O
 		options.Period = *_showsPeriod
 	}
 
+	options.FullHour = true
 	if len(*_showsStartDate) > consts.ZeroValue {
-		options.StartDate = c.common.ConvertDateString(*_showsStartDate, consts.DefaultStartDateFormat)
+		options.StartDate = c.common.ConvertDateString(*_showsStartDate, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
 	} else {
-		options.StartDate = time.Now().Format(consts.DefaultStartDateFormat)
+		options.StartDate = c.common.CurrentDateString(options.Timezone, options.FullHour)
 	}
+	options.FullHour = false
 
 	if len(*_showsInternalID) > consts.ZeroValue {
 		options.InternalID = *_showsInternalID
@@ -825,7 +831,7 @@ func UpdateOptionsWithCommandShowsFlags(c *Command, options *str.Options) *str.O
 	}
 
 	if len(*_showsResetAt) > consts.ZeroValue {
-		options.ResetAt = c.common.ConvertDateString(*_showsResetAt, consts.DefaultStartDateFormat)
+		options.ResetAt = c.common.ConvertDateString(*_showsResetAt, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
 	}
 
 	return options

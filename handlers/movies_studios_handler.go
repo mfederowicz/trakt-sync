@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 
@@ -39,7 +38,7 @@ func (m MoviesStudiosHandler) Handle(options *str.Options, client *internal.Clie
 
 func (MoviesStudiosHandler) fetchMoviesStudios(client *internal.Client, options *str.Options) ([]*str.Studio, *str.Response, error) {
 	result, resp, err := client.Movies.GetMovieStudios(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 	)
 

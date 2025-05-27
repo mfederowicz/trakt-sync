@@ -28,11 +28,13 @@ func TestHelp(t *testing.T) {
 	AppFs.MkdirAll(tmpPath, consts.X755)
 
 	afero.WriteFile(AppFs, tmpPath+"/token.json", []byte("{}"), consts.X644)
+	afero.WriteFile(AppFs, tmpPath+"/user_settings.json", []byte("{}"), consts.X644)
 
 	c := cfg.DefaultConfig()
 	c.ClientID = "a"
 	c.ClientSecret = "b"
 	c.TokenPath = tmpPath + "/token.json"
+	c.SettingsPath = tmpPath + "/user_settings.json"
 	tests := genTestsList(c)
 	processTests(t, tests)
 }

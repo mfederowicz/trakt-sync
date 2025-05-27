@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -45,7 +44,7 @@ func (h MoviesTrendingHandler) Handle(options *str.Options, client *internal.Cli
 func (h MoviesTrendingHandler) fetchMoviesTrending(client *internal.Client, options *str.Options, page int) ([]*str.MoviesItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Movies.GetTrendingMovies(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&opts,
 	)
 

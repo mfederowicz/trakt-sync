@@ -10,6 +10,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"reflect"
 	"strconv"
 	"strings"
 	"sync"
@@ -21,19 +22,21 @@ import (
 	"github.com/mfederowicz/trakt-sync/uri"
 )
 
+type contextKey string
+
 // basic consts for client
 const (
-	Version                   = "2"
-	defaultBaseURL            = "https://api.trakt.tv/"
-	upgradeURL                = "https://trakt.tv/vip"
-	HeaderRateLimit           = "X-RateLimit"
-	HeaderRetryAfter          = "Retry-After"
-	HeaderPaginationPage      = "X-Pagination-Page"
-	HeaderPaginationPageCount = "X-Pagination-Page-Count"
-	HeaderUpgradeURL          = "X-Upgrade-URL"
-
-	skipRateLimitCheck requestContext = iota
-	emptyLimit                        = ""
+	HeaderPaginationPage                     = "X-Pagination-Page"
+	HeaderPaginationPageCount                = "X-Pagination-Page-Count"
+	HeaderRateLimit                          = "X-RateLimit"
+	HeaderRetryAfter                         = "Retry-After"
+	HeaderUpgradeURL                         = "X-Upgrade-URL"
+	TimezoneKey               contextKey     = "timezone"
+	Version                                  = "2"
+	defaultBaseURL                           = "https://api.trakt.tv/"
+	emptyLimit                               = ""
+	skipRateLimitCheck        requestContext = iota
+	upgradeURL                               = "https://trakt.tv/vip"
 )
 
 var errNonNilContext = errors.New("context must be non-nil")
@@ -76,9 +79,36 @@ type Client struct {
 	rateMu          sync.Mutex
 }
 
+// BuildCtxFromOptions create ctx with custom options
+func (*Client) BuildCtxFromOptions(options *str.Options) context.Context {
+	ctx := context.Background()
+
+	if len(options.Timezone) > consts.ZeroValue {
+		loc, err := time.LoadLocation(options.Timezone)
+		if err == nil {
+			ctx = context.WithValue(ctx, TimezoneKey, loc)
+		}
+	}
+	return ctx
+}
+
+// GetTimezone to get timezone from ctx object
+func (*Client) GetTimezone(ctx context.Context) *time.Location {
+	loc, ok := ctx.Value(TimezoneKey).(*time.Location)
+	if !ok {
+		return time.UTC
+	}
+	return loc
+}
+
 // UpdateHeaders is for update client headers map
 func (c *Client) UpdateHeaders(headers map[string]any) {
 	c.headers = headers
+}
+
+// GetHeaders is for get headers map
+func (c *Client) GetHeaders() map[string]any {
+	return c.headers
 }
 
 // HavePages checks if we have available pages to fetch
@@ -190,7 +220,6 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v any) (*str.Respons
 	case io.Writer:
 		_, err = io.Copy(v, resp.Body)
 	default:
-
 		decErr := json.NewDecoder(resp.Body).Decode(v)
 		if decErr == io.EOF {
 			decErr = nil // ignore EOF errors caused by empty response body
@@ -199,7 +228,59 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v any) (*str.Respons
 			err = decErr
 		}
 	}
+	// Adjust all Timestamp fields
+	loc := c.GetTimezone(ctx)
+	if loc != time.UTC {
+		c.AdjustTimestamps(reflect.ValueOf(v), loc)
+	}
+
 	return resp, err
+}
+
+// AdjustTimestamps update timestamps with user timezone
+func (c *Client) AdjustTimestamps(val reflect.Value, loc *time.Location) {
+	if val.Kind() == reflect.Ptr {
+		if val.IsNil() {
+			return
+		}
+		val = val.Elem()
+	}
+	switch val.Kind() {
+	case reflect.Struct:
+		for i := consts.ZeroValue; i < val.NumField(); i++ {
+			field := val.Field(i)
+			fieldType := val.Type().Field(i)
+			// skip unexported fields
+			if fieldType.PkgPath != "" {
+				continue
+			}
+
+			switch field.Kind() {
+			case reflect.Ptr:
+				if field.Type().Elem().String() == "str.Timestamp" && !field.IsNil() {
+					ts := field.Interface().(*str.Timestamp)
+					ts.Time = ts.Time.In(loc)
+				} else {
+					c.AdjustTimestamps(field, loc)
+				}
+			case reflect.Struct:
+				if field.Type().String() == "str.Timestamp" {
+					ts := field.Addr().Interface().(*str.Timestamp)
+					ts.Time = ts.Time.In(loc)
+				} else {
+					c.AdjustTimestamps(field, loc)
+				}
+			case reflect.Slice, reflect.Array:
+				for j := consts.ZeroValue; j < field.Len(); j++ {
+					c.AdjustTimestamps(field.Index(j), loc)
+				}
+			}
+		}
+	case reflect.Slice, reflect.Array:
+		for i := consts.ZeroValue; i < val.Len(); i++ {
+			c.AdjustTimestamps(val.Index(i), loc)
+		}
+	}
 }
 
 // BareDo sends an API request and lets you handle the api response.
@@ -238,6 +319,8 @@ func prepareResponse(c *Client, resp *http.Response) (*str.Response, error) {
 			return response, errors.New(e.Error())
 		case *NotFoundError:
 			return response, errors.New(e.Error())
+		case *BadRequestError:
+			return response, errors.New(e.Error())
 		case *ServerError:
 			return response, errors.New(e.Error())
 		case *ConflictError:
@@ -245,7 +328,7 @@ func prepareResponse(c *Client, resp *http.Response) (*str.Response, error) {
 			response.Errors = e.Errors
 			return response, errors.New("validation error")
 		default:
-			printer.Println("General error occurred:", errCheck)
+			printer.Println("General error occurred:", errCheck.Error())
 		}
 	}
 
@@ -349,6 +432,8 @@ func genErrorResponse(c *Client, r *http.Response, e *str.ErrorResponse) error {
 		return c.genUpgradeRequiredError(r, e)
 	case http.StatusNotFound:
 		return c.genNotFoundError(r, e)
+	case http.StatusBadRequest:
+		return c.genBadRequestError(r, e)
 	case http.StatusInternalServerError:
 		return c.genServerError(r, e)
 	case http.StatusUnauthorized:
@@ -403,6 +488,17 @@ func (*Client) genNotFoundError(r *http.Response, errorResponse *str.ErrorRespon
 	}
 	if r.StatusCode == http.StatusNotFound {
 		return notFoundError
+	}
+	return nil
+}
+
+func (*Client) genBadRequestError(r *http.Response, errorResponse *str.ErrorResponse) error {
+	badRequestError := &BadRequestError{
+		Response: errorResponse.Response,
+		Message:  errorResponse.Message,
+	}
+	if r.StatusCode == http.StatusBadRequest {
+		return badRequestError
 	}
 	return nil
 }

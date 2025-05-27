@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 
@@ -39,7 +38,7 @@ func (m ShowsRatingsHandler) Handle(options *str.Options, client *internal.Clien
 
 func (ShowsRatingsHandler) fetchShowsRatings(client *internal.Client, options *str.Options) (*str.ShowRatings, *str.Response, error) {
 	result, resp, err := client.Shows.GetShowRatings(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 	)
 

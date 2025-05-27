@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"net/http"
@@ -40,14 +39,14 @@ func (CommentsLikeHandler) likeSingleComment(client *internal.Client, options *s
 
 	if !options.Remove {
 		resp, err := client.Comments.LikeComment(
-			context.Background(),
+			client.BuildCtxFromOptions(options),
 			&commentID,
 		)
 		return resp, err
 	}
 
 	resp, err := client.Comments.RemoveLikeComment(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&commentID,
 	)
 

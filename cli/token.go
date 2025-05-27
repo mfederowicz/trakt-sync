@@ -2,8 +2,8 @@
 package cli
 
 import (
-	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -15,16 +15,20 @@ import (
 )
 
 // ValidAccessToken valid if access_token is expired or not, and refresh if expired
-func ValidAccessToken(config *cfg.Config, oauth *internal.OauthService) bool {
+func ValidAccessToken(config *cfg.Config, client *internal.Client, options *str.Options) bool {
 	token, err := ReadTokenFromFile(config.TokenPath)
 	if err != nil {
 		printer.Println("Error reading token:", err)
 		return false
 	}
+	if len(token.AccessToken) == consts.ZeroValue {
+		printer.Println("Error: empty access token")
+		return false
+	}
 
 	if token.Expired() {
-		if refreshed := refreshToken(config, oauth); refreshed {
-			printer.Println("Token refresed!")
+		if refreshed := refreshToken(config, client, options); refreshed {
+			printer.Println("Token refreshed!")
 		}
 
 		// Reload the updated token from the file
@@ -33,9 +37,29 @@ func ValidAccessToken(config *cfg.Config, oauth *internal.OauthService) bool {
 			printer.Println("Error reading updated token:", err)
 			return false
 		}
+
+		if refreshedSettings := RefreshUserSettings(config, client, options); refreshedSettings {
+			printer.Println("User settings refreshed!")
+		}
 	}
 
 	return !token.Expired()
+}
+
+// ReadUserSettingsFromFile reads user settings from the specified file
+func ReadUserSettingsFromFile(filePath string) (*str.UserSettings, error) {
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		fmt.Println("ooo")
+		return nil, err
+	}
+
+	var settings str.UserSettings
+	if err := json.Unmarshal(data, &settings); err != nil {
+		return nil, err
+	}
+
+	return &settings, nil
 }
 
 // ReadTokenFromFile reads the token from the specified file
@@ -54,7 +78,7 @@ func ReadTokenFromFile(filePath string) (*str.Token, error) {
 }
 
 // refresh access token to new one
-func refreshToken(config *cfg.Config, oauth *internal.OauthService) bool {
+func refreshToken(config *cfg.Config, client *internal.Client, options *str.Options) bool {
 	token, err := ReadTokenFromFile(config.TokenPath)
 	if err != nil {
 		printer.Println("Error reading token:", err)
@@ -71,8 +95,8 @@ func refreshToken(config *cfg.Config, oauth *internal.OauthService) bool {
 		GrantType:    &grantType,
 	}
 
-	newToken, resp, err := oauth.ExchangeRefreshTokenForAccessToken(
-		context.Background(),
+	newToken, resp, err := client.Oauth.ExchangeRefreshTokenForAccessToken(
+		client.BuildCtxFromOptions(options),
 		currentToken,
 	)
 
@@ -84,6 +108,30 @@ func refreshToken(config *cfg.Config, oauth *internal.OauthService) bool {
 	if resp.StatusCode == http.StatusOK {
 		tokenjson, _ := json.Marshal(newToken)
 		if err := os.WriteFile(config.TokenPath, tokenjson, consts.X644); err != nil {
+			printer.Println(err.Error())
+			return false
+		}
+
+		return true
+	}
+
+	return false
+}
+
+// RefreshUserSettings user settings
+func RefreshUserSettings(config *cfg.Config, client *internal.Client, options *str.Options) bool {
+	newSettings, resp, err := client.Users.RetrieveSettings(
+		client.BuildCtxFromOptions(options),
+	)
+
+	if err != nil {
+		printer.Println("Error get settings:", err)
+		return false
+	}
+
+	if resp.StatusCode == http.StatusOK {
+		settingsjson, _ := json.Marshal(newSettings)
+		if err := os.WriteFile(config.SettingsPath, settingsjson, consts.X644); err != nil {
 			printer.Println(err.Error())
 			return false
 		}

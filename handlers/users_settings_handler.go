@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 
@@ -20,7 +19,7 @@ type UsersSettingsHandler struct{}
 func (UsersSettingsHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("users settings handler:" + options.UserName)
 
-	settings, _, err := fetchUsersSettings(client)
+	settings, _, err := fetchUsersSettings(client, options)
 	if err != nil {
 		return fmt.Errorf("fetch settings error:%w", err)
 	}
@@ -33,8 +32,8 @@ func (UsersSettingsHandler) Handle(options *str.Options, client *internal.Client
 	return nil
 }
 
-func fetchUsersSettings(client *internal.Client) (*str.UserSettings, *str.Response, error) {
-	settings, resp, err := client.Users.RetrieveSettings(context.Background())
+func fetchUsersSettings(client *internal.Client, options *str.Options) (*str.UserSettings, *str.Response, error) {
+	settings, resp, err := client.Users.RetrieveSettings(client.BuildCtxFromOptions(options))
 
 	return settings, resp, err
 }

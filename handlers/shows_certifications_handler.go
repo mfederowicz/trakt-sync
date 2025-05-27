@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 
@@ -39,7 +38,7 @@ func (m ShowsCertificationsHandler) Handle(options *str.Options, client *interna
 
 func (ShowsCertificationsHandler) fetchShowsCertifications(client *internal.Client, options *str.Options) ([]*str.Certification, *str.Response, error) {
 	certifications, resp, err := client.Shows.GetAllShowCertifications(
-		context.Background(),
+		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 	)
 
