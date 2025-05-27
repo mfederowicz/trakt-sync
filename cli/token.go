@@ -21,6 +21,10 @@ func ValidAccessToken(config *cfg.Config, client *internal.Client, options *str.
 		printer.Println("Error reading token:", err)
 		return false
 	}
+	if len(token.AccessToken) == consts.ZeroValue {
+		printer.Println("Error: empty access token")
+		return false
+	}
 
 	if token.Expired() {
 		if refreshed := refreshToken(config, client, options); refreshed {

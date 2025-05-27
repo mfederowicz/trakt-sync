@@ -9,6 +9,7 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
@@ -255,8 +256,10 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 	if err != nil {
 		return str.Options{}, fmt.Errorf("error reading user settings:%w", err)
 	}
+	if len(token.AccessToken) > consts.ZeroValue {
+		str.Headers["Authorization"] = "Bearer " + token.AccessToken
+	}
 
-	str.Headers["Authorization"] = "Bearer " + token.AccessToken
 	str.Headers["trakt-api-key"] = config.ClientID
 
 	if len(str.Headers["Authorization"].(string)) == consts.ZeroValue && len(str.Headers["trakt-api-key"].(string)) == consts.ZeroValue {
@@ -366,6 +369,11 @@ func IsValidConfigTypeSlice(allowedElements []string, userElements str.Slice) bo
 
 // ReadTokenFromFile reads the token from the specified file
 func readTokenFromFile(fs afero.Fs, filePath string) (*str.Token, error) {
+	check, _ := afero.Exists(fs, filePath)
+	if check == false {
+		genDefaultToken(filePath)
+	}
+
 	data, err := afero.ReadFile(fs, filePath)
 	if err != nil {
 		return nil, err
@@ -377,6 +385,13 @@ func readTokenFromFile(fs afero.Fs, filePath string) (*str.Token, error) {
 	}
 
 	return &token, nil
+}
+
+func genDefaultToken(filePath string) {
+	var token str.Token
+	token.CreatedAt = time.Now().Add(-24 * time.Hour).Unix()
+	tokenjson, _ := json.Marshal(token)
+	os.WriteFile(filePath, tokenjson, consts.X644)
 }
 
 // readUserSettingsFromFile reads the user settings from the specified file

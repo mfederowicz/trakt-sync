@@ -1,13 +1,16 @@
 // Package str used for structs
 package str
 
-import "time"
+import (
+	"time"
+)
 
 // TokenInterface methods for tokens
 type TokenInterface interface {
 	Expired() bool
 	ExpiritySeconds() int
 	ExpirationPoint() time.Time
+	Import(t DeviceToken) Token
 }
 
 // Token represents JSON token object
@@ -16,8 +19,8 @@ type Token struct {
 	TokenType    string `json:"token_type"`
 	RefreshToken string `json:"refresh_token"`
 	Scope        string `json:"scope"`
-	ExpiresIn    int    `json:"expires_in"`
-	CreatedAt    int    `json:"created_at"`
+	ExpiresIn    int64  `json:"expires_in"`
+	CreatedAt    int64  `json:"created_at"`
 }
 
 // Expired check if token is expired

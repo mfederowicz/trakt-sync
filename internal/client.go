@@ -106,6 +106,11 @@ func (c *Client) UpdateHeaders(headers map[string]any) {
 	c.headers = headers
 }
 
+// GetHeaders is for get headers map
+func (c *Client) GetHeaders() map[string]any {
+	return c.headers
+}
+
 // HavePages checks if we have available pages to fetch
 func (*Client) HavePages(page int, resp *str.Response, limit int) bool {
 	_, pageHeader := resp.Header[HeaderPaginationPage]
@@ -224,10 +229,10 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v any) (*str.Respons
 		}
 	}
 	// Adjust all Timestamp fields
-	// loc := c.GetTimezone(ctx)
-	// if loc != time.UTC {
-	// 	c.AdjustTimestamps(reflect.ValueOf(v), loc)
-	// }
+	loc := c.GetTimezone(ctx)
+	if loc != time.UTC {
+		c.AdjustTimestamps(reflect.ValueOf(v), loc)
+	}
 
 	return resp, err
 }
@@ -314,6 +319,8 @@ func prepareResponse(c *Client, resp *http.Response) (*str.Response, error) {
 			return response, errors.New(e.Error())
 		case *NotFoundError:
 			return response, errors.New(e.Error())
+		case *BadRequestError:
+			return response, errors.New(e.Error())
 		case *ServerError:
 			return response, errors.New(e.Error())
 		case *ConflictError:
@@ -321,7 +328,7 @@ func prepareResponse(c *Client, resp *http.Response) (*str.Response, error) {
 			response.Errors = e.Errors
 			return response, errors.New("validation error")
 		default:
-			printer.Println("General error occurred:", errCheck)
+			printer.Println("General error occurred:", errCheck.Error())
 		}
 	}
 
@@ -425,6 +432,8 @@ func genErrorResponse(c *Client, r *http.Response, e *str.ErrorResponse) error {
 		return c.genUpgradeRequiredError(r, e)
 	case http.StatusNotFound:
 		return c.genNotFoundError(r, e)
+	case http.StatusBadRequest:
+		return c.genBadRequestError(r, e)
 	case http.StatusInternalServerError:
 		return c.genServerError(r, e)
 	case http.StatusUnauthorized:
@@ -479,6 +488,17 @@ func (*Client) genNotFoundError(r *http.Response, errorResponse *str.ErrorRespon
 	}
 	if r.StatusCode == http.StatusNotFound {
 		return notFoundError
+	}
+	return nil
+}
+
+func (*Client) genBadRequestError(r *http.Response, errorResponse *str.ErrorResponse) error {
+	badRequestError := &BadRequestError{
+		Response: errorResponse.Response,
+		Message:  errorResponse.Message,
+	}
+	if r.StatusCode == http.StatusBadRequest {
+		return badRequestError
 	}
 	return nil
 }

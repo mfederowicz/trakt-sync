@@ -47,19 +47,19 @@ func main() {
 		return
 	}
 
+	if !cli.ValidAccessToken(config, client, &options) {
+		cli.PoolNewDeviceCode(config, client, &options)
+		options, err = cfg.OptionsFromConfig(fs, config)
+	}
+
+	if len(options.Token.AccessToken) > consts.ZeroValue && options.UserSettings.User == nil {
+		cli.RefreshUserSettings(config, client, &options)
+		printer.Println("User settings refreshed!")
+	}
 	args := flag.Args()
 	if len(args) == consts.ZeroValue {
 		flag.Usage()
 		return
-	}
-
-	if !cli.ValidAccessToken(config, client, &options) {
-		cli.PoolNewDeviceCode(config, client, &options)
-	}
-
-	if options.UserSettings.User == nil {
-		cli.RefreshUserSettings(config, client, &options)
-		printer.Println("User settings refreshed!")
 	}
 
 	cmds.ModulesRuntime(args, config, client, fs)

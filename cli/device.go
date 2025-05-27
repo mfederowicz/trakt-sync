@@ -3,6 +3,7 @@ package cli
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"os"
 	"time"
@@ -22,8 +23,13 @@ func fail(err string) {
 func deviceCodeVerification(deviceToken *str.NewDeviceToken, client *internal.Client, config *cfg.Config, options *str.Options) bool {
 	token, resp, err := client.Oauth.PoolForTheAccessToken(client.BuildCtxFromOptions(options), deviceToken)
 
-	if err != nil {
+	if (resp.StatusCode != http.StatusBadRequest && resp.StatusCode != http.StatusTeapot) && err != nil {
 		printer.Println("Error:", err)
+		return false
+	}
+
+	if resp.StatusCode == http.StatusBadRequest {
+		printer.Println("Wait for code")
 		return false
 	}
 
@@ -37,6 +43,15 @@ func deviceCodeVerification(deviceToken *str.NewDeviceToken, client *internal.Cl
 		if err := os.WriteFile(config.TokenPath, tokenjson, consts.X644); err != nil {
 			printer.Println(err.Error())
 		}
+
+		options.Token = *token.ToToken()
+		headers := client.GetHeaders()
+		if len(options.Token.AccessToken) > consts.ZeroValue {
+			headers["Authorization"] = "Bearer " + options.Token.AccessToken
+		}
+		client.UpdateHeaders(headers)
+		RefreshUserSettings(config, client, options)
+		printer.Println("User settings refreshed!")
 	}
 
 	return resp.StatusCode == http.StatusOK
@@ -65,13 +80,12 @@ func PoolNewDeviceCode(config *cfg.Config, client *internal.Client, options *str
 
 	device, err := fetchNewDeviceCodeForClient(config, client, options)
 	if err != nil {
-		return printer.Errorf("Error generate new device code:" + err.Error())
+		return errors.New("Error generate new device code:" + err.Error())
 	}
 
 	showCodeAndOpenBrowser(device)
 
 	verifyCode(device, config, client, options)
-
 	return nil
 }
 
