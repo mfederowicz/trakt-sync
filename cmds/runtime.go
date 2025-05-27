@@ -51,7 +51,7 @@ func runFoundedModule(cmd *Command, fs afero.Fs, client *internal.Client, config
 }
 
 // ModulesRuntime core function for process commands
-func ModulesRuntime(args []string, config *cfg.Config, client *internal.Client, fs afero.Fs) {
+func ModulesRuntime(args []string, fs afero.Fs, config *cfg.Config, client *internal.Client) {
 	var found []*Command
 	sub, args := args[NotFound], args[FoundOne:]
 find:

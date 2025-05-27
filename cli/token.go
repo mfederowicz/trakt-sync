@@ -12,6 +12,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/spf13/afero"
 )
 
 // ValidAccessToken valid if access_token is expired or not, and refresh if expired
@@ -140,4 +141,17 @@ func RefreshUserSettings(config *cfg.Config, client *internal.Client, options *s
 	}
 
 	return false
+}
+
+// HandleToken process token check and refresh
+func HandleToken(fs afero.Fs, config *cfg.Config, client *internal.Client, options str.Options) {
+	if !ValidAccessToken(config, client, &options) {
+		PoolNewDeviceCode(config, client, &options)
+	}
+
+	options, _ = cfg.OptionsFromConfig(fs, config)
+	if len(options.Token.AccessToken) > consts.ZeroValue && options.UserSettings.User == nil {
+		RefreshUserSettings(config, client, &options)
+		printer.Println("User settings refreshed!")
+	}
 }
