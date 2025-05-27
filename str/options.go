@@ -54,6 +54,7 @@ type Options struct {
 	Token             Token
 	TraktID           int
 	Type              string
+	Timezone          string
 	UserName          string
 	UserSettings      UserSettings
 	Verbose           bool

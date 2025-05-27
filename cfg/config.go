@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -83,6 +84,7 @@ type Config struct {
 	UserName          string    `toml:"username"`
 	Verbose           bool      `toml:"verbose"`
 	WarningCode       int       `toml:"warningCode"`
+	Timezone          string    `toml:"timezone"`
 }
 
 var (
@@ -514,6 +516,7 @@ func DefaultConfig() *Config {
 		UserName:       "me",
 		Verbose:        false,
 		WarningCode:    consts.ZeroValue,
+		Timezone:       time.UTC.String(),
 	}
 }
 
@@ -524,6 +527,10 @@ func normalizeConfig(config *Config) error {
 
 	if len(config.TokenPath) == consts.ZeroValue || (config.TokenPath != consts.EmptyString && !strings.HasSuffix(config.TokenPath, "json")) {
 		return errors.New("token_path should be json file, update your config file")
+	}
+
+	if len(config.SettingsPath) == consts.ZeroValue || (config.SettingsPath != consts.EmptyString && !strings.HasSuffix(config.SettingsPath, "json")) {
+		return errors.New("settings_path should be json file, update your config file")
 	}
 
 	return nil

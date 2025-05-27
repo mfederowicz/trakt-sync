@@ -83,8 +83,8 @@ type Client struct {
 func (*Client) BuildCtxFromOptions(options *str.Options) context.Context {
 	ctx := context.Background()
 
-	if len(*options.UserSettings.Account.Timezone) > consts.ZeroValue {
-		loc, err := time.LoadLocation(*options.UserSettings.Account.Timezone)
+	if len(options.Timezone) > consts.ZeroValue {
+		loc, err := time.LoadLocation(options.Timezone)
 		if err == nil {
 			ctx = context.WithValue(ctx, TimezoneKey, loc)
 		}
@@ -224,10 +224,10 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v any) (*str.Respons
 		}
 	}
 	// Adjust all Timestamp fields
-	loc := c.GetTimezone(ctx)
-	if loc != time.UTC {
-		c.AdjustTimestamps(reflect.ValueOf(v), loc)
-	}
+	// loc := c.GetTimezone(ctx)
+	// if loc != time.UTC {
+	// 	c.AdjustTimestamps(reflect.ValueOf(v), loc)
+	// }
 
 	return resp, err
 }

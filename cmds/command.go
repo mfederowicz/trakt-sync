@@ -688,9 +688,9 @@ func UpdateOptionsCommonFlags(c *Command, options *str.Options) *str.Options {
 
 	options.FullHour = true
 	if len(*_startDate) > consts.ZeroValue {
-		options.StartDate = c.common.ConvertDateString(*_startDate, consts.DefaultStartDateFormat, *options.UserSettings.Account.Timezone, options.FullHour)
+		options.StartDate = c.common.ConvertDateString(*_startDate, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
 	} else {
-		options.StartDate = c.common.CurrentDateString(*options.UserSettings.Account.Timezone, options.FullHour)
+		options.StartDate = c.common.CurrentDateString(options.Timezone, options.FullHour)
 	}
 	options.FullHour = true
 
@@ -779,9 +779,9 @@ func UpdateOptionsWithCommandMoviesFlags(c *Command, options *str.Options) *str.
 
 	options.FullHour = true
 	if len(*_moviesStartDate) > consts.ZeroValue {
-		options.StartDate = c.common.ConvertDateString(*_moviesStartDate, consts.DefaultStartDateFormat, *options.UserSettings.Account.Timezone, options.FullHour)
+		options.StartDate = c.common.ConvertDateString(*_moviesStartDate, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
 	} else {
-		options.StartDate = c.common.CurrentDateString(*options.UserSettings.Account.Timezone, options.FullHour)
+		options.StartDate = c.common.CurrentDateString(options.Timezone, options.FullHour)
 	}
 	options.FullHour = false
 
@@ -812,9 +812,9 @@ func UpdateOptionsWithCommandShowsFlags(c *Command, options *str.Options) *str.O
 
 	options.FullHour = true
 	if len(*_showsStartDate) > consts.ZeroValue {
-		options.StartDate = c.common.ConvertDateString(*_showsStartDate, consts.DefaultStartDateFormat, *options.UserSettings.Account.Timezone, options.FullHour)
+		options.StartDate = c.common.ConvertDateString(*_showsStartDate, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
 	} else {
-		options.StartDate = c.common.CurrentDateString(*options.UserSettings.Account.Timezone, options.FullHour)
+		options.StartDate = c.common.CurrentDateString(options.Timezone, options.FullHour)
 	}
 	options.FullHour = false
 
@@ -831,7 +831,7 @@ func UpdateOptionsWithCommandShowsFlags(c *Command, options *str.Options) *str.O
 	}
 
 	if len(*_showsResetAt) > consts.ZeroValue {
-		options.ResetAt = c.common.ConvertDateString(*_showsResetAt, consts.DefaultStartDateFormat, *options.UserSettings.Account.Timezone, options.FullHour)
+		options.ResetAt = c.common.ConvertDateString(*_showsResetAt, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
 	}
 
 	return options

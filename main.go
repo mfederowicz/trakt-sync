@@ -57,5 +57,10 @@ func main() {
 		cli.PoolNewDeviceCode(config, client, &options)
 	}
 
+	if options.UserSettings.User == nil {
+		cli.RefreshUserSettings(config, client, &options)
+		printer.Println("User settings refreshed!")
+	}
+
 	cmds.ModulesRuntime(args, config, client, fs)
 }

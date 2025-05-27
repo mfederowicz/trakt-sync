@@ -3,6 +3,7 @@ package cli
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -45,6 +46,7 @@ func ValidAccessToken(config *cfg.Config, client *internal.Client, options *str.
 func ReadUserSettingsFromFile(filePath string) (*str.UserSettings, error) {
 	data, err := os.ReadFile(filePath)
 	if err != nil {
+		fmt.Println("ooo")
 		return nil, err
 	}
 

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"slices"
 	"strconv"
 	"strings"
@@ -277,9 +278,19 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 	options.Headers = str.Headers
 	options.Token = *token
 	options.UserSettings = *settings
+	options.Timezone = timezoneFromConfig(options, config)
+
 	options.Output = optionsFromConfigOutput(options)
 
 	return *options, nil
+}
+
+func timezoneFromConfig(options *str.Options, config *Config) string {
+	if options.UserSettings.Account == nil {
+		return config.Timezone
+	}
+
+	return *options.UserSettings.Account.Timezone
 }
 
 func optionsFromModuleConfig(moduleConfig OptionsConfig, options *str.Options) *str.Options {
@@ -370,6 +381,11 @@ func readTokenFromFile(fs afero.Fs, filePath string) (*str.Token, error) {
 
 // readUserSettingsFromFile reads the user settings from the specified file
 func readUserSettingsFromFile(fs afero.Fs, filePath string) (*str.UserSettings, error) {
+	check, _ := afero.Exists(fs, filePath)
+	if check == false {
+		genDefaultSettings(filePath)
+	}
+
 	data, err := afero.ReadFile(fs, filePath)
 	if err != nil {
 		return nil, err
@@ -381,6 +397,16 @@ func readUserSettingsFromFile(fs afero.Fs, filePath string) (*str.UserSettings, 
 	}
 
 	return &settings, nil
+}
+
+func genDefaultSettings(filePath string) {
+	var settings str.UserSettings
+	a := &str.UserAccount{}
+	tz := "UTC"
+	a.Timezone = &tz
+	settings.Account = a
+	settingsjson, _ := json.Marshal(settings)
+	os.WriteFile(filePath, settingsjson, consts.X644)
 }
 
 // GetOptionTime config Time depends on Module name
