@@ -35,8 +35,18 @@ func main() {
 		printer.Printf("Error: %v\n", err)
 		return
 	}
-	client.UpdateHeaders(options.Headers)
 
+	args, noflags := handleArgs()
+	if noflags {
+		return
+	}
+
+	client.UpdateHeaders(options.Headers)
+	cli.HandleToken(fs, config, client, options)
+	cmds.ModulesRuntime(args, fs, config, client)
+}
+
+func handleArgs() ([]string, bool) {
 	flag.Usage = func() {
 		cmds.HelpFunc(cmds.HelpCmd)
 	}
@@ -44,23 +54,14 @@ func main() {
 
 	if *_version {
 		printer.Println(cli.GenAppVersion())
-		return
+		return []string{}, true
 	}
 
-	if !cli.ValidAccessToken(config, client, &options) {
-		cli.PoolNewDeviceCode(config, client, &options)
-		options, err = cfg.OptionsFromConfig(fs, config)
-	}
-
-	if len(options.Token.AccessToken) > consts.ZeroValue && options.UserSettings.User == nil {
-		cli.RefreshUserSettings(config, client, &options)
-		printer.Println("User settings refreshed!")
-	}
 	args := flag.Args()
 	if len(args) == consts.ZeroValue {
 		flag.Usage()
-		return
+		return []string{}, true
 	}
 
-	cmds.ModulesRuntime(args, config, client, fs)
+	return args, false
 }
