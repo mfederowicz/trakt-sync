@@ -45,6 +45,7 @@ type Config struct {
 	IncludeReplies    string    `toml:"include_replies"`
 	InternalID        string    `toml:"trakt_id"`
 	Item              string    `toml:"item"`
+	Language          string    `toml:"language"`
 	List              string    `toml:"list"`
 	Module            string    `toml:"module"`
 	MoviesCountry     string    `toml:"country"`
@@ -68,6 +69,9 @@ type Config struct {
 	SearchIDType      string    `toml:"search_id_type"`
 	SearchType        str.Slice `toml:"search_type"`
 	Season            int       `toml:"season"`
+	SeasonsSort       string    `toml:"sort"`
+	SeasonsType       string    `toml:"type"`
+	SettingsPath      string    `toml:"settings_path"`
 	ShowsCountry      string    `toml:"country"`
 	ShowsLanguage     string    `toml:"language"`
 	ShowsPeriod       string    `toml:"period"`
@@ -76,15 +80,15 @@ type Config struct {
 	Sort              string    `toml:"sort"`
 	Specials          string    `toml:"specials"`
 	Spoiler           bool      `toml:"spoiler"`
+	Timezone          string    `toml:"timezone"`
 	TokenPath         string    `toml:"token_path"`
-	SettingsPath      string    `toml:"settings_path"`
 	TraktID           int       `toml:"trakt_id"`
+	Translations      string    `toml:"translations"`
 	Type              string    `toml:"type"`
 	Undo              bool      `toml:"undo"`
 	UserName          string    `toml:"username"`
 	Verbose           bool      `toml:"verbose"`
 	WarningCode       int       `toml:"warningCode"`
-	Timezone          string    `toml:"timezone"`
 }
 
 var (

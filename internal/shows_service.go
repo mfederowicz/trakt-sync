@@ -781,3 +781,47 @@ func (s *ShowsService) GetLastEpisode(ctx context.Context, id *string, opts *uri
 
 	return result, resp, nil
 }
+
+// GetAllSeasonsForShow Returns all seasons for a show including the number of episodes in each season.
+// API docs: https://trakt.docs.apiary.io/#reference/seasons/summary/get-all-seasons-for-a-show
+func (s *ShowsService) GetAllSeasonsForShow(ctx context.Context, id *string, opts *uri.ListOptions) ([]*str.Season, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/seasons", *id)
+	url, err := uri.AddQuery(url, opts)
+	printer.Println("fetch all seasons url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := []*str.Season{}
+	resp, err := s.client.Do(ctx, req, &result)
+
+	if err != nil {
+		printer.Println("fetch seasons err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// GetSingleSeasonsForShow Returns a single seasons for a show.
+// API docs: https://trakt.docs.apiary.io/#reference/seasons/season/get-single-seasons-for-a-show
+func (s *ShowsService) GetSingleSeasonsForShow(ctx context.Context, id *string, season *int, opts *uri.ListOptions) (*str.Season, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/seasons/%d/info", *id, *season)
+	url, err := uri.AddQuery(url, opts)
+	printer.Println("fetch single seasons url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.Season)
+	resp, err := s.client.Do(ctx, req, &result)
+
+	if err != nil {
+		printer.Println("fetch seasons err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}

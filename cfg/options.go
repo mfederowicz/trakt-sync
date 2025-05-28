@@ -181,6 +181,17 @@ var ModuleConfig = map[string]OptionsConfig{
 		Format:       []string{"imdb", "tmdb", "tvdb", "tvrage", "trakt"},
 		Action:       []string{},
 	},
+	"seasons": {
+		SearchIDType: []string{},
+		SearchType:   []string{},
+		CommentType:  []string{"all", "review", "shouts"},
+		SearchField:  []string{},
+		Type:         []string{"all", "movies", "shows", "seasons", "episodes", "lists"},
+		Period:       []string{"all", "daily", "weekly", "monthly"},
+		Sort:         []string{"newest", "oldest", "likes", "replies", "highest", "lowest", "plays"},
+		Format:       []string{"imdb", "tmdb", "tvdb", "tvrage", "trakt"},
+		Action:       []string{},
+	},
 
 	"users": {
 		SearchIDType: []string{},
@@ -454,6 +465,7 @@ func GetOutputForModule(options *str.Options) string {
 		consts.Languages:       getOutputForModuleLanguages(options),
 		consts.Search:          getOutputForModuleSearch(options),
 		consts.Shows:           getOutputForModuleShows(options),
+		consts.Seasons:         getOutputForModuleSeasons(options),
 		consts.Users:           getOutputForModuleUsers(options),
 		consts.Lists:           getOutputForModuleLists(options),
 		consts.Movies:          getOutputForModuleMovies(options),
@@ -518,6 +530,19 @@ func getOutputForModuleShows(options *str.Options) string {
 		consts.Comments, consts.Lists, consts.CollectionProgress, consts.WatchedProgress,
 		consts.People, consts.Ratings, consts.Related, consts.Stats, consts.Studios,
 		consts.Watching, consts.Videos, consts.NextEpisode, consts.LastEpisode:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.InternalID)
+	default:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
+	}
+
+	return options.Output
+}
+
+func getOutputForModuleSeasons(options *str.Options) string {
+	switch options.Action {
+	case consts.Summary, consts.Season, consts.Episodes, consts.Translations,
+		consts.Comments, consts.Lists, consts.People, consts.Ratings, consts.Related, consts.Stats,
+		consts.Watching, consts.Videos:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.InternalID)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)

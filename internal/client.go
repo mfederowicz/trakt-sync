@@ -239,13 +239,15 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v any) (*str.Respons
 
 // AdjustTimestamps update timestamps with user timezone
 func (c *Client) AdjustTimestamps(val reflect.Value, loc *time.Location) {
-	if val.Kind() == reflect.Ptr {
-		if val.IsNil() {
-			return
-		}
-		val = val.Elem()
+	if !val.IsValid() {
+		return
 	}
+
 	switch val.Kind() {
+	case reflect.Ptr:
+		if !val.IsNil() {
+			c.AdjustTimestamps(val.Elem(), loc)
+		}
 	case reflect.Struct:
 		for i := consts.ZeroValue; i < val.NumField(); i++ {
 			field := val.Field(i)
@@ -254,7 +256,6 @@ func (c *Client) AdjustTimestamps(val reflect.Value, loc *time.Location) {
 			if fieldType.PkgPath != "" {
 				continue
 			}
-
 			switch field.Kind() {
 			case reflect.Ptr:
 				if field.Type().Elem().String() == "str.Timestamp" && !field.IsNil() {

@@ -26,6 +26,7 @@
       - [scrobble](#scrobble)
       - [search](#search)
       - [shows](#shows)
+      - [seasons](#seasons)
       - [users](#users)
       - [watchlist](#watchlist)
 
@@ -797,6 +798,10 @@ $ ./trakt-sync shows -a videos -i the-sopranos
 ##### Refresh show metadata
 ```console
 $ ./trakt-sync shows -a refresh -i the-sopranos
+```
+#### seasons:
+```console
+$ ./trakt-sync seasons -a summary -i the-sopranos -ex full
 ```
 
 #### users:

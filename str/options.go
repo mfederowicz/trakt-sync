@@ -53,6 +53,7 @@ type Options struct {
 	Time              string
 	Token             Token
 	TraktID           int
+	Translations      string
 	Type              string
 	Timezone          string
 	UserName          string
