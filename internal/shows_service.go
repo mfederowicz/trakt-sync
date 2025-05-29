@@ -914,3 +914,42 @@ func (s *ShowsService) GetAllSeasonComments(ctx context.Context, id *string, sea
 
 	return list, resp, nil
 }
+
+// GetListsContainingSeason Returns all lists that contain this season.
+// By default, personal lists are returned sorted by the most popular.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/seasons/lists/get-lists-containing-this-season
+func (m *SeasonsService) GetListsContainingSeason(ctx context.Context, id *string, season *int, t *string, sort *string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
+	var url string
+	if *t != consts.EmptyString && *sort != consts.EmptyString {
+		url = fmt.Sprintf("shows/%s/seasons/%d/lists/%s/%s", *id, *season, *t, *sort)
+	} else {
+		url = fmt.Sprintf("shows/%s/seasons/%d/lists", *id, *season)
+	}
+
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch lists url:" + url)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.PersonalList{}
+	resp, err := m.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found lists for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch lists err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

@@ -89,6 +89,14 @@ var ModuleActionConfig = map[string]OptionsConfig{
 		Type: []string{"all", "personal", "official", "watchlists", "favorites"},
 		Sort: []string{"popular", "likes", "comments", "items", "added", "updated"},
 	},
+	"seasons:comments": {
+		Type: []string{},
+		Sort: []string{"newest", "oldest", "likes", "replies", "highest", "lowest", "plays"},
+	},
+	"seasons:lists": {
+		Type: []string{"all", "personal", "official", "watchlists", "favorites"},
+		Sort: []string{"popular", "likes", "comments", "items", "added", "updated"},
+	},
 }
 
 // ModuleConfig represents the configuration options for all modules

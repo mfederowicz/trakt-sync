@@ -843,6 +843,25 @@ $ ./trakt-sync seasons -a comments -i the-sopranos -season 1 -s lowest
 ```console
 $ ./trakt-sync seasons -a comments -i the-sopranos -season 1 -s plays
 ```
+##### Get lists containing this season
+```console
+$ ./trakt-sync seasons -a lists -i the-sopranos -season 1 -t all -s popular
+```
+```console
+$ ./trakt-sync seasons -a lists -i the-sopranos -season 1 -t all -s likes
+```
+```console
+$ ./trakt-sync seasons -a lists -i the-sopranos -season 1 -t all -s comments
+```
+```console
+$ ./trakt-sync seasons -a lists -i the-sopranos -season 1 -t all -s items
+```
+```console
+$ ./trakt-sync seasons -a lists -i the-sopranos -season 1 -t all -s added
+```
+```console
+$ ./trakt-sync seasons -a lists -i the-sopranos -season 1 -t all -s updated
+```
 
 #### users:
 
