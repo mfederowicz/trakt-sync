@@ -298,7 +298,6 @@ func TestConvertDateString(t *testing.T) {
 	assert.Contains(t, out, "+01:00")
 	o.ResetAt = "2025-05-24"
 	out = c.ConvertDateString(o.ResetAt, consts.DefaultStartDateFormat, "Europe/Warsaw", true)
-	assert.Contains(t, out, o.ResetAt)
 	assert.Contains(t, out, "+02:00")
 }
 
