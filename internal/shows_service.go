@@ -847,3 +847,30 @@ func (s *ShowsService) GetAllEpisodesForSingleSeason(ctx context.Context, id *st
 
 	return result, resp, nil
 }
+
+// GetAllSeasonTranslations Returns all translations for an season, including language and translated values for title and overview.
+// API docs: https://trakt.docs.apiary.io/#reference/seasons/episodes/get-all-season-translations
+func (s *ShowsService) GetAllSeasonTranslations(ctx context.Context, id *string, season *int, language *string, opts *uri.ListOptions) ([]*str.Translation, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/seasons/%d/translations", *id, *season)
+
+	if len(*language) > consts.ZeroValue {
+		url = fmt.Sprintf("shows/%s/seasons/%d/translations/%s", *id, *season, *language)
+	}
+
+	url, err := uri.AddQuery(url, opts)
+	printer.Println("fetch season translations url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := []*str.Translation{}
+	resp, err := s.client.Do(ctx, req, &result)
+
+	if err != nil {
+		printer.Println("fetch season translations err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}

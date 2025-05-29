@@ -26,7 +26,7 @@ var (
 var SeasonsCmd = &Command{
 	Name:    "seasons",
 	Usage:   "",
-	Summary: "Returns data about seasons: trending, popular, list, likes, like, items, comments etc...",
+	Summary: "Returns data about seasons: summary, season, episodes, translations, comments etc...",
 	Help:    `seasons command`,
 }
 
@@ -48,10 +48,10 @@ func seasonsFunc(cmd *Command, _ ...string) error {
 
 	var handler handlers.SeasonsHandler
 	allHandlers := map[string]handlers.Handler{
-		"summary":  handlers.SeasonsSummaryHandler{},
-		"season":   handlers.SeasonsSeasonHandler{},
-		"episodes": handlers.SeasonsEpisodesHandler{},
-		// "translations": handlers.SeasonsTranslationsHandler{},
+		"summary":      handlers.SeasonsSummaryHandler{},
+		"season":       handlers.SeasonsSeasonHandler{},
+		"episodes":     handlers.SeasonsEpisodesHandler{},
+		"translations": handlers.SeasonsTranslationsHandler{},
 		// "comments":     handlers.SeasonsCommentsHandler{},
 		// "lists":        handlers.SeasonsListsHandler{},
 		// "people":       handlers.SeasonsPeopleHandler{},

@@ -86,6 +86,7 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 - `recommendations` - Recommendations manage movie and shows recommendations for user
 - `scrobble` - Scrobble for start/pause/stop movie,show,episode 
 - `search` - Searches can use queries or ID lookups.
+- `seasons` - Returns data about seasons: summary, season, episodes, translations, comments etc...
 - `shows` - Returns data about movies: trending, popular, list, likes, like, items, comments etc...
 - `users` - Returns all data for a user.
 - `watchlist` - Returns all items in a user's watchlist filtered by type.
@@ -811,6 +812,14 @@ $ ./trakt-sync seasons -a season -i the-sopranos -season 1 -ex full
 ##### Get all episodes for a single season
 ```console
 $ ./trakt-sync seasons -a episodes -i the-sopranos -season 1 -translations es -ex full
+```
+##### Get all season translations - all languages
+```console
+$ ./trakt-sync seasons -a translations -i the-sopranos -season 1 
+```
+##### Get all season translations - selected language
+```console
+$ ./trakt-sync seasons -a translations -i the-sopranos -season 1 -language en
 ```
 
 #### users:
