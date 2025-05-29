@@ -919,7 +919,7 @@ func (s *ShowsService) GetAllSeasonComments(ctx context.Context, id *string, sea
 // By default, personal lists are returned sorted by the most popular.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/seasons/lists/get-lists-containing-this-season
-func (m *SeasonsService) GetListsContainingSeason(ctx context.Context, id *string, season *int, t *string, sort *string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
+func (s *ShowsService) GetListsContainingSeason(ctx context.Context, id *string, season *int, t *string, sort *string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
 	var url string
 	if *t != consts.EmptyString && *sort != consts.EmptyString {
 		url = fmt.Sprintf("shows/%s/seasons/%d/lists/%s/%s", *id, *season, *t, *sort)
@@ -934,13 +934,13 @@ func (m *SeasonsService) GetListsContainingSeason(ctx context.Context, id *strin
 	}
 
 	printer.Println("fetch lists url:" + url)
-	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	list := []*str.PersonalList{}
-	resp, err := m.client.Do(ctx, req, &list)
+	resp, err := s.client.Do(ctx, req, &list)
 
 	if resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found lists for id/slug:%s", *id)
@@ -952,4 +952,38 @@ func (m *SeasonsService) GetListsContainingSeason(ctx context.Context, id *strin
 	}
 
 	return list, resp, nil
+}
+
+// GetAllPeopleForSeason Returns all cast and crew for a season.
+// Each cast member will have a characters array and a standard person object.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/seasons/people/get-all-people-for-a-season
+func (s *ShowsService) GetAllPeopleForSeason(ctx context.Context, id *string, season *int, opts *uri.ListOptions) (*str.SeasonPeople, *str.Response, error) {
+	var url string
+
+	url = fmt.Sprintf("shows/%s/seasons/%d/people", *id, *season)
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch season people url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := new(str.SeasonPeople)
+	resp, err := s.client.Do(ctx, req, &result)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found season people for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch season people err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
 }

@@ -54,7 +54,7 @@ func seasonsFunc(cmd *Command, _ ...string) error {
 		"translations": handlers.SeasonsTranslationsHandler{},
 		"comments":     handlers.SeasonsCommentsHandler{},
 		"lists":        handlers.SeasonsListsHandler{},
-		// "people":       handlers.SeasonsPeopleHandler{},
+		"people":       handlers.SeasonsPeopleHandler{},
 		// "ratings":      handlers.SeasonsRatingsHandler{},
 		// "stats":        handlers.SeasonsStatsHandler{},
 		// "watching":     handlers.SeasonsWatchingHandler{},

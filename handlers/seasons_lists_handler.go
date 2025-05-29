@@ -46,7 +46,7 @@ func (m SeasonsListsHandler) Handle(options *str.Options, client *internal.Clien
 
 func (m SeasonsListsHandler) fetchSeasonsLists(client *internal.Client, options *str.Options, page int) ([]*str.PersonalList, *str.Response, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
-	list, resp, err := client.Seasons.GetListsContainingSeason(
+	list, resp, err := client.Shows.GetListsContainingSeason(
 		client.BuildCtxFromOptions(options),
 		&options.InternalID,
 		&options.Season,
