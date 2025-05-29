@@ -1012,3 +1012,28 @@ func (s *ShowsService) GetSeasonRatings(ctx context.Context, id *string, season 
 
 	return result, resp, nil
 }
+
+// GetSeasonStats Returns lots of season stats.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/seasons/stats/get-season-stats
+func (s *ShowsService) GetSeasonStats(ctx context.Context, id *string, season *int) (*str.SeasonStats, *str.Response, error) {
+	url := fmt.Sprintf("shows/%s/seasons/%d/stats", *id, *season)
+	printer.Println("fetch season stats url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := new(str.SeasonStats)
+	resp, err := s.client.Do(ctx, req, &result)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found season stats for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch season stats err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
