@@ -28,6 +28,7 @@ var (
 	_years        = flag.String("years", "", "")
 	_genres       = flag.String("genres", "", "")
 	_languages    = flag.String("languages", "", "")
+	_translations = flag.String("translations", "", "")
 	_countries    = flag.String("countries", "", "")
 	_runtimes     = flag.String("runtimes", "", "")
 	_studioIDs    = flag.String("studio_ids", "", "")
@@ -401,11 +402,19 @@ func setOptionsDependsOnModuleSeasons(options str.Options) str.Options {
 	options.Action = *_seasonsAction
 	options.InternalID = *_seasonsInternalID
 	options.Language = *_seasonsLanguage
-	options.Translations = *_seasonsTranslations
+	options.Translations = toStrSlice(*_translations)
 	options.Season = *_seasonsSeason
 	options.Sort = *_seasonsSort
 	options.Type = *_seasonsType
 	return options
+}
+
+func toStrSlice(s string) str.Slice {
+	if len(s) == consts.ZeroValue {
+		return []string{}
+	}
+
+	return strings.Split(s, consts.SeparatorString)
 }
 
 func setOptionsDependsOnModuleLists(options str.Options) str.Options {

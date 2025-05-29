@@ -800,8 +800,17 @@ $ ./trakt-sync shows -a videos -i the-sopranos
 $ ./trakt-sync shows -a refresh -i the-sopranos
 ```
 #### seasons:
+##### Get all seasons for a show
 ```console
 $ ./trakt-sync seasons -a summary -i the-sopranos -ex full
+```
+##### Get single seasons for a show
+```console
+$ ./trakt-sync seasons -a season -i the-sopranos -season 1 -ex full
+```
+##### Get all episodes for a single season
+```console
+$ ./trakt-sync seasons -a episodes -i the-sopranos -season 1 -translations es -ex full
 ```
 
 #### users:

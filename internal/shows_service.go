@@ -825,3 +825,25 @@ func (s *ShowsService) GetSingleSeasonsForShow(ctx context.Context, id *string, 
 
 	return result, resp, nil
 }
+
+// GetAllEpisodesForSingleSeason Returns a single seasons for a show.
+// API docs: https://trakt.docs.apiary.io/#reference/seasons/episodes/get-all-episodes-for-a-single-season
+func (s *ShowsService) GetAllEpisodesForSingleSeason(ctx context.Context, id *string, season *int, opts *uri.ListOptions) ([]*str.Episode, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/seasons/%d", *id, *season)
+	url, err := uri.AddQuery(url, opts)
+	printer.Println("fetch season episodes url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := []*str.Episode{}
+	resp, err := s.client.Do(ctx, req, &result)
+
+	if err != nil {
+		printer.Println("fetch season episodes err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
