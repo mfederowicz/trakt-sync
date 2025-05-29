@@ -821,6 +821,28 @@ $ ./trakt-sync seasons -a translations -i the-sopranos -season 1
 ```console
 $ ./trakt-sync seasons -a translations -i the-sopranos -season 1 -language en
 ```
+##### Get all season comments
+```console
+$ ./trakt-sync seasons -a comments -i the-sopranos -season 1 -s newest
+```
+```console
+$ ./trakt-sync seasons -a comments -i the-sopranos -season 1 -s oldest
+```
+```console
+$ ./trakt-sync seasons -a comments -i the-sopranos -season 1 -s likes
+```
+```console
+$ ./trakt-sync seasons -a comments -i the-sopranos -season 1 -s replies
+```
+```console
+$ ./trakt-sync seasons -a comments -i the-sopranos -season 1 -s highest
+```
+```console
+$ ./trakt-sync seasons -a comments -i the-sopranos -season 1 -s lowest
+```
+```console
+$ ./trakt-sync seasons -a comments -i the-sopranos -season 1 -s plays
+```
 
 #### users:
 

@@ -874,3 +874,43 @@ func (s *ShowsService) GetAllSeasonTranslations(ctx context.Context, id *string,
 
 	return result, resp, nil
 }
+
+// GetAllSeasonComments Returns all top level comments for a season.
+// By default, the newest comments are returned first.
+// Other sorting options include oldest, most likes, most replies, highest rated, lowest rated, and most plays..
+//
+// API docs: https://trakt.docs.apiary.io/#reference/seasons/comments/get-all-season-comments
+func (s *ShowsService) GetAllSeasonComments(ctx context.Context, id *string, season *int, sort *string, opts *uri.ListOptions) ([]*str.Comment, *str.Response, error) {
+	var url string
+	if *sort != consts.EmptyString {
+		url = fmt.Sprintf("shows/%s/seasons/%d/comments/%s", *id, *season, *sort)
+	} else {
+		url = fmt.Sprintf("shows/%s/seasons/%d/comments", *id, *season)
+	}
+
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch comments url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Comment{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found comments for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch comments err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
