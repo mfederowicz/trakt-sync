@@ -862,6 +862,30 @@ $ ./trakt-sync seasons -a lists -i the-sopranos -season 1 -t all -s added
 ```console
 $ ./trakt-sync seasons -a lists -i the-sopranos -season 1 -t all -s updated
 ```
+##### Get all people for season
+```console
+$ ./trakt-sync seasons -a people -i the-sopranos -season 1
+```
+##### Get season ratings
+```console
+$ ./trakt-sync seasons -a ratings -i the-sopranos -season 1
+```
+##### Get related seasons
+```console
+$ ./trakt-sync seasons -a related -i the-sopranos -season 1
+```
+##### Get seasons stats
+```console
+$ ./trakt-sync seasons -a stats -i the-sopranos -season 1
+```
+##### Get users watching right now
+```console
+$ ./trakt-sync seasons -a watching -i the-sopranos -season 1
+```
+##### Get all videos
+```console
+$ ./trakt-sync seasons -a videos -i the-sopranos -season 1
+```
 
 #### users:
 
