@@ -28,6 +28,7 @@ var (
 	_years        = flag.String("years", "", "")
 	_genres       = flag.String("genres", "", "")
 	_languages    = flag.String("languages", "", "")
+	_translations = flag.String("translations", "", "")
 	_countries    = flag.String("countries", "", "")
 	_runtimes     = flag.String("runtimes", "", "")
 	_studioIDs    = flag.String("studio_ids", "", "")
@@ -89,6 +90,8 @@ var Avflags = map[string]bool{
 	"s":                  true,
 	"scrobble":           true,
 	"search":             true,
+	"seasons":            true,
+	"season":             true,
 	"shows":              true,
 	"specials":           true,
 	"spoiler":            true,
@@ -160,6 +163,26 @@ func (*Command) UpdateShowFlagsValues() {
 			*_showsType = consts.EmptyString
 		case "lists":
 			*_showsType = "personal"
+		}
+	}
+}
+
+// UpdateSeasonFlagsValues update season flags values only in command
+func (*Command) UpdateSeasonFlagsValues() {
+	if *_seasonsSort == "" {
+		switch *_seasonsAction {
+		case "comments":
+			*_seasonsSort = "newest"
+		case "lists":
+			*_seasonsSort = "popular"
+		}
+	}
+	if *_seasonsType == "" {
+		switch *_seasonsAction {
+		case "comments":
+			*_seasonsType = consts.EmptyString
+		case "lists":
+			*_seasonsType = "personal"
 		}
 	}
 }
@@ -270,6 +293,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		consts.Calendars:       setOptionsDependsOnModuleCalendars(options),
 		consts.Search:          setOptionsDependsOnModuleSearch(options),
 		consts.Shows:           setOptionsDependsOnModuleShows(options),
+		consts.Seasons:         setOptionsDependsOnModuleSeasons(options),
 		consts.Watchlist:       setOptionsDependsOnModuleDefault(options),
 		consts.Collection:      setOptionsDependsOnModuleDefault(options),
 		consts.History:         setOptionsDependsOnModuleDefault(options),
@@ -372,6 +396,25 @@ func setOptionsDependsOnModuleShows(options str.Options) str.Options {
 	options.Delete = *_showsUndo
 	options.ResetAt = *_showsResetAt
 	return options
+}
+
+func setOptionsDependsOnModuleSeasons(options str.Options) str.Options {
+	options.Action = *_seasonsAction
+	options.InternalID = *_seasonsInternalID
+	options.Language = *_seasonsLanguage
+	options.Translations = toStrSlice(*_translations)
+	options.Season = *_seasonsSeason
+	options.Sort = *_seasonsSort
+	options.Type = *_seasonsType
+	return options
+}
+
+func toStrSlice(s string) str.Slice {
+	if len(s) == consts.ZeroValue {
+		return []string{}
+	}
+
+	return strings.Split(s, consts.SeparatorString)
 }
 
 func setOptionsDependsOnModuleLists(options str.Options) str.Options {

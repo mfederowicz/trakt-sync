@@ -33,6 +33,7 @@ type ListOptions struct {
 	ImdbVotes         ImdbVotesRange   `url:"imdb_votes,omitempty"`
 	IncludeReplies    string           `url:"include_replies,omitempty"`
 	Languages         []string         `url:"languages,omitempty"`
+	Translations      []string         `url:"translations,omitempty"`
 	Limit             int              `url:"limit,omitempty"`
 	Metascores        RatingRangeFloat `url:"metascores,omitempty"`
 	NetworkIDs        []int            `url:"network_ids,omitempty"`
