@@ -457,6 +457,45 @@ func (s *ShowsService) GetAllShowComments(ctx context.Context, id *string, sort 
 	return list, resp, nil
 }
 
+// GetAllEpisodeComments Returns all top level comments for an episode.
+// By default, the newest comments are returned first.
+// Other sorting options include oldest, most likes, most replies, highest rated, lowest rated, and most plays..
+// API docs: https://trakt.docs.apiary.io/#reference/episodes/comments/get-all-episode-comments
+func (s *ShowsService) GetAllEpisodeComments(ctx context.Context, id *string, season *int, episode *int, sort *string, opts *uri.ListOptions) ([]*str.Comment, *str.Response, error) {
+	var url string
+	if *sort != consts.EmptyString {
+		url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/comments/%s", *id, *season, *episode, *sort)
+	} else {
+		url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/comments", *id, *season, *episode)
+	}
+
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch comments url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Comment{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found comments for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch comments err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
 // GetListsContainingShow Returns all lists that contain this show.
 // By default, personal lists are returned sorted by the most popular.
 // API docs: https://trakt.docs.apiary.io/#reference/shows/lists/get-lists-containing-this-show

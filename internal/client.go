@@ -506,7 +506,7 @@ func (*Client) genBadRequestError(r *http.Response, errorResponse *str.ErrorResp
 	return nil
 }
 
-func (c *Client) genPreconditionFailedError(r *http.Response, errorResponse *str.ErrorResponse) error {
+func (*Client) genPreconditionFailedError(r *http.Response, errorResponse *str.ErrorResponse) error {
 	precoditionFailedRequestError := &PreconditionFailedRequestError{
 		Response: errorResponse.Response,
 		Message:  errorResponse.Message,
@@ -515,7 +515,6 @@ func (c *Client) genPreconditionFailedError(r *http.Response, errorResponse *str
 		return precoditionFailedRequestError
 	}
 	return nil
-
 }
 
 func (*Client) genInvalidUserError(r *http.Response, errorResponse *str.ErrorResponse) *InvalidUserError {

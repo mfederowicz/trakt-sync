@@ -51,7 +51,7 @@ func episodesFunc(cmd *Command, _ ...string) error {
 	allHandlers := map[string]handlers.Handler{
 		"summary":      handlers.EpisodesSummaryHandler{},
 		"translations": handlers.EpisodesTranslationsHandler{},
-		// "comments":     handlers.EpisodesCommentsHandler{},
+		"comments":     handlers.EpisodesCommentsHandler{},
 		// "lists":        handlers.EpisodesListsHandler{},
 		// "people":       handlers.EpisodesPeopleHandler{},
 		// "ratings":      handlers.EpisodesRatingsHandler{},
