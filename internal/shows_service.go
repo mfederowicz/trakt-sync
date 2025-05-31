@@ -47,8 +47,12 @@ func (s *ShowsService) GetShow(ctx context.Context, id *string, opts *uri.ListOp
 // GetSingleEpisodeForShow Returns a single episode's details.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/episodes/summary/get-a-single-episode-for-a-show
-func (s *EpisodesService) GetSingleEpisodeForShow(ctx context.Context, id *string, season *int, episode *int) (*str.Episode, *str.Response, error) {
-	var url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d", *id, *season, *episode)
+func (s *ShowsService) GetSingleEpisodeForShow(ctx context.Context, id *string, season *int, episode *int, opts *uri.ListOptions) (*str.Episode, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d", *id, *season, *episode)	
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
 	printer.Println("fetch single episode url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
