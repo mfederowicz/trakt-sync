@@ -50,7 +50,7 @@ func episodesFunc(cmd *Command, _ ...string) error {
 	var handler handlers.EpisodesHandler
 	allHandlers := map[string]handlers.Handler{
 		"summary":      handlers.EpisodesSummaryHandler{},
-		// "translations": handlers.EpisodesTranslationsHandler{},
+		"translations": handlers.EpisodesTranslationsHandler{},
 		// "comments":     handlers.EpisodesCommentsHandler{},
 		// "lists":        handlers.EpisodesListsHandler{},
 		// "people":       handlers.EpisodesPeopleHandler{},

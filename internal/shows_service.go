@@ -48,7 +48,7 @@ func (s *ShowsService) GetShow(ctx context.Context, id *string, opts *uri.ListOp
 //
 // API docs: https://trakt.docs.apiary.io/#reference/episodes/summary/get-a-single-episode-for-a-show
 func (s *ShowsService) GetSingleEpisodeForShow(ctx context.Context, id *string, season *int, episode *int, opts *uri.ListOptions) (*str.Episode, *str.Response, error) {
-	var url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d", *id, *season, *episode)	
+	var url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d", *id, *season, *episode)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -364,6 +364,37 @@ func (s *ShowsService) GetAllShowTranslations(ctx context.Context, id *string, l
 		url = fmt.Sprintf("shows/%s/translations/%s", *id, *language)
 	} else {
 		url = fmt.Sprintf("shows/%s/translations", *id)
+	}
+
+	printer.Println("fetch translations url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Translation{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found translations for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch translations err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// GetAllEpisodeTranslations Returns all translations for an episode, including language and translated values for title, tagline and overview.
+// API docs: https://trakt.docs.apiary.io/#reference/episodes/translations/get-all-episode-translations
+func (s *ShowsService) GetAllEpisodeTranslations(ctx context.Context, id *string, season *int, episode *int, language *string) ([]*str.Translation, *str.Response, error) {
+	var url string
+	if *language != consts.EmptyString {
+		url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/translations/%s", *id, *season, *episode, *language)
+	} else {
+		url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/translations", *id, *season, *episode)
 	}
 
 	printer.Println("fetch translations url:" + url)
