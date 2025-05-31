@@ -1028,6 +1028,45 @@ func (s *ShowsService) GetListsContainingSeason(ctx context.Context, id *string,
 	return list, resp, nil
 }
 
+// GetListsContainingEpisode Returns all lists that contain this episode.
+// By default, personal lists are returned sorted by the most popular.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/episodes/lists/get-lists-containing-this-episode
+func (s *ShowsService) GetListsContainingEpisode(ctx context.Context, id *string, season *int, episode *int, t *string, sort *string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
+	var url string
+	if *t != consts.EmptyString && *sort != consts.EmptyString {
+		url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/lists/%s/%s", *id, *season, *episode, *t, *sort)
+	} else {
+		url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/lists", *id, *season, *episode)
+	}
+
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch lists url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.PersonalList{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found lists for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch lists err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
 // GetAllPeopleForSeason Returns all cast and crew for a season.
 // Each cast member will have a characters array and a standard person object.
 //

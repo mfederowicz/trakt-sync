@@ -52,7 +52,7 @@ func episodesFunc(cmd *Command, _ ...string) error {
 		"summary":      handlers.EpisodesSummaryHandler{},
 		"translations": handlers.EpisodesTranslationsHandler{},
 		"comments":     handlers.EpisodesCommentsHandler{},
-		// "lists":        handlers.EpisodesListsHandler{},
+		"lists":        handlers.EpisodesListsHandler{},
 		// "people":       handlers.EpisodesPeopleHandler{},
 		// "ratings":      handlers.EpisodesRatingsHandler{},
 		// "stats":        handlers.EpisodesStatsHandler{},
