@@ -34,6 +34,8 @@ type Config struct {
 	Episode           int       `toml:"episode"`
 	EpisodeAbs        int       `toml:"episode_abs"`
 	EpisodeCode       string    `toml:"episode_code"`
+	EpisodesSort      string    `toml:"sort"`
+	EpisodesType      string    `toml:"type"`
 	ErrorCode         int       `toml:"errorCode"`
 	Field             string    `toml:"field"`
 	Format            string    `toml:"format"`

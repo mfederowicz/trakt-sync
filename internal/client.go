@@ -435,6 +435,8 @@ func genErrorResponse(c *Client, r *http.Response, e *str.ErrorResponse) error {
 		return c.genNotFoundError(r, e)
 	case http.StatusBadRequest:
 		return c.genBadRequestError(r, e)
+	case http.StatusPreconditionFailed:
+		return c.genPreconditionFailedError(r, e)
 	case http.StatusInternalServerError:
 		return c.genServerError(r, e)
 	case http.StatusUnauthorized:
@@ -500,6 +502,17 @@ func (*Client) genBadRequestError(r *http.Response, errorResponse *str.ErrorResp
 	}
 	if r.StatusCode == http.StatusBadRequest {
 		return badRequestError
+	}
+	return nil
+}
+
+func (*Client) genPreconditionFailedError(r *http.Response, errorResponse *str.ErrorResponse) error {
+	precoditionFailedRequestError := &PreconditionFailedRequestError{
+		Response: errorResponse.Response,
+		Message:  errorResponse.Message,
+	}
+	if r.StatusCode == http.StatusPreconditionFailed {
+		return precoditionFailedRequestError
 	}
 	return nil
 }

@@ -20,6 +20,7 @@ var Commands = []*Command{
 	CommentsCmd,
 	CollectionCmd,
 	CountriesCmd,
+	EpisodesCmd,
 	GenresCmd,
 	HelpCmd,
 	HistoryCmd,

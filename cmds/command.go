@@ -53,6 +53,8 @@ var Avflags = map[string]bool{
 	"delete":             true,
 	"episode_abs":        true,
 	"episode_code":       true,
+	"episodes":           true,
+	"episode":            true,
 	"ex":                 true,
 	"f":                  true,
 	"field":              true,
@@ -143,6 +145,26 @@ func (*Command) UpdateMovieFlagsValues() {
 			*_moviesType = consts.EmptyString
 		case "lists":
 			*_moviesType = "personal"
+		}
+	}
+}
+
+// UpdateEpisodeFlagsValues update episode flags values only in command
+func (*Command) UpdateEpisodeFlagsValues() {
+	if *_episodesSort == "" {
+		switch *_episodesAction {
+		case "comments":
+			*_episodesSort = "newest"
+		case "lists":
+			*_episodesSort = "popular"
+		}
+	}
+	if *_episodesType == "" {
+		switch *_episodesAction {
+		case "comments":
+			*_episodesType = consts.EmptyString
+		case "lists":
+			*_episodesType = "personal"
 		}
 	}
 }
@@ -282,6 +304,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 	allModules := map[string]str.Options{
 		consts.Comments:        setOptionsDependsOnModuleComments(options),
 		consts.Checkin:         setOptionsDependsOnModuleCheckin(options),
+		consts.Episodes:        setOptionsDependsOnModuleEpisodes(options),
 		consts.Lists:           setOptionsDependsOnModuleLists(options),
 		consts.Movies:          setOptionsDependsOnModuleMovies(options),
 		consts.Networks:        setOptionsDependsOnModuleNetworks(options),
@@ -406,6 +429,18 @@ func setOptionsDependsOnModuleSeasons(options str.Options) str.Options {
 	options.Season = *_seasonsSeason
 	options.Sort = *_seasonsSort
 	options.Type = *_seasonsType
+	return options
+}
+
+func setOptionsDependsOnModuleEpisodes(options str.Options) str.Options {
+	options.Action = *_episodesAction
+	options.InternalID = *_episodesInternalID
+	options.Language = *_episodesLanguage
+	options.Translations = toStrSlice(*_translations)
+	options.Season = *_episodesSeason
+	options.Episode = *_episodesEpisode
+	options.Sort = *_episodesSort
+	options.Type = *_episodesType
 	return options
 }
 

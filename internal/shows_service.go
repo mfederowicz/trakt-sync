@@ -47,8 +47,12 @@ func (s *ShowsService) GetShow(ctx context.Context, id *string, opts *uri.ListOp
 // GetSingleEpisodeForShow Returns a single episode's details.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/episodes/summary/get-a-single-episode-for-a-show
-func (s *EpisodesService) GetSingleEpisodeForShow(ctx context.Context, id *string, season *int, episode *int) (*str.Episode, *str.Response, error) {
+func (s *ShowsService) GetSingleEpisodeForShow(ctx context.Context, id *string, season *int, episode *int, opts *uri.ListOptions) (*str.Episode, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d", *id, *season, *episode)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
 	printer.Println("fetch single episode url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -383,6 +387,37 @@ func (s *ShowsService) GetAllShowTranslations(ctx context.Context, id *string, l
 	return list, resp, nil
 }
 
+// GetAllEpisodeTranslations Returns all translations for an episode, including language and translated values for title, tagline and overview.
+// API docs: https://trakt.docs.apiary.io/#reference/episodes/translations/get-all-episode-translations
+func (s *ShowsService) GetAllEpisodeTranslations(ctx context.Context, id *string, season *int, episode *int, language *string) ([]*str.Translation, *str.Response, error) {
+	var url string
+	if *language != consts.EmptyString {
+		url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/translations/%s", *id, *season, *episode, *language)
+	} else {
+		url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/translations", *id, *season, *episode)
+	}
+
+	printer.Println("fetch translations url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Translation{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found translations for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch translations err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
 // GetAllShowComments Returns all top level comments for a show.
 // By default, the newest comments are returned first.
 // Other sorting options include oldest, most likes, most replies, highest rated, lowest rated, and most plays..
@@ -393,6 +428,45 @@ func (s *ShowsService) GetAllShowComments(ctx context.Context, id *string, sort 
 		url = fmt.Sprintf("shows/%s/comments/%s", *id, *sort)
 	} else {
 		url = fmt.Sprintf("shows/%s/comments", *id)
+	}
+
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch comments url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Comment{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found comments for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch comments err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// GetAllEpisodeComments Returns all top level comments for an episode.
+// By default, the newest comments are returned first.
+// Other sorting options include oldest, most likes, most replies, highest rated, lowest rated, and most plays..
+// API docs: https://trakt.docs.apiary.io/#reference/episodes/comments/get-all-episode-comments
+func (s *ShowsService) GetAllEpisodeComments(ctx context.Context, id *string, season *int, episode *int, sort *string, opts *uri.ListOptions) ([]*str.Comment, *str.Response, error) {
+	var url string
+	if *sort != consts.EmptyString {
+		url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/comments/%s", *id, *season, *episode, *sort)
+	} else {
+		url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/comments", *id, *season, *episode)
 	}
 
 	url, err := uri.AddQuery(url, opts)
@@ -954,6 +1028,45 @@ func (s *ShowsService) GetListsContainingSeason(ctx context.Context, id *string,
 	return list, resp, nil
 }
 
+// GetListsContainingEpisode Returns all lists that contain this episode.
+// By default, personal lists are returned sorted by the most popular.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/episodes/lists/get-lists-containing-this-episode
+func (s *ShowsService) GetListsContainingEpisode(ctx context.Context, id *string, season *int, episode *int, t *string, sort *string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
+	var url string
+	if *t != consts.EmptyString && *sort != consts.EmptyString {
+		url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/lists/%s/%s", *id, *season, *episode, *t, *sort)
+	} else {
+		url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/lists", *id, *season, *episode)
+	}
+
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch lists url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.PersonalList{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found lists for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch lists err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
 // GetAllPeopleForSeason Returns all cast and crew for a season.
 // Each cast member will have a characters array and a standard person object.
 //
@@ -982,6 +1095,40 @@ func (s *ShowsService) GetAllPeopleForSeason(ctx context.Context, id *string, se
 
 	if err != nil {
 		printer.Println("fetch season people err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// GetAllPeopleForEpisode Returns all cast and crew for an episode.
+// Each cast member will have a characters array and a standard person object.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/episodes/people/get-all-people-for-an-episode
+func (s *ShowsService) GetAllPeopleForEpisode(ctx context.Context, id *string, season *int, episode *int, opts *uri.ListOptions) (*str.EpisodePeople, *str.Response, error) {
+	var url string
+
+	url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/people", *id, *season, *episode)
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch episode people url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := new(str.EpisodePeople)
+	resp, err := s.client.Do(ctx, req, &result)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found episode people for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch episode people err:" + err.Error())
 		return nil, resp, err
 	}
 
