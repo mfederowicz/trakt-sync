@@ -1101,6 +1101,40 @@ func (s *ShowsService) GetAllPeopleForSeason(ctx context.Context, id *string, se
 	return result, resp, nil
 }
 
+// GetAllPeopleForEpisode Returns all cast and crew for an episode.
+// Each cast member will have a characters array and a standard person object.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/episodes/people/get-all-people-for-an-episode
+func (s *ShowsService) GetAllPeopleForEpisode(ctx context.Context, id *string, season *int, episode *int, opts *uri.ListOptions) (*str.EpisodePeople, *str.Response, error) {
+	var url string
+
+	url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/people", *id, *season, *episode)
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch episode people url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := new(str.EpisodePeople)
+	resp, err := s.client.Do(ctx, req, &result)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found episode people for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch episode people err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
 // GetSeasonRatings Returns rating (between 0 and 10) and distribution for a season.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/seasons/ratings/get-season-ratings
