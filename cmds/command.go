@@ -100,6 +100,7 @@ var Avflags = map[string]bool{
 	"start":              true,
 	"start_date":         true,
 	"stop":               true,
+	"sync":               true,
 	"t":                  true,
 	"trakt_id":           true,
 	"translations":       true,
@@ -187,6 +188,11 @@ func (*Command) UpdateShowFlagsValues() {
 			*_showsType = "personal"
 		}
 	}
+}
+
+// UpdateSyncFlagsValues update sync flags values only in command
+func (*Command) UpdateSyncFlagsValues() {
+
 }
 
 // UpdateSeasonFlagsValues update season flags values only in command
@@ -715,7 +721,8 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 	options = UpdateOptionsWithCommandShowsFlags(c, options)
 	options = UpdateOptionsWithCommandRecommendationsFlags(options)
 	options = UpdateOptionsWithCommandScrobbleFlags(options)
-
+	options = UpdateOptionsWithCommandSyncFlags(options)
+	fmt.Println("a:", options.Action)
 	return options
 }
 
@@ -728,6 +735,15 @@ func UpdateOptionsWithCommandScrobbleFlags(options *str.Options) *str.Options {
 		options.EpisodeCode = *_scrobbleEpisodeCode
 	}
 
+	return options
+}
+
+// UpdateOptionsWithCommandSyncFlags update options depends on scrobble command flags
+func UpdateOptionsWithCommandSyncFlags(options *str.Options) *str.Options {
+	if len(*_syncAction) > consts.ZeroValue {
+		options.Action = *_syncAction
+	}
+	options.Output = cfg.GetOutputForModule(options)
 	return options
 }
 

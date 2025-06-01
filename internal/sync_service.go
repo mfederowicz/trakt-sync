@@ -113,3 +113,27 @@ func (s *SyncService) GetWatchlist(ctx context.Context, types *string, sort *str
 
 	return list, resp, nil
 }
+
+// GetLastActivity Returns trakt user activity.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/sync/last-activities/get-last-activity
+func (s *SyncService) GetLastActivity(ctx context.Context) (*str.UserLastActivities, *str.Response, error) {
+	var url string
+	url = "sync/last_activities"
+
+	printer.Println("fetch last activities url:" + url)
+	req, err := s.client.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.UserLastActivities)
+	resp, err := s.client.Do(ctx, req, &result)
+
+	if err != nil {
+		printer.Println("fetch activities err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
