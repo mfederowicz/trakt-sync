@@ -1267,6 +1267,38 @@ func (s *ShowsService) GetSeasonsWatching(ctx context.Context, id *string, seaso
 	return list, resp, nil
 }
 
+// GetEpisodesWatching Returns all users watching this episode right now.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/episodes/watching/get-users-watching-right-now
+func (s *ShowsService) GetEpisodesWatching(ctx context.Context, id *string, season *int, episode *int, opts *uri.ListOptions) ([]*str.UserProfile, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/watching", *id, *season, *episode)
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch episodes watching url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.UserProfile{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found episodes watching for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch episodes watching err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
 // GetSeasonsVideos Returns all videos including trailers, teasers, clips, and featurettes.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/seasons/videos/get-all-videos
