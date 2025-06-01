@@ -1210,6 +1210,31 @@ func (s *ShowsService) GetSeasonStats(ctx context.Context, id *string, season *i
 	return result, resp, nil
 }
 
+// GetEpisodeStats Returns lots of episode stats.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/episodes/stats/get-episode-stats
+func (s *ShowsService) GetEpisodeStats(ctx context.Context, id *string, season *int, episode *int) (*str.EpisodeStats, *str.Response, error) {
+	url := fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/stats", *id, *season, *episode)
+	printer.Println("fetch episode stats url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := new(str.EpisodeStats)
+	resp, err := s.client.Do(ctx, req, &result)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found episode stats for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch episode stats err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
 // GetSeasonsWatching Returns all users watching this season right now.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/seasons/watching/get-users-watching-right-now
