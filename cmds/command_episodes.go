@@ -54,7 +54,7 @@ func episodesFunc(cmd *Command, _ ...string) error {
 		"comments":     handlers.EpisodesCommentsHandler{},
 		"lists":        handlers.EpisodesListsHandler{},
 		"people":       handlers.EpisodesPeopleHandler{},
-		// "ratings":      handlers.EpisodesRatingsHandler{},
+		"ratings":      handlers.EpisodesRatingsHandler{},
 		// "stats":        handlers.EpisodesStatsHandler{},
 		// "watching":     handlers.EpisodesWatchingHandler{},
 	}

@@ -1160,6 +1160,31 @@ func (s *ShowsService) GetSeasonRatings(ctx context.Context, id *string, season 
 	return result, resp, nil
 }
 
+// GetEpisodeRatings Returns rating (between 0 and 10) and distribution for an episode.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/episodes/ratings/get-episode-ratings
+func (s *ShowsService) GetEpisodeRatings(ctx context.Context, id *string, season *int, episode *int) (*str.EpisodeRatings, *str.Response, error) {
+	url := fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/ratings", *id, *season, *episode)
+	printer.Println("fetch episode ratings url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	result := new(str.EpisodeRatings)
+	resp, err := s.client.Do(ctx, req, &result)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found episode ratings for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch episode ratings err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
 // GetSeasonStats Returns lots of season stats.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/seasons/stats/get-season-stats
