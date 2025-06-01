@@ -962,6 +962,10 @@ $ ./trakt-sync episodes -a stats -i the-sopranos -season 1 -episode 1
 ```console
 $ ./trakt-sync episodes -a watching -i the-sopranos -season 1 -episode 1
 ```
+##### Get all episodes videos
+```console
+$ ./trakt-sync episodes -a videos -i the-sopranos -season 1 -episode 1
+```
 
 #### users:
 

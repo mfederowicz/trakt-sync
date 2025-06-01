@@ -1330,3 +1330,35 @@ func (s *ShowsService) GetSeasonsVideos(ctx context.Context, id *string, season 
 
 	return list, resp, nil
 }
+
+// GetEpisodeVideos Returns all videos including trailers, teasers, clips, and featurettes.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/episodes/videos/get-all-videos
+func (s *ShowsService) GetEpisodeVideos(ctx context.Context, id *string, season *int, episode *int, opts *uri.ListOptions) ([]*str.Video, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/videos", *id, *season, *episode)
+	url, err := uri.AddQuery(url, opts)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	printer.Println("fetch episode video url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.Video{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil, fmt.Errorf("not found episode video for id/slug:%s", *id)
+	}
+
+	if err != nil {
+		printer.Println("fetch episode video err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

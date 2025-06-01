@@ -57,6 +57,7 @@ func episodesFunc(cmd *Command, _ ...string) error {
 		"ratings":      handlers.EpisodesRatingsHandler{},
 		"stats":        handlers.EpisodesStatsHandler{},
 		"watching":     handlers.EpisodesWatchingHandler{},
+		"videos":       handlers.EpisodesVideosHandler{},
 	}
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
