@@ -51,10 +51,11 @@ var Avflags = map[string]bool{
 	"country":            true,
 	"days":               true,
 	"delete":             true,
+	"end_at":             true,
+	"episode":            true,
 	"episode_abs":        true,
 	"episode_code":       true,
 	"episodes":           true,
-	"episode":            true,
 	"ex":                 true,
 	"f":                  true,
 	"field":              true,
@@ -81,6 +82,7 @@ var Avflags = map[string]bool{
 	"pause":              true,
 	"people":             true,
 	"period":             true,
+	"playback_id":        true,
 	"privacy":            true,
 	"progress":           true,
 	"q":                  true,
@@ -92,20 +94,22 @@ var Avflags = map[string]bool{
 	"s":                  true,
 	"scrobble":           true,
 	"search":             true,
-	"seasons":            true,
 	"season":             true,
+	"seasons":            true,
 	"shows":              true,
 	"specials":           true,
 	"spoiler":            true,
 	"start":              true,
+	"start_at":           true,
 	"start_date":         true,
 	"stop":               true,
+	"sync":               true,
 	"t":                  true,
 	"trakt_id":           true,
 	"translations":       true,
 	"u":                  true,
-	"users":              true,
 	"undo":               true,
+	"users":              true,
 	"v":                  true,
 	"version":            true,
 	"watchlist":          true,
@@ -187,6 +191,11 @@ func (*Command) UpdateShowFlagsValues() {
 			*_showsType = "personal"
 		}
 	}
+}
+
+// UpdateSyncFlagsValues update sync flags values only in command
+func (*Command) UpdateSyncFlagsValues() {
+
 }
 
 // UpdateSeasonFlagsValues update season flags values only in command
@@ -715,7 +724,7 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 	options = UpdateOptionsWithCommandShowsFlags(c, options)
 	options = UpdateOptionsWithCommandRecommendationsFlags(options)
 	options = UpdateOptionsWithCommandScrobbleFlags(options)
-
+	options = UpdateOptionsWithCommandSyncFlags(c, options)
 	return options
 }
 
@@ -726,6 +735,35 @@ func UpdateOptionsWithCommandScrobbleFlags(options *str.Options) *str.Options {
 	}
 	if len(*_scrobbleEpisodeCode) > consts.ZeroValue {
 		options.EpisodeCode = *_scrobbleEpisodeCode
+	}
+
+	return options
+}
+
+// UpdateOptionsWithCommandSyncFlags update options depends on scrobble command flags
+func UpdateOptionsWithCommandSyncFlags(c *Command, options *str.Options) *str.Options {
+	if len(*_syncAction) > consts.ZeroValue {
+		options.Action = *_syncAction
+	}
+	options.Output = cfg.GetOutputForModule(options)
+
+	options.FullHour = true
+	if len(*_syncStartAt) > consts.ZeroValue {
+		options.StartDate = c.common.ConvertDateString(*_syncStartAt, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
+	} else {
+		options.StartDate = c.common.DateLastDays(consts.DefaultStartAtDays, options.Timezone, options.FullHour)
+	}
+
+	if len(*_syncEndAt) > consts.ZeroValue {
+		options.EndDate = c.common.ConvertDateString(*_syncEndAt, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
+	} else {
+		options.EndDate = c.common.CurrentDateString(options.Timezone, options.FullHour)
+	}
+
+	options.FullHour = true
+
+	if *_syncPlaybackID > consts.ZeroValue {
+		options.PlaybackID = *_syncPlaybackID
 	}
 
 	return options

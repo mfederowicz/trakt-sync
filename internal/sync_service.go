@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
@@ -112,4 +113,81 @@ func (s *SyncService) GetWatchlist(ctx context.Context, types *string, sort *str
 	}
 
 	return list, resp, nil
+}
+
+// GetLastActivity Returns trakt user activity.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/sync/last-activities/get-last-activity
+func (s *SyncService) GetLastActivity(ctx context.Context) (*str.UserLastActivities, *str.Response, error) {
+	var url string
+	url = "sync/last_activities"
+
+	printer.Println("fetch last activities url:" + url)
+	req, err := s.client.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.UserLastActivities)
+	resp, err := s.client.Do(ctx, req, &result)
+
+	if err != nil {
+		printer.Println("fetch activities err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// GetPlaybackProgress Returns playback progress.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/playback/get-playback-progress
+func (s *SyncService) GetPlaybackProgress(ctx context.Context, types *string, opts *uri.ListOptions) ([]*str.PlaybackProgress, *str.Response, error) {
+	var url string
+	if types != nil {
+		url = fmt.Sprintf("sync/playback/%s", *types)
+	} else {
+		url = "sync/playback"
+	}
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch playback url:" + url)
+	req, err := s.client.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.PlaybackProgress{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch playback err:" + err.Error())
+		return nil, resp, err
+	}
+	return list, resp, nil
+}
+
+// RemovePlaybackItem removes playback item with selected id
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/remove-playback/remove-a-playback-item
+func (s *SyncService) RemovePlaybackItem(ctx context.Context, id *int) (*str.Response, error) {
+	var url = fmt.Sprintf("sync/playback/%d", *id)
+	req, err := s.client.NewRequest(http.MethodDelete, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.client.Do(ctx, req, nil)
+
+	if resp.StatusCode == http.StatusNotFound {
+		err = fmt.Errorf(consts.PlaybackNotFoundWithID, *id)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
 }
