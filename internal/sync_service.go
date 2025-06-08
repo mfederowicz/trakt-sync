@@ -137,3 +137,33 @@ func (s *SyncService) GetLastActivity(ctx context.Context) (*str.UserLastActivit
 
 	return result, resp, nil
 }
+
+// GetPlaybackProgress Returns playback progress.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/playback/get-playback-progress
+func (s *SyncService) GetPlaybackProgress(ctx context.Context, types *string, opts *uri.ListOptions) ([]*str.PlaybackProgress, *str.Response, error) {
+	var url string
+	if types != nil {
+		url = fmt.Sprintf("sync/playback/%s", *types)
+	} else {
+		url = "sync/playback"
+	}
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch playback url:" + url)
+	req, err := s.client.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.PlaybackProgress{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch playback err:" + err.Error())
+		return nil, resp, err
+	}
+	return list, resp, nil
+}

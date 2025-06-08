@@ -60,6 +60,7 @@ const (
 	Notes              = "notes"
 	People             = "people"
 	Played             = "played"
+	Playback           = "playback"
 	Popular            = "popular"
 	Query              = "query"
 	Ratings            = "ratings"

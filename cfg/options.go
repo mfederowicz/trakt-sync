@@ -105,6 +105,10 @@ var ModuleActionConfig = map[string]OptionsConfig{
 		Type: []string{"all", "personal", "official", "watchlists", "favorites"},
 		Sort: []string{"popular", "likes", "comments", "items", "added", "updated"},
 	},
+	"sync:playback": {
+		Type: []string{"movies", "shows"},
+		Sort: []string{},
+	},
 }
 
 // ModuleConfig represents the configuration options for all modules
@@ -231,6 +235,10 @@ var ModuleConfig = map[string]OptionsConfig{
 	},
 	"notes": {
 		Privacy: []string{"private", "friends", "public"},
+	},
+
+	"sync": {
+		Type: []string{"all", "movies", "shows"},
 	},
 }
 
@@ -511,7 +519,7 @@ func GetOutputForModule(options *str.Options) string {
 
 func getOutputForModuleSync(options *str.Options) string {
 	switch options.Action {
-	case consts.LastActivities:
+	case consts.LastActivities, consts.Playback:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)

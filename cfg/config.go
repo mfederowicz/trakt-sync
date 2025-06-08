@@ -31,6 +31,7 @@ type Config struct {
 	CountSpecials     string    `toml:"count_specials"`
 	Days              int       `toml:"days"`
 	Delete            bool      `toml:"delete"`
+	EndAt             string    `toml:"end_at"`
 	Episode           int       `toml:"episode"`
 	EpisodeAbs        int       `toml:"episode_abs"`
 	EpisodeCode       string    `toml:"episode_code"`
@@ -82,6 +83,7 @@ type Config struct {
 	Sort              string    `toml:"sort"`
 	Specials          string    `toml:"specials"`
 	Spoiler           bool      `toml:"spoiler"`
+	StartAt           string    `toml:"start_at"`
 	Timezone          string    `toml:"timezone"`
 	TokenPath         string    `toml:"token_path"`
 	TraktID           int       `toml:"trakt_id"`

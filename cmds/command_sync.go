@@ -10,7 +10,9 @@ import (
 )
 
 var (
-	_syncAction = SyncCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_syncAction  = SyncCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_syncStartAt = SyncCmd.Flag.String("start_at", cfg.DefaultConfig().StartAt, consts.StartAtUsage)
+	_syncEndAt   = SyncCmd.Flag.String("end_at", cfg.DefaultConfig().EndAt, consts.EndAtUsage)
 
 	validSyncActions = []string{"last_activities"}
 )
@@ -32,6 +34,8 @@ func syncFunc(cmd *Command, _ ...string) error {
 	var handler handlers.SyncHandler
 	allHandlers := map[string]handlers.Handler{
 		"last_activities": handlers.SyncLastActivitiesHandler{},
+		"playback":        handlers.SyncPlaybackHandler{},
+		// "remove_playback": handlers.SyncRemovePlaybackHandler{},
 	}
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 

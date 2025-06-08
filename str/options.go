@@ -50,6 +50,7 @@ type Options struct {
 	Specials          string
 	Spoiler           bool
 	StartDate         string
+	EndDate           string
 	Time              string
 	Token             Token
 	TraktID           int
