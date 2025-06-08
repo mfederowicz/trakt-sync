@@ -82,6 +82,7 @@ var Avflags = map[string]bool{
 	"pause":              true,
 	"people":             true,
 	"period":             true,
+	"playback_id":        true,
 	"privacy":            true,
 	"progress":           true,
 	"q":                  true,
@@ -760,6 +761,10 @@ func UpdateOptionsWithCommandSyncFlags(c *Command, options *str.Options) *str.Op
 	}
 
 	options.FullHour = true
+
+	if *_syncPlaybackID > consts.ZeroValue {
+		options.PlaybackID = *_syncPlaybackID
+	}
 
 	return options
 }

@@ -54,6 +54,7 @@ type Options struct {
 	Time              string
 	Token             Token
 	TraktID           int
+	PlaybackID        int
 	Translations      Slice
 	Type              string
 	Timezone          string

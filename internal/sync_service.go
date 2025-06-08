@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
@@ -166,4 +167,27 @@ func (s *SyncService) GetPlaybackProgress(ctx context.Context, types *string, op
 		return nil, resp, err
 	}
 	return list, resp, nil
+}
+
+// RemovePlaybackItem removes playback item with selected id
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/remove-playback/remove-a-playback-item
+func (s *SyncService) RemovePlaybackItem(ctx context.Context, id *int) (*str.Response, error) {
+	var url = fmt.Sprintf("sync/playback/%d", *id)
+	req, err := s.client.NewRequest(http.MethodDelete, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.client.Do(ctx, req, nil)
+
+	if resp.StatusCode == http.StatusNotFound {
+		err = fmt.Errorf(consts.PlaybackNotFoundWithID, *id)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
 }

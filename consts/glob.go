@@ -41,6 +41,7 @@ const (
 	EmptyString                  = ""
 	EmptyTraktIDMsg              = "set traktId ie: -trakt_id 55"
 	EndAtUsage                   = "allow to overwrite end_at"
+	PlaybackIDUsage              = "allow to overwrite playback_id"
 	EpisodeAbsUsage              = "episode_abs 1234"
 	EpisodeCodeErr               = "episode code error:%w"
 	EpisodeCodeUsage             = "episode_code format 01x24"
@@ -81,6 +82,7 @@ const (
 	NotFoundConfigForModule      = "not found config for module '%s'"
 	NotesIDUsage                 = "allow to overwrite notes_id"
 	NotesNotFoundWithID          = "notes not found with Id:%s"
+	PlaybackNotFoundWithID       = "playback not found with Id:%d"
 	NotesUsage                   = "allow to overwrite notes"
 	OutputUsage                  = "allow to overwrite default output filename"
 	PagesNoLimit                 = 0

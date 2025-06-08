@@ -61,6 +61,7 @@ type Config struct {
 	NotesID           int       `toml:"notes_id"`
 	Output            string    `toml:"output"`
 	PagesLimit        int       `toml:"pages_limit"`
+	PlaybackID        int       `toml:"playback_id"`
 	PerPage           int       `toml:"per_page"`
 	Privacy           string    `toml:"privacy"`
 	Progress          float64   `toml:"progress"`
