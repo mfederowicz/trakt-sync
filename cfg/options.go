@@ -106,7 +106,7 @@ var ModuleActionConfig = map[string]OptionsConfig{
 		Sort: []string{"popular", "likes", "comments", "items", "added", "updated"},
 	},
 	"sync:playback": {
-		Type: []string{"movies", "shows"},
+		Type: []string{"movies", "episodes"},
 		Sort: []string{},
 	},
 }

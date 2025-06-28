@@ -15,7 +15,7 @@ var (
 	_syncEndAt      = SyncCmd.Flag.String("end_at", cfg.DefaultConfig().EndAt, consts.EndAtUsage)
 	_syncPlaybackID = SyncCmd.Flag.Int("playback_id", cfg.DefaultConfig().PlaybackID, consts.PlaybackIDUsage)
 
-	validSyncActions = []string{"last_activities"}
+	validSyncActions = []string{"last_activities", "playback", "remove_playback"}
 )
 
 // SyncCmd returns movies and episodes that a user has watched, sorted by most recent.
