@@ -31,6 +31,7 @@ type Config struct {
 	CountSpecials     string    `toml:"count_specials"`
 	Days              int       `toml:"days"`
 	Delete            bool      `toml:"delete"`
+	EndAt             string    `toml:"end_at"`
 	Episode           int       `toml:"episode"`
 	EpisodeAbs        int       `toml:"episode_abs"`
 	EpisodeCode       string    `toml:"episode_code"`
@@ -60,6 +61,7 @@ type Config struct {
 	NotesID           int       `toml:"notes_id"`
 	Output            string    `toml:"output"`
 	PagesLimit        int       `toml:"pages_limit"`
+	PlaybackID        int       `toml:"playback_id"`
 	PerPage           int       `toml:"per_page"`
 	Privacy           string    `toml:"privacy"`
 	Progress          float64   `toml:"progress"`
@@ -82,6 +84,7 @@ type Config struct {
 	Sort              string    `toml:"sort"`
 	Specials          string    `toml:"specials"`
 	Spoiler           bool      `toml:"spoiler"`
+	StartAt           string    `toml:"start_at"`
 	Timezone          string    `toml:"timezone"`
 	TokenPath         string    `toml:"token_path"`
 	TraktID           int       `toml:"trakt_id"`

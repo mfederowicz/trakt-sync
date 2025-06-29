@@ -967,6 +967,32 @@ $ ./trakt-sync episodes -a watching -i the-sopranos -season 1 -episode 1
 $ ./trakt-sync episodes -a videos -i the-sopranos -season 1 -episode 1
 ```
 
+#### sync:
+
+##### Last activities
+```console
+$ ./trakt-sync sync -a last_activities
+```
+##### Playback progress from last 60 days
+```console
+$ ./trakt-sync sync -a playback
+```
+##### Playback progress from last 60 days (movies or episodes)
+```console
+$ ./trakt-sync sync -a playback -t movies
+```
+##### Playback progress from 7 days
+```console
+$ ./trakt-sync sync -a playback -start_at 2025-06-01 -end_at 2025-06-07
+```
+##### Remove playback
+```console
+$ ./trakt-sync sync -a remove_playback -playback_id 12345
+```
+
+
+
+
 #### users:
 
 ##### Export movies or shows or episodes from user lists:

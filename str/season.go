@@ -12,6 +12,7 @@ type Season struct {
 	Rating        *float32   `json:"rating,omitempty"`
 	Votes         *int       `json:"votes,omitempty"`
 	EpisodeCount  *int       `json:"episode_count,omitempty"`
+	Episodes      *[]Episode `json:"episodes,omitempty"`
 	AiredEpisodes *int       `json:"aired_episodes,omitempty"`
 	Overview      *string    `json:"overview,omitempty"`
 	FirstAired    *Timestamp `json:"first_aired,omitempty"`
