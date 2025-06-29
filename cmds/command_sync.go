@@ -37,6 +37,9 @@ func syncFunc(cmd *Command, _ ...string) error {
 		"last_activities": handlers.SyncLastActivitiesHandler{},
 		"playback":        handlers.SyncPlaybackHandler{},
 		"remove_playback": handlers.SyncRemovePlaybackHandler{},
+		"get_collection":  handlers.SyncGetCollectionHandler{},
+		// "add_to_collection": handlers.SyncAddToCollectionHandler{},
+		// "remove_from_collection": handlers.SyncRemoveFromCollectionHandler{},
 	}
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 

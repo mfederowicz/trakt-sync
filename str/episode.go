@@ -18,6 +18,7 @@ type Episode struct {
 	UpdatedAt             *Timestamp `json:"updated_at,omitempty"`
 	CompletedAt           *Timestamp `json:"completed_at,omitempty"`
 	CollectedAt           *Timestamp `json:"collected_at,omitempty"`
+	Metadata              *Metadata  `json:"metadata,omitempty"`
 	AvailableTranslations *[]string  `json:"available_translations,omitempty"`
 	Runtime               *int       `json:"runtime,omitempty"`
 	EpisodeType           *string    `json:"episode_type,omitempty"`
