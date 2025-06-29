@@ -8,6 +8,7 @@ import (
 
 // usage strings
 const (
+	AddToCollection    = "add_to_collection"
 	ActionTypeAll      = "all"
 	Aliases            = "aliases"
 	AllDvd             = "all-dvd"
@@ -33,6 +34,7 @@ const (
 	Finales            = "finales"
 	Episodes           = "episodes"
 	Genres             = "genres"
+	GetCollection      = "get_collection"
 	History            = "history"
 	IDLookup           = "id-lookup"
 	ImdbFormat         = "imdb"

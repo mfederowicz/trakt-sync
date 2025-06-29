@@ -28,6 +28,7 @@
       - [shows](#shows)
       - [seasons](#seasons)
       - [episodes](#episodes)
+      - [sync](#sync)
       - [users](#users)
       - [watchlist](#watchlist)
 
@@ -989,9 +990,49 @@ $ ./trakt-sync sync -a playback -start_at 2025-06-01 -end_at 2025-06-07
 ```console
 $ ./trakt-sync sync -a remove_playback -playback_id 12345
 ```
+##### Get collection - movies
+```console
+$ ./trakt-sync sync -a get_collection -t movies -ex metadata
+```
+##### Get collection - shows
+```console
+$ ./trakt-sync sync -a get_collection -t shows -ex metadata
+```
+##### Get collection - episodes
+```console
+$ ./trakt-sync sync -a get_collection -t episodes -ex metadata
+```
+##### Get collection - seasons
+```console
+$ ./trakt-sync sync -a get_collection -t seasons -ex metadata
+```
 
-
-
+##### Add to collection - via -collection_items flag
+```console
+$ ./trakt-sync sync -a add_to_collection -collection_items export_sync_collection_movies.json
+```
+```console
+$ ./trakt-sync sync -a add_to_collection -collection_items export_sync_collection_shows.json
+```
+```console
+$ ./trakt-sync sync -a add_to_collection -collection_items export_sync_collection_episodes.json
+```
+```console
+$ ./trakt-sync sync -a add_to_collection -collection_items export_sync_collection_seasons.json
+```
+##### Add to collection - via stdin
+```console
+$ cat export_sync_collection_movies.json | ./trakt-sync sync -a add_to_collection
+```
+```console
+$ cat export_sync_collection_shows.json | ./trakt-sync sync -a add_to_collection
+```
+```console
+$ cat export_sync_collection_episodes.json | ./trakt-sync sync -a add_to_collection
+```
+```console
+$ cat export_sync_collection_seasons.json | ./trakt-sync sync -a add_to_collection
+```
 
 #### users:
 

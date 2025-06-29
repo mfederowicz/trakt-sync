@@ -21,13 +21,32 @@ type Show struct {
 	Votes                 *int       `json:"votes,omitempty"`
 	CommentCount          *int       `json:"comment_count,omitempty"`
 	UpdatedAt             *Timestamp `json:"updated_at,omitempty"`
+	CollectedAt           *Timestamp `json:"collected_at,omitempty"`
 	Language              *string    `json:"language,omitempty"`
 	Languages             *[]string  `json:"languages,omitempty"`
 	AvailableTranslations *[]string  `json:"available_translations,omitempty"`
 	Genres                *[]string  `json:"genres,omitempty"`
 	AiredEpisodes         *int       `json:"aired_episodes,omitempty"`
+	MediaType             *string    `json:"media_type,omitempty"`
+	Resolution            *string    `json:"resolution,omitempty"`
+	HDR                   *string    `json:"hdr,omitempty"`
+	Audio                 *string    `json:"audio,omitempty"`
+	AudioChannels         *string    `json:"audio_channels,omitempty"`
+	ThreeD                *bool      `json:"3d,omitempty"`
 }
 
 func (s Show) String() string {
 	return Stringify(s)
+}
+
+// UpdateCollectedData update meta data of object
+func (s *Show) UpdateCollectedData(item *ExportlistItem) {
+	if item.Metadata != nil {
+		s.MediaType = item.Metadata.MediaType
+		s.Resolution = item.Metadata.Resolution
+		s.Audio = item.Metadata.Audio
+		s.AudioChannels = item.Metadata.AudioChannels
+		s.ThreeD = item.Metadata.ThreeD
+	}
+	s.CollectedAt = item.CollectedAt.UTC()
 }

@@ -10,12 +10,13 @@ import (
 )
 
 var (
-	_syncAction     = SyncCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
-	_syncStartAt    = SyncCmd.Flag.String("start_at", cfg.DefaultConfig().StartAt, consts.StartAtUsage)
-	_syncEndAt      = SyncCmd.Flag.String("end_at", cfg.DefaultConfig().EndAt, consts.EndAtUsage)
-	_syncPlaybackID = SyncCmd.Flag.Int("playback_id", cfg.DefaultConfig().PlaybackID, consts.PlaybackIDUsage)
+	_syncAction          = SyncCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_syncStartAt         = SyncCmd.Flag.String("start_at", cfg.DefaultConfig().StartAt, consts.StartAtUsage)
+	_syncEndAt           = SyncCmd.Flag.String("end_at", cfg.DefaultConfig().EndAt, consts.EndAtUsage)
+	_syncPlaybackID      = SyncCmd.Flag.Int("playback_id", cfg.DefaultConfig().PlaybackID, consts.PlaybackIDUsage)
+	_syncCollectionItems = SyncCmd.Flag.String("collection_items", consts.EmptyString, consts.CollectionItemsUsage)
 
-	validSyncActions = []string{"last_activities", "playback", "remove_playback"}
+	validSyncActions = []string{"last_activities", "playback", "remove_playback", "get_collection", "add_to_collection"}
 )
 
 // SyncCmd returns movies and episodes that a user has watched, sorted by most recent.
@@ -34,9 +35,12 @@ func syncFunc(cmd *Command, _ ...string) error {
 
 	var handler handlers.SyncHandler
 	allHandlers := map[string]handlers.Handler{
-		"last_activities": handlers.SyncLastActivitiesHandler{},
-		"playback":        handlers.SyncPlaybackHandler{},
-		"remove_playback": handlers.SyncRemovePlaybackHandler{},
+		"last_activities":   handlers.SyncLastActivitiesHandler{},
+		"playback":          handlers.SyncPlaybackHandler{},
+		"remove_playback":   handlers.SyncRemovePlaybackHandler{},
+		"get_collection":    handlers.SyncGetCollectionHandler{},
+		"add_to_collection": handlers.SyncAddToCollectionHandler{},
+		// "remove_from_collection": handlers.SyncRemoveFromCollectionHandler{},
 	}
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 

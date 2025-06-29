@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strconv"
@@ -64,6 +65,54 @@ type CommonInterface interface {
 
 // CommonLogic struct for common methods
 type CommonLogic struct{}
+
+// ConvertBytesToColletionItems convert bytes to struct
+func (CommonLogic) ConvertBytesToColletionItems(data []byte) (*str.CollectionItems, error) {
+	var list []*str.ExportlistItem
+	if err := json.Unmarshal(data, &list); err != nil {
+		return nil, err
+	}
+
+	items := new(str.CollectionItems)
+	items.Movies = &[]str.ExportlistItem{}
+	items.Shows = &[]str.ExportlistItem{}
+	items.Seasons = &[]str.ExportlistItem{}
+	items.Episodes = &[]str.ExportlistItem{}
+
+	for _, val := range list {
+		if val.Movie != nil {
+			e := str.ExportlistItem{}
+			e.CollectedAt = val.CollectedAt.UTC()
+			e.Title = val.Movie.Title
+			e.Year = val.Movie.Year
+			e.IDs = val.Movie.IDs
+			e.UpdateCollectedData(val)
+			*items.Movies = append(*items.Movies, e)
+		}
+		if val.Show != nil {
+			e := str.ExportlistItem{}
+			e.Title = val.Show.Title
+			e.Year = val.Show.Year
+			e.IDs = val.Show.IDs
+			e.UpdateCollectedData(val)
+			*items.Shows = append(*items.Shows, e)
+		}
+		if val.Season != nil {
+			e := str.ExportlistItem{}
+			e.IDs = val.Season.IDs
+			val.Season.UpdateCollectedData(val)
+			*items.Seasons = append(*items.Seasons, e)
+		}
+		if val.Episode != nil {
+			e := str.ExportlistItem{}
+			e.IDs = val.Episode.IDs
+			e.UpdateCollectedData(val)
+			*items.Episodes = append(*items.Episodes, e)
+		}
+	}
+
+	return items, nil
+}
 
 // CreateCheckin helper function to create checkin object
 func (c CommonLogic) CreateCheckin(client *internal.Client, options *str.Options) (*str.Checkin, error) {

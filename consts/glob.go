@@ -12,6 +12,7 @@ const (
 	CheckinError                 = "checkin error:%w"
 	CheckinMsgUsage              = "allow to overwrite msg"
 	ClientNewRequestFatal        = "client.NewRequest returned error: %v"
+	CollectionItemsUsage         = "allow to overwrite collection_items file path"
 	CollectionProgressError      = "collection progress error:%w"
 	CommaString                  = ","
 	CommentIDUsage               = "allow to overwrite comment_id"

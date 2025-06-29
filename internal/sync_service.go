@@ -5,6 +5,8 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"slices"
+	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
@@ -190,4 +192,66 @@ func (s *SyncService) RemovePlaybackItem(ctx context.Context, id *int) (*str.Res
 	}
 
 	return resp, nil
+}
+
+// AddItemsToCollection add items to user's collection
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/add-to-collection/add-items-to-collection
+func (s *SyncService) AddItemsToCollection(ctx context.Context, items *str.CollectionItems) (*str.CollectionAddResult, error) {
+	var url = "sync/collection"
+	printer.Println("add items")
+	req, err := s.client.NewRequest(http.MethodPost, url, items)
+	if err != nil {
+		return nil, err
+	}
+
+	result := new(str.CollectionAddResult)
+	_, err = s.client.Do(ctx, req, result)
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
+
+// GetCollectedSeasons dedicated function do prepare collection: seasons format
+func (s *SyncService) GetCollectedSeasons(ctx context.Context, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+	// fetch collected shows
+	strType := consts.Shows
+	shows, resp, err := s.GetCollection(ctx, &strType, options)
+	if err != nil {
+		return nil, resp, err
+	}
+	collected := []str.Season{}
+	for _, val := range shows {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+
+		seasonsNumbers := []int{}
+		for _, sitem := range *val.Seasons {
+			seasonsNumbers = append(seasonsNumbers, *sitem.Number)
+		}
+
+		seasons, _, err := s.client.Shows.GetAllSeasonsForShow(ctx, val.Show.IDs.Slug, options)
+		if err != nil {
+			return nil, resp, err
+		}
+		for _, sitem := range seasons {
+			if slices.Contains(seasonsNumbers, *sitem.Number) {
+				s := str.Season{}
+				s.IDs = sitem.IDs
+				collected = append(collected, s)
+			}
+		}
+	}
+
+	strType = consts.Season
+	list := []*str.ExportlistItem{}
+	for _, citem := range collected {
+		item := &str.ExportlistItem{}
+		item.Type = &strType
+		item.Season = &citem
+		list = append(list, item)
+	}
+
+	return list, nil, nil
 }
