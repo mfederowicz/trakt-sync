@@ -53,6 +53,8 @@ type ListOptions struct {
 	Hidden            string           `url:"hidden,omitempty"`
 	Specials          string           `url:"specials,omitempty"`
 	CountSpecials     string           `url:"count_specials,omitempty"`
+	StartAt           string           `url:"start_at,omitempty"`
+	EndAt             string           `url:"end_at,omitempty"`
 }
 
 // AddQuery adds query parameters to s.

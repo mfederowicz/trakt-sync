@@ -8,6 +8,7 @@ import (
 
 // usage strings
 const (
+	AddToCollection    = "add_to_collection"
 	ActionTypeAll      = "all"
 	Aliases            = "aliases"
 	AllDvd             = "all-dvd"
@@ -33,6 +34,7 @@ const (
 	Finales            = "finales"
 	Episodes           = "episodes"
 	Genres             = "genres"
+	GetCollection      = "get_collection"
 	History            = "history"
 	IDLookup           = "id-lookup"
 	ImdbFormat         = "imdb"
@@ -53,12 +55,14 @@ const (
 	MyNewShows         = "my-new-shows"
 	MySeasonPremieres  = "my-season-premieres"
 	MyShows            = "my-shows"
+	LastActivities     = "last_activities"
 	Networks           = "networks"
 	NewShows           = "new_shows"
 	NextEpisode        = "next_episode"
 	Notes              = "notes"
 	People             = "people"
 	Played             = "played"
+	Playback           = "playback"
 	Popular            = "popular"
 	Query              = "query"
 	Ratings            = "ratings"
@@ -78,6 +82,7 @@ const (
 	Stats              = "stats"
 	Studios            = "studios"
 	Summary            = "summary"
+	Sync               = "sync"
 	TextQuery          = "text-query"
 	TmdbFormat         = "tmdb"
 	TmdbIDFormat       = "Tmdb"

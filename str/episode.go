@@ -18,12 +18,32 @@ type Episode struct {
 	UpdatedAt             *Timestamp `json:"updated_at,omitempty"`
 	CompletedAt           *Timestamp `json:"completed_at,omitempty"`
 	CollectedAt           *Timestamp `json:"collected_at,omitempty"`
+	Metadata              *Metadata  `json:"metadata,omitempty"`
 	AvailableTranslations *[]string  `json:"available_translations,omitempty"`
 	Runtime               *int       `json:"runtime,omitempty"`
 	EpisodeType           *string    `json:"episode_type,omitempty"`
 	Completed             *bool      `json:"completed,omitempty"`
+	MediaType             *string    `json:"media_type,omitempty"`
+	Resolution            *string    `json:"resolution,omitempty"`
+	HDR                   *string    `json:"hdr,omitempty"`
+	Audio                 *string    `json:"audio,omitempty"`
+	AudioChannels         *string    `json:"audio_channels,omitempty"`
+	ThreeD                *bool      `json:"3d,omitempty"`
 }
 
-func (s Episode) String() string {
-	return Stringify(s)
+func (e Episode) String() string {
+	return Stringify(e)
+}
+
+// UpdateCollectedData update meta data of object
+func (e *Episode) UpdateCollectedData(item *ExportlistItem) {
+	if item.Metadata != nil {
+		e.MediaType = item.Metadata.MediaType
+		e.Resolution = item.Metadata.Resolution
+		e.Audio = item.Metadata.Audio
+		e.AudioChannels = item.Metadata.AudioChannels
+		e.ThreeD = item.Metadata.ThreeD
+	}
+
+	e.CollectedAt = item.CollectedAt.UTC()
 }

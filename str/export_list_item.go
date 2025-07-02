@@ -46,8 +46,11 @@ func (i *ExportlistItemJSON) Uptime(options *Options, data *ExportlistItem) {
 
 // ExportlistItem represents JSON for list item
 type ExportlistItem struct {
+	Title           *string    `json:"title,omitempty"`
+	Year            *int       `json:"year,omitempty"`
 	Rank            *int       `json:"rank,omitempty"`
 	ID              *int64     `json:"id,omitempty"`
+	IDs             *IDs       `json:"ids,omitempty"`
 	WatchedAt       *Timestamp `json:"watched_at,omitempty"`
 	ListedAt        *Timestamp `json:"listed_at,omitempty"`
 	CollectedAt     *Timestamp `json:"collected_at,omitempty"`
@@ -59,8 +62,15 @@ type ExportlistItem struct {
 	Movie           *Movie     `json:"movie,omitempty"`
 	Show            *Show      `json:"show,omitempty"`
 	Season          *Season    `json:"season,omitempty"`
+	Seasons         *[]Season  `json:"seasons,omitempty"`
 	Episode         *Episode   `json:"episode,omitempty"`
 	Metadata        *Metadata  `json:"metadata,omitempty"`
+	MediaType       *string    `json:"media_type,omitempty"`
+	Resolution      *string    `json:"resolution,omitempty"`
+	Hdr             *string    `json:"hdr,omitempty"`
+	Audio           *string    `json:"audio,omitempty"`
+	AudioChannels   *string    `json:"audio_channels,omitempty"`
+	ThreeD          *bool      `json:"3d,omitempty"`
 }
 
 func (i ExportlistItem) String() string {
@@ -94,4 +104,38 @@ func (i ExportlistItem) GetTime() *Timestamp {
 	}
 
 	return nil
+}
+
+// UpdateCollectedData update meta data of object
+func (i *ExportlistItem) UpdateCollectedData(item *ExportlistItem) {
+	if item.Metadata != nil {
+		i.MediaType = item.Metadata.MediaType
+		i.Resolution = item.Metadata.Resolution
+		i.Audio = item.Metadata.Audio
+		i.AudioChannels = item.Metadata.AudioChannels
+		i.ThreeD = item.Metadata.ThreeD
+	}
+
+	if item.Seasons != nil {
+		i.Seasons = &[]Season{}
+		for _, season := range *item.Seasons {
+			s := Season{}
+			s.Number = season.Number
+			if season.Episodes != nil {
+				s.Episodes = &[]Episode{}
+				for _, ep := range *season.Episodes {
+					e := Episode{}
+					e.Number = ep.Number
+					e.MediaType = ep.Metadata.MediaType
+					e.Resolution = ep.Metadata.Resolution
+					e.Audio = ep.Metadata.Audio
+					e.AudioChannels = ep.Metadata.AudioChannels
+					e.ThreeD = ep.Metadata.ThreeD
+
+					*s.Episodes = append(*s.Episodes, e)
+				}
+			}
+			*i.Seasons = append(*i.Seasons, s)
+		}
+	}
 }

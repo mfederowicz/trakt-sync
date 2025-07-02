@@ -28,6 +28,7 @@
       - [shows](#shows)
       - [seasons](#seasons)
       - [episodes](#episodes)
+      - [sync](#sync)
       - [users](#users)
       - [watchlist](#watchlist)
 
@@ -965,6 +966,72 @@ $ ./trakt-sync episodes -a watching -i the-sopranos -season 1 -episode 1
 ##### Get all episodes videos
 ```console
 $ ./trakt-sync episodes -a videos -i the-sopranos -season 1 -episode 1
+```
+
+#### sync:
+
+##### Last activities
+```console
+$ ./trakt-sync sync -a last_activities
+```
+##### Playback progress from last 60 days
+```console
+$ ./trakt-sync sync -a playback
+```
+##### Playback progress from last 60 days (movies or episodes)
+```console
+$ ./trakt-sync sync -a playback -t movies
+```
+##### Playback progress from 7 days
+```console
+$ ./trakt-sync sync -a playback -start_at 2025-06-01 -end_at 2025-06-07
+```
+##### Remove playback
+```console
+$ ./trakt-sync sync -a remove_playback -playback_id 12345
+```
+##### Get collection - movies
+```console
+$ ./trakt-sync sync -a get_collection -t movies -ex metadata
+```
+##### Get collection - shows
+```console
+$ ./trakt-sync sync -a get_collection -t shows -ex metadata
+```
+##### Get collection - episodes
+```console
+$ ./trakt-sync sync -a get_collection -t episodes -ex metadata
+```
+##### Get collection - seasons
+```console
+$ ./trakt-sync sync -a get_collection -t seasons -ex metadata
+```
+
+##### Add to collection - via -collection_items flag
+```console
+$ ./trakt-sync sync -a add_to_collection -collection_items export_sync_collection_movies.json
+```
+```console
+$ ./trakt-sync sync -a add_to_collection -collection_items export_sync_collection_shows.json
+```
+```console
+$ ./trakt-sync sync -a add_to_collection -collection_items export_sync_collection_episodes.json
+```
+```console
+$ ./trakt-sync sync -a add_to_collection -collection_items export_sync_collection_seasons.json
+```
+##### Add to collection - via stdin
+```console
+$ cat export_sync_collection_movies.json | ./trakt-sync sync -a add_to_collection
+```
+```console
+$ cat export_sync_collection_shows.json | ./trakt-sync sync -a add_to_collection
+```
+```console
+$ cat export_sync_collection_episodes.json | ./trakt-sync sync -a add_to_collection
+```
+```console
+$ cat export_sync_collection_seasons.json | ./trakt-sync sync -a add_to_collection
 ```
 
 #### users:

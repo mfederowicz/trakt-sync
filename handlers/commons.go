@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strconv"
@@ -54,13 +55,64 @@ type CommonInterface interface {
 	Notes(client *internal.Client, notes *str.Notes) (*str.Notes, *str.Response, error)
 	Reply(client *internal.Client, id *int, comment *str.Comment) (*str.Comment, *str.Response, error)
 	CheckSortAndTypes(options *str.Options) error
+	CheckTypes(options *str.Options) error
 	ToTimestamp(at string) (*str.Timestamp, error)
 	ConvertDateString(date string, out string) string
 	CurrentDateString(tz string) string
+	DateLastDays(days int, tz string, full bool) string
+	CheckDates(from string, to string, tz string) string
 }
 
 // CommonLogic struct for common methods
 type CommonLogic struct{}
+
+// ConvertBytesToColletionItems convert bytes to struct
+func (CommonLogic) ConvertBytesToColletionItems(data []byte) (*str.CollectionItems, error) {
+	var list []*str.ExportlistItem
+	if err := json.Unmarshal(data, &list); err != nil {
+		return nil, err
+	}
+
+	items := new(str.CollectionItems)
+	items.Movies = &[]str.ExportlistItem{}
+	items.Shows = &[]str.ExportlistItem{}
+	items.Seasons = &[]str.ExportlistItem{}
+	items.Episodes = &[]str.ExportlistItem{}
+
+	for _, val := range list {
+		if val.Movie != nil {
+			e := str.ExportlistItem{}
+			e.CollectedAt = val.CollectedAt.UTC()
+			e.Title = val.Movie.Title
+			e.Year = val.Movie.Year
+			e.IDs = val.Movie.IDs
+			e.UpdateCollectedData(val)
+			*items.Movies = append(*items.Movies, e)
+		}
+		if val.Show != nil {
+			e := str.ExportlistItem{}
+			e.Title = val.Show.Title
+			e.Year = val.Show.Year
+			e.IDs = val.Show.IDs
+			e.UpdateCollectedData(val)
+			*items.Shows = append(*items.Shows, e)
+		}
+		if val.Season != nil {
+			e := str.ExportlistItem{}
+			e.IDs = val.Season.IDs
+			val.Season.UpdateCollectedData(val)
+			*items.Seasons = append(*items.Seasons, e)
+		}
+		if val.Episode != nil {
+			e := str.ExportlistItem{}
+			e.IDs = val.Episode.IDs
+			e.UpdateCollectedData(val)
+			*items.Episodes = append(*items.Episodes, e)
+		}
+	}
+
+	return items, nil
+}
 
 // CreateCheckin helper function to create checkin object
 func (c CommonLogic) CreateCheckin(client *internal.Client, options *str.Options) (*str.Checkin, error) {
@@ -660,6 +712,22 @@ func (*CommonLogic) CheckSortAndTypes(options *str.Options) error {
 	return nil
 }
 
+// CheckTypes helper function to validate type field depends on module
+func (CommonLogic) CheckTypes(options *str.Options) error {
+	// Check if the provided module exists in ModuleConfig
+	_, ok := cfg.ModuleConfig[options.Module]
+	if !ok {
+		return fmt.Errorf("not found config for module '%s'", options.Module)
+	}
+	prefix := options.Module + ":" + options.Action
+	if !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].Type, options.Type) {
+		return fmt.Errorf("not found type for module '%s'", options.Module)
+	}
+
+	// Check id_type values
+	return nil
+}
+
 // ValidPrivacy helper function to validate privacy field depends on module
 func (*CommonLogic) ValidPrivacy(options *str.Options) error {
 	// Check if the provided module exists in ModuleConfig
@@ -784,4 +852,66 @@ func (CommonLogic) CurrentDateString(tz string, full bool) string {
 	}
 
 	return currentTime.Format(time.RFC3339)
+}
+
+// DateLastDays return last x days from user timezone
+func (CommonLogic) DateLastDays(days int, tz string, full bool) string {
+	// Get the current time
+	currentTime := time.Now().UTC()
+
+	if tz != time.UTC.String() {
+		loc, _ := time.LoadLocation(tz)
+		currentTime = currentTime.In(loc)
+	}
+
+	past := currentTime.AddDate(0, 0, -days)
+	if full {
+		past = past.Truncate(time.Hour)
+	}
+
+	return past.Format(time.RFC3339)
+}
+
+// CheckDates if dates are ok
+func (CommonLogic) CheckDates(from string, to string, tz string) error {
+	// Load location
+	loc, err := time.LoadLocation(tz)
+	if err != nil {
+		return fmt.Errorf("invalid timezone: %w", err)
+	}
+
+	// Get current full hour
+	now := time.Now().In(loc)
+	fullHour := now.Truncate(time.Hour)
+
+	// Parse from and to if they are present
+	var fromTime, toTime time.Time
+	if from != "" {
+		fromTime, err = time.ParseInLocation(consts.DefaultStartDateFormat, from, loc)
+		if err != nil {
+			return fmt.Errorf("invalid from date: %w", err)
+		}
+		if fromTime.After(fullHour) {
+			return fmt.Errorf("'from' date must not be later than the current full hour")
+		}
+	}
+
+	if to != "" {
+		toTime, err = time.ParseInLocation(consts.DefaultStartDateFormat, to, loc)
+		if err != nil {
+			return fmt.Errorf("invalid to date: %w", err)
+		}
+		if toTime.After(fullHour) {
+			return fmt.Errorf("'to' date must not be later than:%s", fullHour.Format(consts.DefaultStartDateFormat))
+		}
+	}
+
+	// If both are present, validate range
+	if from != "" && to != "" {
+		if fromTime.After(toTime) {
+			return fmt.Errorf("'from' date must be earlier than or equal to 'to' date")
+		}
+	}
+
+	return nil
 }

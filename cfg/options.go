@@ -105,6 +105,10 @@ var ModuleActionConfig = map[string]OptionsConfig{
 		Type: []string{"all", "personal", "official", "watchlists", "favorites"},
 		Sort: []string{"popular", "likes", "comments", "items", "added", "updated"},
 	},
+	"sync:playback": {
+		Type: []string{"movies", "episodes"},
+		Sort: []string{},
+	},
 }
 
 // ModuleConfig represents the configuration options for all modules
@@ -231,6 +235,10 @@ var ModuleConfig = map[string]OptionsConfig{
 	},
 	"notes": {
 		Privacy: []string{"private", "friends", "public"},
+	},
+
+	"sync": {
+		Type: []string{"all", "movies", "shows"},
 	},
 }
 
@@ -500,12 +508,26 @@ func GetOutputForModule(options *str.Options) string {
 		consts.Networks:        getOutputForModuleNetworks(options),
 		consts.Notes:           getOutputForModuleNotes(options),
 		consts.Recommendations: getOutputForModuleRecommendations(options),
+		consts.Sync:            getOutputForModuleSync(options),
 	}
 
 	if output, found := allOutputs[options.Module]; found {
 		return output
 	}
 	return fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Type, options.Format)
+}
+
+func getOutputForModuleSync(options *str.Options) string {
+	switch options.Action {
+	case consts.GetCollection:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Collection, options.Type)
+	case consts.LastActivities, consts.Playback, consts.AddToCollection:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
+	default:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
+	}
+
+	return options.Output
 }
 
 func getOutputForModuleRecommendations(options *str.Options) string {
