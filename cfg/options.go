@@ -521,7 +521,7 @@ func getOutputForModuleSync(options *str.Options) string {
 	switch options.Action {
 	case consts.GetCollection:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Collection, options.Type)
-	case consts.LastActivities, consts.Playback, consts.AddToCollection:
+	case consts.LastActivities, consts.Playback, consts.AddToCollection, consts.RemoveFromCollection:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)

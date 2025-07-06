@@ -255,3 +255,23 @@ func (s *SyncService) GetCollectedSeasons(ctx context.Context, options *uri.List
 
 	return list, nil, nil
 }
+
+// RemoveItemsFromCollection remove items from user's collection
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/remove-from-collection/remove-items-from-collection
+func (s *SyncService) RemoveItemsFromCollection(ctx context.Context, items *str.CollectionItems) (*str.CollectionRemoveResult, error) {
+	var url = "sync/collection/remove"
+	printer.Println("remove items")
+	req, err := s.client.NewRequest(http.MethodPost, url, items)
+	if err != nil {
+		return nil, err
+	}
+
+	result := new(str.CollectionRemoveResult)
+	_, err = s.client.Do(ctx, req, result)
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}

@@ -1034,6 +1034,19 @@ $ cat export_sync_collection_episodes.json | ./trakt-sync sync -a add_to_collect
 $ cat export_sync_collection_seasons.json | ./trakt-sync sync -a add_to_collection
 ```
 
+##### Remove from collection - via -collection_items flag
+```console
+$ ./trakt-sync sync -a remove_from_collection -collection_items export_sync_collection_movies.json
+```
+```console
+```
+##### Remove from collection - via stdin
+```console
+$ cat export_sync_collection_movies.json | ./trakt-sync sync -a remove_from_collection
+```
+```console
+```
+
 #### users:
 
 ##### Export movies or shows or episodes from user lists:

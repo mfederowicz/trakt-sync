@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -61,58 +63,12 @@ type CommonInterface interface {
 	CurrentDateString(tz string) string
 	DateLastDays(days int, tz string, full bool) string
 	CheckDates(from string, to string, tz string) string
+	ReadInput(items string) (*str.CollectionItems, error)
+	ConvertBytesToColletionItems(data []byte) (*str.CollectionItems, error)
 }
 
 // CommonLogic struct for common methods
 type CommonLogic struct{}
-
-// ConvertBytesToColletionItems convert bytes to struct
-func (CommonLogic) ConvertBytesToColletionItems(data []byte) (*str.CollectionItems, error) {
-	var list []*str.ExportlistItem
-	if err := json.Unmarshal(data, &list); err != nil {
-		return nil, err
-	}
-
-	items := new(str.CollectionItems)
-	items.Movies = &[]str.ExportlistItem{}
-	items.Shows = &[]str.ExportlistItem{}
-	items.Seasons = &[]str.ExportlistItem{}
-	items.Episodes = &[]str.ExportlistItem{}
-
-	for _, val := range list {
-		if val.Movie != nil {
-			e := str.ExportlistItem{}
-			e.CollectedAt = val.CollectedAt.UTC()
-			e.Title = val.Movie.Title
-			e.Year = val.Movie.Year
-			e.IDs = val.Movie.IDs
-			e.UpdateCollectedData(val)
-			*items.Movies = append(*items.Movies, e)
-		}
-		if val.Show != nil {
-			e := str.ExportlistItem{}
-			e.Title = val.Show.Title
-			e.Year = val.Show.Year
-			e.IDs = val.Show.IDs
-			e.UpdateCollectedData(val)
-			*items.Shows = append(*items.Shows, e)
-		}
-		if val.Season != nil {
-			e := str.ExportlistItem{}
-			e.IDs = val.Season.IDs
-			val.Season.UpdateCollectedData(val)
-			*items.Seasons = append(*items.Seasons, e)
-		}
-		if val.Episode != nil {
-			e := str.ExportlistItem{}
-			e.IDs = val.Episode.IDs
-			e.UpdateCollectedData(val)
-			*items.Episodes = append(*items.Episodes, e)
-		}
-	}
-
-	return items, nil
-}
 
 // CreateCheckin helper function to create checkin object
 func (c CommonLogic) CreateCheckin(client *internal.Client, options *str.Options) (*str.Checkin, error) {
@@ -914,4 +870,82 @@ func (CommonLogic) CheckDates(from string, to string, tz string) error {
 	}
 
 	return nil
+}
+
+// ConvertBytesToColletionItems convert bytes to struct
+func (CommonLogic) ConvertBytesToColletionItems(data []byte) (*str.CollectionItems, error) {
+	var list []*str.ExportlistItem
+	if err := json.Unmarshal(data, &list); err != nil {
+		return nil, err
+	}
+
+	items := new(str.CollectionItems)
+	items.Movies = &[]str.ExportlistItem{}
+	items.Shows = &[]str.ExportlistItem{}
+	items.Seasons = &[]str.ExportlistItem{}
+	items.Episodes = &[]str.ExportlistItem{}
+
+	for _, val := range list {
+		if val.Movie != nil {
+			e := str.ExportlistItem{}
+			e.Title = val.Movie.Title
+			e.Year = val.Movie.Year
+			e.IDs = val.Movie.IDs
+			e.UpdateCollectedData(val)
+			*items.Movies = append(*items.Movies, e)
+		}
+		if val.Show != nil {
+			e := str.ExportlistItem{}
+			e.Title = val.Show.Title
+			e.Year = val.Show.Year
+			e.IDs = val.Show.IDs
+			e.UpdateCollectedData(val)
+			*items.Shows = append(*items.Shows, e)
+		}
+		if val.Season != nil {
+			e := str.ExportlistItem{}
+			e.IDs = val.Season.IDs
+			val.Season.UpdateCollectedData(val)
+			*items.Seasons = append(*items.Seasons, e)
+		}
+		if val.Episode != nil {
+			e := str.ExportlistItem{}
+			e.IDs = val.Episode.IDs
+			e.UpdateCollectedData(val)
+			*items.Episodes = append(*items.Episodes, e)
+		}
+	}
+
+	return items, nil
+}
+
+// ReadInput read data from stdin or from file
+func (c CommonLogic) ReadInput(filePath string) (*str.CollectionItems, error) {
+	if filePath != consts.EmptyString {
+		data, err := os.ReadFile(filePath)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read file %s: %w", filePath, err)
+		}
+
+		return c.ConvertBytesToColletionItems(data)
+	}
+
+	// Check if there's data in stdin to avoid blocking
+	fi, err := os.Stdin.Stat()
+	if err != nil {
+		return nil, fmt.Errorf("failed to stat stdin: %w", err)
+	}
+
+	// os.ModeCharDevice means no data is being piped (stdin is a terminal)
+	if fi.Mode()&os.ModeCharDevice != 0 {
+		return nil, fmt.Errorf("no --file provided and no data piped to stdin")
+	}
+
+	// Read all data from stdin
+	data, err := io.ReadAll(os.Stdin)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read from stdin: %w", err)
+	}
+
+	return c.ConvertBytesToColletionItems(data)
 }

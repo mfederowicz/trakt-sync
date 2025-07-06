@@ -11,19 +11,19 @@ import (
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
-// SyncAddToCollectionHandler struct for handler
-type SyncAddToCollectionHandler struct{ common CommonLogic }
+// SyncRemoveFromCollectionHandler struct for handler
+type SyncRemoveFromCollectionHandler struct{ common CommonLogic }
 
 // Handle to handle sync: add_to_collection action
-func (m SyncAddToCollectionHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m SyncRemoveFromCollectionHandler) Handle(options *str.Options, client *internal.Client) error {
 	items, err := m.common.ReadInput(options.CollectionItems)
 	if err != nil {
 		return err
 	}
-	printer.Println("Add collection")
-	result, err := m.syncAddToCollection(client, options, items)
+	printer.Println("Remove from collection")
+	result, err := m.syncRemoveFromCollection(client, options, items)
 	if err != nil {
-		return fmt.Errorf("add to collection error:%w", err)
+		return fmt.Errorf("remove from collection error:%w", err)
 	}
 
 	print("write result to:" + options.Output)
@@ -33,8 +33,8 @@ func (m SyncAddToCollectionHandler) Handle(options *str.Options, client *interna
 	return nil
 }
 
-func (SyncAddToCollectionHandler) syncAddToCollection(client *internal.Client, options *str.Options, items *str.CollectionItems) (*str.CollectionAddResult, error) {
-	result, err := client.Sync.AddItemsToCollection(
+func (SyncRemoveFromCollectionHandler) syncRemoveFromCollection(client *internal.Client, options *str.Options, items *str.CollectionItems) (*str.CollectionRemoveResult, error) {
+	result, err := client.Sync.RemoveItemsFromCollection(
 		client.BuildCtxFromOptions(options),
 		items,
 	)

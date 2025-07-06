@@ -108,6 +108,10 @@ func (i ExportlistItem) GetTime() *Timestamp {
 
 // UpdateCollectedData update meta data of object
 func (i *ExportlistItem) UpdateCollectedData(item *ExportlistItem) {
+	if item.CollectedAt != nil {
+		i.CollectedAt = item.CollectedAt.UTC()
+	}
+
 	if item.Metadata != nil {
 		i.MediaType = item.Metadata.MediaType
 		i.Resolution = item.Metadata.Resolution
