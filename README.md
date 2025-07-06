@@ -1064,6 +1064,23 @@ $ ./trakt-sync sync -a get_watched -t shows -ex noseasons
 $ ./trakt-sync sync -a get_watched -t episodes
 ```
 
+##### Get history - movies
+```console
+$ ./trakt-sync sync -a get_history -t movies -start_at 2025-07-01 -end_at 2025-07-06
+```
+##### Get history - shows - with trakt_id
+```console
+$ ./trakt-sync sync -a get_history -t shows -i 1388
+```
+##### Get history - shows 
+```console
+$ ./trakt-sync sync -a get_history -t shows
+```
+##### Get history - episodes
+```console
+$ ./trakt-sync sync -a get_history -t episodes
+```
+
 #### users:
 
 ##### Export movies or shows or episodes from user lists:
