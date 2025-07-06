@@ -949,3 +949,36 @@ func (c CommonLogic) ReadInput(filePath string) (*str.CollectionItems, error) {
 
 	return c.ConvertBytesToColletionItems(data)
 }
+
+// FetchHistoryList returns movies and episodes that a user has watched, sorted by most recent.
+func (c CommonLogic) FetchHistoryList(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, StartAt: options.StartDate, EndAt: options.EndDate, Extended: options.ExtendedInfo}
+
+	list, resp, err := client.Sync.GetWatchedHistory(
+		client.BuildCtxFromOptions(options),
+		&options.TraktID,
+		&options.Type,
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchHistoryList(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+
+	return list, nil
+}

@@ -15,10 +15,12 @@ var (
 	_syncEndAt           = SyncCmd.Flag.String("end_at", cfg.DefaultConfig().EndAt, consts.EndAtUsage)
 	_syncPlaybackID      = SyncCmd.Flag.Int("playback_id", cfg.DefaultConfig().PlaybackID, consts.PlaybackIDUsage)
 	_syncCollectionItems = SyncCmd.Flag.String("collection_items", consts.EmptyString, consts.CollectionItemsUsage)
+	_syncID              = SyncCmd.Flag.Int("i", cfg.DefaultConfig().TraktID, consts.TraktIDUsage)
 
 	validSyncActions = []string{
-		"last_activities", "playback", "remove_playback",
-		"get_collection", "add_to_collection", "remove_from_collection"}
+		"last_activities", "playback", "remove_playback", "get_collection",
+		"add_to_collection", "remove_from_collection", "get_watched",
+		"get_history"}
 )
 
 // SyncCmd returns movies and episodes that a user has watched, sorted by most recent.
@@ -43,6 +45,8 @@ func syncFunc(cmd *Command, _ ...string) error {
 		"get_collection":         handlers.SyncGetCollectionHandler{},
 		"add_to_collection":      handlers.SyncAddToCollectionHandler{},
 		"remove_from_collection": handlers.SyncRemoveFromCollectionHandler{},
+		"get_watched":            handlers.SyncGetWatchedHandler{},
+		"get_history":            handlers.SyncGetHistoryHandler{},
 	}
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 

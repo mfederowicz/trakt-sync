@@ -9,6 +9,7 @@ type UserWatched struct {
 	ResetAt       *Timestamp `json:"reset_at,omitempty"`
 	Movie         *Movie     `json:"movie,omitempty"`
 	Show          *Show      `json:"show,omitempty"`
+	Episode       *Episode   `json:"episode,omitempty"`
 	Seasons       *[]Season  `json:"seasons,omitempty"`
 }
 

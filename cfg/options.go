@@ -109,6 +109,14 @@ var ModuleActionConfig = map[string]OptionsConfig{
 		Type: []string{"movies", "episodes"},
 		Sort: []string{},
 	},
+	"sync:get_watched": {
+		Type: []string{"movies", "shows", "episodes"},
+		Sort: []string{},
+	},
+	"sync:get_history": {
+		Type: []string{"movies", "shows", "seasons", "episodes"},
+		Sort: []string{},
+	},
 }
 
 // ModuleConfig represents the configuration options for all modules
@@ -519,6 +527,10 @@ func GetOutputForModule(options *str.Options) string {
 
 func getOutputForModuleSync(options *str.Options) string {
 	switch options.Action {
+	case consts.GetHistory:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.History, options.Type)
+	case consts.GetWatched:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Watched, options.Type)
 	case consts.GetCollection:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Collection, options.Type)
 	case consts.LastActivities, consts.Playback, consts.AddToCollection, consts.RemoveFromCollection:

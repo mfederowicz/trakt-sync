@@ -35,6 +35,8 @@ const (
 	Episodes             = "episodes"
 	Genres               = "genres"
 	GetCollection        = "get_collection"
+	GetWatched           = "get_watched"
+	GetHistory           = "get_history"
 	History              = "history"
 	IDLookup             = "id-lookup"
 	ImdbFormat           = "imdb"

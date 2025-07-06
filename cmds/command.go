@@ -771,6 +771,9 @@ func UpdateOptionsWithCommandSyncFlags(c *Command, options *str.Options) *str.Op
 		options.CollectionItems = *_syncCollectionItems
 	}
 
+	if *_syncID > consts.ZeroValue {
+		options.TraktID = *_syncID
+	}
 	return options
 }
 

@@ -55,13 +55,17 @@ func (s *SyncService) GetCollection(ctx context.Context, types *string, opts *ur
 // GetWatchedHistory Returns movies and episodes that a user has watched, sorted by most recent.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/sync/get-watched/get-watched-history
-func (s *SyncService) GetWatchedHistory(ctx context.Context, types *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+func (s *SyncService) GetWatchedHistory(ctx context.Context, id *int, types *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 
 	if types != nil {
 		url = fmt.Sprintf("sync/history/%s", *types)
 	} else {
 		url = "sync/history"
+	}
+
+	if *id > consts.ZeroValue {
+		url = fmt.Sprintf(url+"/%d", *id)
 	}
 
 	url, err := uri.AddQuery(url, opts)
@@ -274,4 +278,29 @@ func (s *SyncService) RemoveItemsFromCollection(ctx context.Context, items *str.
 	}
 
 	return result, nil
+}
+
+// GetWatched Returns all movies or shows a user has watched sorted by most plays.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/get-watched/get-watched
+func (s *SyncService) GetWatched(ctx context.Context, watchType *string, opts *uri.ListOptions) ([]*str.UserWatched, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("sync/watched/%s", *watchType)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("get watched url:" + url)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	watched := []*str.UserWatched{}
+	resp, err := s.client.Do(ctx, req, &watched)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return watched, resp, nil
 }

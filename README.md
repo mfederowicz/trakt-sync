@@ -1047,6 +1047,23 @@ $ cat export_sync_collection_movies.json | ./trakt-sync sync -a remove_from_coll
 ```console
 ```
 
+##### Get watched - movies
+```console
+$ ./trakt-sync sync -a get_watched -t movies
+```
+##### Get watched - shows
+```console
+$ ./trakt-sync sync -a get_watched -t shows
+```
+##### Get watched - shows - noseasons
+```console
+$ ./trakt-sync sync -a get_watched -t shows -ex noseasons
+```
+##### Get watched - episodes
+```console
+$ ./trakt-sync sync -a get_watched -t episodes
+```
+
 #### users:
 
 ##### Export movies or shows or episodes from user lists:
