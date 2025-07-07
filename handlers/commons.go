@@ -63,8 +63,8 @@ type CommonInterface interface {
 	CurrentDateString(tz string) string
 	DateLastDays(days int, tz string, full bool) string
 	CheckDates(from string, to string, tz string) string
-	ReadInput(items string) (*str.CollectionItems, error)
-	ConvertBytesToColletionItems(data []byte) (*str.CollectionItems, error)
+	ReadInput(items string) (*str.ItemsList, error)
+	ConvertBytesToColletionItems(data []byte) (*str.ItemsList, error)
 }
 
 // CommonLogic struct for common methods
@@ -872,18 +872,19 @@ func (CommonLogic) CheckDates(from string, to string, tz string) error {
 	return nil
 }
 
-// ConvertBytesToColletionItems convert bytes to struct
-func (CommonLogic) ConvertBytesToColletionItems(data []byte) (*str.CollectionItems, error) {
+// ConvertBytesToItemsList convert bytes to struct
+func (CommonLogic) ConvertBytesToItemsList(data []byte) (*str.ItemsList, error) {
 	var list []*str.ExportlistItem
 	if err := json.Unmarshal(data, &list); err != nil {
 		return nil, err
 	}
 
-	items := new(str.CollectionItems)
+	items := new(str.ItemsList)
 	items.Movies = &[]str.ExportlistItem{}
 	items.Shows = &[]str.ExportlistItem{}
 	items.Seasons = &[]str.ExportlistItem{}
 	items.Episodes = &[]str.ExportlistItem{}
+	items.IDs = &[]int64{}
 
 	for _, val := range list {
 		if val.Movie != nil {
@@ -914,20 +915,22 @@ func (CommonLogic) ConvertBytesToColletionItems(data []byte) (*str.CollectionIte
 			e.UpdateCollectedData(val)
 			*items.Episodes = append(*items.Episodes, e)
 		}
-	}
 
-	return items, nil
+		*items.IDs = append(*items.IDs, *val.ID)
+	}
+	
+	return items.Uniq(), nil
 }
 
 // ReadInput read data from stdin or from file
-func (c CommonLogic) ReadInput(filePath string) (*str.CollectionItems, error) {
+func (c CommonLogic) ReadInput(filePath string) (*str.ItemsList, error) {
 	if filePath != consts.EmptyString {
 		data, err := os.ReadFile(filePath)
 		if err != nil {
 			return nil, fmt.Errorf("failed to read file %s: %w", filePath, err)
 		}
 
-		return c.ConvertBytesToColletionItems(data)
+		return c.ConvertBytesToItemsList(data)
 	}
 
 	// Check if there's data in stdin to avoid blocking
@@ -947,7 +950,7 @@ func (c CommonLogic) ReadInput(filePath string) (*str.CollectionItems, error) {
 		return nil, fmt.Errorf("failed to read from stdin: %w", err)
 	}
 
-	return c.ConvertBytesToColletionItems(data)
+	return c.ConvertBytesToItemsList(data)
 }
 
 // FetchHistoryList returns movies and episodes that a user has watched, sorted by most recent.

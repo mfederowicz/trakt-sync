@@ -33,7 +33,7 @@ func (m SyncRemoveFromCollectionHandler) Handle(options *str.Options, client *in
 	return nil
 }
 
-func (SyncRemoveFromCollectionHandler) syncRemoveFromCollection(client *internal.Client, options *str.Options, items *str.CollectionItems) (*str.CollectionRemoveResult, error) {
+func (SyncRemoveFromCollectionHandler) syncRemoveFromCollection(client *internal.Client, options *str.Options, items *str.ItemsList) (*str.CollectionRemoveResult, error) {
 	result, err := client.Sync.RemoveItemsFromCollection(
 		client.BuildCtxFromOptions(options),
 		items,

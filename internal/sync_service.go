@@ -201,7 +201,7 @@ func (s *SyncService) RemovePlaybackItem(ctx context.Context, id *int) (*str.Res
 // AddItemsToCollection add items to user's collection
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/add-to-collection/add-items-to-collection
-func (s *SyncService) AddItemsToCollection(ctx context.Context, items *str.CollectionItems) (*str.CollectionAddResult, error) {
+func (s *SyncService) AddItemsToCollection(ctx context.Context, items *str.ItemsList) (*str.CollectionAddResult, error) {
 	var url = "sync/collection"
 	printer.Println("add items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
@@ -263,7 +263,7 @@ func (s *SyncService) GetCollectedSeasons(ctx context.Context, options *uri.List
 // RemoveItemsFromCollection remove items from user's collection
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/remove-from-collection/remove-items-from-collection
-func (s *SyncService) RemoveItemsFromCollection(ctx context.Context, items *str.CollectionItems) (*str.CollectionRemoveResult, error) {
+func (s *SyncService) RemoveItemsFromCollection(ctx context.Context, items *str.ItemsList) (*str.CollectionRemoveResult, error) {
 	var url = "sync/collection/remove"
 	printer.Println("remove items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
@@ -304,3 +304,44 @@ func (s *SyncService) GetWatched(ctx context.Context, watchType *string, opts *u
 
 	return watched, resp, nil
 }
+
+// AddItemsToHistory add items to user's history
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/add-to-history/add-items-to-watched-history
+func (s *SyncService) AddItemsToHistory(ctx context.Context, items *str.ItemsList) (*str.HistoryAddResult, error) {
+	var url = "sync/history"
+	printer.Println("add items")
+	req, err := s.client.NewRequest(http.MethodPost, url, items)
+	if err != nil {
+		return nil, err
+	}
+
+	result := new(str.HistoryAddResult)
+	_, err = s.client.Do(ctx, req, result)
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
+
+// RemoveItemsFromHistory remove items from user's history
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/remove-from-history/remove-items-from-history
+func (s *SyncService) RemoveItemsFromHistory(ctx context.Context, items *str.ItemsList) (*str.HistoryRemoveResult, error) {
+	var url = "sync/history/remove"
+	printer.Println("remove items")
+	req, err := s.client.NewRequest(http.MethodPost, url, items)
+	if err != nil {
+		return nil, err
+	}
+
+	result := new(str.HistoryRemoveResult)
+	_, err = s.client.Do(ctx, req, result)
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
+

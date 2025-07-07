@@ -33,7 +33,7 @@ func (m SyncAddToCollectionHandler) Handle(options *str.Options, client *interna
 	return nil
 }
 
-func (SyncAddToCollectionHandler) syncAddToCollection(client *internal.Client, options *str.Options, items *str.CollectionItems) (*str.CollectionAddResult, error) {
+func (SyncAddToCollectionHandler) syncAddToCollection(client *internal.Client, options *str.Options, items *str.ItemsList) (*str.CollectionAddResult, error) {
 	result, err := client.Sync.AddItemsToCollection(
 		client.BuildCtxFromOptions(options),
 		items,

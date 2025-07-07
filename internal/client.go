@@ -298,7 +298,6 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 	}
 
 	resp, err := c.client.Do(req)
-
 	if err != nil {
 		return handleBareDoError(ctx, err)
 	}

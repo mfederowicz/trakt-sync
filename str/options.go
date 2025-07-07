@@ -5,6 +5,7 @@ package str
 type Options struct {
 	Action            string
 	CollectionItems   string
+	HistoryItems      string
 	Comment           string
 	CommentID         int
 	CommentType       string
