@@ -299,9 +299,9 @@ func convertKeysToString(keys []string, values url.Values) string {
 			if buf.Len() > consts.ZeroValue {
 				_ = buf.WriteByte('&')
 			}
-			_, _ = buf.WriteString(k)
+			_, _ = buf.WriteString(url.QueryEscape(k))
 			_ = buf.WriteByte('=')
-			_, _ = buf.WriteString(v)
+			_, _ = buf.WriteString(url.QueryEscape(v))
 		}
 	}
 	return buf.String()

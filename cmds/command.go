@@ -42,7 +42,7 @@ var Avflags = map[string]bool{
 	"certifications":     true,
 	"checkin":            true,
 	"collection":         true,
-	"collection_items":   true,
+	"items":   true,
 	"comment":            true,
 	"comment_id":         true,
 	"comment_type":       true,
@@ -767,8 +767,8 @@ func UpdateOptionsWithCommandSyncFlags(c *Command, options *str.Options) *str.Op
 		options.PlaybackID = *_syncPlaybackID
 	}
 
-	if len(*_syncCollectionItems) > consts.ZeroValue {
-		options.CollectionItems = *_syncCollectionItems
+	if len(*_syncItems) > consts.ZeroValue {
+		options.Items = *_syncItems
 	}
 
 	if *_syncID > consts.ZeroValue {

@@ -9,6 +9,7 @@ import (
 // usage strings
 const (
 	AddToCollection      = "add_to_collection"
+	AddToHistory         = "add_to_history"
 	ActionTypeAll        = "all"
 	Aliases              = "aliases"
 	AllDvd               = "all-dvd"
@@ -80,6 +81,7 @@ const (
 	Settings             = "settings"
 	ShowEpisode          = "show_episode"
 	Shows                = "shows"
+	Show                 = "show"
 	Season               = "season"
 	Seasons              = "seasons"
 	Stats                = "stats"

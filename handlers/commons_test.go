@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
+	"path/filepath"
 	"testing"
 	"time"
 
@@ -22,6 +24,19 @@ type TestSetup struct {
 	ServerURL string
 	Teardown  func()
 }
+
+const (
+	emptyTimeStr                     = `"0001-01-01T00:00:00Z"`
+	referenceTimeStr                 = `"2006-01-02T15:04:05Z"`
+	referenceTimeStrFractional       = `"2006-01-02T15:04:05.000Z"` // This format was returned by the Projects API before October 1, 2017.
+	referenceUnixTimeStr             = `1136214245`
+	referenceUnixTimeStrMilliSeconds = `1136214245000` // Millisecond-granular timestamps were introduced in the Audit log API.
+)
+
+var (
+	referenceTime = time.Date(2006, time.January, 02, 15, 04, 05, 0, time.UTC)
+	unixOrigin    = time.Unix(0, 0).In(time.UTC)
+)
 
 // setup sets up a test HTTP server along with a trakt.Client that is
 // configured to talk to that test server. Tests should register handlers on
@@ -51,6 +66,19 @@ func setup(t *testing.T) *TestSetup {
 		ServerURL: server.URL,
 		Teardown:  server.Close,
 	}
+}
+
+func testJsonItemsList(t *testing.T, c *CommonLogic, filename string, itemsList *str.ItemsList) {
+	t.Helper()
+	baseDir := filepath.Join("..", "testdata", filepath.Dir(filename))
+	filename = filepath.Base(filename) + ".json"
+	fullFilePath := filepath.Join(baseDir, filename)
+	src, err := os.ReadFile(fullFilePath)
+	if err != nil {
+		t.Fatalf("Bad filename path in test for %s: %v", filename, err)
+	}
+	c.ConvertBytesToItemsList(src, consts.AddToHistory, "movies")
+
 }
 
 func MuxUserSettings(t *testing.T, mux *http.ServeMux) *http.ServeMux {
@@ -308,4 +336,88 @@ func TestCurrnetDateString(t *testing.T) {
 	out := c.CurrentDateString(time.UTC.String(), true)
 	currentTime := time.Now().UTC().Truncate(time.Hour)
 	assert.Contains(t, out, currentTime.Format(time.RFC3339))
+}
+
+func TestListToHistoryItems(t *testing.T) {
+	testSetup := setup(t)
+	mux := testSetup.Mux
+	mux = MuxUserSettings(t, mux)
+	c := &CommonLogic{}
+	items := &str.ItemsList{}
+	items.Shows = &[]str.ExportlistItem{}
+	items.IDs = &[]int64{}
+	list := []*str.ExportlistItem{{
+		ID:        Ptr(int64(11041459005)),
+		WatchedAt: &str.Timestamp{referenceTime},
+		Type:      Ptr(consts.Episode),
+		Show: &str.Show{
+			Title: Ptr("Californication"),
+			Year:  Ptr(2007),
+			IDs: &str.IDs{
+				Trakt: Ptr(int64(1209)),
+				Slug:  Ptr("californication"),
+				Imdb:  Ptr("tt0904208"),
+				Tmdb:  Ptr(1215),
+				Tvdb:  Ptr(80349),
+			},
+		},
+		Episode: &str.Episode{
+			Season: Ptr(4),
+			Number: Ptr(2),
+			Title:  Ptr("Suicide Solution"),
+			IDs: &str.IDs{
+				Trakt: Ptr(int64(69468)),
+				Imdb:  Ptr("tt1656237"),
+				Tmdb:  Ptr(58188),
+				Tvdb:  Ptr(2350481),
+			},
+		},
+	},
+		{
+			ID:        Ptr(int64(110414590056)),
+			WatchedAt: &str.Timestamp{referenceTime},
+			Type:      Ptr(consts.Episode),
+			Show: &str.Show{
+				Title: Ptr("Californication"),
+				Year:  Ptr(2007),
+				IDs: &str.IDs{
+					Trakt: Ptr(int64(1210)),
+					Slug:  Ptr("californication"),
+					Imdb:  Ptr("tt0904208"),
+					Tmdb:  Ptr(1215),
+					Tvdb:  Ptr(80349),
+				},
+			},
+			Episode: &str.Episode{
+				Season: Ptr(4),
+				Number: Ptr(1),
+				Title:  Ptr("Suicide Solution"),
+				IDs: &str.IDs{
+					Trakt: Ptr(int64(69468)),
+					Imdb:  Ptr("tt1656237"),
+					Tmdb:  Ptr(58188),
+					Tvdb:  Ptr(2350481),
+				},
+			},
+		},
+	}
+	c.ListToHistoryItems(items, list, "shows")
+}
+
+func TestConvertBytesToItemsListEmptyByte(t *testing.T) {
+	testSetup := setup(t)
+	mux := testSetup.Mux
+	mux = MuxUserSettings(t, mux)
+	c := &CommonLogic{}
+	_, err := c.ConvertBytesToItemsList([]byte{}, consts.AddToHistory, consts.Movies)
+	assert.Contains(t, err.Error(), "unexpected end of JSON input")
+}
+
+func TestConvertBytesToItemsListFromFile(t *testing.T) {
+	testSetup := setup(t)
+	mux := testSetup.Mux
+	mux = MuxUserSettings(t, mux)
+	c := &CommonLogic{}
+	testJsonItemsList(t, c, "export_sync_history_movies", &str.ItemsList{})
+
 }

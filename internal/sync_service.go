@@ -308,9 +308,8 @@ func (s *SyncService) GetWatched(ctx context.Context, watchType *string, opts *u
 // AddItemsToHistory add items to user's history
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/add-to-history/add-items-to-watched-history
-func (s *SyncService) AddItemsToHistory(ctx context.Context, items *str.ItemsList) (*str.HistoryAddResult, error) {
+func (s *SyncService) AddItemsToHistory(ctx context.Context, items *str.HistoryItems) (*str.HistoryAddResult, error) {
 	var url = "sync/history"
-	printer.Println("add items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
 		return nil, err
@@ -328,7 +327,7 @@ func (s *SyncService) AddItemsToHistory(ctx context.Context, items *str.ItemsLis
 // RemoveItemsFromHistory remove items from user's history
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/remove-from-history/remove-items-from-history
-func (s *SyncService) RemoveItemsFromHistory(ctx context.Context, items *str.ItemsList) (*str.HistoryRemoveResult, error) {
+func (s *SyncService) RemoveItemsFromHistory(ctx context.Context, items *str.ItemsToRemove) (*str.HistoryRemoveResult, error) {
 	var url = "sync/history/remove"
 	printer.Println("remove items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
@@ -344,4 +343,3 @@ func (s *SyncService) RemoveItemsFromHistory(ctx context.Context, items *str.Ite
 
 	return result, nil
 }
-

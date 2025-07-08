@@ -16,7 +16,7 @@ type SyncRemoveFromCollectionHandler struct{ common CommonLogic }
 
 // Handle to handle sync: add_to_collection action
 func (m SyncRemoveFromCollectionHandler) Handle(options *str.Options, client *internal.Client) error {
-	items, err := m.common.ReadInput(options.CollectionItems)
+	items, err := m.common.ReadInput(*options)
 	if err != nil {
 		return err
 	}

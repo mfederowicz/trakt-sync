@@ -19,6 +19,7 @@ type Movie struct {
 	CommentCount          *int         `json:"comment_count,omitempty"`
 	UpdatedAt             *Timestamp   `json:"updated_at,omitempty"`
 	CollectedAt           *Timestamp   `json:"collected_at,omitempty"`
+	WatchedAt             *Timestamp   `json:"watched_at,omitempty"`
 	Language              *string      `json:"language,omitempty"`
 	Languages             *[]string    `json:"languages,omitempty"`
 	AvailableTranslations *[]string    `json:"available_translations,omitempty"`

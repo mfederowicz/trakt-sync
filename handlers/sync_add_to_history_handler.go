@@ -18,14 +18,13 @@ type SyncAddToHistoryHandler struct{ common CommonLogic }
 
 // Handle to handle sync: add_to_history action
 func (m SyncAddToHistoryHandler) Handle(options *str.Options, client *internal.Client) error {
-	items, err := m.common.ReadInput(options.HistoryItems)
+	items, err := m.common.ReadInput(*options)
 	if err != nil {
 		return err
 	}
-	//printer.Println("clean history")
-	toRemove := str.ItemsList{
-		IDs: items.IDs,
-	}
+	printer.Println("clean history")
+	toRemove := m.common.CreateItemsToRemove(items)
+
 	result, err := m.syncRemoveFromHistory(client, options, &toRemove)
 	if err != nil {
 		return fmt.Errorf("clean history error:%w", err)
@@ -37,9 +36,12 @@ func (m SyncAddToHistoryHandler) Handle(options *str.Options, client *internal.C
 	jsonData, _ := json.MarshalIndent(result, "", "  ")
 	writer.WriteJSON(options, jsonData)
 	time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+
 	printer.Println("add to history")
-	items.IDs = nil
-	addResult, err := m.syncAddToHistory(client, options, items)
+
+	toHistory := m.common.CreateItemsToAdd(items)
+
+	addResult, err := m.syncAddToHistory(client, options, &toHistory)
 	if err != nil {
 		return fmt.Errorf("add to history error:%w", err)
 	}
@@ -52,7 +54,7 @@ func (m SyncAddToHistoryHandler) Handle(options *str.Options, client *internal.C
 	return nil
 }
 
-func (SyncAddToHistoryHandler) syncRemoveFromHistory(client *internal.Client, options *str.Options, items *str.ItemsList) (*str.HistoryRemoveResult, error) {
+func (SyncAddToHistoryHandler) syncRemoveFromHistory(client *internal.Client, options *str.Options, items *str.ItemsToRemove) (*str.HistoryRemoveResult, error) {
 	result, err := client.Sync.RemoveItemsFromHistory(
 		client.BuildCtxFromOptions(options),
 		items,
@@ -64,7 +66,7 @@ func (SyncAddToHistoryHandler) syncRemoveFromHistory(client *internal.Client, op
 	return result, nil
 }
 
-func (SyncAddToHistoryHandler) syncAddToHistory(client *internal.Client, options *str.Options, items *str.ItemsList) (*str.HistoryAddResult, error) {
+func (SyncAddToHistoryHandler) syncAddToHistory(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.HistoryAddResult, error) {
 	result, err := client.Sync.AddItemsToHistory(
 		client.BuildCtxFromOptions(options),
 		items,

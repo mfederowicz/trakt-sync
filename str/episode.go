@@ -15,6 +15,7 @@ type Episode struct {
 	CommentCount          *int       `json:"comment_count,omitempty"`
 	FirstAired            *Timestamp `json:"first_aired,omitempty"`
 	LastWatchedAt         *Timestamp `json:"last_watched_at,omitempty"`
+	WatchedAt             *Timestamp `json:"watched_at,omitempty"`
 	UpdatedAt             *Timestamp `json:"updated_at,omitempty"`
 	CompletedAt           *Timestamp `json:"completed_at,omitempty"`
 	CollectedAt           *Timestamp `json:"collected_at,omitempty"`

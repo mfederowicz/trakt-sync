@@ -1,7 +1,9 @@
 // Package str used for structs
 package str
 
-import "github.com/mfederowicz/trakt-sync/consts"
+import (
+	"github.com/mfederowicz/trakt-sync/consts"
+)
 
 // ItemsList represents JSON items object
 type ItemsList struct {
@@ -18,6 +20,7 @@ func (i ItemsList) String() string {
 
 // Uniq make lists unique with oldest elements
 func (i ItemsList) Uniq() *ItemsList {
+
 	i.Movies = i.GetUniqueOldest(i.Movies)
 	i.Shows = i.GetUniqueOldest(i.Shows)
 	i.Seasons = i.GetUniqueOldest(i.Seasons)
@@ -35,13 +38,11 @@ func (ItemsList) GetUniqueOldest(items *[]ExportlistItem) *[]ExportlistItem {
 		if item.WatchedAt == nil {
 			continue // skip items with nil ID or WatchedAt
 		}
-
 		existing, found := unique[id]
-		if !found || item.WatchedAt.Before(existing.WatchedAt.Time) {
+		if !found || item.WatchedAt.After(existing.WatchedAt.Time) {
 			unique[id] = item
 		}
 	}
-
 	result := make([]ExportlistItem, consts.ZeroValue, len(unique))
 	for _, item := range unique {
 		result = append(result, item)

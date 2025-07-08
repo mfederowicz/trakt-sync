@@ -65,10 +65,132 @@ type CommonInterface interface {
 	CheckDates(from string, to string, tz string) string
 	ReadInput(items string) (*str.ItemsList, error)
 	ConvertBytesToColletionItems(data []byte) (*str.ItemsList, error)
+	UpdateHistoryListWithType(data []*str.ExportlistItem, strtype string) (*str.ItemsList, error)
+	FetchHistoryListSeasons(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 }
 
 // CommonLogic struct for common methods
 type CommonLogic struct{}
+
+// Media interface for helpers
+type Media interface {
+	str.Movie | str.Show | str.Episode | str.Season
+}
+
+// OnlySeasonsIDs helper for list of season ids object
+func (c CommonLogic) OnlySeasonsIDs(items *[]str.ExportlistItem) *[]str.Season {
+	result := onlyIDs[str.Season](*items)
+	return &result
+}
+
+func (c CommonLogic) OnlyMoviesIDs(items *[]str.ExportlistItem) *[]str.Movie {
+	result := onlyIDs[str.Movie](*items)
+	return &result
+}
+
+func (c CommonLogic) OnlyShowsIDs(items *[]str.ExportlistItem) *[]str.Show {
+	result := onlyIDs[str.Show](*items)
+	return &result
+}
+
+func (c CommonLogic) OnlyEpisodesIDs(items *[]str.ExportlistItem) *[]str.Episode {
+	result := onlyIDs[str.Episode](*items)
+	return &result
+}
+
+// onlyIDs is a helper function to extract each type objects with only ids
+func onlyIDs[T Media](items []str.ExportlistItem) []T {
+	result := make([]T, 0, len(items))
+
+	var zero T
+
+	switch any(zero).(type) {
+	case str.Movie:
+		for _, item := range items {
+			result = append(result, any(str.Movie{IDs: item.IDs}).(T))
+		}
+	case str.Show:
+		for _, item := range items {
+			if len(*item.Seasons) > 0 {
+				updatedSeasons := SeasonsWithEpisodeNumbersOnly(item.Seasons)
+				result = append(result, any(str.Show{IDs: item.IDs, Seasons: updatedSeasons}).(T))
+			} else {
+				result = append(result, any(str.Show{IDs: item.IDs}).(T))
+			}
+		}
+	case str.Episode:
+		for _, item := range items {
+			result = append(result, any(str.Episode{IDs: item.IDs}).(T))
+		}
+	case str.Season:
+		for _, item := range items {
+			result = append(result, any(str.Season{IDs: item.IDs}).(T))
+		}
+	default:
+		panic("unsupported type")
+	}
+
+	return result
+}
+
+// CreateItemsToRemove helper to create list of items to remove from history
+func (c CommonLogic) CreateItemsToRemove(items *str.ItemsList) str.ItemsToRemove {
+
+	return str.ItemsToRemove{
+		Movies:   c.OnlyMoviesIDs(items.Movies),
+		Shows:    c.OnlyShowsIDs(items.Shows),
+		Seasons:  c.OnlySeasonsIDs(items.Seasons),
+		Episodes: c.OnlyEpisodesIDs(items.Episodes),
+	}
+
+}
+
+// CreateItemsToAdd helper to create list of items to add to history
+func (c CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
+	movies := []str.Movie{}
+	for _, m := range *items.Movies {
+		movie := str.Movie{
+			Title:     m.Title,
+			Year:      m.Year,
+			IDs:       m.IDs,
+			WatchedAt: m.WatchedAt,
+		}
+		movies = append(movies, movie)
+	}
+	shows := []str.Show{}
+	for _, m := range *items.Shows {
+		show := str.Show{
+			Title:   m.Title,
+			Year:    m.Year,
+			IDs:     m.IDs,
+			Seasons: m.Seasons,
+		}
+		shows = append(shows, show)
+	}
+	seasons := []str.Season{}
+	for _, m := range *items.Seasons {
+		season := str.Season{
+			IDs:       m.IDs,
+			WatchedAt: m.WatchedAt,
+		}
+		seasons = append(seasons, season)
+	}
+	episodes := []str.Episode{}
+	for _, m := range *items.Episodes {
+		episode := str.Episode{
+			IDs:       m.IDs,
+			WatchedAt: m.WatchedAt,
+		}
+		episodes = append(episodes, episode)
+	}
+
+	return str.HistoryItems{
+		Movies:   &movies,
+		Shows:    &shows,
+		Seasons:  &seasons,
+		Episodes: &episodes,
+	}
+}
 
 // CreateCheckin helper function to create checkin object
 func (c CommonLogic) CreateCheckin(client *internal.Client, options *str.Options) (*str.Checkin, error) {
@@ -873,7 +995,7 @@ func (CommonLogic) CheckDates(from string, to string, tz string) error {
 }
 
 // ConvertBytesToItemsList convert bytes to struct
-func (CommonLogic) ConvertBytesToItemsList(data []byte) (*str.ItemsList, error) {
+func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype string) (*str.ItemsList, error) {
 	var list []*str.ExportlistItem
 	if err := json.Unmarshal(data, &list); err != nil {
 		return nil, err
@@ -885,8 +1007,24 @@ func (CommonLogic) ConvertBytesToItemsList(data []byte) (*str.ItemsList, error) 
 	items.Seasons = &[]str.ExportlistItem{}
 	items.Episodes = &[]str.ExportlistItem{}
 	items.IDs = &[]int64{}
+	switch action {
+	case consts.AddToHistory:
+		items = c.ListToHistoryItems(items, list, stype)
+	case consts.AddToCollection:
+		items = c.ListToCollectionItems(items, list, stype)
+	default:
+		return nil, errors.New(consts.UnknownItemsListType)
+	}
 
+	return items.Uniq(), nil
+}
+
+func (c *CommonLogic) ListToCollectionItems(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
 	for _, val := range list {
+		if val.ID != nil {
+			*items.IDs = append(*items.IDs, *val.ID)
+		}
+
 		if val.Movie != nil {
 			e := str.ExportlistItem{}
 			e.Title = val.Movie.Title
@@ -908,29 +1046,180 @@ func (CommonLogic) ConvertBytesToItemsList(data []byte) (*str.ItemsList, error) 
 			e.IDs = val.Season.IDs
 			val.Season.UpdateCollectedData(val)
 			*items.Seasons = append(*items.Seasons, e)
+
 		}
 		if val.Episode != nil {
 			e := str.ExportlistItem{}
 			e.IDs = val.Episode.IDs
 			e.UpdateCollectedData(val)
 			*items.Episodes = append(*items.Episodes, e)
+
 		}
 
-		*items.IDs = append(*items.IDs, *val.ID)
 	}
-	
-	return items.Uniq(), nil
+
+	return items
+
+}
+
+// ListToHistoryItems convert list to history items to struct
+func (c *CommonLogic) ListToHistoryItems(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
+	// Group by movie
+	moviesMap := make(map[int64]str.OutputMovie)
+	// Group by show
+	showsMap := make(map[int64]str.OutputShow)
+	// Group by season
+	seasonsMap := make(map[int64]str.OutputSeason)
+	// Group by episodes
+	episodesMap := make(map[int64]str.OutputEpisode)
+
+	for _, item := range list {
+		switch stype {
+		case consts.Movies:
+			movieID := item.Movie.IDs.Trakt
+			if item.ID != nil {
+				*items.IDs = append(*items.IDs, *item.ID)
+			}
+			if movieID != nil {
+				movie, exists := moviesMap[*movieID]
+				if !exists {
+					movie = str.OutputMovie{
+						Title:     item.Movie.Title,
+						Year:      item.Movie.Year,
+						IDs:       item.Movie.IDs,
+						WatchedAt: item.WatchedAt,
+					}
+				}
+
+				moviesMap[*movieID] = movie
+			}
+
+		case consts.Shows:
+
+			showID := item.Show.IDs.Trakt
+			if showID != nil {
+				showIDnp := *showID
+				if item.ID != nil {
+					*items.IDs = append(*items.IDs, *item.ID)
+				}
+				show, exists := showsMap[showIDnp]
+				if !exists {
+					show = str.OutputShow{
+						Title:     item.Show.Title,
+						Year:      item.Show.Year,
+						IDs:       item.Show.IDs,
+						Seasons:   &[]str.Season{},
+						WatchedAt: item.WatchedAt,
+					}
+				}
+				// Initialize seasons if nil
+				if show.Seasons == nil {
+					empty := []str.Season{}
+					show.Seasons = &empty
+				}
+
+				// Find or create season
+				var season *str.Season
+
+				for i := range *show.Seasons {
+					if *(*show.Seasons)[i].Number == *item.Episode.Season {
+						season = &(*show.Seasons)[i]
+						break
+					}
+				}
+
+				if season == nil {
+					newSeason := str.Season{
+						Number: item.Episode.Season,
+					}
+					*show.Seasons = append(*show.Seasons, newSeason)
+					season = &(*show.Seasons)[len(*show.Seasons)-1]
+					season.Episodes = &[]str.Episode{}
+				}
+
+				// Add episode
+				newEpisode := &str.Episode{Number: item.Episode.Number, WatchedAt: item.WatchedAt}
+				*season.Episodes = append(*season.Episodes, *newEpisode)
+
+				showsMap[showIDnp] = show
+			}
+
+		case consts.Seasons:
+			seasonID := item.Season.IDs.Trakt
+			if seasonID != nil {
+				season, exists := seasonsMap[*seasonID]
+				if !exists {
+					season = str.OutputSeason{
+						Title:     item.Season.Title,
+						IDs:       item.Season.IDs,
+						WatchedAt: item.WatchedAt,
+					}
+				}
+				seasonsMap[*seasonID] = season
+			}
+		case consts.Episodes:
+			episodeID := item.Episode.IDs.Trakt
+			if episodeID != nil {
+				episode, exists := episodesMap[*episodeID]
+				if !exists {
+					episode = str.OutputEpisode{
+						Title:     item.Episode.Title,
+						IDs:       item.Episode.IDs,
+						WatchedAt: item.WatchedAt,
+					}
+				}
+				episodesMap[*episodeID] = episode
+			}
+		default:
+			return &str.ItemsList{}
+		}
+	}
+
+	for _, s := range episodesMap {
+		*items.Episodes = append(*items.Episodes, str.ExportlistItem{
+			Episode:   &str.Episode{Title: s.Title, IDs: s.IDs},
+			WatchedAt: s.WatchedAt,
+			IDs:       s.IDs,
+		})
+	}
+	for _, s := range seasonsMap {
+		*items.Seasons = append(*items.Seasons, str.ExportlistItem{
+			Season:    &str.Season{Title: s.Title, IDs: s.IDs},
+			WatchedAt: s.WatchedAt,
+			IDs:       s.IDs,
+		})
+	}
+	for _, s := range moviesMap {
+		*items.Movies = append(*items.Movies, str.ExportlistItem{
+			Movie:     &str.Movie{Title: s.Title, Year: s.Year, IDs: s.IDs},
+			WatchedAt: s.WatchedAt,
+			IDs:       s.IDs,
+		})
+	}
+
+	for _, s := range showsMap {
+		*items.Shows = append(*items.Shows, str.ExportlistItem{
+			Show:      &str.Show{Title: s.Title, Year: s.Year, IDs: s.IDs},
+			Seasons:   s.Seasons,
+			WatchedAt: s.WatchedAt,
+			IDs:       s.IDs,
+		})
+
+	}
+
+	return items
 }
 
 // ReadInput read data from stdin or from file
-func (c CommonLogic) ReadInput(filePath string) (*str.ItemsList, error) {
+func (c CommonLogic) ReadInput(options str.Options) (*str.ItemsList, error) {
+	filePath := options.Items
 	if filePath != consts.EmptyString {
 		data, err := os.ReadFile(filePath)
 		if err != nil {
 			return nil, fmt.Errorf("failed to read file %s: %w", filePath, err)
 		}
 
-		return c.ConvertBytesToItemsList(data)
+		return c.ConvertBytesToItemsList(data, options.Action, options.Type)
 	}
 
 	// Check if there's data in stdin to avoid blocking
@@ -950,13 +1239,12 @@ func (c CommonLogic) ReadInput(filePath string) (*str.ItemsList, error) {
 		return nil, fmt.Errorf("failed to read from stdin: %w", err)
 	}
 
-	return c.ConvertBytesToItemsList(data)
+	return c.ConvertBytesToItemsList(data, options.Action, options.Type)
 }
 
 // FetchHistoryList returns movies and episodes that a user has watched, sorted by most recent.
 func (c CommonLogic) FetchHistoryList(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, StartAt: options.StartDate, EndAt: options.EndDate, Extended: options.ExtendedInfo}
-
 	list, resp, err := client.Sync.GetWatchedHistory(
 		client.BuildCtxFromOptions(options),
 		&options.TraktID,
@@ -984,4 +1272,104 @@ func (c CommonLogic) FetchHistoryList(client *internal.Client, options *str.Opti
 	}
 
 	return list, nil
+}
+
+func (c CommonLogic) UpdateHistoryListWithType(data []*str.ExportlistItem, strtype *string) []*str.ExportlistItem {
+	list := []*str.ExportlistItem{}
+
+	newType := consts.EmptyString
+	switch *strtype {
+	case consts.Shows:
+		newType = consts.Show
+	case consts.Episodes:
+		newType = consts.Episode
+	case consts.Movies:
+		newType = consts.Movie
+	case consts.Seasons:
+		newType = consts.Season
+	default:
+		newType = consts.Movie
+	}
+
+	for _, item := range data {
+		item.Type = &newType
+		list = append(list, item)
+	}
+
+	return list
+}
+
+func (c CommonLogic) FetchHistoryListSeasons(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+
+	// fetch history shows
+	options.Type = consts.Shows
+	_, err := c.FetchHistoryList(client, options, page)
+
+	if err != nil {
+		return nil, err
+	}
+	// for _, val := range episodes {
+	// 	//fmt.Println(*val.ID)
+	// }
+
+	// collected := []str.Season{}
+	// opts := uri.ListOptions{Extended: options.ExtendedInfo}
+	// for _, val := range shows {
+	// 	time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+	//
+	// 	seasonsNumbers := []int{}
+	// 	for _, sitem := range *val.Seasons {
+	// 		seasonsNumbers = append(seasonsNumbers, *sitem.Number)
+	// 	}
+	//
+	// 	seasons, _, err := client.Shows.GetAllSeasonsForShow(client.BuildCtxFromOptions(options), val.Show.IDs.Slug, &opts)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	for _, sitem := range seasons {
+	// 		if slices.Contains(seasonsNumbers, *sitem.Number) {
+	// 			s := str.Season{}
+	// 			s.IDs = sitem.IDs
+	// 			collected = append(collected, s)
+	// 		}
+	// 	}
+	// }
+	// fmt.Println(collected)
+
+	return nil, nil
+
+}
+
+// Ptr is a helper routine that allocates a new T value
+// to store v and returns a pointer to it.
+func Ptr[T any](v T) *T {
+	return &v
+}
+
+// SeasonsWithEpisodeNumbersOnly is a helper function to make seasons lists with episodes contains numbers
+func SeasonsWithEpisodeNumbersOnly(src *[]str.Season) *[]str.Season {
+
+	if src == nil {
+		return nil
+	}
+
+	seasonsCopy := make([]str.Season, len(*src))
+
+	for i, season := range *src {
+		seasonsCopy[i] = season // shallow copy
+
+		if season.Episodes != nil {
+			eps := make([]str.Episode, len(*season.Episodes))
+
+			for j, ep := range *season.Episodes {
+				eps[j] = str.Episode{
+					Number: ep.Number,
+				}
+			}
+
+			seasonsCopy[i].Episodes = &eps
+		}
+	}
+
+	return &seasonsCopy
 }

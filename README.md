@@ -1007,18 +1007,18 @@ $ ./trakt-sync sync -a get_collection -t episodes -ex metadata
 $ ./trakt-sync sync -a get_collection -t seasons -ex metadata
 ```
 
-##### Add to collection - via -collection_items flag
+##### Add to collection - via -items flag
 ```console
-$ ./trakt-sync sync -a add_to_collection -collection_items export_sync_collection_movies.json
+$ ./trakt-sync sync -a add_to_collection -items export_sync_collection_movies.json
 ```
 ```console
-$ ./trakt-sync sync -a add_to_collection -collection_items export_sync_collection_shows.json
+$ ./trakt-sync sync -a add_to_collection -items export_sync_collection_shows.json
 ```
 ```console
-$ ./trakt-sync sync -a add_to_collection -collection_items export_sync_collection_episodes.json
+$ ./trakt-sync sync -a add_to_collection -items export_sync_collection_episodes.json
 ```
 ```console
-$ ./trakt-sync sync -a add_to_collection -collection_items export_sync_collection_seasons.json
+$ ./trakt-sync sync -a add_to_collection -items export_sync_collection_seasons.json
 ```
 ##### Add to collection - via stdin
 ```console
@@ -1034,9 +1034,9 @@ $ cat export_sync_collection_episodes.json | ./trakt-sync sync -a add_to_collect
 $ cat export_sync_collection_seasons.json | ./trakt-sync sync -a add_to_collection
 ```
 
-##### Remove from collection - via -collection_items flag
+##### Remove from collection - via -items flag
 ```console
-$ ./trakt-sync sync -a remove_from_collection -collection_items export_sync_collection_movies.json
+$ ./trakt-sync sync -a remove_from_collection -items export_sync_collection_movies.json
 ```
 ```console
 ```
@@ -1080,6 +1080,35 @@ $ ./trakt-sync sync -a get_history -t shows
 ```console
 $ ./trakt-sync sync -a get_history -t episodes
 ```
+
+##### Add to history - via -items flag
+```console
+$ ./trakt-sync sync -a add_to_history -items export_sync_history_movies.json
+```
+```console
+$ ./trakt-sync sync -a add_to_history -items export_sync_history_shows.json
+```
+```console
+$ ./trakt-sync sync -a add_to_history -items export_sync_history_episode.json
+```
+```console
+$ ./trakt-sync sync -a add_to_history -items export_sync_history_seasons.json
+```
+
+##### Add to history - via stdin
+```console
+$ cat export_sync_history_movies.json | ./trakt-sync sync -a add_to_history
+```
+```console
+$ cat export_sync_history_shows.json | ./trakt-sync sync -a add_to_history
+```
+```console
+$ cat export_sync_history_episodes.json | ./trakt-sync sync -a add_to_history
+```
+```console
+$ cat export_sync_history_seasons.json | ./trakt-sync sync -a add_to_history
+```
+
 
 #### users:
 

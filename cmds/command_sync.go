@@ -10,17 +10,17 @@ import (
 )
 
 var (
-	_syncAction          = SyncCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
-	_syncStartAt         = SyncCmd.Flag.String("start_at", cfg.DefaultConfig().StartAt, consts.StartAtUsage)
-	_syncEndAt           = SyncCmd.Flag.String("end_at", cfg.DefaultConfig().EndAt, consts.EndAtUsage)
-	_syncPlaybackID      = SyncCmd.Flag.Int("playback_id", cfg.DefaultConfig().PlaybackID, consts.PlaybackIDUsage)
-	_syncCollectionItems = SyncCmd.Flag.String("collection_items", consts.EmptyString, consts.CollectionItemsUsage)
-	_syncID              = SyncCmd.Flag.Int("i", cfg.DefaultConfig().TraktID, consts.TraktIDUsage)
+	_syncAction     = SyncCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_syncStartAt    = SyncCmd.Flag.String("start_at", cfg.DefaultConfig().StartAt, consts.StartAtUsage)
+	_syncEndAt      = SyncCmd.Flag.String("end_at", cfg.DefaultConfig().EndAt, consts.EndAtUsage)
+	_syncPlaybackID = SyncCmd.Flag.Int("playback_id", cfg.DefaultConfig().PlaybackID, consts.PlaybackIDUsage)
+	_syncItems      = SyncCmd.Flag.String("items", consts.EmptyString, consts.ItemsUsage)
+	_syncID         = SyncCmd.Flag.Int("i", cfg.DefaultConfig().TraktID, consts.TraktIDUsage)
 
 	validSyncActions = []string{
 		"last_activities", "playback", "remove_playback", "get_collection",
 		"add_to_collection", "remove_from_collection", "get_watched",
-		"get_history"}
+		"get_history","add_to_history"}
 )
 
 // SyncCmd returns movies and episodes that a user has watched, sorted by most recent.

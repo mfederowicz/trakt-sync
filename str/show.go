@@ -26,6 +26,7 @@ type Show struct {
 	Languages             *[]string  `json:"languages,omitempty"`
 	AvailableTranslations *[]string  `json:"available_translations,omitempty"`
 	Genres                *[]string  `json:"genres,omitempty"`
+	Seasons               *[]Season  `json:"seasons,omitempty"`
 	AiredEpisodes         *int       `json:"aired_episodes,omitempty"`
 	MediaType             *string    `json:"media_type,omitempty"`
 	Resolution            *string    `json:"resolution,omitempty"`
