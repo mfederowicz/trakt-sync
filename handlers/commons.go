@@ -66,7 +66,6 @@ type CommonInterface interface {
 	ReadInput(items string) (*str.ItemsList, error)
 	ConvertBytesToColletionItems(data []byte) (*str.ItemsList, error)
 	UpdateHistoryListWithType(data []*str.ExportlistItem, strtype string) (*str.ItemsList, error)
-	FetchHistoryListSeasons(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 }
 
 // CommonLogic struct for common methods
@@ -78,22 +77,25 @@ type Media interface {
 }
 
 // OnlySeasonsIDs helper for list of season ids object
-func (c CommonLogic) OnlySeasonsIDs(items *[]str.ExportlistItem) *[]str.Season {
+func (CommonLogic) OnlySeasonsIDs(items *[]str.ExportlistItem) *[]str.Season {
 	result := onlyIDs[str.Season](*items)
 	return &result
 }
 
-func (c CommonLogic) OnlyMoviesIDs(items *[]str.ExportlistItem) *[]str.Movie {
+// OnlyMoviesIDs helper for list of movies ids object
+func (CommonLogic) OnlyMoviesIDs(items *[]str.ExportlistItem) *[]str.Movie {
 	result := onlyIDs[str.Movie](*items)
 	return &result
 }
 
-func (c CommonLogic) OnlyShowsIDs(items *[]str.ExportlistItem) *[]str.Show {
+// OnlyShowsIDs helper for list of shows ids object
+func (CommonLogic) OnlyShowsIDs(items *[]str.ExportlistItem) *[]str.Show {
 	result := onlyIDs[str.Show](*items)
 	return &result
 }
 
-func (c CommonLogic) OnlyEpisodesIDs(items *[]str.ExportlistItem) *[]str.Episode {
+// OnlyEpisodesIDs helper for list of episodes ids object
+func (CommonLogic) OnlyEpisodesIDs(items *[]str.ExportlistItem) *[]str.Episode {
 	result := onlyIDs[str.Episode](*items)
 	return &result
 }
@@ -135,18 +137,16 @@ func onlyIDs[T Media](items []str.ExportlistItem) []T {
 
 // CreateItemsToRemove helper to create list of items to remove from history
 func (c CommonLogic) CreateItemsToRemove(items *str.ItemsList) str.ItemsToRemove {
-
 	return str.ItemsToRemove{
 		Movies:   c.OnlyMoviesIDs(items.Movies),
 		Shows:    c.OnlyShowsIDs(items.Shows),
 		Seasons:  c.OnlySeasonsIDs(items.Seasons),
 		Episodes: c.OnlyEpisodesIDs(items.Episodes),
 	}
-
 }
 
 // CreateItemsToAdd helper to create list of items to add to history
-func (c CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
+func (CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 	movies := []str.Movie{}
 	for _, m := range *items.Movies {
 		movie := str.Movie{
@@ -1017,10 +1017,10 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 	default:
 		return nil, errors.New(consts.UnknownItemsListType)
 	}
-
 }
 
-func (c *CommonLogic) ListToCollectionItems(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
+// ListToCollectionItems helper function to convert one list to another
+func (*CommonLogic) ListToCollectionItems(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
 	for _, val := range list {
 		if val.ID != nil {
 			*items.IDs = append(*items.IDs, *val.ID)
@@ -1047,32 +1047,28 @@ func (c *CommonLogic) ListToCollectionItems(items *str.ItemsList, list []*str.Ex
 			e.IDs = val.Season.IDs
 			val.Season.UpdateCollectedData(val)
 			*items.Seasons = append(*items.Seasons, e)
-
 		}
 		if val.Episode != nil && stype == consts.Episodes {
 			e := str.ExportlistItem{}
 			e.IDs = val.Episode.IDs
 			e.UpdateCollectedData(val)
 			*items.Episodes = append(*items.Episodes, e)
-
 		}
-
 	}
 
 	return items
-
 }
 
 // ListToHistoryItems convert list to history items to struct
-func (c *CommonLogic) ListToHistoryItems(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
+func (*CommonLogic) ListToHistoryItems(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
 	// Group by movie
-	moviesMap := make(map[int64]str.OutputMovie)
+	moviesMap := map[int64]str.OutputMovie{}
 	// Group by show
-	showsMap := make(map[int64]str.OutputShow)
+	showsMap := map[int64]str.OutputShow{}
 	// Group by season
-	seasonsMap := make(map[int64]str.OutputSeason)
+	seasonsMap := map[int64]str.OutputSeason{}
 	// Group by episodes
-	episodesMap := make(map[int64]str.OutputEpisode)
+	episodesMap := map[int64]str.OutputEpisode{}
 
 	for _, item := range list {
 		switch stype {
@@ -1205,7 +1201,6 @@ func (c *CommonLogic) ListToHistoryItems(items *str.ItemsList, list []*str.Expor
 			WatchedAt: s.WatchedAt,
 			IDs:       s.IDs,
 		})
-
 	}
 
 	return items
@@ -1275,7 +1270,8 @@ func (c CommonLogic) FetchHistoryList(client *internal.Client, options *str.Opti
 	return list, nil
 }
 
-func (c CommonLogic) UpdateHistoryListWithType(data []*str.ExportlistItem, strtype *string) []*str.ExportlistItem {
+// UpdateHistoryListWithType helper function to update History list with new type
+func (CommonLogic) UpdateHistoryListWithType(data []*str.ExportlistItem, strtype *string) []*str.ExportlistItem {
 	list := []*str.ExportlistItem{}
 
 	newType := consts.EmptyString
@@ -1300,47 +1296,6 @@ func (c CommonLogic) UpdateHistoryListWithType(data []*str.ExportlistItem, strty
 	return list
 }
 
-func (c CommonLogic) FetchHistoryListSeasons(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
-
-	// fetch history shows
-	options.Type = consts.Shows
-	_, err := c.FetchHistoryList(client, options, page)
-
-	if err != nil {
-		return nil, err
-	}
-	// for _, val := range episodes {
-	// 	//fmt.Println(*val.ID)
-	// }
-
-	// collected := []str.Season{}
-	// opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	// for _, val := range shows {
-	// 	time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
-	//
-	// 	seasonsNumbers := []int{}
-	// 	for _, sitem := range *val.Seasons {
-	// 		seasonsNumbers = append(seasonsNumbers, *sitem.Number)
-	// 	}
-	//
-	// 	seasons, _, err := client.Shows.GetAllSeasonsForShow(client.BuildCtxFromOptions(options), val.Show.IDs.Slug, &opts)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	for _, sitem := range seasons {
-	// 		if slices.Contains(seasonsNumbers, *sitem.Number) {
-	// 			s := str.Season{}
-	// 			s.IDs = sitem.IDs
-	// 			collected = append(collected, s)
-	// 		}
-	// 	}
-	// }
-	// fmt.Println(collected)
-
-	return nil, nil
-
-}
-
 // Ptr is a helper routine that allocates a new T value
 // to store v and returns a pointer to it.
 func Ptr[T any](v T) *T {
@@ -1349,7 +1304,6 @@ func Ptr[T any](v T) *T {
 
 // SeasonsWithEpisodeNumbersOnly is a helper function to make seasons lists with episodes contains numbers
 func SeasonsWithEpisodeNumbersOnly(src *[]str.Season) *[]str.Season {
-
 	if src == nil {
 		return nil
 	}

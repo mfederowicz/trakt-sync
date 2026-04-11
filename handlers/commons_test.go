@@ -68,7 +68,7 @@ func setup(t *testing.T) *TestSetup {
 	}
 }
 
-func testJsonItemsList(t *testing.T, c *CommonLogic, filename string, itemsList *str.ItemsList) {
+func testJSONItemsList(t *testing.T, c *CommonLogic, filename string, _ *str.ItemsList) {
 	t.Helper()
 	baseDir := filepath.Join("..", "testdata", filepath.Dir(filename))
 	filename = filepath.Base(filename) + ".json"
@@ -78,7 +78,6 @@ func testJsonItemsList(t *testing.T, c *CommonLogic, filename string, itemsList 
 		t.Fatalf("Bad filename path in test for %s: %v", filename, err)
 	}
 	c.ConvertBytesToItemsList(src, consts.AddToHistory, "movies")
-
 }
 
 func MuxUserSettings(t *testing.T, mux *http.ServeMux) *http.ServeMux {
@@ -418,6 +417,5 @@ func TestConvertBytesToItemsListFromFile(t *testing.T) {
 	mux := testSetup.Mux
 	mux = MuxUserSettings(t, mux)
 	c := &CommonLogic{}
-	testJsonItemsList(t, c, "export_sync_history_movies", &str.ItemsList{})
-
+	testJSONItemsList(t, c, "export_sync_history_movies", &str.ItemsList{})
 }

@@ -20,7 +20,7 @@ var (
 	validSyncActions = []string{
 		"last_activities", "playback", "remove_playback", "get_collection",
 		"add_to_collection", "remove_from_collection", "get_watched",
-		"get_history","add_to_history"}
+		"get_history", "add_to_history"}
 )
 
 // SyncCmd returns movies and episodes that a user has watched, sorted by most recent.

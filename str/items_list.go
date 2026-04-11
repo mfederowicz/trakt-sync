@@ -20,7 +20,6 @@ func (i ItemsList) String() string {
 
 // Uniq make lists unique with oldest elements
 func (i ItemsList) Uniq() *ItemsList {
-
 	i.Movies = i.GetUniqueOldest(i.Movies)
 	i.Shows = i.GetUniqueOldest(i.Shows)
 	i.Seasons = i.GetUniqueOldest(i.Seasons)
@@ -31,7 +30,7 @@ func (i ItemsList) Uniq() *ItemsList {
 
 // GetUniqueOldest returns a unique slice of Items, keeping the one with the oldest WatchedAt per ID.
 func (ItemsList) GetUniqueOldest(items *[]ExportlistItem) *[]ExportlistItem {
-	unique := make(map[int64]ExportlistItem)
+	unique := map[int64]ExportlistItem{}
 
 	for _, item := range *items {
 		id := *item.IDs.Trakt
