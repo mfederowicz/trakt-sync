@@ -1010,13 +1010,14 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 	switch action {
 	case consts.AddToHistory:
 		items = c.ListToHistoryItems(items, list, stype)
-	case consts.AddToCollection:
+		return items.Uniq(), nil
+	case consts.AddToCollection, consts.RemoveFromCollection:
 		items = c.ListToCollectionItems(items, list, stype)
+		return items, nil
 	default:
 		return nil, errors.New(consts.UnknownItemsListType)
 	}
 
-	return items.Uniq(), nil
 }
 
 func (c *CommonLogic) ListToCollectionItems(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
@@ -1025,7 +1026,7 @@ func (c *CommonLogic) ListToCollectionItems(items *str.ItemsList, list []*str.Ex
 			*items.IDs = append(*items.IDs, *val.ID)
 		}
 
-		if val.Movie != nil {
+		if val.Movie != nil && stype == consts.Movies {
 			e := str.ExportlistItem{}
 			e.Title = val.Movie.Title
 			e.Year = val.Movie.Year
@@ -1033,7 +1034,7 @@ func (c *CommonLogic) ListToCollectionItems(items *str.ItemsList, list []*str.Ex
 			e.UpdateCollectedData(val)
 			*items.Movies = append(*items.Movies, e)
 		}
-		if val.Show != nil {
+		if val.Show != nil && stype == consts.Shows {
 			e := str.ExportlistItem{}
 			e.Title = val.Show.Title
 			e.Year = val.Show.Year
@@ -1041,14 +1042,14 @@ func (c *CommonLogic) ListToCollectionItems(items *str.ItemsList, list []*str.Ex
 			e.UpdateCollectedData(val)
 			*items.Shows = append(*items.Shows, e)
 		}
-		if val.Season != nil {
+		if val.Season != nil && stype == consts.Shows {
 			e := str.ExportlistItem{}
 			e.IDs = val.Season.IDs
 			val.Season.UpdateCollectedData(val)
 			*items.Seasons = append(*items.Seasons, e)
 
 		}
-		if val.Episode != nil {
+		if val.Episode != nil && stype == consts.Episodes {
 			e := str.ExportlistItem{}
 			e.IDs = val.Episode.IDs
 			e.UpdateCollectedData(val)

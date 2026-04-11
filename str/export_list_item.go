@@ -114,6 +114,9 @@ func (i *ExportlistItem) UpdateCollectedData(item *ExportlistItem) {
 	if item.CollectedAt != nil {
 		i.CollectedAt = item.CollectedAt.UTC()
 	}
+	if item.LastCollectedAt != nil {
+		i.CollectedAt = item.LastCollectedAt.UTC()
+	}
 
 	if item.Metadata != nil {
 		i.MediaType = item.Metadata.MediaType
@@ -132,6 +135,7 @@ func (i *ExportlistItem) UpdateCollectedData(item *ExportlistItem) {
 				s.Episodes = &[]Episode{}
 				for _, ep := range *season.Episodes {
 					e := Episode{}
+					e.CollectedAt = ep.CollectedAt.UTC()
 					e.Number = ep.Number
 					e.MediaType = ep.Metadata.MediaType
 					e.Resolution = ep.Metadata.Resolution

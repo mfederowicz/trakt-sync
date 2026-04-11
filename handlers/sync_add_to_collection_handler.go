@@ -25,7 +25,7 @@ func (m SyncAddToCollectionHandler) Handle(options *str.Options, client *interna
 	if err != nil {
 		return fmt.Errorf("add to collection error:%w", err)
 	}
-
+	
 	print("write result to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(result, "", "  ")
 	writer.WriteJSON(options, jsonData)
