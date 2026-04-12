@@ -38,6 +38,7 @@ const (
 	GetCollection        = "get_collection"
 	GetWatched           = "get_watched"
 	GetHistory           = "get_history"
+	GetRatings           = "get_ratings"
 	History              = "history"
 	IDLookup             = "id-lookup"
 	ImdbFormat           = "imdb"

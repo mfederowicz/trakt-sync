@@ -55,6 +55,7 @@ type ListOptions struct {
 	CountSpecials     string           `url:"count_specials,omitempty"`
 	StartAt           string           `url:"start_at,omitempty"`
 	EndAt             string           `url:"end_at,omitempty"`
+	Rating            []string         `url:"rating,omitempty"`
 }
 
 // AddQuery adds query parameters to s.

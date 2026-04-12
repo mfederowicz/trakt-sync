@@ -91,6 +91,7 @@ const (
 	PrivacyUsage                 = "allow to overwrite privacy"
 	ProgressUsage                = "progress 12.56"
 	QueryUsage                   = "allow use selected query"
+	RatingUsage                  = "allow to overwrite rating"
 	RangeFormatDigits            = "%d-%d"
 	RangeFormatFloats            = "%.1f-%.1f"
 	Recent                       = "recent"

@@ -20,7 +20,7 @@ var (
 	validSyncActions = []string{
 		"last_activities", "playback", "remove_playback", "get_collection",
 		"add_to_collection", "remove_from_collection", "get_watched",
-		"get_history", "add_to_history"}
+		"get_history", "add_to_history", "get_ratings"}
 )
 
 // SyncCmd returns movies and episodes that a user has watched, sorted by most recent.
@@ -48,6 +48,7 @@ func syncFunc(cmd *Command, _ ...string) error {
 		"get_watched":            handlers.SyncGetWatchedHandler{},
 		"get_history":            handlers.SyncGetHistoryHandler{},
 		"add_to_history":         handlers.SyncAddToHistoryHandler{},
+		"get_ratings":            handlers.SyncGetRatingsHandler{},
 	}
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 

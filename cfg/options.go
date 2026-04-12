@@ -30,6 +30,7 @@ type OptionsConfig struct {
 	Format       []string
 	Action       []string
 	Privacy      []string
+	Rating       []int
 }
 
 // SearchFieldConfig represents the configuration options for search_field depens on type
@@ -116,6 +117,10 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	"sync:get_history": {
 		Type: []string{"movies", "shows", "seasons", "episodes"},
 		Sort: []string{},
+	},
+	"sync:get_ratings": {
+		Type:   []string{"movies", "shows", "seasons", "episodes", "all"},
+		Rating: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 	},
 }
 
@@ -246,7 +251,8 @@ var ModuleConfig = map[string]OptionsConfig{
 	},
 
 	"sync": {
-		Type: []string{"all", "movies", "shows"},
+		Type:   []string{"all", "movies", "shows"},
+		Rating: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 	},
 }
 
@@ -527,6 +533,8 @@ func GetOutputForModule(options *str.Options) string {
 
 func getOutputForModuleSync(options *str.Options) string {
 	switch options.Action {
+	case consts.GetRatings:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Ratings, options.Type)
 	case consts.GetHistory:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.History, options.Type)
 	case consts.GetWatched:

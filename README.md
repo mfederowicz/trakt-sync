@@ -1115,6 +1115,26 @@ $ cat export_sync_history_episodes.json | ./trakt-sync sync -t episodes -a add_t
 $ cat export_sync_history_seasons.json | ./trakt-sync sync -t seasons -a add_to_history
 ```
 
+##### Get ratings - movies - all ratings
+```console
+$ ./trakt-sync sync -a get_ratings -t movies
+```
+##### Get ratings - shows - filter for specific rating from 1 to 10
+```console
+$ ./trakt-sync sync -a get_ratings -t shows -rating 1,2,3
+```
+##### Get ratings - seasons 
+```console
+$ ./trakt-sync sync -a get_ratings -t seasons
+```
+##### Get ratings - episodes 
+```console
+$ ./trakt-sync sync -a get_ratings -t episodes
+```
+##### Get ratings - all ratings
+```console
+$ ./trakt-sync sync -a get_ratings -t all
+```
 
 #### users:
 

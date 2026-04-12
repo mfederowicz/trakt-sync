@@ -343,3 +343,35 @@ func (s *SyncService) RemoveItemsFromHistory(ctx context.Context, items *str.Ite
 
 	return result, nil
 }
+
+// GetRatings Returns users ratings.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/sync/get-ratings/get-ratings
+func (s *SyncService) GetRatings(ctx context.Context, types *string, rating *string, opts *uri.ListOptions) ([]*str.RatingListItem, *str.Response, error) {
+	var url string
+
+	url = fmt.Sprintf("sync/ratings/%s", *types)
+	if len(*rating) > consts.ZeroValue {
+		url = fmt.Sprintf("sync/ratings/%s/%s", *types, *rating)
+	}
+
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch ratings url:" + url)
+	req, err := s.client.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.RatingListItem{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch lists err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

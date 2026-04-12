@@ -147,7 +147,11 @@ func TestBuildQueryCertificationsFilters(t *testing.T) {
 func TestBuildQueryShowFilters(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseURL + "?certifications=" + url.QueryEscape("pg-13,pg-16") + "&network_ids=" + url.QueryEscape("1,2,45") + "&status=" + url.QueryEscape("pilot,ended")
+	params := url.Values{}
+	params.Set("certifications", "pg-13,pg-16")
+	params.Set("network_ids", "1,2,45")
+	params.Set("status", "pilot,ended")
+	expectedURL := BaseURL + "?" + params.Encode()
 
 	got, _ := AddQuery(BaseURL, ListOptionsShowsFilters)
 	if string(got) != expectedURL {

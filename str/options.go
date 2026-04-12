@@ -43,6 +43,7 @@ type Options struct {
 	Remove            bool
 	Reply             string
 	ResetAt           string
+	Rating            SliceInt
 	SearchField       Slice
 	SearchIDType      string
 	SearchType        Slice

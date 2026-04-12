@@ -32,6 +32,7 @@ var (
 	_countries    = flag.String("countries", "", "")
 	_runtimes     = flag.String("runtimes", "", "")
 	_studioIDs    = flag.String("studio_ids", "", "")
+	_rating       = flag.String("rating", "", "")
 )
 
 // Avflags contains all available flags
@@ -87,6 +88,7 @@ var Avflags = map[string]bool{
 	"privacy":            true,
 	"progress":           true,
 	"q":                  true,
+	"rating":             true,
 	"recommendations":    true,
 	"releases":           true,
 	"remove":             true,
@@ -330,6 +332,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		consts.Watchlist:       setOptionsDependsOnModuleDefault(options),
 		consts.Collection:      setOptionsDependsOnModuleDefault(options),
 		consts.History:         setOptionsDependsOnModuleDefault(options),
+		consts.Sync:            setOptionsDependsOnModuleSync(options),
 	}
 
 	if opt, found := allModules[module]; found {
@@ -355,6 +358,11 @@ func setOptionsDependsOnModuleRecommendations(options str.Options) str.Options {
 
 func setOptionsDependsOnModuleDefault(options str.Options) str.Options {
 	options.Format = *_format
+	return options
+}
+
+func setOptionsDependsOnModuleSync(options str.Options) str.Options {
+	options.Rating = toIntSlice(*_rating)
 	return options
 }
 
@@ -460,6 +468,25 @@ func toStrSlice(s string) str.Slice {
 	}
 
 	return strings.Split(s, consts.SeparatorString)
+}
+
+func toIntSlice(s string) str.SliceInt {
+	if len(s) == consts.ZeroValue {
+		return []int{}
+	}
+
+	out := &str.SliceInt{}
+
+	for i, v := range strings.Split(s, consts.SeparatorString) {
+		n, err := strconv.Atoi(v)
+		if err != nil {
+			fmt.Printf("invalid number at index %d: %v\n", i, err)
+			return str.SliceInt{}
+		}
+		out.Set(n)
+	}
+
+	return *out
 }
 
 func setOptionsDependsOnModuleLists(options str.Options) str.Options {
@@ -774,6 +801,7 @@ func UpdateOptionsWithCommandSyncFlags(c *Command, options *str.Options) *str.Op
 	if *_syncID > consts.ZeroValue {
 		options.TraktID = *_syncID
 	}
+
 	return options
 }
 

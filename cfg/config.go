@@ -67,6 +67,7 @@ type Config struct {
 	Progress          float64   `toml:"progress"`
 	Query             string    `toml:"query"`
 	RedirectURI       string    `toml:"redirect_uri"`
+	Rating            string    `toml:"rating"`
 	Remove            bool      `toml:"remove"`
 	Reply             string    `toml:"reply"`
 	SearchField       str.Slice `toml:"search_field"`
