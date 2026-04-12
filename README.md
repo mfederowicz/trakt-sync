@@ -1087,7 +1087,7 @@ $ ./trakt-sync sync -a get_history -t shows
 $ ./trakt-sync sync -a get_history -t episodes
 ```
 
-##### Add to history - via -items flag
+##### Remove and Add to history - via -items flag
 ```console
 $ ./trakt-sync sync -t movies -a add_to_history -items export_sync_history_movies.json
 ```
@@ -1101,7 +1101,7 @@ $ ./trakt-sync sync -t episodes -a add_to_history -items export_sync_history_epi
 $ ./trakt-sync sync -t seasons -a add_to_history -items export_sync_history_seasons.json
 ```
 
-##### Add to history - via stdin
+##### Remove and Add to history - via stdin
 ```console
 $ cat export_sync_history_movies.json | ./trakt-sync sync -t movies -a add_to_history
 ```
@@ -1113,6 +1113,24 @@ $ cat export_sync_history_episodes.json | ./trakt-sync sync -t episodes -a add_t
 ```
 ```console
 $ cat export_sync_history_seasons.json | ./trakt-sync sync -t seasons -a add_to_history
+```
+
+##### Remove from history - via -items flag
+```console
+$ ./trakt-sync sync -t movies -a remove_from_history -items export_sync_history_movies.json
+$ ./trakt-sync sync -t shows -a remove_from_history -items export_sync_history_shows.json
+$ ./trakt-sync sync -t episodes -a remove_from_history -items export_sync_history_episode.json
+$ ./trakt-sync sync -t seasons -a remove_from_history -items export_sync_history_seasons.json
+```
+```console
+```
+
+##### Remove from history - via stdin
+```console
+$ cat export_sync_history_movies.json | ./trakt-sync sync -t movies -a remove_from_history
+$ cat export_sync_history_shows.json | ./trakt-sync sync -t shows -a remove_from_history
+$ cat export_sync_history_episodes.json | ./trakt-sync sync -t episodes -a remove_from_history
+$ cat export_sync_history_seasons.json | ./trakt-sync sync -t seasons -a remove_from_history
 ```
 
 ##### Get ratings - movies - all ratings

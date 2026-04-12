@@ -1008,7 +1008,7 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 	items.Episodes = &[]str.ExportlistItem{}
 	items.IDs = &[]int64{}
 	switch action {
-	case consts.AddToHistory:
+	case consts.AddToHistory, consts.RemoveFromHistory:
 		items = c.ListToHistoryItems(items, list, stype)
 		return items.Uniq(), nil
 	case consts.AddToCollection, consts.RemoveFromCollection:
