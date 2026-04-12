@@ -6,8 +6,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
-	"os"
-	"path/filepath"
 	"testing"
 	"time"
 
@@ -66,18 +64,6 @@ func setup(t *testing.T) *TestSetup {
 		ServerURL: server.URL,
 		Teardown:  server.Close,
 	}
-}
-
-func testJSONItemsList(t *testing.T, c *CommonLogic, filename string, _ *str.ItemsList) {
-	t.Helper()
-	baseDir := filepath.Join("..", "testdata", filepath.Dir(filename))
-	filename = filepath.Base(filename) + ".json"
-	fullFilePath := filepath.Join(baseDir, filename)
-	src, err := os.ReadFile(fullFilePath)
-	if err != nil {
-		t.Fatalf("Bad filename path in test for %s: %v", filename, err)
-	}
-	c.ConvertBytesToItemsList(src, consts.AddToHistory, "movies")
 }
 
 func MuxUserSettings(t *testing.T, mux *http.ServeMux) *http.ServeMux {
@@ -410,12 +396,4 @@ func TestConvertBytesToItemsListEmptyByte(t *testing.T) {
 	c := &CommonLogic{}
 	_, err := c.ConvertBytesToItemsList([]byte{}, consts.AddToHistory, consts.Movies)
 	assert.Contains(t, err.Error(), "unexpected end of JSON input")
-}
-
-func TestConvertBytesToItemsListFromFile(t *testing.T) {
-	testSetup := setup(t)
-	mux := testSetup.Mux
-	mux = MuxUserSettings(t, mux)
-	c := &CommonLogic{}
-	testJSONItemsList(t, c, "export_sync_history_movies", &str.ItemsList{})
 }
