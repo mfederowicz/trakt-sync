@@ -32,7 +32,7 @@ func (m SyncRemoveFromHistoryHandler) Handle(options *str.Options, client *inter
 
 	printer.Println("write cleanup result to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(result, "", "  ")
-	writer.WriteJSON(options, jsonData)	
+	writer.WriteJSON(options, jsonData)
 	return nil
 }
 
@@ -47,5 +47,3 @@ func (SyncRemoveFromHistoryHandler) syncRemoveFromHistory(client *internal.Clien
 
 	return result, nil
 }
-
-
