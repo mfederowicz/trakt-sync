@@ -13,9 +13,7 @@ import (
 )
 
 // CheckinShowEpisodeHandler struct for handler
-type CheckinShowEpisodeHandler struct {
-	common CommonLogic
-}
+type CheckinShowEpisodeHandler struct{ common CommonLogic }
 
 // Handle to handle checkin: episode action
 func (h CheckinShowEpisodeHandler) Handle(options *str.Options, client *internal.Client) error {

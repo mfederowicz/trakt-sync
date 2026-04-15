@@ -386,7 +386,7 @@ func TestListToHistoryItems(t *testing.T) {
 			},
 		},
 	}
-	c.ListToHistoryItems(items, list, "shows")
+	c.ListToItems(items, list, "shows")
 }
 
 func TestConvertBytesToItemsListEmptyByte(t *testing.T) {

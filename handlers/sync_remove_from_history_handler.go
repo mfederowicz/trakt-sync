@@ -36,7 +36,7 @@ func (m SyncRemoveFromHistoryHandler) Handle(options *str.Options, client *inter
 	return nil
 }
 
-func (SyncRemoveFromHistoryHandler) syncRemoveFromHistory(client *internal.Client, options *str.Options, items *str.ItemsToRemove) (*str.HistoryRemoveResult, error) {
+func (SyncRemoveFromHistoryHandler) syncRemoveFromHistory(client *internal.Client, options *str.Options, items *str.ItemsToRemove) (*str.RemoveResult, error) {
 	result, err := client.Sync.RemoveItemsFromHistory(
 		client.BuildCtxFromOptions(options),
 		items,

@@ -31,15 +31,22 @@ func (i ItemsList) Uniq() *ItemsList {
 // GetUniqueOldest returns a unique slice of Items, keeping the one with the oldest WatchedAt per ID.
 func (ItemsList) GetUniqueOldest(items *[]ExportlistItem) *[]ExportlistItem {
 	unique := map[int64]ExportlistItem{}
-
 	for _, item := range *items {
 		id := *item.IDs.Trakt
-		if item.WatchedAt == nil {
+		if item.WatchedAt == nil && item.RatedAt == nil {
 			continue // skip items with nil ID or WatchedAt
 		}
+
 		existing, found := unique[id]
-		if !found || item.WatchedAt.After(existing.WatchedAt.Time) {
-			unique[id] = item
+		if item.WatchedAt != nil {
+			if !found || item.WatchedAt.After(existing.WatchedAt.Time) {
+				unique[id] = item
+			}
+		}
+		if item.RatedAt != nil {
+			if !found || item.RatedAt.After(existing.RatedAt.Time) {
+				unique[id] = item
+			}
 		}
 	}
 	result := make([]ExportlistItem, consts.ZeroValue, len(unique))

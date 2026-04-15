@@ -308,14 +308,14 @@ func (s *SyncService) GetWatched(ctx context.Context, watchType *string, opts *u
 // AddItemsToHistory add items to user's history
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/add-to-history/add-items-to-watched-history
-func (s *SyncService) AddItemsToHistory(ctx context.Context, items *str.HistoryItems) (*str.HistoryAddResult, error) {
+func (s *SyncService) AddItemsToHistory(ctx context.Context, items *str.HistoryItems) (*str.AddResult, error) {
 	var url = "sync/history"
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
 		return nil, err
 	}
 
-	result := new(str.HistoryAddResult)
+	result := new(str.AddResult)
 	_, err = s.client.Do(ctx, req, result)
 	if err != nil {
 		return result, err
@@ -327,7 +327,7 @@ func (s *SyncService) AddItemsToHistory(ctx context.Context, items *str.HistoryI
 // RemoveItemsFromHistory remove items from user's history
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/remove-from-history/remove-items-from-history
-func (s *SyncService) RemoveItemsFromHistory(ctx context.Context, items *str.ItemsToRemove) (*str.HistoryRemoveResult, error) {
+func (s *SyncService) RemoveItemsFromHistory(ctx context.Context, items *str.ItemsToRemove) (*str.RemoveResult, error) {
 	var url = "sync/history/remove"
 	printer.Println("remove items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
@@ -335,7 +335,7 @@ func (s *SyncService) RemoveItemsFromHistory(ctx context.Context, items *str.Ite
 		return nil, err
 	}
 
-	result := new(str.HistoryRemoveResult)
+	result := new(str.RemoveResult)
 	_, err = s.client.Do(ctx, req, result)
 	if err != nil {
 		return result, err
@@ -374,4 +374,44 @@ func (s *SyncService) GetRatings(ctx context.Context, types *string, rating *str
 	}
 
 	return list, resp, nil
+}
+
+// RemoveItemsFromRatings Remove ratings for one or more items.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/remove-ratings/remove-ratings
+func (s *SyncService) RemoveItemsFromRatings(ctx context.Context, items *str.ItemsToRemove) (*str.RemoveResult, error) {
+	var url = "sync/ratings/remove"
+	printer.Println("remove items")
+	req, err := s.client.NewRequest(http.MethodPost, url, items)
+	if err != nil {
+		return nil, err
+	}
+
+	result := new(str.RemoveResult)
+	_, err = s.client.Do(ctx, req, result)
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
+
+// AddItemsToRatings Rate one or more items. Accepts shows, seasons, episodes and movies.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/add-ratings/add-new-ratings
+func (s *SyncService) AddItemsToRatings(ctx context.Context, items *str.RatingItems) (*str.AddResult, error) {
+	var url = "sync/ratings"
+	printer.Println("add items")
+	req, err := s.client.NewRequest(http.MethodPost, url, items)
+	if err != nil {
+		return nil, err
+	}
+
+	result := new(str.AddResult)
+	_, err = s.client.Do(ctx, req, result)
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
 }

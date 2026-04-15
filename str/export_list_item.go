@@ -49,6 +49,7 @@ type ExportlistItem struct {
 	Title           *string    `json:"title,omitempty"`
 	Year            *int       `json:"year,omitempty"`
 	Rank            *int       `json:"rank,omitempty"`
+	Rating          *int       `json:"rating,omitempty"`
 	ID              *int64     `json:"id,omitempty"`
 	IDs             *IDs       `json:"ids,omitempty"`
 	WatchedAt       *Timestamp `json:"watched_at,omitempty"`
@@ -57,6 +58,7 @@ type ExportlistItem struct {
 	LastCollectedAt *Timestamp `json:"last_collected_at,omitempty"`
 	UpdatedAt       *Timestamp `json:"updated_at,omitempty"`
 	LastUpdatedAt   *Timestamp `json:"last_updated_at,omitempty"`
+	RatedAt         *Timestamp `json:"rated_at,omitempty"`
 	Notes           *string    `json:"notes,omitempty"`
 	Type            *string    `json:"type,omitempty"`
 	Movie           *Movie     `json:"movie,omitempty"`

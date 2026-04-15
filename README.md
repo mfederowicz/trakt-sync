@@ -1154,6 +1154,24 @@ $ ./trakt-sync sync -a get_ratings -t episodes
 $ ./trakt-sync sync -a get_ratings -t all
 ```
 
+##### Remove and Add ratings - via stdin
+```console
+$ cat export_sync_ratings_movies.json | ./trakt-sync sync -t movies -a add_to_ratings
+```
+```console
+$ cat export_sync_ratings_shows.json | ./trakt-sync sync -t shows -a add_to_ratings
+```
+```console
+$ cat export_sync_ratings_episodes.json | ./trakt-sync sync -t episodes -a add_to_ratings
+```
+```console
+$ cat export_sync_ratings_seasons.json | ./trakt-sync sync -t seasons -a add_to_ratings
+$ cat export_sync_ratings_all.json | ./trakt-sync sync -t seasons -a add_to_ratings
+```
+
+
+
+
 #### users:
 
 ##### Export movies or shows or episodes from user lists:

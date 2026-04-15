@@ -4,9 +4,11 @@ package str
 // OutputMovie represents JSON movie object used in deduplication
 type OutputMovie struct {
 	Title     *string    `json:"title,omitempty"`
+	Rating    *int       `json:"rating,omitempty"`
 	Year      *int       `json:"year,omitempty"`
 	IDs       *IDs       `json:"ids,omitempty"`
 	WatchedAt *Timestamp `json:"watched_at,omitempty"`
+	RatedAt   *Timestamp `json:"rated_at,omitempty"`
 }
 
 func (o OutputMovie) String() string {

@@ -21,118 +21,224 @@ import (
 
 // CommonInterface interface
 type CommonInterface interface {
-	FetchMovie(client *internal.Client, options *str.Options) (*str.Movie, error)
-	FetchShow(client *internal.Client, id *int) (*str.Show, error)
-	FetchSeason(client *internal.Client, id *int) (*str.Season, error)
-	FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error)
-	FetchPerson(client *internal.Client, options *str.Options) (*str.Person, error)
-	FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error)
-	FetchComment(client *internal.Client, options *str.Options) (*str.Comment, error)
-	FetchNotes(client *internal.Client, options *str.Options) (*str.Notes, error)
-	FetchNotesItem(client *internal.Client, options *str.Options) (*str.NotesItem, error)
-	FetchCommentItem(client *internal.Client, options *str.Options) (*str.CommentMediaItem, error)
-	FetchCommentUserLikes(client *internal.Client, options *str.Options) (*str.CommentUserLike, error)
-	FetchTrendingComments(client *internal.Client, options *str.Options) (*str.CommentItem, error)
-	FetchRecentComments(client *internal.Client, options *str.Options) (*str.CommentItem, error)
-	FetchUpdatedComments(client *internal.Client, options *str.Options) (*str.CommentItem, error)
-	FetchMovieRecommendations(client *internal.Client, options *str.Options) ([]*str.Recommendation, error)
-	FetchShowRecommendations(client *internal.Client, options *str.Options) ([]*str.Recommendation, error)
-	UpdateComment(client *internal.Client, options *str.Options) (*str.Comment, error)
-	UpdateNotes(client *internal.Client, options *str.Options) (*str.Notes, error)
-	DeleteComment(client *internal.Client, options *str.Options) (*str.Comment, *str.Response, error)
-	DeleteNotes(client *internal.Client, options *str.Options) (*str.Notes, *str.Response, error)
-	HideMovieRecommendation(client *internal.Client, options *str.Options) (*str.Response, error)
-	HideShowRecommendation(client *internal.Client, options *str.Options) (*str.Response, error)
-	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
-	CheckSeasonNumber(code *string) (*string, *string, error)
-	StartScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error)
-	StopScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error)
-	PauseScrobble(client *internal.Client, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error)
-	CreateScrobble(client *internal.Client, options *str.Options) (*str.Scrobble, error)
-	CreateScrobbleShowEpisode(client *internal.Client, options *str.Options) (*str.Scrobble, error)
-	Checkin(client *internal.Client, checkin *str.Checkin) (*str.Checkin, *str.Response, error)
-	CreateCheckin(client *internal.Client, options *str.Options) (*str.Checkin, error)
-	CreateCheckinShowEpisode(client *internal.Client, options *str.Options) (*str.Checkin, error)
-	Comment(client *internal.Client, comment *str.Comment) (*str.Comment, *str.Response, error)
-	Notes(client *internal.Client, notes *str.Notes) (*str.Notes, *str.Response, error)
-	Reply(client *internal.Client, id *int, comment *str.Comment) (*str.Comment, *str.Response, error)
+	CheckDates(from string, to string, tz string) error
+	CheckSeasonNumber(code string) (*int, *int, error)
 	CheckSortAndTypes(options *str.Options) error
 	CheckTypes(options *str.Options) error
-	ToTimestamp(at string) (*str.Timestamp, error)
-	ConvertDateString(date string, out string) string
-	CurrentDateString(tz string) string
+	Checkin(client *internal.Client, checkin *str.Checkin, options *str.Options) (*str.Checkin, *str.Response, error)
+	Comment(client *internal.Client, comment *str.Comment, options *str.Options) (*str.Comment, *str.Response, error)
+	ConvertDateString(dateStr string, outputFormat string, tz string, full bool) string
+	CreateCheckin(client *internal.Client, options *str.Options) (*str.Checkin, error)
+	CreateCheckinShowEpisode(client *internal.Client, options *str.Options) (*str.Checkin, error)
+	CreateItemsToAdd(items *str.ItemsList) str.HistoryItems
+	CreateItemsToAddRatings(items *str.ItemsList) str.RatingItems
+	CreateItemsToRemove(items *str.ItemsList) str.ItemsToRemove
+	CreateScrobble(client *internal.Client, options *str.Options) (*str.Scrobble, error)
+	CreateScrobbleShowEpisode(client *internal.Client, options *str.Options) (*str.Scrobble, error)
+	CurrentDateString(tz string, full bool) string
 	DateLastDays(days int, tz string, full bool) string
-	CheckDates(from string, to string, tz string) string
-	ReadInput(items string) (*str.ItemsList, error)
-	ConvertBytesToColletionItems(data []byte) (*str.ItemsList, error)
-	UpdateHistoryListWithType(data []*str.ExportlistItem, strtype string) (*str.ItemsList, error)
+	DeleteComment(client *internal.Client, options *str.Options) (*str.Response, error)
+	DeleteNotes(client *internal.Client, options *str.Options) (*str.Response, error)
+	FetchComment(client *internal.Client, options *str.Options) (*str.Comment, error)
+	FetchCommentItem(client *internal.Client, options *str.Options) (*str.CommentMediaItem, error)
+	FetchCommentUserLikes(client *internal.Client, options *str.Options, page int) ([]*str.CommentUserLike, error)
+	FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error)
+	FetchHistoryList(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
+	FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error)
+	FetchMovie(client *internal.Client, options *str.Options) (*str.Movie, *str.Response, error)
+	FetchMovieRecommendations(client *internal.Client, options *str.Options, page int) ([]*str.Recommendation, error)
+	FetchNotes(client *internal.Client, options *str.Options) (*str.Notes, error)
+	FetchNotesItem(client *internal.Client, options *str.Options) (*str.NotesItem, error)
+	FetchPerson(client *internal.Client, options *str.Options) (*str.Person, error)
+	FetchRatings(client *internal.Client, options *str.Options, page int) ([]*str.RatingListItem, error)
+	FetchRecentComments(client *internal.Client, options *str.Options, page int) ([]*str.CommentItem, error)
+	FetchSeason(client *internal.Client, options *str.Options) (*str.Season, error)
+	FetchShow(client *internal.Client, options *str.Options) (*str.Show, error)
+	FetchShowRecommendations(client *internal.Client, options *str.Options, page int) ([]*str.Recommendation, error)
+	FetchTrendingComments(client *internal.Client, options *str.Options, page int) ([]*str.CommentItem, error)
+	FetchUpdatedComments(client *internal.Client, options *str.Options, page int) ([]*str.CommentItem, error)
+	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
+	GenActionTypeItemUsage(options *str.Options, items []string)
+	GenActionTypeUsage(options *str.Options, types []string)
+	GenActionsUsage(name string, actions []string)
+	GenTypeUsage(name string, types []string)
+	GetHandlerForMap(action string, allHandlers map[string]Handler) (Handler, error)
+	HideMovieRecommendation(client *internal.Client, options *str.Options) (*str.Response, error)
+	HideShowRecommendation(client *internal.Client, options *str.Options) (*str.Response, error)
+	Notes(client *internal.Client, notes *str.Notes, options *str.Options) (*str.Notes, *str.Response, error)
+	PauseScrobble(client *internal.Client, scrobble *str.Scrobble, options *str.Options) (*str.Scrobble, *str.Response, error)
+	ReadInput(options str.Options) (*str.ItemsList, error)
+	Reply(client *internal.Client, id *int, comment *str.Comment, options *str.Options) (*str.Comment, *str.Response, error)
+	StartScrobble(client *internal.Client, scrobble *str.Scrobble, options *str.Options) (*str.Scrobble, *str.Response, error)
+	StopScrobble(client *internal.Client, scrobble *str.Scrobble, options *str.Options) (*str.Scrobble, *str.Response, error)
+	ToTimestamp(at string) *str.Timestamp
+	UpdateComment(client *internal.Client, options *str.Options, comment *str.Comment) (*str.Comment, *str.Response, error)
+	UpdateHistoryListWithType(data []*str.ExportlistItem, strtype *string) []*str.ExportlistItem
+	UpdateNotes(client *internal.Client, options *str.Options, notes *str.Notes) (*str.Notes, *str.Response, error)
+	ValidPrivacy(options *str.Options) error
 }
 
 // CommonLogic struct for common methods
 type CommonLogic struct{}
 
-// Media interface for helpers
-type Media interface {
-	str.Movie | str.Show | str.Episode | str.Season
+// Ensure CommonLogic implements CommonInterface at compile time
+var _ CommonInterface = (*CommonLogic)(nil)
+
+// CheckDates if dates are ok
+func (*CommonLogic) CheckDates(from string, to string, tz string) error {
+	// Load location
+	loc, err := time.LoadLocation(tz)
+	if err != nil {
+		return fmt.Errorf("invalid timezone: %w", err)
+	}
+
+	// Get current full hour
+	now := time.Now().In(loc)
+	fullHour := now.Truncate(time.Hour)
+
+	// Parse from and to if they are present
+	var fromTime, toTime time.Time
+	if from != "" {
+		fromTime, err = time.ParseInLocation(consts.DefaultStartDateFormat, from, loc)
+		if err != nil {
+			return fmt.Errorf("invalid from date: %w", err)
+		}
+		if fromTime.After(fullHour) {
+			return fmt.Errorf("'from' date must not be later than the current full hour")
+		}
+	}
+
+	if to != "" {
+		toTime, err = time.ParseInLocation(consts.DefaultStartDateFormat, to, loc)
+		if err != nil {
+			return fmt.Errorf("invalid to date: %w", err)
+		}
+		if toTime.After(fullHour) {
+			return fmt.Errorf("'to' date must not be later than:%s", fullHour.Format(consts.DefaultStartDateFormat))
+		}
+	}
+
+	// If both are present, validate range
+	if from != "" && to != "" {
+		if fromTime.After(toTime) {
+			return fmt.Errorf("'from' date must be earlier than or equal to 'to' date")
+		}
+	}
+
+	return nil
+}
+
+// CheckSeasonNumber helper function to convert string to season and episode
+func (*CommonLogic) CheckSeasonNumber(code string) (season *int, episode *int, err error) {
+	if len(code) < int(consts.MinSeasonNumberLength) {
+		return nil, nil, errors.New("invalid length")
+	}
+
+	if parts := strings.Split(code, "x"); len(parts) == consts.TwoValue {
+		season, _ := strconv.Atoi(parts[0])
+		episode, _ := strconv.Atoi(parts[1])
+		return &season, &episode, nil
+	}
+
+	return nil, nil, errors.New("invalid format")
+}
+
+// CreateItemsToAddRatings helper function to create rating items from list
+func (*CommonLogic) CreateItemsToAddRatings(items *str.ItemsList) str.RatingItems {
+	movies := []str.Movie{}
+	for _, m := range *items.Movies {
+		movie := str.Movie{
+			Title:     m.Title,
+			Year:      m.Year,
+			IDs:       m.IDs,
+			WatchedAt: m.WatchedAt,
+			RatedAt:   m.RatedAt,
+		}
+		if m.Rating != nil {
+			rating := float32(*m.Rating)
+			movie.Rating = &rating
+		}
+		movies = append(movies, movie)
+	}
+	shows := []str.Show{}
+	for _, m := range *items.Shows {
+		show := str.Show{
+			Title:   m.Title,
+			Year:    m.Year,
+			IDs:     m.IDs,
+			Seasons: m.Seasons,
+		}
+		if m.Rating != nil {
+			rating := float32(*m.Rating)
+			show.Rating = &rating
+			show.RatedAt = m.RatedAt
+		}
+		shows = append(shows, show)
+	}
+	seasons := []str.Season{}
+	for _, m := range *items.Seasons {
+		season := str.Season{
+			IDs:       m.IDs,
+			WatchedAt: m.WatchedAt,
+			RatedAt:   m.RatedAt,
+		}
+		if m.Rating != nil {
+			rating := float32(*m.Rating)
+			season.Rating = &rating
+		}
+
+		seasons = append(seasons, season)
+	}
+	episodes := []str.Episode{}
+	for _, m := range *items.Episodes {
+		episode := str.Episode{
+			IDs:       m.IDs,
+			WatchedAt: m.WatchedAt,
+			RatedAt:   m.RatedAt,
+		}
+		if m.Rating != nil {
+			rating := float32(*m.Rating)
+			episode.Rating = &rating
+		}
+
+		episodes = append(episodes, episode)
+	}
+
+	return str.RatingItems{
+		Movies:   &movies,
+		Shows:    &shows,
+		Seasons:  &seasons,
+		Episodes: &episodes,
+	}
+}
+
+// CreateItemsToRemoveRatings helper for items to remove from ratings
+func (c *CommonLogic) CreateItemsToRemoveRatings(items *str.ItemsList) str.ItemsToRemove {
+	return c.CreateItemsToRemove(items)
 }
 
 // OnlySeasonsIDs helper for list of season ids object
-func (CommonLogic) OnlySeasonsIDs(items *[]str.ExportlistItem) *[]str.Season {
+func (*CommonLogic) OnlySeasonsIDs(items *[]str.ExportlistItem) *[]str.Season {
 	result := onlyIDs[str.Season](*items)
 	return &result
 }
 
 // OnlyMoviesIDs helper for list of movies ids object
-func (CommonLogic) OnlyMoviesIDs(items *[]str.ExportlistItem) *[]str.Movie {
+func (*CommonLogic) OnlyMoviesIDs(items *[]str.ExportlistItem) *[]str.Movie {
 	result := onlyIDs[str.Movie](*items)
 	return &result
 }
 
 // OnlyShowsIDs helper for list of shows ids object
-func (CommonLogic) OnlyShowsIDs(items *[]str.ExportlistItem) *[]str.Show {
+func (*CommonLogic) OnlyShowsIDs(items *[]str.ExportlistItem) *[]str.Show {
 	result := onlyIDs[str.Show](*items)
 	return &result
 }
 
 // OnlyEpisodesIDs helper for list of episodes ids object
-func (CommonLogic) OnlyEpisodesIDs(items *[]str.ExportlistItem) *[]str.Episode {
+func (*CommonLogic) OnlyEpisodesIDs(items *[]str.ExportlistItem) *[]str.Episode {
 	result := onlyIDs[str.Episode](*items)
 	return &result
-}
-
-// onlyIDs is a helper function to extract each type objects with only ids
-func onlyIDs[T Media](items []str.ExportlistItem) []T {
-	result := make([]T, 0, len(items))
-
-	var zero T
-
-	switch any(zero).(type) {
-	case str.Movie:
-		for _, item := range items {
-			result = append(result, any(str.Movie{IDs: item.IDs}).(T))
-		}
-	case str.Show:
-		for _, item := range items {
-			if len(*item.Seasons) > 0 {
-				updatedSeasons := SeasonsWithEpisodeNumbersOnly(item.Seasons)
-				result = append(result, any(str.Show{IDs: item.IDs, Seasons: updatedSeasons}).(T))
-			} else {
-				result = append(result, any(str.Show{IDs: item.IDs}).(T))
-			}
-		}
-	case str.Episode:
-		for _, item := range items {
-			result = append(result, any(str.Episode{IDs: item.IDs}).(T))
-		}
-	case str.Season:
-		for _, item := range items {
-			result = append(result, any(str.Season{IDs: item.IDs}).(T))
-		}
-	default:
-		panic("unsupported type")
-	}
-
-	return result
 }
 
 // CreateItemsToRemove helper to create list of items to remove from history
@@ -146,7 +252,7 @@ func (c CommonLogic) CreateItemsToRemove(items *str.ItemsList) str.ItemsToRemove
 }
 
 // CreateItemsToAdd helper to create list of items to add to history
-func (CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
+func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 	movies := []str.Movie{}
 	for _, m := range *items.Movies {
 		movie := str.Movie{
@@ -193,7 +299,7 @@ func (CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 }
 
 // CreateCheckin helper function to create checkin object
-func (c CommonLogic) CreateCheckin(client *internal.Client, options *str.Options) (*str.Checkin, error) {
+func (c *CommonLogic) CreateCheckin(client *internal.Client, options *str.Options) (*str.Checkin, error) {
 	checkin := new(str.Checkin)
 	connections, err := c.FetchUserConnections(client, options)
 	if err != nil {
@@ -231,7 +337,7 @@ func (c CommonLogic) CreateCheckin(client *internal.Client, options *str.Options
 }
 
 // CreateCheckinShowEpisode helper function to create checkin object for show episode
-func (c CommonLogic) CreateCheckinShowEpisode(client *internal.Client, options *str.Options) (*str.Checkin, error) {
+func (c *CommonLogic) CreateCheckinShowEpisode(client *internal.Client, options *str.Options) (*str.Checkin, error) {
 	checkin := new(str.Checkin)
 	show, err := c.FetchShow(client, options)
 	if err != nil {
@@ -257,7 +363,7 @@ func (c CommonLogic) CreateCheckinShowEpisode(client *internal.Client, options *
 }
 
 // CreateScrobble helper function to create scrobble object
-func (c CommonLogic) CreateScrobble(client *internal.Client, options *str.Options) (*str.Scrobble, error) {
+func (c *CommonLogic) CreateScrobble(client *internal.Client, options *str.Options) (*str.Scrobble, error) {
 	scrobble := new(str.Scrobble)
 	switch options.Type {
 	case consts.Movie:
@@ -285,7 +391,7 @@ func (c CommonLogic) CreateScrobble(client *internal.Client, options *str.Option
 }
 
 // CreateScrobbleShowEpisode helper function to create scrobble object
-func (c CommonLogic) CreateScrobbleShowEpisode(client *internal.Client, options *str.Options) (*str.Scrobble, error) {
+func (c *CommonLogic) CreateScrobbleShowEpisode(client *internal.Client, options *str.Options) (*str.Scrobble, error) {
 	scrobble := new(str.Scrobble)
 	show, err := c.FetchShow(client, options)
 	if err != nil {
@@ -619,18 +725,6 @@ func (*CommonLogic) UpdateComment(client *internal.Client, options *str.Options,
 	return result, resp, err
 }
 
-// UpdateNotes helper function to put notes object
-func (*CommonLogic) UpdateNotes(client *internal.Client, options *str.Options, notes *str.Notes) (*str.Notes, *str.Response, error) {
-	notesID := options.InternalID
-	result, resp, err := client.Notes.UpdateNotes(
-		client.BuildCtxFromOptions(options),
-		&notesID,
-		notes,
-	)
-
-	return result, resp, err
-}
-
 // DeleteComment helper function to delete comment object
 func (*CommonLogic) DeleteComment(client *internal.Client, options *str.Options) (*str.Response, error) {
 	commentID := options.CommentID
@@ -755,21 +849,6 @@ func (*CommonLogic) Reply(client *internal.Client, id *int, reply *str.Comment, 
 	return result, resp, err
 }
 
-// CheckSeasonNumber helper function to convert string to season and episode
-func (*CommonLogic) CheckSeasonNumber(code string) (season *int, episode *int, err error) {
-	if len(code) < int(consts.MinSeasonNumberLength) {
-		return nil, nil, errors.New("invalid length")
-	}
-
-	if parts := strings.Split(code, "x"); len(parts) == consts.TwoValue {
-		season, _ := strconv.Atoi(parts[0])
-		episode, _ := strconv.Atoi(parts[1])
-		return &season, &episode, nil
-	}
-
-	return nil, nil, errors.New("invalid format")
-}
-
 // CheckSortAndTypes helper function to validate sort and type field depends on module
 func (*CommonLogic) CheckSortAndTypes(options *str.Options) error {
 	// Check if the provided module exists in ModuleConfig
@@ -791,7 +870,7 @@ func (*CommonLogic) CheckSortAndTypes(options *str.Options) error {
 }
 
 // CheckTypes helper function to validate type field depends on module
-func (CommonLogic) CheckTypes(options *str.Options) error {
+func (*CommonLogic) CheckTypes(options *str.Options) error {
 	// Check if the provided module exists in ModuleConfig
 	_, ok := cfg.ModuleConfig[options.Module]
 	if !ok {
@@ -868,7 +947,7 @@ func (*CommonLogic) GetHandlerForMap(action string, allHandlers map[string]Handl
 
 // ConvertDateString takes a date string and converts it to date time format,
 // if empty return current date
-func (CommonLogic) ConvertDateString(dateStr string, outputFormat string, tz string, full bool) string {
+func (*CommonLogic) ConvertDateString(dateStr string, outputFormat string, tz string, full bool) string {
 	// Parse the input date string using YYYY-MM-DD
 	parsedDate, err := time.Parse("2006-01-02", dateStr)
 	if err != nil {
@@ -905,7 +984,7 @@ func (CommonLogic) ConvertDateString(dateStr string, outputFormat string, tz str
 }
 
 // ToTimestamp convert date time string to Timestamp
-func (CommonLogic) ToTimestamp(at string) *str.Timestamp {
+func (*CommonLogic) ToTimestamp(at string) *str.Timestamp {
 	// Parse the input date string using YYYY-MM-DD
 	parsedDate, err := time.Parse(time.RFC3339, at)
 	if err != nil {
@@ -916,7 +995,7 @@ func (CommonLogic) ToTimestamp(at string) *str.Timestamp {
 }
 
 // CurrentDateString return current date string from user timezone
-func (CommonLogic) CurrentDateString(tz string, full bool) string {
+func (*CommonLogic) CurrentDateString(tz string, full bool) string {
 	// Get the current time
 	currentTime := time.Now().UTC()
 
@@ -933,7 +1012,7 @@ func (CommonLogic) CurrentDateString(tz string, full bool) string {
 }
 
 // DateLastDays return last x days from user timezone
-func (CommonLogic) DateLastDays(days int, tz string, full bool) string {
+func (*CommonLogic) DateLastDays(days int, tz string, full bool) string {
 	// Get the current time
 	currentTime := time.Now().UTC()
 
@@ -950,50 +1029,6 @@ func (CommonLogic) DateLastDays(days int, tz string, full bool) string {
 	return past.Format(time.RFC3339)
 }
 
-// CheckDates if dates are ok
-func (CommonLogic) CheckDates(from string, to string, tz string) error {
-	// Load location
-	loc, err := time.LoadLocation(tz)
-	if err != nil {
-		return fmt.Errorf("invalid timezone: %w", err)
-	}
-
-	// Get current full hour
-	now := time.Now().In(loc)
-	fullHour := now.Truncate(time.Hour)
-
-	// Parse from and to if they are present
-	var fromTime, toTime time.Time
-	if from != "" {
-		fromTime, err = time.ParseInLocation(consts.DefaultStartDateFormat, from, loc)
-		if err != nil {
-			return fmt.Errorf("invalid from date: %w", err)
-		}
-		if fromTime.After(fullHour) {
-			return fmt.Errorf("'from' date must not be later than the current full hour")
-		}
-	}
-
-	if to != "" {
-		toTime, err = time.ParseInLocation(consts.DefaultStartDateFormat, to, loc)
-		if err != nil {
-			return fmt.Errorf("invalid to date: %w", err)
-		}
-		if toTime.After(fullHour) {
-			return fmt.Errorf("'to' date must not be later than:%s", fullHour.Format(consts.DefaultStartDateFormat))
-		}
-	}
-
-	// If both are present, validate range
-	if from != "" && to != "" {
-		if fromTime.After(toTime) {
-			return fmt.Errorf("'from' date must be earlier than or equal to 'to' date")
-		}
-	}
-
-	return nil
-}
-
 // ConvertBytesToItemsList convert bytes to struct
 func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype string) (*str.ItemsList, error) {
 	var list []*str.ExportlistItem
@@ -1001,26 +1036,60 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 		return nil, err
 	}
 
-	items := new(str.ItemsList)
-	items.Movies = &[]str.ExportlistItem{}
-	items.Shows = &[]str.ExportlistItem{}
-	items.Seasons = &[]str.ExportlistItem{}
-	items.Episodes = &[]str.ExportlistItem{}
-	items.IDs = &[]int64{}
+	items := c.InitItemsList()
 	switch action {
-	case consts.AddToHistory, consts.RemoveFromHistory:
-		items = c.ListToHistoryItems(items, list, stype)
+	case consts.AddToHistory, consts.RemoveFromHistory, consts.AddToRatings, consts.RemoveFromRatings:
+		items = c.ListToItemsAgregate(items, list, stype)
 		return items.Uniq(), nil
 	case consts.AddToCollection, consts.RemoveFromCollection:
-		items = c.ListToCollectionItems(items, list, stype)
+		items = c.ListToItemsCollection(items, list, stype)
 		return items, nil
 	default:
 		return nil, errors.New(consts.UnknownItemsListType)
 	}
 }
 
-// ListToCollectionItems helper function to convert one list to another
-func (*CommonLogic) ListToCollectionItems(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
+// ListToItemsAgregate helper function to update itemslists depends on type: movies,shows,seasons,episodes,all
+func (c *CommonLogic) ListToItemsAgregate(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
+	if stype != "all" {
+		return c.ListToItems(items, list, stype)
+	}
+
+	out := c.InitItemsList()
+
+	it := c.ListToItems(items, list, consts.Movies)
+	for _, item := range *it.Movies {
+		*out.Movies = append(*out.Movies, item)
+	}
+	it = c.ListToItems(items, list, consts.Shows)
+	for _, item := range *it.Shows {
+		*out.Shows = append(*out.Shows, item)
+	}
+	it = c.ListToItems(items, list, consts.Seasons)
+	for _, item := range *it.Seasons {
+		*out.Seasons = append(*out.Seasons, item)
+	}
+	it = c.ListToItems(items, list, consts.Episodes)
+	for _, item := range *it.Episodes {
+		*out.Episodes = append(*out.Episodes, item)
+	}
+
+	return out
+}
+
+// InitItemsList helper function to create InitItemsList with empty elements
+func (*CommonLogic) InitItemsList() *str.ItemsList {
+	list := new(str.ItemsList)
+	list.Movies = &[]str.ExportlistItem{}
+	list.Shows = &[]str.ExportlistItem{}
+	list.Seasons = &[]str.ExportlistItem{}
+	list.Episodes = &[]str.ExportlistItem{}
+	list.IDs = &[]int64{}
+	return list
+}
+
+// ListToItemsCollection helper function to convert one list to another
+func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
 	for _, val := range list {
 		if val.ID != nil {
 			*items.IDs = append(*items.IDs, *val.ID)
@@ -1059,8 +1128,8 @@ func (*CommonLogic) ListToCollectionItems(items *str.ItemsList, list []*str.Expo
 	return items
 }
 
-// ListToHistoryItems convert list to history items to struct
-func (*CommonLogic) ListToHistoryItems(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
+// ListToItems convert list to history items to struct
+func (*CommonLogic) ListToItems(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
 	// Group by movie
 	moviesMap := map[int64]str.OutputMovie{}
 	// Group by show
@@ -1073,11 +1142,11 @@ func (*CommonLogic) ListToHistoryItems(items *str.ItemsList, list []*str.Exportl
 	for _, item := range list {
 		switch stype {
 		case consts.Movies:
-			movieID := item.Movie.IDs.Trakt
-			if item.ID != nil {
-				*items.IDs = append(*items.IDs, *item.ID)
-			}
-			if movieID != nil {
+			if item.Movie != nil {
+				if item.ID != nil {
+					*items.IDs = append(*items.IDs, *item.ID)
+				}
+				movieID := item.Movie.IDs.Trakt
 				movie, exists := moviesMap[*movieID]
 				if !exists {
 					movie = str.OutputMovie{
@@ -1085,6 +1154,8 @@ func (*CommonLogic) ListToHistoryItems(items *str.ItemsList, list []*str.Exportl
 						Year:      item.Movie.Year,
 						IDs:       item.Movie.IDs,
 						WatchedAt: item.WatchedAt,
+						RatedAt:   item.RatedAt,
+						Rating:    item.Rating,
 					}
 				}
 
@@ -1093,8 +1164,8 @@ func (*CommonLogic) ListToHistoryItems(items *str.ItemsList, list []*str.Exportl
 
 		case consts.Shows:
 
-			showID := item.Show.IDs.Trakt
-			if showID != nil {
+			if item.Show != nil {
+				showID := item.Show.IDs.Trakt
 				showIDnp := *showID
 				if item.ID != nil {
 					*items.IDs = append(*items.IDs, *item.ID)
@@ -1107,6 +1178,8 @@ func (*CommonLogic) ListToHistoryItems(items *str.ItemsList, list []*str.Exportl
 						IDs:       item.Show.IDs,
 						Seasons:   &[]str.Season{},
 						WatchedAt: item.WatchedAt,
+						RatedAt:   item.RatedAt,
+						Rating:    item.Rating,
 					}
 				}
 				// Initialize seasons if nil
@@ -1114,7 +1187,6 @@ func (*CommonLogic) ListToHistoryItems(items *str.ItemsList, list []*str.Exportl
 					empty := []str.Season{}
 					show.Seasons = &empty
 				}
-
 				// Find or create season
 				var season *str.Season
 
@@ -1125,7 +1197,7 @@ func (*CommonLogic) ListToHistoryItems(items *str.ItemsList, list []*str.Exportl
 					}
 				}
 
-				if season == nil {
+				if season == nil && item.Episode != nil {
 					newSeason := str.Season{
 						Number: item.Episode.Season,
 					}
@@ -1134,35 +1206,46 @@ func (*CommonLogic) ListToHistoryItems(items *str.ItemsList, list []*str.Exportl
 					season.Episodes = &[]str.Episode{}
 				}
 
-				// Add episode
-				newEpisode := &str.Episode{Number: item.Episode.Number, WatchedAt: item.WatchedAt}
-				*season.Episodes = append(*season.Episodes, *newEpisode)
+				if item.Episode != nil {
+					// Add episode
+					newEpisode := &str.Episode{Number: item.Episode.Number, WatchedAt: item.WatchedAt}
+					if item.Rating != nil {
+						rating := float32(*item.Rating)
+						newEpisode.Rating = &rating
+						newEpisode.RatedAt = item.RatedAt
+					}
 
+					*season.Episodes = append(*season.Episodes, *newEpisode)
+				}
 				showsMap[showIDnp] = show
 			}
 
 		case consts.Seasons:
-			seasonID := item.Season.IDs.Trakt
-			if seasonID != nil {
+			if item.Season != nil {
+				seasonID := item.Season.IDs.Trakt
 				season, exists := seasonsMap[*seasonID]
 				if !exists {
 					season = str.OutputSeason{
 						Title:     item.Season.Title,
 						IDs:       item.Season.IDs,
 						WatchedAt: item.WatchedAt,
+						RatedAt:   item.RatedAt,
+						Rating:    item.Rating,
 					}
 				}
 				seasonsMap[*seasonID] = season
 			}
 		case consts.Episodes:
-			episodeID := item.Episode.IDs.Trakt
-			if episodeID != nil {
+			if item.Episode != nil {
+				episodeID := item.Episode.IDs.Trakt
 				episode, exists := episodesMap[*episodeID]
 				if !exists {
 					episode = str.OutputEpisode{
 						Title:     item.Episode.Title,
 						IDs:       item.Episode.IDs,
 						WatchedAt: item.WatchedAt,
+						RatedAt:   item.RatedAt,
+						Rating:    item.Rating,
 					}
 				}
 				episodesMap[*episodeID] = episode
@@ -1176,6 +1259,8 @@ func (*CommonLogic) ListToHistoryItems(items *str.ItemsList, list []*str.Exportl
 		*items.Episodes = append(*items.Episodes, str.ExportlistItem{
 			Episode:   &str.Episode{Title: s.Title, IDs: s.IDs},
 			WatchedAt: s.WatchedAt,
+			RatedAt:   s.RatedAt,
+			Rating:    s.Rating,
 			IDs:       s.IDs,
 		})
 	}
@@ -1183,6 +1268,8 @@ func (*CommonLogic) ListToHistoryItems(items *str.ItemsList, list []*str.Exportl
 		*items.Seasons = append(*items.Seasons, str.ExportlistItem{
 			Season:    &str.Season{Title: s.Title, IDs: s.IDs},
 			WatchedAt: s.WatchedAt,
+			RatedAt:   s.RatedAt,
+			Rating:    s.Rating,
 			IDs:       s.IDs,
 		})
 	}
@@ -1190,6 +1277,8 @@ func (*CommonLogic) ListToHistoryItems(items *str.ItemsList, list []*str.Exportl
 		*items.Movies = append(*items.Movies, str.ExportlistItem{
 			Movie:     &str.Movie{Title: s.Title, Year: s.Year, IDs: s.IDs},
 			WatchedAt: s.WatchedAt,
+			RatedAt:   s.RatedAt,
+			Rating:    s.Rating,
 			IDs:       s.IDs,
 		})
 	}
@@ -1199,6 +1288,8 @@ func (*CommonLogic) ListToHistoryItems(items *str.ItemsList, list []*str.Exportl
 			Show:      &str.Show{Title: s.Title, Year: s.Year, IDs: s.IDs},
 			Seasons:   s.Seasons,
 			WatchedAt: s.WatchedAt,
+			RatedAt:   s.RatedAt,
+			Rating:    s.Rating,
 			IDs:       s.IDs,
 		})
 	}
@@ -1207,7 +1298,7 @@ func (*CommonLogic) ListToHistoryItems(items *str.ItemsList, list []*str.Exportl
 }
 
 // ReadInput read data from stdin or from file
-func (c CommonLogic) ReadInput(options str.Options) (*str.ItemsList, error) {
+func (c *CommonLogic) ReadInput(options str.Options) (*str.ItemsList, error) {
 	filePath := options.Items
 	if filePath != consts.EmptyString {
 		data, err := os.ReadFile(filePath)
@@ -1304,7 +1395,7 @@ func (c CommonLogic) FetchRatings(client *internal.Client, options *str.Options,
 }
 
 // UpdateHistoryListWithType helper function to update History list with new type
-func (CommonLogic) UpdateHistoryListWithType(data []*str.ExportlistItem, strtype *string) []*str.ExportlistItem {
+func (*CommonLogic) UpdateHistoryListWithType(data []*str.ExportlistItem, strtype *string) []*str.ExportlistItem {
 	list := []*str.ExportlistItem{}
 
 	newType := consts.EmptyString
@@ -1327,12 +1418,6 @@ func (CommonLogic) UpdateHistoryListWithType(data []*str.ExportlistItem, strtype
 	}
 
 	return list
-}
-
-// Ptr is a helper routine that allocates a new T value
-// to store v and returns a pointer to it.
-func Ptr[T any](v T) *T {
-	return &v
 }
 
 // SeasonsWithEpisodeNumbersOnly is a helper function to make seasons lists with episodes contains numbers
@@ -1360,4 +1445,62 @@ func SeasonsWithEpisodeNumbersOnly(src *[]str.Season) *[]str.Season {
 	}
 
 	return &seasonsCopy
+}
+
+// UpdateNotes helper function to put notes object
+func (*CommonLogic) UpdateNotes(client *internal.Client, options *str.Options, notes *str.Notes) (*str.Notes, *str.Response, error) {
+	notesID := options.InternalID
+	result, resp, err := client.Notes.UpdateNotes(
+		client.BuildCtxFromOptions(options),
+		&notesID,
+		notes,
+	)
+
+	return result, resp, err
+}
+
+// Media interface for helpers
+type Media interface {
+	str.Movie | str.Show | str.Episode | str.Season
+}
+
+// onlyIDs is a helper function to extract each type objects with only ids
+func onlyIDs[T Media](items []str.ExportlistItem) []T {
+	result := make([]T, 0, len(items))
+
+	var zero T
+
+	switch any(zero).(type) {
+	case str.Movie:
+		for _, item := range items {
+			result = append(result, any(str.Movie{IDs: item.IDs}).(T))
+		}
+	case str.Show:
+		for _, item := range items {
+			if len(*item.Seasons) > 0 {
+				updatedSeasons := SeasonsWithEpisodeNumbersOnly(item.Seasons)
+				result = append(result, any(str.Show{IDs: item.IDs, Seasons: updatedSeasons}).(T))
+			} else {
+				result = append(result, any(str.Show{IDs: item.IDs}).(T))
+			}
+		}
+	case str.Episode:
+		for _, item := range items {
+			result = append(result, any(str.Episode{IDs: item.IDs}).(T))
+		}
+	case str.Season:
+		for _, item := range items {
+			result = append(result, any(str.Season{IDs: item.IDs}).(T))
+		}
+	default:
+		panic("unsupported type")
+	}
+
+	return result
+}
+
+// Ptr is a helper routine that allocates a new T value
+// to store v and returns a pointer to it.
+func Ptr[T any](v T) *T {
+	return &v
 }
