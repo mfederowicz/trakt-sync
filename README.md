@@ -1154,9 +1154,19 @@ $ ./trakt-sync sync -a get_ratings -t episodes
 $ ./trakt-sync sync -a get_ratings -t all
 ```
 
-##### Remove and Add ratings - via stdin
+##### Add ratings - via -items flag
 ```console
-$ cat export_sync_ratings_movies.json | ./trakt-sync sync -t movies -a add_to_ratings
+$ ./trakt-sync sync -t movies -a add_to_ratings -items export_sync_ratings_movies.json
+$ ./trakt-sync sync -t shows -a add_to_ratings -items export_sync_ratings_shows.json
+$ ./trakt-sync sync -t episodes -a add_to_ratings -items export_sync_ratings_episodes.json
+$ ./trakt-sync sync -t seasons -a add_to_ratings -items export_sync_ratings_seasons.json
+```
+```console
+```
+
+##### Add ratings - via stdin
+```console
+$ cat export_sync_ratings_movies.json | 
 ```
 ```console
 $ cat export_sync_ratings_shows.json | ./trakt-sync sync -t shows -a add_to_ratings
@@ -1169,8 +1179,31 @@ $ cat export_sync_ratings_seasons.json | ./trakt-sync sync -t seasons -a add_to_
 $ cat export_sync_ratings_all.json | ./trakt-sync sync -t seasons -a add_to_ratings
 ```
 
+##### Remove from ratings - via -items flag
+```console
+$ ./trakt-sync sync -t movies -a remove_from_ratings -items export_sync_ratings_movies.json
+$ ./trakt-sync sync -t shows -a remove_from_ratings -items export_sync_ratings_shows.json
+$ ./trakt-sync sync -t episodes -a remove_from_ratings -items export_sync_ratings_episodes.json
+$ ./trakt-sync sync -t seasons -a remove_from_ratings -items export_sync_ratings_seasons.json
+$ ./trakt-sync sync -t seasons -a remove_from_ratings -items export_sync_ratings_all.json
+```
+```console
+```
 
-
+##### Remove from ratings - via stdin
+```console
+$ cat export_sync_ratings_movies.json | ./trakt-sync sync -t movies -a remove_from_ratings
+```
+```console
+$ cat export_sync_ratings_shows.json | ./trakt-sync sync -t shows -a remove_from_ratings
+```
+```console
+$ cat export_sync_ratings_episodes.json | ./trakt-sync sync -t episodes -a remove_from_ratings
+```
+```console
+$ cat export_sync_ratings_seasons.json | ./trakt-sync sync -t seasons -a remove_from_ratings
+$ cat export_sync_ratings_all.json | ./trakt-sync sync -t seasons -a remove_from_ratings
+```
 
 #### users:
 

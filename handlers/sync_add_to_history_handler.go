@@ -30,7 +30,7 @@ func (m SyncAddToHistoryHandler) Handle(options *str.Options, client *internal.C
 		return fmt.Errorf("clean history error:%w", err)
 	}
 
-	options.Output = "export_sync_remove_from_history_results.json"
+	options.Output = "sync_remove_from_history_results.json"
 
 	printer.Println("write cleanup result to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(result, "", "  ")
@@ -46,7 +46,7 @@ func (m SyncAddToHistoryHandler) Handle(options *str.Options, client *internal.C
 		return fmt.Errorf("add to history error:%w", err)
 	}
 
-	options.Output = "export_sync_add_to_history_results.json"
+	options.Output = "sync_add_to_history_results.json"
 
 	print("write cleanup result to:" + options.Output)
 	jsonDataResult, _ := json.MarshalIndent(addResult, "", "  ")

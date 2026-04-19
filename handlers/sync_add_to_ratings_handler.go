@@ -26,9 +26,9 @@ func (m SyncAddToRatingsHandler) Handle(options *str.Options, client *internal.C
 	if err != nil {
 		return fmt.Errorf("add to ratings error:%w", err)
 	}
-	
-	options.Output = "export_sync_add_to_ratings_results.json"
-	
+
+	options.Output = "sync_add_to_ratings_results.json"
+
 	print("write result to:" + options.Output)
 	jsonDataResult, _ := json.MarshalIndent(addResult, "", "  ")
 	writer.WriteJSON(options, jsonDataResult)

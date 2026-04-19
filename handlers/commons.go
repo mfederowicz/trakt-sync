@@ -173,6 +173,9 @@ func (*CommonLogic) CreateItemsToAddRatings(items *str.ItemsList) str.RatingItem
 			show.Rating = &rating
 			show.RatedAt = m.RatedAt
 		}
+		if len(*m.Seasons) == consts.ZeroValue {
+			show.Seasons = nil
+		}
 		shows = append(shows, show)
 	}
 	seasons := []str.Season{}
