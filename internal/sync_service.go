@@ -92,11 +92,11 @@ func (s *SyncService) GetWatchedHistory(ctx context.Context, id *int, types *str
 // GetWatchlist Returns all items in a user's watchlist filtered by type.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/sync/get-watchlist/get-watchlist
-func (s *SyncService) GetWatchlist(ctx context.Context, types *string, sort_by *string, sort_how *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+func (s *SyncService) GetWatchlist(ctx context.Context, types *string, sortBy *string, sortHow *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 
-	if types != nil && sort_by != nil && sort_how != nil {
-		url = fmt.Sprintf("sync/watchlist/%s/%s/%s", *types, *sort_by, *sort_how)
+	if types != nil && sortBy != nil && sortHow != nil {
+		url = fmt.Sprintf("sync/watchlist/%s/%s/%s", *types, *sortBy, *sortHow)
 	} else {
 		url = "sync/watchlist"
 	}

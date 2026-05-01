@@ -1462,6 +1462,7 @@ func (*CommonLogic) UpdateNotes(client *internal.Client, options *str.Options, n
 
 	return result, resp, err
 }
+
 // FetchWatchlist helper function to fetch user watchlist
 func (c *CommonLogic) FetchWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}

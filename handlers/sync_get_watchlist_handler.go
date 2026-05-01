@@ -22,7 +22,6 @@ func (m SyncGetWatchlistHandler) Handle(options *str.Options, client *internal.C
 	if err != nil {
 		return err
 	}
-	
 
 	printer.Println("Returns all items in a user's watchlist filtered by type:", options.Type)
 
@@ -38,7 +37,7 @@ func (m SyncGetWatchlistHandler) Handle(options *str.Options, client *internal.C
 }
 
 func (m SyncGetWatchlistHandler) syncGetWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
-	watchlist, err := m.common.FetchWatchlist(client, options, consts.DefaultPage)
+	watchlist, err := m.common.FetchWatchlist(client, options, page)
 	if err != nil {
 		return nil, fmt.Errorf("fetch watchlist error:%w", err)
 	}

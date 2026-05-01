@@ -727,7 +727,7 @@ func (*Command) ValidSort(options *str.Options) error {
 	if len(cfg.ModuleActionConfig[prefix].SortHow) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].SortHow, options.SortHow) {
 		return fmt.Errorf("sort_how '%s' is not valid for module '%s' and action '%s', avaliable sort_how:%s", options.SortHow, options.Module, options.Action, cfg.ModuleActionConfig[prefix].SortHow)
 	}
-	
+
 	if len(cfg.ModuleActionConfig[prefix].SortBy) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].SortBy, options.SortBy) {
 		return fmt.Errorf("sort_by '%s' is not valid for module '%s' and action '%s', avaliable sort_by:%s", options.SortBy, options.Module, options.Action, cfg.ModuleActionConfig[prefix].SortBy)
 	}

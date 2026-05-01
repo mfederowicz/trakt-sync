@@ -36,7 +36,7 @@ func syncFunc(cmd *Command, _ ...string) error {
 	cmd.UpdateSyncFlagsValues()
 	options := cmd.Options
 	client := cmd.Client
-	options = cmd.UpdateOptionsWithCommandFlags(options)	
+	options = cmd.UpdateOptionsWithCommandFlags(options)
 
 	err := cmd.ValidSort(options)
 	if err != nil {
