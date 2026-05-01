@@ -1205,6 +1205,25 @@ $ cat export_sync_ratings_seasons.json | ./trakt-sync sync -t seasons -a remove_
 $ cat export_sync_ratings_all.json | ./trakt-sync sync -t seasons -a remove_from_ratings
 ```
 
+##### Get Watchlist
+```console
+$ ./trakt-sync sync -a get_watchlist -t movies -sort_how asc
+$ ./trakt-sync sync -a get_watchlist -t movies -sort_how des
+$ ./trakt-sync sync -a get_watchlist -t movies -sort_by rank 
+$ ./trakt-sync sync -a get_watchlist -t movies -sort_by added 
+$ ./trakt-sync sync -a get_watchlist -t movies -sort_by title
+$ ./trakt-sync sync -a get_watchlist -t movies -sort_by released
+$ ./trakt-sync sync -a get_watchlist -t movies -sort_by runtime
+$ ./trakt-sync sync -a get_watchlist -t movies -sort_by popularity
+$ ./trakt-sync sync -a get_watchlist -t movies -sort_by random
+$ ./trakt-sync sync -a get_watchlist -t movies -sort_by percentage 
+
+🔥VIP Only including imdb_rating, tmdb_rating, rt_tomatometer, rt_audience, metascore, votes, 
+imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to rank.
+```
+```console
+```
+
 #### users:
 
 ##### Export movies or shows or episodes from user lists:

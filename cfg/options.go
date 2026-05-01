@@ -27,6 +27,8 @@ type OptionsConfig struct {
 	Type         []string
 	Period       []string
 	Sort         []string
+	SortBy       []string
+	SortHow      []string
 	Format       []string
 	Action       []string
 	Privacy      []string
@@ -121,6 +123,15 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	"sync:get_ratings": {
 		Type:   []string{"movies", "shows", "seasons", "episodes", "all"},
 		Rating: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+	},
+	"sync:get_watchlist": {
+		Type:    []string{"movies", "shows", "seasons", "episodes", "all"},
+		Rating:  []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+		SortHow: []string{"asc", "desc"},
+		SortBy: []string{"rank", "added", "title", "released", "runtime", "popularity",
+			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
+			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
+			"watched", "collected"},
 	},
 }
 
@@ -251,8 +262,13 @@ var ModuleConfig = map[string]OptionsConfig{
 	},
 
 	"sync": {
-		Type:   []string{"all", "movies", "shows"},
-		Rating: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+		Type:    []string{"all", "movies", "shows"},
+		Rating:  []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+		SortHow: []string{"asc", "desc"},
+		SortBy: []string{"rank", "added", "title", "released", "runtime", "popularity",
+			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
+			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
+			"watched", "collected"},
 	},
 }
 
@@ -261,6 +277,8 @@ func ValidateConfig(module string, config OptionsConfig) bool {
 	allowedConfig := ModuleConfig[module]
 	return isSubset(config.Type, allowedConfig.Type) &&
 		isSubset(config.Sort, allowedConfig.Sort) &&
+		isSubset(config.SortHow, allowedConfig.SortHow) &&
+		isSubset(config.SortBy, allowedConfig.SortBy) &&
 		isSubset(config.Format, allowedConfig.Format)
 }
 
@@ -533,6 +551,8 @@ func GetOutputForModule(options *str.Options) string {
 
 func getOutputForModuleSync(options *str.Options) string {
 	switch options.Action {
+	case consts.GetWatchlist:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Watchlist, options.Type)
 	case consts.GetRatings:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Ratings, options.Type)
 	case consts.GetHistory:

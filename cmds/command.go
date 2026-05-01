@@ -33,6 +33,8 @@ var (
 	_runtimes     = flag.String("runtimes", "", "")
 	_studioIDs    = flag.String("studio_ids", "", "")
 	_rating       = flag.String("rating", "", "")
+	_sortBy       = flag.String("sort_by", cfg.DefaultConfig().SortBy, consts.SortByUsage)
+	_sortHow      = flag.String("sort_how", cfg.DefaultConfig().SortHow, consts.SortHowUsage)
 )
 
 // Avflags contains all available flags
@@ -100,6 +102,8 @@ var Avflags = map[string]bool{
 	"season":             true,
 	"seasons":            true,
 	"shows":              true,
+	"sort_by":            true,
+	"sort_how":           true,
 	"specials":           true,
 	"spoiler":            true,
 	"start":              true,
@@ -720,6 +724,14 @@ func (*Command) ValidSort(options *str.Options) error {
 		return fmt.Errorf("sort '%s' is not valid for module '%s' and action '%s', avaliable sort:%s", options.Sort, options.Module, options.Action, cfg.ModuleActionConfig[prefix].Sort)
 	}
 
+	if len(cfg.ModuleActionConfig[prefix].SortHow) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].SortHow, options.SortHow) {
+		return fmt.Errorf("sort_how '%s' is not valid for module '%s' and action '%s', avaliable sort_how:%s", options.SortHow, options.Module, options.Action, cfg.ModuleActionConfig[prefix].SortHow)
+	}
+	
+	if len(cfg.ModuleActionConfig[prefix].SortBy) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].SortBy, options.SortBy) {
+		return fmt.Errorf("sort_by '%s' is not valid for module '%s' and action '%s', avaliable sort_by:%s", options.SortBy, options.Module, options.Action, cfg.ModuleActionConfig[prefix].SortBy)
+	}
+
 	return nil
 }
 
@@ -820,6 +832,14 @@ func UpdateOptionsWithCommandRecommendationsFlags(options *str.Options) *str.Opt
 
 // UpdateOptionsCommonFlags update options depends on common command flags
 func UpdateOptionsCommonFlags(c *Command, options *str.Options) *str.Options {
+	if len(*_sortBy) > consts.ZeroValue {
+		options.SortBy = *_sortBy
+	}
+
+	if len(*_sortHow) > consts.ZeroValue {
+		options.SortHow = *_sortHow
+	}
+
 	if len(*_userName) > consts.ZeroValue {
 		options.UserName = *_userName
 	}

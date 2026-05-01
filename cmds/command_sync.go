@@ -36,8 +36,12 @@ func syncFunc(cmd *Command, _ ...string) error {
 	cmd.UpdateSyncFlagsValues()
 	options := cmd.Options
 	client := cmd.Client
-	options = cmd.UpdateOptionsWithCommandFlags(options)
+	options = cmd.UpdateOptionsWithCommandFlags(options)	
 
+	err := cmd.ValidSort(options)
+	if err != nil {
+		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
+	}
 	var handler handlers.SyncHandler
 	allHandlers := map[string]handlers.Handler{
 		"last_activities":        handlers.SyncLastActivitiesHandler{},
@@ -53,9 +57,9 @@ func syncFunc(cmd *Command, _ ...string) error {
 		"get_ratings":            handlers.SyncGetRatingsHandler{},
 		"add_to_ratings":         handlers.SyncAddToRatingsHandler{},
 		"remove_from_ratings":    handlers.SyncRemoveFromRatingsHandler{},
-		"get_watchlist":    handlers.SyncGetWatchlistHandler{},
+		"get_watchlist":          handlers.SyncGetWatchlistHandler{},
 	}
-	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
+	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validSyncActions)

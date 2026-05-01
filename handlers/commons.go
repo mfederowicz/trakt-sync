@@ -1468,7 +1468,8 @@ func (c *CommonLogic) FetchWatchlist(client *internal.Client, options *str.Optio
 	list, resp, err := client.Sync.GetWatchlist(
 		client.BuildCtxFromOptions(options),
 		&options.Type,
-		&options.Sort,
+		&options.SortBy,
+		&options.SortHow,
 		&opts,
 	)
 

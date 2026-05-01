@@ -49,6 +49,8 @@ type Options struct {
 	SearchType        Slice
 	Season            int
 	Sort              string
+	SortBy            string
+	SortHow           string
 	Specials          string
 	Spoiler           bool
 	StartDate         string

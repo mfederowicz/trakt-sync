@@ -113,6 +113,8 @@ const (
 	ShowsSpecialsUsage           = "allow to overwrite specials"
 	ShowsTypeUsage               = "allow to overwrite type"
 	SortUsage                    = "allow to overwrite sort"
+	SortByUsage                  = "allow to overwrite sort_by"
+	SortHowUsage                 = "allow to overwrite sort_how"
 	SpoilerUsage                 = "allow to overwrite spoiler"
 	StartAtUsage                 = "allow to overwrite start_at"
 	StartDateUsage               = "allow to overwrite start_date"

@@ -83,6 +83,8 @@ type Config struct {
 	ShowsSort         string    `toml:"sort"`
 	ShowsType         string    `toml:"type"`
 	Sort              string    `toml:"sort"`
+	SortBy            string    `toml:"sort_by"`
+	SortHow           string    `toml:"sort_how"`
 	Specials          string    `toml:"specials"`
 	Spoiler           bool      `toml:"spoiler"`
 	StartAt           string    `toml:"start_at"`
@@ -520,6 +522,8 @@ func DefaultConfig() *Config {
 		ShowsSort:      consts.EmptyString,
 		ShowsType:      consts.EmptyString,
 		Sort:           "rank",
+		SortBy:         "rank",
+		SortHow:        "asc",
 		Spoiler:        false,
 		TokenPath:      consts.EmptyString,
 		Type:           "movies",
