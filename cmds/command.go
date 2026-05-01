@@ -55,6 +55,7 @@ var Avflags = map[string]bool{
 	"country":            true,
 	"days":               true,
 	"delete":             true,
+	"description":        true,
 	"end_at":             true,
 	"episode":            true,
 	"episode_abs":        true,
@@ -367,6 +368,7 @@ func setOptionsDependsOnModuleDefault(options str.Options) str.Options {
 
 func setOptionsDependsOnModuleSync(options str.Options) str.Options {
 	options.Rating = toIntSlice(*_rating)
+	options.Description = *_syncWatchlistDescription
 	return options
 }
 
@@ -812,6 +814,10 @@ func UpdateOptionsWithCommandSyncFlags(c *Command, options *str.Options) *str.Op
 
 	if *_syncID > consts.ZeroValue {
 		options.TraktID = *_syncID
+	}
+
+	if len(*_syncWatchlistDescription) > consts.ZeroValue {
+		options.Description = *_syncWatchlistDescription
 	}
 
 	return options

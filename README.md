@@ -1224,6 +1224,13 @@ imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to r
 ```console
 ```
 
+##### Update Watchlist
+```console
+$ ./trakt-sync sync -a update_watchlist -description "short watchlist description" -sort_how asc
+$ ./trakt-sync sync -a update_watchlist -description "short watchlist description" -sort_by added
+$ ./trakt-sync sync -a update_watchlist -sort_by added -sort_how desc
+
+```
 #### users:
 
 ##### Export movies or shows or episodes from user lists:

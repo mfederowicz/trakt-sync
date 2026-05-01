@@ -31,6 +31,7 @@ type Config struct {
 	CountSpecials     string    `toml:"count_specials"`
 	Days              int       `toml:"days"`
 	Delete            bool      `toml:"delete"`
+	Description       string    `toml:"description"`
 	EndAt             string    `toml:"end_at"`
 	Episode           int       `toml:"episode"`
 	EpisodeAbs        int       `toml:"episode_abs"`

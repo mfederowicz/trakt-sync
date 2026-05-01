@@ -124,6 +124,7 @@ const (
 	TestURLNext                  = "test-url-next"
 	TraktIDUsage                 = "allow to overwrite trakt_id"
 	TranslationsUsage            = "allow to overwrite translations"
+	WatchlistDescriptionUsage    = "allow to overwrite description"
 	TypeUsage                    = "allow to overwrite type"
 	UndoUsage                    = "allow undo item"
 	UnknownCheckinAction         = "uknown checkin action"

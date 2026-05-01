@@ -10,12 +10,13 @@ import (
 )
 
 var (
-	_syncAction     = SyncCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
-	_syncStartAt    = SyncCmd.Flag.String("start_at", cfg.DefaultConfig().StartAt, consts.StartAtUsage)
-	_syncEndAt      = SyncCmd.Flag.String("end_at", cfg.DefaultConfig().EndAt, consts.EndAtUsage)
-	_syncPlaybackID = SyncCmd.Flag.Int("playback_id", cfg.DefaultConfig().PlaybackID, consts.PlaybackIDUsage)
-	_syncItems      = SyncCmd.Flag.String("items", consts.EmptyString, consts.ItemsUsage)
-	_syncID         = SyncCmd.Flag.Int("i", cfg.DefaultConfig().TraktID, consts.TraktIDUsage)
+	_syncAction               = SyncCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_syncStartAt              = SyncCmd.Flag.String("start_at", cfg.DefaultConfig().StartAt, consts.StartAtUsage)
+	_syncEndAt                = SyncCmd.Flag.String("end_at", cfg.DefaultConfig().EndAt, consts.EndAtUsage)
+	_syncPlaybackID           = SyncCmd.Flag.Int("playback_id", cfg.DefaultConfig().PlaybackID, consts.PlaybackIDUsage)
+	_syncItems                = SyncCmd.Flag.String("items", consts.EmptyString, consts.ItemsUsage)
+	_syncID                   = SyncCmd.Flag.Int("i", cfg.DefaultConfig().TraktID, consts.TraktIDUsage)
+	_syncWatchlistDescription = SyncCmd.Flag.String("description", cfg.DefaultConfig().Description, consts.WatchlistDescriptionUsage)
 
 	validSyncActions = []string{
 		"last_activities", "playback", "remove_playback", "get_collection",
@@ -58,6 +59,7 @@ func syncFunc(cmd *Command, _ ...string) error {
 		"add_to_ratings":         handlers.SyncAddToRatingsHandler{},
 		"remove_from_ratings":    handlers.SyncRemoveFromRatingsHandler{},
 		"get_watchlist":          handlers.SyncGetWatchlistHandler{},
+		"update_watchlist":       handlers.SyncUpdateWatchlistHandler{},
 	}
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 

@@ -13,6 +13,7 @@ type Options struct {
 	Country           string
 	Days              int
 	Delete            bool
+	Description       string
 	Episode           int
 	EpisodeAbs        int
 	EpisodeCode       string
