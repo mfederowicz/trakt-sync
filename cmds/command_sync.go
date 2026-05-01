@@ -53,6 +53,7 @@ func syncFunc(cmd *Command, _ ...string) error {
 		"get_ratings":            handlers.SyncGetRatingsHandler{},
 		"add_to_ratings":         handlers.SyncAddToRatingsHandler{},
 		"remove_from_ratings":    handlers.SyncRemoveFromRatingsHandler{},
+		"get_watchlist":    handlers.SyncGetWatchlistHandler{},
 	}
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 

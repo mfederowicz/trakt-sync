@@ -5,14 +5,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
-	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -31,7 +28,7 @@ func watchlistFunc(cmd *Command, _ ...string) error {
 
 	printer.Println("fetch watchlist lists for:" + options.UserName)
 
-	watchlist, err := fetchWatchlist(client, options, consts.DefaultPage)
+	watchlist, err := cmd.common.FetchWatchlist(client, options, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("fetch watchlist error:%w", err)
 	}
@@ -64,33 +61,4 @@ var (
 
 func init() {
 	WatchlistCmd.Run = watchlistFunc
-}
-
-func fetchWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
-	list, resp, err := client.Sync.GetWatchlist(
-		client.BuildCtxFromOptions(options),
-		&options.Type,
-		&options.Sort,
-		&opts,
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	// Check if there are more pages
-	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
-		// Fetch items from the next page
-		nextPage := page + consts.NextPageStep
-		nextPageItems, err := fetchWatchlist(client, options, nextPage)
-		if err != nil {
-			return nil, err
-		}
-		// Append items from the next page to the current page
-		list = append(list, nextPageItems...)
-	}
-
-	return list, nil
 }
