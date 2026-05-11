@@ -574,9 +574,7 @@ func (s *SyncService) GetFavorites(ctx context.Context, types *string, sortBy *s
 	return list, resp, nil
 }
 
-// AddItemsToFavorites If the user only had 50 TV shows and movies to bring with them on a deserted
-// island, what would they be? Apps should encourage user's to add favorites so
-// the algorithm keeps getting better.
+// AddItemsToFavorites add items to favorites.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/update-favorites/add-items-to-favorites
 func (s *SyncService) AddItemsToFavorites(ctx context.Context, items *str.HistoryItems) (*str.AddResult, error) {
@@ -594,4 +592,67 @@ func (s *SyncService) AddItemsToFavorites(ctx context.Context, items *str.Histor
 	}
 
 	return result, nil
+}
+
+// RemoveItemsFromFavorites remove items from favorites.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/sync/remove-from-favorites/remove-items-from-favorites
+func (s *SyncService) RemoveItemsFromFavorites(context context.Context, items *str.ItemsToRemove) (*str.RemoveResult, error) {
+	var url = "sync/favorites/remove"
+	printer.Println("remove items")
+	req, err := s.client.NewRequest(http.MethodPost, url, items)
+	if err != nil {
+		return nil, err
+	}
+
+	result := new(str.RemoveResult)
+	_, err = s.client.Do(context, req, result)
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
+
+// ReorderFavoritesItems Reorder all items on a user's favorites by sending the updated rank of list item ids.
+// Use the /sync/favorites method to get all list item ids.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/reorder-favorites/reorder-favorited-items
+func (s *SyncService) ReorderFavoritesItems(ctx context.Context, reorder *str.ItemsToReorder) (*str.ReorderResults, error) {
+	var url = "sync/favorites/reorder"
+	printer.Println("reorder favorites")
+	req, err := s.client.NewRequest(http.MethodPost, url, reorder)
+	if err != nil {
+		return nil, err
+	}
+
+	result := new(str.ReorderResults)
+	_, err = s.client.Do(ctx, req, result)
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
+
+// UpdateFavoriteItem Update the notes on a single favorite item.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/sync/update-favorite-item/update-a-favorite-item
+func (s *SyncService) UpdateFavoriteItem(context context.Context, itemID int, update *str.FavoriteItem) error {
+	var url string
+
+	url = fmt.Sprintf("sync/favorites/%d", itemID)
+	printer.Println("update notes")
+	req, err := s.client.NewRequest(http.MethodPut, url, update)
+	if err != nil {
+		return err
+	}
+
+	result := new(str.Response)
+	_, err = s.client.Do(context, req, result)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

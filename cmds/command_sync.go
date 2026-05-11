@@ -27,7 +27,8 @@ var (
 		"get_ratings", "add_to_ratings", "remove_from_ratings",
 		"get_watchlist", "update_watchlist", "add_to_watchlist",
 		"remove_from_watchlist", "reorder_watchlist", "update_watchlist_item",
-		"get_favorites", "update_favorites", "add_to_favorites"}
+		"get_favorites", "update_favorites", "add_to_favorites",
+		"remove_from_favorites", "reorder_favorites", "update_favorite_item"}
 )
 
 // SyncCmd returns movies and episodes that a user has watched, sorted by most recent.
@@ -72,6 +73,9 @@ func syncFunc(cmd *Command, _ ...string) error {
 		"get_favorites":          handlers.SyncGetFavoritesHandler{},
 		"update_favorites":       handlers.SyncUpdateFavoritesHandler{},
 		"add_to_favorites":       handlers.SyncAddToFavoritesHandler{},
+		"remove_from_favorites":  handlers.SyncRemoveFromFavoritesHandler{},
+		"reorder_favorites":      handlers.SyncReorderFavoritesHandler{},
+		"update_favorite_item":   handlers.SyncUpdateFavoriteItemHandler{},
 	}
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 

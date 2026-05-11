@@ -1295,7 +1295,7 @@ $ cat export_sync_watchlist_movies.json | ./trakt-sync sync -a reorder_watchlist
 
 ##### Update Watchlist item
 ```console
-$ ./trakt-sync sync -a update_watchlist_item -list_item_i 97857 -notes "super 10/10"
+$ ./trakt-sync sync -a update_watchlist_item -list_item_id 97857 -notes "super 10/10"
 ```
 ```console
 ```
@@ -1348,6 +1348,49 @@ $ cat export_sync_favorites_episodes.json | ./trakt-sync sync -t episodes -a add
 $ cat export_sync_favorites_seasons.json | ./trakt-sync sync -t seasons -a add_to_favorites
 $ cat export_sync_favorites_all.json | ./trakt-sync sync -t seasons -a add_to_favorites
 ```
+
+##### Remove from Favorites - via -items flag
+```console
+$ ./trakt-sync sync -t movies -a remove_from_favorites -items export_sync_favorites_movies.json
+$ ./trakt-sync sync -t shows -a remove_from_favorites -items export_sync_favorites_shows.json
+$ ./trakt-sync sync -t episodes -a remove_from_favorites -items export_sync_favorites_episodes.json
+$ ./trakt-sync sync -t seasons -a remove_from_favorites -items export_sync_favorites_seasons.json
+```
+```console
+```
+
+##### Remove from Favorites - via stdin
+```console
+$ cat export_sync_favorites_movies.json | ./trakt-sync sync -t movies -a remove_from_favorites
+```
+```console
+$ cat export_sync_favorites_shows.json | ./trakt-sync sync -t shows -a remove_from_favorites
+```
+```console
+$ cat export_sync_favorites_episodes.json | ./trakt-sync sync -t episodes -a remove_from_favorites
+```
+```console
+$ cat export_sync_favorites_seasons.json | ./trakt-sync sync -t seasons -a remove_from_favorites
+$ cat export_sync_favorites_all.json | ./trakt-sync sync -t seasons -a remove_from_favorites
+```
+
+##### Reorder Favorites - via -items flag
+```console
+$ ./trakt-sync sync -a reorder_favorites -items export_sync_favorites_movies.json
+```
+```console
+```
+
+##### Reorder Favorites - via stdin
+```console
+$ cat export_sync_favorites_movies.json | ./trakt-sync sync -a reorder_favorites
+```
+
+##### Update Favorite item
+```console
+$ ./trakt-sync sync -a update_favorite_item -list_item_id 97857 -notes "super 10/10"
+```
+
 
 #### users:
 
