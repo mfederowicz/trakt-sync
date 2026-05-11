@@ -107,6 +107,7 @@ const (
 	TvdbIDFormat         = "Tvdb"
 	UpdatedIDs           = "updated_ids"
 	UpdateWatchlist      = "update_watchlist"
+	UpdateFavorites      = "update_favorites"
 	Updates              = "updates"
 	Users                = "users"
 	Videos               = "videos"

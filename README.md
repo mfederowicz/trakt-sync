@@ -1317,6 +1317,13 @@ $ ./trakt-sync sync -a get_favorites -t movies -sort_by percentage
 imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to rank.
 ```
 
+##### Update Favorites
+```console
+$ ./trakt-sync sync -a update_favorites -description "short favorites description" -sort_how asc
+$ ./trakt-sync sync -a update_favorites -description "short favorites description" -sort_by added
+$ ./trakt-sync sync -a update_favorites -sort_by added -sort_how desc
+
+```
 
 
 #### users:

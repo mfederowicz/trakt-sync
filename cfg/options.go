@@ -158,6 +158,14 @@ var ModuleActionConfig = map[string]OptionsConfig{
 			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
 			"watched", "collected"},
 	},
+	"sync:update_favorites": {
+		Type:    []string{"movies", "shows", "seasons", "episodes", "all"},
+		SortHow: []string{"asc", "desc"},
+		SortBy: []string{"rank", "added", "title", "released", "runtime", "popularity",
+			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
+			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
+			"watched", "collected"},
+	},
 }
 
 // ModuleConfig represents the configuration options for all modules
@@ -576,7 +584,7 @@ func GetOutputForModule(options *str.Options) string {
 
 func getOutputForModuleSync(options *str.Options) string {
 	switch options.Action {
-	case consts.UpdateWatchlist:
+	case consts.UpdateWatchlist, consts.UpdateFavorites:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
 	case consts.GetWatchlist:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Watchlist, options.Type)

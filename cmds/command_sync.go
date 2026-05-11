@@ -70,6 +70,7 @@ func syncFunc(cmd *Command, _ ...string) error {
 		"reorder_watchlist":      handlers.SyncReorderWatchlistHandler{},
 		"update_watchlist_item":  handlers.SyncUpdateWatchlistItemHandler{},
 		"get_favorites":          handlers.SyncGetFavoritesHandler{},
+		"update_favorites":       handlers.SyncUpdateFavoritesHandler{},
 	}
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 

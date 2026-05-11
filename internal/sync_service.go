@@ -436,6 +436,26 @@ func (s *SyncService) UpdateWatchlist(ctx context.Context, update *str.PersonalL
 	return result, nil
 }
 
+// UpdateFavorites Update the favorites list by sending 1 or more parameters.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/update-favorites/update-favorites
+func (s *SyncService) UpdateFavorites(context context.Context, update *str.PersonalList) (*str.PersonalList, error) {
+	var url = "sync/favorites"
+	printer.Println("update favorites")
+	req, err := s.client.NewRequest(http.MethodPut, url, update)
+	if err != nil {
+		return nil, err
+	}
+
+	result := new(str.PersonalList)
+	_, err = s.client.Do(context, req, result)
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
+
 // UpdateWatchlistItem Update the notes on a single watchlist item.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/update-watchlist-item/update-a-watchlist-item
