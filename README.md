@@ -1324,7 +1324,30 @@ $ ./trakt-sync sync -a update_favorites -description "short favorites descriptio
 $ ./trakt-sync sync -a update_favorites -sort_by added -sort_how desc
 
 ```
+##### Add items to Favorites - via -items flag
+```console
+$ ./trakt-sync sync -t movies -a add_to_favorites -items export_sync_favorites_movies.json
+$ ./trakt-sync sync -t shows -a add_to_favorites -items export_sync_favorites_shows.json
+$ ./trakt-sync sync -t episodes -a add_to_favorites -items export_sync_favorites_episodes.json
+$ ./trakt-sync sync -t seasons -a add_to_favorites -items export_sync_favorites_seasons.json
+```
+```console
+```
 
+##### Add items to Favorites - via stdin
+```console
+$ cat export_sync_favorites_movies.json | ./trakt-sync sync -t movies -a add_to_favorites
+```
+```console
+$ cat export_sync_favorites_shows.json | ./trakt-sync sync -t shows -a add_to_favorites
+```
+```console
+$ cat export_sync_favorites_episodes.json | ./trakt-sync sync -t episodes -a add_to_favorites
+```
+```console
+$ cat export_sync_favorites_seasons.json | ./trakt-sync sync -t seasons -a add_to_favorites
+$ cat export_sync_favorites_all.json | ./trakt-sync sync -t seasons -a add_to_favorites
+```
 
 #### users:
 

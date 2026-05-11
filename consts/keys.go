@@ -10,6 +10,7 @@ import (
 const (
 	ActionTypeAll        = "all"
 	AddToCollection      = "add_to_collection"
+	AddToFavorites       = "add_to_favorites"
 	AddToHistory         = "add_to_history"
 	AddToRatings         = "add_to_ratings"
 	AddToWatchlist       = "add_to_watchlist"

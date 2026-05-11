@@ -573,3 +573,25 @@ func (s *SyncService) GetFavorites(ctx context.Context, types *string, sortBy *s
 
 	return list, resp, nil
 }
+
+// AddItemsToFavorites If the user only had 50 TV shows and movies to bring with them on a deserted
+// island, what would they be? Apps should encourage user's to add favorites so
+// the algorithm keeps getting better.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/update-favorites/add-items-to-favorites
+func (s *SyncService) AddItemsToFavorites(ctx context.Context, items *str.HistoryItems) (*str.AddResult, error) {
+	var url = "sync/favorites"
+	printer.Println("add items")
+	req, err := s.client.NewRequest(http.MethodPost, url, items)
+	if err != nil {
+		return nil, err
+	}
+
+	result := new(str.AddResult)
+	_, err = s.client.Do(ctx, req, result)
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
