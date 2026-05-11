@@ -1295,10 +1295,29 @@ $ cat export_sync_watchlist_movies.json | ./trakt-sync sync -a reorder_watchlist
 
 ##### Update Watchlist item
 ```console
-$ ./trakt-sync sync -a update_watchlist_item -list_item_id 97857 -notes "super 10/10"
+$ ./trakt-sync sync -a update_watchlist_item -list_item_i 97857 -notes "super 10/10"
 ```
 ```console
 ```
+
+##### Get Favorites
+```console
+$ ./trakt-sync sync -a get_favorites -t movies -sort_how asc
+$ ./trakt-sync sync -a get_favorites -t movies -sort_how des
+$ ./trakt-sync sync -a get_favorites -t movies -sort_by rank
+$ ./trakt-sync sync -a get_favorites -t movies -sort_by added
+$ ./trakt-sync sync -a get_favorites -t movies -sort_by title
+$ ./trakt-sync sync -a get_favorites -t movies -sort_by released
+$ ./trakt-sync sync -a get_favorites -t movies -sort_by runtime
+$ ./trakt-sync sync -a get_favorites -t movies -sort_by popularity
+$ ./trakt-sync sync -a get_favorites -t movies -sort_by random
+$ ./trakt-sync sync -a get_favorites -t movies -sort_by percentage
+
+🔥VIP Only including imdb_rating, tmdb_rating, rt_tomatometer, rt_audience, metascore, votes,
+imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to rank.
+```
+
+
 
 #### users:
 

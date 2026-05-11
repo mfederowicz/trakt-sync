@@ -521,3 +521,35 @@ func (s *SyncService) ReorderWatchlistItems(ctx context.Context, reorder *str.It
 
 	return result, nil
 }
+
+// GetFavorites Returns all items in a user's favorites filtered by type.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/sync/get-favorites/get-favorites
+func (s *SyncService) GetFavorites(ctx context.Context, types *string, sortBy *string, sortHow *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+	var url string
+
+	if types != nil && sortBy != nil && sortHow != nil {
+		url = fmt.Sprintf("sync/favorites/%s/%s/%s", *types, *sortBy, *sortHow)
+	} else {
+		url = "sync/favorites"
+	}
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch favorites url:" + url)
+	req, err := s.client.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.ExportlistItem{}
+	resp, err := s.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch favorites err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
