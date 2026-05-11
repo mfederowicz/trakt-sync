@@ -51,6 +51,7 @@ type Config struct {
 	Item              string    `toml:"item"`
 	Language          string    `toml:"language"`
 	List              string    `toml:"list"`
+	ListItemID        int       `toml:"list_item_id"`
 	Module            string    `toml:"module"`
 	MoviesCountry     string    `toml:"country"`
 	MoviesLanguage    string    `toml:"language"`

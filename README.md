@@ -1293,6 +1293,12 @@ $ ./trakt-sync sync -a reorder_watchlist -items export_sync_watchlist_movies.jso
 $ cat export_sync_watchlist_movies.json | ./trakt-sync sync -a reorder_watchlist
 ```
 
+##### Update Watchlist item
+```console
+$ ./trakt-sync sync -a update_watchlist_item -list_item_id 97857 -notes "super 10/10"
+```
+```console
+```
 
 #### users:
 

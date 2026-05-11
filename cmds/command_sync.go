@@ -14,9 +14,11 @@ var (
 	_syncStartAt              = SyncCmd.Flag.String("start_at", cfg.DefaultConfig().StartAt, consts.StartAtUsage)
 	_syncEndAt                = SyncCmd.Flag.String("end_at", cfg.DefaultConfig().EndAt, consts.EndAtUsage)
 	_syncPlaybackID           = SyncCmd.Flag.Int("playback_id", cfg.DefaultConfig().PlaybackID, consts.PlaybackIDUsage)
+	_syncListItemID           = SyncCmd.Flag.Int("list_item_id", cfg.DefaultConfig().ListItemID, consts.ListItemIDUsage)
 	_syncItems                = SyncCmd.Flag.String("items", consts.EmptyString, consts.ItemsUsage)
 	_syncID                   = SyncCmd.Flag.Int("i", cfg.DefaultConfig().TraktID, consts.TraktIDUsage)
 	_syncWatchlistDescription = SyncCmd.Flag.String("description", cfg.DefaultConfig().Description, consts.WatchlistDescriptionUsage)
+	_syncWatchlistNotes       = SyncCmd.Flag.String("notes", cfg.DefaultConfig().Notes, consts.WatchlistNotesUsage)
 
 	validSyncActions = []string{
 		"last_activities", "playback", "remove_playback", "get_collection",
@@ -24,7 +26,7 @@ var (
 		"get_history", "add_to_history", "remove_from_history",
 		"get_ratings", "add_to_ratings", "remove_from_ratings",
 		"get_watchlist", "update_watchlist", "add_to_watchlist",
-		"remove_from_watchlist", "reorder_watchlist"}
+		"remove_from_watchlist", "reorder_watchlist", "update_watchlist_item"}
 )
 
 // SyncCmd returns movies and episodes that a user has watched, sorted by most recent.
@@ -65,6 +67,7 @@ func syncFunc(cmd *Command, _ ...string) error {
 		"add_to_watchlist":       handlers.SyncAddToWatchlistHandler{},
 		"remove_from_watchlist":  handlers.SyncRemoveFromWatchlistHandler{},
 		"reorder_watchlist":      handlers.SyncReorderWatchlistHandler{},
+		"update_watchlist_item":  handlers.SyncUpdateWatchlistItemHandler{},
 	}
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 

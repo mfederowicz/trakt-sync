@@ -436,6 +436,28 @@ func (s *SyncService) UpdateWatchlist(ctx context.Context, update *str.PersonalL
 	return result, nil
 }
 
+// UpdateWatchlistItem Update the notes on a single watchlist item.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/update-watchlist-item/update-a-watchlist-item
+func (s *SyncService) UpdateWatchlistItem(context context.Context, itemId int, update *str.WatchlistItem) error {
+	var url string
+
+	url = fmt.Sprintf("sync/watchlist/%d", itemId)
+	printer.Println("update notes")
+	req, err := s.client.NewRequest(http.MethodPut, url, update)
+	if err != nil {
+		return err
+	}
+
+	result := new(str.Response)
+	_, err = s.client.Do(context, req, result)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // RemoveItemsFromWatchlist Remove one or more items from a user's watchlist.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/remove-from-watchlist/remove-items-from-watchlist

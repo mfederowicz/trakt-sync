@@ -79,6 +79,7 @@ var Avflags = map[string]bool{
 	"language":           true,
 	"languages":          true,
 	"lists":              true,
+	"list_item_id":       true,
 	"movies":             true,
 	"msg":                true,
 	"networks":           true,
@@ -816,8 +817,16 @@ func UpdateOptionsWithCommandSyncFlags(c *Command, options *str.Options) *str.Op
 		options.TraktID = *_syncID
 	}
 
+	if *_syncListItemID > consts.ZeroValue {
+		options.ListItemID = *_syncListItemID
+	}
+
 	if len(*_syncWatchlistDescription) > consts.ZeroValue {
 		options.Description = *_syncWatchlistDescription
+	}
+
+	if len(*_syncWatchlistNotes) > consts.ZeroValue {
+		options.Notes = *_syncWatchlistNotes
 	}
 
 	return options
