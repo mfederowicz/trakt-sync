@@ -439,10 +439,10 @@ func (s *SyncService) UpdateWatchlist(ctx context.Context, update *str.PersonalL
 // UpdateWatchlistItem Update the notes on a single watchlist item.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/update-watchlist-item/update-a-watchlist-item
-func (s *SyncService) UpdateWatchlistItem(context context.Context, itemId int, update *str.WatchlistItem) error {
+func (s *SyncService) UpdateWatchlistItem(context context.Context, itemID int, update *str.WatchlistItem) error {
 	var url string
 
-	url = fmt.Sprintf("sync/watchlist/%d", itemId)
+	url = fmt.Sprintf("sync/watchlist/%d", itemID)
 	printer.Println("update notes")
 	req, err := s.client.NewRequest(http.MethodPut, url, update)
 	if err != nil {
