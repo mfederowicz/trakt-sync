@@ -298,7 +298,6 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 	}
 
 	resp, err := c.client.Do(req)
-
 	if err != nil {
 		return handleBareDoError(ctx, err)
 	}
@@ -319,6 +318,8 @@ func prepareResponse(c *Client, resp *http.Response) (*str.Response, error) {
 		case *InvalidUserError:
 			return response, errors.New(e.Error())
 		case *NotFoundError:
+			return response, errors.New(e.Error())
+		case *ForbiddenError:
 			return response, errors.New(e.Error())
 		case *BadRequestError:
 			return response, errors.New(e.Error())
@@ -433,6 +434,8 @@ func genErrorResponse(c *Client, r *http.Response, e *str.ErrorResponse) error {
 		return c.genUpgradeRequiredError(r, e)
 	case http.StatusNotFound:
 		return c.genNotFoundError(r, e)
+	case http.StatusForbidden:
+		return c.genForbiddenError(r, e)
 	case http.StatusBadRequest:
 		return c.genBadRequestError(r, e)
 	case http.StatusPreconditionFailed:
@@ -491,6 +494,17 @@ func (*Client) genNotFoundError(r *http.Response, errorResponse *str.ErrorRespon
 	}
 	if r.StatusCode == http.StatusNotFound {
 		return notFoundError
+	}
+	return nil
+}
+
+func (*Client) genForbiddenError(r *http.Response, errorResponse *str.ErrorResponse) *ForbiddenError {
+	err := &ForbiddenError{
+		Response: errorResponse.Response,
+		Message:  errorResponse.Message,
+	}
+	if r.StatusCode == http.StatusForbidden {
+		return err
 	}
 	return nil
 }

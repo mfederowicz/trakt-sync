@@ -27,9 +27,12 @@ type OptionsConfig struct {
 	Type         []string
 	Period       []string
 	Sort         []string
+	SortBy       []string
+	SortHow      []string
 	Format       []string
 	Action       []string
 	Privacy      []string
+	Rating       []int
 }
 
 // SearchFieldConfig represents the configuration options for search_field depens on type
@@ -104,6 +107,64 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	"episodes:lists": {
 		Type: []string{"all", "personal", "official", "watchlists", "favorites"},
 		Sort: []string{"popular", "likes", "comments", "items", "added", "updated"},
+	},
+	"sync:playback": {
+		Type: []string{"movies", "episodes"},
+		Sort: []string{},
+	},
+	"sync:get_watched": {
+		Type: []string{"movies", "shows", "episodes"},
+		Sort: []string{},
+	},
+	"sync:get_history": {
+		Type: []string{"movies", "shows", "seasons", "episodes"},
+		Sort: []string{},
+	},
+	"sync:get_ratings": {
+		Type:   []string{"movies", "shows", "seasons", "episodes", "all"},
+		Rating: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+	},
+	"sync:get_watchlist": {
+		Type:    []string{"movies", "shows", "seasons", "episodes", "all"},
+		Rating:  []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+		SortHow: []string{"asc", "desc"},
+		SortBy: []string{"rank", "added", "title", "released", "runtime", "popularity",
+			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
+			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
+			"watched", "collected"},
+	},
+	"sync:update_watchlist": {
+		Type:    []string{"movies", "shows", "seasons", "episodes", "all"},
+		SortHow: []string{"asc", "desc"},
+		SortBy: []string{"rank", "added", "title", "released", "runtime", "popularity",
+			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
+			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
+			"watched", "collected"},
+	},
+	"sync:remove_watchlist": {
+		Type:    []string{"movies", "shows", "seasons", "episodes", "all"},
+		SortHow: []string{"asc", "desc"},
+		SortBy: []string{"rank", "added", "title", "released", "runtime", "popularity",
+			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
+			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
+			"watched", "collected"},
+	},
+	"sync:get_favorites": {
+		Type:    []string{"movies", "shows", "seasons", "episodes", "all"},
+		Rating:  []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+		SortHow: []string{"asc", "desc"},
+		SortBy: []string{"rank", "added", "title", "released", "runtime", "popularity",
+			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
+			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
+			"watched", "collected"},
+	},
+	"sync:update_favorites": {
+		Type:    []string{"movies", "shows", "seasons", "episodes", "all"},
+		SortHow: []string{"asc", "desc"},
+		SortBy: []string{"rank", "added", "title", "released", "runtime", "popularity",
+			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
+			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
+			"watched", "collected"},
 	},
 }
 
@@ -232,6 +293,16 @@ var ModuleConfig = map[string]OptionsConfig{
 	"notes": {
 		Privacy: []string{"private", "friends", "public"},
 	},
+
+	"sync": {
+		Type:    []string{"all", "movies", "shows"},
+		Rating:  []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+		SortHow: []string{"asc", "desc"},
+		SortBy: []string{"rank", "added", "title", "released", "runtime", "popularity",
+			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
+			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
+			"watched", "collected"},
+	},
 }
 
 // ValidateConfig validates if the provided configuration is allowed for the given module
@@ -239,6 +310,8 @@ func ValidateConfig(module string, config OptionsConfig) bool {
 	allowedConfig := ModuleConfig[module]
 	return isSubset(config.Type, allowedConfig.Type) &&
 		isSubset(config.Sort, allowedConfig.Sort) &&
+		isSubset(config.SortHow, allowedConfig.SortHow) &&
+		isSubset(config.SortBy, allowedConfig.SortBy) &&
 		isSubset(config.Format, allowedConfig.Format)
 }
 
@@ -500,12 +573,38 @@ func GetOutputForModule(options *str.Options) string {
 		consts.Networks:        getOutputForModuleNetworks(options),
 		consts.Notes:           getOutputForModuleNotes(options),
 		consts.Recommendations: getOutputForModuleRecommendations(options),
+		consts.Sync:            getOutputForModuleSync(options),
 	}
 
 	if output, found := allOutputs[options.Module]; found {
 		return output
 	}
 	return fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Type, options.Format)
+}
+
+func getOutputForModuleSync(options *str.Options) string {
+	switch options.Action {
+	case consts.UpdateWatchlist, consts.UpdateFavorites:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
+	case consts.GetWatchlist:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Watchlist, options.Type)
+	case consts.GetFavorites:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Favorites, options.Type)
+	case consts.GetRatings:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Ratings, options.Type)
+	case consts.GetHistory:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.History, options.Type)
+	case consts.GetWatched:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Watched, options.Type)
+	case consts.GetCollection:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Collection, options.Type)
+	case consts.LastActivities, consts.Playback, consts.AddToCollection, consts.RemoveFromCollection:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
+	default:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
+	}
+
+	return options.Output
 }
 
 func getOutputForModuleRecommendations(options *str.Options) string {

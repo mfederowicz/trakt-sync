@@ -2,10 +2,31 @@
 package printer
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 )
+
+// Printlnjson wraps fmt.Println and handles errors
+func Printlnjson(v ...any) {
+	str, _ := json.Marshal(v)
+	jsonString := string(str)
+	_, err := fmt.Println(jsonString)
+	if err != nil {
+		log.Printf("Println error: %v", err)
+	}
+}
+
+// PrintlnjsonIndent wraps fmt.Println and haindles errors
+func PrintlnjsonIndent(v ...any) {
+	str, _ := json.MarshalIndent(v, "", " ")
+	jsonString := string(str)
+	_, err := fmt.Println(jsonString)
+	if err != nil {
+		log.Printf("Println error: %v", err)
+	}
+}
 
 // Println wraps fmt.Println and handles errors
 func Println(v ...any) {

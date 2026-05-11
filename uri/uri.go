@@ -53,6 +53,9 @@ type ListOptions struct {
 	Hidden            string           `url:"hidden,omitempty"`
 	Specials          string           `url:"specials,omitempty"`
 	CountSpecials     string           `url:"count_specials,omitempty"`
+	StartAt           string           `url:"start_at,omitempty"`
+	EndAt             string           `url:"end_at,omitempty"`
+	Rating            []string         `url:"rating,omitempty"`
 }
 
 // AddQuery adds query parameters to s.
@@ -297,9 +300,9 @@ func convertKeysToString(keys []string, values url.Values) string {
 			if buf.Len() > consts.ZeroValue {
 				_ = buf.WriteByte('&')
 			}
-			_, _ = buf.WriteString(k)
+			_, _ = buf.WriteString(url.QueryEscape(k))
 			_ = buf.WriteByte('=')
-			_, _ = buf.WriteString(v)
+			_, _ = buf.WriteString(url.QueryEscape(v))
 		}
 	}
 	return buf.String()

@@ -1,6 +1,7 @@
 package uri
 
 import (
+	"net/url"
 	"testing"
 )
 
@@ -135,7 +136,7 @@ func TestBuildQueryRatingFiltersMeta(t *testing.T) {
 func TestBuildQueryCertificationsFilters(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseURL + "?certifications=pg-13,pg-16"
+	expectedURL := BaseURL + "?certifications=" + url.QueryEscape("pg-13,pg-16")
 
 	got, _ := AddQuery(BaseURL, ListOptionsCertificationsFilters)
 	if string(got) != expectedURL {
@@ -146,7 +147,11 @@ func TestBuildQueryCertificationsFilters(t *testing.T) {
 func TestBuildQueryShowFilters(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseURL + "?certifications=pg-13,pg-16&network_ids=1,2,45&status=pilot,ended"
+	params := url.Values{}
+	params.Set("certifications", "pg-13,pg-16")
+	params.Set("network_ids", "1,2,45")
+	params.Set("status", "pilot,ended")
+	expectedURL := BaseURL + "?" + params.Encode()
 
 	got, _ := AddQuery(BaseURL, ListOptionsShowsFilters)
 	if string(got) != expectedURL {
@@ -157,8 +162,7 @@ func TestBuildQueryShowFilters(t *testing.T) {
 func TestBuildQueryEpisodeFilters(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseURL + "?certifications=pg-13,pg-16&episode_types=standard,series_premiere&network_ids=1,2,45"
-
+	expectedURL := BaseURL + "?certifications=" + url.QueryEscape("pg-13,pg-16") + "&episode_types=" + url.QueryEscape("standard,series_premiere") + "&network_ids=" + url.QueryEscape("1,2,45")
 	got, err := AddQuery(BaseURL, ListOptionsEpisodesFilters)
 	if err != nil {
 		t.Logf("error:%s", err)

@@ -46,21 +46,33 @@ func (i *ExportlistItemJSON) Uptime(options *Options, data *ExportlistItem) {
 
 // ExportlistItem represents JSON for list item
 type ExportlistItem struct {
+	Title           *string    `json:"title,omitempty"`
+	Year            *int       `json:"year,omitempty"`
 	Rank            *int       `json:"rank,omitempty"`
+	Rating          *int       `json:"rating,omitempty"`
 	ID              *int64     `json:"id,omitempty"`
+	IDs             *IDs       `json:"ids,omitempty"`
 	WatchedAt       *Timestamp `json:"watched_at,omitempty"`
 	ListedAt        *Timestamp `json:"listed_at,omitempty"`
 	CollectedAt     *Timestamp `json:"collected_at,omitempty"`
 	LastCollectedAt *Timestamp `json:"last_collected_at,omitempty"`
 	UpdatedAt       *Timestamp `json:"updated_at,omitempty"`
 	LastUpdatedAt   *Timestamp `json:"last_updated_at,omitempty"`
+	RatedAt         *Timestamp `json:"rated_at,omitempty"`
 	Notes           *string    `json:"notes,omitempty"`
 	Type            *string    `json:"type,omitempty"`
 	Movie           *Movie     `json:"movie,omitempty"`
 	Show            *Show      `json:"show,omitempty"`
 	Season          *Season    `json:"season,omitempty"`
+	Seasons         *[]Season  `json:"seasons,omitempty"`
 	Episode         *Episode   `json:"episode,omitempty"`
 	Metadata        *Metadata  `json:"metadata,omitempty"`
+	MediaType       *string    `json:"media_type,omitempty"`
+	Resolution      *string    `json:"resolution,omitempty"`
+	Hdr             *string    `json:"hdr,omitempty"`
+	Audio           *string    `json:"audio,omitempty"`
+	AudioChannels   *string    `json:"audio_channels,omitempty"`
+	ThreeD          *bool      `json:"3d,omitempty"`
 }
 
 func (i ExportlistItem) String() string {
@@ -94,4 +106,49 @@ func (i ExportlistItem) GetTime() *Timestamp {
 	}
 
 	return nil
+}
+
+// UpdateCollectedData update meta data of object
+func (i *ExportlistItem) UpdateCollectedData(item *ExportlistItem) {
+	if item.WatchedAt != nil {
+		i.WatchedAt = item.WatchedAt.UTC()
+	}
+	if item.CollectedAt != nil {
+		i.CollectedAt = item.CollectedAt.UTC()
+	}
+	if item.LastCollectedAt != nil {
+		i.CollectedAt = item.LastCollectedAt.UTC()
+	}
+
+	if item.Metadata != nil {
+		i.MediaType = item.Metadata.MediaType
+		i.Resolution = item.Metadata.Resolution
+		i.Audio = item.Metadata.Audio
+		i.AudioChannels = item.Metadata.AudioChannels
+		i.ThreeD = item.Metadata.ThreeD
+	}
+
+	if item.Seasons != nil {
+		i.Seasons = &[]Season{}
+		for _, season := range *item.Seasons {
+			s := Season{}
+			s.Number = season.Number
+			if season.Episodes != nil {
+				s.Episodes = &[]Episode{}
+				for _, ep := range *season.Episodes {
+					e := Episode{}
+					e.CollectedAt = ep.CollectedAt.UTC()
+					e.Number = ep.Number
+					e.MediaType = ep.Metadata.MediaType
+					e.Resolution = ep.Metadata.Resolution
+					e.Audio = ep.Metadata.Audio
+					e.AudioChannels = ep.Metadata.AudioChannels
+					e.ThreeD = ep.Metadata.ThreeD
+
+					*s.Episodes = append(*s.Episodes, e)
+				}
+			}
+			*i.Seasons = append(*i.Seasons, s)
+		}
+	}
 }

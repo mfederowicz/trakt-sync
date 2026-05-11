@@ -32,6 +32,9 @@ var (
 	_countries    = flag.String("countries", "", "")
 	_runtimes     = flag.String("runtimes", "", "")
 	_studioIDs    = flag.String("studio_ids", "", "")
+	_rating       = flag.String("rating", "", "")
+	_sortBy       = flag.String("sort_by", cfg.DefaultConfig().SortBy, consts.SortByUsage)
+	_sortHow      = flag.String("sort_how", cfg.DefaultConfig().SortHow, consts.SortHowUsage)
 )
 
 // Avflags contains all available flags
@@ -42,6 +45,7 @@ var Avflags = map[string]bool{
 	"certifications":     true,
 	"checkin":            true,
 	"collection":         true,
+	"items":              true,
 	"comment":            true,
 	"comment_id":         true,
 	"comment_type":       true,
@@ -51,10 +55,12 @@ var Avflags = map[string]bool{
 	"country":            true,
 	"days":               true,
 	"delete":             true,
+	"description":        true,
+	"end_at":             true,
+	"episode":            true,
 	"episode_abs":        true,
 	"episode_code":       true,
 	"episodes":           true,
-	"episode":            true,
 	"ex":                 true,
 	"f":                  true,
 	"field":              true,
@@ -73,6 +79,7 @@ var Avflags = map[string]bool{
 	"language":           true,
 	"languages":          true,
 	"lists":              true,
+	"list_item_id":       true,
 	"movies":             true,
 	"msg":                true,
 	"networks":           true,
@@ -81,9 +88,11 @@ var Avflags = map[string]bool{
 	"pause":              true,
 	"people":             true,
 	"period":             true,
+	"playback_id":        true,
 	"privacy":            true,
 	"progress":           true,
 	"q":                  true,
+	"rating":             true,
 	"recommendations":    true,
 	"releases":           true,
 	"remove":             true,
@@ -92,20 +101,24 @@ var Avflags = map[string]bool{
 	"s":                  true,
 	"scrobble":           true,
 	"search":             true,
-	"seasons":            true,
 	"season":             true,
+	"seasons":            true,
 	"shows":              true,
+	"sort_by":            true,
+	"sort_how":           true,
 	"specials":           true,
 	"spoiler":            true,
 	"start":              true,
+	"start_at":           true,
 	"start_date":         true,
 	"stop":               true,
+	"sync":               true,
 	"t":                  true,
 	"trakt_id":           true,
 	"translations":       true,
 	"u":                  true,
-	"users":              true,
 	"undo":               true,
+	"users":              true,
 	"v":                  true,
 	"version":            true,
 	"watchlist":          true,
@@ -187,6 +200,11 @@ func (*Command) UpdateShowFlagsValues() {
 			*_showsType = "personal"
 		}
 	}
+}
+
+// UpdateSyncFlagsValues update sync flags values only in command
+func (*Command) UpdateSyncFlagsValues() {
+
 }
 
 // UpdateSeasonFlagsValues update season flags values only in command
@@ -320,6 +338,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		consts.Watchlist:       setOptionsDependsOnModuleDefault(options),
 		consts.Collection:      setOptionsDependsOnModuleDefault(options),
 		consts.History:         setOptionsDependsOnModuleDefault(options),
+		consts.Sync:            setOptionsDependsOnModuleSync(options),
 	}
 
 	if opt, found := allModules[module]; found {
@@ -345,6 +364,12 @@ func setOptionsDependsOnModuleRecommendations(options str.Options) str.Options {
 
 func setOptionsDependsOnModuleDefault(options str.Options) str.Options {
 	options.Format = *_format
+	return options
+}
+
+func setOptionsDependsOnModuleSync(options str.Options) str.Options {
+	options.Rating = toIntSlice(*_rating)
+	options.Description = *_syncWatchlistDescription
 	return options
 }
 
@@ -450,6 +475,25 @@ func toStrSlice(s string) str.Slice {
 	}
 
 	return strings.Split(s, consts.SeparatorString)
+}
+
+func toIntSlice(s string) str.SliceInt {
+	if len(s) == consts.ZeroValue {
+		return []int{}
+	}
+
+	out := &str.SliceInt{}
+
+	for i, v := range strings.Split(s, consts.SeparatorString) {
+		n, err := strconv.Atoi(v)
+		if err != nil {
+			fmt.Printf("invalid number at index %d: %v\n", i, err)
+			return str.SliceInt{}
+		}
+		out.Set(n)
+	}
+
+	return *out
 }
 
 func setOptionsDependsOnModuleLists(options str.Options) str.Options {
@@ -683,6 +727,14 @@ func (*Command) ValidSort(options *str.Options) error {
 		return fmt.Errorf("sort '%s' is not valid for module '%s' and action '%s', avaliable sort:%s", options.Sort, options.Module, options.Action, cfg.ModuleActionConfig[prefix].Sort)
 	}
 
+	if len(cfg.ModuleActionConfig[prefix].SortHow) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].SortHow, options.SortHow) {
+		return fmt.Errorf("sort_how '%s' is not valid for module '%s' and action '%s', avaliable sort_how:%s", options.SortHow, options.Module, options.Action, cfg.ModuleActionConfig[prefix].SortHow)
+	}
+
+	if len(cfg.ModuleActionConfig[prefix].SortBy) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].SortBy, options.SortBy) {
+		return fmt.Errorf("sort_by '%s' is not valid for module '%s' and action '%s', avaliable sort_by:%s", options.SortBy, options.Module, options.Action, cfg.ModuleActionConfig[prefix].SortBy)
+	}
+
 	return nil
 }
 
@@ -715,7 +767,7 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 	options = UpdateOptionsWithCommandShowsFlags(c, options)
 	options = UpdateOptionsWithCommandRecommendationsFlags(options)
 	options = UpdateOptionsWithCommandScrobbleFlags(options)
-
+	options = UpdateOptionsWithCommandSyncFlags(c, options)
 	return options
 }
 
@@ -726,6 +778,55 @@ func UpdateOptionsWithCommandScrobbleFlags(options *str.Options) *str.Options {
 	}
 	if len(*_scrobbleEpisodeCode) > consts.ZeroValue {
 		options.EpisodeCode = *_scrobbleEpisodeCode
+	}
+
+	return options
+}
+
+// UpdateOptionsWithCommandSyncFlags update options depends on scrobble command flags
+func UpdateOptionsWithCommandSyncFlags(c *Command, options *str.Options) *str.Options {
+	if len(*_syncAction) > consts.ZeroValue {
+		options.Action = *_syncAction
+	}
+	options.Output = cfg.GetOutputForModule(options)
+
+	options.FullHour = true
+	if len(*_syncStartAt) > consts.ZeroValue {
+		options.StartDate = c.common.ConvertDateString(*_syncStartAt, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
+	} else {
+		options.StartDate = c.common.DateLastDays(consts.DefaultStartAtDays, options.Timezone, options.FullHour)
+	}
+
+	if len(*_syncEndAt) > consts.ZeroValue {
+		options.EndDate = c.common.ConvertDateString(*_syncEndAt, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
+	} else {
+		options.EndDate = c.common.CurrentDateString(options.Timezone, options.FullHour)
+	}
+
+	options.FullHour = true
+
+	if *_syncPlaybackID > consts.ZeroValue {
+		options.PlaybackID = *_syncPlaybackID
+	}
+
+	if len(*_syncItems) > consts.ZeroValue {
+		options.Items = *_syncItems
+	}
+
+	if *_syncID > consts.ZeroValue {
+		options.TraktID = *_syncID
+	}
+
+	if *_syncListItemID > consts.ZeroValue {
+		options.ListItemID = *_syncListItemID
+	}
+
+	if len(*_syncWatchlistDescription) > consts.ZeroValue {
+		options.Description = *_syncWatchlistDescription
+	}
+
+	if len(*_syncWatchlistNotes) > consts.ZeroValue {
+		options.Notes = *_syncWatchlistNotes
 	}
 
 	return options
@@ -746,6 +847,14 @@ func UpdateOptionsWithCommandRecommendationsFlags(options *str.Options) *str.Opt
 
 // UpdateOptionsCommonFlags update options depends on common command flags
 func UpdateOptionsCommonFlags(c *Command, options *str.Options) *str.Options {
+	if len(*_sortBy) > consts.ZeroValue {
+		options.SortBy = *_sortBy
+	}
+
+	if len(*_sortHow) > consts.ZeroValue {
+		options.SortHow = *_sortHow
+	}
+
 	if len(*_userName) > consts.ZeroValue {
 		options.UserName = *_userName
 	}

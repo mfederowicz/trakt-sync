@@ -33,6 +33,7 @@ const (
 	X755                  = 0755
 	ZeroValue             = 0
 	ZeroValueFloat        = float64(0)
+	ZeroValueInt64        = int64(0)
 	TestEpisodeAbs        = 100
 	TestEpisodeSeason6    = 6
 	TestEpisodeNumber10   = 10

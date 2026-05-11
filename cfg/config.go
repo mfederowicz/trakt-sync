@@ -31,6 +31,8 @@ type Config struct {
 	CountSpecials     string    `toml:"count_specials"`
 	Days              int       `toml:"days"`
 	Delete            bool      `toml:"delete"`
+	Description       string    `toml:"description"`
+	EndAt             string    `toml:"end_at"`
 	Episode           int       `toml:"episode"`
 	EpisodeAbs        int       `toml:"episode_abs"`
 	EpisodeCode       string    `toml:"episode_code"`
@@ -49,6 +51,7 @@ type Config struct {
 	Item              string    `toml:"item"`
 	Language          string    `toml:"language"`
 	List              string    `toml:"list"`
+	ListItemID        int       `toml:"list_item_id"`
 	Module            string    `toml:"module"`
 	MoviesCountry     string    `toml:"country"`
 	MoviesLanguage    string    `toml:"language"`
@@ -60,11 +63,13 @@ type Config struct {
 	NotesID           int       `toml:"notes_id"`
 	Output            string    `toml:"output"`
 	PagesLimit        int       `toml:"pages_limit"`
+	PlaybackID        int       `toml:"playback_id"`
 	PerPage           int       `toml:"per_page"`
 	Privacy           string    `toml:"privacy"`
 	Progress          float64   `toml:"progress"`
 	Query             string    `toml:"query"`
 	RedirectURI       string    `toml:"redirect_uri"`
+	Rating            string    `toml:"rating"`
 	Remove            bool      `toml:"remove"`
 	Reply             string    `toml:"reply"`
 	SearchField       str.Slice `toml:"search_field"`
@@ -80,8 +85,11 @@ type Config struct {
 	ShowsSort         string    `toml:"sort"`
 	ShowsType         string    `toml:"type"`
 	Sort              string    `toml:"sort"`
+	SortBy            string    `toml:"sort_by"`
+	SortHow           string    `toml:"sort_how"`
 	Specials          string    `toml:"specials"`
 	Spoiler           bool      `toml:"spoiler"`
+	StartAt           string    `toml:"start_at"`
 	Timezone          string    `toml:"timezone"`
 	TokenPath         string    `toml:"token_path"`
 	TraktID           int       `toml:"trakt_id"`
@@ -516,6 +524,8 @@ func DefaultConfig() *Config {
 		ShowsSort:      consts.EmptyString,
 		ShowsType:      consts.EmptyString,
 		Sort:           "rank",
+		SortBy:         "rank",
+		SortHow:        "asc",
 		Spoiler:        false,
 		TokenPath:      consts.EmptyString,
 		Type:           "movies",

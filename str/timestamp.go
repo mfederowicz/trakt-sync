@@ -15,6 +15,11 @@ func (t Timestamp) String() string {
 	return t.Time.String()
 }
 
+// UTC returns a copy of Timestamp with time converted to UTC.
+func (t Timestamp) UTC() *Timestamp {
+	return &Timestamp{Time: t.Time.UTC()}
+}
+
 // Define the possible formats
 const (
 	dateFormat     = "2006-01-02"

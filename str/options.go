@@ -4,6 +4,7 @@ package str
 // Options represents a app opions.
 type Options struct {
 	Action            string
+	Items             string
 	Comment           string
 	CommentID         int
 	CommentType       string
@@ -12,6 +13,7 @@ type Options struct {
 	Country           string
 	Days              int
 	Delete            bool
+	Description       string
 	Episode           int
 	EpisodeAbs        int
 	EpisodeCode       string
@@ -29,6 +31,7 @@ type Options struct {
 	Item              string
 	Language          string
 	List              string
+	ListItemID        int
 	Module            string
 	Msg               string
 	Notes             string
@@ -42,17 +45,22 @@ type Options struct {
 	Remove            bool
 	Reply             string
 	ResetAt           string
+	Rating            SliceInt
 	SearchField       Slice
 	SearchIDType      string
 	SearchType        Slice
 	Season            int
 	Sort              string
+	SortBy            string
+	SortHow           string
 	Specials          string
 	Spoiler           bool
 	StartDate         string
+	EndDate           string
 	Time              string
 	Token             Token
 	TraktID           int
+	PlaybackID        int
 	Translations      Slice
 	Type              string
 	Timezone          string
