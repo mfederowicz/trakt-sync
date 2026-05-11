@@ -5,6 +5,7 @@ package str
 type RemoveResult struct {
 	Deleted  *ResultCounters `json:"deleted,omitempty"`
 	NotFound *ResultNotFound `json:"not_found,omitempty"`
+	List     *PersonalList   `json:"list,omitempty"`
 }
 
 func (h RemoveResult) String() string {

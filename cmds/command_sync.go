@@ -22,7 +22,8 @@ var (
 		"last_activities", "playback", "remove_playback", "get_collection",
 		"add_to_collection", "remove_from_collection", "get_watched",
 		"get_history", "add_to_history", "remove_from_history",
-		"get_ratings", "add_to_ratings", "remove_from_ratings"}
+		"get_ratings", "add_to_ratings", "remove_from_ratings",
+		"get_watchlist", "update_watchlist"}
 )
 
 // SyncCmd returns movies and episodes that a user has watched, sorted by most recent.
@@ -60,6 +61,8 @@ func syncFunc(cmd *Command, _ ...string) error {
 		"remove_from_ratings":    handlers.SyncRemoveFromRatingsHandler{},
 		"get_watchlist":          handlers.SyncGetWatchlistHandler{},
 		"update_watchlist":       handlers.SyncUpdateWatchlistHandler{},
+		"add_to_watchlist":       handlers.SyncAddToWatchlistHandler{},
+		"remove_from_watchlist":  handlers.SyncRemoveFromWatchlistHandler{},
 	}
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 

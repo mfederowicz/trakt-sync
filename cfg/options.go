@@ -141,6 +141,15 @@ var ModuleActionConfig = map[string]OptionsConfig{
 			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
 			"watched", "collected"},
 	},
+	"sync:remove_watchlist": {
+		Type:    []string{"movies", "shows", "seasons", "episodes", "all"},
+		SortHow: []string{"asc", "desc"},
+		SortBy: []string{"rank", "added", "title", "released", "runtime", "popularity",
+			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
+			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
+			"watched", "collected"},
+	},
+
 }
 
 // ModuleConfig represents the configuration options for all modules

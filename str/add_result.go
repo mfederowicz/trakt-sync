@@ -7,6 +7,7 @@ type AddResult struct {
 	Updated  *ResultCounters `json:"updated,omitempty"`
 	Existing *ResultCounters `json:"existing,omitempty"`
 	NotFound *ResultNotFound `json:"not_found,omitempty"`
+	List     *PersonalList   `json:"list,omitempty"`
 }
 
 func (a AddResult) String() string {

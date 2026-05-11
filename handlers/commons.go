@@ -264,6 +264,7 @@ func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 			Year:      m.Year,
 			IDs:       m.IDs,
 			WatchedAt: m.WatchedAt,
+			Notes:     m.Notes,
 		}
 		movies = append(movies, movie)
 	}
@@ -274,6 +275,7 @@ func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 			Year:    m.Year,
 			IDs:     m.IDs,
 			Seasons: m.Seasons,
+			Notes:   m.Notes,
 		}
 		shows = append(shows, show)
 	}
@@ -282,6 +284,7 @@ func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 		season := str.Season{
 			IDs:       m.IDs,
 			WatchedAt: m.WatchedAt,
+			Notes:     m.Notes,
 		}
 		seasons = append(seasons, season)
 	}
@@ -290,6 +293,7 @@ func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 		episode := str.Episode{
 			IDs:       m.IDs,
 			WatchedAt: m.WatchedAt,
+			Notes:     m.Notes,
 		}
 		episodes = append(episodes, episode)
 	}
@@ -1045,7 +1049,7 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 	case consts.AddToHistory, consts.RemoveFromHistory, consts.AddToRatings, consts.RemoveFromRatings:
 		items = c.ListToItemsAgregate(items, list, stype)
 		return items.Uniq(), nil
-	case consts.AddToCollection, consts.RemoveFromCollection:
+	case consts.AddToCollection, consts.RemoveFromCollection, consts.RemoveFromWatchlist, consts.AddToWatchlist:
 		items = c.ListToItemsCollection(items, list, stype)
 		return items, nil
 	default:
@@ -1115,10 +1119,11 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			e.UpdateCollectedData(val)
 			*items.Shows = append(*items.Shows, e)
 		}
-		if val.Season != nil && stype == consts.Shows {
+		if val.Season != nil && stype == consts.Seasons {
 			e := str.ExportlistItem{}
 			e.IDs = val.Season.IDs
 			val.Season.UpdateCollectedData(val)
+			e.UpdateCollectedData(val)
 			*items.Seasons = append(*items.Seasons, e)
 		}
 		if val.Episode != nil && stype == consts.Episodes {
@@ -1512,7 +1517,7 @@ func onlyIDs[T Media](items []str.ExportlistItem) []T {
 		}
 	case str.Show:
 		for _, item := range items {
-			if len(*item.Seasons) > 0 {
+			if item.Seasons != nil && len(*item.Seasons) > 0 {
 				updatedSeasons := SeasonsWithEpisodeNumbersOnly(item.Seasons)
 				result = append(result, any(str.Show{IDs: item.IDs, Seasons: updatedSeasons}).(T))
 			} else {

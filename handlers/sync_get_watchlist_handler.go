@@ -27,7 +27,7 @@ func (m SyncGetWatchlistHandler) Handle(options *str.Options, client *internal.C
 
 	items, err := m.syncGetWatchlist(client, options, consts.DefaultPage)
 	if err != nil {
-		return fmt.Errorf("get ratings error:%w", err)
+		return fmt.Errorf("get watchlist error:%w", err)
 	}
 	print("write data to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(items, "", "  ")

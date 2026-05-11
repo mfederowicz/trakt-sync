@@ -18,6 +18,8 @@ import (
 // methods of the Trakt API.
 type SyncService Service
 
+
+
 // GetCollection Get all collected items in a user's collection.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/sync/get-collection/get-collection
@@ -428,6 +430,49 @@ func (s *SyncService) UpdateWatchlist(ctx context.Context, update *str.PersonalL
 	}
 
 	result := new(str.PersonalList)
+	_, err = s.client.Do(ctx, req, result)
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
+
+// RemoveItemsFromWatchlist Remove one or more items from a user's watchlist.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/remove-from-watchlist/remove-items-from-watchlist
+func (s *SyncService) RemoveItemsFromWatchlist(context context.Context, items *str.ItemsToRemove) (*str.RemoveResult, error) {
+	var url = "sync/watchlist/remove"
+	printer.Println("remove items")
+	req, err := s.client.NewRequest(http.MethodPost, url, items)
+	if err != nil {
+		return nil, err
+	}
+
+	result := new(str.RemoveResult)
+	_, err = s.client.Do(context, req, result)
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
+
+// AddItemsToWatchlist Add one of more items to a user's watchlist.
+// Accepts shows, seasons, episodes and movies. If only a show is passed,
+// only the show itself will be added. If seasons are specified, all of
+// those seasons will be added.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/update-watchlist/add-items-to-watchlist
+func (s *SyncService) AddItemsToWatchlist(ctx context.Context, items *str.HistoryItems) (*str.AddResult, error) {
+	var url = "sync/watchlist"
+	printer.Println("add items")
+	req, err := s.client.NewRequest(http.MethodPost, url, items)
+	if err != nil {
+		return nil, err
+	}
+
+	result := new(str.AddResult)
 	_, err = s.client.Do(ctx, req, result)
 	if err != nil {
 		return result, err

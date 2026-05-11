@@ -8,6 +8,7 @@ type Episode struct {
 	Plays                 *int       `json:"plays,omitempty"`
 	Title                 *string    `json:"title,omitempty"`
 	IDs                   *IDs       `json:"ids,omitempty"`
+	Notes                 *string    `json:"notes,omitempty"`
 	NumberAbs             *int       `json:"number_abs,omitempty"`
 	Overview              *string    `json:"overview,omitempty"`
 	Rating                *float32   `json:"rating,omitempty"`
