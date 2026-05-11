@@ -18,8 +18,6 @@ import (
 // methods of the Trakt API.
 type SyncService Service
 
-
-
 // GetCollection Get all collected items in a user's collection.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/sync/get-collection/get-collection
@@ -473,6 +471,27 @@ func (s *SyncService) AddItemsToWatchlist(ctx context.Context, items *str.Histor
 	}
 
 	result := new(str.AddResult)
+	_, err = s.client.Do(ctx, req, result)
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
+
+// ReorderWatchlistItems Reorder all items on a user's watchlist by sending the updated rank of list item ids.
+// Use the /sync/watchlist method to get all list item ids.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/sync/reorder-watchlist/reorder-watchlist-items
+func (s *SyncService) ReorderWatchlistItems(ctx context.Context, reorder *str.ItemsToReorder) (*str.ReorderResults, error) {
+	var url = "sync/watchlist/reorder"
+	printer.Println("reorder watchlist")
+	req, err := s.client.NewRequest(http.MethodPost, url, reorder)
+	if err != nil {
+		return nil, err
+	}
+
+	result := new(str.ReorderResults)
 	_, err = s.client.Do(ctx, req, result)
 	if err != nil {
 		return result, err

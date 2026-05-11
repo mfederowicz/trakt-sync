@@ -33,6 +33,7 @@ type CommonInterface interface {
 	CreateItemsToAdd(items *str.ItemsList) str.HistoryItems
 	CreateItemsToAddRatings(items *str.ItemsList) str.RatingItems
 	CreateItemsToRemove(items *str.ItemsList) str.ItemsToRemove
+	CreateItemsToReorder(items *str.ItemsList) str.ItemsToReorder
 	CreateScrobble(client *internal.Client, options *str.Options) (*str.Scrobble, error)
 	CreateScrobbleShowEpisode(client *internal.Client, options *str.Options) (*str.Scrobble, error)
 	CurrentDateString(tz string, full bool) string
@@ -252,6 +253,27 @@ func (c CommonLogic) CreateItemsToRemove(items *str.ItemsList) str.ItemsToRemove
 		Shows:    c.OnlyShowsIDs(items.Shows),
 		Seasons:  c.OnlySeasonsIDs(items.Seasons),
 		Episodes: c.OnlyEpisodesIDs(items.Episodes),
+	}
+}
+
+// CreateItemsToReorder helper to create list of watchlist ids to reorder
+func (CommonLogic) CreateItemsToReorder(items *str.ItemsList) str.ItemsToReorder {
+	reorder := []int64{}
+	for _, m := range *items.Movies {
+		reorder = append(reorder, *m.ID)
+	}
+	for _, m := range *items.Shows {
+		reorder = append(reorder, *m.ID)
+	}
+	for _, m := range *items.Seasons {
+		reorder = append(reorder, *m.ID)
+	}
+	for _, m := range *items.Episodes {
+		reorder = append(reorder, *m.ID)
+	}
+
+	return str.ItemsToReorder{
+		Rank: &reorder,
 	}
 }
 
@@ -1049,7 +1071,7 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 	case consts.AddToHistory, consts.RemoveFromHistory, consts.AddToRatings, consts.RemoveFromRatings:
 		items = c.ListToItemsAgregate(items, list, stype)
 		return items.Uniq(), nil
-	case consts.AddToCollection, consts.RemoveFromCollection, consts.RemoveFromWatchlist, consts.AddToWatchlist:
+	case consts.AddToCollection, consts.RemoveFromCollection, consts.RemoveFromWatchlist, consts.AddToWatchlist, consts.ReorderWatchlist:
 		items = c.ListToItemsCollection(items, list, stype)
 		return items, nil
 	default:
@@ -1109,6 +1131,7 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			e.Year = val.Movie.Year
 			e.IDs = val.Movie.IDs
 			e.UpdateCollectedData(val)
+			e.ID = val.ID
 			*items.Movies = append(*items.Movies, e)
 		}
 		if val.Show != nil && stype == consts.Shows {
@@ -1117,6 +1140,7 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			e.Year = val.Show.Year
 			e.IDs = val.Show.IDs
 			e.UpdateCollectedData(val)
+			e.ID = val.ID
 			*items.Shows = append(*items.Shows, e)
 		}
 		if val.Season != nil && stype == consts.Seasons {
@@ -1124,12 +1148,14 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			e.IDs = val.Season.IDs
 			val.Season.UpdateCollectedData(val)
 			e.UpdateCollectedData(val)
+			e.ID = val.ID
 			*items.Seasons = append(*items.Seasons, e)
 		}
 		if val.Episode != nil && stype == consts.Episodes {
 			e := str.ExportlistItem{}
 			e.IDs = val.Episode.IDs
 			e.UpdateCollectedData(val)
+			e.ID = val.ID
 			*items.Episodes = append(*items.Episodes, e)
 		}
 	}

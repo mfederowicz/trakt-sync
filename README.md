@@ -1281,6 +1281,18 @@ $ cat export_sync_watchlist_seasons.json | ./trakt-sync sync -t seasons -a remov
 $ cat export_sync_watchlist_all.json | ./trakt-sync sync -t seasons -a remove_from_watchlist
 ```
 
+##### Reorder Watchlist - via -items flag
+```console
+$ ./trakt-sync sync -a reorder_watchlist -items export_sync_watchlist_movies.json
+```
+```console
+```
+
+##### Reorder Watchlist - via stdin
+```console
+$ cat export_sync_watchlist_movies.json | ./trakt-sync sync -a reorder_watchlist
+```
+
 
 #### users:
 

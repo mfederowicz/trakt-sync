@@ -80,6 +80,7 @@ const (
 	RemoveFromHistory    = "remove_from_history"
 	RemoveFromRatings    = "remove_from_ratings"
 	RemoveFromWatchlist  = "remove_from_watchlist"
+	ReorderWatchlist     = "reorder_watchlist"
 	Replies              = "replies"
 	SavedFilters         = "saved_filters"
 	Scrobble             = "scrobble"
