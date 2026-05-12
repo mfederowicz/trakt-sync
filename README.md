@@ -7,30 +7,30 @@
     - [Command Line Flags](#command-line-flags)
     - [Command Line Commands](#command-line-commands)
     - [Sample export usage](#sample-export-usage)
-      - [calendars](#calendars)
-      - [certifications](#certifications)
-      - [checkin](#checkin)
-      - [collection](#collection)
-      - [comments](#comments)
-      - [countries](#countries)
-      - [genres](#genres)
-      - [help](#help)
-      - [history](#history)
-      - [languages](#languages)
-      - [lists](#lists)
-      - [movies](#movies)
-      - [networks](#networks)
-      - [notes](#notes)
-      - [people](#people)
-      - [recommendations](#recommendations)
-      - [scrobble](#scrobble)
-      - [search](#search)
-      - [shows](#shows)
-      - [seasons](#seasons)
-      - [episodes](#episodes)
-      - [sync](#sync)
-      - [users](#users)
-      - [watchlist](#watchlist)
+      - [Calendars](#Calendars)
+      - [Certifications](#Certifications)
+      - [Checkin](#Checkin)
+      - [Collection](#Collection)
+      - [Comments](#Comments)
+      - [Countries](#Countries)
+      - [Genres](#Genres)
+      - [Help](#Help)
+      - [History](#History)
+      - [Languages](#Languages)
+      - [Lists](#Lists)
+      - [Movies](#Movies)
+      - [Networks](#Networks)
+      - [Notes](#Notes)
+      - [People](#People)
+      - [Recommendations](#Recommendations)
+      - [Scrobble](#Scrobble)
+      - [Search](#Search)
+      - [Shows](#Shows)
+      - [Seasons](#Seasons)
+      - [Episodes](#Episodes)
+      - [Sync](#Sync)
+      - [Users](#Users)
+      - [Watchlist](#Watchlist)
 
   - [License](#license)
 
@@ -73,8 +73,8 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 - `calendars` - By default, the calendar will return all shows or movies for the specified time period and can be global or user specific.
 - `certifications` - Certifications list
 - `checkin` - Checkin movie,episode,show_episode,delete
-- `collection` - Get all collected items in a user's collection.
 - `comments` - Comments comments,comment,replies,item,likes,like,trending,recent,updates.
+- `collection` - Get all collected items in a user's collection.
 - `countries` - Get a list of all countries, including names and codes.
 - `genres` - Get a list of all genres, including names and slugs.
 - `help` - Help on the trakt-sync command and subcommands.
@@ -90,11 +90,12 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 - `search` - Searches can use queries or ID lookups.
 - `seasons` - Returns data about seasons: summary, season, episodes, translations, comments etc...
 - `shows` - Returns data about movies: trending, popular, list, likes, like, items, comments etc...
+- `sync` - Sync data useful for mediacenters: activities, playbacks, collections, ratings, watchlists, favorites.
 - `users` - Returns all data for a user.
 - `watchlist` - Returns all items in a user's watchlist filtered by type.
 ### Sample export usage
 
-#### calendars:
+#### Calendars:
 ```console
 $ ./trakt-sync calendars -a all-shows -> export_calendars_shows_20240707_7.json
 ```
@@ -113,7 +114,8 @@ $ ./trakt-sync calendars -a all-movies -> export_calendars_movies_20240707_7.jso
 ```console
 $ ./trakt-sync calendars -a all-dvd -> export_calendars_dvd_20240707_7.json
 ```
-#### certifications:
+
+#### Certifications:
 ```console
 $ ./trakt-sync certifications -> export_certifications_movies.json
 ```
@@ -123,7 +125,8 @@ $ ./trakt-sync certifications -t movies -> export_certifications_movies.json
 ```console
 $ ./trakt-sync certifications -t shows -> export_certifications_shows.json
 ```
-#### checkin:
+
+#### Checkin:
 ```console
 $ ./trakt-sync checkin -a movie -trakt_id 28 -msg "super movie"
 ```
@@ -139,14 +142,8 @@ $ ./trakt-sync checkin -a show_episode -trakt_id 136121 -episode_code 1x5 -msg "
 ```console
 $ ./trakt-sync checkin -a delete
 ```
-#### collection:
-```console
-$ ./trakt-sync collection -t movies --ex metadata
-```
-```console
-$ ./trakt-sync collection -t shows --ex metadata
-```
-#### comments:
+
+#### Comments:
 ```console
 $ ./trakt-sync comments -a comment -comment_id 779883 -comment "minions,minions,minions movie ever ok"
 ```
@@ -186,7 +183,16 @@ $ ./trakt-sync comments -a recent -include_replies true
 ```console
 $ ./trakt-sync comments -a updates -include_replies false
 ```
-#### countries:
+
+#### Collection:
+```console
+$ ./trakt-sync collection -t movies --ex metadata
+```
+```console
+$ ./trakt-sync collection -t shows --ex metadata
+```
+
+#### Countries:
 ```console
 $ ./trakt-sync countries -> export_countries_movies.json
 ```
@@ -196,7 +202,8 @@ $ ./trakt-sync countries -t movies -> export_countries_movies.json
 ```console
 $ ./trakt-sync countries -t shows -> export_countries_shows.json
 ```
-#### genres:
+
+#### Genres:
 ```console
 $ ./trakt-sync genres -> export_genres_movies.json
 ```
@@ -206,7 +213,8 @@ $ ./trakt-sync genres -t movies -> export_genres_movies.json
 ```console
 $ ./trakt-sync genres -t shows -> export_genres_shows.json
 ```
-#### history:
+
+#### History:
 ```console
 $ ./trakt-sync history -t shows -> export_history_shows_imdb.json
 ```
@@ -216,7 +224,8 @@ $ ./trakt-sync history -t episodes -f tmdb -> export_history_episodes_tmdb.json
 ```console
 $ ./trakt-sync history -t episodes -f imdb -> export_history_episodes_imdb.json
 ```
-#### languages:
+
+#### Languages:
 ```console
 $ ./trakt-sync languages -> export_languages_movies.json
 ```
@@ -226,7 +235,8 @@ $ ./trakt-sync languages -t movies -> export_languages_movies.json
 ```console
 $ ./trakt-sync languages -t shows -> export_languages_shows.json
 ```
-#### lists:
+
+#### Lists:
 ```console
 $ ./trakt-sync lists -a trending
 ```
@@ -255,7 +265,8 @@ $ ./trakt-sync lists -a items -trakt_id 2142753 -t movie,show
 ```console
 $ ./trakt-sync lists -a comments -trakt_id 2142753
 ```
-#### movies:
+
+#### Movies:
 ```console
 $ ./trakt-sync movies -a trending
 ```
@@ -419,12 +430,14 @@ $ ./trakt-sync movies -a videos -i the-sopranos
 ```console
 $ ./trakt-sync movies -a refresh -i the-sopranos
 ```
-#### networks:
+
+#### Networks:
 ```console
 $ ./trakt-sync networks -a list
 ```
-#### notes:
-##### adding notes for media types:
+
+#### Notes:
+##### Adding notes for media types:
 ```console
 $ ./trakt-sync notes -a notes -t movie -i the-sopranos -notes "xyz"
 ```
@@ -443,7 +456,7 @@ $ ./trakt-sync notes -a notes -t person -i john-wayne -notes "greate person"
 ```console
 $ ./trakt-sync notes -a notes -t history -i 1234567 -notes "history note"
 ```
-##### adding notes depends on activities:
+##### Adding notes depends on activities:
 ```console
 $ ./trakt-sync notes -a notes -t collection -item episode -i 73629 -notes "great episode"
 ```
@@ -465,7 +478,7 @@ $ ./trakt-sync notes -a notes -t rating -item season -i 3961 -notes "overall 9/1
 ```console
 $ ./trakt-sync notes -a notes -t rating -item show -i the-sopranos -notes "overall 9/10"
 ```
-##### manage notes get/modify/delete:
+##### Manage notes get/modify/delete:
 ```console
 $ ./trakt-sync notes -a note -i 97857
 ```
@@ -475,11 +488,12 @@ $ ./trakt-sync notes -a note -i 97857 -notes "super 10/10" -privacy public -spoi
 ```console
 $ ./trakt-sync notes -a note -i 97857 -delete
 ```
-##### get items attachment to note:
+##### Get items attachment to note:
 ```console
 $ ./trakt-sync notes -a item -i 97854
 ```
-#### people:
+
+#### People:
 ```console
 $ ./trakt-sync people -a updates -start_date 2024-10-13
 ```
@@ -498,31 +512,33 @@ $ ./trakt-sync people -a shows -i john-wayne
 ```console
 $ ./trakt-sync people -a lists -i john-wayne
 ```
-#### recommendations:
-##### hide movie recommendations:
+
+#### Recommendations:
+##### Hide movie recommendations:
 ```console
 $ ./trakt-sync recommendations -a movies -i black-bag-2025 -hide
 ```
-##### movies recommendations:
+##### Movies recommendations:
 ```console
 $ ./trakt-sync recommendations -a movies
 ```
 ```console
 $ ./trakt-sync recommendations -a movies -ignore_collected true -ignore_watchlisted true
 ```
-##### hide show recommendations:
+##### Hide show recommendations:
 ```console
 $ ./trakt-sync recommendations -a shows -i wellington-paranormal -hide
 ```
-##### movies recommendations:
+##### Shows recommendations:
 ```console
 $ ./trakt-sync recommendations -a shows
 ```
 ```console
 $ ./trakt-sync recommendations -a shows -ignore_collected false -ignore_watchlisted false
 ```
-#### scrobble:
-##### scrobble start/pause/stop movie:
+
+#### Scrobble:
+##### Scrobble start/pause/stop movie:
 ```console
 $ ./trakt-sync scrobble -a start -t movie -progress 3.45 -i guardians-of-the-galaxy-2014
 ```
@@ -532,7 +548,7 @@ $ ./trakt-sync scrobble -a pause -t movie -progress 3.45 -i guardians-of-the-gal
 ```console
 $ ./trakt-sync scrobble -a stop -t movie -progress 3.45 -i guardians-of-the-galaxy-2014
 ```
-##### scrobble start/pause/stop episode:
+##### Scrobble start/pause/stop episode:
 ```console
 $ ./trakt-sync scrobble -a start -t episode -i 73629 -progress 10.25
 ```
@@ -542,7 +558,7 @@ $ ./trakt-sync scrobble -a pause -t episode -i 73629 -progress 10.25
 ```console
 $ ./trakt-sync scrobble -a stop -t episode -i 73629 -progress 50.25
 ```
-##### scrobble start/pause/stop show by episode code (format season x episode):
+##### Scrobble start/pause/stop show by episode code (format season x episode):
 ```console
 $ ./trakt-sync scrobble -a start -t show_episode -i 136121 -episode_code 1x5 -progress 3.45
 ```
@@ -552,7 +568,7 @@ $ ./trakt-sync scrobble -a pause -t show_episode -i 136121 -episode_code 1x5 -pr
 ```console
 $ ./trakt-sync scrobble -a stop -t show_episode -i 136121 -episode_code 1x5 -progress 3.45
 ```
-##### scrobble start/pause/stop show by episode abs number (useful for Anime and Donghua):
+##### Scrobble start/pause/stop show by episode abs number (useful for Anime and Donghua):
 ```console
 $ ./trakt-sync scrobble -a start -t show_episode -i 37696 -episode_abs 164 -progress 50
 ```
@@ -562,7 +578,8 @@ $ ./trakt-sync scrobble -a pause -t show_episode -i 37696 -episode_abs 164 -prog
 ```console
 $ ./trakt-sync scrobble -a stop -t show_episode -i 37696 -episode_abs 164 -progress 60
 ```
-#### search:
+
+#### Search:
 ##### Export search result by Text Query:
 ```console
 $  ./trakt-sync search -a text-query -t movie -q freddy --field title
@@ -613,7 +630,8 @@ $ ./trakt-sync search -a id-lookup -i 75725 -t episode
 ```console
 $ ./trakt-sync search -a id-lookup --id_type tmdb -i 254265
 ```
-#### shows:
+
+#### Shows:
 ```console
 $ ./trakt-sync shows -a trending
 ```
@@ -744,17 +762,33 @@ $ ./trakt-sync shows -a lists -i the-sopranos -t all -s updated
 ##### Get show collection progress
 ```console
 $ ./trakt-sync shows -a collection_progress -i the-sopranos
+```
+```console
 $ ./trakt-sync shows -a collection_progress -i the-sopranos -hidden false
+```
+```console
 $ ./trakt-sync shows -a collection_progress -i the-sopranos -specials false
+```
+```console
 $ ./trakt-sync shows -a collection_progress -i the-sopranos -count_specials true
+```
+```console
 $ ./trakt-sync shows -a collection_progress -i the-sopranos -hidden true -specials true -count_specials true
 ```
 ##### Get show watched progress
 ```console
 $ ./trakt-sync shows -a watched_progress -i the-sopranos
+```
+```console
 $ ./trakt-sync shows -a watched_progress -i the-sopranos -hidden false
+```
+```console
 $ ./trakt-sync shows -a watched_progress -i the-sopranos -specials false
+```
+```console
 $ ./trakt-sync shows -a watched_progress -i the-sopranos -count_specials true
+```
+```console
 $ ./trakt-sync shows -a watched_progress -i the-sopranos -hidden true -specials true -count_specials true
 ```
 ##### Reset show progress
@@ -768,6 +802,8 @@ $ ./trakt-sync shows -a reset_show_progress -i the-sopranos -undo
 ##### Get all people for a show
 ```console
 $ ./trakt-sync shows -a people -i the-sopranos
+```
+```console
 $ ./trakt-sync shows -a people -i the-sopranos -ex guest_stars
 ```
 ##### Get show ratings
@@ -802,7 +838,8 @@ $ ./trakt-sync shows -a videos -i the-sopranos
 ```console
 $ ./trakt-sync shows -a refresh -i the-sopranos
 ```
-#### seasons:
+
+#### Seasons:
 ##### Get all seasons for a show
 ```console
 $ ./trakt-sync seasons -a summary -i the-sopranos -ex full
@@ -889,7 +926,7 @@ $ ./trakt-sync seasons -a watching -i the-sopranos -season 1
 $ ./trakt-sync seasons -a videos -i the-sopranos -season 1
 ```
 
-#### episodes:
+#### Episodes:
 ##### Get a single episode for a show
 ```console
 $ ./trakt-sync episodes -a summary -i the-sopranos -season 1 -episode 1 -ex full
@@ -968,8 +1005,7 @@ $ ./trakt-sync episodes -a watching -i the-sopranos -season 1 -episode 1
 $ ./trakt-sync episodes -a videos -i the-sopranos -season 1 -episode 1
 ```
 
-#### sync:
-
+#### Sync:
 ##### Last activities
 ```console
 $ ./trakt-sync sync -a last_activities
@@ -1006,7 +1042,6 @@ $ ./trakt-sync sync -a get_collection -t episodes -ex metadata
 ```console
 $ ./trakt-sync sync -a get_collection -t seasons -ex metadata
 ```
-
 ##### Add to collection - via -items flag
 ```console
 $ ./trakt-sync sync -t movies -a add_to_collection -items export_sync_collection_movies.json
@@ -1033,26 +1068,32 @@ $ cat export_sync_collection_episodes.json | ./trakt-sync sync -t episodes -a ad
 ```console
 $ cat export_sync_collection_seasons.json | ./trakt-sync sync -t seasons -a add_to_collection
 ```
-
 ##### Remove from collection - via -items flag
 ```console
 $ ./trakt-sync sync -t movies -a remove_from_collection -items export_sync_collection_movies.json
-$ ./trakt-sync sync -t shows -a remove_from_collection -items export_sync_collection_shows.json
-$ ./trakt-sync sync -t episodes -a remove_from_collection -items export_sync_collection_episode.json
-$ ./trakt-sync sync -t seasons -a remove_from_collection -items export_sync_collection_seasons.json
 ```
 ```console
+$ ./trakt-sync sync -t shows -a remove_from_collection -items export_sync_collection_shows.json
+```
+```console
+$ ./trakt-sync sync -t episodes -a remove_from_collection -items export_sync_collection_episode.json
+```
+```console
+$ ./trakt-sync sync -t seasons -a remove_from_collection -items export_sync_collection_seasons.json
 ```
 ##### Remove from collection - via stdin
 ```console
 $ cat export_sync_collection_movies.json | ./trakt-sync sync -t movies -a remove_from_collection
-$ cat export_sync_collection_shows.json | ./trakt-sync sync -t shows -a remove_from_collection
-$ cat export_sync_collection_episodes.json | ./trakt-sync sync -t episodes -a remove_from_collection
-$ cat export_sync_collection_seasons.json | ./trakt-sync sync -t seasons -a remove_from_collection
 ```
 ```console
+$ cat export_sync_collection_shows.json | ./trakt-sync sync -t shows -a remove_from_collection
 ```
-
+```console
+$ cat export_sync_collection_episodes.json | ./trakt-sync sync -t episodes -a remove_from_collection
+```
+```console
+$ cat export_sync_collection_seasons.json | ./trakt-sync sync -t seasons -a remove_from_collection
+```
 ##### Get watched - movies
 ```console
 $ ./trakt-sync sync -a get_watched -t movies
@@ -1069,7 +1110,6 @@ $ ./trakt-sync sync -a get_watched -t shows -ex noseasons
 ```console
 $ ./trakt-sync sync -a get_watched -t episodes
 ```
-
 ##### Get history - movies
 ```console
 $ ./trakt-sync sync -a get_history -t movies -start_at 2025-07-01 -end_at 2025-07-06
@@ -1086,7 +1126,6 @@ $ ./trakt-sync sync -a get_history -t shows
 ```console
 $ ./trakt-sync sync -a get_history -t episodes
 ```
-
 ##### Remove and Add to history - via -items flag
 ```console
 $ ./trakt-sync sync -t movies -a add_to_history -items export_sync_history_movies.json
@@ -1100,7 +1139,6 @@ $ ./trakt-sync sync -t episodes -a add_to_history -items export_sync_history_epi
 ```console
 $ ./trakt-sync sync -t seasons -a add_to_history -items export_sync_history_seasons.json
 ```
-
 ##### Remove and Add to history - via stdin
 ```console
 $ cat export_sync_history_movies.json | ./trakt-sync sync -t movies -a add_to_history
@@ -1114,25 +1152,32 @@ $ cat export_sync_history_episodes.json | ./trakt-sync sync -t episodes -a add_t
 ```console
 $ cat export_sync_history_seasons.json | ./trakt-sync sync -t seasons -a add_to_history
 ```
-
 ##### Remove from history - via -items flag
 ```console
 $ ./trakt-sync sync -t movies -a remove_from_history -items export_sync_history_movies.json
-$ ./trakt-sync sync -t shows -a remove_from_history -items export_sync_history_shows.json
-$ ./trakt-sync sync -t episodes -a remove_from_history -items export_sync_history_episode.json
-$ ./trakt-sync sync -t seasons -a remove_from_history -items export_sync_history_seasons.json
 ```
 ```console
+$ ./trakt-sync sync -t shows -a remove_from_history -items export_sync_history_shows.json
 ```
-
+```console
+$ ./trakt-sync sync -t episodes -a remove_from_history -items export_sync_history_episode.json
+```
+```console
+$ ./trakt-sync sync -t seasons -a remove_from_history -items export_sync_history_seasons.json
+```
 ##### Remove from history - via stdin
 ```console
 $ cat export_sync_history_movies.json | ./trakt-sync sync -t movies -a remove_from_history
+```
+```console
 $ cat export_sync_history_shows.json | ./trakt-sync sync -t shows -a remove_from_history
+```
+```console
 $ cat export_sync_history_episodes.json | ./trakt-sync sync -t episodes -a remove_from_history
+```
+```console
 $ cat export_sync_history_seasons.json | ./trakt-sync sync -t seasons -a remove_from_history
 ```
-
 ##### Get ratings - movies - all ratings
 ```console
 $ ./trakt-sync sync -a get_ratings -t movies
@@ -1153,17 +1198,19 @@ $ ./trakt-sync sync -a get_ratings -t episodes
 ```console
 $ ./trakt-sync sync -a get_ratings -t all
 ```
-
 ##### Add ratings - via -items flag
 ```console
 $ ./trakt-sync sync -t movies -a add_to_ratings -items export_sync_ratings_movies.json
-$ ./trakt-sync sync -t shows -a add_to_ratings -items export_sync_ratings_shows.json
-$ ./trakt-sync sync -t episodes -a add_to_ratings -items export_sync_ratings_episodes.json
-$ ./trakt-sync sync -t seasons -a add_to_ratings -items export_sync_ratings_seasons.json
 ```
 ```console
+$ ./trakt-sync sync -t shows -a add_to_ratings -items export_sync_ratings_shows.json
 ```
-
+```console
+$ ./trakt-sync sync -t episodes -a add_to_ratings -items export_sync_ratings_episodes.json
+```
+```console
+$ ./trakt-sync sync -t seasons -a add_to_ratings -items export_sync_ratings_seasons.json
+```
 ##### Add ratings - via stdin
 ```console
 $ cat export_sync_ratings_movies.json |
@@ -1176,20 +1223,26 @@ $ cat export_sync_ratings_episodes.json | ./trakt-sync sync -t episodes -a add_t
 ```
 ```console
 $ cat export_sync_ratings_seasons.json | ./trakt-sync sync -t seasons -a add_to_ratings
+```
+```console
 $ cat export_sync_ratings_all.json | ./trakt-sync sync -t seasons -a add_to_ratings
 ```
-
 ##### Remove from ratings - via -items flag
 ```console
 $ ./trakt-sync sync -t movies -a remove_from_ratings -items export_sync_ratings_movies.json
-$ ./trakt-sync sync -t shows -a remove_from_ratings -items export_sync_ratings_shows.json
-$ ./trakt-sync sync -t episodes -a remove_from_ratings -items export_sync_ratings_episodes.json
-$ ./trakt-sync sync -t seasons -a remove_from_ratings -items export_sync_ratings_seasons.json
-$ ./trakt-sync sync -t seasons -a remove_from_ratings -items export_sync_ratings_all.json
 ```
 ```console
+$ ./trakt-sync sync -t shows -a remove_from_ratings -items export_sync_ratings_shows.json
 ```
-
+```console
+$ ./trakt-sync sync -t episodes -a remove_from_ratings -items export_sync_ratings_episodes.json
+```
+```console
+$ ./trakt-sync sync -t seasons -a remove_from_ratings -items export_sync_ratings_seasons.json
+```
+```console
+$ ./trakt-sync sync -t seasons -a remove_from_ratings -items export_sync_ratings_all.json
+```
 ##### Remove from ratings - via stdin
 ```console
 $ cat export_sync_ratings_movies.json | ./trakt-sync sync -t movies -a remove_from_ratings
@@ -1202,45 +1255,69 @@ $ cat export_sync_ratings_episodes.json | ./trakt-sync sync -t episodes -a remov
 ```
 ```console
 $ cat export_sync_ratings_seasons.json | ./trakt-sync sync -t seasons -a remove_from_ratings
+```
+```console
 $ cat export_sync_ratings_all.json | ./trakt-sync sync -t seasons -a remove_from_ratings
 ```
-
 ##### Get Watchlist
 ```console
 $ ./trakt-sync sync -a get_watchlist -t movies -sort_how asc
+```
+```console
 $ ./trakt-sync sync -a get_watchlist -t movies -sort_how des
+```
+```console
 $ ./trakt-sync sync -a get_watchlist -t movies -sort_by rank
+```
+```console
 $ ./trakt-sync sync -a get_watchlist -t movies -sort_by added
+```
+```console
 $ ./trakt-sync sync -a get_watchlist -t movies -sort_by title
+```
+```console
 $ ./trakt-sync sync -a get_watchlist -t movies -sort_by released
+```
+```console
 $ ./trakt-sync sync -a get_watchlist -t movies -sort_by runtime
+```
+```console
 $ ./trakt-sync sync -a get_watchlist -t movies -sort_by popularity
+```
+```console
 $ ./trakt-sync sync -a get_watchlist -t movies -sort_by random
+```
+```console
 $ ./trakt-sync sync -a get_watchlist -t movies -sort_by percentage
+```
 
+```console
 🔥VIP Only including imdb_rating, tmdb_rating, rt_tomatometer, rt_audience, metascore, votes,
 imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to rank.
 ```
-```console
-```
-
 ##### Update Watchlist
 ```console
 $ ./trakt-sync sync -a update_watchlist -description "short watchlist description" -sort_how asc
+```
+```console
 $ ./trakt-sync sync -a update_watchlist -description "short watchlist description" -sort_by added
+```
+```console
 $ ./trakt-sync sync -a update_watchlist -sort_by added -sort_how desc
-
 ```
 ##### Add items to Watchlist - via -items flag
 ```console
 $ ./trakt-sync sync -t movies -a add_to_watchlist -items export_sync_watchlist_movies.json
-$ ./trakt-sync sync -t shows -a add_to_watchlist -items export_sync_watchlist_shows.json
-$ ./trakt-sync sync -t episodes -a add_to_watchlist -items export_sync_watchlist_episodes.json
-$ ./trakt-sync sync -t seasons -a add_to_watchlist -items export_sync_watchlist_seasons.json
 ```
 ```console
+$ ./trakt-sync sync -t shows -a add_to_watchlist -items export_sync_watchlist_shows.json
 ```
-
+```console
+$ ./trakt-sync sync -t episodes -a add_to_watchlist -items export_sync_watchlist_episodes.json
+```
+```console
+$ ./trakt-sync sync -t seasons -a add_to_watchlist -items export_sync_watchlist_seasons.json
+```
 ##### Add items to Watchlist - via stdin
 ```console
 $ cat export_sync_watchlist_movies.json | ./trakt-sync sync -t movies -a add_to_watchlist
@@ -1253,19 +1330,23 @@ $ cat export_sync_watchlist_episodes.json | ./trakt-sync sync -t episodes -a add
 ```
 ```console
 $ cat export_sync_watchlist_seasons.json | ./trakt-sync sync -t seasons -a add_to_watchlist
+```
+```console
 $ cat export_sync_watchlist_all.json | ./trakt-sync sync -t seasons -a add_to_watchlist
 ```
-
 ##### Remove from Watchlist - via -items flag
 ```console
 $ ./trakt-sync sync -t movies -a remove_from_watchlist -items export_sync_watchlist_movies.json
-$ ./trakt-sync sync -t shows -a remove_from_watchlist -items export_sync_watchlist_shows.json
-$ ./trakt-sync sync -t episodes -a remove_from_watchlist -items export_sync_watchlist_episodes.json
-$ ./trakt-sync sync -t seasons -a remove_from_watchlist -items export_sync_watchlist_seasons.json
 ```
 ```console
+$ ./trakt-sync sync -t shows -a remove_from_watchlist -items export_sync_watchlist_shows.json
 ```
-
+```console
+$ ./trakt-sync sync -t episodes -a remove_from_watchlist -items export_sync_watchlist_episodes.json
+```
+```console
+$ ./trakt-sync sync -t seasons -a remove_from_watchlist -items export_sync_watchlist_seasons.json
+```
 ##### Remove from Watchlist - via stdin
 ```console
 $ cat export_sync_watchlist_movies.json | ./trakt-sync sync -t movies -a remove_from_watchlist
@@ -1278,40 +1359,54 @@ $ cat export_sync_watchlist_episodes.json | ./trakt-sync sync -t episodes -a rem
 ```
 ```console
 $ cat export_sync_watchlist_seasons.json | ./trakt-sync sync -t seasons -a remove_from_watchlist
+```
+```console
 $ cat export_sync_watchlist_all.json | ./trakt-sync sync -t seasons -a remove_from_watchlist
 ```
-
 ##### Reorder Watchlist - via -items flag
 ```console
 $ ./trakt-sync sync -a reorder_watchlist -items export_sync_watchlist_movies.json
 ```
-```console
-```
-
 ##### Reorder Watchlist - via stdin
 ```console
 $ cat export_sync_watchlist_movies.json | ./trakt-sync sync -a reorder_watchlist
 ```
-
 ##### Update Watchlist item
 ```console
 $ ./trakt-sync sync -a update_watchlist_item -list_item_id 97857 -notes "super 10/10"
 ```
-```console
-```
-
 ##### Get Favorites
 ```console
 $ ./trakt-sync sync -a get_favorites -t movies -sort_how asc
+```
+```console
 $ ./trakt-sync sync -a get_favorites -t movies -sort_how des
+```
+```console
 $ ./trakt-sync sync -a get_favorites -t movies -sort_by rank
+```
+```console
 $ ./trakt-sync sync -a get_favorites -t movies -sort_by added
+```
+```console
 $ ./trakt-sync sync -a get_favorites -t movies -sort_by title
+```
+```console
 $ ./trakt-sync sync -a get_favorites -t movies -sort_by released
+```
+```console
 $ ./trakt-sync sync -a get_favorites -t movies -sort_by runtime
+```
+```console
 $ ./trakt-sync sync -a get_favorites -t movies -sort_by popularity
+```
+```console
 $ ./trakt-sync sync -a get_favorites -t movies -sort_by random
+```
+```console
 $ ./trakt-sync sync -a get_favorites -t movies -sort_by percentage
+```
+```console
 
 🔥VIP Only including imdb_rating, tmdb_rating, rt_tomatometer, rt_audience, metascore, votes,
 imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to rank.
@@ -1320,20 +1415,26 @@ imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to r
 ##### Update Favorites
 ```console
 $ ./trakt-sync sync -a update_favorites -description "short favorites description" -sort_how asc
+```
+```console
 $ ./trakt-sync sync -a update_favorites -description "short favorites description" -sort_by added
+```
+```console
 $ ./trakt-sync sync -a update_favorites -sort_by added -sort_how desc
-
 ```
 ##### Add items to Favorites - via -items flag
 ```console
 $ ./trakt-sync sync -t movies -a add_to_favorites -items export_sync_favorites_movies.json
-$ ./trakt-sync sync -t shows -a add_to_favorites -items export_sync_favorites_shows.json
-$ ./trakt-sync sync -t episodes -a add_to_favorites -items export_sync_favorites_episodes.json
-$ ./trakt-sync sync -t seasons -a add_to_favorites -items export_sync_favorites_seasons.json
 ```
 ```console
+$ ./trakt-sync sync -t shows -a add_to_favorites -items export_sync_favorites_shows.json
 ```
-
+```console
+$ ./trakt-sync sync -t episodes -a add_to_favorites -items export_sync_favorites_episodes.json
+```
+```console
+$ ./trakt-sync sync -t seasons -a add_to_favorites -items export_sync_favorites_seasons.json
+```
 ##### Add items to Favorites - via stdin
 ```console
 $ cat export_sync_favorites_movies.json | ./trakt-sync sync -t movies -a add_to_favorites
@@ -1346,19 +1447,23 @@ $ cat export_sync_favorites_episodes.json | ./trakt-sync sync -t episodes -a add
 ```
 ```console
 $ cat export_sync_favorites_seasons.json | ./trakt-sync sync -t seasons -a add_to_favorites
+```
+```console
 $ cat export_sync_favorites_all.json | ./trakt-sync sync -t seasons -a add_to_favorites
 ```
-
 ##### Remove from Favorites - via -items flag
 ```console
 $ ./trakt-sync sync -t movies -a remove_from_favorites -items export_sync_favorites_movies.json
-$ ./trakt-sync sync -t shows -a remove_from_favorites -items export_sync_favorites_shows.json
-$ ./trakt-sync sync -t episodes -a remove_from_favorites -items export_sync_favorites_episodes.json
-$ ./trakt-sync sync -t seasons -a remove_from_favorites -items export_sync_favorites_seasons.json
 ```
 ```console
+$ ./trakt-sync sync -t shows -a remove_from_favorites -items export_sync_favorites_shows.json
 ```
-
+```console
+$ ./trakt-sync sync -t episodes -a remove_from_favorites -items export_sync_favorites_episodes.json
+```
+```console
+$ ./trakt-sync sync -t seasons -a remove_from_favorites -items export_sync_favorites_seasons.json
+```
 ##### Remove from Favorites - via stdin
 ```console
 $ cat export_sync_favorites_movies.json | ./trakt-sync sync -t movies -a remove_from_favorites
@@ -1371,29 +1476,24 @@ $ cat export_sync_favorites_episodes.json | ./trakt-sync sync -t episodes -a rem
 ```
 ```console
 $ cat export_sync_favorites_seasons.json | ./trakt-sync sync -t seasons -a remove_from_favorites
+```
+```console
 $ cat export_sync_favorites_all.json | ./trakt-sync sync -t seasons -a remove_from_favorites
 ```
-
 ##### Reorder Favorites - via -items flag
 ```console
 $ ./trakt-sync sync -a reorder_favorites -items export_sync_favorites_movies.json
 ```
-```console
-```
-
 ##### Reorder Favorites - via stdin
 ```console
 $ cat export_sync_favorites_movies.json | ./trakt-sync sync -a reorder_favorites
 ```
-
 ##### Update Favorite item
 ```console
 $ ./trakt-sync sync -a update_favorite_item -list_item_id 97857 -notes "super 10/10"
 ```
 
-
-#### users:
-
+#### Users:
 ##### Export movies or shows or episodes from user lists:
 ```console
 $ ./trakt-sync users -a lists -u username -i 123456 -t episodes
@@ -1432,8 +1532,8 @@ $ ./trakt-sync users -a watched -t shows -u sean
 ```console
 $ ./trakt-sync users -a watched -t shows -u sean --ex noseasons
 ```
-#### watchlist
 
+#### Watchlist
 ##### Export all movies from watchlist:
 ```console
 $ ./trakt-sync watchlist -t movies -f tmdb -> export_watchlist_movies_tmdb.json
