@@ -35,7 +35,7 @@ var (
 var SyncCmd = &Command{
 	Name:    "sync",
 	Usage:   "",
-	Summary: "Syncing with trakt",
+	Summary: "Sync data useful for mediacenters: activities, playbacks, collections, ratings, watchlists, favorites.",
 	Help:    `sync command`,
 }
 
