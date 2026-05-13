@@ -15,8 +15,6 @@ import (
 // methods of the Trakt API.
 type UsersService Service
 
-
-
 // GetItemstOnAPersonalList Get all items on a personal list.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/users/list-items/get-items-on-a-personal-list

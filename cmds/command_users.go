@@ -41,10 +41,10 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"pending_following_requests": handlers.UsersPendingFollowingRequestsHandler{},
 		//"follow_requests":            handlers.UsersFollowRequestsHandler{},
 		//"follow_request":             handlers.UsersFollowRequestHandler{},
-		"lists":                      handlers.UsersListsHandler{},
-		"saved_filters":              handlers.UsersSavedFiltersHandler{},
-		"stats":                      handlers.UsersStatsHandler{},
-		"watched":                    handlers.UsersWatchedHandler{},
+		"lists":         handlers.UsersListsHandler{},
+		"saved_filters": handlers.UsersSavedFiltersHandler{},
+		"stats":         handlers.UsersStatsHandler{},
+		"watched":       handlers.UsersWatchedHandler{},
 	}
 
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)

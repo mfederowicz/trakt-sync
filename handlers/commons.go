@@ -85,8 +85,6 @@ type CommonInterface interface {
 // CommonLogic struct for common methods
 type CommonLogic struct{}
 
-
-
 // Ensure CommonLogic implements CommonInterface at compile time
 var _ CommonInterface = (*CommonLogic)(nil)
 
@@ -1560,6 +1558,7 @@ func (c CommonLogic) FetchFavorites(client *internal.Client, options *str.Option
 
 	return list, nil
 }
+
 // FetchPendingFollowingRequests helper function to fetch pending following requests
 func (c CommonLogic) FetchPendingFollowingRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
