@@ -37,16 +37,19 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 	}
 	var handler handlers.UsersHandler
 	allHandlers := map[string]handlers.Handler{
-		"settings":      handlers.UsersSettingsHandler{},
-		"lists":         handlers.UsersListsHandler{},
-		"saved_filters": handlers.UsersSavedFiltersHandler{},
-		"stats":         handlers.UsersStatsHandler{},
-		"watched":       handlers.UsersWatchedHandler{},
+		"settings":                   handlers.UsersSettingsHandler{},
+		"pending_following_requests": handlers.UsersPendingFollowingRequestsHandler{},
+		//"follow_requests":            handlers.UsersFollowRequestsHandler{},
+		//"follow_request":             handlers.UsersFollowRequestHandler{},
+		"lists":                      handlers.UsersListsHandler{},
+		"saved_filters":              handlers.UsersSavedFiltersHandler{},
+		"stats":                      handlers.UsersStatsHandler{},
+		"watched":                    handlers.UsersWatchedHandler{},
 	}
 
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
-	validActions = []string{"lists", "saved_filters", "stats", "watched"}
+	validActions = []string{"settings", "pending_following_requests", "lists", "saved_filters", "stats", "watched"}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

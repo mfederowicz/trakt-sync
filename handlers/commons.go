@@ -61,6 +61,7 @@ type CommonInterface interface {
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
 	FetchWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchFavorites(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
+	FetchPendingFollowingRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error)
 	GenActionTypeItemUsage(options *str.Options, items []string)
 	GenActionTypeUsage(options *str.Options, types []string)
 	GenActionsUsage(name string, actions []string)
@@ -83,6 +84,8 @@ type CommonInterface interface {
 
 // CommonLogic struct for common methods
 type CommonLogic struct{}
+
+
 
 // Ensure CommonLogic implements CommonInterface at compile time
 var _ CommonInterface = (*CommonLogic)(nil)
@@ -1553,6 +1556,20 @@ func (c CommonLogic) FetchFavorites(client *internal.Client, options *str.Option
 		}
 		// Append items from the next page to the current page
 		list = append(list, nextPageItems...)
+	}
+
+	return list, nil
+}
+// FetchPendingFollowingRequests helper function to fetch pending following requests
+func (c CommonLogic) FetchPendingFollowingRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error) {
+	opts := uri.ListOptions{Extended: options.ExtendedInfo}
+	list, _, err := client.Users.GetPendingFollowingRequests(
+		client.BuildCtxFromOptions(options),
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
 	}
 
 	return list, nil

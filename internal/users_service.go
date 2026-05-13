@@ -15,6 +15,8 @@ import (
 // methods of the Trakt API.
 type UsersService Service
 
+
+
 // GetItemstOnAPersonalList Get all items on a personal list.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/users/list-items/get-items-on-a-personal-list
@@ -197,4 +199,28 @@ func (u *UsersService) RetrieveSettings(ctx context.Context) (*str.UserSettings,
 	}
 
 	return settings, resp, nil
+}
+
+// GetPendingFollowingRequests List a user's pending following requests that they're waiting for the other user's to approve.
+// API docs:https://trakt.docs.apiary.io/#reference/users/following-requests/get-pending-following-requests
+func (u *UsersService) GetPendingFollowingRequests(ctx context.Context, options *uri.ListOptions) ([]*str.FollowRequest, *str.Response, error) {
+	url := "users/requests/following"
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	url, err = uri.AddQuery(url, options)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	requests := []*str.FollowRequest{}
+	resp, err := u.client.Do(ctx, req, &requests)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return requests, resp, nil
 }

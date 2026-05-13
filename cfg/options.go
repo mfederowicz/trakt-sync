@@ -799,7 +799,7 @@ func getOutputForModuleUsers(options *str.Options) string {
 			options.Module,
 			options.Action,
 			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
-	case consts.Settings:
+	case consts.Settings,consts.PendingFollowingRequests:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
