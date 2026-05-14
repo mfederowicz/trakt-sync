@@ -62,6 +62,7 @@ type CommonInterface interface {
 	FetchWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchFavorites(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchPendingFollowingRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error)
+	FetchFollowRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error)
 	GenActionTypeItemUsage(options *str.Options, items []string)
 	GenActionTypeUsage(options *str.Options, types []string)
 	GenActionsUsage(name string, actions []string)
@@ -1560,7 +1561,7 @@ func (c CommonLogic) FetchFavorites(client *internal.Client, options *str.Option
 }
 
 // FetchPendingFollowingRequests helper function to fetch pending following requests
-func (c CommonLogic) FetchPendingFollowingRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error) {
+func (CommonLogic) FetchPendingFollowingRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Users.GetPendingFollowingRequests(
 		client.BuildCtxFromOptions(options),
@@ -1572,6 +1573,49 @@ func (c CommonLogic) FetchPendingFollowingRequests(client *internal.Client, opti
 	}
 
 	return list, nil
+}
+
+// FetchFollowRequests helper function to fetch follow requests
+func (CommonLogic) FetchFollowRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error) {
+	opts := uri.ListOptions{Extended: options.ExtendedInfo}
+	list, _, err := client.Users.GetFollowRequests(
+		client.BuildCtxFromOptions(options),
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return list, nil
+}
+
+// ApproveFollowRequest helper function to approve follow request
+func (CommonLogic) ApproveFollowRequest(client *internal.Client, options *str.Options) (*str.FollowRequest, *str.Response, error) {
+	result, resp, err := client.Users.ApproveFollowRequest(
+		client.BuildCtxFromOptions(options),
+		options.FollowerRequest,
+	)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return result, resp, nil
+}
+
+// DenyFollowRequest helper function to deny follow request
+func (CommonLogic) DenyFollowRequest(client *internal.Client, options *str.Options) (*str.FollowRequest, *str.Response, error) {
+	result, resp, err := client.Users.DenyFollowRequest(
+		client.BuildCtxFromOptions(options),
+		options.FollowerRequest,
+	)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return result, resp, nil
 }
 
 // Media interface for helpers

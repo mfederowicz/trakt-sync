@@ -31,6 +31,7 @@ type Config struct {
 	CountSpecials     string    `toml:"count_specials"`
 	Days              int       `toml:"days"`
 	Delete            bool      `toml:"delete"`
+	Deny              bool      `toml:"deny"`
 	Description       string    `toml:"description"`
 	EndAt             string    `toml:"end_at"`
 	Episode           int       `toml:"episode"`
@@ -72,6 +73,7 @@ type Config struct {
 	Rating            string    `toml:"rating"`
 	Remove            bool      `toml:"remove"`
 	Reply             string    `toml:"reply"`
+	FollowerRequest   int       `toml:"follower_request"`
 	SearchField       str.Slice `toml:"search_field"`
 	SearchIDType      string    `toml:"search_id_type"`
 	SearchType        str.Slice `toml:"search_type"`

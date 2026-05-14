@@ -55,6 +55,7 @@ var Avflags = map[string]bool{
 	"country":            true,
 	"days":               true,
 	"delete":             true,
+	"deny":               true,
 	"description":        true,
 	"end_at":             true,
 	"episode":            true,
@@ -63,6 +64,7 @@ var Avflags = map[string]bool{
 	"episodes":           true,
 	"ex":                 true,
 	"f":                  true,
+	"follower_request":   true,
 	"field":              true,
 	"genres":             true,
 	"godoc":              true,
@@ -398,6 +400,8 @@ func setOptionsDependsOnModulePeople(options str.Options) str.Options {
 
 func setOptionsDependsOnModuleUsers(options str.Options) str.Options {
 	options.Action = *_usersAction
+	options.Deny = *_usersDeny
+	options.FollowerRequest = *_usersFollowerRequest
 	return options
 }
 

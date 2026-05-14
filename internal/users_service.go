@@ -222,3 +222,72 @@ func (u *UsersService) GetPendingFollowingRequests(ctx context.Context, options 
 
 	return requests, resp, nil
 }
+
+// GetFollowRequests List a user's pending follow requests so they can either approve or deny them.
+// API docs:https://trakt.docs.apiary.io/#reference/users/follower-requests/get-follow-requests
+func (u *UsersService) GetFollowRequests(ctx context.Context, options *uri.ListOptions) ([]*str.FollowRequest, *str.Response, error) {
+	url := "users/requests/following"
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	url, err = uri.AddQuery(url, options)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	requests := []*str.FollowRequest{}
+	resp, err := u.client.Do(ctx, req, &requests)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return requests, resp, nil
+}
+
+// ApproveFollowRequest Approve a follower using the id of the request.
+// If the id is not found, was already approved, or was already denied, a 404 error will be returned.
+// API docs:https://trakt.docs.apiary.io/#reference/users/approve-or-deny-follower-requests/approve-follow-request
+func (u *UsersService) ApproveFollowRequest(ctx context.Context, request int) (*str.FollowRequest, *str.Response, error) {
+	var url string
+
+	url = fmt.Sprintf("users/requests/%d", *&request)
+
+	printer.Println("approve follower")
+	req, err := u.client.NewRequest(http.MethodPost, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	fr := new(str.FollowRequest)
+	resp, err := u.client.Do(ctx, req, fr)
+	if err != nil {
+		return fr, resp, err
+	}
+
+	return fr, resp, nil
+}
+
+// DenyFollowRequest Deny a follower using the id of the request.
+// If the id is not found, was already approved, or was already denied, a 404 error will be returned.
+func (u *UsersService) DenyFollowRequest(ctx context.Context, request int) (*str.FollowRequest, *str.Response, error) {
+	var url string
+
+	url = fmt.Sprintf("users/requests/%d", *&request)
+
+	printer.Println("deny follower")
+	req, err := u.client.NewRequest(http.MethodDelete, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	fr := new(str.FollowRequest)
+	resp, err := u.client.Do(ctx, req, fr)
+	if err != nil {
+		return fr, resp, err
+	}
+
+	return fr, resp, nil
+}

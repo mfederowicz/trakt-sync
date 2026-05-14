@@ -15,8 +15,10 @@ var (
 	username   = "me"
 	exportData []*str.PersonalList
 
-	_usersListID = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
-	_usersAction = UsersCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_usersListID          = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
+	_usersAction          = UsersCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_usersDeny            = UsersCmd.Flag.Bool("deny", cfg.DefaultConfig().Deny, consts.DenyUsage)
+	_usersFollowerRequest = UsersCmd.Flag.Int("follower_request", cfg.DefaultConfig().FollowerRequest, consts.FollowerRequestUsage)
 )
 
 // UsersCmd Returns all personal lists for a user.
@@ -39,17 +41,18 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 	allHandlers := map[string]handlers.Handler{
 		"settings":                   handlers.UsersSettingsHandler{},
 		"pending_following_requests": handlers.UsersPendingFollowingRequestsHandler{},
-		//"follow_requests":            handlers.UsersFollowRequestsHandler{},
-		//"follow_request":             handlers.UsersFollowRequestHandler{},
-		"lists":         handlers.UsersListsHandler{},
-		"saved_filters": handlers.UsersSavedFiltersHandler{},
-		"stats":         handlers.UsersStatsHandler{},
-		"watched":       handlers.UsersWatchedHandler{},
+		"follow_requests":            handlers.UsersFollowRequestsHandler{},
+		"follow_request":             handlers.UsersFollowRequestHandler{},
+		"lists":                      handlers.UsersListsHandler{},
+		"saved_filters":              handlers.UsersSavedFiltersHandler{},
+		"stats":                      handlers.UsersStatsHandler{},
+		"watched":                    handlers.UsersWatchedHandler{},
 	}
 
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
-	validActions = []string{"settings", "pending_following_requests", "lists", "saved_filters", "stats", "watched"}
+	validActions = []string{"settings", "pending_following_requests", "follow_requests",
+		"follow_request", "lists", "saved_filters", "stats", "watched"}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil
