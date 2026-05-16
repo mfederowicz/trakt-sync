@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -14,24 +13,24 @@ import (
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
-// UsersFollowRequestHandler struct for handler
-type UsersFollowRequestHandler struct{ common CommonLogic }
+// UsersFollowerRequestsHandler struct for handler
+type UsersFollowerRequestsHandler struct{ common CommonLogic }
 
-// Handle to handle users: follow_request action
-func (u UsersFollowRequestHandler) Handle(options *str.Options, client *internal.Client) error {
+// Handle to handle users: follower_requests action
+func (u UsersFollowerRequestsHandler) Handle(options *str.Options, client *internal.Client) error {
 	if options.FollowerRequest == consts.ZeroValue {
-		return errors.New(consts.EmptyFollowerRequestMsg)
+		return u.HandleFollowerRequests(options, client)
 	}
 
 	if options.Deny {
-		return u.HandleDeny(options, client)
+		return u.HandleFollowerRequestsDeny(options, client)
 	}
 
 	return u.HandleApprove(options, client)
 }
 
 // HandleApprove approve follower request by id.
-func (u UsersFollowRequestHandler) HandleApprove(options *str.Options, client *internal.Client) error {
+func (u UsersFollowerRequestsHandler) HandleApprove(options *str.Options, client *internal.Client) error {
 	result, resp, err := u.common.ApproveFollowRequest(client, options)
 	if err != nil {
 		return fmt.Errorf("approve follower error:%w", err)
@@ -47,8 +46,8 @@ func (u UsersFollowRequestHandler) HandleApprove(options *str.Options, client *i
 	return nil
 }
 
-// HandleDeny deny follower request by id.
-func (u UsersFollowRequestHandler) HandleDeny(options *str.Options, client *internal.Client) error {
+// HandleFollowerRequestsDeny deny follower request by id.
+func (u UsersFollowerRequestsHandler) HandleFollowerRequestsDeny(options *str.Options, client *internal.Client) error {
 	result, resp, err := u.common.DenyFollowRequest(client, options)
 	if err != nil {
 		return fmt.Errorf("deny follower error:%w", err)
@@ -60,6 +59,21 @@ func (u UsersFollowRequestHandler) HandleDeny(options *str.Options, client *inte
 		jsonData, _ := json.MarshalIndent(result, "", "  ")
 		writer.WriteJSON(options, jsonData)
 	}
+
+	return nil
+}
+
+// HandleFollowerRequests get follower requests.
+func (u UsersFollowerRequestsHandler) HandleFollowerRequests(options *str.Options, client *internal.Client) error {
+	printer.Println("get follow requests")
+	items, err := u.common.FetchFollowRequests(client, options)
+	if err != nil {
+		return fmt.Errorf("get follow requests error:%w", err)
+	}
+
+	print("write data to:" + options.Output)
+	jsonData, _ := json.MarshalIndent(items, "", "  ")
+	writer.WriteJSON(options, jsonData)
 
 	return nil
 }

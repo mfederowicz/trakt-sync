@@ -1494,6 +1494,34 @@ $ ./trakt-sync sync -a update_favorite_item -list_item_id 97857 -notes "super 10
 ```
 
 #### Users:
+
+##### Fetch settings for current user:
+```console
+$ ./trakt-sync users -a settings
+```
+##### Following requests:
+```console
+$ ./trakt-sync users -a following_requests
+```
+##### Follower requests:
+```console
+$ ./trakt-sync users -a follower_requests
+```
+##### Approve Follower requests (with request id):
+```console
+$ ./trakt-sync users -a follower_requests -follower_request 123
+```
+##### Deny Follower requests (with request id):
+```console
+$ ./trakt-sync users -a follower_requests -follower_request 123 -deny
+```
+##### Fetch saved filters for selected user:
+```console
+$ ./trakt-sync users -a saved_filters -u username
+```
+
+
+
 ##### Export movies or shows or episodes from user lists:
 ```console
 $ ./trakt-sync users -a lists -u username -i 123456 -t episodes
@@ -1508,17 +1536,9 @@ $ ./trakt-sync users -a lists -u username -i 123456 -t movies
 ```console
 $ ./trakt-sync users -a lists -u username
 ```
-##### Fetch saved filters for selected user:
-```console
-$ ./trakt-sync users -a saved_filters -u username
-```
 ##### Fetch stats for selected user:
 ```console
 $ ./trakt-sync users -a stats -u sean
-```
-##### Fetch settings for current user:
-```console
-$ ./trakt-sync users -a settings
 ```
 ##### Fetch watched movies for selected user:
 ```console

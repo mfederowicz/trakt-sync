@@ -5,6 +5,7 @@ package str
 type FollowRequest struct {
 	ID          *int64       `json:"id,omitempty"`
 	RequestedAt *Timestamp   `json:"requested_at,omitempty"`
+	FollowedAt  *Timestamp   `json:"followed_at,omitempty"`
 	User        *UserProfile `json:"user,omitempty"`
 }
 

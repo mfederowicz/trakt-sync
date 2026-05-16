@@ -21,6 +21,7 @@ import (
 
 // CommonInterface interface
 type CommonInterface interface {
+	ApproveFollowRequest(client *internal.Client, options *str.Options) (*str.FollowRequest, *str.Response, error)
 	CheckDates(from string, to string, tz string) error
 	CheckSeasonNumber(code string) (*int, *int, error)
 	CheckSortAndTypes(options *str.Options) error
@@ -40,16 +41,20 @@ type CommonInterface interface {
 	DateLastDays(days int, tz string, full bool) string
 	DeleteComment(client *internal.Client, options *str.Options) (*str.Response, error)
 	DeleteNotes(client *internal.Client, options *str.Options) (*str.Response, error)
+	DenyFollowRequest(client *internal.Client, options *str.Options) (*str.FollowRequest, *str.Response, error)
 	FetchComment(client *internal.Client, options *str.Options) (*str.Comment, error)
 	FetchCommentItem(client *internal.Client, options *str.Options) (*str.CommentMediaItem, error)
 	FetchCommentUserLikes(client *internal.Client, options *str.Options, page int) ([]*str.CommentUserLike, error)
 	FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error)
+	FetchFavorites(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
+	FetchFollowRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error)
 	FetchHistoryList(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error)
 	FetchMovie(client *internal.Client, options *str.Options) (*str.Movie, *str.Response, error)
 	FetchMovieRecommendations(client *internal.Client, options *str.Options, page int) ([]*str.Recommendation, error)
 	FetchNotes(client *internal.Client, options *str.Options) (*str.Notes, error)
 	FetchNotesItem(client *internal.Client, options *str.Options) (*str.NotesItem, error)
+	FetchPendingFollowingRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error)
 	FetchPerson(client *internal.Client, options *str.Options) (*str.Person, error)
 	FetchRatings(client *internal.Client, options *str.Options, page int) ([]*str.RatingListItem, error)
 	FetchRecentComments(client *internal.Client, options *str.Options, page int) ([]*str.CommentItem, error)
@@ -60,9 +65,6 @@ type CommonInterface interface {
 	FetchUpdatedComments(client *internal.Client, options *str.Options, page int) ([]*str.CommentItem, error)
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
 	FetchWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
-	FetchFavorites(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
-	FetchPendingFollowingRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error)
-	FetchFollowRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error)
 	GenActionTypeItemUsage(options *str.Options, items []string)
 	GenActionTypeUsage(options *str.Options, types []string)
 	GenActionsUsage(name string, actions []string)

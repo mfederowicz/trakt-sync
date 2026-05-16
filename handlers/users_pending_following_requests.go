@@ -11,11 +11,11 @@ import (
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
-// UsersPendingFollowingRequestsHandler struct for handler
-type UsersPendingFollowingRequestsHandler struct{ common CommonLogic }
+// UsersFollowingRequestsHandler struct for handler
+type UsersFollowingRequestsHandler struct{ common CommonLogic }
 
 // Handle to handle users: pending_following_requests action
-func (u UsersPendingFollowingRequestsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (u UsersFollowingRequestsHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("Get pending following request")
 	items, err := u.common.FetchPendingFollowingRequests(client, options)
 	if err != nil {
