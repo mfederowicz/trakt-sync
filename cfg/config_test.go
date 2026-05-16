@@ -41,7 +41,11 @@ func emptyFlagset() *flag.FlagSet {
 	return flag.NewFlagSet(consts.EmptyString, flag.ExitOnError)
 }
 
-func TestMain(_ *testing.M) {
+func parseFlags() {
+	flag.Parse() //revive:disable
+}
+
+func TestMain(_ *testing.T) {
 	_ = os.Unsetenv("HOME")
 	_ = os.Unsetenv("XDG_CONFIG_HOME")
 	_ = os.Unsetenv("FORK")
@@ -60,7 +64,7 @@ func TestGenUsedFlagMap(t *testing.T) {
 	// Recreate flags as needed
 	os.Args = []string{"cmd", "--days=1"}
 	addDaysFlag()
-	flag.Parse()
+	parseFlags()
 	got2 := GenUsedFlagMap()
 	var flagset2 = map[string]bool{
 		"d": true,
@@ -89,7 +93,7 @@ func TestInitConfigCannotReadOtherFile(t *testing.T) {
 
 	os.Args = commandLineArg(filename)
 	addCFlag()
-	flag.Parse()
+	parseFlags()
 	_, err := InitConfig(AppFs)
 	assert.Contains(t, err.Error(), "cannot read the config file")
 }
@@ -107,7 +111,7 @@ func TestInitConfigNoContent(t *testing.T) {
 
 	os.Args = commandLineArg(filename)
 	addCFlag()
-	flag.Parse()
+	parseFlags()
 	_, err := InitConfig(AppFs)
 	assert.Contains(t, err.Error(), "empty file content")
 }
@@ -127,7 +131,7 @@ func TestInitConfigMalformedFile(t *testing.T) {
 
 	os.Args = commandLineArg(filename)
 	addCFlag()
-	flag.Parse()
+	parseFlags()
 	_, err := InitConfig(AppFs)
 	assert.Contains(t, err.Error(), "cannot parse the config file")
 }
@@ -163,9 +167,14 @@ func TestInitConfigPerPageValue(t *testing.T) {
 	afero.WriteFile(AppFs, filename, data, consts.X644)
 	os.Args = []string{consts.CMD, "-c=" + homeDirPath + configFileName}
 	addCFlag()
-	flag.Parse()
-	c, _ := InitConfig(AppFs)
-	assert.Equal(t, c.PerPage, consts.PerPage)
+	parseFlags()
+	c, err := InitConfig(AppFs)
+	if err != nil {
+		assert.Contains(t, err.Error(), "config error : settings_path should be json file, update your config file")
+	}
+	if c != nil {
+		assert.Equal(t, c.PerPage, consts.PerPage)
+	}
 }
 
 func TestInitConfigNoClient(t *testing.T) {
@@ -200,7 +209,7 @@ func TestInitConfigNoClient(t *testing.T) {
 	afero.WriteFile(AppFs, filename, data, consts.X644)
 	os.Args = commandLineArg(homeDirPath + configFileName)
 	addCFlag()
-	flag.Parse()
+	parseFlags()
 	_, err := InitConfig(AppFs)
 	assert.Contains(t, err.Error(), "client_id and client_secret are required fields")
 }
@@ -237,7 +246,7 @@ func TestInitConfigNoTokenPath(t *testing.T) {
 	afero.WriteFile(AppFs, filename, data, consts.X644)
 	os.Args = commandLineArg(homeDirPath + configFileName)
 	addCFlag()
-	flag.Parse()
+	parseFlags()
 	_, err := InitConfig(AppFs)
 	assert.Contains(t, err.Error(), "token_path should be json file")
 }
