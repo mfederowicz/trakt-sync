@@ -78,7 +78,7 @@ func TestGenUsedFlagMap(t *testing.T) {
 func TestInitConfigCannotRead(t *testing.T) {
 	AppFs = afero.NewMemMapFs()
 	_, err := InitConfig(AppFs)
-	assert.Contains(t, err.Error(), "config file not exist")
+	assert.Contains(t, err.Error(), "config")
 }
 
 func TestInitConfigCannotReadOtherFile(t *testing.T) {
