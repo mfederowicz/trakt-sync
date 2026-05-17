@@ -99,6 +99,8 @@ type Config struct {
 	Type              string    `toml:"type"`
 	Undo              bool      `toml:"undo"`
 	UserName          string    `toml:"username"`
+	UsersType         string    `toml:"type"`
+	UsersSection      string    `toml:"section"`
 	Verbose           bool      `toml:"verbose"`
 	WarningCode       int       `toml:"warningCode"`
 }
@@ -532,6 +534,8 @@ func DefaultConfig() *Config {
 		TokenPath:      consts.EmptyString,
 		Type:           "movies",
 		UserName:       "me",
+		UsersType:      consts.Movie,
+		UsersSection:   consts.Calendar,
 		Verbose:        false,
 		WarningCode:    consts.ZeroValue,
 		Timezone:       time.UTC.String(),

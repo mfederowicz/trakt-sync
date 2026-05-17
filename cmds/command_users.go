@@ -17,6 +17,8 @@ var (
 
 	_usersListID          = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
 	_usersAction          = UsersCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_usersType            = UsersCmd.Flag.String("t", cfg.DefaultConfig().UsersType, consts.UsersTypeUsage)
+	_usersSection         = UsersCmd.Flag.String("s", cfg.DefaultConfig().UsersSection, consts.UsersSectionUsage)
 	_usersDeny            = UsersCmd.Flag.Bool("deny", cfg.DefaultConfig().Deny, consts.DenyUsage)
 	_usersFollowerRequest = UsersCmd.Flag.Int("follower_request", cfg.DefaultConfig().FollowerRequest, consts.FollowerRequestUsage)
 )
@@ -37,12 +39,19 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 	if err != nil {
 		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
 	}
+
+	err = cmd.ValidSection(options)
+	if err != nil {
+		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
+	}
+
 	var handler handlers.UsersHandler
 	allHandlers := map[string]handlers.Handler{
 		"settings":           handlers.UsersSettingsHandler{},
 		"following_requests": handlers.UsersFollowingRequestsHandler{},
 		"follower_requests":  handlers.UsersFollowerRequestsHandler{},
 		"saved_filters":      handlers.UsersSavedFiltersHandler{},
+		"hidden_items":       handlers.UsersHiddenItemsHandler{},
 		"lists":              handlers.UsersListsHandler{},
 		"stats":              handlers.UsersStatsHandler{},
 		"watched":            handlers.UsersWatchedHandler{},
@@ -51,7 +60,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	validActions = []string{"settings", "following_requests", "follower_requests",
-		"follow_request", "saved_filters", "lists", "stats", "watched"}
+		"follow_request", "saved_filters", "hidden_items", "lists", "stats", "watched"}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

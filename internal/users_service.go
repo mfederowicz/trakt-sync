@@ -291,3 +291,34 @@ func (u *UsersService) DenyFollowRequest(ctx context.Context, request int) (*str
 
 	return fr, resp, nil
 }
+
+// GetHiddenItems Get hidden items for a section. This will return an array of
+// standard media objects. You can optionally limit the type of results to return..
+// API docs:https:https://trakt.docs.apiary.io/#reference/users/hidden-items/get-hidden-items
+func (u *UsersService) GetHiddenItems(ctx context.Context, section *string, opts *uri.ListOptions) ([]*str.HiddenItem, *str.Response, error) {
+	var url string
+
+	if section != nil {
+		url = fmt.Sprintf("users/hidden/%s", *section)
+	} else {
+		url = "users/hidden"
+	}
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	items := []*str.HiddenItem{}
+	resp, err := u.client.Do(ctx, req, &items)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return items, resp, nil
+}

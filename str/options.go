@@ -52,6 +52,7 @@ type Options struct {
 	SearchIDType      string
 	SearchType        Slice
 	Season            int
+	Section           string
 	Sort              string
 	SortBy            string
 	SortHow           string

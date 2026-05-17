@@ -1519,9 +1519,28 @@ $ ./trakt-sync users -a follower_requests -follower_request 123 -deny
 ```console
 $ ./trakt-sync users -a saved_filters -u username
 ```
-
-
-
+##### Export hidden items for a section (movie,show,season,user):
+```console
+$ ./trakt-sync users -a hidden_items -t show -s calendar
+```
+```console
+$ ./trakt-sync users -a hidden_items -t show -s progress_watched
+```
+```console
+$ ./trakt-sync users -a hidden_items -t show -s progress_watched_reset
+```
+```console
+$ ./trakt-sync users -a hidden_items -t show -s progress_collected
+```
+```console
+$ ./trakt-sync users -a hidden_items -t show -s recommendations
+```
+```console
+$ ./trakt-sync users -a hidden_items -t show -s comments
+```
+```console
+$ ./trakt-sync users -a hidden_items -t show -s dropped
+```
 ##### Export movies or shows or episodes from user lists:
 ```console
 $ ./trakt-sync users -a lists -u username -i 123456 -t episodes

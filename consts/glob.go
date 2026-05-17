@@ -136,6 +136,8 @@ const (
 	UserConnectionsError         = "user connections error:%w"
 	UserSettingsError            = "user settings error:%w"
 	UserlistUsage                = "allow to export a user custom list"
+	UsersTypeUsage               = "allow to overwrite type"
+	UsersSectionUsage            = "allow to overwrite section"
 	VerboseUsage                 = "print additional verbose information"
 	VersionUsage                 = "get trakt-sync version"
 	WatchedProgressError         = "watched progress error:%w"
