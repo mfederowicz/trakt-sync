@@ -534,7 +534,7 @@ func DefaultConfig() *Config {
 		TokenPath:      consts.EmptyString,
 		Type:           "movies",
 		UserName:       "me",
-		UsersType:      consts.Movie,
+		UsersType:      "",
 		UsersSection:   consts.Calendar,
 		Verbose:        false,
 		WarningCode:    consts.ZeroValue,

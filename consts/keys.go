@@ -9,6 +9,7 @@ import (
 // usage strings
 const (
 	ActionTypeAll        = "all"
+	AddHiddenItems       = "add_hidden_items"
 	AddToCollection      = "add_to_collection"
 	AddToFavorites       = "add_to_favorites"
 	AddToHistory         = "add_to_history"
@@ -33,6 +34,7 @@ const (
 	Comment              = "comment"
 	Comments             = "comments"
 	Countries            = "countries"
+	Dropped              = "dropped"
 	Dvd                  = "dvd"
 	Episode              = "episode"
 	Episodes             = "episodes"
@@ -78,6 +80,8 @@ const (
 	Playback             = "playback"
 	Played               = "played"
 	Popular              = "popular"
+	ProgressWatched      = "progress_watched"
+	ProgressCollected    = "progress_collected"
 	Query                = "query"
 	Ratings              = "ratings"
 	Recommendations      = "recommendations"
@@ -117,6 +121,7 @@ const (
 	UpdateFavorites      = "update_favorites"
 	Updates              = "updates"
 	Users                = "users"
+	User                 = "user"
 	Videos               = "videos"
 	Watched              = "watched"
 	WatchedProgress      = "watched_progress"

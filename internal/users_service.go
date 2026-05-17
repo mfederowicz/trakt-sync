@@ -322,3 +322,25 @@ func (u *UsersService) GetHiddenItems(ctx context.Context, section *string, opts
 
 	return items, resp, nil
 }
+
+// AddHiddenItems Hide items for a specific section. Here's what type of items
+// can hidden for each section. You can optionally specify the
+// hidden_at date for each item.
+// API docs:https://trakt.docs.apiary.io/#reference/users/add-hidden-items/add-hidden-items
+func (u *UsersService) AddHiddenItems(ctx context.Context, items *str.HistoryItems, section string) (*str.AddResult, error) {
+	var url string
+	url = fmt.Sprintf("users/hidden/%s", section)
+	printer.Println("add hidden items")
+	req, err := u.client.NewRequest(http.MethodPost, url, items)
+	if err != nil {
+		return nil, err
+	}
+
+	result := new(str.AddResult)
+	_, err = u.client.Do(ctx, req, result)
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}

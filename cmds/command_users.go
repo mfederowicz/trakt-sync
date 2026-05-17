@@ -21,6 +21,7 @@ var (
 	_usersSection         = UsersCmd.Flag.String("s", cfg.DefaultConfig().UsersSection, consts.UsersSectionUsage)
 	_usersDeny            = UsersCmd.Flag.Bool("deny", cfg.DefaultConfig().Deny, consts.DenyUsage)
 	_usersFollowerRequest = UsersCmd.Flag.Int("follower_request", cfg.DefaultConfig().FollowerRequest, consts.FollowerRequestUsage)
+	_usersItems           = UsersCmd.Flag.String("items", consts.EmptyString, consts.ItemsUsage)
 )
 
 // UsersCmd Returns all personal lists for a user.
@@ -52,6 +53,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"follower_requests":  handlers.UsersFollowerRequestsHandler{},
 		"saved_filters":      handlers.UsersSavedFiltersHandler{},
 		"hidden_items":       handlers.UsersHiddenItemsHandler{},
+		"add_hidden_items":   handlers.UsersAddHiddenItemsHandler{},
 		"lists":              handlers.UsersListsHandler{},
 		"stats":              handlers.UsersStatsHandler{},
 		"watched":            handlers.UsersWatchedHandler{},

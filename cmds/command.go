@@ -812,14 +812,16 @@ func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.O
 		return options
 	}
 
+	if len(*_usersItems) > consts.ZeroValue {
+		options.Items = *_usersItems
+	}
+
 	if len(*_usersAction) > consts.ZeroValue {
 		options.Action = *_usersAction
 	}
 
 	if len(*_usersType) > consts.ZeroValue {
 		options.Type = *_usersType
-	} else {
-		options.Type = consts.Movie
 	}
 
 	options.Output = cfg.GetOutputForModule(options)

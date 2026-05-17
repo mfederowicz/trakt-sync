@@ -10,6 +10,7 @@ type UserProfile struct {
 	VipEp         *bool      `json:"vip_ep,omitempty"`
 	IDs           *IDs       `json:"ids,omitempty"`
 	JoinedAt      *Timestamp `json:"joined_at,omitempty"`
+	HiddenAt      *Timestamp `json:"hidden_at,omitempty"`
 	Location      *string    `json:"location,omitempty"`
 	About         *string    `json:"about,omitempty"`
 	Gender        *string    `json:"gender,omitempty"`

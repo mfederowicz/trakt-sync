@@ -33,6 +33,7 @@ type CommonInterface interface {
 	CreateCheckinShowEpisode(client *internal.Client, options *str.Options) (*str.Checkin, error)
 	CreateItemsToAdd(items *str.ItemsList) str.HistoryItems
 	CreateItemsToAddRatings(items *str.ItemsList) str.RatingItems
+	CreateItemsToHidden(section string, items *str.ItemsList) str.HistoryItems
 	CreateItemsToRemove(items *str.ItemsList) str.ItemsToRemove
 	CreateItemsToReorder(items *str.ItemsList) str.ItemsToReorder
 	CreateScrobble(client *internal.Client, options *str.Options) (*str.Scrobble, error)
@@ -83,6 +84,7 @@ type CommonInterface interface {
 	UpdateComment(client *internal.Client, options *str.Options, comment *str.Comment) (*str.Comment, *str.Response, error)
 	UpdateHistoryListWithType(data []*str.ExportlistItem, strtype *string) []*str.ExportlistItem
 	UpdateNotes(client *internal.Client, options *str.Options, notes *str.Notes) (*str.Notes, *str.Response, error)
+	UsersAddToHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error)
 	ValidPrivacy(options *str.Options) error
 }
 
@@ -292,6 +294,7 @@ func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 			Year:      m.Year,
 			IDs:       m.IDs,
 			WatchedAt: m.WatchedAt,
+			HiddenAt:  m.HiddenAt,
 			Notes:     m.Notes,
 		}
 		movies = append(movies, movie)
@@ -299,11 +302,12 @@ func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 	shows := []str.Show{}
 	for _, m := range *items.Shows {
 		show := str.Show{
-			Title:   m.Title,
-			Year:    m.Year,
-			IDs:     m.IDs,
-			Seasons: m.Seasons,
-			Notes:   m.Notes,
+			Title:    m.Title,
+			Year:     m.Year,
+			IDs:      m.IDs,
+			Seasons:  m.Seasons,
+			Notes:    m.Notes,
+			HiddenAt: m.HiddenAt,
 		}
 		shows = append(shows, show)
 	}
@@ -312,6 +316,7 @@ func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 		season := str.Season{
 			IDs:       m.IDs,
 			WatchedAt: m.WatchedAt,
+			HiddenAt:  m.HiddenAt,
 			Notes:     m.Notes,
 		}
 		seasons = append(seasons, season)
@@ -321,9 +326,18 @@ func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 		episode := str.Episode{
 			IDs:       m.IDs,
 			WatchedAt: m.WatchedAt,
+			HiddenAt:  m.HiddenAt,
 			Notes:     m.Notes,
 		}
 		episodes = append(episodes, episode)
+	}
+	users := []str.UserProfile{}
+	for _, m := range *items.Users {
+		user := str.UserProfile{
+			IDs:      m.IDs,
+			HiddenAt: m.HiddenAt,
+		}
+		users = append(users, user)
 	}
 
 	return str.HistoryItems{
@@ -331,6 +345,7 @@ func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 		Shows:    &shows,
 		Seasons:  &seasons,
 		Episodes: &episodes,
+		Users:    &users,
 	}
 }
 
@@ -1081,9 +1096,44 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 		consts.ReorderWatchlist, consts.AddToFavorites, consts.RemoveFromFavorites, consts.ReorderFavorites:
 		items = c.ListToItemsCollection(items, list, stype)
 		return items, nil
+	case consts.AddHiddenItems:
+		items = c.ListToItemsCollectionAgregate(items, list, stype)
+		return items, nil
 	default:
 		return nil, errors.New(consts.UnknownItemsListType)
 	}
+}
+
+// ListToItemsCollectionAgregate helper function to handle all types at once
+func (c *CommonLogic) ListToItemsCollectionAgregate(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
+	if stype != "" {
+		return c.ListToItemsCollection(items, list, stype)
+	}
+
+	out := c.InitItemsList()
+
+	it := c.ListToItemsCollection(items, list, consts.Movie)
+	for _, item := range *it.Movies {
+		*out.Movies = append(*out.Movies, item)
+	}
+	it = c.ListToItemsCollection(items, list, consts.Show)
+	for _, item := range *it.Shows {
+		*out.Shows = append(*out.Shows, item)
+	}
+	it = c.ListToItemsCollection(items, list, consts.Season)
+	for _, item := range *it.Seasons {
+		*out.Seasons = append(*out.Seasons, item)
+	}
+	it = c.ListToItemsCollection(items, list, consts.Episode)
+	for _, item := range *it.Episodes {
+		*out.Episodes = append(*out.Episodes, item)
+	}
+	it = c.ListToItemsCollection(items, list, consts.User)
+	for _, item := range *it.Users {
+		*out.Users = append(*out.Users, item)
+	}
+
+	return out
 }
 
 // ListToItemsAgregate helper function to update itemslists depends on type: movies,shows,seasons,episodes,all
@@ -1121,6 +1171,7 @@ func (*CommonLogic) InitItemsList() *str.ItemsList {
 	list.Shows = &[]str.ExportlistItem{}
 	list.Seasons = &[]str.ExportlistItem{}
 	list.Episodes = &[]str.ExportlistItem{}
+	list.Users = &[]str.ExportlistItem{}
 	list.IDs = &[]int64{}
 	return list
 }
@@ -1132,7 +1183,7 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			*items.IDs = append(*items.IDs, *val.ID)
 		}
 
-		if val.Movie != nil && stype == consts.Movies {
+		if val.Movie != nil && isMovieType(stype) {
 			e := str.ExportlistItem{}
 			e.Title = val.Movie.Title
 			e.Year = val.Movie.Year
@@ -1141,7 +1192,7 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			e.ID = val.ID
 			*items.Movies = append(*items.Movies, e)
 		}
-		if val.Show != nil && stype == consts.Shows {
+		if val.Show != nil && isShowType(stype) {
 			e := str.ExportlistItem{}
 			e.Title = val.Show.Title
 			e.Year = val.Show.Year
@@ -1150,7 +1201,7 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			e.ID = val.ID
 			*items.Shows = append(*items.Shows, e)
 		}
-		if val.Season != nil && stype == consts.Seasons {
+		if val.Season != nil && isSeasonType(stype) {
 			e := str.ExportlistItem{}
 			e.IDs = val.Season.IDs
 			val.Season.UpdateCollectedData(val)
@@ -1158,7 +1209,7 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			e.ID = val.ID
 			*items.Seasons = append(*items.Seasons, e)
 		}
-		if val.Episode != nil && stype == consts.Episodes {
+		if val.Episode != nil && isEpisodeType(stype) {
 			e := str.ExportlistItem{}
 			e.IDs = val.Episode.IDs
 			e.UpdateCollectedData(val)
@@ -1650,48 +1701,35 @@ func (c *CommonLogic) FetchUsersHiddenItems(client *internal.Client, options *st
 	return list, nil
 }
 
-// Media interface for helpers
-type Media interface {
-	str.Movie | str.Show | str.Episode | str.Season
+// CreateItemsToHidden helper function to prepare items to hidden items
+func (c CommonLogic) CreateItemsToHidden(section string, items *str.ItemsList) str.HistoryItems {
+	i := c.CreateItemsToAdd(items)
+	switch section {
+	case consts.Calendar:
+		return str.HistoryItems{Movies: i.Movies, Shows: i.Shows}
+	case consts.ProgressWatched, consts.ProgressCollected:
+		return str.HistoryItems{Shows: i.Shows, Seasons: i.Seasons}
+	case consts.Recommendations:
+		return str.HistoryItems{Movies: i.Movies, Shows: i.Shows}
+	case consts.Comments:
+		return str.HistoryItems{Users: i.Users}
+	case consts.Dropped:
+		return str.HistoryItems{Shows: i.Shows}
+	default:
+		return str.HistoryItems{}
+	}
 }
 
-// onlyIDs is a helper function to extract each type objects with only ids
-func onlyIDs[T Media](items []str.ExportlistItem) []T {
-	result := make([]T, 0, len(items))
-
-	var zero T
-
-	switch any(zero).(type) {
-	case str.Movie:
-		for _, item := range items {
-			result = append(result, any(str.Movie{IDs: item.IDs}).(T))
-		}
-	case str.Show:
-		for _, item := range items {
-			if item.Seasons != nil && len(*item.Seasons) > 0 {
-				updatedSeasons := SeasonsWithEpisodeNumbersOnly(item.Seasons)
-				result = append(result, any(str.Show{IDs: item.IDs, Seasons: updatedSeasons}).(T))
-			} else {
-				result = append(result, any(str.Show{IDs: item.IDs}).(T))
-			}
-		}
-	case str.Episode:
-		for _, item := range items {
-			result = append(result, any(str.Episode{IDs: item.IDs}).(T))
-		}
-	case str.Season:
-		for _, item := range items {
-			result = append(result, any(str.Season{IDs: item.IDs}).(T))
-		}
-	default:
-		panic("unsupported type")
+// UsersAddToHiddenItems helper function to users: add hidden items
+func (CommonLogic) UsersAddToHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error) {
+	result, err := client.Users.AddHiddenItems(
+		client.BuildCtxFromOptions(options),
+		items,
+		options.Section,
+	)
+	if err != nil {
+		return nil, err
 	}
 
-	return result
-}
-
-// Ptr is a helper routine that allocates a new T value
-// to store v and returns a pointer to it.
-func Ptr[T any](v T) *T {
-	return &v
+	return result, nil
 }
