@@ -11,6 +11,7 @@ type ItemsList struct {
 	Shows    *[]ExportlistItem `json:"shows,omitempty"`
 	Seasons  *[]ExportlistItem `json:"seasons,omitempty"`
 	Episodes *[]ExportlistItem `json:"episodes,omitempty"`
+	Users    *[]ExportlistItem `json:"users,omitempty"`
 	IDs      *[]int64          `json:"ids,omitempty"`
 }
 

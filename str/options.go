@@ -13,12 +13,14 @@ type Options struct {
 	Country           string
 	Days              int
 	Delete            bool
+	Deny              bool
 	Description       string
 	Episode           int
 	EpisodeAbs        int
 	EpisodeCode       string
 	ExtendedInfo      string
 	FullHour          bool
+	FollowerRequest   int
 	Format            string
 	Headers           map[string]any
 	Hidden            string
@@ -50,6 +52,7 @@ type Options struct {
 	SearchIDType      string
 	SearchType        Slice
 	Season            int
+	Section           string
 	Sort              string
 	SortBy            string
 	SortHow           string

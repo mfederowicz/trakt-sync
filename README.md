@@ -1494,6 +1494,143 @@ $ ./trakt-sync sync -a update_favorite_item -list_item_id 97857 -notes "super 10
 ```
 
 #### Users:
+
+##### Fetch settings for current user:
+```console
+$ ./trakt-sync users -a settings
+```
+##### Following requests:
+```console
+$ ./trakt-sync users -a following_requests
+```
+##### Follower requests:
+```console
+$ ./trakt-sync users -a follower_requests
+```
+##### Approve Follower requests (with request id):
+```console
+$ ./trakt-sync users -a follower_requests -follower_request 123
+```
+##### Deny Follower requests (with request id):
+```console
+$ ./trakt-sync users -a follower_requests -follower_request 123 -deny
+```
+##### Fetch saved filters for selected user:
+```console
+$ ./trakt-sync users -a saved_filters -u username
+```
+##### Export hidden items for a section (movie,show,season,user):
+```console
+$ ./trakt-sync users -a hidden_items -t show -s calendar
+```
+```console
+$ ./trakt-sync users -a hidden_items -t show -s progress_watched
+```
+```console
+$ ./trakt-sync users -a hidden_items -t show -s progress_watched_reset
+```
+```console
+$ ./trakt-sync users -a hidden_items -t show -s progress_collected
+```
+```console
+$ ./trakt-sync users -a hidden_items -t show -s recommendations
+```
+```console
+$ ./trakt-sync users -a hidden_items -t show -s comments
+```
+```console
+$ ./trakt-sync users -a hidden_items -t show -s dropped
+```
+
+##### Add hidden items - via -items flag
+```console
+$ ./trakt-sync users -a add_hidden_items -items export_users_all.json
+```
+```console
+$ ./trakt-sync users -a add_hidden_items -t movie -items export_users_all.json
+```
+```console
+$ ./trakt-sync users -a add_hidden_items -t show -items export_users_all.json
+```
+```console
+$ ./trakt-sync users -a add_hidden_items -t season -items export_users_all.json
+```
+```console
+$ ./trakt-sync users -a add_hidden_items -t user -items export_users_all.json
+```
+##### Add hidden items - via stdin
+```console
+$ cat export_users_all.json | ./trakt-sync users -a add_hidden_items
+```
+```console
+$ cat export_users_all.json | ./trakt-sync users -a add_hidden_items -t movie
+```
+```console
+$ cat export_users_all.json | ./trakt-sync users -a add_hidden_items -t show
+```
+```console
+$ cat export_users_all.json | ./trakt-sync users -a add_hidden_items -t season
+```
+```console
+$ cat export_users_all.json | ./trakt-sync users -a add_hidden_items -t user
+```
+##### Remove hidden items - via -items flag
+```console
+$ ./trakt-sync users -a remove_hidden_items -items export_users_all.json
+```
+```console
+$ ./trakt-sync users -a remove_hidden_items -t movie -items export_users_all.json
+```
+```console
+$ ./trakt-sync users -a remove_hidden_items -t show -items export_users_all.json
+```
+```console
+$ ./trakt-sync users -a remove_hidden_items -t season -items export_users_all.json
+```
+```console
+$ ./trakt-sync users -a remove_hidden_items -t user -items export_users_all.json
+```
+##### Remove hidden items - via stdin
+```console
+$ cat export_users_all.json | ./trakt-sync users -a remove_hidden_items
+```
+```console
+$ cat export_users_all.json | ./trakt-sync users -a remove_hidden_items -t movie
+```
+```console
+$ cat export_users_all.json | ./trakt-sync users -a remove_hidden_items -t show
+```
+```console
+$ cat export_users_all.json | ./trakt-sync users -a remove_hidden_items -t season
+```
+```console
+$ cat export_users_all.json | ./trakt-sync users -a remove_hidden_items -t user
+```
+##### Fetch user profile:
+```console
+$ ./trakt-sync users -a profile -u username
+```
+##### Fetch user likes:
+```console
+$ ./trakt-sync users -a likes -u username
+```
+```console
+$ ./trakt-sync users -a likes -u username -ex comments
+```
+##### Fetch user collection:
+```console
+$ ./trakt-sync users -a collection -u username
+```
+```console
+$ ./trakt-sync users -a collection -u username -ex comments
+```
+```console
+$ ./trakt-sync users -a collection -u username -t movies
+```
+```console
+$ ./trakt-sync users -a collection -u username -t shows
+```
+
 ##### Export movies or shows or episodes from user lists:
 ```console
 $ ./trakt-sync users -a lists -u username -i 123456 -t episodes
@@ -1508,17 +1645,9 @@ $ ./trakt-sync users -a lists -u username -i 123456 -t movies
 ```console
 $ ./trakt-sync users -a lists -u username
 ```
-##### Fetch saved filters for selected user:
-```console
-$ ./trakt-sync users -a saved_filters -u username
-```
 ##### Fetch stats for selected user:
 ```console
 $ ./trakt-sync users -a stats -u sean
-```
-##### Fetch settings for current user:
-```console
-$ ./trakt-sync users -a settings
 ```
 ##### Fetch watched movies for selected user:
 ```console

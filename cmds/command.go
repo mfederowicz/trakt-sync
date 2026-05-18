@@ -55,6 +55,7 @@ var Avflags = map[string]bool{
 	"country":            true,
 	"days":               true,
 	"delete":             true,
+	"deny":               true,
 	"description":        true,
 	"end_at":             true,
 	"episode":            true,
@@ -63,6 +64,7 @@ var Avflags = map[string]bool{
 	"episodes":           true,
 	"ex":                 true,
 	"f":                  true,
+	"follower_request":   true,
 	"field":              true,
 	"genres":             true,
 	"godoc":              true,
@@ -398,6 +400,10 @@ func setOptionsDependsOnModulePeople(options str.Options) str.Options {
 
 func setOptionsDependsOnModuleUsers(options str.Options) str.Options {
 	options.Action = *_usersAction
+	options.Deny = *_usersDeny
+	options.Type = *_usersType
+	options.Section = *_usersSection
+	options.FollowerRequest = *_usersFollowerRequest
 	return options
 }
 
@@ -738,6 +744,22 @@ func (*Command) ValidSort(options *str.Options) error {
 	return nil
 }
 
+// ValidSection check if section is valid
+func (*Command) ValidSection(options *str.Options) error {
+	// Check if the provided module exists in ModuleConfig
+	_, ok := cfg.ModuleConfig[options.Module]
+	if !ok {
+		return fmt.Errorf(consts.NotFoundConfigForModule, options.Module)
+	}
+	// Check if the provided section is valid for the selected module
+	prefix := options.Module + ":" + options.Action
+	if len(cfg.ModuleActionConfig[prefix].Section) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].Section, options.Section) {
+		return fmt.Errorf("section '%s' is not valid for module '%s' and action '%s', avaliable section:%s", options.Section, options.Module, options.Action, cfg.ModuleActionConfig[prefix].Section)
+	}
+
+	return nil
+}
+
 // ValidPeriod check if period is valid
 func (*Command) ValidPeriod(options *str.Options) error {
 	// Check if the provided module exists in ModuleConfig
@@ -768,6 +790,7 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 	options = UpdateOptionsWithCommandRecommendationsFlags(options)
 	options = UpdateOptionsWithCommandScrobbleFlags(options)
 	options = UpdateOptionsWithCommandSyncFlags(c, options)
+	options = UpdateOptionsWithCommandUsersFlags(c, options)
 	return options
 }
 
@@ -779,6 +802,35 @@ func UpdateOptionsWithCommandScrobbleFlags(options *str.Options) *str.Options {
 	if len(*_scrobbleEpisodeCode) > consts.ZeroValue {
 		options.EpisodeCode = *_scrobbleEpisodeCode
 	}
+
+	return options
+}
+
+// UpdateOptionsWithCommandUsersFlags update options depends on users command flags
+func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.Options {
+	if c.Name != consts.Users {
+		return options
+	}
+
+	if len(*_usersItems) > consts.ZeroValue {
+		options.Items = *_usersItems
+	}
+
+	if len(*_usersAction) > consts.ZeroValue {
+		options.Action = *_usersAction
+	}
+
+	if len(*_usersType) > consts.ZeroValue {
+		options.Type = *_usersType
+	}
+
+	if options.Action == consts.Collection && options.Type == "" {
+		options.Type = consts.Movies
+	}
+	if options.Action == consts.HiddenItems && options.Type == "" {
+		options.Type = consts.Movie
+	}
+	options.Output = cfg.GetOutputForModule(options)
 
 	return options
 }

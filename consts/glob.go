@@ -28,7 +28,9 @@ const (
 	DefaultStartDateFormat       = time.RFC3339
 	DefaultStartAtDays           = 60
 	DeleteUsage                  = "allow delete item"
+	DenyUsage                    = "allow deny item"
 	EmptyCommentIDMsg            = "set commentId ie: -comment_id 123"
+	EmptyFollowerRequestMsg      = "set FollowerRequest ie: -follower_request 123"
 	EmptyHistoryIDMsg            = "set historyId ie: -i 12345 from watched history"
 	EmptyIncludeReplies          = "set includeReplies ie: -include_replies true or false"
 	EmptyInternalIDMsg           = "set Trakt ID, Trakt slug, or IMDB ID Example:  ie: -i 12345 or -i tron-legacy-2010"
@@ -99,6 +101,7 @@ const (
 	RecommendationNotFoundWithID = "recommendation not found with Id:%s"
 	RemoveUsage                  = "allow remove item"
 	ReplyUsage                   = "allow to overwrite reply"
+	FollowerRequestUsage         = "allow to overwrite follower_request"
 	ResetAtUsage                 = "allow to overwrite reset_at"
 	ScrobbleError                = "scrobble error:%w"
 	SeasonUsage                  = "allow to overwrite season"
@@ -133,6 +136,8 @@ const (
 	UserConnectionsError         = "user connections error:%w"
 	UserSettingsError            = "user settings error:%w"
 	UserlistUsage                = "allow to export a user custom list"
+	UsersTypeUsage               = "allow to overwrite type"
+	UsersSectionUsage            = "allow to overwrite section"
 	VerboseUsage                 = "print additional verbose information"
 	VersionUsage                 = "get trakt-sync version"
 	WatchedProgressError         = "watched progress error:%w"

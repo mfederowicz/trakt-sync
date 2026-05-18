@@ -15,8 +15,13 @@ var (
 	username   = "me"
 	exportData []*str.PersonalList
 
-	_usersListID = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
-	_usersAction = UsersCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_usersListID          = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
+	_usersAction          = UsersCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_usersType            = UsersCmd.Flag.String("t", cfg.DefaultConfig().UsersType, consts.UsersTypeUsage)
+	_usersSection         = UsersCmd.Flag.String("s", cfg.DefaultConfig().UsersSection, consts.UsersSectionUsage)
+	_usersDeny            = UsersCmd.Flag.Bool("deny", cfg.DefaultConfig().Deny, consts.DenyUsage)
+	_usersFollowerRequest = UsersCmd.Flag.Int("follower_request", cfg.DefaultConfig().FollowerRequest, consts.FollowerRequestUsage)
+	_usersItems           = UsersCmd.Flag.String("items", consts.EmptyString, consts.ItemsUsage)
 )
 
 // UsersCmd Returns all personal lists for a user.
@@ -35,18 +40,34 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 	if err != nil {
 		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
 	}
+
+	err = cmd.ValidSection(options)
+	if err != nil {
+		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
+	}
+
 	var handler handlers.UsersHandler
 	allHandlers := map[string]handlers.Handler{
-		"settings":      handlers.UsersSettingsHandler{},
-		"lists":         handlers.UsersListsHandler{},
-		"saved_filters": handlers.UsersSavedFiltersHandler{},
-		"stats":         handlers.UsersStatsHandler{},
-		"watched":       handlers.UsersWatchedHandler{},
+		"settings":            handlers.UsersSettingsHandler{},
+		"following_requests":  handlers.UsersFollowingRequestsHandler{},
+		"follower_requests":   handlers.UsersFollowerRequestsHandler{},
+		"saved_filters":       handlers.UsersSavedFiltersHandler{},
+		"hidden_items":        handlers.UsersHiddenItemsHandler{},
+		"add_hidden_items":    handlers.UsersAddHiddenItemsHandler{},
+		"remove_hidden_items": handlers.UsersRemoveHiddenItemsHandler{},
+		"profile":             handlers.UsersProfileHandler{},
+		"likes":               handlers.UsersLikesHandler{},
+		"collection":          handlers.UsersCollectionHandler{},
+		"lists":               handlers.UsersListsHandler{},
+		"stats":               handlers.UsersStatsHandler{},
+		"watched":             handlers.UsersWatchedHandler{},
 	}
 
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
-	validActions = []string{"lists", "saved_filters", "stats", "watched"}
+	validActions = []string{"settings", "following_requests", "follower_requests",
+		"follow_request", "saved_filters", "hidden_items", "add_hidden_items",
+		"remove_hidden_items", "profile", "likes", "lists", "stats", "watched"}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

@@ -25,6 +25,7 @@ type OptionsConfig struct {
 	SearchType   []string
 	SearchField  []string
 	Type         []string
+	Section      []string
 	Period       []string
 	Sort         []string
 	SortBy       []string
@@ -165,6 +166,17 @@ var ModuleActionConfig = map[string]OptionsConfig{
 			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
 			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
 			"watched", "collected"},
+	},
+	"users:hidden_items": {
+		Type: []string{"movie", "show", "season", "user"},
+		Section: []string{"calendar", "progress_watched", "progress_watched_reset",
+			"progress_collected", "recommendations", "comments", "dropped"},
+	},
+	"users:likes": {
+		Type: []string{"comments", "lists"},
+	},
+	"users:collection": {
+		Type: []string{"movies", "shows"},
 	},
 }
 
@@ -793,13 +805,21 @@ func getOutputForModuleUsers(options *str.Options) string {
 			options.Module,
 			options.Action,
 			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
-	case consts.SavedFilters:
+	case consts.SavedFilters, consts.Collection:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
 			options.Action,
 			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
-	case consts.Settings:
+	case consts.HiddenItems:
+		strType := strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString)
+		strSection := strings.ReplaceAll(options.Section, consts.CommaString, consts.EmptyString)
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat3,
+			options.Module,
+			options.Action,
+			strType+"_"+strSection)
+	case consts.Settings, consts.Profile, consts.Likes, consts.FollowingRequests, consts.FollowerRequests:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,

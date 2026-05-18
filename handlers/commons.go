@@ -21,6 +21,7 @@ import (
 
 // CommonInterface interface
 type CommonInterface interface {
+	ApproveFollowRequest(client *internal.Client, options *str.Options) (*str.FollowRequest, *str.Response, error)
 	CheckDates(from string, to string, tz string) error
 	CheckSeasonNumber(code string) (*int, *int, error)
 	CheckSortAndTypes(options *str.Options) error
@@ -32,6 +33,7 @@ type CommonInterface interface {
 	CreateCheckinShowEpisode(client *internal.Client, options *str.Options) (*str.Checkin, error)
 	CreateItemsToAdd(items *str.ItemsList) str.HistoryItems
 	CreateItemsToAddRatings(items *str.ItemsList) str.RatingItems
+	CreateItemsToHidden(section string, items *str.ItemsList) str.HistoryItems
 	CreateItemsToRemove(items *str.ItemsList) str.ItemsToRemove
 	CreateItemsToReorder(items *str.ItemsList) str.ItemsToReorder
 	CreateScrobble(client *internal.Client, options *str.Options) (*str.Scrobble, error)
@@ -40,16 +42,20 @@ type CommonInterface interface {
 	DateLastDays(days int, tz string, full bool) string
 	DeleteComment(client *internal.Client, options *str.Options) (*str.Response, error)
 	DeleteNotes(client *internal.Client, options *str.Options) (*str.Response, error)
+	DenyFollowRequest(client *internal.Client, options *str.Options) (*str.FollowRequest, *str.Response, error)
 	FetchComment(client *internal.Client, options *str.Options) (*str.Comment, error)
 	FetchCommentItem(client *internal.Client, options *str.Options) (*str.CommentMediaItem, error)
 	FetchCommentUserLikes(client *internal.Client, options *str.Options, page int) ([]*str.CommentUserLike, error)
 	FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error)
+	FetchFavorites(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
+	FetchFollowRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error)
 	FetchHistoryList(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error)
 	FetchMovie(client *internal.Client, options *str.Options) (*str.Movie, *str.Response, error)
 	FetchMovieRecommendations(client *internal.Client, options *str.Options, page int) ([]*str.Recommendation, error)
 	FetchNotes(client *internal.Client, options *str.Options) (*str.Notes, error)
 	FetchNotesItem(client *internal.Client, options *str.Options) (*str.NotesItem, error)
+	FetchPendingFollowingRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error)
 	FetchPerson(client *internal.Client, options *str.Options) (*str.Person, error)
 	FetchRatings(client *internal.Client, options *str.Options, page int) ([]*str.RatingListItem, error)
 	FetchRecentComments(client *internal.Client, options *str.Options, page int) ([]*str.CommentItem, error)
@@ -59,8 +65,8 @@ type CommonInterface interface {
 	FetchTrendingComments(client *internal.Client, options *str.Options, page int) ([]*str.CommentItem, error)
 	FetchUpdatedComments(client *internal.Client, options *str.Options, page int) ([]*str.CommentItem, error)
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
+	FetchUsersHiddenItems(client *internal.Client, options *str.Options, page int) ([]*str.HiddenItem, error)
 	FetchWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
-	FetchFavorites(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	GenActionTypeItemUsage(options *str.Options, items []string)
 	GenActionTypeUsage(options *str.Options, types []string)
 	GenActionsUsage(name string, actions []string)
@@ -78,7 +84,11 @@ type CommonInterface interface {
 	UpdateComment(client *internal.Client, options *str.Options, comment *str.Comment) (*str.Comment, *str.Response, error)
 	UpdateHistoryListWithType(data []*str.ExportlistItem, strtype *string) []*str.ExportlistItem
 	UpdateNotes(client *internal.Client, options *str.Options, notes *str.Notes) (*str.Notes, *str.Response, error)
+	UsersAddToHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error)
+	UsersRemoveHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.RemoveResult, error)
 	ValidPrivacy(options *str.Options) error
+	FetchUsersLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error)
+	FetchUsersCollection(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 }
 
 // CommonLogic struct for common methods
@@ -287,6 +297,7 @@ func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 			Year:      m.Year,
 			IDs:       m.IDs,
 			WatchedAt: m.WatchedAt,
+			HiddenAt:  m.HiddenAt,
 			Notes:     m.Notes,
 		}
 		movies = append(movies, movie)
@@ -294,11 +305,12 @@ func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 	shows := []str.Show{}
 	for _, m := range *items.Shows {
 		show := str.Show{
-			Title:   m.Title,
-			Year:    m.Year,
-			IDs:     m.IDs,
-			Seasons: m.Seasons,
-			Notes:   m.Notes,
+			Title:    m.Title,
+			Year:     m.Year,
+			IDs:      m.IDs,
+			Seasons:  m.Seasons,
+			Notes:    m.Notes,
+			HiddenAt: m.HiddenAt,
 		}
 		shows = append(shows, show)
 	}
@@ -307,6 +319,7 @@ func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 		season := str.Season{
 			IDs:       m.IDs,
 			WatchedAt: m.WatchedAt,
+			HiddenAt:  m.HiddenAt,
 			Notes:     m.Notes,
 		}
 		seasons = append(seasons, season)
@@ -316,9 +329,18 @@ func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 		episode := str.Episode{
 			IDs:       m.IDs,
 			WatchedAt: m.WatchedAt,
+			HiddenAt:  m.HiddenAt,
 			Notes:     m.Notes,
 		}
 		episodes = append(episodes, episode)
+	}
+	users := []str.UserProfile{}
+	for _, m := range *items.Users {
+		user := str.UserProfile{
+			IDs:      m.IDs,
+			HiddenAt: m.HiddenAt,
+		}
+		users = append(users, user)
 	}
 
 	return str.HistoryItems{
@@ -326,6 +348,7 @@ func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 		Shows:    &shows,
 		Seasons:  &seasons,
 		Episodes: &episodes,
+		Users:    &users,
 	}
 }
 
@@ -1076,9 +1099,44 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 		consts.ReorderWatchlist, consts.AddToFavorites, consts.RemoveFromFavorites, consts.ReorderFavorites:
 		items = c.ListToItemsCollection(items, list, stype)
 		return items, nil
+	case consts.AddHiddenItems, consts.RemoveHiddenItems:
+		items = c.ListToItemsCollectionAgregate(items, list, stype)
+		return items, nil
 	default:
 		return nil, errors.New(consts.UnknownItemsListType)
 	}
+}
+
+// ListToItemsCollectionAgregate helper function to handle all types at once
+func (c *CommonLogic) ListToItemsCollectionAgregate(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
+	if stype != "" {
+		return c.ListToItemsCollection(items, list, stype)
+	}
+
+	out := c.InitItemsList()
+
+	it := c.ListToItemsCollection(items, list, consts.Movie)
+	for _, item := range *it.Movies {
+		*out.Movies = append(*out.Movies, item)
+	}
+	it = c.ListToItemsCollection(items, list, consts.Show)
+	for _, item := range *it.Shows {
+		*out.Shows = append(*out.Shows, item)
+	}
+	it = c.ListToItemsCollection(items, list, consts.Season)
+	for _, item := range *it.Seasons {
+		*out.Seasons = append(*out.Seasons, item)
+	}
+	it = c.ListToItemsCollection(items, list, consts.Episode)
+	for _, item := range *it.Episodes {
+		*out.Episodes = append(*out.Episodes, item)
+	}
+	it = c.ListToItemsCollection(items, list, consts.User)
+	for _, item := range *it.Users {
+		*out.Users = append(*out.Users, item)
+	}
+
+	return out
 }
 
 // ListToItemsAgregate helper function to update itemslists depends on type: movies,shows,seasons,episodes,all
@@ -1116,6 +1174,7 @@ func (*CommonLogic) InitItemsList() *str.ItemsList {
 	list.Shows = &[]str.ExportlistItem{}
 	list.Seasons = &[]str.ExportlistItem{}
 	list.Episodes = &[]str.ExportlistItem{}
+	list.Users = &[]str.ExportlistItem{}
 	list.IDs = &[]int64{}
 	return list
 }
@@ -1127,7 +1186,7 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			*items.IDs = append(*items.IDs, *val.ID)
 		}
 
-		if val.Movie != nil && stype == consts.Movies {
+		if val.Movie != nil && isMovieType(stype) {
 			e := str.ExportlistItem{}
 			e.Title = val.Movie.Title
 			e.Year = val.Movie.Year
@@ -1136,7 +1195,7 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			e.ID = val.ID
 			*items.Movies = append(*items.Movies, e)
 		}
-		if val.Show != nil && stype == consts.Shows {
+		if val.Show != nil && isShowType(stype) {
 			e := str.ExportlistItem{}
 			e.Title = val.Show.Title
 			e.Year = val.Show.Year
@@ -1145,7 +1204,7 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			e.ID = val.ID
 			*items.Shows = append(*items.Shows, e)
 		}
-		if val.Season != nil && stype == consts.Seasons {
+		if val.Season != nil && isSeasonType(stype) {
 			e := str.ExportlistItem{}
 			e.IDs = val.Season.IDs
 			val.Season.UpdateCollectedData(val)
@@ -1153,7 +1212,7 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			e.ID = val.ID
 			*items.Seasons = append(*items.Seasons, e)
 		}
-		if val.Episode != nil && stype == consts.Episodes {
+		if val.Episode != nil && isEpisodeType(stype) {
 			e := str.ExportlistItem{}
 			e.IDs = val.Episode.IDs
 			e.UpdateCollectedData(val)
@@ -1558,48 +1617,196 @@ func (c CommonLogic) FetchFavorites(client *internal.Client, options *str.Option
 	return list, nil
 }
 
-// Media interface for helpers
-type Media interface {
-	str.Movie | str.Show | str.Episode | str.Season
-}
+// FetchPendingFollowingRequests helper function to fetch pending following requests
+func (CommonLogic) FetchPendingFollowingRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error) {
+	opts := uri.ListOptions{Extended: options.ExtendedInfo}
+	list, _, err := client.Users.GetPendingFollowingRequests(
+		client.BuildCtxFromOptions(options),
+		&opts,
+	)
 
-// onlyIDs is a helper function to extract each type objects with only ids
-func onlyIDs[T Media](items []str.ExportlistItem) []T {
-	result := make([]T, 0, len(items))
-
-	var zero T
-
-	switch any(zero).(type) {
-	case str.Movie:
-		for _, item := range items {
-			result = append(result, any(str.Movie{IDs: item.IDs}).(T))
-		}
-	case str.Show:
-		for _, item := range items {
-			if item.Seasons != nil && len(*item.Seasons) > 0 {
-				updatedSeasons := SeasonsWithEpisodeNumbersOnly(item.Seasons)
-				result = append(result, any(str.Show{IDs: item.IDs, Seasons: updatedSeasons}).(T))
-			} else {
-				result = append(result, any(str.Show{IDs: item.IDs}).(T))
-			}
-		}
-	case str.Episode:
-		for _, item := range items {
-			result = append(result, any(str.Episode{IDs: item.IDs}).(T))
-		}
-	case str.Season:
-		for _, item := range items {
-			result = append(result, any(str.Season{IDs: item.IDs}).(T))
-		}
-	default:
-		panic("unsupported type")
+	if err != nil {
+		return nil, err
 	}
 
-	return result
+	return list, nil
 }
 
-// Ptr is a helper routine that allocates a new T value
-// to store v and returns a pointer to it.
-func Ptr[T any](v T) *T {
-	return &v
+// FetchFollowRequests helper function to fetch follow requests
+func (CommonLogic) FetchFollowRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error) {
+	opts := uri.ListOptions{Extended: options.ExtendedInfo}
+	list, _, err := client.Users.GetFollowRequests(
+		client.BuildCtxFromOptions(options),
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return list, nil
+}
+
+// ApproveFollowRequest helper function to approve follow request
+func (CommonLogic) ApproveFollowRequest(client *internal.Client, options *str.Options) (*str.FollowRequest, *str.Response, error) {
+	result, resp, err := client.Users.ApproveFollowRequest(
+		client.BuildCtxFromOptions(options),
+		options.FollowerRequest,
+	)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return result, resp, nil
+}
+
+// DenyFollowRequest helper function to deny follow request
+func (CommonLogic) DenyFollowRequest(client *internal.Client, options *str.Options) (*str.FollowRequest, *str.Response, error) {
+	result, resp, err := client.Users.DenyFollowRequest(
+		client.BuildCtxFromOptions(options),
+		options.FollowerRequest,
+	)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return result, resp, nil
+}
+
+// FetchUsersHiddenItems helper function to fetch users:hidden items
+func (c *CommonLogic) FetchUsersHiddenItems(client *internal.Client, options *str.Options, page int) ([]*str.HiddenItem, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Type: options.Type}
+	list, resp, err := client.Users.GetHiddenItems(
+		client.BuildCtxFromOptions(options),
+		&options.Section,
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchUsersHiddenItems(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+
+	return list, nil
+}
+
+// CreateItemsToHidden helper function to prepare items to hidden items
+func (c CommonLogic) CreateItemsToHidden(section string, items *str.ItemsList) str.HistoryItems {
+	i := c.CreateItemsToAdd(items)
+	switch section {
+	case consts.Calendar:
+		return str.HistoryItems{Movies: i.Movies, Shows: i.Shows}
+	case consts.ProgressWatched, consts.ProgressCollected:
+		return str.HistoryItems{Shows: i.Shows, Seasons: i.Seasons}
+	case consts.Recommendations:
+		return str.HistoryItems{Movies: i.Movies, Shows: i.Shows}
+	case consts.Comments:
+		return str.HistoryItems{Users: i.Users}
+	case consts.Dropped:
+		return str.HistoryItems{Shows: i.Shows}
+	default:
+		return str.HistoryItems{}
+	}
+}
+
+// UsersAddToHiddenItems helper function to users: add hidden items
+func (CommonLogic) UsersAddToHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error) {
+	result, err := client.Users.AddHiddenItems(
+		client.BuildCtxFromOptions(options),
+		items,
+		options.Section,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+// UsersRemoveHiddenItems helper function to users: remove hidden items
+func (CommonLogic) UsersRemoveHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.RemoveResult, error) {
+	result, err := client.Users.RemoveHiddenItems(
+		client.BuildCtxFromOptions(options),
+		items,
+		options.Section,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+// FetchUsersLikes helper function to users: likes
+func (c CommonLogic) FetchUsersLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	list, resp, err := client.Users.GetLikes(
+		client.BuildCtxFromOptions(options),
+		&options.UserName,
+		&options.Type,
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchUsersLikes(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+
+	return list, nil
+}
+
+// FetchUsersCollection helper funciton to users: collection
+func (c CommonLogic) FetchUsersCollection(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	list, resp, err := client.Users.GetCollection(
+		client.BuildCtxFromOptions(options),
+		&options.UserName,
+		&options.Type,
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchUsersCollection(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+
+	return list, nil
 }
