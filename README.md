@@ -1610,6 +1610,13 @@ $ cat export_users_all.json | ./trakt-sync users -a remove_hidden_items -t user
 ```console
 $ ./trakt-sync users -a profile -u username
 ```
+##### Fetch user likes:
+```console
+$ ./trakt-sync users -a likes -u username
+```
+```console
+$ ./trakt-sync users -a likes -u username -ex comments
+```
 ##### Export movies or shows or episodes from user lists:
 ```console
 $ ./trakt-sync users -a lists -u username -i 123456 -t episodes

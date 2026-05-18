@@ -172,6 +172,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 		Section: []string{"calendar", "progress_watched", "progress_watched_reset",
 			"progress_collected", "recommendations", "comments", "dropped"},
 	},
+	"users:likes": {
+		Type: []string{"comments", "lists"},
+	},
 }
 
 // ModuleConfig represents the configuration options for all modules
@@ -813,7 +816,7 @@ func getOutputForModuleUsers(options *str.Options) string {
 			options.Module,
 			options.Action,
 			strType+"_"+strSection)
-	case consts.Settings, consts.Profile, consts.FollowingRequests, consts.FollowerRequests:
+	case consts.Settings, consts.Profile, consts.Likes, consts.FollowingRequests, consts.FollowerRequests:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,

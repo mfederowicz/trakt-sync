@@ -386,3 +386,33 @@ func (u *UsersService) GetProfile(ctx context.Context, s *string) (*str.UserProf
 
 	return profile, resp, nil
 }
+
+// GetLikes Get items a user likes. This will return an array of standard media objects.
+// You can optionally limit the type of results to return.
+// API docs:https://trakt.docs.apiary.io/#reference/users/likes/get-likes
+func (u *UsersService) GetLikes(ctx context.Context, user *string, stype *string, opts *uri.ListOptions) ([]*str.UserLike, *str.Response, error) {
+	var url string
+	if stype != nil {
+		url = fmt.Sprintf("users/%s/likes/%s", *user, *stype)
+	} else {
+		url = "users/me/likes"
+	}
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	fmt.Println(url)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	items := []*str.UserLike{}
+	resp, err := u.client.Do(ctx, req, &items)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return items, resp, nil
+}
