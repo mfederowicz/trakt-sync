@@ -364,3 +364,25 @@ func (u *UsersService) RemoveHiddenItems(ctx context.Context, items *str.History
 
 	return result, nil
 }
+
+// GetProfile Get a user's profile information. If the user is private,
+// info will only be returned if you send OAuth and are either that user
+// or an approved follower. Adding ?extended=vip will return some additional VIP related fields
+// so you can display the user's Trakt VIP status and year count.
+// API docs:https://trakt.docs.apiary.io/#reference/users/profile/get-user-profile
+func (u *UsersService) GetProfile(ctx context.Context, s *string) (*str.UserProfile, *str.Response, error) {
+	url := fmt.Sprintf("users/%s", *s)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	profile := new(str.UserProfile)
+	resp, err := u.client.Do(ctx, req, &profile)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return profile, resp, nil
+}

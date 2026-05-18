@@ -80,6 +80,7 @@ const (
 	Playback             = "playback"
 	Played               = "played"
 	Popular              = "popular"
+	Profile              = "profile"
 	ProgressWatched      = "progress_watched"
 	ProgressCollected    = "progress_collected"
 	Query                = "query"
