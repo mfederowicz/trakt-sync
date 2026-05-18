@@ -48,21 +48,23 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 
 	var handler handlers.UsersHandler
 	allHandlers := map[string]handlers.Handler{
-		"settings":           handlers.UsersSettingsHandler{},
-		"following_requests": handlers.UsersFollowingRequestsHandler{},
-		"follower_requests":  handlers.UsersFollowerRequestsHandler{},
-		"saved_filters":      handlers.UsersSavedFiltersHandler{},
-		"hidden_items":       handlers.UsersHiddenItemsHandler{},
-		"add_hidden_items":   handlers.UsersAddHiddenItemsHandler{},
-		"lists":              handlers.UsersListsHandler{},
-		"stats":              handlers.UsersStatsHandler{},
-		"watched":            handlers.UsersWatchedHandler{},
+		"settings":            handlers.UsersSettingsHandler{},
+		"following_requests":  handlers.UsersFollowingRequestsHandler{},
+		"follower_requests":   handlers.UsersFollowerRequestsHandler{},
+		"saved_filters":       handlers.UsersSavedFiltersHandler{},
+		"hidden_items":        handlers.UsersHiddenItemsHandler{},
+		"add_hidden_items":    handlers.UsersAddHiddenItemsHandler{},
+		"remove_hidden_items": handlers.UsersRemoveHiddenItemsHandler{},
+		"lists":               handlers.UsersListsHandler{},
+		"stats":               handlers.UsersStatsHandler{},
+		"watched":             handlers.UsersWatchedHandler{},
 	}
 
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	validActions = []string{"settings", "following_requests", "follower_requests",
-		"follow_request", "saved_filters", "hidden_items", "lists", "stats", "watched"}
+		"follow_request", "saved_filters", "hidden_items", "add_hidden_items",
+		"remove_hidden_items", "lists", "stats", "watched"}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

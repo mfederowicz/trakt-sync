@@ -92,6 +92,7 @@ const (
 	RemoveFromRatings    = "remove_from_ratings"
 	RemoveFromWatchlist  = "remove_from_watchlist"
 	RemoveFromFavorites  = "remove_from_favorites"
+	RemoveHiddenItems    = "remove_hidden_items"
 	ReorderFavorites     = "reorder_favorites"
 	ReorderWatchlist     = "reorder_watchlist"
 	Replies              = "replies"

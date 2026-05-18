@@ -1574,6 +1574,38 @@ $ cat export_users_all.json | ./trakt-sync users -a add_hidden_items -t season
 ```console
 $ cat export_users_all.json | ./trakt-sync users -a add_hidden_items -t user
 ```
+##### Remove hidden items - via -items flag
+```console
+$ ./trakt-sync users -a remove_hidden_items -items export_users_all.json
+```
+```console
+$ ./trakt-sync users -a remove_hidden_items -t movie -items export_users_all.json
+```
+```console
+$ ./trakt-sync users -a remove_hidden_items -t show -items export_users_all.json
+```
+```console
+$ ./trakt-sync users -a remove_hidden_items -t season -items export_users_all.json
+```
+```console
+$ ./trakt-sync users -a remove_hidden_items -t user -items export_users_all.json
+```
+##### Remove hidden items - via stdin
+```console
+$ cat export_users_all.json | ./trakt-sync users -a remove_hidden_items
+```
+```console
+$ cat export_users_all.json | ./trakt-sync users -a remove_hidden_items -t movie
+```
+```console
+$ cat export_users_all.json | ./trakt-sync users -a remove_hidden_items -t show
+```
+```console
+$ cat export_users_all.json | ./trakt-sync users -a remove_hidden_items -t season
+```
+```console
+$ cat export_users_all.json | ./trakt-sync users -a remove_hidden_items -t user
+```
 
 ##### Export movies or shows or episodes from user lists:
 ```console

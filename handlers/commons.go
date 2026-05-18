@@ -85,6 +85,7 @@ type CommonInterface interface {
 	UpdateHistoryListWithType(data []*str.ExportlistItem, strtype *string) []*str.ExportlistItem
 	UpdateNotes(client *internal.Client, options *str.Options, notes *str.Notes) (*str.Notes, *str.Response, error)
 	UsersAddToHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error)
+	UsersRemoveHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.RemoveResult, error)
 	ValidPrivacy(options *str.Options) error
 }
 
@@ -1096,7 +1097,7 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 		consts.ReorderWatchlist, consts.AddToFavorites, consts.RemoveFromFavorites, consts.ReorderFavorites:
 		items = c.ListToItemsCollection(items, list, stype)
 		return items, nil
-	case consts.AddHiddenItems:
+	case consts.AddHiddenItems, consts.RemoveHiddenItems:
 		items = c.ListToItemsCollectionAgregate(items, list, stype)
 		return items, nil
 	default:
@@ -1723,6 +1724,20 @@ func (c CommonLogic) CreateItemsToHidden(section string, items *str.ItemsList) s
 // UsersAddToHiddenItems helper function to users: add hidden items
 func (CommonLogic) UsersAddToHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error) {
 	result, err := client.Users.AddHiddenItems(
+		client.BuildCtxFromOptions(options),
+		items,
+		options.Section,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+// UsersRemoveHiddenItems helper function to users: remove hidden items
+func (CommonLogic) UsersRemoveHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.RemoveResult, error) {
+	result, err := client.Users.RemoveHiddenItems(
 		client.BuildCtxFromOptions(options),
 		items,
 		options.Section,

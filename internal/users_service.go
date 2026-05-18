@@ -344,3 +344,23 @@ func (u *UsersService) AddHiddenItems(ctx context.Context, items *str.HistoryIte
 
 	return result, nil
 }
+
+// RemoveHiddenItems Unhide items for a specific section. Here's what type of items can unhidden for each section.
+// API docs:https://trakt.docs.apiary.io/#reference/users/remove-hidden-items/remove-hidden-items
+func (u *UsersService) RemoveHiddenItems(ctx context.Context, items *str.HistoryItems, section string) (*str.RemoveResult, error) {
+	var url string
+	url = fmt.Sprintf("users/hidden/%s/remove", section)
+	printer.Println("remove hidden items")
+	req, err := u.client.NewRequest(http.MethodPost, url, items)
+	if err != nil {
+		return nil, err
+	}
+
+	result := new(str.RemoveResult)
+	_, err = u.client.Do(ctx, req, result)
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
