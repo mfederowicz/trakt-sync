@@ -175,6 +175,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	"users:likes": {
 		Type: []string{"comments", "lists"},
 	},
+	"users:collection": {
+		Type: []string{"movies", "shows"},
+	},
 }
 
 // ModuleConfig represents the configuration options for all modules
@@ -802,7 +805,7 @@ func getOutputForModuleUsers(options *str.Options) string {
 			options.Module,
 			options.Action,
 			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
-	case consts.SavedFilters:
+	case consts.SavedFilters, consts.Collection:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,

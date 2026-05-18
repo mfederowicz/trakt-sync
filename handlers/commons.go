@@ -88,6 +88,7 @@ type CommonInterface interface {
 	UsersRemoveHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.RemoveResult, error)
 	ValidPrivacy(options *str.Options) error
 	FetchUsersLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error)
+	FetchUsersCollection(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 }
 
 // CommonLogic struct for common methods
@@ -1770,6 +1771,36 @@ func (c CommonLogic) FetchUsersLikes(client *internal.Client, options *str.Optio
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersLikes(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+
+	return list, nil
+}
+
+// FetchUsersCollection helper funciton to users: collection
+func (c CommonLogic) FetchUsersCollection(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	list, resp, err := client.Users.GetCollection(
+		client.BuildCtxFromOptions(options),
+		&options.UserName,
+		&options.Type,
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchUsersCollection(client, options, nextPage)
 		if err != nil {
 			return nil, err
 		}

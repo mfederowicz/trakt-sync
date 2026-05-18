@@ -824,6 +824,10 @@ func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.O
 		options.Type = *_usersType
 	}
 
+	if options.Action == consts.Collection && options.Type == "" {
+		options.Type = consts.Movies
+	}
+
 	options.Output = cfg.GetOutputForModule(options)
 
 	return options

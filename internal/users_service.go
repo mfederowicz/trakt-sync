@@ -416,3 +416,33 @@ func (u *UsersService) GetLikes(ctx context.Context, user *string, stype *string
 
 	return items, resp, nil
 }
+
+// GetCollection Get all collected items in a user's collection.
+// A collected item indicates availability to watch digitally or on physical media.
+// API docs:https://trakt.docs.apiary.io/#reference/users/collection/get-collection
+func (u *UsersService) GetCollection(ctx context.Context, user *string, stype *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+	var url string
+	if stype != nil {
+		url = fmt.Sprintf("users/%s/collection/%s", *user, *stype)
+	} else {
+		url = "users/me/collection"
+	}
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	fmt.Println(url)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	items := []*str.ExportlistItem{}
+	resp, err := u.client.Do(ctx, req, &items)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return items, resp, nil
+}

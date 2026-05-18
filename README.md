@@ -1617,6 +1617,20 @@ $ ./trakt-sync users -a likes -u username
 ```console
 $ ./trakt-sync users -a likes -u username -ex comments
 ```
+##### Fetch user collection:
+```console
+$ ./trakt-sync users -a collection -u username
+```
+```console
+$ ./trakt-sync users -a collection -u username -ex comments
+```
+```console
+$ ./trakt-sync users -a collection -u username -t movies
+```
+```console
+$ ./trakt-sync users -a collection -u username -t shows
+```
+
 ##### Export movies or shows or episodes from user lists:
 ```console
 $ ./trakt-sync users -a lists -u username -i 123456 -t episodes

@@ -57,6 +57,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"remove_hidden_items": handlers.UsersRemoveHiddenItemsHandler{},
 		"profile":             handlers.UsersProfileHandler{},
 		"likes":               handlers.UsersLikesHandler{},
+		"collection":          handlers.UsersCollectionHandler{},
 		"lists":               handlers.UsersListsHandler{},
 		"stats":               handlers.UsersStatsHandler{},
 		"watched":             handlers.UsersWatchedHandler{},
