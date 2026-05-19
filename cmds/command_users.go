@@ -15,13 +15,15 @@ var (
 	username   = "me"
 	exportData []*str.PersonalList
 
-	_usersListID          = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
-	_usersAction          = UsersCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
-	_usersType            = UsersCmd.Flag.String("t", cfg.DefaultConfig().UsersType, consts.UsersTypeUsage)
-	_usersSection         = UsersCmd.Flag.String("s", cfg.DefaultConfig().UsersSection, consts.UsersSectionUsage)
-	_usersDeny            = UsersCmd.Flag.Bool("deny", cfg.DefaultConfig().Deny, consts.DenyUsage)
-	_usersFollowerRequest = UsersCmd.Flag.Int("follower_request", cfg.DefaultConfig().FollowerRequest, consts.FollowerRequestUsage)
-	_usersItems           = UsersCmd.Flag.String("items", consts.EmptyString, consts.ItemsUsage)
+	_usersListID                 = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
+	_usersAction                 = UsersCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_usersType                   = UsersCmd.Flag.String("t", cfg.DefaultConfig().UsersType, consts.UsersTypeUsage)
+	_usersSection                = UsersCmd.Flag.String("s", cfg.DefaultConfig().UsersSection, consts.UsersSectionUsage)
+	_usersDeny                   = UsersCmd.Flag.Bool("deny", cfg.DefaultConfig().Deny, consts.DenyUsage)
+	_usersFollowerRequest        = UsersCmd.Flag.Int("follower_request", cfg.DefaultConfig().FollowerRequest, consts.FollowerRequestUsage)
+	_usersItems                  = UsersCmd.Flag.String("items", consts.EmptyString, consts.ItemsUsage)
+	_usersCommentsIncludeReplies = UsersCmd.Flag.String("include_replies", cfg.DefaultConfig().IncludeReplies, consts.IncludeRepliesUsage)
+	_usersCommentsCommentType    = UsersCmd.Flag.String("comment_type", cfg.DefaultConfig().CommentType, consts.CommentTypeUsage)
 )
 
 // UsersCmd Returns all personal lists for a user.
@@ -58,6 +60,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"profile":             handlers.UsersProfileHandler{},
 		"likes":               handlers.UsersLikesHandler{},
 		"collection":          handlers.UsersCollectionHandler{},
+		"comments":            handlers.UsersCommentsHandler{},
 		"lists":               handlers.UsersListsHandler{},
 		"stats":               handlers.UsersStatsHandler{},
 		"watched":             handlers.UsersWatchedHandler{},
@@ -67,7 +70,8 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 
 	validActions = []string{"settings", "following_requests", "follower_requests",
 		"follow_request", "saved_filters", "hidden_items", "add_hidden_items",
-		"remove_hidden_items", "profile", "likes", "lists", "stats", "watched"}
+		"remove_hidden_items", "profile", "likes", "collection", "comments",
+		"lists", "stats", "watched"}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

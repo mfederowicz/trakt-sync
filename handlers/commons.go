@@ -22,7 +22,10 @@ import (
 // CommonInterface interface
 type CommonInterface interface {
 	ApproveFollowRequest(client *internal.Client, options *str.Options) (*str.FollowRequest, *str.Response, error)
+	CheckCommentTypes(options *str.Options) error
+	CheckCommentsFilters(options *str.Options) error
 	CheckDates(from string, to string, tz string) error
+	CheckIncludeReplies(options *str.Options) error
 	CheckSeasonNumber(code string) (*int, *int, error)
 	CheckSortAndTypes(options *str.Options) error
 	CheckTypes(options *str.Options) error
@@ -65,7 +68,9 @@ type CommonInterface interface {
 	FetchTrendingComments(client *internal.Client, options *str.Options, page int) ([]*str.CommentItem, error)
 	FetchUpdatedComments(client *internal.Client, options *str.Options, page int) ([]*str.CommentItem, error)
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
+	FetchUsersCollection(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchUsersHiddenItems(client *internal.Client, options *str.Options, page int) ([]*str.HiddenItem, error)
+	FetchUsersLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error)
 	FetchWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	GenActionTypeItemUsage(options *str.Options, items []string)
 	GenActionTypeUsage(options *str.Options, types []string)
@@ -87,8 +92,6 @@ type CommonInterface interface {
 	UsersAddToHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error)
 	UsersRemoveHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.RemoveResult, error)
 	ValidPrivacy(options *str.Options) error
-	FetchUsersLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error)
-	FetchUsersCollection(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 }
 
 // CommonLogic struct for common methods
@@ -920,6 +923,56 @@ func (*CommonLogic) CheckSortAndTypes(options *str.Options) error {
 	}
 
 	// Check id_type values
+	return nil
+}
+
+// CheckCommentsFilters helper function to validate comment_type,type,include_replies fields depends on module
+func (c *CommonLogic) CheckCommentsFilters(options *str.Options) error {
+	err := c.CheckCommentTypes(options)
+	if err != nil {
+		return err
+	}
+	err = c.CheckTypes(options)
+	if err != nil {
+		return err
+	}
+	err = c.CheckIncludeReplies(options)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// CheckIncludeReplies helper function to validate include_replies field depends on module
+func (*CommonLogic) CheckIncludeReplies(options *str.Options) error {
+	// Check if the provided module exists in ModuleConfig
+	_, ok := cfg.ModuleConfig[options.Module]
+	if !ok {
+		return fmt.Errorf("not found config for module '%s'", options.Module)
+	}
+	prefix := options.Module + ":" + options.Action
+	if !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].IncludeReplies, options.IncludeReplies) {
+		return fmt.Errorf("not found include_replies for module '%s'", options.Module)
+	}
+
+	// Check include_replies values
+	return nil
+}
+
+// CheckCommentTypes helper function to validate comment_type field depends on module
+func (*CommonLogic) CheckCommentTypes(options *str.Options) error {
+	// Check if the provided module exists in ModuleConfig
+	_, ok := cfg.ModuleConfig[options.Module]
+	if !ok {
+		return fmt.Errorf("not found config for module '%s'", options.Module)
+	}
+	prefix := options.Module + ":" + options.Action
+	if !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].CommentType, options.CommentType) {
+		return fmt.Errorf("not found comment_type for module '%s'", options.Module)
+	}
+
+	// Check comment_type values
 	return nil
 }
 
@@ -1808,5 +1861,38 @@ func (c CommonLogic) FetchUsersCollection(client *internal.Client, options *str.
 		list = append(list, nextPageItems...)
 	}
 
+	return list, nil
+}
+
+// FetchUsersComments helper function to users:comments
+func (c *CommonLogic) FetchUsersComments(client *internal.Client, options *str.Options, page int) ([]*str.CommentItem, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, IncludeReplies: options.IncludeReplies}
+	user := options.UserName
+	commentType := options.CommentType
+	strType := options.Type
+	list, resp, err := client.Users.GetComments(
+		client.BuildCtxFromOptions(options),
+		&user,
+		&commentType,
+		&strType,
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchUsersComments(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
 	return list, nil
 }

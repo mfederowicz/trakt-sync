@@ -20,20 +20,21 @@ import (
 
 // OptionsConfig represents the configuration options for each module
 type OptionsConfig struct {
-	SearchIDType []string
-	CommentType  []string
-	SearchType   []string
-	SearchField  []string
-	Type         []string
-	Section      []string
-	Period       []string
-	Sort         []string
-	SortBy       []string
-	SortHow      []string
-	Format       []string
-	Action       []string
-	Privacy      []string
-	Rating       []int
+	SearchIDType   []string
+	IncludeReplies []string
+	CommentType    []string
+	SearchType     []string
+	SearchField    []string
+	Type           []string
+	Section        []string
+	Period         []string
+	Sort           []string
+	SortBy         []string
+	SortHow        []string
+	Format         []string
+	Action         []string
+	Privacy        []string
+	Rating         []int
 }
 
 // SearchFieldConfig represents the configuration options for search_field depens on type
@@ -177,6 +178,11 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	},
 	"users:collection": {
 		Type: []string{"movies", "shows"},
+	},
+	"users:comments": {
+		Type:           []string{"all", "movies", "shows", "seasons", "episodes", "lists"},
+		CommentType:    []string{"all", "reviews", "shouts"},
+		IncludeReplies: []string{"true", "false", "only"},
 	},
 }
 
@@ -805,7 +811,7 @@ func getOutputForModuleUsers(options *str.Options) string {
 			options.Module,
 			options.Action,
 			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
-	case consts.SavedFilters, consts.Collection:
+	case consts.SavedFilters, consts.Collection, consts.Comments:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,

@@ -1630,6 +1630,43 @@ $ ./trakt-sync users -a collection -u username -t movies
 ```console
 $ ./trakt-sync users -a collection -u username -t shows
 ```
+##### Fetch user comments:
+```console
+$ ./trakt-sync users -a comments
+```
+```console
+$ ./trakt-sync users -a comments -comment_type all
+```
+```console
+$ ./trakt-sync users -a comments -comment_type reviews
+```
+```console
+$ ./trakt-sync users -a comments -comment_type shouts
+```
+```console
+$ ./trakt-sync users -a comments -t all -include_replies true
+```
+```console
+$ ./trakt-sync users -a comments -t movies -include_replies true
+```
+```console
+$ ./trakt-sync users -a comments -t shows -include_replies true
+```
+```console
+$ ./trakt-sync users -a comments -t seasons -include_replies true
+```
+```console
+$ ./trakt-sync users -a comments -t episodes -include_replies true
+```
+```console
+$ ./trakt-sync users -a comments -t lists -comment_type reviews  -include_replies true
+```
+```console
+$ ./trakt-sync users -a comments -t lists -comment_type reviews  -include_replies false
+```
+```console
+$ ./trakt-sync users -a comments -t lists -comment_type reviews  -include_replies only
+```
 
 ##### Export movies or shows or episodes from user lists:
 ```console

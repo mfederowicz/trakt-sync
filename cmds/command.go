@@ -812,6 +812,14 @@ func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.O
 		return options
 	}
 
+	if len(*_usersCommentsIncludeReplies) > consts.ZeroValue {
+		options.IncludeReplies = *_usersCommentsIncludeReplies
+	}
+
+	if len(*_usersCommentsCommentType) > consts.ZeroValue {
+		options.CommentType = *_usersCommentsCommentType
+	}
+
 	if len(*_usersItems) > consts.ZeroValue {
 		options.Items = *_usersItems
 	}
@@ -824,6 +832,9 @@ func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.O
 		options.Type = *_usersType
 	}
 
+	if options.Action == consts.Comments && options.Type == "" {
+		options.Type = consts.ActionTypeAll
+	}
 	if options.Action == consts.Collection && options.Type == "" {
 		options.Type = consts.Movies
 	}

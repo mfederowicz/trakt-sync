@@ -446,3 +446,36 @@ func (u *UsersService) GetCollection(ctx context.Context, user *string, stype *s
 
 	return items, resp, nil
 }
+
+// GetComments Returns the most recently written comments for the user.
+// You can optionally filter by the comment_type and media type to limit what gets returned.
+// By default, only top level comments are returned. Set ?include_replies=true to return
+// replies in addition to top level comments. Set ?include_replies=only to return only
+// replies and no top level comments.
+// API docs:https://trakt.docs.apiary.io/#reference/users/comments/get-comments
+func (u *UsersService) GetComments(ctx context.Context, user *string, commentType *string, strType *string, opts *uri.ListOptions) ([]*str.CommentItem, *str.Response, error) {
+	var url string
+	if commentType != nil && strType != nil {
+		url = fmt.Sprintf("users/%s/comments/%s/%s", *user, *commentType, *strType)
+	} else {
+		url = "users/me/comments/all/all"
+	}
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	fmt.Println(url)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	items := []*str.CommentItem{}
+	resp, err := u.client.Do(ctx, req, &items)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return items, resp, nil
+}
