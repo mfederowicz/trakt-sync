@@ -71,6 +71,7 @@ type CommonInterface interface {
 	FetchUsersCollection(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchUsersHiddenItems(client *internal.Client, options *str.Options, page int) ([]*str.HiddenItem, error)
 	FetchUsersLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error)
+	FetchUsersNotes(client *internal.Client, options *str.Options, page int) ([]*str.NotesItem, error)
 	FetchWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	GenActionTypeItemUsage(options *str.Options, items []string)
 	GenActionTypeUsage(options *str.Options, types []string)
@@ -1888,6 +1889,37 @@ func (c *CommonLogic) FetchUsersComments(client *internal.Client, options *str.O
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersComments(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+	return list, nil
+}
+
+// FetchUsersNotes helper function to users:notes
+func (c CommonLogic) FetchUsersNotes(client *internal.Client, options *str.Options, page int) ([]*str.NotesItem, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	user := options.UserName
+	strType := options.Type
+	list, resp, err := client.Users.GetNotes(
+		client.BuildCtxFromOptions(options),
+		&user,
+		&strType,
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchUsersNotes(client, options, nextPage)
 		if err != nil {
 			return nil, err
 		}

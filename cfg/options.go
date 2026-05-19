@@ -184,6 +184,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 		CommentType:    []string{"all", "reviews", "shouts"},
 		IncludeReplies: []string{"true", "false", "only"},
 	},
+	"users:notes": {
+		Type: []string{"all", "movies", "shows", "seasons", "episodes", "people", "history", "collection", "ratings"},
+	},
 }
 
 // ModuleConfig represents the configuration options for all modules
@@ -811,7 +814,7 @@ func getOutputForModuleUsers(options *str.Options) string {
 			options.Module,
 			options.Action,
 			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
-	case consts.SavedFilters, consts.Collection, consts.Comments:
+	case consts.SavedFilters, consts.Collection, consts.Comments, consts.Notes:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,

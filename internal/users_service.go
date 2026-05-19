@@ -479,3 +479,38 @@ func (u *UsersService) GetComments(ctx context.Context, user *string, commentTyp
 
 	return items, resp, nil
 }
+
+// GetNotes Returns the most recently notes for the user.
+// You can optionally filter by media type to limit what gets returned.
+// Use the attached_to info to know what the note is actually added to.
+// Media items like movie, show, season, episode, or person are straightforward,
+// but history will need to be mapped to that specific play in their watched history
+// since they might have multiple plays. Since collection and rating is a 1:1 association,
+// you can assume the note is attached to the media item in the type field that has been collected or rated.
+// API docs:https://trakt.docs.apiary.io/#reference/users/notes/get-notes
+func (u *UsersService) GetNotes(ctx context.Context, user *string, strType *string, opts *uri.ListOptions) ([]*str.NotesItem, *str.Response, error) {
+	var url string
+	if strType != nil {
+		url = fmt.Sprintf("users/%s/notes/%s", *user, *strType)
+	} else {
+		url = "users/me/notes/all"
+	}
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	fmt.Println(url)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	items := []*str.NotesItem{}
+	resp, err := u.client.Do(ctx, req, &items)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return items, resp, nil
+}

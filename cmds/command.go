@@ -832,6 +832,9 @@ func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.O
 		options.Type = *_usersType
 	}
 
+	if options.Action == consts.Notes && options.Type == "" {
+		options.Type = consts.ActionTypeAll
+	}
 	if options.Action == consts.Comments && options.Type == "" {
 		options.Type = consts.ActionTypeAll
 	}

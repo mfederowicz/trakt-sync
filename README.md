@@ -1667,6 +1667,38 @@ $ ./trakt-sync users -a comments -t lists -comment_type reviews  -include_replie
 ```console
 $ ./trakt-sync users -a comments -t lists -comment_type reviews  -include_replies only
 ```
+##### Fetch user notes:
+```console
+$ ./trakt-sync users -a notes
+```
+```console
+$ ./trakt-sync users -a notes -t all
+```
+```console
+$ ./trakt-sync users -a notes -t movies
+```
+```console
+$ ./trakt-sync users -a notes -t shows
+```
+```console
+$ ./trakt-sync users -a notes -t seasons
+```
+```console
+$ ./trakt-sync users -a notes -t episodes
+```
+```console
+$ ./trakt-sync users -a notes -t people
+```
+```console
+$ ./trakt-sync users -a notes -t history
+```
+```console
+$ ./trakt-sync users -a notes -t collection
+```
+```console
+$ ./trakt-sync users -a notes -t ratings
+```
+
 
 ##### Export movies or shows or episodes from user lists:
 ```console
