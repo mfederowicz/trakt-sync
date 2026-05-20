@@ -311,6 +311,8 @@ func prepareResponse(c *Client, resp *http.Response) (*str.Response, error) {
 	if errCheck != nil {
 		defer resp.Body.Close()
 		switch e := errCheck.(type) {
+		case *UpgradeUserLimitsError:
+			return response, errors.New(e.Error())
 		case *AbuseRateLimitError:
 			updateRateLimitReset(c, e)
 		case *UpgradeRequiredError:
@@ -428,6 +430,8 @@ func (c *Client) CheckResponse(r *http.Response) error {
 
 func genErrorResponse(c *Client, r *http.Response, e *str.ErrorResponse) error {
 	switch r.StatusCode {
+	case 420:
+		return c.genUpgradeUserLimitsError(r, e)
 	case http.StatusTooManyRequests:
 		return c.genRateLimitError(r, e)
 	case http.StatusUpgradeRequired:
@@ -562,6 +566,17 @@ func (c *Client) genRateLimitError(r *http.Response, errorResponse *str.ErrorRes
 	if retryAfter := c.ParseRateLimit(r); retryAfter != nil {
 		abuseRateLimitError.RetryAfter = retryAfter
 		return abuseRateLimitError
+	}
+	return nil
+}
+
+func (*Client) genUpgradeUserLimitsError(r *http.Response, errorResponse *str.ErrorResponse) *UpgradeUserLimitsError {
+	upgradeUserLimitsError := &UpgradeUserLimitsError{
+		Response: errorResponse.Response,
+		Message:  errorResponse.Message,
+	}
+	if r.StatusCode == 420 {
+		return upgradeUserLimitsError
 	}
 	return nil
 }

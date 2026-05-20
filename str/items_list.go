@@ -13,6 +13,7 @@ type ItemsList struct {
 	Episodes *[]ExportlistItem `json:"episodes,omitempty"`
 	Users    *[]ExportlistItem `json:"users,omitempty"`
 	IDs      *[]int64          `json:"ids,omitempty"`
+	List     *PersonalList     `json:"list,omitempty"`
 }
 
 func (i ItemsList) String() string {

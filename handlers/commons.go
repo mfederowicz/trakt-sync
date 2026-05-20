@@ -32,6 +32,8 @@ type CommonInterface interface {
 	Checkin(client *internal.Client, checkin *str.Checkin, options *str.Options) (*str.Checkin, *str.Response, error)
 	Comment(client *internal.Client, comment *str.Comment, options *str.Options) (*str.Comment, *str.Response, error)
 	ConvertDateString(dateStr string, outputFormat string, tz string, full bool) string
+	ConvertBytesFromPersonalListObject(data []byte) (*str.ItemsList, error)
+	ConvertBytes(data []byte, options str.Options) (*str.ItemsList, error)
 	CreateCheckin(client *internal.Client, options *str.Options) (*str.Checkin, error)
 	CreateCheckinShowEpisode(client *internal.Client, options *str.Options) (*str.Checkin, error)
 	CreateItemsToAdd(items *str.ItemsList) str.HistoryItems
@@ -92,6 +94,7 @@ type CommonInterface interface {
 	UpdateNotes(client *internal.Client, options *str.Options, notes *str.Notes) (*str.Notes, *str.Response, error)
 	UsersAddToHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error)
 	UsersRemoveHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.RemoveResult, error)
+	UsersAddPersonalList(client *internal.Client, options *str.Options, list *str.PersonalList) (*str.PersonalList, *str.Response, error)
 	ValidPrivacy(options *str.Options) error
 }
 
@@ -1447,6 +1450,23 @@ func (*CommonLogic) ListToItems(items *str.ItemsList, list []*str.ExportlistItem
 	return items
 }
 
+// ConvertBytesFromPersonalListObject helper to convert bytes to proper struct.
+func (*CommonLogic) ConvertBytesFromPersonalListObject(data []byte) (*str.ItemsList, error) {
+	var list *str.PersonalList
+	if err := json.Unmarshal(data, &list); err != nil {
+		return nil, err
+	}
+	return &str.ItemsList{List: list}, nil
+}
+
+// ConvertBytes helper to converts bytes to proper structs.
+func (c *CommonLogic) ConvertBytes(data []byte, options str.Options) (*str.ItemsList, error) {
+	if options.Action == consts.AddList {
+		return c.ConvertBytesFromPersonalListObject(data)
+	}
+	return c.ConvertBytesToItemsList(data, options.Action, options.Type)
+}
+
 // ReadInput read data from stdin or from file
 func (c *CommonLogic) ReadInput(options str.Options) (*str.ItemsList, error) {
 	filePath := options.Items
@@ -1456,7 +1476,7 @@ func (c *CommonLogic) ReadInput(options str.Options) (*str.ItemsList, error) {
 			return nil, fmt.Errorf("failed to read file %s: %w", filePath, err)
 		}
 
-		return c.ConvertBytesToItemsList(data, options.Action, options.Type)
+		return c.ConvertBytes(data, options)
 	}
 
 	// Check if there's data in stdin to avoid blocking
@@ -1467,7 +1487,7 @@ func (c *CommonLogic) ReadInput(options str.Options) (*str.ItemsList, error) {
 
 	// os.ModeCharDevice means no data is being piped (stdin is a terminal)
 	if fi.Mode()&os.ModeCharDevice != 0 {
-		return nil, fmt.Errorf("no --file provided and no data piped to stdin")
+		return nil, fmt.Errorf("no --items provided and no data piped to stdin")
 	}
 
 	// Read all data from stdin
@@ -1476,7 +1496,7 @@ func (c *CommonLogic) ReadInput(options str.Options) (*str.ItemsList, error) {
 		return nil, fmt.Errorf("failed to read from stdin: %w", err)
 	}
 
-	return c.ConvertBytesToItemsList(data, options.Action, options.Type)
+	return c.ConvertBytes(data, options)
 }
 
 // FetchHistoryList returns movies and episodes that a user has watched, sorted by most recent.
@@ -1927,4 +1947,18 @@ func (c CommonLogic) FetchUsersNotes(client *internal.Client, options *str.Optio
 		list = append(list, nextPageItems...)
 	}
 	return list, nil
+}
+
+// UsersAddPersonalList helper function to users:add_list.
+func (*CommonLogic) UsersAddPersonalList(client *internal.Client, options *str.Options, list *str.PersonalList) (*str.PersonalList, *str.Response, error) {
+	result, resp, err := client.Users.AddPersonalList(
+		client.BuildCtxFromOptions(options),
+		&options.UserName,
+		list,
+	)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return result, resp, nil
 }

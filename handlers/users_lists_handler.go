@@ -15,12 +15,11 @@ import (
 )
 
 // UsersListsHandler struct for handler
-type UsersListsHandler struct{}
+type UsersListsHandler struct{ common CommonLogic }
 
 // Handle to handle users: lists action
 func (UsersListsHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("fetch private lists for:" + options.UserName)
-
 	personalLists, _, err := fetchUsersPersonalLists(client, options)
 	if err != nil {
 		return fmt.Errorf("fetch user list error:%w", err)

@@ -3,6 +3,7 @@ package internal
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -513,4 +514,29 @@ func (u *UsersService) GetNotes(ctx context.Context, user *string, strType *stri
 	}
 
 	return items, resp, nil
+}
+
+// AddPersonalList Create a new personal list. The name is the only required field, but the other info is recommended to ask for.
+// API docs:https://trakt.docs.apiary.io/#reference/users/lists/create-personal-list
+func (u *UsersService) AddPersonalList(ctx context.Context, user *string, list *str.PersonalList) (*str.PersonalList, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/lists", *user)
+	printer.Println("create new personal list")
+	req, err := u.client.NewRequest(http.MethodPost, url, list)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.PersonalList)
+	resp, err := u.client.Do(ctx, req, result)
+
+	if resp.StatusCode == 420 {
+		return nil, nil, errors.New("use the /users/settings method to get all limits for a user account. In most cases, upgrading to Trakt VIP will increase the limits")
+	}
+
+	if err != nil {
+		return result, resp, err
+	}
+
+	return result, resp, nil
 }
