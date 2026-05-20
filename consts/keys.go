@@ -29,6 +29,7 @@ const (
 	Calendars            = "calendars"
 	Certifications       = "certifications"
 	Checkin              = "checkin"
+	Collaborations       = "collaborations"
 	Collected            = "collected"
 	Collection           = "collection"
 	CollectionProgress   = "collection_progress"

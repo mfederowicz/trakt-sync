@@ -1698,9 +1698,6 @@ $ ./trakt-sync users -a notes -t collection
 ```console
 $ ./trakt-sync users -a notes -t ratings
 ```
-
-
-
 ##### Export movies or shows or episodes from user lists:
 ```console
 $ ./trakt-sync users -a lists -u username -i 123456 -t episodes
@@ -1723,13 +1720,17 @@ $ ./trakt-sync users -a add_list -item personal_list.json
 ```console
 $ cat personal_list.json | ./trakt-sync users -a add_list
 ```
-##### Reorder lists - via -items flag
+##### Reorder lists - via -items flag:
 ```console
 $ ./trakt-sync users -a reorder_lists -items personal_lists.json
 ```
 ##### Reorder lists - via stdin
 ```console
 $ cat personal_lists.json | ./trakt-sync users -a reorder_lists
+```
+##### Fetch lists  a user can collaborate on:
+```console
+$ ./trakt-sync users -a collaborations -u username
 ```
 
 ##### Fetch stats for selected user:

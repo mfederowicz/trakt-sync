@@ -75,6 +75,7 @@ type CommonInterface interface {
 	FetchUsersLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error)
 	FetchUsersNotes(client *internal.Client, options *str.Options, page int) ([]*str.NotesItem, error)
 	FetchWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
+	FetchUsersCollaborations(client *internal.Client, options *str.Options, page int) ([]*str.PersonalList, error)
 	GenActionTypeItemUsage(options *str.Options, items []string)
 	GenActionTypeUsage(options *str.Options, types []string)
 	GenActionsUsage(name string, actions []string)
@@ -1978,4 +1979,33 @@ func (*CommonLogic) UsersAddPersonalList(client *internal.Client, options *str.O
 	}
 
 	return result, resp, nil
+}
+
+// FetchUsersCollaborations helper function to users:collaborations
+func (c CommonLogic) FetchUsersCollaborations(client *internal.Client, options *str.Options, page int) ([]*str.PersonalList, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	user := options.UserName
+	list, resp, err := client.Users.GetCollaborations(
+		client.BuildCtxFromOptions(options),
+		&user,
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchUsersCollaborations(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+	return list, nil
 }

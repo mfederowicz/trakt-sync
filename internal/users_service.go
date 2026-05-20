@@ -561,3 +561,35 @@ func (u *UsersService) ReorderLists(ctx context.Context, user *string, items *st
 
 	return result, resp, nil
 }
+
+// GetCollaborations Returns all lists a user can collaborate on.
+// This gives full access to add, remove, and re-order list items.
+// It essentially works just like a list owned by the user, just make sure to
+// use the correct list owner user when building the API URLs.
+// API docs:https://trakt.docs.apiary.io/#reference/users/collaborations/get-all-lists-a-user-can-collaborate-on
+func (u *UsersService) GetCollaborations(ctx context.Context, user *string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
+	var url string
+	if user != nil {
+		url = fmt.Sprintf("users/%s/lists/collaborations", *user)
+	} else {
+		url = "users/me/lists/collaborations"
+	}
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	fmt.Println(url)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	items := []*str.PersonalList{}
+	resp, err := u.client.Do(ctx, req, &items)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return items, resp, nil
+}
