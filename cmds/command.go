@@ -404,6 +404,11 @@ func setOptionsDependsOnModuleUsers(options str.Options) str.Options {
 	options.Type = *_usersType
 	options.Section = *_usersSection
 	options.FollowerRequest = *_usersFollowerRequest
+	options.Delete = *_usersDelete
+	options.Privacy = *_usersPrivacy
+	options.AllowComments = *_usersAllowComments
+	options.DisplayNumbers = *_usersDisplayNumbers
+
 	return options
 }
 

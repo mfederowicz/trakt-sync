@@ -42,6 +42,8 @@ type Options struct {
 	PerPage           int
 	Period            string
 	Privacy           string
+	DisplayNumbers    bool
+	AllowComments     bool
 	Progress          float64
 	Query             string
 	Remove            bool

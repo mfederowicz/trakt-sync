@@ -1736,6 +1736,16 @@ $ ./trakt-sync users -a collaborations -u username
 ```console
 $ ./trakt-sync users -a list -u username -i 123456
 ```
+##### Update single personal list (Trakt ID or Trakt slug):
+```console
+$ ./trakt-sync users -a update_list -u username -i 123456 -description "short watchlist description" -sort_how asc
+```
+```console
+$ ./trakt-sync users -a update_list -u username -i 123456 -description "short watchlist description" -sort_by added
+```
+```console
+$ ./trakt-sync users -a update_list -u username -i 123456 -sort_by added -sort_how desc
+```
 
 ##### Fetch stats for selected user:
 ```console

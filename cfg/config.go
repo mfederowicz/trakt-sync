@@ -32,6 +32,8 @@ type Config struct {
 	Days              int       `toml:"days"`
 	Delete            bool      `toml:"delete"`
 	Deny              bool      `toml:"deny"`
+	DisplayNumbers    bool      `toml:"display_numbers"`
+	AllowComments     bool      `toml:"allow_comments"`
 	Description       string    `toml:"description"`
 	EndAt             string    `toml:"end_at"`
 	Episode           int       `toml:"episode"`
@@ -490,6 +492,8 @@ func parseConfig(fs afero.Fs, path string, config *Config) error {
 // DefaultConfig config with default values
 func DefaultConfig() *Config {
 	return &Config{
+		AllowComments:  false,
+		DisplayNumbers: true,
 		Action:         consts.EmptyString,
 		ClientID:       consts.EmptyString,
 		ClientSecret:   consts.EmptyString,

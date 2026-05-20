@@ -187,6 +187,14 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	"users:notes": {
 		Type: []string{"all", "movies", "shows", "seasons", "episodes", "people", "history", "collection", "ratings"},
 	},
+	"users:update_list": {
+		Privacy: []string{"private", "friends", "public"},
+		SortHow: []string{"asc", "desc"},
+		SortBy: []string{"rank", "added", "title", "released", "runtime", "popularity",
+			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
+			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
+			"watched", "collected"},
+	},
 }
 
 // ModuleConfig represents the configuration options for all modules

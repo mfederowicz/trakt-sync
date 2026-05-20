@@ -20,6 +20,10 @@ var (
 	_usersType                   = UsersCmd.Flag.String("t", cfg.DefaultConfig().UsersType, consts.UsersTypeUsage)
 	_usersSection                = UsersCmd.Flag.String("s", cfg.DefaultConfig().UsersSection, consts.UsersSectionUsage)
 	_usersDeny                   = UsersCmd.Flag.Bool("deny", cfg.DefaultConfig().Deny, consts.DenyUsage)
+	_usersDelete                 = UsersCmd.Flag.Bool("delete", cfg.DefaultConfig().Delete, consts.DeleteUsage)
+	_usersPrivacy                = UsersCmd.Flag.String("privacy", cfg.DefaultConfig().Privacy, consts.PrivacyUsage)
+	_usersDisplayNumbers         = UsersCmd.Flag.Bool("display_numbers", cfg.DefaultConfig().DisplayNumbers, consts.DisplayNumbersUsage)
+	_usersAllowComments          = UsersCmd.Flag.Bool("allow_comments", cfg.DefaultConfig().AllowComments, consts.AllowCommentsUsage)
 	_usersFollowerRequest        = UsersCmd.Flag.Int("follower_request", cfg.DefaultConfig().FollowerRequest, consts.FollowerRequestUsage)
 	_usersItems                  = UsersCmd.Flag.String("items", consts.EmptyString, consts.ItemsUsage)
 	_usersCommentsIncludeReplies = UsersCmd.Flag.String("include_replies", cfg.DefaultConfig().IncludeReplies, consts.IncludeRepliesUsage)
@@ -47,7 +51,10 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 	if err != nil {
 		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
 	}
-
+	err = cmd.common.ValidPrivacy(options)
+	if err != nil {
+		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
+	}
 	var handler handlers.UsersHandler
 	allHandlers := map[string]handlers.Handler{
 		"settings":            handlers.UsersSettingsHandler{},
@@ -67,6 +74,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"reorder_lists":       handlers.UsersReorderListsHandler{},
 		"collaborations":      handlers.UsersCollaborationsHandler{},
 		"list":                handlers.UsersListHandler{},
+		"update_list":         handlers.UsersUpdateListHandler{},
 		"stats":               handlers.UsersStatsHandler{},
 		"watched":             handlers.UsersWatchedHandler{},
 	}
@@ -76,7 +84,8 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 	validActions = []string{"settings", "following_requests", "follower_requests",
 		"follow_request", "saved_filters", "hidden_items", "add_hidden_items",
 		"remove_hidden_items", "profile", "likes", "collection", "comments",
-		"notes", "lists", "add_lst", "reorder_lists", "collaborations", "stats", "watched"}
+		"notes", "lists", "add_list", "reorder_lists", "collaborations", "list",
+		"update_list", "stats", "watched"}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

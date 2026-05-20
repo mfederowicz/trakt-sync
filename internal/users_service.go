@@ -603,8 +603,30 @@ func (u *UsersService) GetList(ctx context.Context, user *string, listID *string
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println(url)
+	// fmt.Println(url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	item := new(str.PersonalList)
+	resp, err := u.client.Do(ctx, req, &item)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return item, resp, nil
+}
+
+// UpdateList Update a personal list by sending 1 or more parameters.
+// If you update the list name, the original slug will still be retained
+// so existing references to this list won't break.
+// API docs:https://trakt.docs.apiary.io/#reference/users/list/update-personal-list
+func (u *UsersService) UpdateList(ctx context.Context, user *string, listID *string, update *str.PersonalList) (*str.PersonalList, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/lists/%s", *user, *listID)
+	req, err := u.client.NewRequest(http.MethodPut, url, update)
 	if err != nil {
 		return nil, nil, err
 	}

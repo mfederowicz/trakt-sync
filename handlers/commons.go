@@ -73,6 +73,7 @@ type CommonInterface interface {
 	FetchUsersCollection(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchUsersHiddenItems(client *internal.Client, options *str.Options, page int) ([]*str.HiddenItem, error)
 	FetchUsersLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error)
+	FetchUsersList(client *internal.Client, options *str.Options) (*str.PersonalList, *str.Response, error)
 	FetchUsersNotes(client *internal.Client, options *str.Options, page int) ([]*str.NotesItem, error)
 	FetchWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchUsersCollaborations(client *internal.Client, options *str.Options, page int) ([]*str.PersonalList, error)
@@ -2008,4 +2009,19 @@ func (c CommonLogic) FetchUsersCollaborations(client *internal.Client, options *
 		list = append(list, nextPageItems...)
 	}
 	return list, nil
+}
+
+// FetchUsersList helper function to fetch personal list object
+func (*CommonLogic) FetchUsersList(client *internal.Client, options *str.Options) (*str.PersonalList, *str.Response, error) {
+	opts := uri.ListOptions{Extended: options.ExtendedInfo}
+	user := options.UserName
+	listID := options.ID
+	result, resp, err := client.Users.GetList(
+		client.BuildCtxFromOptions(options),
+		&user,
+		&listID,
+		&opts,
+	)
+
+	return result, resp, err
 }

@@ -29,6 +29,8 @@ const (
 	DefaultStartAtDays           = 60
 	DeleteUsage                  = "allow delete item"
 	DenyUsage                    = "allow deny item"
+	DisplayNumbersUsage          = "set display_numbers ie: -display_numbers true or false"
+	AllowCommentsUsage           = "set allow_comments ie: -allow_comments true or false"
 	EmptyCommentIDMsg            = "set commentId ie: -comment_id 123"
 	EmptyFollowerRequestMsg      = "set FollowerRequest ie: -follower_request 123"
 	EmptyHistoryIDMsg            = "set historyId ie: -i 12345 from watched history"
