@@ -593,3 +593,28 @@ func (u *UsersService) GetCollaborations(ctx context.Context, user *string, opts
 
 	return items, resp, nil
 }
+
+// GetList Returns a single personal list. Use the /users/:id/lists/:list_id/items method to get the actual items this list contains.
+// API docs:https://trakt.docs.apiary.io/#reference/users/list/get-personal-list
+func (u *UsersService) GetList(ctx context.Context, user *string, listID *string, opts *uri.ListOptions) (*str.PersonalList, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/lists/%s", *user, *listID)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	fmt.Println(url)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	item := new(str.PersonalList)
+	resp, err := u.client.Do(ctx, req, &item)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return item, resp, nil
+}

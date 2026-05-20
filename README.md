@@ -1732,6 +1732,10 @@ $ cat personal_lists.json | ./trakt-sync users -a reorder_lists
 ```console
 $ ./trakt-sync users -a collaborations -u username
 ```
+##### Fetch single personal list (Trakt ID or Trakt slug):
+```console
+$ ./trakt-sync users -a list -u username -i 123456
+```
 
 ##### Fetch stats for selected user:
 ```console

@@ -808,6 +808,12 @@ func getOutputForModuleUsers(options *str.Options) string {
 			consts.DefaultOutputFormat2,
 			options.Module,
 			options.Action)
+	case consts.List:
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			fmt.Sprintf(consts.StringString, "list_trakt_", options.ID),
+		)
 	case consts.Lists:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,

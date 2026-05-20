@@ -66,6 +66,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"add_list":            handlers.UsersAddListHandler{},
 		"reorder_lists":       handlers.UsersReorderListsHandler{},
 		"collaborations":      handlers.UsersCollaborationsHandler{},
+		"list":                handlers.UsersListHandler{},
 		"stats":               handlers.UsersStatsHandler{},
 		"watched":             handlers.UsersWatchedHandler{},
 	}
