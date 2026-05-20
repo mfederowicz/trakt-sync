@@ -28,8 +28,11 @@ func (UsersListsHandler) Handle(options *str.Options, client *internal.Client) e
 	if len(personalLists) == consts.ZeroValue {
 		return errors.New("empty personal lists")
 	}
-
+	options.Output = "export_users_lists.json"
 	printer.Printf("Found %d user list\n", len(personalLists))
+	print("write data to:" + options.Output + "\n")
+	jsonData, _ := json.MarshalIndent(personalLists, "", "  ")
+	writer.WriteJSON(options, jsonData)
 
 	avLists := getAvlistsFromPersonals(personalLists)
 
@@ -58,8 +61,10 @@ func (UsersListsHandler) Handle(options *str.Options, client *internal.Client) e
 	exportJSON := []*str.UserListItem{}
 	exportJSON = append(exportJSON, itemsExportData...)
 	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
-	writer.WriteJSON(options, jsonData)
+	if len(exportJSON) > 0 {
+		jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
+		writer.WriteJSON(options, jsonData)
+	}
 
 	return nil
 }

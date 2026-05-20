@@ -1723,10 +1723,14 @@ $ ./trakt-sync users -a add_list -item personal_list.json
 ```console
 $ cat personal_list.json | ./trakt-sync users -a add_list
 ```
-
-
-
-
+##### Reorder lists - via -items flag
+```console
+$ ./trakt-sync users -a reorder_lists -items personal_lists.json
+```
+##### Reorder lists - via stdin
+```console
+$ cat personal_lists.json | ./trakt-sync users -a reorder_lists
+```
 
 ##### Fetch stats for selected user:
 ```console

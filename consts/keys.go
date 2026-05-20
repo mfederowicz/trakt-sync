@@ -97,6 +97,7 @@ const (
 	RemoveHiddenItems    = "remove_hidden_items"
 	ReorderFavorites     = "reorder_favorites"
 	ReorderWatchlist     = "reorder_watchlist"
+	ReorderLists         = "reorder_lists"
 	Replies              = "replies"
 	SavedFilters         = "saved_filters"
 	Scrobble             = "scrobble"

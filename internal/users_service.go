@@ -540,3 +540,24 @@ func (u *UsersService) AddPersonalList(ctx context.Context, user *string, list *
 
 	return result, resp, nil
 }
+
+// ReorderLists Reorder all lists by sending the updated rank of list ids. Use the /users/:id/lists method to get all list ids.
+// API docs:https://trakt.docs.apiary.io/#reference/users/reorder-lists/reorder-a-user's-lists
+func (u *UsersService) ReorderLists(ctx context.Context, user *string, items *str.ItemsToReorder) (*str.ReorderResults, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/lists/reorder", *user)
+	printer.Println("reorder user lists")
+	req, err := u.client.NewRequest(http.MethodPost, url, items)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.ReorderResults)
+	resp, err := u.client.Do(ctx, req, result)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}

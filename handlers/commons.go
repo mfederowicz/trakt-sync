@@ -274,7 +274,7 @@ func (c CommonLogic) CreateItemsToRemove(items *str.ItemsList) str.ItemsToRemove
 	}
 }
 
-// CreateItemsToReorder helper to create list of watchlist ids to reorder
+// CreateItemsToReorder helper to create list of ids to reorder
 func (CommonLogic) CreateItemsToReorder(items *str.ItemsList) str.ItemsToReorder {
 	reorder := []int64{}
 	for _, m := range *items.Movies {
@@ -289,7 +289,9 @@ func (CommonLogic) CreateItemsToReorder(items *str.ItemsList) str.ItemsToReorder
 	for _, m := range *items.Episodes {
 		reorder = append(reorder, *m.ID)
 	}
-
+	for _, m := range *items.Lists {
+		reorder = append(reorder, *m.IDs.Trakt)
+	}
 	return str.ItemsToReorder{
 		Rank: &reorder,
 	}
@@ -1153,7 +1155,7 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 		items = c.ListToItemsAgregate(items, list, stype)
 		return items.Uniq(), nil
 	case consts.AddToCollection, consts.RemoveFromCollection, consts.RemoveFromWatchlist, consts.AddToWatchlist,
-		consts.ReorderWatchlist, consts.AddToFavorites, consts.RemoveFromFavorites, consts.ReorderFavorites:
+		consts.ReorderWatchlist, consts.ReorderLists, consts.AddToFavorites, consts.RemoveFromFavorites, consts.ReorderFavorites:
 		items = c.ListToItemsCollection(items, list, stype)
 		return items, nil
 	case consts.AddHiddenItems, consts.RemoveHiddenItems:
@@ -1459,12 +1461,27 @@ func (*CommonLogic) ConvertBytesFromPersonalListObject(data []byte) (*str.ItemsL
 	return &str.ItemsList{List: list}, nil
 }
 
+// ConvertBytesFromPersonalLists helper to convert bytes to proper struct.
+func (c *CommonLogic) ConvertBytesFromPersonalLists(data []byte) (*str.ItemsList, error) {
+	var list *[]str.PersonalList
+	if err := json.Unmarshal(data, &list); err != nil {
+		return nil, err
+	}
+	items := c.InitItemsList()
+	items.Lists = list
+	return items, nil
+}
+
 // ConvertBytes helper to converts bytes to proper structs.
 func (c *CommonLogic) ConvertBytes(data []byte, options str.Options) (*str.ItemsList, error) {
-	if options.Action == consts.AddList {
+	switch options.Action {
+	case consts.ReorderLists:
+		return c.ConvertBytesFromPersonalLists(data)
+	case consts.AddList:
 		return c.ConvertBytesFromPersonalListObject(data)
+	default:
+		return c.ConvertBytesToItemsList(data, options.Action, options.Type)
 	}
-	return c.ConvertBytesToItemsList(data, options.Action, options.Type)
 }
 
 // ReadInput read data from stdin or from file
