@@ -73,6 +73,7 @@ type CommonInterface interface {
 	FetchUsersCollection(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchUsersHiddenItems(client *internal.Client, options *str.Options, page int) ([]*str.HiddenItem, error)
 	FetchUsersLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error)
+	FetchUsersListLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error)
 	FetchUsersList(client *internal.Client, options *str.Options) (*str.PersonalList, *str.Response, error)
 	FetchUsersNotes(client *internal.Client, options *str.Options, page int) ([]*str.NotesItem, error)
 	FetchWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
@@ -1864,6 +1865,36 @@ func (c CommonLogic) FetchUsersLikes(client *internal.Client, options *str.Optio
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersLikes(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+
+	return list, nil
+}
+
+// FetchUsersListLikes helper function to users: list likes
+func (c CommonLogic) FetchUsersListLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	list, resp, err := client.Users.GetListLikes(
+		client.BuildCtxFromOptions(options),
+		&options.UserName,
+		&options.ID,
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchUsersListLikes(client, options, nextPage)
 		if err != nil {
 			return nil, err
 		}

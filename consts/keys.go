@@ -63,6 +63,7 @@ const (
 	LastEpisode          = "last_episode"
 	Likes                = "likes"
 	List                 = "list"
+	ListLikes            = "list_likes"
 	Lists                = "lists"
 	Lookup               = "lookup"
 	Movie                = "movie"

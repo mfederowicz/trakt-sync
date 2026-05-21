@@ -51,10 +51,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 	if err != nil {
 		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
 	}
-	err = cmd.common.ValidPrivacy(options)
-	if err != nil {
-		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
-	}
+
 	var handler handlers.UsersHandler
 	allHandlers := map[string]handlers.Handler{
 		"settings":            handlers.UsersSettingsHandler{},
@@ -76,6 +73,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"list":                handlers.UsersListHandler{},
 		"update_list":         handlers.UsersUpdateListHandler{},
 		"delete_list":         handlers.UsersDeleteListHandler{},
+		"list_likes":          handlers.UsersListLikesHandler{},
 		"stats":               handlers.UsersStatsHandler{},
 		"watched":             handlers.UsersWatchedHandler{},
 	}
@@ -86,7 +84,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"follow_request", "saved_filters", "hidden_items", "add_hidden_items",
 		"remove_hidden_items", "profile", "likes", "collection", "comments",
 		"notes", "lists", "add_list", "reorder_lists", "collaborations", "list",
-		"update_list", "delete_list", "stats", "watched"}
+		"update_list", "delete_list", "list_likes", "stats", "watched"}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

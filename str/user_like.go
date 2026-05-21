@@ -11,6 +11,7 @@ type UserLike struct {
 	Movie       *Movie        `json:"movie,omitempty"`
 	Season      *Season       `json:"season,omitempty"`
 	Show        *Show         `json:"show,omitempty"`
+	User        *UserProfile  `json:"user,omitempty"`
 }
 
 func (u UserLike) String() string {

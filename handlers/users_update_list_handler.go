@@ -23,7 +23,10 @@ func (m UsersUpdateListHandler) Handle(options *str.Options, client *internal.Cl
 	if err != nil {
 		return err
 	}
-
+	err = m.common.ValidPrivacy(options)
+	if err != nil {
+		return err
+	}
 	if len(options.ID) == consts.ZeroValue {
 		return errors.New(consts.EmptyInternalIDMsg)
 	}

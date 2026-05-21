@@ -418,6 +418,31 @@ func (u *UsersService) GetLikes(ctx context.Context, user *string, stype *string
 	return items, resp, nil
 }
 
+// GetListLikes Returns all users who liked a list.
+// API docs:https://trakt.docs.apiary.io/#reference/users/list-likes/get-all-users-who-liked-a-list
+func (u *UsersService) GetListLikes(ctx context.Context, user *string, listID *string, opts *uri.ListOptions) ([]*str.UserLike, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/lists/%s/likes", *user, *listID)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	fmt.Println(url)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	items := []*str.UserLike{}
+	resp, err := u.client.Do(ctx, req, &items)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return items, resp, nil
+}
+
 // GetCollection Get all collected items in a user's collection.
 // A collected item indicates availability to watch digitally or on physical media.
 // API docs:https://trakt.docs.apiary.io/#reference/users/collection/get-collection
