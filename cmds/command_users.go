@@ -46,8 +46,11 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 	if err != nil {
 		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
 	}
-
 	err = cmd.ValidSection(options)
+	if err != nil {
+		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
+	}
+	err = cmd.ValidSort(options)
 	if err != nil {
 		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
 	}
@@ -75,6 +78,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"delete_list":         handlers.UsersDeleteListHandler{},
 		"list_likes":          handlers.UsersListLikesHandler{},
 		"list_like":           handlers.UsersListLikeHandler{},
+		"list_items":          handlers.UsersListItemsHandler{},
 		"stats":               handlers.UsersStatsHandler{},
 		"watched":             handlers.UsersWatchedHandler{},
 	}

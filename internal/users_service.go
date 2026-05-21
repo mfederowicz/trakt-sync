@@ -719,3 +719,29 @@ func (u *UsersService) ListLike(ctx context.Context, user *string, listID *strin
 
 	return resp, nil
 }
+
+// GetListItems Get all items on a personal list. Items can be a movie, show, season, episode, or person.
+// You can optionally specify the type parameter with a single value or comma delimited string for multiple item types.
+// API docs:https://trakt.docs.apiary.io/#reference/users/list-items/get-items-on-a-personal-list
+func (u *UsersService) GetListItems(ctx context.Context, user *string, listID *string, strType *string, sortBy *string, sortHow *string, options *uri.ListOptions) ([]*str.UserListItem, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/lists/%s/items/%s/%s/%s", *user, *listID, *strType, *sortBy, *sortHow)
+	url, err := uri.AddQuery(url, options)
+	if err != nil {
+		return nil, nil, err
+	}
+	fmt.Println(url)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	items := []*str.UserListItem{}
+	resp, err := u.client.Do(ctx, req, &items)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return items, resp, nil
+}

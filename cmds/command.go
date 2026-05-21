@@ -849,6 +849,9 @@ func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.O
 	if options.Action == consts.HiddenItems && options.Type == "" {
 		options.Type = consts.Movie
 	}
+	if options.Action == consts.ListItems && options.Type == "" {
+		options.Type = consts.Movies
+	}
 	options.Output = cfg.GetOutputForModule(options)
 
 	return options

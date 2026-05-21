@@ -101,6 +101,7 @@ type CommonInterface interface {
 	ValidPrivacy(options *str.Options) error
 	UsersRemoveListLike(client *internal.Client, options *str.Options) (*str.Response, error)
 	UsersListLike(client *internal.Client, options *str.Options) (*str.Response, error)
+	FetchUsersListItems(client *internal.Client, options *str.Options, page int) ([]*str.UserListItem, error)
 }
 
 // CommonLogic struct for common methods
@@ -2083,4 +2084,41 @@ func (*CommonLogic) UsersListLike(client *internal.Client, options *str.Options)
 	)
 
 	return resp, err
+}
+
+// FetchUsersListItems helper function to fetch items on a personal list
+func (c CommonLogic) FetchUsersListItems(client *internal.Client, options *str.Options, page int) ([]*str.UserListItem, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	user := options.UserName
+	listID := options.ID
+	strType := options.Type
+	sortBy := options.SortBy
+	sortHow := options.SortHow
+	list, resp, err := client.Users.GetListItems(
+		client.BuildCtxFromOptions(options),
+		&user,
+		&listID,
+		&strType,
+		&sortBy,
+		&sortHow,
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchUsersListItems(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+	return list, nil
 }
