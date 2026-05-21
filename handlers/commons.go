@@ -99,6 +99,8 @@ type CommonInterface interface {
 	UsersRemoveHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.RemoveResult, error)
 	UsersAddPersonalList(client *internal.Client, options *str.Options, list *str.PersonalList) (*str.PersonalList, *str.Response, error)
 	ValidPrivacy(options *str.Options) error
+	UsersRemoveListLike(client *internal.Client, options *str.Options) (*str.Response, error)
+	UsersListLike(client *internal.Client, options *str.Options) (*str.Response, error)
 }
 
 // CommonLogic struct for common methods
@@ -2055,4 +2057,30 @@ func (*CommonLogic) FetchUsersList(client *internal.Client, options *str.Options
 	)
 
 	return result, resp, err
+}
+
+// UsersRemoveListLike helper function to remove like on list
+func (*CommonLogic) UsersRemoveListLike(client *internal.Client, options *str.Options) (*str.Response, error) {
+	user := options.UserName
+	listID := options.ID
+	resp, err := client.Users.RemoveListLike(
+		client.BuildCtxFromOptions(options),
+		&user,
+		&listID,
+	)
+
+	return resp, err
+}
+
+// UsersListLike helper function to like on list
+func (*CommonLogic) UsersListLike(client *internal.Client, options *str.Options) (*str.Response, error) {
+	user := options.UserName
+	listID := options.ID
+	resp, err := client.Users.ListLike(
+		client.BuildCtxFromOptions(options),
+		&user,
+		&listID,
+	)
+
+	return resp, err
 }

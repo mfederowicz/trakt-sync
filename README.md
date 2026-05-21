@@ -1750,6 +1750,18 @@ $ ./trakt-sync users -a update_list -u username -i 123456 -sort_by added -sort_h
 ```console
 $ ./trakt-sync users -a delete_list -u username -i 123456
 ```
+##### Fetch all users who liked a list (Trakt ID or Trakt slug):
+```console
+$ ./trakt-sync users -a list_likes -u username -i 123456
+```
+##### Like a list (Trakt ID or Trakt slug):
+```console
+$ ./trakt-sync users -a list_like -u username -i 123456
+```
+##### Remove like on a list (Trakt ID or Trakt slug):
+```console
+$ ./trakt-sync users -a list_like -u username -i 123456 -delete
+```
 
 ##### Fetch stats for selected user:
 ```console

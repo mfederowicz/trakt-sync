@@ -74,6 +74,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"update_list":         handlers.UsersUpdateListHandler{},
 		"delete_list":         handlers.UsersDeleteListHandler{},
 		"list_likes":          handlers.UsersListLikesHandler{},
+		"list_like":           handlers.UsersListLikeHandler{},
 		"stats":               handlers.UsersStatsHandler{},
 		"watched":             handlers.UsersWatchedHandler{},
 	}

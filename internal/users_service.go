@@ -683,3 +683,39 @@ func (u *UsersService) DeleteList(ctx context.Context, user *string, listID *str
 
 	return resp, nil
 }
+
+// RemoveListLike Remove a like on a list.
+// API docs:https://trakt.docs.apiary.io/#reference/users/list-like/remove-like-on-a-list
+func (u *UsersService) RemoveListLike(ctx context.Context, user *string, listID *string) (*str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/lists/%s/like", *user, *listID)
+	req, err := u.client.NewRequest(http.MethodDelete, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := u.client.Do(ctx, req, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// ListLike Votes help determine popular lists. Only one like is allowed per list per user.
+// API docs:https://trakt.docs.apiary.io/#reference/users/list-like/like-a-list
+func (u *UsersService) ListLike(ctx context.Context, user *string, listID *string) (*str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/lists/%s/like", *user, *listID)
+	req, err := u.client.NewRequest(http.MethodDelete, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := u.client.Do(ctx, req, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
