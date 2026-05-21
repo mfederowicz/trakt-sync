@@ -195,6 +195,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
 			"watched", "collected"},
 	},
+	"users:delete_list": {
+		Privacy: []string{"private", "friends", "public"},
+	},
 }
 
 // ModuleConfig represents the configuration options for all modules

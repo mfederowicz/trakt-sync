@@ -1746,6 +1746,10 @@ $ ./trakt-sync users -a update_list -u username -i 123456 -description "short wa
 ```console
 $ ./trakt-sync users -a update_list -u username -i 123456 -sort_by added -sort_how desc
 ```
+##### Delete single personal list (Trakt ID or Trakt slug):
+```console
+$ ./trakt-sync users -a delete_list -u username -i 123456
+```
 
 ##### Fetch stats for selected user:
 ```console

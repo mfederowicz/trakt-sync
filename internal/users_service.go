@@ -640,3 +640,21 @@ func (u *UsersService) UpdateList(ctx context.Context, user *string, listID *str
 
 	return item, resp, nil
 }
+
+// DeleteList Remove a personal list and all items it contains.
+// API docs:https://trakt.docs.apiary.io/#reference/users/list/delete-a-user's-personal-list
+func (u *UsersService) DeleteList(ctx context.Context, user *string, listID *string) (*str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/lists/%s", *user, *listID)
+	req, err := u.client.NewRequest(http.MethodDelete, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := u.client.Do(ctx, req, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
