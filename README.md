@@ -1799,6 +1799,36 @@ $ ./trakt-sync sync -a list_items -u username -i 123456 -t movies -sort_by perce
 imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to rank.
 ```
 
+##### Add items to personal list - via -items flag
+```console
+$ ./trakt-sync users -u username -i 123456 -t movies -a add_list_items -items export_users_list_movies.json
+```
+```console
+$ ./trakt-sync users -u username -i 123456 -t shows -a add_list_items -items export_users_list_shows.json
+```
+```console
+$ ./trakt-sync users -u username -i 123456 -t episodes -a add_list_items -items export_users_list_episodes.json
+```
+```console
+$ ./trakt-sync users -u username -i 123456 -t seasons -a add_list_items -items export_users_list_seasons.json
+```
+##### Add items to personal list - via stdin
+```console
+$ cat export_users_list_movies.json | ./trakt-sync users -u username -i 123456 -t movies -a add_list_items
+```
+```console
+$ cat export_users_list_shows.json | ./trakt-sync users -u username -i 123456 -t shows -a add_list_items
+```
+```console
+$ cat export_users_list_episodes.json | ./trakt-sync users -u username -i 123456 -t episodes -a add_list_items
+```
+```console
+$ cat export_users_list_seasons.json | ./trakt-sync users -u username -i 123456 -t seasons -a add_list_items
+```
+```console
+$ cat export_users_list_all.json | ./trakt-sync users -u username -i 123456 -t seasons -a add_list_items
+```
+
 
 ##### Fetch stats for selected user:
 ```console

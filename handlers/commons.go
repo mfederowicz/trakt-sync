@@ -1161,7 +1161,7 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 		items = c.ListToItemsAgregate(items, list, stype)
 		return items.Uniq(), nil
 	case consts.AddToCollection, consts.RemoveFromCollection, consts.RemoveFromWatchlist, consts.AddToWatchlist,
-		consts.ReorderWatchlist, consts.ReorderLists, consts.AddToFavorites, consts.RemoveFromFavorites, consts.ReorderFavorites:
+		consts.ReorderWatchlist, consts.AddListItems, consts.ReorderLists, consts.AddToFavorites, consts.RemoveFromFavorites, consts.ReorderFavorites:
 		items = c.ListToItemsCollection(items, list, stype)
 		return items, nil
 	case consts.AddHiddenItems, consts.RemoveHiddenItems:

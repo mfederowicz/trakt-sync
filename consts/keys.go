@@ -16,6 +16,7 @@ const (
 	AddToRatings         = "add_to_ratings"
 	AddToWatchlist       = "add_to_watchlist"
 	AddList              = "add_list"
+	AddListItems         = "add_list_items"
 	Aliases              = "aliases"
 	AllDvd               = "all-dvd"
 	AllFinales           = "all-finales"

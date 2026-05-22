@@ -79,6 +79,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"list_likes":          handlers.UsersListLikesHandler{},
 		"list_like":           handlers.UsersListLikeHandler{},
 		"list_items":          handlers.UsersListItemsHandler{},
+		"add_list_items":      handlers.UsersAddListItemsHandler{},
 		"stats":               handlers.UsersStatsHandler{},
 		"watched":             handlers.UsersWatchedHandler{},
 	}
@@ -89,7 +90,8 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"follow_request", "saved_filters", "hidden_items", "add_hidden_items",
 		"remove_hidden_items", "profile", "likes", "collection", "comments",
 		"notes", "lists", "add_list", "reorder_lists", "collaborations", "list",
-		"update_list", "delete_list", "list_likes", "stats", "watched"}
+		"update_list", "delete_list", "list_likes", "list_like", "list_items",
+		"add_list_items", "stats", "watched"}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

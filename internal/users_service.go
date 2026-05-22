@@ -745,3 +745,23 @@ func (u *UsersService) GetListItems(ctx context.Context, user *string, listID *s
 
 	return items, resp, nil
 }
+
+// AddListItems Add one or more items to a personal list. Items can be movies, shows, seasons, episodes, or people.
+// API docs:https://trakt.docs.apiary.io/#reference/users/add-list-items/add-items-to-personal-list
+func (u *UsersService) AddListItems(ctx context.Context, user *string, listID *string, items *str.HistoryItems) (*str.AddResult, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/lists/%s/items", *user, *listID)
+	req, err := u.client.NewRequest(http.MethodPost, url, items)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.AddResult)
+	resp, err := u.client.Do(ctx, req, &result)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
