@@ -1857,6 +1857,14 @@ $ cat export_users_list_seasons.json | ./trakt-sync users -u username -i 123456 
 ```console
 $ cat export_users_list_all.json | ./trakt-sync users -u username -i 123456 -t seasons -a remove_list_items
 ```
+##### Reorder items from personal list - via -items flag
+```console
+$ ./trakt-sync users -a reorder_list_items -items export_users_list_movies.json
+```
+##### Reorder items from personal list - via stdin
+```console
+$ cat export_users_list_movies.json | ./trakt-sync users -a reorder_list_items
+```
 
 
 ##### Fetch stats for selected user:

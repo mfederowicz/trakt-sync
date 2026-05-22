@@ -298,6 +298,7 @@ func (CommonLogic) CreateItemsToReorder(items *str.ItemsList) str.ItemsToReorder
 	for _, m := range *items.Lists {
 		reorder = append(reorder, *m.IDs.Trakt)
 	}
+
 	return str.ItemsToReorder{
 		Rank: &reorder,
 	}
@@ -1170,7 +1171,8 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 		items = c.ListToItemsAgregate(items, list, stype)
 		return items.Uniq(), nil
 	case consts.AddToCollection, consts.RemoveFromCollection, consts.RemoveFromWatchlist, consts.AddToWatchlist,
-		consts.ReorderWatchlist, consts.AddListItems, consts.RemoveListItems, consts.ReorderLists, consts.AddToFavorites, consts.RemoveFromFavorites, consts.ReorderFavorites:
+		consts.ReorderWatchlist, consts.AddListItems, consts.RemoveListItems, consts.ReorderLists, consts.ReorderListItems,
+		consts.AddToFavorites, consts.RemoveFromFavorites, consts.ReorderFavorites:
 		items = c.ListToItemsCollection(items, list, stype)
 		return items, nil
 	case consts.AddHiddenItems, consts.RemoveHiddenItems:
@@ -1249,6 +1251,7 @@ func (*CommonLogic) InitItemsList() *str.ItemsList {
 	list.Seasons = &[]str.ExportlistItem{}
 	list.Episodes = &[]str.ExportlistItem{}
 	list.Users = &[]str.ExportlistItem{}
+	list.Lists = &[]str.PersonalList{}
 	list.People = &[]str.ExportlistItem{}
 	list.IDs = &[]int64{}
 	return list

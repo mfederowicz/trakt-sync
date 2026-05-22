@@ -785,3 +785,25 @@ func (u *UsersService) RemoveListItems(ctx context.Context, user *string, listID
 
 	return result, resp, nil
 }
+
+// ReorderListItems Reorder all items on a list by sending the updated rank of list item ids.
+// Use the /users/:id/lists/:list_id/items method to get all list item ids.
+// API docs:https://trakt.docs.apiary.io/#reference/users/reorder-list-items/reorder-items-on-a-list
+func (u *UsersService) ReorderListItems(ctx context.Context, user *string, listID *string, items *str.ItemsToReorder) (*str.ReorderResults, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/lists/%s/items/reorder", *user, *listID)
+	printer.Println("reorder list items")
+	req, err := u.client.NewRequest(http.MethodPost, url, items)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.ReorderResults)
+	resp, err := u.client.Do(ctx, req, result)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}

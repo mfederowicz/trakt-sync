@@ -104,6 +104,7 @@ const (
 	ReorderFavorites     = "reorder_favorites"
 	ReorderWatchlist     = "reorder_watchlist"
 	ReorderLists         = "reorder_lists"
+	ReorderListItems     = "reorder_list_items"
 	Replies              = "replies"
 	SavedFilters         = "saved_filters"
 	Scrobble             = "scrobble"
