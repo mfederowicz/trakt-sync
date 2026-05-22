@@ -765,3 +765,23 @@ func (u *UsersService) AddListItems(ctx context.Context, user *string, listID *s
 
 	return result, resp, nil
 }
+
+// RemoveListItems Remove one or more items from a personal list.
+// API docs:https://trakt.docs.apiary.io/#reference/users/remove-list-items/remove-items-from-personal-list
+func (u *UsersService) RemoveListItems(ctx context.Context, user *string, listID *string, items *str.HistoryItems) (*str.RemoveResult, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/lists/%s/items/remove", *user, *listID)
+	req, err := u.client.NewRequest(http.MethodPost, url, items)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.RemoveResult)
+	resp, err := u.client.Do(ctx, req, &result)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}

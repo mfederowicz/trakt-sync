@@ -833,7 +833,7 @@ func getOutputForModuleUsers(options *str.Options) string {
 			options.Module,
 			fmt.Sprintf(consts.StringString, "list_trakt_", options.ID),
 		)
-	case consts.Lists:
+	case consts.Lists, consts.RemoveListItems:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,

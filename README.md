@@ -1828,6 +1828,35 @@ $ cat export_users_list_seasons.json | ./trakt-sync users -u username -i 123456 
 ```console
 $ cat export_users_list_all.json | ./trakt-sync users -u username -i 123456 -t seasons -a add_list_items
 ```
+##### Remove items from personal list - via -items flag
+```console
+$ ./trakt-sync users -u username -i 123456 -t movies -a remove_list_items -items export_users_list_movies.json
+```
+```console
+$ ./trakt-sync users -u username -i 123456 -t shows -a remove_list_items -items export_users_list_shows.json
+```
+```console
+$ ./trakt-sync users -u username -i 123456 -t episodes -a remove_list_items -items export_users_list_episodes.json
+```
+```console
+$ ./trakt-sync users -u username -i 123456 -t seasons -a remove_list_items -items export_users_list_seasons.json
+```
+##### Remove items from personal list - via stdin
+```console
+$ cat export_users_list_movies.json | ./trakt-sync users -u username -i 123456 -t movies -a remove_list_items
+```
+```console
+$ cat export_users_list_shows.json | ./trakt-sync users -u username -i 123456 -t shows -a remove_list_items
+```
+```console
+$ cat export_users_list_episodes.json | ./trakt-sync users -u username -i 123456 -t episodes -a remove_list_items
+```
+```console
+$ cat export_users_list_seasons.json | ./trakt-sync users -u username -i 123456 -t seasons -a remove_list_items
+```
+```console
+$ cat export_users_list_all.json | ./trakt-sync users -u username -i 123456 -t seasons -a remove_list_items
+```
 
 
 ##### Fetch stats for selected user:
