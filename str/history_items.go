@@ -8,6 +8,7 @@ type HistoryItems struct {
 	Seasons  *[]Season      `json:"seasons,omitempty"`
 	Episodes *[]Episode     `json:"episodes,omitempty"`
 	Users    *[]UserProfile `json:"users,omitempty"`
+	People   *[]Person      `json:"people,omitempty"`
 }
 
 func (h HistoryItems) String() string {

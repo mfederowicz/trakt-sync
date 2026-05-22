@@ -67,6 +67,7 @@ type ExportlistItem struct {
 	Season          *Season      `json:"season,omitempty"`
 	Seasons         *[]Season    `json:"seasons,omitempty"`
 	Episode         *Episode     `json:"episode,omitempty"`
+	Person          *Person      `json:"person,omitempty"`
 	User            *UserProfile `json:"user,omitempty"`
 	Metadata        *Metadata    `json:"metadata,omitempty"`
 	MediaType       *string      `json:"media_type,omitempty"`

@@ -81,6 +81,7 @@ const (
 	NextEpisode          = "next_episode"
 	Notes                = "notes"
 	People               = "people"
+	Person               = "person"
 	FollowingRequests    = "following_requests"
 	Playback             = "playback"
 	Played               = "played"

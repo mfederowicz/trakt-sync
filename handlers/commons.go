@@ -357,6 +357,14 @@ func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 		}
 		users = append(users, user)
 	}
+	people := []str.Person{}
+	for _, m := range *items.People {
+		person := str.Person{
+			IDs:      m.IDs,
+			HiddenAt: m.HiddenAt,
+		}
+		people = append(people, person)
+	}
 
 	return str.HistoryItems{
 		Movies:   &movies,
@@ -364,6 +372,7 @@ func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 		Seasons:  &seasons,
 		Episodes: &episodes,
 		Users:    &users,
+		People:   &people,
 	}
 }
 
@@ -1240,6 +1249,7 @@ func (*CommonLogic) InitItemsList() *str.ItemsList {
 	list.Seasons = &[]str.ExportlistItem{}
 	list.Episodes = &[]str.ExportlistItem{}
 	list.Users = &[]str.ExportlistItem{}
+	list.People = &[]str.ExportlistItem{}
 	list.IDs = &[]int64{}
 	return list
 }
@@ -1284,8 +1294,14 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			e.ID = val.ID
 			*items.Episodes = append(*items.Episodes, e)
 		}
+		if val.Person != nil && isPeopleType(stype) {
+			e := str.ExportlistItem{}
+			e.IDs = val.Person.IDs
+			e.UpdateCollectedData(val)
+			e.ID = val.ID
+			*items.People = append(*items.People, e)
+		}
 	}
-
 	return items
 }
 
