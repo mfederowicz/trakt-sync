@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -31,9 +32,9 @@ type CommonInterface interface {
 	CheckTypes(options *str.Options) error
 	Checkin(client *internal.Client, checkin *str.Checkin, options *str.Options) (*str.Checkin, *str.Response, error)
 	Comment(client *internal.Client, comment *str.Comment, options *str.Options) (*str.Comment, *str.Response, error)
-	ConvertDateString(dateStr string, outputFormat string, tz string, full bool) string
-	ConvertBytesFromPersonalListObject(data []byte) (*str.ItemsList, error)
 	ConvertBytes(data []byte, options str.Options) (*str.ItemsList, error)
+	ConvertBytesFromPersonalListObject(data []byte) (*str.ItemsList, error)
+	ConvertDateString(dateStr string, outputFormat string, tz string, full bool) string
 	CreateCheckin(client *internal.Client, options *str.Options) (*str.Checkin, error)
 	CreateCheckinShowEpisode(client *internal.Client, options *str.Options) (*str.Checkin, error)
 	CreateItemsToAdd(items *str.ItemsList) str.HistoryItems
@@ -70,14 +71,16 @@ type CommonInterface interface {
 	FetchTrendingComments(client *internal.Client, options *str.Options, page int) ([]*str.CommentItem, error)
 	FetchUpdatedComments(client *internal.Client, options *str.Options, page int) ([]*str.CommentItem, error)
 	FetchUserConnections(client *internal.Client, _ *str.Options) (*str.Connections, error)
+	FetchUsersCollaborations(client *internal.Client, options *str.Options, page int) ([]*str.PersonalList, error)
 	FetchUsersCollection(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchUsersHiddenItems(client *internal.Client, options *str.Options, page int) ([]*str.HiddenItem, error)
 	FetchUsersLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error)
-	FetchUsersListLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error)
 	FetchUsersList(client *internal.Client, options *str.Options) (*str.PersonalList, *str.Response, error)
+	FetchUsersListComments(client *internal.Client, options *str.Options, page int) ([]*str.ListComment, error)
+	FetchUsersListItems(client *internal.Client, options *str.Options, page int) ([]*str.UserListItem, error)
+	FetchUsersListLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error)
 	FetchUsersNotes(client *internal.Client, options *str.Options, page int) ([]*str.NotesItem, error)
 	FetchWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
-	FetchUsersCollaborations(client *internal.Client, options *str.Options, page int) ([]*str.PersonalList, error)
 	GenActionTypeItemUsage(options *str.Options, items []string)
 	GenActionTypeUsage(options *str.Options, types []string)
 	GenActionsUsage(name string, actions []string)
@@ -95,13 +98,12 @@ type CommonInterface interface {
 	UpdateComment(client *internal.Client, options *str.Options, comment *str.Comment) (*str.Comment, *str.Response, error)
 	UpdateHistoryListWithType(data []*str.ExportlistItem, strtype *string) []*str.ExportlistItem
 	UpdateNotes(client *internal.Client, options *str.Options, notes *str.Notes) (*str.Notes, *str.Response, error)
-	UsersAddToHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error)
-	UsersRemoveHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.RemoveResult, error)
 	UsersAddPersonalList(client *internal.Client, options *str.Options, list *str.PersonalList) (*str.PersonalList, *str.Response, error)
-	ValidPrivacy(options *str.Options) error
-	UsersRemoveListLike(client *internal.Client, options *str.Options) (*str.Response, error)
+	UsersAddToHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error)
 	UsersListLike(client *internal.Client, options *str.Options) (*str.Response, error)
-	FetchUsersListItems(client *internal.Client, options *str.Options, page int) ([]*str.UserListItem, error)
+	UsersRemoveHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.RemoveResult, error)
+	UsersRemoveListLike(client *internal.Client, options *str.Options) (*str.Response, error)
+	ValidPrivacy(options *str.Options) error
 }
 
 // CommonLogic struct for common methods
@@ -2133,6 +2135,42 @@ func (c CommonLogic) FetchUsersListItems(client *internal.Client, options *str.O
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersListItems(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+	return list, nil
+}
+
+// FetchUsersListComments helper function to fetch comments for a personal list
+func (c CommonLogic) FetchUsersListComments(client *internal.Client, options *str.Options, page int) ([]*str.ListComment, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	user := options.UserName
+	listID := options.ID
+	sort := options.Sort
+	list, resp, err := client.Users.GetListComments(
+		client.BuildCtxFromOptions(options),
+		&user,
+		&listID,
+		&sort,
+		&opts,
+	)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, fmt.Errorf("comments not found for:%s", listID)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchUsersListComments(client, options, nextPage)
 		if err != nil {
 			return nil, err
 		}

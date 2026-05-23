@@ -828,3 +828,31 @@ func (u *UsersService) UpdateListItem(ctx context.Context, user *string, listID 
 
 	return resp, nil
 }
+
+// GetListComments Returns all top level comments for a list.
+// By default, the comments are sorted by most likes.
+// Other sorting options include likes_30, most replies, replies_30,
+// most plays, highest rating, and added date.
+// API docs:https://trakt.docs.apiary.io/#reference/users/list-comments/get-all-list-comments
+func (u *UsersService) GetListComments(ctx context.Context, user *string, listID *string, sort *string, options *uri.ListOptions) ([]*str.ListComment, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/lists/%s/comments/%s", *user, *listID, *sort)
+	url, err := uri.AddQuery(url, options)
+	if err != nil {
+		return nil, nil, err
+	}
+	fmt.Println(url)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	items := []*str.ListComment{}
+	resp, err := u.client.Do(ctx, req, &items)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return items, resp, nil
+}

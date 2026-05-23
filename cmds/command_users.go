@@ -15,6 +15,7 @@ var (
 	username   = "me"
 	exportData []*str.PersonalList
 
+	_usersSort                   = flag.String("s", cfg.DefaultConfig().Sort, consts.SortUsage)
 	_usersListID                 = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
 	_usersListItemID             = UsersCmd.Flag.Int("list_item_id", cfg.DefaultConfig().ListItemID, consts.ListItemIDUsage)
 	_usersNotes                  = UsersCmd.Flag.String("notes", cfg.DefaultConfig().Notes, consts.NotesUsage)
@@ -85,6 +86,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"remove_list_items":   handlers.UsersRemoveListItemsHandler{},
 		"reorder_list_items":  handlers.UsersReorderListItemsHandler{},
 		"update_list_item":    handlers.UsersUpdateListItemHandler{},
+		"list_comments":       handlers.UsersListCommentsHandler{},
 		"stats":               handlers.UsersStatsHandler{},
 		"watched":             handlers.UsersWatchedHandler{},
 	}
@@ -97,7 +99,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"notes", "lists", "add_list", "reorder_lists", "collaborations", "list",
 		"update_list", "delete_list", "list_likes", "list_like", "list_items",
 		"add_list_items", "remove_list_items", "reorder_list_items", "update_list_item",
-		"stats", "watched"}
+		"list_comments", "stats", "watched"}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

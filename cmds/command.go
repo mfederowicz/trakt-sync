@@ -403,6 +403,7 @@ func setOptionsDependsOnModuleUsers(options str.Options) str.Options {
 	options.Deny = *_usersDeny
 	options.Type = *_usersType
 	options.Section = *_usersSection
+	options.Sort = *_usersSort
 	options.FollowerRequest = *_usersFollowerRequest
 	options.Delete = *_usersDelete
 	options.Privacy = *_usersPrivacy
@@ -861,6 +862,10 @@ func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.O
 	if options.Action == consts.ListItems && options.Type == "" {
 		options.Type = consts.Movies
 	}
+	if options.Action == consts.ListComments && options.Type == "" {
+		options.Sort = consts.Likes
+	}
+
 	options.Output = cfg.GetOutputForModule(options)
 
 	return options

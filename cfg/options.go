@@ -206,6 +206,10 @@ var ModuleActionConfig = map[string]OptionsConfig{
 			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
 			"watched", "collected"},
 	},
+	"users:list_comments": {
+		Type: []string{"movies", "shows", "seasons", "episodes", "persons"},
+		Sort: []string{"likes", "likes_30", "replies", "replies_30", "plays", "rating", "added"},
+	},
 }
 
 // ModuleConfig represents the configuration options for all modules
@@ -816,6 +820,12 @@ func getOutputForModuleLists(options *str.Options) string {
 
 func getOutputForModuleUsers(options *str.Options) string {
 	switch options.Action {
+	case consts.ListComments:
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat3,
+			options.Module,
+			options.Action,
+			strings.ReplaceAll(options.Sort, consts.CommaString, consts.EmptyString))
 	case consts.Watched:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,

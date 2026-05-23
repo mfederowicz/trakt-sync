@@ -66,6 +66,7 @@ const (
 	List                 = "list"
 	ListItems            = "list_items"
 	ListLikes            = "list_likes"
+	ListComments         = "list_comments"
 	Lists                = "lists"
 	Lookup               = "lookup"
 	Movie                = "movie"
