@@ -807,3 +807,24 @@ func (u *UsersService) ReorderListItems(ctx context.Context, user *string, listI
 
 	return result, resp, nil
 }
+
+// UpdateListItem Update the notes on a single list item.
+// API docs:https://trakt.docs.apiary.io/#reference/users/update-list-item/update-a-list-item
+func (u *UsersService) UpdateListItem(ctx context.Context, user *string, listID *string, listItemID *int, item *str.PersonalListItem) (*str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/lists/%s/items/%d", *user, *listID, *listItemID)
+	printer.Println("update list item")
+	req, err := u.client.NewRequest(http.MethodPut, url, item)
+	if err != nil {
+		return nil, err
+	}
+
+	result := new(str.PersonalListItem)
+	resp, err := u.client.Do(ctx, req, result)
+
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}

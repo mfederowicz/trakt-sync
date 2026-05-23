@@ -36,6 +36,7 @@ const (
 	EmptyHistoryIDMsg            = "set historyId ie: -i 12345 from watched history"
 	EmptyIncludeReplies          = "set includeReplies ie: -include_replies true or false"
 	EmptyInternalIDMsg           = "set Trakt ID, Trakt slug, or IMDB ID Example:  ie: -i 12345 or -i tron-legacy-2010"
+	EmptyListItemIDMsg           = "set List item ID Example:  ie: -list_item_id 12345"
 	EmptyListIDMsg               = "set traktId ie: -trakt_id 55"
 	EmptyMovieIDMsg              = "set Trakt ID, Trakt slug, or IMDB ID Example:  ie: -i 12345 or -i tron-legacy-2010"
 	EmptyNotesIDMsg              = "set notesId ie: -i 12345678"

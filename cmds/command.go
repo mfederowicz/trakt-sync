@@ -817,6 +817,15 @@ func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.O
 		return options
 	}
 
+	if len(*_usersListID) > consts.ZeroValue {
+		options.ID = *_usersListID
+	}
+	if *_usersListItemID > consts.ZeroValue {
+		options.ListItemID = *_usersListItemID
+	}
+	if len(*_usersNotes) > consts.ZeroValue {
+		options.Notes = *_usersNotes
+	}
 	if len(*_usersCommentsIncludeReplies) > consts.ZeroValue {
 		options.IncludeReplies = *_usersCommentsIncludeReplies
 	}
