@@ -74,6 +74,7 @@ type Config struct {
 	RedirectURI       string    `toml:"redirect_uri"`
 	Rating            string    `toml:"rating"`
 	Remove            bool      `toml:"remove"`
+	Reason            string    `toml:"reason"`
 	Reply             string    `toml:"reply"`
 	FollowerRequest   int       `toml:"follower_request"`
 	SearchField       str.Slice `toml:"search_field"`

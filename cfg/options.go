@@ -35,6 +35,7 @@ type OptionsConfig struct {
 	Action         []string
 	Privacy        []string
 	Rating         []int
+	Reason         []string
 }
 
 // SearchFieldConfig represents the configuration options for search_field depens on type
@@ -209,6 +210,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	"users:list_comments": {
 		Type: []string{"movies", "shows", "seasons", "episodes", "persons"},
 		Sort: []string{"likes", "likes_30", "replies", "replies_30", "plays", "rating", "added"},
+	},
+	"users:list_report": {
+		Reason: []string{"duplicate", "remove", "metadata", "adult", "language", "spam", "other"},
 	},
 }
 

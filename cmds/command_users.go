@@ -22,6 +22,8 @@ var (
 	_usersAction                 = UsersCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
 	_usersType                   = UsersCmd.Flag.String("t", cfg.DefaultConfig().UsersType, consts.UsersTypeUsage)
 	_usersSection                = UsersCmd.Flag.String("s", cfg.DefaultConfig().UsersSection, consts.UsersSectionUsage)
+	_usersReason                 = UsersCmd.Flag.String("r", cfg.DefaultConfig().Reason, consts.ReasonUsage)
+	_usersMessage                = UsersCmd.Flag.String("message", cfg.DefaultConfig().Msg, consts.ReportMsgUsage)
 	_usersDeny                   = UsersCmd.Flag.Bool("deny", cfg.DefaultConfig().Deny, consts.DenyUsage)
 	_usersDelete                 = UsersCmd.Flag.Bool("delete", cfg.DefaultConfig().Delete, consts.DeleteUsage)
 	_usersPrivacy                = UsersCmd.Flag.String("privacy", cfg.DefaultConfig().Privacy, consts.PrivacyUsage)
@@ -87,6 +89,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"reorder_list_items":  handlers.UsersReorderListItemsHandler{},
 		"update_list_item":    handlers.UsersUpdateListItemHandler{},
 		"list_comments":       handlers.UsersListCommentsHandler{},
+		"list_report":         handlers.UsersListReportHandler{},
 		"stats":               handlers.UsersStatsHandler{},
 		"watched":             handlers.UsersWatchedHandler{},
 	}
@@ -99,7 +102,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"notes", "lists", "add_list", "reorder_lists", "collaborations", "list",
 		"update_list", "delete_list", "list_likes", "list_like", "list_items",
 		"add_list_items", "remove_list_items", "reorder_list_items", "update_list_item",
-		"list_comments", "stats", "watched"}
+		"list_comments", "list_report", "stats", "watched"}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

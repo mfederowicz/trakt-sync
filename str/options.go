@@ -48,6 +48,7 @@ type Options struct {
 	Query             string
 	Remove            bool
 	Reply             string
+	Reason            string
 	ResetAt           string
 	Rating            SliceInt
 	SearchField       Slice

@@ -856,3 +856,26 @@ func (u *UsersService) GetListComments(ctx context.Context, user *string, listID
 
 	return items, resp, nil
 }
+
+// ListReport Report a user's list for moderator review.
+// Send a reason and optional message with additional context.
+// A user can only have one pending report per list.
+// API docs:https://trakt.docs.apiary.io/#reference/users/list-report/report-a-user's-list
+func (u *UsersService) ListReport(ctx context.Context, user *string, listID *string, report *str.ListReport) (*str.ListReportResult, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/lists/%s/report", *user, *listID)
+	printer.Println("list report")
+	req, err := u.client.NewRequest(http.MethodPost, url, report)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.ListReportResult)
+	resp, err := u.client.Do(ctx, req, &result)
+
+	if err != nil {
+		return nil, resp, errors.New(*result.Message)
+	}
+
+	return result, resp, nil
+}

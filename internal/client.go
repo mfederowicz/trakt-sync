@@ -212,6 +212,9 @@ func (c *Client) requestSetHeaders(r *http.Request, body any) *http.Request {
 func (c *Client) Do(ctx context.Context, req *http.Request, v any) (*str.Response, error) {
 	resp, err := c.BareDo(ctx, req)
 	if err != nil {
+		if v != nil && resp.StatusCode > 399 {
+			json.NewDecoder(resp.Body).Decode(v)
+		}
 		return resp, err
 	}
 	defer resp.Body.Close()

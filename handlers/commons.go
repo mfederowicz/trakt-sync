@@ -30,6 +30,7 @@ type CommonInterface interface {
 	CheckSeasonNumber(code string) (*int, *int, error)
 	CheckSortAndTypes(options *str.Options) error
 	CheckTypes(options *str.Options) error
+	ValidReason(options *str.Options) error
 	Checkin(client *internal.Client, checkin *str.Checkin, options *str.Options) (*str.Checkin, *str.Response, error)
 	Comment(client *internal.Client, comment *str.Comment, options *str.Options) (*str.Comment, *str.Response, error)
 	ConvertBytes(data []byte, options str.Options) (*str.ItemsList, error)
@@ -1013,6 +1014,21 @@ func (*CommonLogic) CheckTypes(options *str.Options) error {
 	}
 
 	// Check id_type values
+	return nil
+}
+
+// ValidReason helper function to validate reason field depends on module
+func (*CommonLogic) ValidReason(options *str.Options) error {
+	// Check if the provided module exists in ModuleConfig
+	_, ok := cfg.ModuleConfig[options.Module]
+	if !ok {
+		return fmt.Errorf("not found config for module '%s'", options.Module)
+	}
+	prefix := options.Module + ":" + options.Action
+	if len(cfg.ModuleActionConfig[prefix].Reason) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].Reason, options.Reason) {
+		return fmt.Errorf("reason '%s' is not valid for module '%s' and action '%s', avaliable reason:%s", options.Reason, options.Module, options.Action, cfg.ModuleActionConfig[prefix].Reason)
+	}
+
 	return nil
 }
 

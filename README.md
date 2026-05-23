@@ -1865,6 +1865,54 @@ $ ./trakt-sync users -a reorder_list_items -items export_users_list_movies.json
 ```console
 $ cat export_users_list_movies.json | ./trakt-sync users -a reorder_list_items
 ```
+##### Update list item (notes):
+```console
+$ ./trakt-sync users -a update_list_item -u username -i 27316587 -list_item_id 996953153 -notes "best romcom"
+```
+##### Get all list comments
+```console
+$ ./trakt-sync users -a list_comments -i star-wars-in-machete-order -s likes
+```
+```console
+$ ./trakt-sync users -a list_comments -i star-wars-in-machete-order -s likes_30
+```
+```console
+$ ./trakt-sync users -a list_comments -i star-wars-in-machete-order -s replies
+```
+```console
+$ ./trakt-sync users -a list_comments -i star-wars-in-machete-order -s replies_30
+```
+```console
+$ ./trakt-sync users -a list_comments -i star-wars-in-machete-order -s plays
+```
+```console
+$ ./trakt-sync users -a list_comments -i star-wars-in-machete-order -s rating
+```
+```console
+$ ./trakt-sync users -a list_comments -i star-wars-in-machete-order -s added
+```
+##### List report
+```console
+$ ./trakt-sync users -a list_report -u username -i star-wars-in-machete-order -r duplicate -message "Duplicate of another list"
+```
+```console
+$ ./trakt-sync users -a list_report -u username -i star-wars-in-machete-order -r remove -message "Should be removed from Trakt"
+```
+```console
+$ ./trakt-sync users -a list_report -u username -i star-wars-in-machete-order -r metadata -message "Metadata is wrong (name, description, etc)"
+```
+```console
+$ ./trakt-sync users -a list_report -u username -i star-wars-in-machete-order -r adult -message "Contains adult content"
+```
+```console
+$ ./trakt-sync users -a list_report -u username -i star-wars-in-machete-order -r language -message "Not in English"
+```
+```console
+$ ./trakt-sync users -a list_report -u username -i star-wars-in-machete-order -r spam -message "Spam or self-promotion"
+```
+```console
+$ ./trakt-sync users -a list_report -u username -i star-wars-in-machete-order -r other -message "Anything else"
+```
 
 
 ##### Fetch stats for selected user:

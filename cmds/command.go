@@ -84,6 +84,7 @@ var Avflags = map[string]bool{
 	"list_item_id":       true,
 	"movies":             true,
 	"msg":                true,
+	"message":            true,
 	"networks":           true,
 	"notes":              true,
 	"o":                  true,
@@ -94,6 +95,7 @@ var Avflags = map[string]bool{
 	"privacy":            true,
 	"progress":           true,
 	"q":                  true,
+	"r":                  true,
 	"rating":             true,
 	"recommendations":    true,
 	"releases":           true,
@@ -404,6 +406,8 @@ func setOptionsDependsOnModuleUsers(options str.Options) str.Options {
 	options.Type = *_usersType
 	options.Section = *_usersSection
 	options.Sort = *_usersSort
+	options.Reason = *_usersReason
+	options.Msg = *_usersMessage
 	options.FollowerRequest = *_usersFollowerRequest
 	options.Delete = *_usersDelete
 	options.Privacy = *_usersPrivacy
@@ -847,6 +851,13 @@ func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.O
 		options.Type = *_usersType
 	}
 
+	if len(*_usersReason) > consts.ZeroValue {
+		options.Reason = *_usersReason
+	}
+
+	if len(*_usersMessage) > consts.ZeroValue {
+		options.Msg = *_usersMessage
+	}
 	if options.Action == consts.Notes && options.Type == "" {
 		options.Type = consts.ActionTypeAll
 	}
