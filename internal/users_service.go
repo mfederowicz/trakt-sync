@@ -1017,3 +1017,28 @@ func (u *UsersService) GetFollowers(ctx context.Context, user *string, options *
 
 	return items, resp, nil
 }
+
+// GetFollowing Returns all user's they follow including when the relationship began.
+// API docs:https://trakt.docs.apiary.io/#reference/users/following/get-following
+func (u *UsersService) GetFollowing(ctx context.Context, user *string, options *uri.ListOptions) ([]*str.Follower, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/following", *user)
+	url, err := uri.AddQuery(url, options)
+	if err != nil {
+		return nil, nil, err
+	}
+	fmt.Println(url)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	items := []*str.Follower{}
+	resp, err := u.client.Do(ctx, req, &items)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return items, resp, nil
+}
