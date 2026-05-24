@@ -26,6 +26,7 @@ const (
 	AllShows             = "all-shows"
 	Anticipated          = "anticipated"
 	Boxoffice            = "boxoffice"
+	BlockedUsers         = "blocked_users"
 	Calendar             = "calendar"
 	Calendars            = "calendars"
 	Certifications       = "certifications"

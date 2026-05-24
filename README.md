@@ -1925,6 +1925,14 @@ $ ./trakt-sync users -a unfollow -u username
 ```console
 $ ./trakt-sync users -a blocked_users
 ```
+##### Block user
+```console
+$ ./trakt-sync users -a block -u username
+```
+##### Unblock user
+```console
+$ ./trakt-sync users -a unblock -u username
+```
 
 
 ##### Fetch stats for selected user:

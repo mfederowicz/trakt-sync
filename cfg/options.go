@@ -867,7 +867,8 @@ func getOutputForModuleUsers(options *str.Options) string {
 			options.Module,
 			options.Action,
 			strType+"_"+strSection)
-	case consts.Settings, consts.Profile, consts.Likes, consts.FollowingRequests, consts.FollowerRequests, consts.ListLikes, consts.ListItems, consts.Follow:
+	case consts.Settings, consts.Profile, consts.Likes, consts.FollowingRequests, consts.FollowerRequests,
+		consts.ListLikes, consts.ListItems, consts.Follow, consts.BlockedUsers:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,

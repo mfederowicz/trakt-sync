@@ -948,3 +948,25 @@ func (u *UsersService) GetBlockedUsers(ctx context.Context, options *uri.ListOpt
 
 	return items, resp, nil
 }
+
+// Block Block a user. If they are already following you, they will be removed from your followers.
+// Any pending follow request from this user will be blocked, preventing them
+// from following you in the future until you unblock them.
+// API docs:https://trakt.docs.apiary.io/#reference/users/block/block-this-user
+func (u *UsersService) Block(ctx context.Context, user *string) (*str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/block", *user)
+	printer.Println("block user")
+	req, err := u.client.NewRequest(http.MethodPost, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := u.client.Do(ctx, req, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
