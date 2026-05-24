@@ -50,6 +50,7 @@ type CommonInterface interface {
 	DeleteComment(client *internal.Client, options *str.Options) (*str.Response, error)
 	DeleteNotes(client *internal.Client, options *str.Options) (*str.Response, error)
 	DenyFollowRequest(client *internal.Client, options *str.Options) (*str.FollowRequest, *str.Response, error)
+	FetchBlockedUsers(client *internal.Client, options *str.Options, page int) ([]*str.UserBlocked, error)
 	FetchComment(client *internal.Client, options *str.Options) (*str.Comment, error)
 	FetchCommentItem(client *internal.Client, options *str.Options) (*str.CommentMediaItem, error)
 	FetchCommentUserLikes(client *internal.Client, options *str.Options, page int) ([]*str.CommentUserLike, error)
@@ -2187,6 +2188,32 @@ func (c CommonLogic) FetchUsersListComments(client *internal.Client, options *st
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersListComments(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+	return list, nil
+}
+
+// FetchBlockedUsers helper function to fetch blocked users
+func (c CommonLogic) FetchBlockedUsers(client *internal.Client, options *str.Options, page int) ([]*str.UserBlocked, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	list, resp, err := client.Users.GetBlockedUsers(
+		client.BuildCtxFromOptions(options),
+		&opts,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchBlockedUsers(client, options, nextPage)
 		if err != nil {
 			return nil, err
 		}

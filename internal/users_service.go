@@ -923,3 +923,28 @@ func (u *UsersService) Unfollow(ctx context.Context, user *string) (*str.Respons
 
 	return resp, nil
 }
+
+// GetBlockedUsers Returns all users you have blocked, including when each user was blocked.
+// API docs:https://trakt.docs.apiary.io/#reference/users/blocked-users/get-blocked-users
+func (u *UsersService) GetBlockedUsers(ctx context.Context, options *uri.ListOptions) ([]*str.UserBlocked, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/blocked")
+	url, err := uri.AddQuery(url, options)
+	if err != nil {
+		return nil, nil, err
+	}
+	fmt.Println(url)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	items := []*str.UserBlocked{}
+	resp, err := u.client.Do(ctx, req, &items)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return items, resp, nil
+}
