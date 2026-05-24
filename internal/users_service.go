@@ -879,3 +879,25 @@ func (u *UsersService) ListReport(ctx context.Context, user *string, listID *str
 
 	return result, resp, nil
 }
+
+// Follow If the user has a private profile, the follow request will require approval (approved_at will be null).
+// If a user is public, they will be followed immediately (approved_at will have a date).
+// API docs:https://trakt.docs.apiary.io/#reference/users/follow/follow-this-user
+func (u *UsersService) Follow(ctx context.Context, user *string) (*str.FollowResult, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/follow", *user)
+	printer.Println("follow user")
+	req, err := u.client.NewRequest(http.MethodPost, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.FollowResult)
+	resp, err := u.client.Do(ctx, req, &result)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return result, resp, nil
+}

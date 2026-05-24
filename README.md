@@ -1913,6 +1913,14 @@ $ ./trakt-sync users -a list_report -u username -i star-wars-in-machete-order -r
 ```console
 $ ./trakt-sync users -a list_report -u username -i star-wars-in-machete-order -r other -message "Anything else"
 ```
+##### Follow user:
+```console
+$ ./trakt-sync users -a follow -u username
+```
+##### Unfollow user:
+```console
+$ ./trakt-sync users -a unfollow -u username
+```
 
 
 ##### Fetch stats for selected user:
