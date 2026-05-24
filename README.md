@@ -1933,6 +1933,10 @@ $ ./trakt-sync users -a block -u username
 ```console
 $ ./trakt-sync users -a unblock -u username
 ```
+##### Get followers
+```console
+$ ./trakt-sync users -a followers
+```
 
 
 ##### Fetch stats for selected user:

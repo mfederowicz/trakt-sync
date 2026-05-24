@@ -46,6 +46,7 @@ const (
 	Favorites            = "favorites"
 	Finales              = "finales"
 	Follow               = "follow"
+	Followers            = "followers"
 	FollowerRequests     = "follower_requests"
 	Genres               = "genres"
 	GetCollection        = "get_collection"

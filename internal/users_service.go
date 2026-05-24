@@ -992,3 +992,28 @@ func (u *UsersService) Unblock(ctx context.Context, user *string) (*str.Response
 
 	return resp, nil
 }
+
+// GetFollowers Returns all followers including when the relationship began.
+// API docs:https://trakt.docs.apiary.io/#reference/users/followers/get-followers
+func (u *UsersService) GetFollowers(ctx context.Context, user *string, options *uri.ListOptions) ([]*str.Follower, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/followers", *user)
+	url, err := uri.AddQuery(url, options)
+	if err != nil {
+		return nil, nil, err
+	}
+	fmt.Println(url)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	items := []*str.Follower{}
+	resp, err := u.client.Do(ctx, req, &items)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return items, resp, nil
+}
