@@ -214,6 +214,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	"users:list_report": {
 		Reason: []string{"duplicate", "remove", "metadata", "adult", "language", "spam", "other"},
 	},
+	"users:history": {
+		Type: []string{"movies", "shows", "seasons", "episodes"},
+	},
 }
 
 // ModuleConfig represents the configuration options for all modules
@@ -868,7 +871,8 @@ func getOutputForModuleUsers(options *str.Options) string {
 			options.Action,
 			strType+"_"+strSection)
 	case consts.Settings, consts.Profile, consts.Likes, consts.FollowingRequests, consts.FollowerRequests,
-		consts.ListLikes, consts.ListItems, consts.Follow, consts.BlockedUsers, consts.Followers, consts.Following, consts.Friends:
+		consts.ListLikes, consts.ListItems, consts.Follow, consts.BlockedUsers, consts.Followers, consts.Following,
+		consts.Friends, consts.History:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,

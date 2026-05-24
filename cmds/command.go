@@ -82,6 +82,7 @@ var Avflags = map[string]bool{
 	"languages":          true,
 	"lists":              true,
 	"list_item_id":       true,
+	"item_id":            true,
 	"movies":             true,
 	"msg":                true,
 	"message":            true,
@@ -828,6 +829,9 @@ func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.O
 	if *_usersListItemID > consts.ZeroValue {
 		options.ListItemID = *_usersListItemID
 	}
+	if *_usersItemID > consts.ZeroValue {
+		options.ItemID = *_usersItemID
+	}
 	if len(*_usersNotes) > consts.ZeroValue {
 		options.Notes = *_usersNotes
 	}
@@ -876,7 +880,9 @@ func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.O
 	if options.Action == consts.ListComments && options.Type == "" {
 		options.Sort = consts.Likes
 	}
-
+	if options.Action == consts.History && options.Type == "" {
+		options.Type = consts.Movies
+	}
 	options.Output = cfg.GetOutputForModule(options)
 
 	return options

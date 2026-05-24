@@ -18,6 +18,7 @@ var (
 	_usersSort                   = flag.String("s", cfg.DefaultConfig().Sort, consts.SortUsage)
 	_usersListID                 = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
 	_usersListItemID             = UsersCmd.Flag.Int("list_item_id", cfg.DefaultConfig().ListItemID, consts.ListItemIDUsage)
+	_usersItemID                 = UsersCmd.Flag.Int("item_id", cfg.DefaultConfig().ItemID, consts.ItemIDUsage)
 	_usersNotes                  = UsersCmd.Flag.String("notes", cfg.DefaultConfig().Notes, consts.NotesUsage)
 	_usersAction                 = UsersCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
 	_usersType                   = UsersCmd.Flag.String("t", cfg.DefaultConfig().UsersType, consts.UsersTypeUsage)
@@ -98,6 +99,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"followers":           handlers.UsersFollowersHandler{},
 		"following":           handlers.UsersFollowingHandler{},
 		"friends":             handlers.UsersFriendsHandler{},
+		"history":             handlers.UsersHistoryHandler{},
 		"stats":               handlers.UsersStatsHandler{},
 		"watched":             handlers.UsersWatchedHandler{},
 	}
@@ -111,7 +113,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"update_list", "delete_list", "list_likes", "list_like", "list_items",
 		"add_list_items", "remove_list_items", "reorder_list_items", "update_list_item",
 		"list_comments", "list_report", "follow", "unfollow", "blocked_users",
-		"block", "unblock", "followers", "following", "friends", "stats", "watched"}
+		"block", "unblock", "followers", "following", "friends", "history", "stats", "watched"}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

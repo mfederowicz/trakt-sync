@@ -47,6 +47,7 @@ type Config struct {
 	Hidden            string    `toml:"hidden"`
 	Hide              bool      `toml:"hide"`
 	ID                string    `toml:"id"`
+	ItemID            int       `toml:"item_id"`
 	IgnoreCollected   string    `toml:"ignore_collected"`
 	IgnoreWatchlisted string    `toml:"ignore_watchlisted"`
 	IncludeReplies    string    `toml:"include_replies"`

@@ -77,6 +77,7 @@ const (
 	ListCommentSortUsage         = "allow to overwrite comments sort"
 	ListIDUsage                  = "allow to export a specific custom list"
 	ListItem                     = "  - %s\n"
+	ItemIDUsage                  = "allow to overwrite item_id"
 	ListItemIDUsage              = "allow to overwrite list_item_id"
 	ListLikeRemoveUsage          = "allow remove like for list"
 	ListUsage                    = "allow to overwrite list"

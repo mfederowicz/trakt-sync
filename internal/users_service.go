@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
@@ -1060,6 +1061,42 @@ func (u *UsersService) GetFriends(ctx context.Context, user *string, options *ur
 	}
 
 	items := []*str.Friend{}
+	resp, err := u.client.Do(ctx, req, &items)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return items, resp, nil
+}
+
+// GetHistory Returns movies and episodes that a user has watched, sorted by most recent.
+// You can optionally limit the type to movies or episodes. The id (64-bit integer) in each
+// history item uniquely identifies the event and can be used to remove individual events
+// by using the /sync/history/remove method. The action will be set to scrobble, checkin,
+// or watch.Specify a type and trakt item_id to limit the history for just that item.
+// If the item_id is valid, but there is no history, an empty array will be returned.
+// API docs:
+func (u *UsersService) GetHistory(ctx context.Context, user *string, strType *string, id *int, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+	var url string
+
+	if *id > consts.ZeroValue {
+		url = fmt.Sprintf("users/%s/history/%s/%d", *user, *strType, *id)
+	} else {
+		url = fmt.Sprintf("users/%s/history/%s", *user, *strType)
+	}
+
+	url, err := uri.AddQuery(url, options)
+	if err != nil {
+		return nil, nil, err
+	}
+	fmt.Println(url)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	items := []*str.ExportlistItem{}
 	resp, err := u.client.Do(ctx, req, &items)
 
 	if err != nil {

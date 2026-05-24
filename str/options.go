@@ -34,6 +34,7 @@ type Options struct {
 	Language          string
 	List              string
 	ListItemID        int
+	ItemID            int
 	Module            string
 	Msg               string
 	Notes             string

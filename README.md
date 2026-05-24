@@ -1945,6 +1945,27 @@ $ ./trakt-sync users -a following -u username
 ```console
 $ ./trakt-sync users -a friends -u username
 ```
+##### Get history last 7 days
+```console
+$ ./trakt-sync users -a history -u username -start_at 2025-06-01 -end_at 2025-06-07
+```
+##### Get history filter by type
+```console
+$ ./trakt-sync users -a history -u username -t movies
+```
+```console
+$ ./trakt-sync users -a history -u username -t shows
+```
+```console
+$ ./trakt-sync users -a history -u username -t seasons
+```
+```console
+$ ./trakt-sync users -a history -u username -t episodes
+```
+##### Get history filter for specific item
+```console
+$ ./trakt-sync users -a history -u username -item_id 123456
+```
 
 ##### Fetch stats for selected user:
 ```console
