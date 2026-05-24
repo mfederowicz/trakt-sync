@@ -970,3 +970,25 @@ func (u *UsersService) Block(ctx context.Context, user *string) (*str.Response, 
 
 	return resp, nil
 }
+
+// Unblock Unblock a user you previously blocked.
+// API docs:https://trakt.docs.apiary.io/#reference/users/block/unblock-this-user
+func (u *UsersService) Unblock(ctx context.Context, user *string) (*str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/block", *user)
+	printer.Println("unblock user")
+	req, err := u.client.NewRequest(http.MethodDelete, url, nil)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := u.client.Do(ctx, req, nil)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return resp, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
