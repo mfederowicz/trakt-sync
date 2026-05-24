@@ -901,3 +901,25 @@ func (u *UsersService) Follow(ctx context.Context, user *string) (*str.FollowRes
 
 	return result, resp, nil
 }
+
+// Unfollow Unfollow someone you already follow..
+// API docs:https://trakt.docs.apiary.io/#reference/users/follow/unfollow-this-user
+func (u *UsersService) Unfollow(ctx context.Context, user *string) (*str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/follow", *user)
+	printer.Println("unfollow user")
+	req, err := u.client.NewRequest(http.MethodDelete, url, nil)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := u.client.Do(ctx, req, nil)
+
+	if resp.StatusCode == http.StatusNotFound {
+		return resp, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}

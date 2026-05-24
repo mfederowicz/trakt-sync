@@ -91,6 +91,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"list_comments":       handlers.UsersListCommentsHandler{},
 		"list_report":         handlers.UsersListReportHandler{},
 		"follow":              handlers.UsersFollowHandler{},
+		"unfollow":            handlers.UsersUnfollowHandler{},
 		"stats":               handlers.UsersStatsHandler{},
 		"watched":             handlers.UsersWatchedHandler{},
 	}
