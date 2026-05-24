@@ -48,6 +48,7 @@ const (
 	Follow               = "follow"
 	Followers            = "followers"
 	Following            = "following"
+	Friends              = "friends"
 	FollowerRequests     = "follower_requests"
 	Genres               = "genres"
 	GetCollection        = "get_collection"

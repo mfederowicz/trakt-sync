@@ -1042,3 +1042,29 @@ func (u *UsersService) GetFollowing(ctx context.Context, user *string, options *
 
 	return items, resp, nil
 }
+
+// GetFriends Returns all friends for a user including when the relationship began.
+// Friendship is a 2 way relationship where each user follows the other.
+// API docs:https://trakt.docs.apiary.io/#reference/users/friends/get-friends
+func (u *UsersService) GetFriends(ctx context.Context, user *string, options *uri.ListOptions) ([]*str.Friend, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/friends", *user)
+	url, err := uri.AddQuery(url, options)
+	if err != nil {
+		return nil, nil, err
+	}
+	fmt.Println(url)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	items := []*str.Friend{}
+	resp, err := u.client.Do(ctx, req, &items)
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return items, resp, nil
+}

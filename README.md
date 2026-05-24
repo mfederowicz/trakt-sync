@@ -1935,9 +1935,16 @@ $ ./trakt-sync users -a unblock -u username
 ```
 ##### Get followers
 ```console
-$ ./trakt-sync users -a followers
+$ ./trakt-sync users -a followers -u username
 ```
-
+##### Get following
+```console
+$ ./trakt-sync users -a following -u username
+```
+##### Get friends
+```console
+$ ./trakt-sync users -a friends -u username
+```
 
 ##### Fetch stats for selected user:
 ```console

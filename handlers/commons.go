@@ -107,6 +107,7 @@ type CommonInterface interface {
 	UsersRemoveListLike(client *internal.Client, options *str.Options) (*str.Response, error)
 	FetchFollowers(client *internal.Client, options *str.Options, page int) ([]*str.Follower, error)
 	FetchFollowing(client *internal.Client, options *str.Options, page int) ([]*str.Follower, error)
+	FetchFriends(client *internal.Client, options *str.Options, page int) ([]*str.Friend, error)
 	ValidPrivacy(options *str.Options) error
 }
 
@@ -2270,6 +2271,33 @@ func (c CommonLogic) FetchFollowing(client *internal.Client, options *str.Option
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchFollowing(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+	return list, nil
+}
+
+// FetchFriends helper function to fetch all friends
+func (c CommonLogic) FetchFriends(client *internal.Client, options *str.Options, page int) ([]*str.Friend, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	list, resp, err := client.Users.GetFriends(
+		client.BuildCtxFromOptions(options),
+		&options.UserName,
+		&opts,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchFriends(client, options, nextPage)
 		if err != nil {
 			return nil, err
 		}
