@@ -44,6 +44,7 @@ const (
 	Episodes             = "episodes"
 	Favorited            = "favorited"
 	Favorites            = "favorites"
+	FavoritesComments    = "favorites_comments"
 	Finales              = "finales"
 	Follow               = "follow"
 	Followers            = "followers"

@@ -2080,6 +2080,28 @@ $ ./trakt-sync users -a favorites -t movies -sort_by percentage
 🔥VIP Only sort_by including imdb_rating, tmdb_rating, rt_tomatometer, rt_audience, metascore, votes,
 imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to rank.
 ```
+##### Get user favorites comments
+```console
+$ ./trakt-sync users -a favorites_comments -u username -s likes
+```
+```console
+$ ./trakt-sync users -a favorites_comments -u username -s likes_30
+```
+```console
+$ ./trakt-sync users -a favorites_comments -u username -s replies
+```
+```console
+$ ./trakt-sync users -a favorites_comments -u username -s replies_30
+```
+```console
+$ ./trakt-sync users -a favorites_comments -u username -s plays
+```
+```console
+$ ./trakt-sync users -a favorites_comments -u username -s rating
+```
+```console
+$ ./trakt-sync users -a favorites_comments -u username -s added
+```
 
 
 ##### Fetch stats for selected user:

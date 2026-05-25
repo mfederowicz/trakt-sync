@@ -104,6 +104,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"watchlist":           handlers.UsersWatchlistHandler{},
 		"watchlist_comments":  handlers.UsersWatchlistCommentsHandler{},
 		"favorites":           handlers.UsersFavoritesHandler{},
+		"favorites_comments":  handlers.UsersFavoritesCommentsHandler{},
 		"stats":               handlers.UsersStatsHandler{},
 		"watched":             handlers.UsersWatchedHandler{},
 	}

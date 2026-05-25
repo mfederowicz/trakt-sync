@@ -55,6 +55,7 @@ type CommonInterface interface {
 	FetchCommentUserLikes(client *internal.Client, options *str.Options, page int) ([]*str.CommentUserLike, error)
 	FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error)
 	FetchUsersFavorites(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
+	FetchUsersFavoritesComments(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchFollowRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error)
 	FetchFollowers(client *internal.Client, options *str.Options, page int) ([]*str.Follower, error)
 	FetchFollowing(client *internal.Client, options *str.Options, page int) ([]*str.Follower, error)
@@ -2457,6 +2458,36 @@ func (c CommonLogic) FetchUsersFavorites(client *internal.Client, options *str.O
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersFavorites(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+
+	return list, nil
+}
+
+// FetchUsersFavoritesComments helper function to fetch watchlist comments.
+func (c CommonLogic) FetchUsersFavoritesComments(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	list, resp, err := client.Users.GetFavoritesComments(
+		client.BuildCtxFromOptions(options),
+		&options.UserName,
+		&options.Sort,
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchUsersFavoritesComments(client, options, nextPage)
 		if err != nil {
 			return nil, err
 		}

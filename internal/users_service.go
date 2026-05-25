@@ -1221,3 +1221,31 @@ func (u *UsersService) GetFavorites(ctx context.Context, user *string, strType *
 
 	return list, resp, nil
 }
+
+// GetFavoritesComments Returns all top level comments for the favorites.
+// By default, the comments are sorted by most likes. Other sorting options include
+// likes_30, most replies, replies_30, most plays, highest rating, and added date.
+// API docs:https://trakt.docs.apiary.io/#reference/users/favorites-comments/get-all-favorites-comments
+func (u *UsersService) GetFavoritesComments(ctx context.Context, user *string, sort *string, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/favorites/comments/%s", *user, *sort)
+	url, err := uri.AddQuery(url, options)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch favorites comments url:" + url)
+	req, err := u.client.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.ExportlistItem{}
+	resp, err := u.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch favorites comments err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
