@@ -15,14 +15,14 @@ var (
 	username   = "me"
 	exportData []*str.PersonalList
 
-	_usersSort                   = flag.String("s", cfg.DefaultConfig().Sort, consts.SortUsage)
+	_usersSort                   = flag.String("s", cfg.DefaultConfig().UsersSort, consts.SortUsage)
 	_usersListID                 = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
 	_usersListItemID             = UsersCmd.Flag.Int("list_item_id", cfg.DefaultConfig().ListItemID, consts.ListItemIDUsage)
 	_usersItemID                 = UsersCmd.Flag.Int("item_id", cfg.DefaultConfig().ItemID, consts.ItemIDUsage)
 	_usersNotes                  = UsersCmd.Flag.String("notes", cfg.DefaultConfig().Notes, consts.NotesUsage)
 	_usersAction                 = UsersCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
 	_usersType                   = UsersCmd.Flag.String("t", cfg.DefaultConfig().UsersType, consts.UsersTypeUsage)
-	_usersSection                = UsersCmd.Flag.String("s", cfg.DefaultConfig().UsersSection, consts.UsersSectionUsage)
+	_usersSection                = UsersCmd.Flag.String("section", cfg.DefaultConfig().UsersSection, consts.UsersSectionUsage)
 	_usersReason                 = UsersCmd.Flag.String("r", cfg.DefaultConfig().Reason, consts.ReasonUsage)
 	_usersMessage                = UsersCmd.Flag.String("message", cfg.DefaultConfig().Msg, consts.ReportMsgUsage)
 	_usersDeny                   = UsersCmd.Flag.Bool("deny", cfg.DefaultConfig().Deny, consts.DenyUsage)
@@ -102,6 +102,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"history":             handlers.UsersHistoryHandler{},
 		"ratings":             handlers.UsersRatingsHandler{},
 		"watchlist":           handlers.UsersWatchlistHandler{},
+		"watchlist_comments":  handlers.UsersWatchlistCommentsHandler{},
 		"stats":               handlers.UsersStatsHandler{},
 		"watched":             handlers.UsersWatchedHandler{},
 	}
@@ -116,7 +117,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"add_list_items", "remove_list_items", "reorder_list_items", "update_list_item",
 		"list_comments", "list_report", "follow", "unfollow", "blocked_users",
 		"block", "unblock", "followers", "following", "friends", "history", "ratings",
-		"watchlist", "stats", "watched"}
+		"watchlist", "watchlist_comments", "stats", "watched"}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

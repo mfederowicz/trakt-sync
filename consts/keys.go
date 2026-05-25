@@ -144,6 +144,7 @@ const (
 	WatchedProgress      = "watched_progress"
 	Watching             = "watching"
 	Watchlist            = "watchlist"
+	WatchlistComments    = "watchlist_comments"
 )
 
 // Fupper helper function to convert string in title format

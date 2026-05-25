@@ -104,6 +104,7 @@ type Config struct {
 	Undo              bool      `toml:"undo"`
 	UserName          string    `toml:"username"`
 	UsersType         string    `toml:"type"`
+	UsersSort         string    `toml:"type"`
 	UsersSection      string    `toml:"section"`
 	Verbose           bool      `toml:"verbose"`
 	WarningCode       int       `toml:"warningCode"`
@@ -494,14 +495,14 @@ func parseConfig(fs afero.Fs, path string, config *Config) error {
 // DefaultConfig config with default values
 func DefaultConfig() *Config {
 	return &Config{
-		AllowComments:  false,
-		DisplayNumbers: true,
 		Action:         consts.EmptyString,
+		AllowComments:  false,
 		ClientID:       consts.EmptyString,
 		ClientSecret:   consts.EmptyString,
 		CommentType:    "all",
 		ConfigPath:     buildDefaultConfigPath(),
 		Delete:         false,
+		DisplayNumbers: true,
 		ErrorCode:      consts.ZeroValue,
 		Format:         "imdb",
 		Hide:           false,
@@ -537,14 +538,15 @@ func DefaultConfig() *Config {
 		SortBy:         "rank",
 		SortHow:        "asc",
 		Spoiler:        false,
+		Timezone:       time.UTC.String(),
 		TokenPath:      consts.EmptyString,
 		Type:           "movies",
 		UserName:       "me",
-		UsersType:      "",
 		UsersSection:   consts.Calendar,
+		UsersType:      "",
+		UsersSort:      consts.Likes,
 		Verbose:        false,
 		WarningCode:    consts.ZeroValue,
-		Timezone:       time.UTC.String(),
 	}
 }
 

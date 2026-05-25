@@ -1521,25 +1521,25 @@ $ ./trakt-sync users -a saved_filters -u username
 ```
 ##### Export hidden items for a section (movie,show,season,user):
 ```console
-$ ./trakt-sync users -a hidden_items -t show -s calendar
+$ ./trakt-sync users -a hidden_items -t show -section calendar
 ```
 ```console
-$ ./trakt-sync users -a hidden_items -t show -s progress_watched
+$ ./trakt-sync users -a hidden_items -t show -section progress_watched
 ```
 ```console
-$ ./trakt-sync users -a hidden_items -t show -s progress_watched_reset
+$ ./trakt-sync users -a hidden_items -t show -section progress_watched_reset
 ```
 ```console
-$ ./trakt-sync users -a hidden_items -t show -s progress_collected
+$ ./trakt-sync users -a hidden_items -t show -section progress_collected
 ```
 ```console
-$ ./trakt-sync users -a hidden_items -t show -s recommendations
+$ ./trakt-sync users -a hidden_items -t show -section recommendations
 ```
 ```console
-$ ./trakt-sync users -a hidden_items -t show -s comments
+$ ./trakt-sync users -a hidden_items -t show -section comments
 ```
 ```console
-$ ./trakt-sync users -a hidden_items -t show -s dropped
+$ ./trakt-sync users -a hidden_items -t show -section dropped
 ```
 
 ##### Add hidden items - via -items flag
@@ -2022,6 +2022,29 @@ $ ./trakt-sync users -a watchlist -u username -t movies -sort_by percentage
 🔥VIP Only including imdb_rating, tmdb_rating, rt_tomatometer, rt_audience, metascore, votes,
 imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to rank.
 ```
+##### Get user watchlist comments
+```console
+$ ./trakt-sync users -a watchlist_comments -u username -s likes
+```
+```console
+$ ./trakt-sync users -a watchlist_comments -u username -s likes_30
+```
+```console
+$ ./trakt-sync users -a watchlist_comments -u username -s replies
+```
+```console
+$ ./trakt-sync users -a watchlist_comments -u username -s replies_30
+```
+```console
+$ ./trakt-sync users -a watchlist_comments -u username -s plays
+```
+```console
+$ ./trakt-sync users -a watchlist_comments -u username -s rating
+```
+```console
+$ ./trakt-sync users -a watchlist_comments -u username -s added
+```
+
 
 ##### Fetch stats for selected user:
 ```console

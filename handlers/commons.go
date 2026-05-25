@@ -86,6 +86,7 @@ type CommonInterface interface {
 	FetchUsersListLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error)
 	FetchUsersNotes(client *internal.Client, options *str.Options, page int) ([]*str.NotesItem, error)
 	FetchUsersWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
+	FetchUsersWatchlistComments(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	GenActionTypeItemUsage(options *str.Options, items []string)
 	GenActionTypeUsage(options *str.Options, types []string)
@@ -2394,6 +2395,36 @@ func (c CommonLogic) FetchUsersWatchlist(client *internal.Client, options *str.O
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersWatchlist(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+
+	return list, nil
+}
+
+// FetchUsersWatchlistComments helper function to fetch watchlist comments.
+func (c CommonLogic) FetchUsersWatchlistComments(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	list, resp, err := client.Users.GetWatchlistComments(
+		client.BuildCtxFromOptions(options),
+		&options.UserName,
+		&options.Sort,
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchUsersWatchlistComments(client, options, nextPage)
 		if err != nil {
 			return nil, err
 		}

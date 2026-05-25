@@ -105,6 +105,7 @@ var Avflags = map[string]bool{
 	"reset_at":           true,
 	"s":                  true,
 	"scrobble":           true,
+	"section":            true,
 	"search":             true,
 	"season":             true,
 	"seasons":            true,
@@ -886,6 +887,12 @@ func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.O
 	}
 	if options.Action == consts.Watchlist && options.Type == "" {
 		options.Type = consts.ActionTypeAll
+	}
+	if options.Action == consts.WatchlistComments && len(*_usersSort) == consts.ZeroValue {
+		options.Sort = consts.Likes
+	}
+	if len(*_usersSort) > consts.ZeroValue {
+		options.Sort = *_usersSort
 	}
 
 	options.Output = cfg.GetOutputForModule(options)

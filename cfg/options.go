@@ -228,6 +228,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
 			"watched", "collected"},
 	},
+	"users:watchlist_comments": {
+		Sort: []string{"likes", "likes_30", "replies", "replies_30", "plays", "rating", "added"},
+	},
 }
 
 // ModuleConfig represents the configuration options for all modules
@@ -883,7 +886,7 @@ func getOutputForModuleUsers(options *str.Options) string {
 			strType+"_"+strSection)
 	case consts.Settings, consts.Profile, consts.Likes, consts.FollowingRequests, consts.FollowerRequests,
 		consts.ListLikes, consts.ListItems, consts.Follow, consts.BlockedUsers, consts.Followers, consts.Following,
-		consts.Friends, consts.History, consts.Ratings, consts.Watchlist:
+		consts.Friends, consts.History, consts.Ratings, consts.Watchlist, consts.WatchlistComments:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
