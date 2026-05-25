@@ -106,8 +106,8 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"favorites":           handlers.UsersFavoritesHandler{},
 		"favorites_comments":  handlers.UsersFavoritesCommentsHandler{},
 		"watching":            handlers.UsersWatchingHandler{},
-		"stats":               handlers.UsersStatsHandler{},
 		"watched":             handlers.UsersWatchedHandler{},
+		"stats":               handlers.UsersStatsHandler{},
 	}
 
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
@@ -121,7 +121,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"list_comments", "list_report", "follow", "unfollow", "blocked_users",
 		"block", "unblock", "followers", "following", "friends", "history", "ratings",
 		"watchlist", "watchlist_comments", "favorites", "favorites_comments", "watching",
-		"stats", "watched"}
+		"watched", "stats"}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

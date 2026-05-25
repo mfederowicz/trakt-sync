@@ -2106,12 +2106,6 @@ $ ./trakt-sync users -a favorites_comments -u username -s added
 ```console
 $ ./trakt-sync users -a watching -u username
 ```
-
-
-##### Fetch stats for selected user:
-```console
-$ ./trakt-sync users -a stats -u sean
-```
 ##### Fetch watched movies for selected user:
 ```console
 $ ./trakt-sync users -a watched -t movies -u sean
@@ -2123,6 +2117,10 @@ $ ./trakt-sync users -a watched -t shows -u sean
 ##### Fetch watched shows for selected user without seasons:
 ```console
 $ ./trakt-sync users -a watched -t shows -u sean --ex noseasons
+```
+##### Fetch stats for selected user:
+```console
+$ ./trakt-sync users -a stats -u sean
 ```
 
 #### Watchlist
