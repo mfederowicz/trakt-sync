@@ -231,6 +231,14 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	"users:watchlist_comments": {
 		Sort: []string{"likes", "likes_30", "replies", "replies_30", "plays", "rating", "added"},
 	},
+	"users:favorites": {
+		Type:    []string{"movies", "shows", "seasons", "episodes", "all"},
+		SortHow: []string{"asc", "desc"},
+		SortBy: []string{"rank", "added", "title", "released", "runtime", "popularity",
+			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
+			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
+			"watched", "collected"},
+	},
 }
 
 // ModuleConfig represents the configuration options for all modules
@@ -886,7 +894,7 @@ func getOutputForModuleUsers(options *str.Options) string {
 			strType+"_"+strSection)
 	case consts.Settings, consts.Profile, consts.Likes, consts.FollowingRequests, consts.FollowerRequests,
 		consts.ListLikes, consts.ListItems, consts.Follow, consts.BlockedUsers, consts.Followers, consts.Following,
-		consts.Friends, consts.History, consts.Ratings, consts.Watchlist, consts.WatchlistComments:
+		consts.Friends, consts.History, consts.Ratings, consts.Watchlist, consts.WatchlistComments, consts.Favorites:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,

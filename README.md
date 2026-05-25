@@ -2019,7 +2019,7 @@ $ ./trakt-sync users -a watchlist -u username -t movies -sort_by percentage
 ```
 
 ```console
-🔥VIP Only including imdb_rating, tmdb_rating, rt_tomatometer, rt_audience, metascore, votes,
+🔥VIP Only sort_by including imdb_rating, tmdb_rating, rt_tomatometer, rt_audience, metascore, votes,
 imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to rank.
 ```
 ##### Get user watchlist comments
@@ -2043,6 +2043,42 @@ $ ./trakt-sync users -a watchlist_comments -u username -s rating
 ```
 ```console
 $ ./trakt-sync users -a watchlist_comments -u username -s added
+```
+##### Get user favorites
+```console
+$ ./trakt-sync users -a favorites -t movies -sort_how asc
+```
+```console
+$ ./trakt-sync users -a favorites -t movies -sort_how des
+```
+```console
+$ ./trakt-sync users -a favorites -t movies -sort_by rank
+```
+```console
+$ ./trakt-sync users -a favorites -t movies -sort_by added
+```
+```console
+$ ./trakt-sync users -a favorites -t movies -sort_by title
+```
+```console
+$ ./trakt-sync users -a favorites -t movies -sort_by released
+```
+```console
+$ ./trakt-sync users -a favorites -t movies -sort_by runtime
+```
+```console
+$ ./trakt-sync users -a favorites -t movies -sort_by popularity
+```
+```console
+$ ./trakt-sync users -a favorites -t movies -sort_by random
+```
+```console
+$ ./trakt-sync users -a favorites -t movies -sort_by percentage
+```
+```console
+
+🔥VIP Only sort_by including imdb_rating, tmdb_rating, rt_tomatometer, rt_audience, metascore, votes,
+imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to rank.
 ```
 
 

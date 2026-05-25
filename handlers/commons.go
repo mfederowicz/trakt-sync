@@ -54,7 +54,7 @@ type CommonInterface interface {
 	FetchCommentItem(client *internal.Client, options *str.Options) (*str.CommentMediaItem, error)
 	FetchCommentUserLikes(client *internal.Client, options *str.Options, page int) ([]*str.CommentUserLike, error)
 	FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error)
-	FetchFavorites(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
+	FetchUsersFavorites(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchFollowRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error)
 	FetchFollowers(client *internal.Client, options *str.Options, page int) ([]*str.Follower, error)
 	FetchFollowing(client *internal.Client, options *str.Options, page int) ([]*str.Follower, error)
@@ -2425,6 +2425,38 @@ func (c CommonLogic) FetchUsersWatchlistComments(client *internal.Client, option
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersWatchlistComments(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+
+	return list, nil
+}
+
+// FetchUsersFavorites helper function to fetch favorited shows and movies by user.
+func (c CommonLogic) FetchUsersFavorites(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	list, resp, err := client.Users.GetFavorites(
+		client.BuildCtxFromOptions(options),
+		&options.UserName,
+		&options.Type,
+		&options.SortBy,
+		&options.SortHow,
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchUsersFavorites(client, options, nextPage)
 		if err != nil {
 			return nil, err
 		}

@@ -1193,3 +1193,31 @@ func (u *UsersService) GetWatchlistComments(ctx context.Context, user *string, s
 
 	return list, resp, nil
 }
+
+// GetFavorites Returns the top 100 shows and movies a user has favorited.
+// Apps should encourage user's to add favorites so the algorithm keeps getting better.
+// API docs:https://trakt.docs.apiary.io/#reference/users/favorites/get-favorites
+func (u *UsersService) GetFavorites(ctx context.Context, user *string, strType *string, sortBy *string, sortHow *string, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/favorites/%s/%s/%s", *user, *strType, *sortBy, *sortHow)
+
+	url, err := uri.AddQuery(url, options)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch favorites url:" + url)
+	req, err := u.client.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.ExportlistItem{}
+	resp, err := u.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch favorites err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

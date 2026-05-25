@@ -894,6 +894,9 @@ func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.O
 	if len(*_usersSort) > consts.ZeroValue {
 		options.Sort = *_usersSort
 	}
+	if options.Action == consts.Favorites && options.Type == "" {
+		options.Type = consts.ActionTypeAll
+	}
 
 	options.Output = cfg.GetOutputForModule(options)
 
