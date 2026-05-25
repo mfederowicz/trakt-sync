@@ -100,6 +100,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"following":           handlers.UsersFollowingHandler{},
 		"friends":             handlers.UsersFriendsHandler{},
 		"history":             handlers.UsersHistoryHandler{},
+		"ratings":             handlers.UsersRatingsHandler{},
 		"stats":               handlers.UsersStatsHandler{},
 		"watched":             handlers.UsersWatchedHandler{},
 	}

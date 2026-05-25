@@ -217,6 +217,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	"users:history": {
 		Type: []string{"movies", "shows", "seasons", "episodes"},
 	},
+	"users:ratings": {
+		Type: []string{"movies", "shows", "seasons", "episodes", "all"},
+	},
 }
 
 // ModuleConfig represents the configuration options for all modules
@@ -872,7 +875,7 @@ func getOutputForModuleUsers(options *str.Options) string {
 			strType+"_"+strSection)
 	case consts.Settings, consts.Profile, consts.Likes, consts.FollowingRequests, consts.FollowerRequests,
 		consts.ListLikes, consts.ListItems, consts.Follow, consts.BlockedUsers, consts.Followers, consts.Following,
-		consts.Friends, consts.History:
+		consts.Friends, consts.History, consts.Ratings:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,

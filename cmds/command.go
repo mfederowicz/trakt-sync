@@ -402,6 +402,7 @@ func setOptionsDependsOnModulePeople(options str.Options) str.Options {
 }
 
 func setOptionsDependsOnModuleUsers(options str.Options) str.Options {
+	options.Rating = toIntSlice(*_rating)
 	options.Action = *_usersAction
 	options.Deny = *_usersDeny
 	options.Type = *_usersType

@@ -1629,6 +1629,40 @@ func (c CommonLogic) FetchRatings(client *internal.Client, options *str.Options,
 	return list, nil
 }
 
+// FetchUsersRatings returns user ratings filtered by type.
+func (c CommonLogic) FetchUsersRatings(client *internal.Client, options *str.Options, page int) ([]*str.RatingListItem, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	r := options.Rating.String()
+	list, resp, err := client.Users.GetRatings(
+		client.BuildCtxFromOptions(options),
+		&options.UserName,
+		&options.Type,
+		&r,
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchUsersRatings(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+
+	return list, nil
+}
+
 // UpdateHistoryListWithType helper function to update History list with new type
 func (*CommonLogic) UpdateHistoryListWithType(data []*str.ExportlistItem, strtype *string) []*str.ExportlistItem {
 	list := []*str.ExportlistItem{}

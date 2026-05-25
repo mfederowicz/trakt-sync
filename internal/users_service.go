@@ -1076,7 +1076,7 @@ func (u *UsersService) GetFriends(ctx context.Context, user *string, options *ur
 // by using the /sync/history/remove method. The action will be set to scrobble, checkin,
 // or watch.Specify a type and trakt item_id to limit the history for just that item.
 // If the item_id is valid, but there is no history, an empty array will be returned.
-// API docs:
+// API docs:https://trakt.docs.apiary.io/#reference/users/history/get-watched-history
 func (u *UsersService) GetHistory(ctx context.Context, user *string, strType *string, id *int, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 
@@ -1104,4 +1104,36 @@ func (u *UsersService) GetHistory(ctx context.Context, user *string, strType *st
 	}
 
 	return items, resp, nil
+}
+
+// GetRatings Get a user's ratings filtered by type. You can optionally filter
+// for a specific rating between 1 and 10. Send a comma separated string for
+// rating if you need multiple ratings.
+// API docs:https://trakt.docs.apiary.io/#reference/users/ratings/get-ratings
+func (u *UsersService) GetRatings(ctx context.Context, user *string, strType *string, rating *string, options *uri.ListOptions) ([]*str.RatingListItem, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/ratings/%s", *user, *strType)
+	if len(*rating) > consts.ZeroValue {
+		url = fmt.Sprintf("users/%s/ratings/%s/%s", *user, *strType, *rating)
+	}
+
+	url, err := uri.AddQuery(url, options)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch ratings url:" + url)
+	req, err := u.client.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.RatingListItem{}
+	resp, err := u.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch lists err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
 }

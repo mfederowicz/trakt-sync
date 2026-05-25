@@ -1966,6 +1966,26 @@ $ ./trakt-sync users -a history -u username -t episodes
 ```console
 $ ./trakt-sync users -a history -u username -item_id 123456
 ```
+##### Get user ratings - movies - all ratings
+```console
+$ ./trakt-sync users -a ratings -t movies
+```
+##### Get user ratings - shows - filter for specific rating from 1 to 10
+```console
+$ ./trakt-sync users -a ratings -t shows -rating 1,2,3
+```
+##### Get user ratings - seasons
+```console
+$ ./trakt-sync users -a ratings -t seasons
+```
+##### Get user ratings - episodes
+```console
+$ ./trakt-sync users -a ratings -t episodes
+```
+##### Get user ratings - all ratings
+```console
+$ ./trakt-sync users -a ratings -t all
+```
 
 ##### Fetch stats for selected user:
 ```console
