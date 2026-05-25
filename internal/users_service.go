@@ -1137,3 +1137,30 @@ func (u *UsersService) GetRatings(ctx context.Context, user *string, strType *st
 
 	return list, resp, nil
 }
+
+// GetWatchlist Returns all items in a user's watchlist filtered by type.
+// API docs:https://trakt.docs.apiary.io/#reference/users/watchlist/get-watchlist
+func (u *UsersService) GetWatchlist(ctx context.Context, user *string, types *string, sortBy *string, sortHow *string, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+	var url string
+
+	url = fmt.Sprintf("users/%s/watchlist/%s/%s/%s", *user, *types, *sortBy, *sortHow)
+	url, err := uri.AddQuery(url, options)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch watchlist url:" + url)
+	req, err := u.client.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.ExportlistItem{}
+	resp, err := u.client.Do(ctx, req, &list)
+
+	if err != nil {
+		printer.Println("fetch lists err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

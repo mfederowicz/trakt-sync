@@ -30,7 +30,6 @@ type CommonInterface interface {
 	CheckSeasonNumber(code string) (*int, *int, error)
 	CheckSortAndTypes(options *str.Options) error
 	CheckTypes(options *str.Options) error
-	ValidReason(options *str.Options) error
 	Checkin(client *internal.Client, checkin *str.Checkin, options *str.Options) (*str.Checkin, *str.Response, error)
 	Comment(client *internal.Client, comment *str.Comment, options *str.Options) (*str.Comment, *str.Response, error)
 	ConvertBytes(data []byte, options str.Options) (*str.ItemsList, error)
@@ -57,6 +56,9 @@ type CommonInterface interface {
 	FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error)
 	FetchFavorites(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchFollowRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error)
+	FetchFollowers(client *internal.Client, options *str.Options, page int) ([]*str.Follower, error)
+	FetchFollowing(client *internal.Client, options *str.Options, page int) ([]*str.Follower, error)
+	FetchFriends(client *internal.Client, options *str.Options, page int) ([]*str.Friend, error)
 	FetchHistoryList(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchList(client *internal.Client, options *str.Options) (*str.PersonalList, error)
 	FetchMovie(client *internal.Client, options *str.Options) (*str.Movie, *str.Response, error)
@@ -76,12 +78,14 @@ type CommonInterface interface {
 	FetchUsersCollaborations(client *internal.Client, options *str.Options, page int) ([]*str.PersonalList, error)
 	FetchUsersCollection(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchUsersHiddenItems(client *internal.Client, options *str.Options, page int) ([]*str.HiddenItem, error)
+	FetchUsersHistory(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchUsersLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error)
 	FetchUsersList(client *internal.Client, options *str.Options) (*str.PersonalList, *str.Response, error)
 	FetchUsersListComments(client *internal.Client, options *str.Options, page int) ([]*str.ListComment, error)
 	FetchUsersListItems(client *internal.Client, options *str.Options, page int) ([]*str.UserListItem, error)
 	FetchUsersListLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error)
 	FetchUsersNotes(client *internal.Client, options *str.Options, page int) ([]*str.NotesItem, error)
+	FetchUsersWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	GenActionTypeItemUsage(options *str.Options, items []string)
 	GenActionTypeUsage(options *str.Options, types []string)
@@ -105,11 +109,8 @@ type CommonInterface interface {
 	UsersListLike(client *internal.Client, options *str.Options) (*str.Response, error)
 	UsersRemoveHiddenItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.RemoveResult, error)
 	UsersRemoveListLike(client *internal.Client, options *str.Options) (*str.Response, error)
-	FetchFollowers(client *internal.Client, options *str.Options, page int) ([]*str.Follower, error)
-	FetchFollowing(client *internal.Client, options *str.Options, page int) ([]*str.Follower, error)
-	FetchFriends(client *internal.Client, options *str.Options, page int) ([]*str.Friend, error)
-	FetchUsersHistory(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	ValidPrivacy(options *str.Options) error
+	ValidReason(options *str.Options) error
 }
 
 // CommonLogic struct for common methods
@@ -2368,5 +2369,37 @@ func (c CommonLogic) FetchUsersHistory(client *internal.Client, options *str.Opt
 		// Append items from the next page to the current page
 		list = append(list, nextPageItems...)
 	}
+	return list, nil
+}
+
+// FetchUsersWatchlist helper function to fetch watchlist.
+func (c CommonLogic) FetchUsersWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	list, resp, err := client.Users.GetWatchlist(
+		client.BuildCtxFromOptions(options),
+		&options.UserName,
+		&options.Type,
+		&options.SortBy,
+		&options.SortHow,
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := c.FetchUsersWatchlist(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+
 	return list, nil
 }

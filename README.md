@@ -1986,6 +1986,42 @@ $ ./trakt-sync users -a ratings -t episodes
 ```console
 $ ./trakt-sync users -a ratings -t all
 ```
+##### Get user watchlist
+```console
+$ ./trakt-sync users -a watchlist -u username -t movies -sort_how asc
+```
+```console
+$ ./trakt-sync users -a watchlist -u username -t movies -sort_how des
+```
+```console
+$ ./trakt-sync users -a watchlist -u username -t movies -sort_by rank
+```
+```console
+$ ./trakt-sync users -a watchlist -u username -t movies -sort_by added
+```
+```console
+$ ./trakt-sync users -a watchlist -u username -t movies -sort_by title
+```
+```console
+$ ./trakt-sync users -a watchlist -u username -t movies -sort_by released
+```
+```console
+$ ./trakt-sync users -a watchlist -u username -t movies -sort_by runtime
+```
+```console
+$ ./trakt-sync users -a watchlist -u username -t movies -sort_by popularity
+```
+```console
+$ ./trakt-sync users -a watchlist -u username -t movies -sort_by random
+```
+```console
+$ ./trakt-sync users -a watchlist -u username -t movies -sort_by percentage
+```
+
+```console
+🔥VIP Only including imdb_rating, tmdb_rating, rt_tomatometer, rt_audience, metascore, votes,
+imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to rank.
+```
 
 ##### Fetch stats for selected user:
 ```console
