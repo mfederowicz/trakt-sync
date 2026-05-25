@@ -1276,3 +1276,34 @@ func (u *UsersService) Watching(ctx context.Context, user *string, options *uri.
 
 	return result, resp, nil
 }
+
+// Report Report a user for moderator review.
+// Send a reason and optional message with additional context.
+// A user can only have one pending report per reported user.
+// API docs:https://trakt.docs.apiary.io/#reference/users/report/report-a-user
+func (u *UsersService) Report(ctx context.Context, user *string, report *str.UserReport) (*str.UserReportResult, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/report", *user)
+	printer.Println("user report")
+	req, err := u.client.NewRequest(http.MethodPost, url, report)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.UserReportResult)
+	resp, err := u.client.Do(ctx, req, &result)
+
+	if resp.StatusCode == http.StatusBadRequest {
+		return result, resp, errors.New(*result.Message)
+	}
+
+	if resp.StatusCode == http.StatusNotFound {
+		return result, resp, errors.New(*result.Message)
+	}
+
+	if err != nil {
+		return nil, resp, errors.New(*result.Message)
+	}
+
+	return result, resp, nil
+}

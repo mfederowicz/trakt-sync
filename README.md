@@ -2122,6 +2122,28 @@ $ ./trakt-sync users -a watched -t shows -u sean --ex noseasons
 ```console
 $ ./trakt-sync users -a stats -u sean
 ```
+##### Report user:
+```console
+$ ./trakt-sync users -a report -u username -r duplicate -message "Duplicate of another list"
+```
+```console
+$ ./trakt-sync users -a report -u username -r remove -message "Should be removed from Trakt"
+```
+```console
+$ ./trakt-sync users -a report -u username -r metadata -message "Metadata is wrong (name, description, etc)"
+```
+```console
+$ ./trakt-sync users -a report -u username -r adult -message "Contains adult content"
+```
+```console
+$ ./trakt-sync users -a report -u username -r language -message "Not in English"
+```
+```console
+$ ./trakt-sync users -a report -u username -r spam -message "Spam or self-promotion"
+```
+```console
+$ ./trakt-sync users -a report -u username -r other -message "Anything else"
+```
 
 #### Watchlist
 ##### Export all movies from watchlist:
