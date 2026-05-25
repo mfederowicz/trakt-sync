@@ -1249,3 +1249,30 @@ func (u *UsersService) GetFavoritesComments(ctx context.Context, user *string, s
 
 	return list, resp, nil
 }
+
+// Watching Returns a movie or episode if the user is currently watching something.
+// If they are not, it returns no data and a 204 HTTP status code.
+// API docs:https://trakt.docs.apiary.io/#reference/users/watching/get-watching
+func (u *UsersService) Watching(ctx context.Context, user *string, options *uri.ListOptions) (*str.WatchingResult, *str.Response, error) {
+	var url string
+	url = fmt.Sprintf("users/%s/watching", *user)
+	url, err := uri.AddQuery(url, options)
+	if err != nil {
+		return nil, nil, err
+	}
+	printer.Println("fetch watching url:" + url)
+	req, err := u.client.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.WatchingResult)
+	resp, err := u.client.Do(ctx, req, &result)
+
+	if err != nil {
+		printer.Println("fetch watching err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}

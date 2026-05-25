@@ -2102,6 +2102,10 @@ $ ./trakt-sync users -a favorites_comments -u username -s rating
 ```console
 $ ./trakt-sync users -a favorites_comments -u username -s added
 ```
+##### Get user watching
+```console
+$ ./trakt-sync users -a watching -u username
+```
 
 
 ##### Fetch stats for selected user:

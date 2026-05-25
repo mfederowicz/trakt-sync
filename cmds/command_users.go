@@ -105,6 +105,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"watchlist_comments":  handlers.UsersWatchlistCommentsHandler{},
 		"favorites":           handlers.UsersFavoritesHandler{},
 		"favorites_comments":  handlers.UsersFavoritesCommentsHandler{},
+		"watching":            handlers.UsersWatchingHandler{},
 		"stats":               handlers.UsersStatsHandler{},
 		"watched":             handlers.UsersWatchedHandler{},
 	}
@@ -119,7 +120,8 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"add_list_items", "remove_list_items", "reorder_list_items", "update_list_item",
 		"list_comments", "list_report", "follow", "unfollow", "blocked_users",
 		"block", "unblock", "followers", "following", "friends", "history", "ratings",
-		"watchlist", "watchlist_comments", "favorites", "stats", "watched"}
+		"watchlist", "watchlist_comments", "favorites", "favorites_comments", "watching",
+		"stats", "watched"}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

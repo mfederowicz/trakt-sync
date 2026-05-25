@@ -36,6 +36,7 @@ const (
 	EmptyHistoryIDMsg            = "set historyId ie: -i 12345 from watched history"
 	EmptyIncludeReplies          = "set includeReplies ie: -include_replies true or false"
 	EmptyInternalIDMsg           = "set Trakt ID, Trakt slug, or IMDB ID Example:  ie: -i 12345 or -i tron-legacy-2010"
+	UserNotWatchingAnything      = "user not watching anything"
 	EmptyUserNameMsg             = "set User slug, Example: -u sean"
 	EmptyReasonMsg               = "set reason:  ie: -r duplicate"
 	EmptyReportMsg               = "set reason:  ie: -message \"xyz\""
