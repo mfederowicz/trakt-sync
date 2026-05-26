@@ -21,6 +21,7 @@ type Season struct {
 	UpdatedAt     *Timestamp `json:"updated_at,omitempty"`
 	WatchedAt     *Timestamp `json:"watched_at,omitempty"`
 	RatedAt       *Timestamp `json:"rated_at,omitempty"`
+	HiddenAt      *Timestamp `json:"hidden_at,omitempty"`
 	Network       *string    `json:"network,omitempty"`
 	MediaType     *string    `json:"media_type,omitempty"`
 	Resolution    *string    `json:"resolution,omitempty"`

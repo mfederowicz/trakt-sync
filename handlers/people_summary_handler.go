@@ -45,7 +45,7 @@ func (PeopleSummaryHandler) fetchSinglePerson(client *internal.Client, options *
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetSinglePerson(
 		client.BuildCtxFromOptions(options),
-		&options.InternalID,
+		&options.ID,
 		&opts,
 	)
 

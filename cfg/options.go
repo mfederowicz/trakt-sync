@@ -20,19 +20,22 @@ import (
 
 // OptionsConfig represents the configuration options for each module
 type OptionsConfig struct {
-	SearchIDType []string
-	CommentType  []string
-	SearchType   []string
-	SearchField  []string
-	Type         []string
-	Period       []string
-	Sort         []string
-	SortBy       []string
-	SortHow      []string
-	Format       []string
-	Action       []string
-	Privacy      []string
-	Rating       []int
+	SearchIDType   []string
+	IncludeReplies []string
+	CommentType    []string
+	SearchType     []string
+	SearchField    []string
+	Type           []string
+	Section        []string
+	Period         []string
+	Sort           []string
+	SortBy         []string
+	SortHow        []string
+	Format         []string
+	Action         []string
+	Privacy        []string
+	Rating         []int
+	Reason         []string
 }
 
 // SearchFieldConfig represents the configuration options for search_field depens on type
@@ -165,6 +168,79 @@ var ModuleActionConfig = map[string]OptionsConfig{
 			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
 			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
 			"watched", "collected"},
+	},
+	"users:hidden_items": {
+		Type: []string{"movie", "show", "season", "user"},
+		Section: []string{"calendar", "progress_watched", "progress_watched_reset",
+			"progress_collected", "recommendations", "comments", "dropped"},
+	},
+	"users:likes": {
+		Type: []string{"comments", "lists"},
+	},
+	"users:collection": {
+		Type: []string{"movies", "shows"},
+	},
+	"users:comments": {
+		Type:           []string{"all", "movies", "shows", "seasons", "episodes", "lists"},
+		CommentType:    []string{"all", "reviews", "shouts"},
+		IncludeReplies: []string{"true", "false", "only"},
+	},
+	"users:notes": {
+		Type: []string{"all", "movies", "shows", "seasons", "episodes", "people", "history", "collection", "ratings"},
+	},
+	"users:update_list": {
+		Privacy: []string{"private", "friends", "public"},
+		SortHow: []string{"asc", "desc"},
+		SortBy: []string{"rank", "added", "title", "released", "runtime", "popularity",
+			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
+			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
+			"watched", "collected"},
+	},
+	"users:delete_list": {
+		Privacy: []string{"private", "friends", "public"},
+	},
+	"users:list_items": {
+		Type:    []string{"movies", "shows", "seasons", "episodes", "persons"},
+		SortHow: []string{"asc", "desc"},
+		SortBy: []string{"rank", "added", "title", "released", "runtime", "popularity",
+			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
+			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
+			"watched", "collected"},
+	},
+	"users:list_comments": {
+		Type: []string{"movies", "shows", "seasons", "episodes", "persons"},
+		Sort: []string{"likes", "likes_30", "replies", "replies_30", "plays", "rating", "added"},
+	},
+	"users:list_report": {
+		Reason: []string{"duplicate", "remove", "metadata", "adult", "language", "spam", "other"},
+	},
+	"users:history": {
+		Type: []string{"movies", "shows", "seasons", "episodes"},
+	},
+	"users:ratings": {
+		Type: []string{"movies", "shows", "seasons", "episodes", "all"},
+	},
+	"users:watchlist": {
+		Type:    []string{"movies", "shows", "seasons", "episodes", "all"},
+		SortHow: []string{"asc", "desc"},
+		SortBy: []string{"rank", "added", "title", "released", "runtime", "popularity",
+			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
+			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
+			"watched", "collected"},
+	},
+	"users:watchlist_comments": {
+		Sort: []string{"likes", "likes_30", "replies", "replies_30", "plays", "rating", "added"},
+	},
+	"users:favorites": {
+		Type:    []string{"movies", "shows", "seasons", "episodes", "all"},
+		SortHow: []string{"asc", "desc"},
+		SortBy: []string{"rank", "added", "title", "released", "runtime", "popularity",
+			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
+			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
+			"watched", "collected"},
+	},
+	"users:favorites_comments": {
+		Sort: []string{"likes", "likes_30", "replies", "replies_30", "plays", "rating", "added"},
 	},
 }
 
@@ -776,30 +852,53 @@ func getOutputForModuleLists(options *str.Options) string {
 
 func getOutputForModuleUsers(options *str.Options) string {
 	switch options.Action {
+	case consts.ListComments:
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat3,
+			options.Module,
+			options.Action,
+			strings.ReplaceAll(options.Sort, consts.CommaString, consts.EmptyString))
 	case consts.Watched:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
 			options.Action,
 			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
-	case consts.Stats:
+	case consts.Stats, consts.Collaborations:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
 			options.Action)
-	case consts.Lists:
+	case consts.List:
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			fmt.Sprintf(consts.StringString, "list_trakt_", options.ID),
+		)
+	case consts.Lists, consts.RemoveListItems:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
 			options.Action,
 			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
-	case consts.SavedFilters:
+	case consts.SavedFilters, consts.Collection, consts.Comments, consts.Notes:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
 			options.Action,
 			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
-	case consts.Settings:
+	case consts.HiddenItems:
+		strType := strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString)
+		strSection := strings.ReplaceAll(options.Section, consts.CommaString, consts.EmptyString)
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat3,
+			options.Module,
+			options.Action,
+			strType+"_"+strSection)
+	case consts.Settings, consts.Profile, consts.Likes, consts.FollowingRequests, consts.FollowerRequests,
+		consts.ListLikes, consts.ListItems, consts.Follow, consts.BlockedUsers, consts.Followers, consts.Following,
+		consts.Friends, consts.History, consts.Ratings, consts.Watchlist, consts.WatchlistComments, consts.Favorites,
+		consts.FavoritesComments:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,

@@ -22,6 +22,13 @@ var (
 	_configPath = flag.String("c", cfg.DefaultConfig().ConfigPath, consts.ConfigUsage)
 )
 
+func init() {
+	flag.Usage = func() {
+		cmds.HelpFunc(cmds.HelpCmd)
+	}
+	flag.Parse()
+}
+
 func main() {
 	fs := afero.NewOsFs()
 	config, err := cfg.InitConfig(fs)
@@ -47,11 +54,6 @@ func main() {
 }
 
 func handleArgs() ([]string, bool) {
-	flag.Usage = func() {
-		cmds.HelpFunc(cmds.HelpCmd)
-	}
-	flag.Parse()
-
 	if *_version {
 		printer.Println(cli.GenAppVersion())
 		return []string{}, true

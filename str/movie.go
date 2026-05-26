@@ -22,6 +22,7 @@ type Movie struct {
 	CollectedAt           *Timestamp   `json:"collected_at,omitempty"`
 	WatchedAt             *Timestamp   `json:"watched_at,omitempty"`
 	RatedAt               *Timestamp   `json:"rated_at,omitempty"`
+	HiddenAt              *Timestamp   `json:"hidden_at,omitempty"`
 	Language              *string      `json:"language,omitempty"`
 	Languages             *[]string    `json:"languages,omitempty"`
 	AvailableTranslations *[]string    `json:"available_translations,omitempty"`

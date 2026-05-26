@@ -55,6 +55,7 @@ var Avflags = map[string]bool{
 	"country":            true,
 	"days":               true,
 	"delete":             true,
+	"deny":               true,
 	"description":        true,
 	"end_at":             true,
 	"episode":            true,
@@ -63,6 +64,7 @@ var Avflags = map[string]bool{
 	"episodes":           true,
 	"ex":                 true,
 	"f":                  true,
+	"follower_request":   true,
 	"field":              true,
 	"genres":             true,
 	"godoc":              true,
@@ -80,8 +82,10 @@ var Avflags = map[string]bool{
 	"languages":          true,
 	"lists":              true,
 	"list_item_id":       true,
+	"item_id":            true,
 	"movies":             true,
 	"msg":                true,
+	"message":            true,
 	"networks":           true,
 	"notes":              true,
 	"o":                  true,
@@ -92,6 +96,7 @@ var Avflags = map[string]bool{
 	"privacy":            true,
 	"progress":           true,
 	"q":                  true,
+	"r":                  true,
 	"rating":             true,
 	"recommendations":    true,
 	"releases":           true,
@@ -100,6 +105,7 @@ var Avflags = map[string]bool{
 	"reset_at":           true,
 	"s":                  true,
 	"scrobble":           true,
+	"section":            true,
 	"search":             true,
 	"season":             true,
 	"seasons":            true,
@@ -397,7 +403,20 @@ func setOptionsDependsOnModulePeople(options str.Options) str.Options {
 }
 
 func setOptionsDependsOnModuleUsers(options str.Options) str.Options {
+	options.Rating = toIntSlice(*_rating)
 	options.Action = *_usersAction
+	options.Deny = *_usersDeny
+	options.Type = *_usersType
+	options.Section = *_usersSection
+	options.Sort = *_usersSort
+	options.Reason = *_usersReason
+	options.Msg = *_usersMessage
+	options.FollowerRequest = *_usersFollowerRequest
+	options.Delete = *_usersDelete
+	options.Privacy = *_usersPrivacy
+	options.AllowComments = *_usersAllowComments
+	options.DisplayNumbers = *_usersDisplayNumbers
+
 	return options
 }
 
@@ -738,6 +757,22 @@ func (*Command) ValidSort(options *str.Options) error {
 	return nil
 }
 
+// ValidSection check if section is valid
+func (*Command) ValidSection(options *str.Options) error {
+	// Check if the provided module exists in ModuleConfig
+	_, ok := cfg.ModuleConfig[options.Module]
+	if !ok {
+		return fmt.Errorf(consts.NotFoundConfigForModule, options.Module)
+	}
+	// Check if the provided section is valid for the selected module
+	prefix := options.Module + ":" + options.Action
+	if len(cfg.ModuleActionConfig[prefix].Section) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].Section, options.Section) {
+		return fmt.Errorf("section '%s' is not valid for module '%s' and action '%s', avaliable section:%s", options.Section, options.Module, options.Action, cfg.ModuleActionConfig[prefix].Section)
+	}
+
+	return nil
+}
+
 // ValidPeriod check if period is valid
 func (*Command) ValidPeriod(options *str.Options) error {
 	// Check if the provided module exists in ModuleConfig
@@ -768,6 +803,7 @@ func (c *Command) UpdateOptionsWithCommandFlags(options *str.Options) *str.Optio
 	options = UpdateOptionsWithCommandRecommendationsFlags(options)
 	options = UpdateOptionsWithCommandScrobbleFlags(options)
 	options = UpdateOptionsWithCommandSyncFlags(c, options)
+	options = UpdateOptionsWithCommandUsersFlags(c, options)
 	return options
 }
 
@@ -779,6 +815,92 @@ func UpdateOptionsWithCommandScrobbleFlags(options *str.Options) *str.Options {
 	if len(*_scrobbleEpisodeCode) > consts.ZeroValue {
 		options.EpisodeCode = *_scrobbleEpisodeCode
 	}
+
+	return options
+}
+
+// UpdateOptionsWithCommandUsersFlags update options depends on users command flags
+func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.Options {
+	if c.Name != consts.Users {
+		return options
+	}
+
+	if len(*_usersListID) > consts.ZeroValue {
+		options.ID = *_usersListID
+	}
+	if *_usersListItemID > consts.ZeroValue {
+		options.ListItemID = *_usersListItemID
+	}
+	if *_usersItemID > consts.ZeroValue {
+		options.ItemID = *_usersItemID
+	}
+	if len(*_usersNotes) > consts.ZeroValue {
+		options.Notes = *_usersNotes
+	}
+	if len(*_usersCommentsIncludeReplies) > consts.ZeroValue {
+		options.IncludeReplies = *_usersCommentsIncludeReplies
+	}
+
+	if len(*_usersCommentsCommentType) > consts.ZeroValue {
+		options.CommentType = *_usersCommentsCommentType
+	}
+
+	if len(*_usersItems) > consts.ZeroValue {
+		options.Items = *_usersItems
+	}
+
+	if len(*_usersAction) > consts.ZeroValue {
+		options.Action = *_usersAction
+	}
+
+	if len(*_usersType) > consts.ZeroValue {
+		options.Type = *_usersType
+	}
+
+	if len(*_usersReason) > consts.ZeroValue {
+		options.Reason = *_usersReason
+	}
+
+	if len(*_usersMessage) > consts.ZeroValue {
+		options.Msg = *_usersMessage
+	}
+	if options.Action == consts.Notes && options.Type == "" {
+		options.Type = consts.ActionTypeAll
+	}
+	if options.Action == consts.Comments && options.Type == "" {
+		options.Type = consts.ActionTypeAll
+	}
+	if options.Action == consts.Collection && options.Type == "" {
+		options.Type = consts.Movies
+	}
+	if options.Action == consts.HiddenItems && options.Type == "" {
+		options.Type = consts.Movie
+	}
+	if options.Action == consts.ListItems && options.Type == "" {
+		options.Type = consts.Movies
+	}
+	if options.Action == consts.ListComments && options.Type == "" {
+		options.Sort = consts.Likes
+	}
+	if options.Action == consts.History && options.Type == "" {
+		options.Type = consts.Movies
+	}
+	if options.Action == consts.Watchlist && options.Type == "" {
+		options.Type = consts.ActionTypeAll
+	}
+	if options.Action == consts.WatchlistComments && len(*_usersSort) == consts.ZeroValue {
+		options.Sort = consts.Likes
+	}
+	if len(*_usersSort) > consts.ZeroValue {
+		options.Sort = *_usersSort
+	}
+	if options.Action == consts.Favorites && options.Type == "" {
+		options.Type = consts.ActionTypeAll
+	}
+	if options.Action == consts.Watched && options.Type == "" {
+		options.Type = consts.Movies
+	}
+	options.Output = cfg.GetOutputForModule(options)
 
 	return options
 }

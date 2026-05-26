@@ -10,6 +10,7 @@ type NotesItem struct {
 	Season     *Season     `json:"season,omitempty"`
 	Episode    *Episode    `json:"episode,omitempty"`
 	Person     *Person     `json:"person,omitempty"`
+	Note       *Notes      `json:"note,omitempty"`
 }
 
 func (n NotesItem) String() string {

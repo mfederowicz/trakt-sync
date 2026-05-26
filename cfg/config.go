@@ -31,6 +31,9 @@ type Config struct {
 	CountSpecials     string    `toml:"count_specials"`
 	Days              int       `toml:"days"`
 	Delete            bool      `toml:"delete"`
+	Deny              bool      `toml:"deny"`
+	DisplayNumbers    bool      `toml:"display_numbers"`
+	AllowComments     bool      `toml:"allow_comments"`
 	Description       string    `toml:"description"`
 	EndAt             string    `toml:"end_at"`
 	Episode           int       `toml:"episode"`
@@ -44,6 +47,7 @@ type Config struct {
 	Hidden            string    `toml:"hidden"`
 	Hide              bool      `toml:"hide"`
 	ID                string    `toml:"id"`
+	ItemID            int       `toml:"item_id"`
 	IgnoreCollected   string    `toml:"ignore_collected"`
 	IgnoreWatchlisted string    `toml:"ignore_watchlisted"`
 	IncludeReplies    string    `toml:"include_replies"`
@@ -71,7 +75,9 @@ type Config struct {
 	RedirectURI       string    `toml:"redirect_uri"`
 	Rating            string    `toml:"rating"`
 	Remove            bool      `toml:"remove"`
+	Reason            string    `toml:"reason"`
 	Reply             string    `toml:"reply"`
+	FollowerRequest   int       `toml:"follower_request"`
 	SearchField       str.Slice `toml:"search_field"`
 	SearchIDType      string    `toml:"search_id_type"`
 	SearchType        str.Slice `toml:"search_type"`
@@ -97,6 +103,9 @@ type Config struct {
 	Type              string    `toml:"type"`
 	Undo              bool      `toml:"undo"`
 	UserName          string    `toml:"username"`
+	UsersType         string    `toml:"type"`
+	UsersSort         string    `toml:"type"`
+	UsersSection      string    `toml:"section"`
 	Verbose           bool      `toml:"verbose"`
 	WarningCode       int       `toml:"warningCode"`
 }
@@ -487,11 +496,13 @@ func parseConfig(fs afero.Fs, path string, config *Config) error {
 func DefaultConfig() *Config {
 	return &Config{
 		Action:         consts.EmptyString,
+		AllowComments:  false,
 		ClientID:       consts.EmptyString,
 		ClientSecret:   consts.EmptyString,
 		CommentType:    "all",
 		ConfigPath:     buildDefaultConfigPath(),
 		Delete:         false,
+		DisplayNumbers: true,
 		ErrorCode:      consts.ZeroValue,
 		Format:         "imdb",
 		Hide:           false,
@@ -527,12 +538,15 @@ func DefaultConfig() *Config {
 		SortBy:         "rank",
 		SortHow:        "asc",
 		Spoiler:        false,
+		Timezone:       time.UTC.String(),
 		TokenPath:      consts.EmptyString,
 		Type:           "movies",
 		UserName:       "me",
+		UsersSection:   consts.Calendar,
+		UsersType:      "",
+		UsersSort:      consts.Likes,
 		Verbose:        false,
 		WarningCode:    consts.ZeroValue,
-		Timezone:       time.UTC.String(),
 	}
 }
 

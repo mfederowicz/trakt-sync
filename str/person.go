@@ -14,8 +14,15 @@ type Person struct {
 	Gender             *string    `json:"gender,omitempty"`
 	KnownForDepartment *string    `json:"known_for_department,omitempty"`
 	UpdatedAt          *Timestamp `json:"updated_at,omitempty"`
+	CollectedAt        *Timestamp `json:"collected_at,omitempty"`
+	HiddenAt           *Timestamp `json:"hidden_at,omitempty"`
 }
 
 func (p Person) String() string {
 	return Stringify(p)
+}
+
+// UpdateCollectedData update meta data of object
+func (p *Person) UpdateCollectedData(item *ExportlistItem) {
+	p.CollectedAt = item.CollectedAt.UTC()
 }
