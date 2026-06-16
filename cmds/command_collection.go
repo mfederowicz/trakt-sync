@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -30,7 +31,7 @@ func collectionFunc(cmd *Command, _ ...string) error {
 
 	printer.Println("fetch collection lists for:" + options.UserName)
 
-	collection, err := fetchCollectionList(client, options)
+	collection, err := fetchCollectionList(client, options, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("fetch collection error:%w", err)
 	}
@@ -69,9 +70,9 @@ func init() {
 	CollectionCmd.Run = collectionFunc
 }
 
-func fetchCollectionList(client *internal.Client, options *str.Options) ([]*str.ExportlistItem, error) {
-	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	list, _, err := client.Sync.GetCollection(
+func fetchCollectionList(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	list, resp, err := client.Sync.GetCollection(
 		client.BuildCtxFromOptions(options),
 		&options.Type,
 		&opts,
@@ -81,5 +82,17 @@ func fetchCollectionList(client *internal.Client, options *str.Options) ([]*str.
 		return nil, err
 	}
 
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := fetchCollectionList(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
 	return list, nil
 }
