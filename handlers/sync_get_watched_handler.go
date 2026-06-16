@@ -4,7 +4,9 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -23,7 +25,7 @@ func (m SyncGetWatchedHandler) Handle(options *str.Options, client *internal.Cli
 	}
 
 	printer.Println("Get watched type:", options.Type)
-	items, err := m.syncGetWatchedItems(client, options)
+	items, err := m.syncGetWatchedItems(client, options, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("get watched error:%w", err)
 	}
@@ -35,15 +37,28 @@ func (m SyncGetWatchedHandler) Handle(options *str.Options, client *internal.Cli
 	return nil
 }
 
-func (SyncGetWatchedHandler) syncGetWatchedItems(client *internal.Client, options *str.Options) ([]*str.UserWatched, error) {
-	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	items, _, err := client.Sync.GetWatched(
+func (m SyncGetWatchedHandler) syncGetWatchedItems(client *internal.Client, options *str.Options, page int) ([]*str.UserWatched, error) {
+	opts := uri.ListOptions{Page: page, Limit: consts.PerPage, Extended: options.ExtendedInfo}
+	items, resp, err := client.Sync.GetWatched(
 		client.BuildCtxFromOptions(options),
 		&options.Type,
 		&opts,
 	)
 	if err != nil {
 		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := m.syncGetWatchedItems(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+		// Append items from the next page to the current page
+		items = append(items, nextPageItems...)
 	}
 
 	return items, nil

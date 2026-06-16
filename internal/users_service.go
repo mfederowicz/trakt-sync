@@ -168,6 +168,7 @@ func (u *UsersService) GetWatched(ctx context.Context, id *string, watchType *st
 		return nil, nil, err
 	}
 
+	fmt.Println("url:", url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
