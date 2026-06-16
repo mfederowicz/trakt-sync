@@ -4,6 +4,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
@@ -17,9 +18,9 @@ import (
 type SyncGetCollectionHandler struct{ common CommonLogic }
 
 // Handle to handle sync: get_collection action
-func (m SyncGetCollectionHandler) Handle(options *str.Options, client *internal.Client) error {
+func (s SyncGetCollectionHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("Get collection type:", options.Type)
-	items, err := m.syncGetCollectionItems(client, options)
+	items, err := s.syncGetCollection(client, options, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("get collection error:%w", err)
 	}
@@ -31,14 +32,9 @@ func (m SyncGetCollectionHandler) Handle(options *str.Options, client *internal.
 	return nil
 }
 
-func (SyncGetCollectionHandler) syncGetCollectionItems(client *internal.Client, options *str.Options) ([]*str.ExportlistItem, error) {
-	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-
+func (s SyncGetCollectionHandler) syncGetCollection(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	if options.Type == consts.Seasons {
-		items, _, err := client.Sync.GetCollectedSeasons(
-			client.BuildCtxFromOptions(options),
-			&opts,
-		)
+		items, err := s.syncGetCollectedSeasons(client, options, page)
 		if err != nil {
 			return nil, err
 		}
@@ -46,14 +42,68 @@ func (SyncGetCollectionHandler) syncGetCollectionItems(client *internal.Client, 
 		return items, nil
 	}
 
-	items, _, err := client.Sync.GetCollection(
+	items, err := s.syncGetCollected(client, options, page)
+	if err != nil {
+		return nil, err
+	}
+
+	return items, nil
+}
+
+func (s SyncGetCollectionHandler) syncGetCollected(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	list, resp, err := client.Sync.GetCollection(
 		client.BuildCtxFromOptions(options),
 		&options.Type,
+		&opts,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := s.syncGetCollected(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+
+	return list, nil
+}
+
+func (s SyncGetCollectionHandler) syncGetCollectedSeasons(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	list, resp, err := client.Sync.GetCollectedSeasons(
+		client.BuildCtxFromOptions(options),
 		&opts,
 	)
 	if err != nil {
 		return nil, err
 	}
 
-	return items, nil
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+
+		// Fetch items from the next page
+		nextPage := page + consts.NextPageStep
+		nextPageItems, err := s.syncGetCollectedSeasons(client, options, nextPage)
+		if err != nil {
+			return nil, err
+		}
+
+		// Append items from the next page to the current page
+		list = append(list, nextPageItems...)
+	}
+
+	return list, nil
 }
