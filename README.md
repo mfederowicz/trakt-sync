@@ -16,7 +16,7 @@ go install github.com/mfederowicz/trakt-sync@latest
 ```
 ## Configuration
 
-After install, we should create [API app](https://trakt.tv/oauth/applications/new) and save credentials in config file (`$HOME/trakt-sync.toml`):
+After install, we need [API credentials](https://docs.trakt.tv/docs/create-an-app) (Client ID and Client Secret) and save them in config file (`$HOME/trakt-sync.toml`):
 ```console
 client_id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 client_secret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
