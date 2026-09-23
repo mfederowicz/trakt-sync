@@ -22,6 +22,8 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Changed
 
+- All modules: a failed action now prints its error as `<module>/<action>: <cause>`, with a space after the colon.
+
 ### Fixed
 
 - `certifications -t movies|shows`: the "write data to:" message is printed to stdout on its own line;

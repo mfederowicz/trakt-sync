@@ -74,7 +74,7 @@ func runIDLookup(options *str.Options, client *internal.Client) error {
 
 	result, err := fetchSearchIDLookup(client, options)
 	if err != nil {
-		return fmt.Errorf("fetch "+options.Action+" search error:%w", err)
+		return fmt.Errorf("fetch %s search error: %w", options.Action, err)
 	}
 
 	if result == nil {
@@ -97,7 +97,7 @@ func runTextQuery(options *str.Options, client *internal.Client) error {
 
 	result, err := fetchSearchTextQuery(client, options, consts.DefaultPage)
 	if err != nil {
-		return fmt.Errorf("fetch "+options.Action+" search error:%s", err)
+		return fmt.Errorf("fetch %s search error: %w", options.Action, err)
 	}
 
 	if result == nil {

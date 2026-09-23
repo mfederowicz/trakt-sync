@@ -269,7 +269,7 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	options, err := cfg.SyncOptionsFromFlags(fs, c.Config, m)
 
 	if err != nil {
-		return fmt.Errorf("%s", err)
+		return err
 	}
 
 	options.Type = *_strType

@@ -60,7 +60,7 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 
 	err = handler.Handle(options, client)
 	if err != nil {
-		return fmt.Errorf(cmd.Name+"/"+options.Action+":%s", err)
+		return fmt.Errorf("%s/%s: %w", cmd.Name, options.Action, err)
 	}
 
 	return nil
