@@ -82,6 +82,7 @@ const (
 	ListComments         = "list_comments"
 	Lists                = "lists"
 	Lookup               = "lookup"
+	Media                = "media"
 	Movie                = "movie"
 	Movies               = "movies"
 	MyDvd                = "my-dvd"

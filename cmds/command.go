@@ -81,6 +81,7 @@ var Avflags = map[string]bool{
 	"language":           true,
 	"languages":          true,
 	"lists":              true,
+	"media":              true,
 	"list_item_id":       true,
 	"item_id":            true,
 	"movies":             true,
@@ -330,6 +331,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		consts.Checkin:         setOptionsDependsOnModuleCheckin(options),
 		consts.Episodes:        setOptionsDependsOnModuleEpisodes(options),
 		consts.Lists:           setOptionsDependsOnModuleLists(options),
+		consts.Media:           setOptionsDependsOnModuleMedia(options),
 		consts.Movies:          setOptionsDependsOnModuleMovies(options),
 		consts.Networks:        setOptionsDependsOnModuleNetworks(options),
 		consts.Notes:           setOptionsDependsOnModuleNotes(options),
@@ -433,6 +435,11 @@ func setOptionsDependsOnModuleNotes(options str.Options) str.Options {
 
 func setOptionsDependsOnModuleNetworks(options str.Options) str.Options {
 	options.Action = *_networksAction
+	return options
+}
+
+func setOptionsDependsOnModuleMedia(options str.Options) str.Options {
+	options.Action = *_mediaAction
 	return options
 }
 
