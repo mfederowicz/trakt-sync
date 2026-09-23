@@ -20,6 +20,14 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.15.3] - 2026-09-23
+
+### Added
+
 - `API_COVERAGE.md`: every Trakt API route from the official contract, whether trakt-sync
   implements it, and the Go method that calls it. Linked from the README.
 - Contributor and AI agent guidelines: `AGENTS.md`, `CLAUDE.md` and `.agents/rules/`.
@@ -44,4 +52,5 @@ schedule. Releases up to v1.15.2 are listed on
 - `-version` now shows the real version and commit for release binaries and `make build`
   builds, instead of `dev` / `none` or a Go pseudo-version.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.15.2...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.15.3...HEAD
+[1.15.3]: https://github.com/mfederowicz/trakt-sync/compare/v1.15.2...v1.15.3
