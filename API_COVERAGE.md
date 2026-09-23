@@ -520,4 +520,3 @@ Differences between the service code and the contract, found while building this
 | --- | --- | --- |
 | `EpisodesService.GetEpisode` | `GET episodes/{id}` | contract only has `POST /episodes/{id}/report` |
 | `SeasonsService.GetSeason` | `GET seasons/{id}` | contract only has `POST /seasons/{id}/report` |
-| `UsersService.GetUserProfile` | `GET user/me` (when no user id) | likely a typo for `users/me` |

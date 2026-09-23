@@ -75,14 +75,14 @@ func (u *UsersService) GetUsersPersonalLists(ctx context.Context, id *string) ([
 
 // GetUserProfile Get a user's profile information.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/users/profile/get-user-profile
+// API docs: https://docs.trakt.tv/reference/getusersprofile
 func (u *UsersService) GetUserProfile(ctx context.Context, id *string) (*str.UserProfile, *str.Response, error) {
 	var url string
 
 	if id != nil {
 		url = fmt.Sprintf("users/%s", *id)
 	} else {
-		url = "user/me"
+		url = "users/me"
 	}
 
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
