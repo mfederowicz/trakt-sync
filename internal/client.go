@@ -333,6 +333,7 @@ func prepareResponse(c *Client, resp *http.Response) (*str.Response, error) {
 		case *ServerError:
 			return response, e
 		case *ConflictError:
+			return response, e
 		case *ValidationError:
 			response.Errors = e.Errors
 			return response, errors.New("validation error")

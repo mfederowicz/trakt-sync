@@ -225,6 +225,7 @@ func TestDo_returnsTypedErrors(t *testing.T) {
 		{name: "401", status: http.StatusUnauthorized, as: func(err error) bool { var e *InvalidUserError; return errors.As(err, &e) }},
 		{name: "403", status: http.StatusForbidden, as: func(err error) bool { var e *ForbiddenError; return errors.As(err, &e) }},
 		{name: "404", status: http.StatusNotFound, as: func(err error) bool { var e *NotFoundError; return errors.As(err, &e) }},
+		{name: "409", status: http.StatusConflict, as: func(err error) bool { var e *ConflictError; return errors.As(err, &e) }},
 		{name: "420", status: 420, as: func(err error) bool { var e *UpgradeUserLimitsError; return errors.As(err, &e) }},
 		{name: "500", status: http.StatusInternalServerError, as: func(err error) bool { var e *ServerError; return errors.As(err, &e) }},
 	}

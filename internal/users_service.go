@@ -874,7 +874,7 @@ func (u *UsersService) ListReport(ctx context.Context, user *string, listID *str
 	resp, err := u.client.Do(ctx, req, &result)
 
 	if err != nil {
-		return nil, resp, errors.New(*result.Message)
+		return result, resp, err
 	}
 
 	return result, resp, nil
@@ -896,7 +896,7 @@ func (u *UsersService) Follow(ctx context.Context, user *string) (*str.FollowRes
 	resp, err := u.client.Do(ctx, req, &result)
 
 	if err != nil {
-		return nil, nil, err
+		return nil, resp, err
 	}
 
 	return result, resp, nil
@@ -965,7 +965,7 @@ func (u *UsersService) Block(ctx context.Context, user *string) (*str.Response, 
 	resp, err := u.client.Do(ctx, req, nil)
 
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 
 	return resp, nil
@@ -1298,6 +1298,10 @@ func (u *UsersService) Report(ctx context.Context, user *string, report *str.Use
 
 	if resp.StatusCode == http.StatusNotFound {
 		return result, resp, errors.New(*result.Message)
+	}
+
+	if resp.StatusCode == http.StatusConflict {
+		return result, resp, err
 	}
 
 	if err != nil {

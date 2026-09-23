@@ -35,6 +35,10 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Fixed
 
+- `checkin -a movie|episode`: if you are already checked in, the command now fails with the 409 error;
+  before, it exited without printing anything.
+- `users -a follow|block`: an unknown user now gives "user not found"; before, the command crashed
+  with a nil pointer panic.
 - `certifications -t movies|shows`: the "write data to:" message is printed to stdout on its own line;
   before, it went to stderr with no newline and ran into the next line of output.
 
