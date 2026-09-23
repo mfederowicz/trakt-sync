@@ -24,6 +24,9 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Fixed
 
+- `certifications -t movies|shows`: the "write data to:" message is printed to stdout on its own line;
+  before, it went to stderr with no newline and ran into the next line of output.
+
 ## [1.15.3] - 2026-09-23
 
 ### Added

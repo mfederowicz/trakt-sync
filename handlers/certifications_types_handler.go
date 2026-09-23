@@ -15,18 +15,21 @@ import (
 // CertificationsTypesHandler interface to handle certifications types
 type CertificationsTypesHandler struct{}
 
-// Handle to handle calendars: shows action
+// Handle to handle certifications: movies and shows types
 func (CertificationsTypesHandler) Handle(options *str.Options, client *internal.Client) error {
 	printer.Println("certifications handler:" + options.Type)
 
 	certifications, _, err := fetchCertifications(client, options)
 	if err != nil {
-		return fmt.Errorf("fetch certifications error:%w", err)
+		return fmt.Errorf("fetch certifications error: %w", err)
 	}
 
 	printer.Print("Found " + options.Type + " data \n")
-	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(certifications, consts.EmptyString, consts.JSONDataFormat)
+	printer.Println("write data to:" + options.Output)
+	jsonData, err := json.MarshalIndent(certifications, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("marshal certifications error: %w", err)
+	}
 
 	writer.WriteJSON(options, jsonData)
 	return nil
