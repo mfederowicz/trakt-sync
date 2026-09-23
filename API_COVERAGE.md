@@ -13,7 +13,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 | Domain | ✅ | 🟡 | ⬜ | Total |
 | --- | ---: | ---: | ---: | ---: |
-| [`calendars`](#calendars) | 6 | 0 | 6 | 12 |
+| [`calendars`](#calendars) | 12 | 0 | 0 | 12 |
 | [`certifications`](#certifications) | 3 | 0 | 0 | 3 |
 | [`checkin`](#checkin) | 2 | 0 | 0 | 2 |
 | [`comments`](#comments) | 13 | 0 | 5 | 18 |
@@ -40,24 +40,24 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 51 | 9 | 44 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 5 |
-| **Total** | **209** | **13** | **113** | **335** |
+| **Total** | **215** | **13** | **107** | **335** |
 
 ## calendars
 
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
-| ⬜ | GET | `/calendars/releases/hot/finales/{start_date}/{days}` | Get hot finales |  |
-| ⬜ | GET | `/calendars/releases/hot/new/{start_date}/{days}` | Get hot new shows |  |
-| ⬜ | GET | `/calendars/releases/hot/premieres/{start_date}/{days}` | Get hot premieres |  |
-| ⬜ | GET | `/calendars/releases/hot/{start_date}/{days}` | Get hot releases |  |
+| ✅ | GET | `/calendars/releases/hot/finales/{start_date}/{days}` | Get hot finales | `CalendarsService.GetHotFinales` |
+| ✅ | GET | `/calendars/releases/hot/new/{start_date}/{days}` | Get hot new shows | `CalendarsService.GetHotNewShows` |
+| ✅ | GET | `/calendars/releases/hot/premieres/{start_date}/{days}` | Get hot premieres | `CalendarsService.GetHotPremieres` |
+| ✅ | GET | `/calendars/releases/hot/{start_date}/{days}` | Get hot releases | `CalendarsService.GetHotReleases` |
 | ✅ | GET | `/calendars/{target}/dvd/{start_date}/{days}` | Get DVD releases | `CalendarsService.GetDVDReleases` |
-| ⬜ | GET | `/calendars/{target}/media/{start_date}/{days}` | Get media |  |
+| ✅ | GET | `/calendars/{target}/media/{start_date}/{days}` | Get media | `CalendarsService.GetMedia` |
 | ✅ | GET | `/calendars/{target}/movies/{start_date}/{days}` | Get movies | `CalendarsService.GetMovies` |
 | ✅ | GET | `/calendars/{target}/shows/finales/{start_date}/{days}` | Get finales | `CalendarsService.GetFinales` |
 | ✅ | GET | `/calendars/{target}/shows/new/{start_date}/{days}` | Get new shows | `CalendarsService.GetNewShows` |
 | ✅ | GET | `/calendars/{target}/shows/premieres/{start_date}/{days}` | Get season premieres | `CalendarsService.GetSeasonPremieres` |
 | ✅ | GET | `/calendars/{target}/shows/{start_date}/{days}` | Get shows | `CalendarsService.GetShows` |
-| ⬜ | GET | `/calendars/{target}/streaming/{start_date}/{days}` | Get streaming releases |  |
+| ✅ | GET | `/calendars/{target}/streaming/{start_date}/{days}` | Get streaming releases | `CalendarsService.GetStreamingReleases` |
 
 ## certifications
 

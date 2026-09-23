@@ -184,3 +184,71 @@ func (c *CalendarsService) GetFinales(ctx context.Context, actionType *string, s
 
 	return list, resp, nil
 }
+
+// GetMedia Returns all movies and shows releasing during the time period specified.
+//
+// API docs: https://docs.trakt.tv/reference/getcalendarsmedia
+func (c *CalendarsService) GetMedia(ctx context.Context, actionType *string, startDate *string, days *int, opts *uri.ListOptions) ([]*str.CalendarList, *str.Response, error) {
+	var url = fmt.Sprintf("calendars/%s/media/%s/%d", *actionType, *startDate, *days)
+	return c.fetchCalendarList(ctx, url, opts)
+}
+
+// GetStreamingReleases Returns all movies with a streaming release date during the time period specified.
+//
+// API docs: https://docs.trakt.tv/reference/getcalendarsstreaming
+func (c *CalendarsService) GetStreamingReleases(ctx context.Context, actionType *string, startDate *string, days *int, opts *uri.ListOptions) ([]*str.CalendarList, *str.Response, error) {
+	var url = fmt.Sprintf("calendars/%s/streaming/%s/%d", *actionType, *startDate, *days)
+	return c.fetchCalendarList(ctx, url, opts)
+}
+
+// GetHotReleases Returns hot movies and shows releasing during the time period specified.
+//
+// API docs: https://docs.trakt.tv/reference/getcalendarsreleaseshot
+func (c *CalendarsService) GetHotReleases(ctx context.Context, startDate *string, days *int, opts *uri.ListOptions) ([]*str.CalendarList, *str.Response, error) {
+	var url = fmt.Sprintf("calendars/releases/hot/%s/%d", *startDate, *days)
+	return c.fetchCalendarList(ctx, url, opts)
+}
+
+// GetHotPremieres Returns hot show premieres airing during the time period specified.
+//
+// API docs: https://docs.trakt.tv/reference/getcalendarsreleaseshotpremieres
+func (c *CalendarsService) GetHotPremieres(ctx context.Context, startDate *string, days *int, opts *uri.ListOptions) ([]*str.CalendarList, *str.Response, error) {
+	var url = fmt.Sprintf("calendars/releases/hot/premieres/%s/%d", *startDate, *days)
+	return c.fetchCalendarList(ctx, url, opts)
+}
+
+// GetHotNewShows Returns hot new shows premiering during the time period specified.
+//
+// API docs: https://docs.trakt.tv/reference/getcalendarsreleaseshotnew
+func (c *CalendarsService) GetHotNewShows(ctx context.Context, startDate *string, days *int, opts *uri.ListOptions) ([]*str.CalendarList, *str.Response, error) {
+	var url = fmt.Sprintf("calendars/releases/hot/new/%s/%d", *startDate, *days)
+	return c.fetchCalendarList(ctx, url, opts)
+}
+
+// GetHotFinales Returns hot show finales airing during the time period specified.
+//
+// API docs: https://docs.trakt.tv/reference/getcalendarsreleaseshotfinales
+func (c *CalendarsService) GetHotFinales(ctx context.Context, startDate *string, days *int, opts *uri.ListOptions) ([]*str.CalendarList, *str.Response, error) {
+	var url = fmt.Sprintf("calendars/releases/hot/finales/%s/%d", *startDate, *days)
+	return c.fetchCalendarList(ctx, url, opts)
+}
+
+func (c *CalendarsService) fetchCalendarList(ctx context.Context, url string, opts *uri.ListOptions) ([]*str.CalendarList, *str.Response, error) {
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := c.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.CalendarList{}
+	resp, err := c.client.Do(ctx, req, &list)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
