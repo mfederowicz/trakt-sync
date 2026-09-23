@@ -6,6 +6,7 @@
   - [Usage](#usage)
     - [Command Line Flags](#command-line-flags)
     - [Command Line Commands](#command-line-commands)
+  - [API documentation](#api-documentation)
   - [License](#license)
 
 <!-- /TOC -->
@@ -16,7 +17,7 @@ go install github.com/mfederowicz/trakt-sync@latest
 ```
 ## Configuration
 
-After install, we need [API credentials](https://docs.trakt.tv/docs/create-an-app) (Client ID and Client Secret) and save them in config file (`$HOME/trakt-sync.toml`):
+After install, we need API credentials (Client ID and Client Secret). Create a new API app in the [Trakt developer portal](https://developer.trakt.tv/apps/new) (a verified GitHub account is required) and save them in config file (`$HOME/trakt-sync.toml`):
 ```console
 client_id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 client_secret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
@@ -50,6 +51,7 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 - [`comments`](./docs/comments.md) - Comments comments,comment,replies,item,likes,like,trending,recent,updates.
 - [`collection`](./docs/collection.md) - Get all collected items in a user's collection.
 - [`countries`](./docs/countries.md) - Get a list of all countries, including names and codes.
+- [`episodes`](./docs/episodes.md) - Returns data about episodes: summary, season, episodes, translations, comments etc...
 - [`genres`](./docs/genres.md) - Get a list of all genres, including names and slugs.
 - `help` - Help on the trakt-sync command and subcommands.
 - [`history`](./docs/history.md) - Returns movies and episodes that a user has watched, sorted by most recent.
@@ -67,6 +69,11 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 - [`sync`](./docs/sync.md) - Sync data useful for mediacenters: activities, playbacks, collections, ratings, watchlists, favorites.
 - [`users`](./docs/users.md) - Returns all data for a user.
 - [`watchlist`](./docs/watchlist.md) - Returns all items in a user's watchlist filtered by type.
+
+## API documentation
+
+- [Trakt developer portal](https://developer.trakt.tv) - official guides (authentication, pagination, rate limiting, required headers) and management of your API apps.
+- [trakt/trakt-api](https://github.com/trakt/trakt-api) - API contract used as the source of truth for this project; API announcements are published there.
 
 ## License
 
