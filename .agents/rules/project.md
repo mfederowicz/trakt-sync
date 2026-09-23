@@ -117,8 +117,13 @@ meaningful fix is done. There is no fixed schedule.
    and a new `[X.Y.Z]` compares the previous tag with `vX.Y.Z`.
 4. Commit the bump as `changelog: vX.Y.Z` on the current branch, usually the
    last PR before the release. There is no dedicated release branch or PR.
-5. The maintainer tags `vX.Y.Z` on `main` and publishes the release. Agents
-   never create tags, push tags or publish releases.
+5. The maintainer tags `vX.Y.Z` on `main` and pushes the tag. That runs
+   `.github/workflows/release.yaml`, where GoReleaser builds the binaries, sets
+   the version ldflags and publishes the GitHub release. Agents never create
+   tags, push tags or publish releases.
+
+Check release config changes locally with `goreleaser check` and
+`goreleaser build --snapshot --clean --single-target`. Note that `--clean` wipes `dist/`.
 
 ## Rule Files
 
