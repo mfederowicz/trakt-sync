@@ -74,6 +74,7 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 
 - [Trakt developer portal](https://developer.trakt.tv) - official guides (authentication, pagination, rate limiting, required headers) and management of your API apps.
 - [trakt/trakt-api](https://github.com/trakt/trakt-api) - API contract used as the source of truth for this project; API announcements are published there.
+- [API coverage](./API_COVERAGE.md) - which Trakt API routes trakt-sync implements, and what is still missing.
 
 ## License
 

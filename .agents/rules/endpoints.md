@@ -105,7 +105,9 @@ func (m *NetworksService) GetNetworksList(ctx context.Context, opts *uri.ListOpt
 ## 7. Docs
 
 Update `docs/<module>.md` (actions, flags, example invocations) and the
-command list in `README.md`.
+command list in `README.md`. Mark the route ✅ in `API_COVERAGE.md`, with the Go
+method, and update that domain's counts in the summary table. Pick new work
+from its ⬜ rows.
 
 ## 8. Tests
 
