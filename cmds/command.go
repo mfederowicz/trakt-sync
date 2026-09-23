@@ -99,6 +99,7 @@ var Avflags = map[string]bool{
 	"q":                  true,
 	"r":                  true,
 	"rating":             true,
+	"reaction":           true,
 	"recommendations":    true,
 	"releases":           true,
 	"remove":             true,
@@ -1078,6 +1079,18 @@ func UpdateOptionsWithCommandCommentsFlags(options *str.Options) *str.Options {
 
 	if len(*_commentsIncludeReplies) > consts.ZeroValue {
 		options.IncludeReplies = *_commentsIncludeReplies
+	}
+
+	if len(*_commentsReaction) > consts.ZeroValue {
+		options.Reaction = *_commentsReaction
+	}
+
+	if len(*_commentsReason) > consts.ZeroValue {
+		options.Reason = *_commentsReason
+	}
+
+	if len(*_commentsMessage) > consts.ZeroValue {
+		options.Msg = *_commentsMessage
 	}
 
 	return options

@@ -2,8 +2,12 @@
 package handlers
 
 import (
+	"time"
+
 	"github.com/mfederowicz/trakt-sync/consts"
+	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/uri"
 )
 
 func isMovieType(stype string) bool {
@@ -95,4 +99,27 @@ func onlyIDs[T Media](items []str.ExportlistItem) []T {
 // to store v and returns a pointer to it.
 func Ptr[T any](v T) *T {
 	return &v
+}
+
+// pageFetcher fetches one page of a paginated list.
+type pageFetcher[T any] func(opts *uri.ListOptions) ([]T, *str.Response, error)
+
+// fetchAllPages fetches a list starting at page, following pages while client.HavePages allows.
+func fetchAllPages[T any](client *internal.Client, options *str.Options, page int, fetch pageFetcher[T]) ([]T, error) {
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	list, resp, err := fetch(&opts)
+	if err != nil {
+		return nil, err
+	}
+
+	if client.HavePages(page, resp, options.PagesLimit) {
+		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		nextPageItems, err := fetchAllPages(client, options, page+consts.NextPageStep, fetch)
+		if err != nil {
+			return nil, err
+		}
+		list = append(list, nextPageItems...)
+	}
+
+	return list, nil
 }

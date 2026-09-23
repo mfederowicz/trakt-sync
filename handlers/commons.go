@@ -1040,6 +1040,16 @@ func (*CommonLogic) ValidReason(options *str.Options) error {
 	return nil
 }
 
+// ValidReaction helper function to validate reaction field depends on module and action
+func (*CommonLogic) ValidReaction(options *str.Options) error {
+	prefix := options.Module + ":" + options.Action
+	if len(cfg.ModuleActionConfig[prefix].Reaction) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.ModuleActionConfig[prefix].Reaction, options.Reaction) {
+		return fmt.Errorf("reaction '%s' is not valid for module '%s' and action '%s', avaliable reaction:%s", options.Reaction, options.Module, options.Action, cfg.ModuleActionConfig[prefix].Reaction)
+	}
+
+	return nil
+}
+
 // ValidPrivacy helper function to validate privacy field depends on module
 func (*CommonLogic) ValidPrivacy(options *str.Options) error {
 	// Check if the provided module exists in ModuleConfig

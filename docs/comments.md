@@ -38,4 +38,18 @@ $ ./trakt-sync comments -a recent -include_replies true
 ```console
 $ ./trakt-sync comments -a updates -include_replies false
 ```
-
+```console
+$ ./trakt-sync comments -a reactions -comment_id 773108 -> export_comments_reactions_773108.json
+```
+```console
+$ ./trakt-sync comments -a reactions_summary -comment_id 773108 -> export_comments_reactions_summary_773108.json
+```
+```console
+$ ./trakt-sync comments -a reaction -comment_id 773108 -reaction love
+```
+```console
+$ ./trakt-sync comments -a reaction -comment_id 773108 -reaction love -remove
+```
+```console
+$ ./trakt-sync comments -a report -comment_id 773108 -r spoilers -message "reveals the ending"
+```

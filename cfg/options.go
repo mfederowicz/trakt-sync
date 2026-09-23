@@ -36,6 +36,7 @@ type OptionsConfig struct {
 	Privacy        []string
 	Rating         []int
 	Reason         []string
+	Reaction       []string
 }
 
 // SearchFieldConfig represents the configuration options for search_field depens on type
@@ -53,6 +54,12 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	"comments:trending": {
 		Type: []string{"all", "movies", "shows", "seasons", "episodes", "lists"},
 		Sort: []string{"newest", "oldest", "likes", "replies", "highest", "lowest", "plays"},
+	},
+	"comments:reaction": {
+		Reaction: []string{"like", "dislike", "love", "laugh", "shocked", "bravo", "spoiler"},
+	},
+	"comments:report": {
+		Reason: []string{"spoilers", "language", "abusive", "spam", "bigotry", "political", "offtopic", "support", "duplicate", "too_short", "other"},
 	},
 	"comments:recent": {
 		Type: []string{"all", "movies", "shows", "seasons", "episodes", "lists"},
@@ -1056,6 +1063,18 @@ func getOutputForModuleComments(options *str.Options) string {
 			consts.DefaultOutputFormat2,
 			options.Module,
 			fmt.Sprintf(consts.StringDigit, "likes_", options.CommentID),
+		)
+	case consts.Reactions:
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			fmt.Sprintf(consts.StringDigit, "reactions_", options.CommentID),
+		)
+	case consts.ReactionsSummary:
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat2,
+			options.Module,
+			fmt.Sprintf(consts.StringDigit, "reactions_summary_", options.CommentID),
 		)
 	case "trending":
 		options.Output = fmt.Sprintf(

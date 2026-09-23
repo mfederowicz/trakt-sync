@@ -321,3 +321,94 @@ func (c *CommentsService) GetUpdatedComments(ctx context.Context, contentType *s
 
 	return list, resp, nil
 }
+
+// GetCommentReactions Returns users and reaction details for every reaction on a comment.
+//
+// API docs: https://docs.trakt.tv/reference/getcommentsreactionsall
+func (c *CommentsService) GetCommentReactions(ctx context.Context, id *int, opts *uri.ListOptions) ([]*str.CommentReaction, *str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/reactions", *id)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := c.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.CommentReaction{}
+	resp, err := c.client.Do(ctx, req, &list)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// GetCommentReactionsSummary Returns reaction totals for a comment, grouped by reaction type.
+//
+// API docs: https://docs.trakt.tv/reference/getcommentsreactionssummary
+func (c *CommentsService) GetCommentReactionsSummary(ctx context.Context, id *int) (*str.ReactionSummary, *str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/reactions/summary", *id)
+	req, err := c.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.ReactionSummary)
+	resp, err := c.client.Do(ctx, req, result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// AddCommentReaction Add a reaction to a comment.
+//
+// API docs: https://docs.trakt.tv/reference/postcommentsreactionsadd
+func (c *CommentsService) AddCommentReaction(ctx context.Context, id *int, reactionType *string) (*str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/reactions/%s", *id, *reactionType)
+	req, err := c.client.NewRequest(http.MethodPost, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.client.Do(ctx, req, nil)
+}
+
+// RemoveCommentReaction Remove a reaction from a comment.
+//
+// API docs: https://docs.trakt.tv/reference/deletecommentsreactionsremove
+func (c *CommentsService) RemoveCommentReaction(ctx context.Context, id *int, reactionType *string) (*str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/reactions/%s", *id, *reactionType)
+	req, err := c.client.NewRequest(http.MethodDelete, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.client.Do(ctx, req, nil)
+}
+
+// ReportComment Report a comment for moderator review.
+//
+// API docs: https://docs.trakt.tv/reference/postcommentsreport
+func (c *CommentsService) ReportComment(ctx context.Context, id *int, report *str.CommentReport) (*str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/report", *id)
+	req, err := c.client.NewRequest(http.MethodPost, url, report)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.client.Do(ctx, req, nil)
+	if err != nil {
+		return resp, err
+	}
+	// Client.Do does not return an error for 409, so check it here.
+	if resp.StatusCode == http.StatusConflict {
+		return resp, fmt.Errorf(consts.CommentReportPending, *id)
+	}
+
+	return resp, nil
+}
