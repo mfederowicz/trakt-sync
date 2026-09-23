@@ -709,7 +709,7 @@ func (u *UsersService) RemoveListLike(ctx context.Context, user *string, listID 
 func (u *UsersService) ListLike(ctx context.Context, user *string, listID *string) (*str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s/like", *user, *listID)
-	req, err := u.client.NewRequest(http.MethodDelete, url, nil)
+	req, err := u.client.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
 		return nil, err
 	}
