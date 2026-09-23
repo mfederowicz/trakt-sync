@@ -9,7 +9,6 @@ require (
 	github.com/stretchr/testify v1.9.0
 	github.com/wissance/stringFormatter v1.2.0
 	golang.org/x/text v0.17.0
-
 )
 
 require (
