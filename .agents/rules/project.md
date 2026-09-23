@@ -88,6 +88,38 @@ Hard limits for every contributor, human or agent. Ask before crossing one.
   `README.md`.
 - Keep examples in docs runnable against the current flags.
 
+## Changelog
+
+`CHANGELOG.md` follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
+and SemVer. The versioning rules are at the top of the file.
+
+- Every PR adds its entry under `## [Unreleased]`, in the matching `### Added` /
+  `### Changed` / `### Fixed` subsection (`### Removed`, `### Deprecated` or
+  `### Security` when needed), in the same PR as the change.
+- Write entries for CLI users: name the module/action/flag they run (e.g.
+  `users -a list_like`), say what now happens, and for a fix, what went wrong
+  before. Internal names only when there is no user-visible surface.
+- Check action and flag names against `cmds/` before writing them.
+- Changes nobody outside the repo notices (tests only, refactors, rule files) may
+  be skipped or grouped into one line.
+- Never edit a released section; a correction goes into `[Unreleased]`.
+
+### Releasing
+
+A release happens when the maintainer asks, usually after a module or a
+meaningful fix is done. There is no fixed schedule.
+
+1. Pick the version from `[Unreleased]` using the rules at the top of the file.
+2. Rename `## [Unreleased]` to `## [X.Y.Z] - YYYY-MM-DD`, drop its empty
+   subsections, and add a fresh `## [Unreleased]` with empty `Added` / `Changed`
+   / `Fixed` subsections above it.
+3. Update the compare links at the bottom: `[Unreleased]` compares `vX.Y.Z...HEAD`,
+   and a new `[X.Y.Z]` compares the previous tag with `vX.Y.Z`.
+4. Commit the bump as `changelog: vX.Y.Z` on the current branch, usually the
+   last PR before the release. There is no dedicated release branch or PR.
+5. The maintainer tags `vX.Y.Z` on `main` and publishes the release. Agents
+   never create tags, push tags or publish releases.
+
 ## Rule Files
 
 Rules live in `.agents/rules/`; `AGENTS.md` loads the core ones and `CLAUDE.md`
