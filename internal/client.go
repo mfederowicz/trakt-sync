@@ -68,6 +68,7 @@ type Client struct {
 	Search          *SearchService
 	Languages       *LanguagesService
 	Lists           *ListsService
+	Media           *MediaService
 	Movies          *MoviesService
 	Networks        *NetworksService
 	Notes           *NotesService
@@ -145,6 +146,7 @@ func (c *Client) initialize() {
 	c.Search = (*SearchService)(&c.common)
 	c.Languages = (*LanguagesService)(&c.common)
 	c.Lists = (*ListsService)(&c.common)
+	c.Media = (*MediaService)(&c.common)
 	c.Movies = (*MoviesService)(&c.common)
 	c.Networks = (*NetworksService)(&c.common)
 	c.Notes = (*NotesService)(&c.common)

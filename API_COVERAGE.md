@@ -22,7 +22,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`genres`](#genres) | 1 | 0 | 0 | 1 |
 | [`languages`](#languages) | 1 | 0 | 0 | 1 |
 | [`lists`](#lists) | 8 | 0 | 7 | 15 |
-| [`media`](#media) | 0 | 0 | 3 | 3 |
+| [`media`](#media) | 3 | 0 | 0 | 3 |
 | [`movies`](#movies) | 24 | 0 | 7 | 31 |
 | [`networks`](#networks) | 1 | 0 | 0 | 1 |
 | [`notes`](#notes) | 5 | 0 | 0 | 5 |
@@ -40,7 +40,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 51 | 9 | 44 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 5 |
-| **Total** | **215** | **13** | **107** | **335** |
+| **Total** | **218** | **13** | **104** | **335** |
 
 ## calendars
 
@@ -146,9 +146,9 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
-| ⬜ | GET | `/media/anticipated` | Get anticipated media |  |
-| ⬜ | GET | `/media/popular` | Get popular media |  |
-| ⬜ | GET | `/media/trending` | Get trending media |  |
+| ✅ | GET | `/media/anticipated` | Get anticipated media | `MediaService.GetAnticipatedMedia` |
+| ✅ | GET | `/media/popular` | Get popular media | `MediaService.GetPopularMedia` |
+| ✅ | GET | `/media/trending` | Get trending media | `MediaService.GetTrendingMedia` |
 
 ## movies
 

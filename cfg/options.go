@@ -645,6 +645,7 @@ func GetOutputForModule(options *str.Options) string {
 		consts.Episodes:        getOutputForModuleEpisodes(options),
 		consts.Users:           getOutputForModuleUsers(options),
 		consts.Lists:           getOutputForModuleLists(options),
+		consts.Media:           getOutputForModuleMedia(options),
 		consts.Movies:          getOutputForModuleMovies(options),
 		consts.Networks:        getOutputForModuleNetworks(options),
 		consts.Notes:           getOutputForModuleNotes(options),
@@ -706,6 +707,10 @@ func getOutputForModuleNetworks(options *str.Options) string {
 	}
 
 	return options.Output
+}
+
+func getOutputForModuleMedia(options *str.Options) string {
+	return fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
 }
 
 func getOutputForModuleMovies(options *str.Options) string {

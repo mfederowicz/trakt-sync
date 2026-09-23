@@ -24,6 +24,7 @@ schedule. Releases up to v1.15.2 are listed on
 - `calendars -a {my,all}-streaming`: movies with a streaming release in the selected period.
 - `calendars -a hot-releases|hot-premieres|hot-new-shows|hot-finales`: hot releases, premieres,
   new shows and finales in the selected period.
+- New `media` module: `media -a trending|popular|anticipated` exports movies and shows together in one list.
 
 ### Changed
 

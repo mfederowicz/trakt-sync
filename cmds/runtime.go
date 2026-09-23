@@ -26,6 +26,7 @@ var Commands = []*Command{
 	HistoryCmd,
 	LanguagesCmd,
 	ListsCmd,
+	MediaCmd,
 	MoviesCmd,
 	NetworksCmd,
 	NotesCmd,
