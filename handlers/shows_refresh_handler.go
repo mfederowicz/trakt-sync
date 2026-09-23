@@ -23,7 +23,10 @@ func (h ShowsRefreshHandler) Handle(options *str.Options, client *internal.Clien
 		return errors.New(consts.EmptyShowIDMsg)
 	}
 
-	resp, _ := h.refreshShow(client, options)
+	resp, err := h.refreshShow(client, options)
+	if resp == nil {
+		return fmt.Errorf("refresh show error: %w", err)
+	}
 
 	if resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found show for:%s", options.InternalID)
@@ -35,6 +38,10 @@ func (h ShowsRefreshHandler) Handle(options *str.Options, client *internal.Clien
 
 	if resp.StatusCode == http.StatusConflict {
 		return errors.New("result: show is already queued")
+	}
+
+	if err != nil {
+		return fmt.Errorf("refresh show error: %w", err)
 	}
 
 	if resp.StatusCode == http.StatusCreated {

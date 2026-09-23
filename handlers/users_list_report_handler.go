@@ -53,16 +53,20 @@ func (UsersListReportHandler) usersListReport(client *internal.Client, options *
 		&options.ID,
 		report)
 
+	if resp == nil {
+		return nil, fmt.Errorf("report error: %w", err)
+	}
+
 	if resp.StatusCode == http.StatusNotFound {
 		return nil, fmt.Errorf("list not found:%s", options.ID)
 	}
 
 	if resp.StatusCode == http.StatusBadRequest {
-		return nil, fmt.Errorf("reason error:%s", *result.Message)
+		return nil, fmt.Errorf("reason error:%s", reportMessage(result.Message, err))
 	}
 
 	if resp.StatusCode == http.StatusConflict {
-		return nil, fmt.Errorf("reason error:%s", *result.Message)
+		return nil, fmt.Errorf("reason error:%s", reportMessage(result.Message, err))
 	}
 	if err != nil {
 		return nil, fmt.Errorf("report error:%w", err)

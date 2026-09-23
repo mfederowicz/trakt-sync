@@ -23,7 +23,10 @@ func (h MoviesRefreshHandler) Handle(options *str.Options, client *internal.Clie
 		return errors.New(consts.EmptyMovieIDMsg)
 	}
 
-	resp, _ := h.refreshMovie(client, options)
+	resp, err := h.refreshMovie(client, options)
+	if resp == nil {
+		return fmt.Errorf("refresh movie error: %w", err)
+	}
 
 	if resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found movie for:%s", options.InternalID)
@@ -35,6 +38,10 @@ func (h MoviesRefreshHandler) Handle(options *str.Options, client *internal.Clie
 
 	if resp.StatusCode == http.StatusConflict {
 		return errors.New("result: movie is already queued")
+	}
+
+	if err != nil {
+		return fmt.Errorf("refresh movie error: %w", err)
 	}
 
 	if resp.StatusCode == http.StatusCreated {

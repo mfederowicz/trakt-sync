@@ -22,7 +22,10 @@ func (h PeopleRefreshHandler) Handle(options *str.Options, client *internal.Clie
 		return errors.New(consts.EmptyPersonIDMsg)
 	}
 
-	resp, _ := h.refreshPerson(client, options)
+	resp, err := h.refreshPerson(client, options)
+	if resp == nil {
+		return fmt.Errorf("refresh person error: %w", err)
+	}
 
 	if resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found person for:%s", options.ID)
@@ -34,6 +37,10 @@ func (h PeopleRefreshHandler) Handle(options *str.Options, client *internal.Clie
 
 	if resp.StatusCode == http.StatusConflict {
 		return errors.New("result: person is already queued")
+	}
+
+	if err != nil {
+		return fmt.Errorf("refresh person error: %w", err)
 	}
 
 	if resp.StatusCode == http.StatusCreated {

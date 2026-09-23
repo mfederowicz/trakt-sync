@@ -1291,21 +1291,8 @@ func (u *UsersService) Report(ctx context.Context, user *string, report *str.Use
 
 	result := new(str.UserReportResult)
 	resp, err := u.client.Do(ctx, req, &result)
-
-	if resp.StatusCode == http.StatusBadRequest {
-		return result, resp, errors.New(*result.Message)
-	}
-
-	if resp.StatusCode == http.StatusNotFound {
-		return result, resp, errors.New(*result.Message)
-	}
-
-	if resp.StatusCode == http.StatusConflict {
-		return result, resp, err
-	}
-
 	if err != nil {
-		return nil, resp, errors.New(*result.Message)
+		return result, resp, err
 	}
 
 	return result, resp, nil
