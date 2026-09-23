@@ -14,7 +14,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | Domain | ✅ | 🟡 | ⬜ | Total |
 | --- | ---: | ---: | ---: | ---: |
 | [`calendars`](#calendars) | 6 | 0 | 6 | 12 |
-| [`certifications`](#certifications) | 1 | 2 | 0 | 3 |
+| [`certifications`](#certifications) | 3 | 0 | 0 | 3 |
 | [`checkin`](#checkin) | 2 | 0 | 0 | 2 |
 | [`comments`](#comments) | 13 | 0 | 5 | 18 |
 | [`countries`](#countries) | 1 | 0 | 0 | 1 |
@@ -40,7 +40,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 51 | 9 | 44 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 5 |
-| **Total** | **207** | **15** | **113** | **335** |
+| **Total** | **209** | **13** | **113** | **335** |
 
 ## calendars
 
@@ -63,8 +63,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
-| 🟡 | GET | `/certifications/movies` | Get movie certifications | `CertificationsService.GetCertifications` |
-| 🟡 | GET | `/certifications/shows` | Get show certifications | `CertificationsService.GetCertifications` |
+| ✅ | GET | `/certifications/movies` | Get movie certifications | `CertificationsService.GetCertifications` |
+| ✅ | GET | `/certifications/shows` | Get show certifications | `CertificationsService.GetCertifications` |
 | ✅ | GET | `/certifications/{type}` | Get certifications | `CertificationsService.GetCertifications` |
 
 ## checkin
