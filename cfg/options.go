@@ -969,6 +969,42 @@ func getOutputForModuleCalendars(options *str.Options) string {
 			options.Module,
 			"dvd",
 			strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+	case consts.MyMedia, consts.AllMedia:
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat3,
+			options.Module,
+			"media",
+			strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+	case consts.MyStreaming, consts.AllStreaming:
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat3,
+			options.Module,
+			"streaming",
+			strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+	case consts.HotReleases:
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat3,
+			options.Module,
+			"hot_releases",
+			strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+	case consts.HotPremieres:
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat3,
+			options.Module,
+			"hot_premieres",
+			strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+	case consts.HotNewShows:
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat3,
+			options.Module,
+			"hot_new_shows",
+			strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
+	case consts.HotFinales:
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat3,
+			options.Module,
+			"hot_finales",
+			strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
 
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat1, options.Module)

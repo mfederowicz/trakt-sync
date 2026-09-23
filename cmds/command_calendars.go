@@ -48,11 +48,22 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 		"all-movies":           handlers.CalendarsMoviesHandler{},
 		"my-dvd":               handlers.CalendarsDvdHandler{},
 		"all-dvd":              handlers.CalendarsDvdHandler{},
+		consts.MyMedia:         handlers.CalendarsMediaHandler{},
+		consts.AllMedia:        handlers.CalendarsMediaHandler{},
+		consts.MyStreaming:     handlers.CalendarsStreamingHandler{},
+		consts.AllStreaming:    handlers.CalendarsStreamingHandler{},
+		consts.HotReleases:     handlers.CalendarsHotReleasesHandler{},
+		consts.HotPremieres:    handlers.CalendarsHotPremieresHandler{},
+		consts.HotNewShows:     handlers.CalendarsHotNewShowsHandler{},
+		consts.HotFinales:      handlers.CalendarsHotFinalesHandler{},
 	}
 
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
-	validActions = []string{"{my,all}-shows", "{my,all}-new-shows", "{my,all}-season-premieres", "{my,all}-finales", "{my,all}-movies", "{my,all}-dvd"}
+	validActions = []string{
+		"{my,all}-shows", "{my,all}-new-shows", "{my,all}-season-premieres", "{my,all}-finales", "{my,all}-movies", "{my,all}-dvd",
+		"{my,all}-media", "{my,all}-streaming", consts.HotReleases, consts.HotPremieres, consts.HotNewShows, consts.HotFinales,
+	}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

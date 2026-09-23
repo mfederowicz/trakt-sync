@@ -20,6 +20,11 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Added
 
+- `calendars -a {my,all}-media`: movies and shows releasing in the selected period.
+- `calendars -a {my,all}-streaming`: movies with a streaming release in the selected period.
+- `calendars -a hot-releases|hot-premieres|hot-new-shows|hot-finales`: hot releases, premieres,
+  new shows and finales in the selected period.
+
 ### Changed
 
 - All modules: a failed action now prints its error as `<module>/<action>: <cause>`, with a space after the colon.
