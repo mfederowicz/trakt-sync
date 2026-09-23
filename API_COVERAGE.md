@@ -16,7 +16,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`calendars`](#calendars) | 12 | 0 | 0 | 12 |
 | [`certifications`](#certifications) | 3 | 0 | 0 | 3 |
 | [`checkin`](#checkin) | 2 | 0 | 0 | 2 |
-| [`comments`](#comments) | 13 | 0 | 5 | 18 |
+| [`comments`](#comments) | 18 | 0 | 0 | 18 |
 | [`countries`](#countries) | 1 | 0 | 0 | 1 |
 | [`episodes`](#episodes) | 0 | 0 | 2 | 2 |
 | [`genres`](#genres) | 1 | 0 | 0 | 1 |
@@ -40,7 +40,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 51 | 9 | 44 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 5 |
-| **Total** | **218** | **13** | **104** | **335** |
+| **Total** | **223** | **13** | **99** | **335** |
 
 ## calendars
 
@@ -89,13 +89,13 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | POST | `/comments/{id}/like` | Like a comment | `CommentsService.LikeComment` |
 | ✅ | DELETE | `/comments/{id}/like` | Remove like on a comment | `CommentsService.RemoveLikeComment` |
 | ✅ | GET | `/comments/{id}/likes` | Get all users who liked a comment | `CommentsService.GetCommentUserLikes` |
-| ⬜ | GET | `/comments/{id}/reactions/` | Get comment reactions |  |
-| ⬜ | GET | `/comments/{id}/reactions/summary` | Get reaction summary |  |
-| ⬜ | POST | `/comments/{id}/reactions/{reaction_type}` | Add comment reaction |  |
-| ⬜ | DELETE | `/comments/{id}/reactions/{reaction_type}` | Remove comment reaction |  |
+| ✅ | GET | `/comments/{id}/reactions/` | Get comment reactions | `CommentsService.GetCommentReactions` |
+| ✅ | GET | `/comments/{id}/reactions/summary` | Get reaction summary | `CommentsService.GetCommentReactionsSummary` |
+| ✅ | POST | `/comments/{id}/reactions/{reaction_type}` | Add comment reaction | `CommentsService.AddCommentReaction` |
+| ✅ | DELETE | `/comments/{id}/reactions/{reaction_type}` | Remove comment reaction | `CommentsService.RemoveCommentReaction` |
 | ✅ | GET | `/comments/{id}/replies` | Get replies for a comment | `CommentsService.GetRepliesForComment` |
 | ✅ | POST | `/comments/{id}/replies` | Post a reply for a comment | `CommentsService.ReplyAComment` |
-| ⬜ | POST | `/comments/{id}/report` | Report a comment |  |
+| ✅ | POST | `/comments/{id}/report` | Report a comment | `CommentsService.ReportComment` |
 
 ## countries
 

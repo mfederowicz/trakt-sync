@@ -21,13 +21,16 @@ var (
 	_commentsComment        = CommentsCmd.Flag.String("comment", cfg.DefaultConfig().Comment, consts.CommentUsage)
 	_commentsCommentType    = CommentsCmd.Flag.String("comment_type", cfg.DefaultConfig().CommentType, consts.CommentTypeUsage)
 	_commentsReply          = CommentsCmd.Flag.String("reply", cfg.DefaultConfig().Reply, consts.ReplyUsage)
+	_commentsReaction       = CommentsCmd.Flag.String("reaction", cfg.DefaultConfig().Reaction, consts.ReactionUsage)
+	_commentsReason         = CommentsCmd.Flag.String("r", cfg.DefaultConfig().Reason, consts.ReasonUsage)
+	_commentsMessage        = CommentsCmd.Flag.String("message", cfg.DefaultConfig().Msg, consts.ReportMsgUsage)
 )
 
 // CommentsCmd manage all types of comments:movie, show, season, episode, or list.
 var CommentsCmd = &Command{
 	Name:    "comments",
 	Usage:   "",
-	Summary: "Comments comments,comment,replies,item,likes,like,trending,recent,updates",
+	Summary: "Comments comments,comment,replies,item,likes,like,trending,recent,updates,reactions,reactions_summary,reaction,report",
 	Help:    `comments command`,
 }
 
@@ -52,6 +55,11 @@ func commentsFunc(cmd *Command, _ ...string) error {
 		"trending": handlers.CommentsTrendingHandler{},
 		"recent":   handlers.CommentsRecentHandler{},
 		"updates":  handlers.CommentsUpdatesHandler{},
+
+		consts.Reactions:        handlers.CommentsReactionsHandler{},
+		consts.ReactionsSummary: handlers.CommentsReactionsSummaryHandler{},
+		consts.Reaction:         handlers.CommentsReactionHandler{},
+		consts.Report:           handlers.CommentsReportHandler{},
 	}
 
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
@@ -59,6 +67,7 @@ func commentsFunc(cmd *Command, _ ...string) error {
 	validActions = []string{
 		"comments", "comment", "replies", "item", "likes", "like",
 		"trending", "recent", "updates",
+		consts.Reactions, consts.ReactionsSummary, consts.Reaction, consts.Report,
 	}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)

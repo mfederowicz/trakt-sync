@@ -48,7 +48,7 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 - [`calendars`](./docs/calendars.md) - By default, the calendar will return all shows or movies for the specified time period and can be global or user specific.
 - [`certifications`](./docs/certifications.md) - Certifications list
 - [`checkin`](./docs/checkin.md) - Checkin movie,episode,show_episode,delete
-- [`comments`](./docs/comments.md) - Comments comments,comment,replies,item,likes,like,trending,recent,updates.
+- [`comments`](./docs/comments.md) - Comments comments,comment,replies,item,likes,like,trending,recent,updates,reactions,reactions_summary,reaction,report.
 - [`collection`](./docs/collection.md) - Get all collected items in a user's collection.
 - [`countries`](./docs/countries.md) - Get a list of all countries, including names and codes.
 - [`episodes`](./docs/episodes.md) - Returns data about episodes: summary, season, episodes, translations, comments etc...

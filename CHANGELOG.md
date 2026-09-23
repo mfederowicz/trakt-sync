@@ -25,6 +25,9 @@ schedule. Releases up to v1.15.2 are listed on
 - `calendars -a hot-releases|hot-premieres|hot-new-shows|hot-finales`: hot releases, premieres,
   new shows and finales in the selected period.
 - New `media` module: `media -a trending|popular|anticipated` exports movies and shows together in one list.
+- `comments -a reactions` and `comments -a reactions_summary`: export the reactions on a comment, or their totals by type.
+- `comments -a reaction -reaction <type>`: add a reaction to a comment; add `-remove` to take it back.
+- `comments -a report -r <reason> [-message "..."]`: report a comment for moderator review.
 
 ### Changed
 

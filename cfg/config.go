@@ -76,6 +76,7 @@ type Config struct {
 	Rating            string    `toml:"rating"`
 	Remove            bool      `toml:"remove"`
 	Reason            string    `toml:"reason"`
+	Reaction          string    `toml:"reaction"`
 	Reply             string    `toml:"reply"`
 	FollowerRequest   int       `toml:"follower_request"`
 	SearchField       str.Slice `toml:"search_field"`
@@ -524,6 +525,7 @@ func DefaultConfig() *Config {
 		PerPage:        consts.DefaultPerPage,
 		Privacy:        "private",
 		Progress:       consts.DefaultProgress,
+		Reaction:       consts.EmptyString,
 		RedirectURI:    consts.EmptyString,
 		Remove:         false,
 		SearchField:    []string{},

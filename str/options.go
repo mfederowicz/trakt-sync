@@ -50,6 +50,7 @@ type Options struct {
 	Remove            bool
 	Reply             string
 	Reason            string
+	Reaction          string
 	ResetAt           string
 	Rating            SliceInt
 	SearchField       Slice
