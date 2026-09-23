@@ -31,12 +31,15 @@ func (c *CommentsService) PostAComment(ctx context.Context, comment *str.Comment
 	com := new(str.Comment)
 	resp, err := c.client.Do(ctx, req, com)
 
-	if resp.StatusCode == http.StatusInternalServerError {
+	if resp != nil && resp.StatusCode == http.StatusInternalServerError {
 		return nil, nil, errors.New("500 Internal server error")
 	}
 
 	if err != nil {
-		return nil, nil, errors.Join(resp.Errors.GetComments())
+		if resp != nil && resp.Errors != nil {
+			return nil, nil, errors.Join(resp.Errors.GetComments())
+		}
+		return nil, resp, err
 	}
 
 	return com, resp, nil
@@ -55,7 +58,10 @@ func (c *CommentsService) UpdateComment(ctx context.Context, id *int, comment *s
 	com := new(str.Comment)
 	resp, err := c.client.Do(ctx, req, com)
 	if err != nil {
-		return nil, nil, errors.Join(resp.Errors.GetComments())
+		if resp != nil && resp.Errors != nil {
+			return nil, nil, errors.Join(resp.Errors.GetComments())
+		}
+		return nil, resp, err
 	}
 
 	return com, resp, nil
@@ -73,7 +79,7 @@ func (c *CommentsService) GetComment(ctx context.Context, id *int) (*str.Comment
 	result := new(str.Comment)
 	resp, err := c.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		err = fmt.Errorf(consts.CommentNotFoundWithID, *id)
 	}
 
@@ -102,7 +108,7 @@ func (c *CommentsService) GetCommentItem(ctx context.Context, id *int, opts *uri
 	result := new(str.CommentMediaItem)
 	resp, err := c.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		err = fmt.Errorf("comment item not found with commentId:%d", *id)
 	}
 
@@ -124,7 +130,7 @@ func (c *CommentsService) DeleteComment(ctx context.Context, id *int) (*str.Resp
 	}
 
 	resp, err := c.client.Do(ctx, req, nil)
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		err = fmt.Errorf(consts.CommentNotFoundWithID, *id)
 	}
 
@@ -236,7 +242,7 @@ func (c *CommentsService) ReplyAComment(ctx context.Context, id *int, reply *str
 	com := new(str.Comment)
 	resp, err := c.client.Do(ctx, req, com)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		err = fmt.Errorf(consts.CommentNotFoundWithID, *id)
 	}
 

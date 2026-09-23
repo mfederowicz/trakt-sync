@@ -27,7 +27,7 @@ func (m *RecommendationsService) HideMovieRecommendation(ctx context.Context, id
 	}
 
 	resp, err := m.client.Do(ctx, req, nil)
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		err = fmt.Errorf(consts.RecommendationNotFoundWithID, *id)
 	}
 
@@ -49,7 +49,7 @@ func (m *RecommendationsService) HideShowRecommendation(ctx context.Context, id 
 	}
 
 	resp, err := m.client.Do(ctx, req, nil)
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		err = fmt.Errorf(consts.RecommendationNotFoundWithID, *id)
 	}
 

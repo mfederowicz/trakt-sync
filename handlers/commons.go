@@ -2226,7 +2226,7 @@ func (c CommonLogic) FetchUsersListComments(client *internal.Client, options *st
 		&opts,
 	)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, fmt.Errorf("comments not found for:%s", listID)
 	}
 	if err != nil {

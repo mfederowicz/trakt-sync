@@ -35,11 +35,10 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Fixed
 
-- Fewer nil pointer panics when a request fails before Trakt answers (no network, DNS, timeout): the
-  command now prints the error. Fixed in the shared client and in `checkin -a delete`,
-  `comments -a like`, `lists -a like|list`, `movies|people|shows -a refresh` and
-  `users -a list|update_list|report|list_report`. Some commands can still panic in this case; they
-  will be fixed separately.
+- Nil pointer panics when a request fails before Trakt answers (no network, DNS, timeout) are fixed in
+  the shared client, the API services and the command handlers; the command now prints the error.
+- Posting a comment or a note: an error other than a validation error (for example 401) now shows the
+  HTTP error; before, the command crashed with a nil pointer panic.
 - `lists -a list` and `users -a list`: a 500 from Trakt now gives an error instead of a panic.
 - `users -a report|list_report`: a 400 or 409 response without a `message` no longer panics.
 - `checkin -a movie|episode`: if you are already checked in, the command now fails with the 409 error;

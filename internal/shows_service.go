@@ -33,7 +33,7 @@ func (s *ShowsService) GetShow(ctx context.Context, id *string, opts *uri.ListOp
 	result := new(str.Show)
 	resp, err := s.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		err = fmt.Errorf("show not found with traktId:%s", *id)
 	}
 
@@ -315,7 +315,7 @@ func (s *ShowsService) GetAllShowAliases(ctx context.Context, id *string) ([]*st
 	list := []*str.Alias{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found aliases for id/slug:%s", *id)
 	}
 
@@ -340,11 +340,11 @@ func (s *ShowsService) GetAllShowCertifications(ctx context.Context, id *string)
 	list := []*str.Certification{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found certifications for id/slug:%s", *id)
 	}
 
-	if resp.StatusCode == http.StatusInternalServerError {
+	if resp != nil && resp.StatusCode == http.StatusInternalServerError {
 		return nil, nil, fmt.Errorf("fetch certifications: internal server error for id/slug:%s", *id)
 	}
 
@@ -375,7 +375,7 @@ func (s *ShowsService) GetAllShowTranslations(ctx context.Context, id *string, l
 	list := []*str.Translation{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found translations for id/slug:%s", *id)
 	}
 
@@ -406,7 +406,7 @@ func (s *ShowsService) GetAllEpisodeTranslations(ctx context.Context, id *string
 	list := []*str.Translation{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found translations for id/slug:%s", *id)
 	}
 
@@ -445,7 +445,7 @@ func (s *ShowsService) GetAllShowComments(ctx context.Context, id *string, sort 
 	list := []*str.Comment{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found comments for id/slug:%s", *id)
 	}
 
@@ -484,7 +484,7 @@ func (s *ShowsService) GetAllEpisodeComments(ctx context.Context, id *string, se
 	list := []*str.Comment{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found comments for id/slug:%s", *id)
 	}
 
@@ -522,7 +522,7 @@ func (s *ShowsService) GetListsContainingShow(ctx context.Context, id *string, t
 	list := []*str.PersonalList{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found lists for id/slug:%s", *id)
 	}
 
@@ -640,7 +640,7 @@ func (s *ShowsService) GetShowRatings(ctx context.Context, id *string) (*str.Sho
 	result := new(str.ShowRatings)
 	resp, err := s.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found ratings for id/slug:%s", *id)
 	}
 
@@ -672,7 +672,7 @@ func (s *ShowsService) GetRelatedShows(ctx context.Context, id *string, opts *ur
 	list := []*str.Show{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found related for id/slug:%s", *id)
 	}
 
@@ -696,7 +696,7 @@ func (s *ShowsService) GetShowStats(ctx context.Context, id *string) (*str.ShowS
 	result := new(str.ShowStats)
 	resp, err := s.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found stats for id/slug:%s", *id)
 	}
 
@@ -721,7 +721,7 @@ func (s *ShowsService) GetShowStudios(ctx context.Context, id *string) ([]*str.S
 	list := []*str.Studio{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found studios for id/slug:%s", *id)
 	}
 
@@ -752,7 +752,7 @@ func (s *ShowsService) GetShowWatching(ctx context.Context, id *string, opts *ur
 	list := []*str.UserProfile{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found watching for id/slug:%s", *id)
 	}
 
@@ -783,7 +783,7 @@ func (s *ShowsService) GetShowVideos(ctx context.Context, id *string, opts *uri.
 	list := []*str.Video{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found video for id/slug:%s", *id)
 	}
 
@@ -977,7 +977,7 @@ func (s *ShowsService) GetAllSeasonComments(ctx context.Context, id *string, sea
 	list := []*str.Comment{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found comments for id/slug:%s", *id)
 	}
 
@@ -1016,7 +1016,7 @@ func (s *ShowsService) GetListsContainingSeason(ctx context.Context, id *string,
 	list := []*str.PersonalList{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found lists for id/slug:%s", *id)
 	}
 
@@ -1055,7 +1055,7 @@ func (s *ShowsService) GetListsContainingEpisode(ctx context.Context, id *string
 	list := []*str.PersonalList{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found lists for id/slug:%s", *id)
 	}
 
@@ -1089,7 +1089,7 @@ func (s *ShowsService) GetAllPeopleForSeason(ctx context.Context, id *string, se
 	result := new(str.SeasonPeople)
 	resp, err := s.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found season people for id/slug:%s", *id)
 	}
 
@@ -1123,7 +1123,7 @@ func (s *ShowsService) GetAllPeopleForEpisode(ctx context.Context, id *string, s
 	result := new(str.EpisodePeople)
 	resp, err := s.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found episode people for id/slug:%s", *id)
 	}
 
@@ -1148,7 +1148,7 @@ func (s *ShowsService) GetSeasonRatings(ctx context.Context, id *string, season 
 	result := new(str.SeasonRatings)
 	resp, err := s.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found season ratings for id/slug:%s", *id)
 	}
 
@@ -1173,7 +1173,7 @@ func (s *ShowsService) GetEpisodeRatings(ctx context.Context, id *string, season
 	result := new(str.EpisodeRatings)
 	resp, err := s.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found episode ratings for id/slug:%s", *id)
 	}
 
@@ -1198,7 +1198,7 @@ func (s *ShowsService) GetSeasonStats(ctx context.Context, id *string, season *i
 	result := new(str.SeasonStats)
 	resp, err := s.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found season stats for id/slug:%s", *id)
 	}
 
@@ -1223,7 +1223,7 @@ func (s *ShowsService) GetEpisodeStats(ctx context.Context, id *string, season *
 	result := new(str.EpisodeStats)
 	resp, err := s.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found episode stats for id/slug:%s", *id)
 	}
 
@@ -1255,7 +1255,7 @@ func (s *ShowsService) GetSeasonsWatching(ctx context.Context, id *string, seaso
 	list := []*str.UserProfile{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found season watching for id/slug:%s", *id)
 	}
 
@@ -1287,7 +1287,7 @@ func (s *ShowsService) GetEpisodesWatching(ctx context.Context, id *string, seas
 	list := []*str.UserProfile{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found episodes watching for id/slug:%s", *id)
 	}
 
@@ -1319,7 +1319,7 @@ func (s *ShowsService) GetSeasonsVideos(ctx context.Context, id *string, season 
 	list := []*str.Video{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found season video for id/slug:%s", *id)
 	}
 
@@ -1351,7 +1351,7 @@ func (s *ShowsService) GetEpisodeVideos(ctx context.Context, id *string, season 
 	list := []*str.Video{}
 	resp, err := s.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found episode video for id/slug:%s", *id)
 	}
 

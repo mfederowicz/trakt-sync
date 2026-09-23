@@ -49,7 +49,7 @@ func (UsersUpdateListItemHandler) usersUpdateListItem(client *internal.Client, o
 		&options.ID,
 		&options.ListItemID,
 		item)
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, fmt.Errorf("list item not found:%d", options.ListItemID)
 	}
 

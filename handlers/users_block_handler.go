@@ -34,11 +34,11 @@ func (m UsersBlockHandler) Handle(options *str.Options, client *internal.Client)
 func (UsersBlockHandler) usersBlock(client *internal.Client, options *str.Options) (*str.Response, error) {
 	resp, err := client.Users.Block(client.BuildCtxFromOptions(options), &options.UserName)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return resp, fmt.Errorf("user not found:%s", options.UserName)
 	}
 
-	if resp.StatusCode == http.StatusConflict {
+	if resp != nil && resp.StatusCode == http.StatusConflict {
 		return resp, fmt.Errorf("block error:%s", consts.UserBlockedAlready)
 	}
 	if err != nil {

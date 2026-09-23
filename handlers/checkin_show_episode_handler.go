@@ -43,11 +43,11 @@ func (h CheckinShowEpisodeHandler) CreateCheckinForEpisodeCode(options *str.Opti
 	}
 
 	result, resp, err := h.common.Checkin(client, checkin, options)
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found episode for show:%s, season:%d, episode:%d", *checkin.Show.Title, *checkin.Episode.Season, *checkin.Episode.Number)
 	}
 
-	if resp.StatusCode == http.StatusConflict {
+	if resp != nil && resp.StatusCode == http.StatusConflict {
 		return fmt.Errorf("checkin for show:%s, season:%d, episode:%d exists, expires:%s", *checkin.Show.Title, *checkin.Episode.Season, *checkin.Episode.Number, result.Expires.Local())
 	}
 
@@ -71,11 +71,11 @@ func (h CheckinShowEpisodeHandler) CreateCheckinForEpisodeAbs(options *str.Optio
 
 	result, resp, err := h.common.Checkin(client, checkin, options)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found episode for show:%s, episode_abs:%d", *checkin.Show.Title, options.EpisodeAbs)
 	}
 
-	if resp.StatusCode == http.StatusConflict {
+	if resp != nil && resp.StatusCode == http.StatusConflict {
 		return fmt.Errorf("checkin for show:%s, episode_abs:%d exists, expires:%s", *checkin.Show.Title, options.EpisodeAbs, result.Expires.Local())
 	}
 

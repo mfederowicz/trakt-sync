@@ -30,20 +30,23 @@ func (n *NotesService) AddNotes(ctx context.Context, notes *str.Notes) (*str.Not
 	note := new(str.Notes)
 	resp, err := n.client.Do(ctx, req, note)
 
-	if resp.StatusCode == http.StatusInternalServerError {
+	if resp != nil && resp.StatusCode == http.StatusInternalServerError {
 		return nil, nil, errors.New("internal server error")
 	}
 
-	if resp.StatusCode == http.StatusUnprocessableEntity {
+	if resp != nil && resp.StatusCode == http.StatusUnprocessableEntity {
 		return nil, nil, errors.New("validation error")
 	}
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, errors.New("item not found or doesn't allow notes")
 	}
 
 	if err != nil {
-		return nil, nil, errors.Join(resp.Errors.GetComments())
+		if resp != nil && resp.Errors != nil {
+			return nil, nil, errors.Join(resp.Errors.GetComments())
+		}
+		return nil, resp, err
 	}
 
 	return note, resp, nil
@@ -62,11 +65,11 @@ func (n *NotesService) DeleteNotes(ctx context.Context, id *string) (*str.Respon
 
 	resp, err := n.client.Do(ctx, req, nil)
 
-	if resp.StatusCode == http.StatusUnauthorized {
+	if resp != nil && resp.StatusCode == http.StatusUnauthorized {
 		err = fmt.Errorf(consts.InvalidUserForNotes, *id)
 	}
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		err = fmt.Errorf(consts.NotesNotFoundWithID, *id)
 	}
 
@@ -91,7 +94,10 @@ func (n *NotesService) UpdateNotes(ctx context.Context, id *string, notes *str.N
 	note := new(str.Notes)
 	resp, err := n.client.Do(ctx, req, note)
 	if err != nil {
-		return nil, nil, errors.Join(resp.Errors.GetComments())
+		if resp != nil && resp.Errors != nil {
+			return nil, nil, errors.Join(resp.Errors.GetComments())
+		}
+		return nil, resp, err
 	}
 
 	return note, resp, nil
@@ -111,11 +117,11 @@ func (n *NotesService) GetNotes(ctx context.Context, id *string) (*str.Notes, *s
 	result := new(str.Notes)
 	resp, err := n.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusUnauthorized {
+	if resp != nil && resp.StatusCode == http.StatusUnauthorized {
 		err = fmt.Errorf(consts.InvalidUserForNotes, *id)
 	}
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		err = fmt.Errorf(consts.NotesNotFoundWithID, *id)
 	}
 
@@ -140,11 +146,11 @@ func (n *NotesService) GetNotesItem(ctx context.Context, id *string) (*str.Notes
 	result := new(str.NotesItem)
 	resp, err := n.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusUnauthorized {
+	if resp != nil && resp.StatusCode == http.StatusUnauthorized {
 		err = fmt.Errorf(consts.InvalidUserForNotes, *id)
 	}
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		err = fmt.Errorf(consts.NotesNotFoundWithID, *id)
 	}
 

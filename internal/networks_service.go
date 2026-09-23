@@ -31,7 +31,7 @@ func (m *NetworksService) GetNetworksList(ctx context.Context, opts *uri.ListOpt
 	list := []*str.TvNetwork{}
 	resp, err := m.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, errors.New("not found networks")
 	}
 

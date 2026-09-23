@@ -30,7 +30,7 @@ func (m UsersDeleteListHandler) Handle(options *str.Options, client *internal.Cl
 
 	resp, err := m.usersDeleteList(client, options)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return errors.New("personal list not found")
 	}
 
@@ -48,7 +48,7 @@ func (m UsersDeleteListHandler) Handle(options *str.Options, client *internal.Cl
 func (UsersDeleteListHandler) usersDeleteList(client *internal.Client, options *str.Options) (*str.Response, error) {
 	resp, err := client.Users.DeleteList(client.BuildCtxFromOptions(options), &options.UserName, &options.ID)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return resp, nil
 	}
 

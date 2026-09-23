@@ -26,7 +26,7 @@ func (m UsersWatchingHandler) Handle(options *str.Options, client *internal.Clie
 
 	result, resp, err := m.usersWatching(client, options)
 
-	if resp.StatusCode == http.StatusNoContent {
+	if resp != nil && resp.StatusCode == http.StatusNoContent {
 		return fmt.Errorf("watching error:%s", consts.UserNotWatchingAnything)
 	}
 
@@ -49,7 +49,7 @@ func (UsersWatchingHandler) usersWatching(client *internal.Client, options *str.
 		&opts,
 	)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, resp, fmt.Errorf("user not found:%s", options.UserName)
 	}
 	if err != nil {

@@ -555,7 +555,7 @@ func (u *UsersService) AddPersonalList(ctx context.Context, user *string, list *
 	result := new(str.PersonalList)
 	resp, err := u.client.Do(ctx, req, result)
 
-	if resp.StatusCode == 420 {
+	if resp != nil && resp.StatusCode == 420 {
 		return nil, nil, errors.New("use the /users/settings method to get all limits for a user account. In most cases, upgrading to Trakt VIP will increase the limits")
 	}
 
@@ -914,7 +914,7 @@ func (u *UsersService) Unfollow(ctx context.Context, user *string) (*str.Respons
 	}
 	resp, err := u.client.Do(ctx, req, nil)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return resp, nil
 	}
 	if err != nil {
@@ -983,7 +983,7 @@ func (u *UsersService) Unblock(ctx context.Context, user *string) (*str.Response
 	}
 	resp, err := u.client.Do(ctx, req, nil)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return resp, nil
 	}
 	if err != nil {

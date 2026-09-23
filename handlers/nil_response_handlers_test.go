@@ -32,6 +32,12 @@ func TestHandlersWithoutResponse(t *testing.T) {
 		{name: "shows refresh", handler: ShowsRefreshHandler{}, options: str.Options{InternalID: "breaking-bad"}},
 		{name: "users list", handler: UsersListHandler{}, options: str.Options{ID: "1"}},
 		{name: "users report", handler: UsersReportHandler{}, options: usersReportOptions},
+		{name: "users follow", handler: UsersFollowHandler{}, options: str.Options{UserName: "sean"}},
+		{name: "users unfollow", handler: UsersUnfollowHandler{}, options: str.Options{UserName: "sean"}},
+		{name: "users block", handler: UsersBlockHandler{}, options: str.Options{UserName: "sean"}},
+		{name: "users unblock", handler: UsersUnblockHandler{}, options: str.Options{UserName: "sean"}},
+		{name: "users watching", handler: UsersWatchingHandler{}, options: str.Options{UserName: "sean"}},
+		{name: "users delete list", handler: UsersDeleteListHandler{}, options: str.Options{UserName: "sean", ID: "1"}},
 		{name: "users list report", handler: UsersListReportHandler{}, options: usersListReportOptions},
 	}
 

@@ -25,7 +25,7 @@ func (u UsersAddListItemsHandler) Handle(options *str.Options, client *internal.
 	toList := u.common.CreateItemsToAdd(input)
 	addResult, resp, err := u.usersAddListItems(client, options, &toList)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("list:%s not found", options.ID)
 	}
 

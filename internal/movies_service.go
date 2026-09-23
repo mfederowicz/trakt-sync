@@ -32,7 +32,7 @@ func (m *MoviesService) GetMovie(ctx context.Context, id *string, opts *uri.List
 	movie := new(str.Movie)
 	resp, err := m.client.Do(ctx, req, &movie)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found movie for id/slug:%s", *id)
 	}
 
@@ -321,7 +321,7 @@ func (m *MoviesService) GetAllMovieAliases(ctx context.Context, id *string) ([]*
 	list := []*str.Alias{}
 	resp, err := m.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found aliases for id/slug:%s", *id)
 	}
 
@@ -353,7 +353,7 @@ func (m *MoviesService) GetAllMovieReleases(ctx context.Context, id *string, cou
 	list := []*str.Release{}
 	resp, err := m.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found releases for id/slug:%s", *id)
 	}
 
@@ -385,7 +385,7 @@ func (m *MoviesService) GetAllMovieTranslations(ctx context.Context, id *string,
 	list := []*str.Translation{}
 	resp, err := m.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found translations for id/slug:%s", *id)
 	}
 
@@ -425,7 +425,7 @@ func (m *MoviesService) GetAllMovieComments(ctx context.Context, id *string, sor
 	list := []*str.Comment{}
 	resp, err := m.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found comments for id/slug:%s", *id)
 	}
 
@@ -464,7 +464,7 @@ func (m *MoviesService) GetListsContainingMovie(ctx context.Context, id *string,
 	list := []*str.PersonalList{}
 	resp, err := m.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found lists for id/slug:%s", *id)
 	}
 
@@ -498,7 +498,7 @@ func (m *MoviesService) GetAllPeopleForMovie(ctx context.Context, id *string, op
 	result := new(str.MoviePeople)
 	resp, err := m.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found people for id/slug:%s", *id)
 	}
 
@@ -523,7 +523,7 @@ func (m *MoviesService) GetMovieRatings(ctx context.Context, id *string) (*str.M
 	result := new(str.MovieRatings)
 	resp, err := m.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found ratings for id/slug:%s", *id)
 	}
 
@@ -556,7 +556,7 @@ func (m *MoviesService) GetRelatedMovies(ctx context.Context, id *string, opts *
 	list := []*str.Movie{}
 	resp, err := m.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found related for id/slug:%s", *id)
 	}
 
@@ -581,7 +581,7 @@ func (m *MoviesService) GetMovieStats(ctx context.Context, id *string) (*str.Mov
 	result := new(str.MovieStats)
 	resp, err := m.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found stats for id/slug:%s", *id)
 	}
 
@@ -607,7 +607,7 @@ func (m *MoviesService) GetMovieStudios(ctx context.Context, id *string) ([]*str
 	list := []*str.Studio{}
 	resp, err := m.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found studios for id/slug:%s", *id)
 	}
 
@@ -639,7 +639,7 @@ func (m *MoviesService) GetMovieWatching(ctx context.Context, id *string, opts *
 	list := []*str.UserProfile{}
 	resp, err := m.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found watching for id/slug:%s", *id)
 	}
 
@@ -671,7 +671,7 @@ func (m *MoviesService) GetMovieVideos(ctx context.Context, id *string, opts *ur
 	list := []*str.Video{}
 	resp, err := m.client.Do(ctx, req, &list)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found video for id/slug:%s", *id)
 	}
 
