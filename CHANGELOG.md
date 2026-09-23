@@ -30,6 +30,8 @@ schedule. Releases up to v1.15.2 are listed on
 - README: API credentials are now created in the
   [Trakt developer portal](https://developer.trakt.tv/apps/new) (a verified GitHub account is
   required); new "API documentation" section; `episodes` added to the command list.
+- Releases are now built and published by GitHub Actions (GoReleaser) when a `v*` tag is
+  pushed.
 
 ### Fixed
 
@@ -39,5 +41,7 @@ schedule. Releases up to v1.15.2 are listed on
   returned your own pending requests to other users instead.
 - `users -a follower_requests` and `users -a following_requests` now send `-ex` (extended info)
   to the API; it was silently dropped.
+- `-version` now shows the real version and commit for release binaries and `make build`
+  builds, instead of `dev` / `none` or a Go pseudo-version.
 
 [Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.15.2...HEAD
