@@ -123,3 +123,14 @@ func fetchAllPages[T any](client *internal.Client, options *str.Options, page in
 
 	return list, nil
 }
+
+// reportMessage returns the API message of a failed report, or the error text when the response has no message.
+func reportMessage(message *string, err error) string {
+	if message != nil && len(*message) > consts.ZeroValue {
+		return *message
+	}
+	if err != nil {
+		return err.Error()
+	}
+	return consts.EmptyString
+}

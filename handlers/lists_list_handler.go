@@ -23,9 +23,16 @@ func (h ListsListHandler) Handle(options *str.Options, client *internal.Client) 
 		return errors.New(consts.EmptyListIDMsg)
 	}
 
-	result, resp, _ := h.fetchSingleList(client, options)
+	result, resp, err := h.fetchSingleList(client, options)
+	if resp == nil {
+		return fmt.Errorf("fetch list error: %w", err)
+	}
 	if resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found list for:%s", options.InternalID)
+	}
+
+	if err != nil {
+		return fmt.Errorf("fetch list error: %w", err)
 	}
 
 	printer.Printf("Found list for traktId:%s and name:%s \n", options.InternalID, *result.Name)

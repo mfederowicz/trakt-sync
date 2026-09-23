@@ -52,16 +52,20 @@ func (UsersReportHandler) usersReport(client *internal.Client, options *str.Opti
 		&options.UserName,
 		report)
 
+	if resp == nil {
+		return nil, fmt.Errorf("report error: %w", err)
+	}
+
 	if resp.StatusCode == http.StatusNotFound {
 		return nil, fmt.Errorf("user not found:%s", options.UserName)
 	}
 
 	if resp.StatusCode == http.StatusBadRequest {
-		return nil, fmt.Errorf("reason error:%s", *result.Message)
+		return nil, fmt.Errorf("reason error:%s", reportMessage(result.Message, err))
 	}
 
 	if resp.StatusCode == http.StatusConflict {
-		return nil, fmt.Errorf("reason error:%s", *result.Message)
+		return nil, fmt.Errorf("reason error:%s", reportMessage(result.Message, err))
 	}
 	if err != nil {
 		return nil, fmt.Errorf("report error:%w", err)

@@ -21,10 +21,17 @@ func (h CommentsLikeHandler) Handle(options *str.Options, client *internal.Clien
 		return errors.New(consts.EmptyCommentIDMsg)
 	}
 
-	resp, _ := h.likeSingleComment(client, options)
+	resp, err := h.likeSingleComment(client, options)
+	if resp == nil {
+		return fmt.Errorf("like comment error: %w", err)
+	}
 
 	if resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found comment for:%d", options.CommentID)
+	}
+
+	if err != nil {
+		return fmt.Errorf("like comment error: %w", err)
 	}
 
 	if resp.StatusCode == http.StatusNoContent {

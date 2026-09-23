@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/internal"
@@ -14,7 +15,14 @@ type CheckinDeleteHandler struct{}
 
 // Handle to handle checkin: episode action
 func (h CheckinDeleteHandler) Handle(options *str.Options, client *internal.Client) error {
-	resp, _ := h.deleteActiveCheckins(client, options)
+	resp, err := h.deleteActiveCheckins(client, options)
+	if resp == nil {
+		return fmt.Errorf("delete checkin error: %w", err)
+	}
+
+	if err != nil {
+		return fmt.Errorf("delete checkin error: %w", err)
+	}
 
 	if resp.StatusCode == http.StatusNoContent {
 		printer.Print("result: success \n")

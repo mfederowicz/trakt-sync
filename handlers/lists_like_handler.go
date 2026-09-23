@@ -21,10 +21,17 @@ func (h ListsLikeHandler) Handle(options *str.Options, client *internal.Client) 
 		return errors.New(consts.EmptyListIDMsg)
 	}
 
-	resp, _ := h.likeSingleList(client, options)
+	resp, err := h.likeSingleList(client, options)
+	if resp == nil {
+		return fmt.Errorf("like list error: %w", err)
+	}
 
 	if resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found list for:%d", options.TraktID)
+	}
+
+	if err != nil {
+		return fmt.Errorf("like list error: %w", err)
 	}
 
 	if resp.StatusCode == http.StatusNoContent {

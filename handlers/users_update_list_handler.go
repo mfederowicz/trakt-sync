@@ -31,10 +31,17 @@ func (m UsersUpdateListHandler) Handle(options *str.Options, client *internal.Cl
 		return errors.New(consts.EmptyInternalIDMsg)
 	}
 
-	list, resp, _ := m.common.FetchUsersList(client, options)
+	list, resp, err := m.common.FetchUsersList(client, options)
+	if resp == nil {
+		return fmt.Errorf("fetch list error: %w", err)
+	}
 
 	if resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found list for:%s", options.ID)
+	}
+
+	if err != nil {
+		return fmt.Errorf("fetch list error: %w", err)
 	}
 
 	printer.Println("Update personal list by sending 1 or more parameters.")

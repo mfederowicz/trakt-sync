@@ -261,3 +261,22 @@ func TestDo_returnsTypedErrors(t *testing.T) {
 		})
 	}
 }
+
+func TestDo_withoutResponseDoesNotPanic(t *testing.T) {
+	testSetup := Setup()
+	testSetup.Teardown() // closed server: the request fails before any response
+
+	req, err := testSetup.Client.NewRequest(http.MethodGet, consts.TestURL, nil)
+	if err != nil {
+		t.Fatalf(consts.ClientNewRequestFatal, err)
+	}
+
+	result := new(str.Movie)
+	resp, err := testSetup.Client.Do(context.Background(), req, result)
+	if err == nil {
+		t.Fatal("expected an error")
+	}
+	if resp != nil {
+		t.Errorf("response is %v, want nil", resp)
+	}
+}
