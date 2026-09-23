@@ -402,12 +402,12 @@ func (c *CommentsService) ReportComment(ctx context.Context, id *int, report *st
 	}
 
 	resp, err := c.client.Do(ctx, req, nil)
+	var conflict *ConflictError
+	if errors.As(err, &conflict) {
+		return resp, fmt.Errorf(consts.CommentReportPending, *id)
+	}
 	if err != nil {
 		return resp, err
-	}
-	// Client.Do does not return an error for 409, so check it here.
-	if resp.StatusCode == http.StatusConflict {
-		return resp, fmt.Errorf(consts.CommentReportPending, *id)
 	}
 
 	return resp, nil
