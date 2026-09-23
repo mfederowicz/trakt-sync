@@ -98,3 +98,34 @@ func TestUsersServiceFollowRequests(t *testing.T) {
 		})
 	}
 }
+
+func TestUsersServiceGetUserProfile(t *testing.T) {
+	tests := []struct {
+		name string
+		id   *string
+		path string
+	}{
+		{name: "given user", id: str.String("sean"), path: "/users/sean"},
+		{name: "authenticated user", id: nil, path: "/users/me"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			setup := Setup()
+			defer setup.Teardown()
+
+			setup.Mux.HandleFunc(tt.path, func(w http.ResponseWriter, r *http.Request) {
+				test.AssertMethod(t, r, http.MethodGet)
+				fmt.Fprint(w, `{"username":"sean","name":"Sean Rudford"}`)
+			})
+
+			profile, _, err := setup.Client.Users.GetUserProfile(context.Background(), tt.id)
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			if got, want := *profile.Name, "Sean Rudford"; got != want {
+				t.Errorf("name is %q, want %q", got, want)
+			}
+		})
+	}
+}
