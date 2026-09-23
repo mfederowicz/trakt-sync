@@ -3,9 +3,11 @@ package internal
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
@@ -225,4 +227,60 @@ func (l *ListsService) GetListComments(ctx context.Context, id *string, sort *st
 	}
 
 	return lists, resp, nil
+}
+
+// GetTrendingListsByType Returns trending lists of the given type, ordered by current activity.
+//
+// API docs: https://docs.trakt.tv/reference/getliststrendingbytype
+func (l *ListsService) GetTrendingListsByType(ctx context.Context, listType *string, opts *uri.ListOptions) ([]*str.List, *str.Response, error) {
+	return l.fetchLists(ctx, fmt.Sprintf("lists/trending/%s", *listType), opts)
+}
+
+// GetPopularListsByType Returns popular lists of the given type, ordered by long-term activity.
+//
+// API docs: https://docs.trakt.tv/reference/getlistspopularbytype
+func (l *ListsService) GetPopularListsByType(ctx context.Context, listType *string, opts *uri.ListOptions) ([]*str.List, *str.Response, error) {
+	return l.fetchLists(ctx, fmt.Sprintf("lists/popular/%s", *listType), opts)
+}
+
+// ReportList Report a list for moderator review.
+//
+// API docs: https://docs.trakt.tv/reference/postlistsreport
+func (l *ListsService) ReportList(ctx context.Context, id *string, report *str.ListReport) (*str.Response, error) {
+	var url = fmt.Sprintf("lists/%s/report", *id)
+	req, err := l.client.NewRequest(http.MethodPost, url, report)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := l.client.Do(ctx, req, nil)
+	var conflict *ConflictError
+	if errors.As(err, &conflict) {
+		return resp, fmt.Errorf(consts.ListReportPending, *id)
+	}
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+func (l *ListsService) fetchLists(ctx context.Context, url string, opts *uri.ListOptions) ([]*str.List, *str.Response, error) {
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := l.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.List{}
+	resp, err := l.client.Do(ctx, req, &list)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return list, resp, nil
 }

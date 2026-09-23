@@ -56,6 +56,8 @@ type ListOptions struct {
 	StartAt           string           `url:"start_at,omitempty"`
 	EndAt             string           `url:"end_at,omitempty"`
 	Rating            []string         `url:"rating,omitempty"`
+	SortBy            string           `url:"sort_by,omitempty"`
+	SortHow           string           `url:"sort_how,omitempty"`
 }
 
 // AddQuery adds query parameters to s.

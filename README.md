@@ -56,7 +56,7 @@ Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built
 - `help` - Help on the trakt-sync command and subcommands.
 - [`history`](./docs/history.md) - Returns movies and episodes that a user has watched, sorted by most recent.
 - [`languages`](./docs/languages.md) - Get a list of all laguages, including names and codes.
-- [`lists`](./docs/lists.md) - Returns data about lists: trending, popular, list, likes, like, items, comments.
+- [`lists`](./docs/lists.md) - Returns data about lists: trending, popular, list, likes, like, items, comments, report.
 - [`media`](./docs/media.md) - Returns movies and shows together: trending, popular, anticipated.
 - [`movies`](./docs/movies.md) - Returns data about movies: trending, popular, list, likes, like, items, comments etc...
 - [`networks`](./docs/networks.md) - Get a list of all TV networks

@@ -28,6 +28,10 @@ schedule. Releases up to v1.15.2 are listed on
 - `comments -a reactions` and `comments -a reactions_summary`: export the reactions on a comment, or their totals by type.
 - `comments -a reaction -reaction <type>`: add a reaction to a comment; add `-remove` to take it back.
 - `comments -a report -r <reason> [-message "..."]`: report a comment for moderator review.
+- `lists -a trending|popular -t <type>`: lists of one type. The value is sent to the API as-is; the API
+  contract does not list the allowed types.
+- `lists -a items -sort_by <field> -sort_how asc|desc`: sort list items.
+- `lists -a report -trakt_id <id> -r <reason> [-message "..."]`: report a list for moderator review.
 
 ### Changed
 
@@ -35,6 +39,10 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Fixed
 
+- `lists -a trending`: the output file name was empty, so the export was not written; it is now
+  `export_lists_trending.json`.
+- `lists -a items` without `-t`: it used the global default type `movies`, which is not a list item type;
+  it now requests all item types (`movie,show,episode,season`).
 - Nil pointer panics when a request fails before Trakt answers (no network, DNS, timeout) are fixed in
   the shared client, the API services and the command handlers; the command now prints the error.
 - Posting a comment or a note: an error other than a validation error (for example 401) now shows the

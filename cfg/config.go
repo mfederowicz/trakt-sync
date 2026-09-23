@@ -61,6 +61,7 @@ type Config struct {
 	MoviesLanguage    string    `toml:"language"`
 	MoviesPeriod      string    `toml:"period"`
 	MoviesSort        string    `toml:"sort"`
+	ListsType         string    `toml:"type"`
 	MoviesType        string    `toml:"type"`
 	Msg               string    `toml:"msg"`
 	Notes             string    `toml:"notes"`
@@ -517,6 +518,7 @@ func DefaultConfig() *Config {
 		MoviesLanguage: consts.EmptyString,
 		MoviesPeriod:   "weekly",
 		MoviesSort:     consts.EmptyString,
+		ListsType:      consts.EmptyString,
 		MoviesType:     consts.EmptyString,
 		Msg:            consts.EmptyString,
 		NotesID:        consts.ZeroValue,

@@ -527,6 +527,7 @@ func setOptionsDependsOnModuleLists(options str.Options) str.Options {
 	options.Action = *_listsAction
 	options.InternalID = selectFirstNonEmpty(*_listTraktID, *_listInternalID)
 	options.Sort = *_listSort
+	options.Type = *_listType
 	return options
 }
 
@@ -1030,6 +1031,14 @@ func UpdateOptionsWithCommandListsFlags(options *str.Options) *str.Options {
 
 	if len(*_listSort) > consts.ZeroValue {
 		options.CommentsSort = *_listSort
+	}
+
+	if len(*_listReason) > consts.ZeroValue {
+		options.Reason = *_listReason
+	}
+
+	if len(*_listMessage) > consts.ZeroValue {
+		options.Msg = *_listMessage
 	}
 	return options
 }

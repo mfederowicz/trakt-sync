@@ -218,6 +218,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 		Type: []string{"movies", "shows", "seasons", "episodes", "persons"},
 		Sort: []string{"likes", "likes_30", "replies", "replies_30", "plays", "rating", "added"},
 	},
+	"lists:report": {
+		Reason: []string{"duplicate", "remove", "metadata", "adult", "language", "spam", "other"},
+	},
 	"users:list_report": {
 		Reason: []string{"duplicate", "remove", "metadata", "adult", "language", "spam", "other"},
 	},
@@ -823,12 +826,14 @@ func getOutputForModuleCountries(options *str.Options) string {
 
 func getOutputForModuleLists(options *str.Options) string {
 	switch options.Action {
-	case consts.Trending:
-	case consts.Popular:
+	case consts.Trending, consts.Popular:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
 			options.Action)
+		if len(options.Type) > consts.ZeroValue {
+			options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.Type)
+		}
 	case consts.List:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,

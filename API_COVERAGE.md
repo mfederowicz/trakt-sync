@@ -21,7 +21,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`episodes`](#episodes) | 0 | 0 | 2 | 2 |
 | [`genres`](#genres) | 1 | 0 | 0 | 1 |
 | [`languages`](#languages) | 1 | 0 | 0 | 1 |
-| [`lists`](#lists) | 8 | 0 | 7 | 15 |
+| [`lists`](#lists) | 15 | 0 | 0 | 15 |
 | [`media`](#media) | 3 | 0 | 0 | 3 |
 | [`movies`](#movies) | 24 | 0 | 7 | 31 |
 | [`networks`](#networks) | 1 | 0 | 0 | 1 |
@@ -40,7 +40,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 51 | 9 | 44 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 5 |
-| **Total** | **223** | **13** | **99** | **335** |
+| **Total** | **230** | **13** | **92** | **335** |
 
 ## calendars
 
@@ -127,20 +127,20 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
 | ✅ | GET | `/lists/popular` | Get popular lists | `ListsService.GetPopularLists` |
-| ⬜ | GET | `/lists/popular/{type}` | Get popular lists |  |
+| ✅ | GET | `/lists/popular/{type}` | Get popular lists | `ListsService.GetPopularListsByType` |
 | ✅ | GET | `/lists/trending` | Get trending lists | `ListsService.GetTrendingLists` |
-| ⬜ | GET | `/lists/trending/{type}` | Get trending lists |  |
+| ✅ | GET | `/lists/trending/{type}` | Get trending lists | `ListsService.GetTrendingListsByType` |
 | ✅ | GET | `/lists/{id}` | Get list | `ListsService.GetList` |
 | ✅ | GET | `/lists/{id}/comments/{sort}` | Get all list comments | `ListsService.GetListComments` |
-| ⬜ | GET | `/lists/{id}/items/movie` | Get movie list items |  |
-| ⬜ | GET | `/lists/{id}/items/movie,show` | Get media list items |  |
-| ⬜ | GET | `/lists/{id}/items/movie,show,episode,season` | Get all list items |  |
-| ⬜ | GET | `/lists/{id}/items/show` | Get show list items |  |
+| ✅ | GET | `/lists/{id}/items/movie` | Get movie list items | `ListsService.GetListItems` |
+| ✅ | GET | `/lists/{id}/items/movie,show` | Get media list items | `ListsService.GetListItems` |
+| ✅ | GET | `/lists/{id}/items/movie,show,episode,season` | Get all list items | `ListsService.GetListItems` |
+| ✅ | GET | `/lists/{id}/items/show` | Get show list items | `ListsService.GetListItems` |
 | ✅ | GET | `/lists/{id}/items/{type}/{sort_by}/{sort_how}` | Get items on a list | `ListsService.GetListItems` |
 | ✅ | POST | `/lists/{id}/like` | Like a list | `ListsService.LikeList` |
 | ✅ | DELETE | `/lists/{id}/like` | Remove like on a list | `ListsService.RemoveLikeList` |
 | ✅ | GET | `/lists/{id}/likes` | Get all users who liked a list | `ListsService.GetAllUsersWhoLikedList` |
-| ⬜ | POST | `/lists/{id}/report` | Report a list |  |
+| ✅ | POST | `/lists/{id}/report` | Report a list | `ListsService.ReportList` |
 
 ## media
 
