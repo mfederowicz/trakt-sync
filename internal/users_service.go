@@ -203,15 +203,14 @@ func (u *UsersService) RetrieveSettings(ctx context.Context) (*str.UserSettings,
 }
 
 // GetPendingFollowingRequests List a user's pending following requests that they're waiting for the other user's to approve.
-// API docs:https://trakt.docs.apiary.io/#reference/users/following-requests/get-pending-following-requests
+// API docs: https://docs.trakt.tv/reference/getusersrequestsfollowing
 func (u *UsersService) GetPendingFollowingRequests(ctx context.Context, options *uri.ListOptions) ([]*str.FollowRequest, *str.Response, error) {
-	url := "users/requests/following"
-	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	url, err := uri.AddQuery("users/requests/following", options)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	url, err = uri.AddQuery(url, options)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -227,15 +226,14 @@ func (u *UsersService) GetPendingFollowingRequests(ctx context.Context, options 
 }
 
 // GetFollowRequests List a user's pending follow requests so they can either approve or deny them.
-// API docs:https://trakt.docs.apiary.io/#reference/users/follower-requests/get-follow-requests
+// API docs: https://docs.trakt.tv/reference/getusersrequestsfollow
 func (u *UsersService) GetFollowRequests(ctx context.Context, options *uri.ListOptions) ([]*str.FollowRequest, *str.Response, error) {
-	url := "users/requests/following"
-	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	url, err := uri.AddQuery("users/requests", options)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	url, err = uri.AddQuery(url, options)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
