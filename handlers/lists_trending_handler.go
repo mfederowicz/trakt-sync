@@ -43,10 +43,15 @@ func (h ListsTrendingHandler) Handle(options *str.Options, client *internal.Clie
 
 func (h ListsTrendingHandler) fetchListsTrending(client *internal.Client, options *str.Options, page int) ([]*str.List, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
-	list, resp, err := client.Lists.GetTrendingLists(
-		client.BuildCtxFromOptions(options),
-		&opts,
-	)
+	ctx := client.BuildCtxFromOptions(options)
+	var list []*str.List
+	var resp *str.Response
+	var err error
+	if len(options.Type) > consts.ZeroValue {
+		list, resp, err = client.Lists.GetTrendingListsByType(ctx, &options.Type, &opts)
+	} else {
+		list, resp, err = client.Lists.GetTrendingLists(ctx, &opts)
+	}
 
 	if err != nil {
 		return nil, err

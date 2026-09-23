@@ -80,6 +80,7 @@ const (
 	ListItems            = "list_items"
 	ListLikes            = "list_likes"
 	ListComments         = "list_comments"
+	ListItemsAll         = "movie,show,episode,season"
 	Lists                = "lists"
 	Lookup               = "lookup"
 	Media                = "media"

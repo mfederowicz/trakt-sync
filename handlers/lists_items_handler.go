@@ -45,11 +45,15 @@ func (h ListsItemsHandler) Handle(options *str.Options, client *internal.Client)
 }
 
 func (h ListsItemsHandler) fetchListItems(client *internal.Client, options *str.Options, page int) ([]*str.UserListItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, SortBy: options.SortBy, SortHow: options.SortHow}
+	itemTypes := options.Type
+	if len(itemTypes) == consts.ZeroValue {
+		itemTypes = consts.ListItemsAll
+	}
 	list, resp, err := client.Lists.GetListItems(
 		client.BuildCtxFromOptions(options),
 		&options.InternalID,
-		&options.Type,
+		&itemTypes,
 		&opts,
 	)
 

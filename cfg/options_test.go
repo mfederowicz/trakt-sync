@@ -3,6 +3,7 @@ package cfg
 import (
 	"testing"
 
+	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -32,4 +33,20 @@ func TestModuleConfigTypeUsers(t *testing.T) {
 	got := ModuleActionConfig["users:watched"].Type
 
 	assert.Equal(t, got, []string{"movies", "shows"})
+}
+
+func TestGetOutputForModuleListsTrendingPopular(t *testing.T) {
+	tests := []struct {
+		action, listType, want string
+	}{
+		{action: "trending", want: "export_lists_trending.json"},
+		{action: "popular", want: "export_lists_popular.json"},
+		{action: "trending", listType: "personal", want: "export_lists_trending_personal.json"},
+		{action: "popular", listType: "official", want: "export_lists_popular_official.json"},
+	}
+
+	for _, tt := range tests {
+		options := &str.Options{Module: "lists", Action: tt.action, Type: tt.listType}
+		assert.Equal(t, tt.want, GetOutputForModule(options))
+	}
 }

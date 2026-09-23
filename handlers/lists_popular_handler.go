@@ -43,10 +43,15 @@ func (h ListsPopularHandler) Handle(options *str.Options, client *internal.Clien
 
 func (h ListsPopularHandler) fetchListsPopular(client *internal.Client, options *str.Options, page int) ([]*str.List, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
-	list, resp, err := client.Lists.GetPopularLists(
-		client.BuildCtxFromOptions(options),
-		&opts,
-	)
+	ctx := client.BuildCtxFromOptions(options)
+	var list []*str.List
+	var resp *str.Response
+	var err error
+	if len(options.Type) > consts.ZeroValue {
+		list, resp, err = client.Lists.GetPopularListsByType(ctx, &options.Type, &opts)
+	} else {
+		list, resp, err = client.Lists.GetPopularLists(ctx, &opts)
+	}
 
 	if err != nil {
 		return nil, err
