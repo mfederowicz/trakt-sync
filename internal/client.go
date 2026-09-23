@@ -317,21 +317,21 @@ func prepareResponse(c *Client, resp *http.Response) (*str.Response, error) {
 		defer resp.Body.Close()
 		switch e := errCheck.(type) {
 		case *UpgradeUserLimitsError:
-			return response, errors.New(e.Error())
+			return response, e
 		case *AbuseRateLimitError:
 			updateRateLimitReset(c, e)
 		case *UpgradeRequiredError:
 			upgradeAccountRequired(c, e)
 		case *InvalidUserError:
-			return response, errors.New(e.Error())
+			return response, e
 		case *NotFoundError:
-			return response, errors.New(e.Error())
+			return response, e
 		case *ForbiddenError:
-			return response, errors.New(e.Error())
+			return response, e
 		case *BadRequestError:
-			return response, errors.New(e.Error())
+			return response, e
 		case *ServerError:
-			return response, errors.New(e.Error())
+			return response, e
 		case *ConflictError:
 		case *ValidationError:
 			response.Errors = e.Errors

@@ -2,6 +2,7 @@ package internal
 
 import (
 	"context"
+	"errors"
 	"io"
 	"net/http"
 	"net/url"
@@ -212,4 +213,50 @@ func TestBareDo_upgrade_required(t *testing.T) {
 	}
 	assert.Equal(t, resp.StatusCode, http.StatusUpgradeRequired)
 	assert.Equal(t, client.UpgradeURL.String(), "https://trakt.tv/vip")
+}
+
+func TestDo_returnsTypedErrors(t *testing.T) {
+	tests := []struct {
+		name   string
+		status int
+		as     func(err error) bool
+	}{
+		{name: "400", status: http.StatusBadRequest, as: func(err error) bool { var e *BadRequestError; return errors.As(err, &e) }},
+		{name: "401", status: http.StatusUnauthorized, as: func(err error) bool { var e *InvalidUserError; return errors.As(err, &e) }},
+		{name: "403", status: http.StatusForbidden, as: func(err error) bool { var e *ForbiddenError; return errors.As(err, &e) }},
+		{name: "404", status: http.StatusNotFound, as: func(err error) bool { var e *NotFoundError; return errors.As(err, &e) }},
+		{name: "420", status: 420, as: func(err error) bool { var e *UpgradeUserLimitsError; return errors.As(err, &e) }},
+		{name: "500", status: http.StatusInternalServerError, as: func(err error) bool { var e *ServerError; return errors.As(err, &e) }},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			testSetup := Setup()
+			defer testSetup.Teardown()
+
+			testSetup.Mux.HandleFunc("/"+consts.TestURL, func(w http.ResponseWriter, _ *http.Request) {
+				w.WriteHeader(tt.status)
+				test.SafeFprint(w, `{"message":"boom"}`)
+			})
+
+			req, err := testSetup.Client.NewRequest(http.MethodGet, consts.TestURL, nil)
+			if err != nil {
+				t.Fatalf(consts.ClientNewRequestFatal, err)
+			}
+
+			resp, err := testSetup.Client.Do(context.Background(), req, nil)
+			if err == nil {
+				t.Fatal("expected an error")
+			}
+			if !tt.as(err) {
+				t.Errorf("error %T is not the typed error for status %d", err, tt.status)
+			}
+			if !strings.Contains(err.Error(), "boom") {
+				t.Errorf("error %q does not carry the API message", err)
+			}
+			if resp == nil || resp.StatusCode != tt.status {
+				t.Errorf("response status is not %d", tt.status)
+			}
+		})
+	}
 }
