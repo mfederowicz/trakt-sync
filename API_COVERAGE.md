@@ -37,10 +37,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 2 |
 | [`sync`](#sync) | 25 | 4 | 8 | 37 |
 | [`team`](#team) | 0 | 0 | 1 | 1 |
-| [`users`](#users) | 49 | 9 | 46 | 104 |
+| [`users`](#users) | 50 | 9 | 45 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 5 |
-| **Total** | **205** | **15** | **115** | **335** |
+| **Total** | **206** | **15** | **114** | **335** |
 
 ## calendars
 
@@ -464,8 +464,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ⬜ | GET | `/users/{id}/lists/{list_id}/items/show` | Get show list items |  |
 | ✅ | PUT | `/users/{id}/lists/{list_id}/items/{list_item_id}` | Update a list item | `UsersService.UpdateListItem` |
 | ✅ | GET | `/users/{id}/lists/{list_id}/items/{type}/{sort_by}/{sort_how}` | Get items on a personal list | `UsersService.GetItemstOnAPersonalList`, `UsersService.GetListItems` |
-| ⬜ | POST | `/users/{id}/lists/{list_id}/like` | Like a list |  |
-| ✅ | DELETE | `/users/{id}/lists/{list_id}/like` | Remove like on a list | `UsersService.ListLike`, `UsersService.RemoveListLike` |
+| ✅ | POST | `/users/{id}/lists/{list_id}/like` | Like a list | `UsersService.ListLike` |
+| ✅ | DELETE | `/users/{id}/lists/{list_id}/like` | Remove like on a list | `UsersService.RemoveListLike` |
 | ✅ | GET | `/users/{id}/lists/{list_id}/likes` | Get all users who liked a list | `UsersService.GetListLikes` |
 | ⬜ | POST | `/users/{id}/lists/{list_id}/reorder` | Reorder items on a list |  |
 | ✅ | POST | `/users/{id}/lists/{list_id}/report` | Report a user's list | `UsersService.ListReport` |
@@ -522,4 +522,3 @@ Differences between the service code and the contract, found while building this
 | `SeasonsService.GetSeason` | `GET seasons/{id}` | contract only has `POST /seasons/{id}/report` |
 | `UsersService.GetUserProfile` | `GET user/me` (when no user id) | likely a typo for `users/me` |
 | `UsersService.GetFollowRequests` | `GET users/requests/following` | "Get follow requests" is `GET /users/requests`; also `uri.AddQuery` runs after `NewRequest`, so query options are never sent |
-| `UsersService.ListLike` | `DELETE users/{id}/lists/{list_id}/like` | "Like a list" is `POST` in the contract; `DELETE` removes the like |
