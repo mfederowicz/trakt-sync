@@ -32,7 +32,7 @@ func (s *SeasonsService) GetSeason(ctx context.Context, id *string, opts *uri.Li
 	result := new(str.Season)
 	resp, err := s.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		err = fmt.Errorf("season not found with traktId:%s", *id)
 	}
 

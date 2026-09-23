@@ -35,7 +35,7 @@ func (m UsersUnfollowHandler) Handle(options *str.Options, client *internal.Clie
 func (UsersUnfollowHandler) usersUnfollow(client *internal.Client, options *str.Options) (*str.Response, error) {
 	resp, err := client.Users.Unfollow(client.BuildCtxFromOptions(options), &options.UserName)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return resp, fmt.Errorf("user not found:%s", options.UserName)
 	}
 

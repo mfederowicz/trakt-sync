@@ -187,7 +187,7 @@ func (s *SyncService) RemovePlaybackItem(ctx context.Context, id *int) (*str.Res
 
 	resp, err := s.client.Do(ctx, req, nil)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		err = fmt.Errorf(consts.PlaybackNotFoundWithID, *id)
 	}
 

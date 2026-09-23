@@ -25,7 +25,7 @@ func (u UsersRemoveListItemsHandler) Handle(options *str.Options, client *intern
 	toList := u.common.CreateItemsToAdd(input)
 	removeResult, resp, err := u.usersRemoveListItems(client, options, &toList)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("list:%s not found", options.ID)
 	}
 

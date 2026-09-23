@@ -40,11 +40,11 @@ func (m UsersFollowHandler) Handle(options *str.Options, client *internal.Client
 func (UsersFollowHandler) usersFollow(client *internal.Client, options *str.Options) (*str.FollowResult, *str.Response, error) {
 	result, resp, err := client.Users.Follow(client.BuildCtxFromOptions(options), &options.UserName)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, resp, fmt.Errorf("user not found:%s", options.UserName)
 	}
 
-	if resp.StatusCode == http.StatusConflict {
+	if resp != nil && resp.StatusCode == http.StatusConflict {
 		return nil, resp, fmt.Errorf("follow error:%s", consts.UserPendingFollowRequest)
 	}
 	if err != nil {

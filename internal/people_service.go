@@ -66,7 +66,7 @@ func (p *PeopleService) GetAllPeopleForShow(ctx context.Context, id *string, opt
 	result := new(str.ShowPeople)
 	resp, err := p.client.Do(ctx, req, &result)
 
-	if resp.StatusCode == http.StatusNotFound {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, nil, fmt.Errorf("not found people for id/slug:%s", *id)
 	}
 
