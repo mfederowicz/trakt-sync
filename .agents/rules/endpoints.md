@@ -78,6 +78,15 @@ func (m *NetworksService) GetNetworksList(ctx context.Context, opts *uri.ListOpt
 - Signature: `(ctx context.Context, <path params>, opts *uri.X[, body]) (T, *str.Response, error)`.
 - Use `http.Method*` constants; path built with `fmt.Sprintf` from path params.
 - Check `err` before touching `resp`.
+- Add `uri.AddQuery` to the URL before `NewRequest`; otherwise the query is dropped.
+- Doc comment links to the API reference:
+  `// API docs: https://docs.trakt.tv/reference/<operationid>`, where
+  `<operationid>` is the route's `operationId` from
+  <https://developer.trakt.tv/openapi.json> in lowercase (e.g.
+  `getUsersRequestsFollow` -> `getusersrequestsfollow`). Check that the page
+  opens; unknown IDs return 404. When
+  you touch a method that still links to `trakt.docs.apiary.io`, replace that
+  link. Change only the methods the PR already touches, one at a time, never in bulk.
 - A new service: declare `type XService Service` in its own file, add the field
   to `Client` and the `c.X = (*XService)(&c.common)` line in `client.go`.
 

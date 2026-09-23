@@ -37,10 +37,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 2 |
 | [`sync`](#sync) | 25 | 4 | 8 | 37 |
 | [`team`](#team) | 0 | 0 | 1 | 1 |
-| [`users`](#users) | 50 | 9 | 45 | 104 |
+| [`users`](#users) | 51 | 9 | 44 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 5 |
-| **Total** | **206** | **15** | **114** | **335** |
+| **Total** | **207** | **15** | **113** | **335** |
 
 ## calendars
 
@@ -400,8 +400,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | POST | `/users/hidden/{section}` | Add hidden items | `UsersService.AddHiddenItems` |
 | ✅ | POST | `/users/hidden/{section}/remove` | Remove hidden items | `UsersService.RemoveHiddenItems` |
 | ⬜ | GET | `/users/reactions/comments` | Get comment reactions |  |
-| ⬜ | GET | `/users/requests/` | Get follow requests |  |
-| ✅ | GET | `/users/requests/following` | Get pending following requests | `UsersService.GetFollowRequests`, `UsersService.GetPendingFollowingRequests` |
+| ✅ | GET | `/users/requests/` | Get follow requests | `UsersService.GetFollowRequests` |
+| ✅ | GET | `/users/requests/following` | Get pending following requests | `UsersService.GetPendingFollowingRequests` |
 | ✅ | POST | `/users/requests/{id}` | Approve follow request | `UsersService.ApproveFollowRequest` |
 | ✅ | DELETE | `/users/requests/{id}` | Deny follow request | `UsersService.DenyFollowRequest` |
 | ⬜ | POST | `/users/saved_filters` | Add saved filters |  |
@@ -521,4 +521,3 @@ Differences between the service code and the contract, found while building this
 | `EpisodesService.GetEpisode` | `GET episodes/{id}` | contract only has `POST /episodes/{id}/report` |
 | `SeasonsService.GetSeason` | `GET seasons/{id}` | contract only has `POST /seasons/{id}/report` |
 | `UsersService.GetUserProfile` | `GET user/me` (when no user id) | likely a typo for `users/me` |
-| `UsersService.GetFollowRequests` | `GET users/requests/following` | "Get follow requests" is `GET /users/requests`; also `uri.AddQuery` runs after `NewRequest`, so query options are never sent |
