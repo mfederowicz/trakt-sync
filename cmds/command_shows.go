@@ -32,7 +32,7 @@ var (
 		"anticipated", "boxoffice", "updates", "updated_ids", "summary", "aliases", "certifications",
 		"collection_progress", "watched_progress", "releases", "translations", "comments", "lists", "people", "ratings",
 		"releated", "stats", "studios", "watching", "next_episode", "last_episode", "videos", "refresh",
-		consts.Report, consts.Sentiments, consts.WatchNow, consts.JustwatchLinks}
+		consts.Report, consts.Sentiments, consts.WatchNow, consts.JustwatchLinks, consts.RefreshJustwatch}
 )
 
 // ShowsCmd returns movies and episodes that a user has watched, sorted by most recent.
@@ -95,6 +95,8 @@ func showsFunc(cmd *Command, _ ...string) error {
 
 		consts.WatchNow:       handlers.ShowsWatchNowHandler{},
 		consts.JustwatchLinks: handlers.ShowsJustwatchLinksHandler{},
+
+		consts.RefreshJustwatch: handlers.ShowsRefreshJustwatchHandler{},
 	}
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 

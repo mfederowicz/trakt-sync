@@ -33,7 +33,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`scrobble`](#scrobble) | 3 | 0 | 0 | 0 | 3 |
 | [`search`](#search) | 2 | 0 | 4 | 0 | 6 |
 | [`seasons`](#seasons) | 0 | 0 | 1 | 0 | 1 |
-| [`shows`](#shows) | 57 | 0 | 1 | 2 | 60 |
+| [`shows`](#shows) | 58 | 0 | 0 | 2 | 60 |
 | [`smart-lists`](#smart-lists) | 0 | 0 | 2 | 0 | 2 |
 | [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 0 | 2 |
 | [`sync`](#sync) | 29 | 0 | 8 | 0 | 37 |
@@ -41,7 +41,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 63 | 0 | 41 | 0 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **259** | **0** | **72** | **4** | **335** |
+| **Total** | **260** | **0** | **71** | **4** | **335** |
 
 ## calendars
 
@@ -289,7 +289,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | DELETE | `/shows/{id}/progress/watched/reset` | Undo reset show progress | `ShowsService.UndoResetShowProgress` |
 | ✅ | GET | `/shows/{id}/ratings` | Get show ratings | `ShowsService.GetShowRatings` |
 | ✅ | POST | `/shows/{id}/refresh` | Refresh show metadata | `ShowsService.RefreshShowMetadata` |
-| ⬜ | POST | `/shows/{id}/refresh/justwatch` | Refresh show JustWatch links |  |
+| ✅ | POST | `/shows/{id}/refresh/justwatch` | Refresh show JustWatch links | `ShowsService.RefreshShowJustwatch` |
 | ✅ | GET | `/shows/{id}/related` | Get related shows | `ShowsService.GetRelatedShows` |
 | ✅ | POST | `/shows/{id}/report` | Report a show | `ShowsService.ReportShow` |
 | ✅ | GET | `/shows/{id}/seasons` | Get all seasons for a show | `ShowsService.GetAllSeasonsForShow` |

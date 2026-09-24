@@ -222,6 +222,12 @@ $ ./trakt-sync shows -a videos -i the-sopranos
 ```console
 $ ./trakt-sync shows -a refresh -i the-sopranos
 ```
+##### Refresh show JustWatch links
+```console
+$ ./trakt-sync shows -a refresh_justwatch -i the-sopranos
+```
+`refresh_justwatch` is marked VIP only by Trakt; when Trakt answers with 426 the upgrade page opens in the browser.
+The live API accepted it from a non-VIP account (checked 2026-09-24), unlike `movies -a refresh_justwatch`.
 ##### Report a show
 ```console
 $ ./trakt-sync shows -a report -i the-sopranos -r metadata -message "overview is wrong"

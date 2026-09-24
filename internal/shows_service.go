@@ -1532,3 +1532,16 @@ func (s *ShowsService) GetSeasonJustwatchLinks(ctx context.Context, id *string, 
 
 	return result, resp, nil
 }
+
+// RefreshShowJustwatch Queue a refresh of the show's JustWatch links (VIP only).
+//
+// API docs: https://docs.trakt.tv/reference/postshowsjustwatchrefresh
+func (s *ShowsService) RefreshShowJustwatch(ctx context.Context, id *string) (*str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/refresh/justwatch", *id)
+	req, err := s.client.NewRequest(http.MethodPost, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.client.Do(ctx, req, nil)
+}
