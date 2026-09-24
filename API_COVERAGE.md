@@ -37,10 +37,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 2 |
 | [`sync`](#sync) | 29 | 0 | 8 | 37 |
 | [`team`](#team) | 0 | 0 | 1 | 1 |
-| [`users`](#users) | 51 | 9 | 44 | 104 |
+| [`users`](#users) | 55 | 5 | 44 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 5 |
-| **Total** | **234** | **9** | **92** | **335** |
+| **Total** | **238** | **5** | **92** | **335** |
 
 ## calendars
 
@@ -392,10 +392,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | :---: | --- | --- | --- | --- |
 | ⬜ | PUT | `/users/avatar` | Update avatar |  |
 | ✅ | GET | `/users/blocked` | Get blocked users | `UsersService.GetBlockedUsers` |
-| 🟡 | POST | `/users/hidden/calendar/remove` | Remove hidden calendar items | `UsersService.RemoveHiddenItems` |
-| 🟡 | GET | `/users/hidden/dropped` | Get dropped shows | `UsersService.GetHiddenItems` |
-| 🟡 | GET | `/users/hidden/progress_watched` | Get hidden progress items | `UsersService.GetHiddenItems` |
-| 🟡 | POST | `/users/hidden/progress_watched/remove` | Remove hidden progress items | `UsersService.RemoveHiddenItems` |
+| ✅ | POST | `/users/hidden/calendar/remove` | Remove hidden calendar items | `UsersService.RemoveHiddenItems` |
+| ✅ | GET | `/users/hidden/dropped` | Get dropped shows | `UsersService.GetHiddenItems` |
+| ✅ | GET | `/users/hidden/progress_watched` | Get hidden progress items | `UsersService.GetHiddenItems` |
+| ✅ | POST | `/users/hidden/progress_watched/remove` | Remove hidden progress items | `UsersService.RemoveHiddenItems` |
 | ✅ | GET | `/users/hidden/{section}` | Get hidden items | `UsersService.GetHiddenItems` |
 | ✅ | POST | `/users/hidden/{section}` | Add hidden items | `UsersService.AddHiddenItems` |
 | ✅ | POST | `/users/hidden/{section}/remove` | Remove hidden items | `UsersService.RemoveHiddenItems` |

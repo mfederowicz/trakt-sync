@@ -24,14 +24,13 @@ $ ./trakt-sync users -a follower_requests -follower_request 123 -deny
 $ ./trakt-sync users -a saved_filters -u username
 ```
 ##### Export hidden items for a section (movie,show,season,user):
+Sections: `calendar` (default), `progress_watched`, `progress_collected`, `recommendations`, `comments`, `dropped`.
+The same sections are checked for `add_hidden_items` and `remove_hidden_items`.
 ```console
 $ ./trakt-sync users -a hidden_items -t show -section calendar
 ```
 ```console
 $ ./trakt-sync users -a hidden_items -t show -section progress_watched
-```
-```console
-$ ./trakt-sync users -a hidden_items -t show -section progress_watched_reset
 ```
 ```console
 $ ./trakt-sync users -a hidden_items -t show -section progress_collected
@@ -90,6 +89,9 @@ $ ./trakt-sync users -a remove_hidden_items -t show -items export_users_all.json
 ```
 ```console
 $ ./trakt-sync users -a remove_hidden_items -t season -items export_users_all.json
+```
+```console
+$ ./trakt-sync users -a remove_hidden_items -section progress_watched -items export_users_all.json
 ```
 ```console
 $ ./trakt-sync users -a remove_hidden_items -t user -items export_users_all.json
