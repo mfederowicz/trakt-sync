@@ -28,6 +28,9 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Fixed
 
+- `movies -a hot` and `movies -a streaming`: the live Trakt API returns 404 for these routes; the error now says the
+  route is documented but not served, instead of a bare 404.
+
 ## [1.16.0] - 2026-09-24
 
 ### Added

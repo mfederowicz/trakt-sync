@@ -19,7 +19,7 @@ func (MoviesHotHandler) Handle(options *str.Options, client *internal.Client) er
 		return client.Movies.GetHotMovies(client.BuildCtxFromOptions(options), opts)
 	})
 	if err != nil {
-		return err
+		return endpointNotLiveError(err)
 	}
 
 	return writeMoviesItems(options, result)
