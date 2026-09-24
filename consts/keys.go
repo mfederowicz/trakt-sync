@@ -115,6 +115,7 @@ const (
 	Ratings              = "ratings"
 	Recommendations      = "recommendations"
 	Related              = "related"
+	RefreshJustwatch     = "refresh_justwatch"
 	Releases             = "releases"
 	RemoveFromCollection = "remove_from_collection"
 	RemoveFromHistory    = "remove_from_history"

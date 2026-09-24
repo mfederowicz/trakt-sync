@@ -23,7 +23,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`languages`](#languages) | 1 | 0 | 0 | 1 |
 | [`lists`](#lists) | 15 | 0 | 0 | 15 |
 | [`media`](#media) | 3 | 0 | 0 | 3 |
-| [`movies`](#movies) | 26 | 0 | 5 | 31 |
+| [`movies`](#movies) | 28 | 0 | 3 | 31 |
 | [`networks`](#networks) | 1 | 0 | 0 | 1 |
 | [`notes`](#notes) | 5 | 0 | 0 | 5 |
 | [`oauth`](#oauth) | 3 | 0 | 2 | 5 |
@@ -40,7 +40,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 63 | 0 | 41 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 5 |
-| **Total** | **248** | **0** | **87** | **335** |
+| **Total** | **250** | **0** | **85** | **335** |
 
 ## calendars
 
@@ -173,10 +173,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/movies/{id}/people` | Get all people for a movie | `MoviesService.GetAllPeopleForMovie` |
 | ✅ | GET | `/movies/{id}/ratings` | Get movie ratings | `MoviesService.GetMovieRatings` |
 | ✅ | POST | `/movies/{id}/refresh` | Refresh movie metadata | `MoviesService.RefreshMovieMetadata` |
-| ⬜ | POST | `/movies/{id}/refresh/justwatch` | Refresh movie JustWatch links |  |
+| ✅ | POST | `/movies/{id}/refresh/justwatch` | Refresh movie JustWatch links | `MoviesService.RefreshMovieJustwatch` |
 | ✅ | GET | `/movies/{id}/related` | Get related movies | `MoviesService.GetRelatedMovies` |
 | ✅ | GET | `/movies/{id}/releases/{country}` | Get all movie releases | `MoviesService.GetAllMovieReleases` |
-| ⬜ | POST | `/movies/{id}/report` | Report a movie |  |
+| ✅ | POST | `/movies/{id}/report` | Report a movie | `MoviesService.ReportMovie` |
 | ⬜ | GET | `/movies/{id}/sentiments` | Get movie sentiments |  |
 | ✅ | GET | `/movies/{id}/stats` | Get movie stats | `MoviesService.GetMovieStats` |
 | ✅ | GET | `/movies/{id}/studios` | Get movie studios | `MoviesService.GetMovieStudios` |

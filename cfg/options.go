@@ -68,6 +68,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 		Type: []string{"all", "movies", "shows", "seasons", "episodes", "lists"},
 		Sort: []string{"newest", "oldest", "likes", "replies", "highest", "lowest", "plays"},
 	},
+	"movies:report": {
+		Reason: []string{"duplicate", "remove", "data_refresh", "metadata", "adult", "runtime", "language", "spam", "tmdb", "other"},
+	},
 	"movies:streaming": {
 		Period: []string{"daily", "weekly", "monthly"},
 	},
