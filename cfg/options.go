@@ -95,6 +95,12 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	"notes:item": {
 		Privacy: []string{"private", "friends", "public"},
 	},
+	"seasons:report": {
+		Reason: []string{"duplicate", "remove", "data_refresh", "metadata", "adult", "runtime", "language", "spam", "tmdb", "other"},
+	},
+	"episodes:report": {
+		Reason: []string{"duplicate", "remove", "data_refresh", "metadata", "adult", "runtime", "language", "spam", "tmdb", "other"},
+	},
 	"shows:report": {
 		Reason: []string{"duplicate", "remove", "data_refresh", "metadata", "adult", "runtime", "language", "spam", "tmdb", "other"},
 	},

@@ -84,3 +84,8 @@ $ ./trakt-sync seasons -a watching -i the-sopranos -season 1
 ```console
 $ ./trakt-sync seasons -a videos -i the-sopranos -season 1
 ```
+##### Report a season
+```console
+$ ./trakt-sync seasons -a report -i the-sopranos -season 1 -r metadata -message "overview is wrong"
+```
+`-season` is required (`0` is specials). `-r` is one of: `duplicate`, `remove`, `data_refresh`, `metadata`, `adult`, `runtime`, `language`, `spam`, `tmdb`, `other`.

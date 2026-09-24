@@ -16,10 +16,12 @@ var (
 	_seasonsLanguage   = SeasonsCmd.Flag.String("language", cfg.DefaultConfig().Language, consts.LanguageUsage)
 	_seasonsSort       = SeasonsCmd.Flag.String("s", cfg.DefaultConfig().SeasonsSort, consts.SortUsage)
 	_seasonsType       = SeasonsCmd.Flag.String("t", cfg.DefaultConfig().SeasonsType, consts.TypeUsage)
+	_seasonsReason     = SeasonsCmd.Flag.String("r", cfg.DefaultConfig().Reason, consts.ReasonUsage)
+	_seasonsMessage    = SeasonsCmd.Flag.String("message", cfg.DefaultConfig().Msg, consts.ReportMsgUsage)
 
 	_seasonsActions = []string{
 		"summary", "season", "episodes", "translations", "comments", "lists",
-		"people", "ratings", "stats", "watching", "videos"}
+		"people", "ratings", "stats", "watching", "videos", consts.Report}
 )
 
 // SeasonsCmd returns seasons and episodes that a user has watched, sorted by most recent.
@@ -46,6 +48,11 @@ func seasonsFunc(cmd *Command, _ ...string) error {
 		return fmt.Errorf("%s/%s: %w", cmd.Name, options.Action, err)
 	}
 
+	// season 0 is specials, so a report needs -season given explicitly
+	if options.Action == consts.Report && !cmd.flagIsSet(consts.Season) {
+		return fmt.Errorf("%s/%s: %s", cmd.Name, options.Action, consts.EmptySeasonMsg)
+	}
+
 	var handler handlers.SeasonsHandler
 	allHandlers := map[string]handlers.Handler{
 		"summary":      handlers.SeasonsSummaryHandler{},
@@ -59,6 +66,8 @@ func seasonsFunc(cmd *Command, _ ...string) error {
 		"stats":        handlers.SeasonsStatsHandler{},
 		"watching":     handlers.SeasonsWatchingHandler{},
 		"videos":       handlers.SeasonsVideosHandler{},
+
+		consts.Report: handlers.SeasonsReportHandler{},
 	}
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 

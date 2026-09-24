@@ -28,6 +28,10 @@ schedule. Releases up to v1.15.2 are listed on
 - `shows -a watchnow -i <id> -country <code>`: watch now sources for a show in one country, with the same
   `-links` and `-ex streaming_ranks` options as `movies -a watchnow`.
 - `shows -a justwatch_links -i <id> -country <code>`: the JustWatch link for a show in one country.
+- `seasons -a report -i <show> -season <n> -r <reason> [-message "..."]`: report a season for moderator review;
+  `-season` must be given (`0` is specials).
+- `episodes -a report -i <show> -season <n> -episode <n> -r <reason> [-message "..."]`: report an episode for
+  moderator review.
 
 ### Changed
 

@@ -11,6 +11,7 @@ const (
 	DefaultProgress       = 0.00
 	EmptyBuildInfoLen     = 0
 	FirstArgElement       = 0
+	FirstEpisodeNumber    = 1
 	ImdbVotesRangeMax     = 3000000
 	ImdbVotesRangeMin     = 0
 	MaxAcceptedStatus     = 299
