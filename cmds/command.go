@@ -274,7 +274,11 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 		return err
 	}
 
-	options.Type = *_strType
+	// -t given after the module name is parsed by c.Flag, which cfg.MergeConfigs does not see,
+	// so apply it here; otherwise keep the merged value (config file type or cfg.DefaultConfig().Type).
+	if c.flagIsSet("t") {
+		options.Type = *_strType
+	}
 
 	options.Module = c.Name
 	options = setOptionsDependsOnModule(c.Name, options)
@@ -629,6 +633,17 @@ func (*Command) ValidFlags() bool {
 		}
 	}
 	return true
+}
+
+// flagIsSet reports whether the flag was given on the command line of this command.
+func (c *Command) flagIsSet(name string) bool {
+	set := false
+	c.Flag.Visit(func(f *flag.Flag) {
+		if f.Name == name {
+			set = true
+		}
+	})
+	return set
 }
 
 func (*Command) registerGlobalFlagsInSet(fset *flag.FlagSet) {

@@ -67,11 +67,22 @@ func TestGenUsedFlagMap(t *testing.T) {
 	parseFlags()
 	got2 := GenUsedFlagMap()
 	var flagset2 = map[string]bool{
-		"d": true,
+		"days": true,
 	}
 
 	if !test.MapsStringBoolEqual(got2, flagset2) {
 		t.Errorf("maps should be equal:%v, got:%v", flagset2, got2)
+	}
+
+	// a long flag must not mark a short flag with the same first letter as used
+	flag.CommandLine = emptyFlagset()
+	os.Args = []string{"cmd", "--translations=pl"}
+	flag.String("translations", "", "translations")
+	flag.String("t", "", "type")
+	parseFlags()
+	got3 := GenUsedFlagMap()
+	if !test.MapsStringBoolEqual(got3, map[string]bool{"translations": true}) {
+		t.Errorf("maps should be equal:%v, got:%v", map[string]bool{"translations": true}, got3)
 	}
 }
 

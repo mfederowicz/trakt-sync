@@ -46,6 +46,11 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Fixed
 
+- `type` from the config file was ignored: commands that use the global `-t` flag (for example `sync`,
+  `watchlist`, `collection`, `history`, `certifications`, `comments`) always used `-t`'s default `movies`
+  when `-t` was not given. The config file value is now used, and `-t` still overrides it.
+- A global flag given before the module name could hide a config file value for an unrelated one-letter
+  flag with the same first letter (for example `-translations` made `type` fall back to the `-t` default).
 - `users -a history -item_id <id>` without `-t`: the request URL had no type (`history//<id>`), which is
   not an API route; the command now asks for `-t` (for example `-t movies`).
 - `lists -a trending`: the output file name was empty, so the export was not written; it is now
