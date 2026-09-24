@@ -13,6 +13,9 @@ var (
 	_action    = PeopleCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
 	_startDate = PeopleCmd.Flag.String("start_date", "", consts.StartDateUsage)
 	_personID  = PeopleCmd.Flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
+
+	_peopleReason  = PeopleCmd.Flag.String("r", cfg.DefaultConfig().Reason, consts.ReasonUsage)
+	_peopleMessage = PeopleCmd.Flag.String("message", cfg.DefaultConfig().Msg, consts.ReportMsgUsage)
 )
 
 // PeopleCmd returns all data for selected person.
@@ -36,11 +39,13 @@ func peopleFunc(cmd *Command, _ ...string) error {
 		"shows":       handlers.PeopleShowsHandler{},
 		"lists":       handlers.PeopleListsHandler{},
 		"refresh":     handlers.PeopleRefreshHandler{},
+
+		consts.Report: handlers.PeopleReportHandler{},
 	}
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	if err != nil {
-		cmd.common.GenActionsUsage(cmd.Name, []string{"updates", "updated_ids", "summary", "movies", "shows", "lists", "refresh"})
+		cmd.common.GenActionsUsage(cmd.Name, []string{"updates", "updated_ids", "summary", "movies", "shows", "lists", "refresh", consts.Report})
 		return nil
 	}
 

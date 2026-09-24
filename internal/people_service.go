@@ -3,9 +3,11 @@ package internal
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
@@ -232,6 +234,28 @@ func (p *PeopleService) RefreshPersonMetadata(ctx context.Context, id *string) (
 	}
 
 	resp, err := p.client.Do(ctx, req, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// ReportPerson Report a person for moderator review.
+//
+// API docs: https://docs.trakt.tv/reference/postpeoplereport
+func (p *PeopleService) ReportPerson(ctx context.Context, id *string, report *str.PersonReport) (*str.Response, error) {
+	var url = fmt.Sprintf("people/%s/report", *id)
+	req, err := p.client.NewRequest(http.MethodPost, url, report)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := p.client.Do(ctx, req, nil)
+	var conflict *ConflictError
+	if errors.As(err, &conflict) {
+		return resp, fmt.Errorf(consts.PersonReportPending, *id)
+	}
 	if err != nil {
 		return resp, err
 	}

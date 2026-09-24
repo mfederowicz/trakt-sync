@@ -28,7 +28,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`networks`](#networks) | 1 | 0 | 0 | 0 | 1 |
 | [`notes`](#notes) | 5 | 0 | 0 | 0 | 5 |
 | [`oauth`](#oauth) | 3 | 0 | 2 | 0 | 5 |
-| [`people`](#people) | 7 | 0 | 1 | 0 | 8 |
+| [`people`](#people) | 8 | 0 | 0 | 0 | 8 |
 | [`recommendations`](#recommendations) | 4 | 0 | 0 | 0 | 4 |
 | [`scrobble`](#scrobble) | 3 | 0 | 0 | 0 | 3 |
 | [`search`](#search) | 2 | 0 | 4 | 0 | 6 |
@@ -41,7 +41,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 63 | 0 | 41 | 0 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **260** | **0** | **71** | **4** | **335** |
+| **Total** | **261** | **0** | **70** | **4** | **335** |
 
 ## calendars
 
@@ -223,7 +223,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/people/{id}/lists/{type}/{sort}` | Get lists containing this person | `PeopleService.GetListsContainingThisPerson` |
 | ✅ | GET | `/people/{id}/movies` | Get movie credits | `PeopleService.GetMovieCredits` |
 | ✅ | POST | `/people/{id}/refresh` | Refresh person metadata | `PeopleService.RefreshPersonMetadata` |
-| ⬜ | POST | `/people/{id}/report` | Report a person |  |
+| ✅ | POST | `/people/{id}/report` | Report a person | `PeopleService.ReportPerson` |
 | ✅ | GET | `/people/{id}/shows` | Get show credits | `PeopleService.GetShowCredits` |
 
 ## recommendations
