@@ -44,6 +44,8 @@ schedule. Releases up to v1.15.2 are listed on
 - `search -a exact_query -t movie|show -q <query>`: exact title matches for movies or shows.
 - `search -a trending -t movies|shows|people [-q <query>]`: globally trending searches, the items people most often
   picked from search results; `-q` filters on the typed search text.
+- `search -a add_recent|remove_recent -t movies|shows|people|lists -q <query> -i <trakt id>`: add or remove a pick
+  in the global search trends that `search -a trending` returns.
 
 ### Changed
 
