@@ -931,6 +931,11 @@ func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.O
 
 // UpdateOptionsWithCommandSyncFlags update options depends on scrobble command flags
 func UpdateOptionsWithCommandSyncFlags(c *Command, options *str.Options) *str.Options {
+	// users -a history uses the same start_at/end_at window (last DefaultStartAtDays days by default)
+	if c.Name != consts.Sync && c.Name != consts.Users {
+		return options
+	}
+
 	if len(*_syncAction) > consts.ZeroValue {
 		options.Action = *_syncAction
 	}
@@ -1019,11 +1024,14 @@ func UpdateOptionsCommonFlags(c *Command, options *str.Options) *str.Options {
 		options.Output = cfg.GetOutputForModule(options)
 	}
 
-	options.FullHour = true
-	if len(*_startDate) > consts.ZeroValue {
-		options.StartDate = c.common.ConvertDateString(*_startDate, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
-	} else {
-		options.StartDate = c.common.CurrentDateString(options.Timezone, options.FullHour)
+	// _startDate is the people -start_date flag; other modules set StartDate themselves.
+	if c.Name == consts.People {
+		options.FullHour = true
+		if len(*_startDate) > consts.ZeroValue {
+			options.StartDate = c.common.ConvertDateString(*_startDate, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
+		} else {
+			options.StartDate = c.common.DateLastDays(consts.DefaultStartAtDays, options.Timezone, options.FullHour)
+		}
 	}
 	options.FullHour = true
 
@@ -1122,6 +1130,10 @@ func UpdateOptionsWithCommandCommentsFlags(options *str.Options) *str.Options {
 
 // UpdateOptionsWithCommandMoviesFlags update options depends on movies command flags
 func UpdateOptionsWithCommandMoviesFlags(c *Command, options *str.Options) *str.Options {
+	if c.Name != consts.Movies {
+		return options
+	}
+
 	if len(*_moviesAction) > consts.ZeroValue {
 		options.Action = *_moviesAction
 	}
@@ -1134,7 +1146,7 @@ func UpdateOptionsWithCommandMoviesFlags(c *Command, options *str.Options) *str.
 	if len(*_moviesStartDate) > consts.ZeroValue {
 		options.StartDate = c.common.ConvertDateString(*_moviesStartDate, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
 	} else {
-		options.StartDate = c.common.CurrentDateString(options.Timezone, options.FullHour)
+		options.StartDate = c.common.DateLastDays(consts.DefaultStartAtDays, options.Timezone, options.FullHour)
 	}
 	options.FullHour = false
 
@@ -1155,6 +1167,10 @@ func UpdateOptionsWithCommandMoviesFlags(c *Command, options *str.Options) *str.
 
 // UpdateOptionsWithCommandShowsFlags update options depends on shows command flags
 func UpdateOptionsWithCommandShowsFlags(c *Command, options *str.Options) *str.Options {
+	if c.Name != consts.Shows {
+		return options
+	}
+
 	if len(*_showsAction) > consts.ZeroValue {
 		options.Action = *_showsAction
 	}
@@ -1167,7 +1183,7 @@ func UpdateOptionsWithCommandShowsFlags(c *Command, options *str.Options) *str.O
 	if len(*_showsStartDate) > consts.ZeroValue {
 		options.StartDate = c.common.ConvertDateString(*_showsStartDate, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
 	} else {
-		options.StartDate = c.common.CurrentDateString(options.Timezone, options.FullHour)
+		options.StartDate = c.common.DateLastDays(consts.DefaultStartAtDays, options.Timezone, options.FullHour)
 	}
 	options.FullHour = false
 
