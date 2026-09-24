@@ -32,6 +32,9 @@ schedule. Releases up to v1.15.2 are listed on
   `-season` must be given (`0` is specials).
 - `episodes -a report -i <show> -season <n> -episode <n> -r <reason> [-message "..."]`: report an episode for
   moderator review.
+- `episodes -a watchnow -i <show> -season <n> -episode <n> -country <code>`: watch now sources for an episode, with the
+  same `-links` and `-ex streaming_ranks` options as `shows -a watchnow`.
+- `seasons -a justwatch_links -i <show> -season <n> -country <code>`: the JustWatch link for a season.
 
 ### Changed
 

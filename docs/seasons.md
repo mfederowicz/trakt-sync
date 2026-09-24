@@ -84,6 +84,11 @@ $ ./trakt-sync seasons -a watching -i the-sopranos -season 1
 ```console
 $ ./trakt-sync seasons -a videos -i the-sopranos -season 1
 ```
+##### Get the JustWatch link for a season
+```console
+$ ./trakt-sync seasons -a justwatch_links -i the-sopranos -season 1 -country pl -> export_seasons_justwatch_links_the-sopranos.json
+```
+`-country` is required. Marked Limited Access by Trakt.
 ##### Report a season
 ```console
 $ ./trakt-sync seasons -a report -i the-sopranos -season 1 -r metadata -message "overview is wrong"
