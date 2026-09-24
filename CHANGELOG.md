@@ -41,6 +41,9 @@ schedule. Releases up to v1.15.2 are listed on
   in `-i` when `-season` (and for episodes `-episode`) is left out; with them, `-i` is still the show.
 - `search -a text_query --field`: accepts `original_title` for `-t movie` / `-t show` and `show_title` for
   `-t episode`, the remaining search fields from the Trakt API docs.
+- `search -a exact_query -t movie|show -q <query>`: exact title matches for movies or shows.
+- `search -a trending -t movies|shows|people [-q <query>]`: globally trending searches, the items people most often
+  picked from search results; `-q` filters on the typed search text.
 
 ### Changed
 

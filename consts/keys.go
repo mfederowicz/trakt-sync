@@ -45,6 +45,7 @@ const (
 	Dvd                  = "dvd"
 	Episode              = "episode"
 	Episodes             = "episodes"
+	ExactQuery           = "exact_query"
 	Favorited            = "favorited"
 	Favorites            = "favorites"
 	FavoritesComments    = "favorites_comments"
