@@ -20,6 +20,14 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.17.0] - 2026-09-25
+
+### Added
+
 - `movies -a watchnow -i <id> -country <code>`: watch now sources (streaming, rent, purchase) for a movie in one country;
   `-links tvos,direct,android,webos` adds provider links and `-ex streaming_ranks` adds the JustWatch rank.
 - `movies -a justwatch_links -i <id> -country <code>`: the JustWatch link for a movie in one country.
@@ -173,6 +181,7 @@ schedule. Releases up to v1.15.2 are listed on
 - `-version` now shows the real version and commit for release binaries and `make build`
   builds, instead of `dev` / `none` or a Go pseudo-version.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.16.0...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.17.0...HEAD
+[1.17.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.16.0...v1.17.0
 [1.16.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.15.3...v1.16.0
 [1.15.3]: https://github.com/mfederowicz/trakt-sync/compare/v1.15.2...v1.15.3
