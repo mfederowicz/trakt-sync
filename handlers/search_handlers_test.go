@@ -25,7 +25,7 @@ func TestSearchHandlers(t *testing.T) {
 			name:      "text query",
 			handler:   SearchTextQueryHandler{},
 			options:   str.Options{Action: consts.TextQuery, SearchType: str.Slice{"movie"}, SearchField: str.Slice{"title"}, Query: "freddy"},
-			wantCalls: map[string]int{"GET /search/movie?field=title&page=1&query=freddy": 1},
+			wantCalls: map[string]int{"GET /search/movie?fields=title&page=1&query=freddy": 1},
 		},
 		{
 			name:      "text query without type",

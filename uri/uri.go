@@ -25,7 +25,7 @@ type ListOptions struct {
 	Countries         []string         `url:"countries,omitempty"`
 	EpisodeTypes      []string         `url:"episode_types,omitempty"`
 	Extended          string           `url:"extended,omitempty"`
-	Field             string           `url:"field,omitempty"`
+	Field             string           `url:"fields,omitempty"`
 	Genres            []string         `url:"genres,omitempty"`
 	IgnoreCollected   string           `url:"ignore_collected,omitempty"`
 	IgnoreWatchlisted string           `url:"ignore_watchlisted,omitempty"`
