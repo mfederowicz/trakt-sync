@@ -41,6 +41,11 @@ var (
 var Avflags = map[string]bool{
 	"a":                  true,
 	"available_on":       true,
+	"hide_completed":     true,
+	"hide_not_completed": true,
+	"include_stats":      true,
+	"lifetime_stats":     true,
+	"only_rewatching":    true,
 	"c":                  true,
 	"calendars":          true,
 	"certifications":     true,
@@ -996,6 +1001,12 @@ func UpdateOptionsWithCommandSyncFlags(c *Command, options *str.Options) *str.Op
 	if len(*_syncAvailableOn) > consts.ZeroValue {
 		options.AvailableOn = *_syncAvailableOn
 	}
+
+	options.IncludeStats = *_syncIncludeStats
+	options.LifetimeStats = *_syncLifetimeStats
+	options.HideCompleted = *_syncHideCompleted
+	options.HideNotCompleted = *_syncHideNotCompleted
+	options.OnlyRewatching = *_syncOnlyRewatching
 
 	return options
 }

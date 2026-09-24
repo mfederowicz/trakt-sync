@@ -23,6 +23,10 @@ schedule. Releases up to v1.15.2 are listed on
 - `sync -a playback -t all`, and `-ex` for `sync -a playback`, which was not sent before.
 - `sync -a get_minimal_collection -t movies|shows|episodes [-available_on plex]`: the collection as a compact map of
   Trakt IDs to collected dates (shows nested by season and episode), for syncing local state.
+- `sync -a get_up_next [-include_stats] [-lifetime_stats]`: shows you are watching, with their next episode and
+  progress.
+- `sync -a get_watched_progress [-hide_completed | -hide_not_completed] [-only_rewatching] [-lifetime_stats]`:
+  watched progress of your shows. Both actions take `-sort_by` / `-sort_how` (sent only when given) and `-ex`.
 
 ### Changed
 

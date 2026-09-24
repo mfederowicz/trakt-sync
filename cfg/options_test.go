@@ -60,6 +60,11 @@ func TestGetOutputForModuleSyncMinimalCollection(t *testing.T) {
 	assert.Equal(t, "export_sync_minimal_collection_shows.json", GetOutputForModule(&str.Options{Module: "sync", Action: "get_minimal_collection", Type: "shows"}))
 }
 
+func TestGetOutputForModuleSyncProgress(t *testing.T) {
+	assert.Equal(t, "export_sync_up_next.json", GetOutputForModule(&str.Options{Module: "sync", Action: "get_up_next"}))
+	assert.Equal(t, "export_sync_watched_progress.json", GetOutputForModule(&str.Options{Module: "sync", Action: "get_watched_progress"}))
+}
+
 func TestGetOutputForModuleMoviesHotStreaming(t *testing.T) {
 	assert.Equal(t, "export_movies_hot.json", GetOutputForModule(&str.Options{Module: "movies", Action: "hot"}))
 	assert.Equal(t, "export_movies_streaming_weekly.json", GetOutputForModule(&str.Options{Module: "movies", Action: "streaming", Period: DefaultConfig().MoviesPeriod}))

@@ -172,3 +172,14 @@ func TestBuildQueryEpisodeFilters(t *testing.T) {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
 }
+
+func TestBuildQuerySyncProgressBools(t *testing.T) {
+	expectedURL := BaseURL + "?hide_completed=true&lifetime_stats=true&page=2&sort_how=desc"
+	got, err := AddQuery(BaseURL, SyncProgressOptions{Page: 2, SortHow: "desc", HideCompleted: true, LifetimeStats: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got != expectedURL {
+		t.Fatalf(Expected, expectedURL, got)
+	}
+}

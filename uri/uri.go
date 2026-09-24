@@ -244,6 +244,8 @@ func flatOptsOtherTypes(qs *url.Values, fieldTag string, fieldValue reflect.Valu
 		value = fmt.Sprintf("%.2f", fieldValue.Float())
 	case reflect.String:
 		value = fieldValue.String()
+	case reflect.Bool:
+		value = strconv.FormatBool(fieldValue.Bool())
 	}
 
 	// Add field to query string only if it's non-empty
