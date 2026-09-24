@@ -37,10 +37,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 2 |
 | [`sync`](#sync) | 29 | 0 | 8 | 37 |
 | [`team`](#team) | 0 | 0 | 1 | 1 |
-| [`users`](#users) | 61 | 2 | 41 | 104 |
+| [`users`](#users) | 63 | 0 | 41 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 5 |
-| **Total** | **244** | **2** | **89** | **335** |
+| **Total** | **246** | **0** | **89** | **335** |
 
 ## calendars
 
@@ -483,8 +483,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ⬜ | PUT | `/users/{id}/smart-lists/{list_id}/` | Update smart list |  |
 | ⬜ | DELETE | `/users/{id}/smart-lists/{list_id}/` | Delete a user's smart list |  |
 | ✅ | GET | `/users/{id}/stats` | Get stats | `UsersService.GetStats` |
-| 🟡 | GET | `/users/{id}/watched/movies` | Get watched movies | `UsersService.GetWatched` |
-| 🟡 | GET | `/users/{id}/watched/shows` | Get watched shows | `UsersService.GetWatched` |
+| ✅ | GET | `/users/{id}/watched/movies` | Get watched movies | `UsersService.GetWatched` |
+| ✅ | GET | `/users/{id}/watched/shows` | Get watched shows | `UsersService.GetWatched` |
 | ✅ | GET | `/users/{id}/watched/{type}` | Get watched | `UsersService.GetWatched` |
 | ✅ | GET | `/users/{id}/watching` | Get watching | `UsersService.Watching` |
 | ✅ | GET | `/users/{id}/watchlist/comments/{sort}` | Get all watchlist comments | `UsersService.GetWatchlistComments` |

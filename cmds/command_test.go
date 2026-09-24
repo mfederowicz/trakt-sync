@@ -71,3 +71,31 @@ func TestValidSectionHiddenItems(t *testing.T) {
 		})
 	}
 }
+
+func TestUsersWatchedType(t *testing.T) {
+	tests := []struct {
+		name     string
+		flagType string
+		wantType string
+		wantErr  bool
+	}{
+		{name: "no -t uses movies", flagType: cfg.DefaultConfig().UsersType, wantType: "movies"},
+		{name: "shows", flagType: "shows", wantType: "shows"},
+		{name: "episodes is not a watched type", flagType: "episodes", wantType: "episodes", wantErr: true},
+	}
+
+	testCmd := &Command{Name: "users"}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			options := UpdateOptionsWithCommandUsersFlags(testCmd, &str.Options{Module: "users", Action: "watched", UserName: "sean", Type: tt.flagType})
+			assert.Equal(t, tt.wantType, options.Type)
+
+			err := testCmd.ValidModuleActionType(options)
+			if tt.wantErr {
+				assert.ErrorContains(t, err, "type 'episodes' is not valid")
+				return
+			}
+			assert.NoError(t, err)
+		})
+	}
+}

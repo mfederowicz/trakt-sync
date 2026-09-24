@@ -613,6 +613,7 @@ $ ./trakt-sync users -a favorites_comments -u username -s added
 $ ./trakt-sync users -a watching -u username
 ```
 ##### Fetch watched movies for selected user:
+`-t` is `movies` or `shows`; without `-t`, `watched` uses `movies`.
 ```console
 $ ./trakt-sync users -a watched -t movies -u sean
 ```
