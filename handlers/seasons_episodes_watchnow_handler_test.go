@@ -34,6 +34,9 @@ func TestSeasonsEpisodesWatchNowHandlers(t *testing.T) {
 		{name: "episode watchnow limited access", handler: EpisodesWatchNowHandler{}, options: episode, path: episodePath, status: http.StatusForbidden, wantErr: "watchnow is limited access on Trakt"},
 		{name: "episode watchnow without id", handler: EpisodesWatchNowHandler{}, options: str.Options{Season: 1, Episode: 2, Country: "us"}, wantErr: consts.EmptyShowIDMsg},
 		{name: "episode watchnow without country", handler: EpisodesWatchNowHandler{}, options: str.Options{InternalID: "the-sopranos", Season: 1, Episode: 2}, wantErr: consts.EmptyCountryMsg},
+		{name: "episode watchnow by trakt id", handler: EpisodesWatchNowHandler{}, options: str.Options{ID: "73482", Country: "us"}, path: "/episodes/73482/watchnow/us", status: http.StatusOK},
+		{name: "episode watchnow by trakt id not found", handler: EpisodesWatchNowHandler{}, options: str.Options{ID: "73482", Country: "us"}, path: "/episodes/73482/watchnow/us", status: http.StatusNotFound, wantErr: "not found episode for:73482"},
+		{name: "episode watchnow by trakt id without country", handler: EpisodesWatchNowHandler{}, options: str.Options{ID: "73482"}, wantErr: consts.EmptyCountryMsg},
 		{name: "season justwatch links", handler: SeasonsJustwatchLinksHandler{}, options: season, path: seasonPath, status: http.StatusOK},
 		{name: "season justwatch links not found", handler: SeasonsJustwatchLinksHandler{}, options: season, path: seasonPath, status: http.StatusNotFound, wantErr: "not found season for:the-sopranos"},
 		{name: "season justwatch links limited access", handler: SeasonsJustwatchLinksHandler{}, options: season, path: seasonPath, status: http.StatusForbidden, wantErr: "justwatch_links is limited access on Trakt"},
@@ -46,14 +49,17 @@ func TestSeasonsEpisodesWatchNowHandlers(t *testing.T) {
 			defer s.Teardown()
 
 			calls := map[string]int{}
-			s.Mux.HandleFunc("/shows/", func(w http.ResponseWriter, r *http.Request) {
+			handle := func(w http.ResponseWriter, r *http.Request) {
 				calls[r.Method+" "+r.URL.Path]++
 				if r.URL.RawQuery != tt.query {
 					t.Errorf("query is %q, want %q", r.URL.RawQuery, tt.query)
 				}
 				w.WriteHeader(tt.status)
 				test.SafeFprint(w, `{}`)
-			})
+			}
+			for _, prefix := range []string{"/shows/", "/episodes/"} {
+				s.Mux.HandleFunc(prefix, handle)
+			}
 
 			options := tt.options
 			options.Output = filepath.Join(t.TempDir(), "out.json")

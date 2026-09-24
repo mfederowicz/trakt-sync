@@ -491,6 +491,7 @@ func setOptionsDependsOnModuleSeasons(options str.Options) str.Options {
 	options.Reason = *_seasonsReason
 	options.Msg = *_seasonsMessage
 	options.Country = *_seasonsCountry
+	options.ID = consts.EmptyString
 	return options
 }
 
@@ -507,6 +508,7 @@ func setOptionsDependsOnModuleEpisodes(options str.Options) str.Options {
 	options.Msg = *_episodesMessage
 	options.Country = *_episodesCountry
 	options.Links = *_episodesLinks
+	options.ID = consts.EmptyString
 	return options
 }
 

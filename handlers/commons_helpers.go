@@ -153,9 +153,9 @@ func validIDCountryOptions(options *str.Options, emptyIDMsg string) error {
 }
 
 // watchNowError maps a watch now response to a readable error: 404, VIP limits and limited access (403).
-func watchNowError(action string, kind string, options *str.Options, resp *str.Response, err error) error {
+func watchNowError(action string, kind string, id string, resp *str.Response, err error) error {
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		return fmt.Errorf("not found %s for:%s", kind, options.InternalID)
+		return fmt.Errorf("not found %s for:%s", kind, id)
 	}
 
 	if vipErr := cli.HandleVIPResponse(resp, err); vipErr != nil {

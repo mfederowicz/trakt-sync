@@ -83,9 +83,17 @@ $ ./trakt-sync episodes -a watchnow -i the-sopranos -season 1 -episode 2 -countr
 ```console
 $ ./trakt-sync -ex streaming_ranks episodes -a watchnow -i the-sopranos -season 1 -episode 2 -country us -links tvos,direct
 ```
+Or by the episode's own Trakt ID (`-i` without `-season` and `-episode`):
+```console
+$ ./trakt-sync episodes -a watchnow -i 73482 -country us -> export_episodes_watchnow_73482.json
+```
 `-country` is required; `-links` and `-ex streaming_ranks` work as in `shows -a watchnow`. Marked Limited Access by Trakt.
 ##### Report an episode
 ```console
 $ ./trakt-sync episodes -a report -i the-sopranos -season 1 -episode 2 -r runtime -message "runtime is 50 min"
 ```
-`-season` and `-episode` are required. `-r` is one of: `duplicate`, `remove`, `data_refresh`, `metadata`, `adult`, `runtime`, `language`, `spam`, `tmdb`, `other`.
+Or report an episode by its own Trakt ID: pass it in `-i` without `-season` and `-episode`:
+```console
+$ ./trakt-sync episodes -a report -i 73482 -r runtime
+```
+With `-season` and `-episode`, `-i` is the show; without both, `-i` is the episode's Trakt ID. Only one of them is an error. `-r` is one of: `duplicate`, `remove`, `data_refresh`, `metadata`, `adult`, `runtime`, `language`, `spam`, `tmdb`, `other`.

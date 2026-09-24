@@ -19,7 +19,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`checkin`](#checkin) | 2 | 0 | 0 | 0 | 2 |
 | [`comments`](#comments) | 18 | 0 | 0 | 0 | 18 |
 | [`countries`](#countries) | 1 | 0 | 0 | 0 | 1 |
-| [`episodes`](#episodes) | 0 | 0 | 2 | 0 | 2 |
+| [`episodes`](#episodes) | 2 | 0 | 0 | 0 | 2 |
 | [`genres`](#genres) | 1 | 0 | 0 | 0 | 1 |
 | [`languages`](#languages) | 1 | 0 | 0 | 0 | 1 |
 | [`lists`](#lists) | 15 | 0 | 0 | 0 | 15 |
@@ -32,7 +32,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`recommendations`](#recommendations) | 4 | 0 | 0 | 0 | 4 |
 | [`scrobble`](#scrobble) | 3 | 0 | 0 | 0 | 3 |
 | [`search`](#search) | 2 | 0 | 4 | 0 | 6 |
-| [`seasons`](#seasons) | 0 | 0 | 1 | 0 | 1 |
+| [`seasons`](#seasons) | 1 | 0 | 0 | 0 | 1 |
 | [`shows`](#shows) | 58 | 0 | 0 | 2 | 60 |
 | [`smart-lists`](#smart-lists) | 0 | 0 | 2 | 0 | 2 |
 | [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 0 | 2 |
@@ -41,7 +41,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 63 | 0 | 41 | 0 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **261** | **0** | **70** | **4** | **335** |
+| **Total** | **264** | **0** | **67** | **4** | **335** |
 
 ## calendars
 
@@ -108,8 +108,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
-| ⬜ | POST | `/episodes/{id}/report` | Report an episode |  |
-| ⬜ | GET | `/episodes/{id}/watchnow/{country}` | Get episode watch now sources |  |
+| ✅ | POST | `/episodes/{id}/report` | Report an episode | `EpisodesService.ReportEpisode` |
+| ✅ | GET | `/episodes/{id}/watchnow/{country}` | Get episode watch now sources | `EpisodesService.GetEpisodeWatchNow` |
 
 ## genres
 
@@ -258,7 +258,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
-| ⬜ | POST | `/seasons/{id}/report` | Report a season |  |
+| ✅ | POST | `/seasons/{id}/report` | Report a season | `SeasonsService.ReportSeason` |
 
 ## shows
 

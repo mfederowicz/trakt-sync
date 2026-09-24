@@ -28,8 +28,8 @@ schedule. Releases up to v1.15.2 are listed on
 - `shows -a watchnow -i <id> -country <code>`: watch now sources for a show in one country, with the same
   `-links` and `-ex streaming_ranks` options as `movies -a watchnow`.
 - `shows -a justwatch_links -i <id> -country <code>`: the JustWatch link for a show in one country.
-- `seasons -a report -i <show> -season <n> -r <reason> [-message "..."]`: report a season for moderator review;
-  `-season` must be given (`0` is specials).
+- `seasons -a report -i <show> -season <n> -r <reason> [-message "..."]`: report a season for moderator review
+  (`-season 0` is specials).
 - `episodes -a report -i <show> -season <n> -episode <n> -r <reason> [-message "..."]`: report an episode for
   moderator review.
 - `episodes -a watchnow -i <show> -season <n> -episode <n> -country <code>`: watch now sources for an episode, with the
@@ -37,6 +37,8 @@ schedule. Releases up to v1.15.2 are listed on
 - `seasons -a justwatch_links -i <show> -season <n> -country <code>`: the JustWatch link for a season.
 - `shows -a refresh_justwatch -i <id>`: queue a refresh of the show's JustWatch links (VIP only).
 - `people -a report -i <id> -r <reason> [-message "..."]`: report a person for moderator review.
+- `seasons -a report`, `episodes -a report` and `episodes -a watchnow` accept the season's or episode's own Trakt ID
+  in `-i` when `-season` (and for episodes `-episode`) is left out; with them, `-i` is still the show.
 
 ### Changed
 

@@ -93,4 +93,8 @@ $ ./trakt-sync seasons -a justwatch_links -i the-sopranos -season 1 -country pl 
 ```console
 $ ./trakt-sync seasons -a report -i the-sopranos -season 1 -r metadata -message "overview is wrong"
 ```
-`-season` is required (`0` is specials). `-r` is one of: `duplicate`, `remove`, `data_refresh`, `metadata`, `adult`, `runtime`, `language`, `spam`, `tmdb`, `other`.
+Or report a season by its own Trakt ID: pass it in `-i` without `-season`:
+```console
+$ ./trakt-sync seasons -a report -i 3950 -r metadata
+```
+With `-season`, `-i` is the show (`-season 0` is specials); without it, `-i` is the season's Trakt ID. `-r` is one of: `duplicate`, `remove`, `data_refresh`, `metadata`, `adult`, `runtime`, `language`, `spam`, `tmdb`, `other`.
