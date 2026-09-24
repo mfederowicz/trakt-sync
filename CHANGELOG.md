@@ -53,6 +53,11 @@ schedule. Releases up to v1.15.2 are listed on
   names of the other modules. The old names still work and print a deprecation note.
 - `search` with an unknown or missing `-a` prints the same "Available actions" list as the other modules.
 
+### Removed
+
+- `search -t podcast` and `-t podcast_episode`, and the `podcast` / `podcast_episode` fields in search results: the
+  Trakt API contract has no podcast search types or podcast results.
+
 ### Fixed
 
 - `search -a text_query --field <name>`: the field filter was sent as `field` instead of `fields`, so the API

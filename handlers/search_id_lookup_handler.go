@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -18,7 +19,7 @@ type SearchIDLookupHandler struct{}
 
 // Handle to handle search: id_lookup action
 func (s SearchIDLookupHandler) Handle(options *str.Options, client *internal.Client) error {
-	printer.Println("Get sarch: " + options.Action)
+	printer.Println("Get search: " + options.Action)
 	printer.Println("search id_type: " + options.SearchIDType)
 	printer.Println("search id: " + options.ID)
 	printer.Println("search item_type: " + options.SearchType.String())
@@ -29,12 +30,16 @@ func (s SearchIDLookupHandler) Handle(options *str.Options, client *internal.Cli
 	}
 
 	if result == nil {
-		return errors.New("empty result")
+		return errors.New(consts.EmptyResult)
 	}
 
-	printer.Print("Found " + options.Action + " search data \n")
-	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(result, "", "  ")
+	printer.Println("Found " + options.Action + " search data")
+	jsonData, err := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
+
+	printer.Println("write data to:" + options.Output)
 
 	writer.WriteJSON(options, jsonData)
 	return nil

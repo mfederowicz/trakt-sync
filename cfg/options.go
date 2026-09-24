@@ -364,7 +364,7 @@ var ModuleConfig = map[string]OptionsConfig{
 	},
 	"search": {
 		SearchIDType: []string{"trakt", "imdb", "tmdb", "tvdb"},
-		SearchType:   []string{"movie", "show", "episode", "person", "list", "podcast", "podcast_episode"},
+		SearchType:   []string{"movie", "show", "episode", "person", "list"},
 		SearchField:  []string{"title", "aliases", "biography", "description", "episode", "name", "overview", "people", "show", "tagline", "translations"},
 		Type:         []string{"movies", "shows", "episodes", "persons", "all", "personal", "official"},
 		Sort:         []string{"rank", "added", "released", "title", "popular", "likes", "comments", "items", "added", "updated"},
