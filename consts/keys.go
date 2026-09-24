@@ -140,6 +140,7 @@ const (
 	Show                 = "show"
 	ShowEpisode          = "show_episode"
 	Shows                = "shows"
+	Sentiments           = "sentiments"
 	Stats                = "stats"
 	Streaming            = "streaming"
 	Studios              = "studios"

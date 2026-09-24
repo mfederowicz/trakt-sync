@@ -772,3 +772,22 @@ func (m *MoviesService) RefreshMovieJustwatch(ctx context.Context, id *string) (
 
 	return m.client.Do(ctx, req, nil)
 }
+
+// GetMovieSentiments Returns sentiment counts for comments and reactions attached to a movie.
+//
+// API docs: https://docs.trakt.tv/reference/getmoviessentiments
+func (m *MoviesService) GetMovieSentiments(ctx context.Context, id *string) (*str.Sentiments, *str.Response, error) {
+	var url = fmt.Sprintf("movies/%s/sentiments", *id)
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.Sentiments)
+	resp, err := m.client.Do(ctx, req, result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}

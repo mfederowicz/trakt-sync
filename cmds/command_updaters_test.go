@@ -67,6 +67,7 @@ func TestModuleFlagUpdaters(t *testing.T) {
 		{name: "movies report", cmd: MoviesCmd, args: []string{"-a", "report", "-i", "tron-legacy-2010", "-r", "spam"}, path: func(string) string { return "/movies/tron-legacy-2010/report" }},
 		{name: "movies report default reason is rejected", cmd: MoviesCmd, args: []string{"-a", "report", "-i", "tron-legacy-2010"}, path: func(string) string { return "" }},
 		{name: "movies refresh_justwatch", cmd: MoviesCmd, args: []string{"-a", "refresh_justwatch", "-i", "tron-legacy-2010"}, path: func(string) string { return "/movies/tron-legacy-2010/refresh/justwatch" }},
+		{name: "movies sentiments", cmd: MoviesCmd, args: []string{"-a", "sentiments", "-i", "tron-legacy-2010"}, path: func(string) string { return "/movies/tron-legacy-2010/sentiments" }},
 		{name: "shows -period", cmd: ShowsCmd, args: []string{"-a", "favorited", "-period", "daily"}, path: func(string) string { return "/shows/favorited/daily" }},
 		{name: "shows -start_date", cmd: ShowsCmd, args: []string{"-a", "updates", "-start_date", "2026-01-15"}, path: func(tz string) string { return "/shows/updates/" + startDate(tz) }},
 		{name: "shows default start", cmd: ShowsCmd, args: []string{"-a", "updates"}, path: func(tz string) string { return "/shows/updates/" + window(tz) }},

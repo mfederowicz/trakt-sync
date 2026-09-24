@@ -23,7 +23,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`languages`](#languages) | 1 | 0 | 0 | 1 |
 | [`lists`](#lists) | 15 | 0 | 0 | 15 |
 | [`media`](#media) | 3 | 0 | 0 | 3 |
-| [`movies`](#movies) | 28 | 0 | 3 | 31 |
+| [`movies`](#movies) | 29 | 0 | 2 | 31 |
 | [`networks`](#networks) | 1 | 0 | 0 | 1 |
 | [`notes`](#notes) | 5 | 0 | 0 | 5 |
 | [`oauth`](#oauth) | 3 | 0 | 2 | 5 |
@@ -40,7 +40,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 63 | 0 | 41 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 5 |
-| **Total** | **250** | **0** | **85** | **335** |
+| **Total** | **251** | **0** | **84** | **335** |
 
 ## calendars
 
@@ -177,7 +177,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/movies/{id}/related` | Get related movies | `MoviesService.GetRelatedMovies` |
 | ✅ | GET | `/movies/{id}/releases/{country}` | Get all movie releases | `MoviesService.GetAllMovieReleases` |
 | ✅ | POST | `/movies/{id}/report` | Report a movie | `MoviesService.ReportMovie` |
-| ⬜ | GET | `/movies/{id}/sentiments` | Get movie sentiments |  |
+| ✅ | GET | `/movies/{id}/sentiments` | Get movie sentiments | `MoviesService.GetMovieSentiments` |
 | ✅ | GET | `/movies/{id}/stats` | Get movie stats | `MoviesService.GetMovieStats` |
 | ✅ | GET | `/movies/{id}/studios` | Get movie studios | `MoviesService.GetMovieStudios` |
 | ✅ | GET | `/movies/{id}/translations` | Get all movie translations | `MoviesService.GetAllMovieTranslations` |

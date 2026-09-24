@@ -55,3 +55,7 @@ func TestGetOutputForModuleMoviesHotStreaming(t *testing.T) {
 	assert.Equal(t, "export_movies_hot.json", GetOutputForModule(&str.Options{Module: "movies", Action: "hot"}))
 	assert.Equal(t, "export_movies_streaming_weekly.json", GetOutputForModule(&str.Options{Module: "movies", Action: "streaming", Period: DefaultConfig().MoviesPeriod}))
 }
+
+func TestGetOutputForModuleMoviesSentiments(t *testing.T) {
+	assert.Equal(t, "export_movies_sentiments_tron-legacy-2010.json", GetOutputForModule(&str.Options{Module: "movies", Action: "sentiments", InternalID: "tron-legacy-2010"}))
+}

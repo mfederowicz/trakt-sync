@@ -36,6 +36,7 @@ schedule. Releases up to v1.15.2 are listed on
 - `movies -a streaming -period daily|weekly|monthly`: the most streamed movies (default `weekly`).
 - `movies -a report -i <id> -r <reason> [-message "..."]`: report a movie for moderator review.
 - `movies -a refresh_justwatch -i <id>`: queue a refresh of the movie's JustWatch links (VIP only).
+- `movies -a sentiments -i <id>`: good and bad sentiments from a movie's comments and reactions.
 
 ### Changed
 
