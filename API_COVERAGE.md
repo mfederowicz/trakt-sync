@@ -36,12 +36,12 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`shows`](#shows) | 58 | 0 | 0 | 2 | 60 |
 | [`smart-lists`](#smart-lists) | 0 | 0 | 2 | 0 | 2 |
 | [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 0 | 2 |
-| [`sync`](#sync) | 29 | 0 | 8 | 0 | 37 |
+| [`sync`](#sync) | 31 | 0 | 6 | 0 | 37 |
 | [`team`](#team) | 0 | 0 | 1 | 0 | 1 |
 | [`users`](#users) | 63 | 0 | 41 | 0 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **268** | **0** | **63** | **4** | **335** |
+| **Total** | **270** | **0** | **61** | **4** | **335** |
 
 ## calendars
 
@@ -364,8 +364,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/sync/history/{type}/{id}` | Get watched history | `SyncService.GetWatchedHistory` |
 | ✅ | GET | `/sync/last_activities` | Get last activity | `SyncService.GetLastActivity` |
 | ✅ | GET | `/sync/playback` | Get playback progress | `SyncService.GetPlaybackProgress` |
-| ⬜ | GET | `/sync/playback/episodes` | Get episode playback progress |  |
-| ⬜ | GET | `/sync/playback/movies` | Get movie playback progress |  |
+| ✅ | GET | `/sync/playback/episodes` | Get episode playback progress | `SyncService.GetPlaybackProgress` |
+| ✅ | GET | `/sync/playback/movies` | Get movie playback progress | `SyncService.GetPlaybackProgress` |
 | ✅ | DELETE | `/sync/playback/{id}` | Remove a playback item | `SyncService.RemovePlaybackItem` |
 | ⬜ | GET | `/sync/progress/up_next` | Get up next |  |
 | ⬜ | GET | `/sync/progress/up_next_nitro` | Get up next nitro |  |

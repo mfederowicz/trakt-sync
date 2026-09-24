@@ -145,9 +145,9 @@ func (s *SyncService) GetLastActivity(ctx context.Context) (*str.UserLastActivit
 	return result, resp, nil
 }
 
-// GetPlaybackProgress Returns playback progress.
+// GetPlaybackProgress Returns playback progress; types movies or episodes narrows it, nil returns both.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/sync/playback/get-playback-progress
+// API docs: https://docs.trakt.tv/reference/getsyncprogressplayback
 func (s *SyncService) GetPlaybackProgress(ctx context.Context, types *string, opts *uri.ListOptions) ([]*str.PlaybackProgress, *str.Response, error) {
 	var url string
 	if types != nil {
@@ -160,7 +160,7 @@ func (s *SyncService) GetPlaybackProgress(ctx context.Context, types *string, op
 		return nil, nil, err
 	}
 	printer.Println("fetch playback url:" + url)
-	req, err := s.client.NewRequest("GET", url, nil)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -3,6 +3,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -36,17 +37,26 @@ func (m SyncPlaybackHandler) Handle(options *str.Options, client *internal.Clien
 		return err
 	}
 
-	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(result, "", "  ")
+	jsonData, err := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode playback result: %w", err)
+	}
+
+	printer.Println("write data to:" + options.Output)
 	writer.WriteJSON(options, jsonData)
 	return nil
 }
 
 func (m SyncPlaybackHandler) syncPlayback(client *internal.Client, options *str.Options, page int) ([]*str.PlaybackProgress, *str.Response, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, StartAt: options.StartDate, EndAt: options.EndDate}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, StartAt: options.StartDate, EndAt: options.EndDate}
+	// all is the untyped sync/playback route
+	var types *string
+	if options.Type != consts.ActionTypeAll {
+		types = &options.Type
+	}
 	list, resp, err := client.Sync.GetPlaybackProgress(
 		client.BuildCtxFromOptions(options),
-		&options.Type,
+		types,
 		&opts,
 	)
 

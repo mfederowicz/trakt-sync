@@ -3,13 +3,17 @@
 ```console
 $ ./trakt-sync sync -a last_activities
 ```
-##### Playback progress from last 60 days
+##### Playback progress from last 60 days (movies and episodes)
+Without `-t` (or with `-t all`) the result has both movies and episodes.
 ```console
 $ ./trakt-sync sync -a playback
 ```
 ##### Playback progress from last 60 days (movies or episodes)
 ```console
 $ ./trakt-sync sync -a playback -t movies
+```
+```console
+$ ./trakt-sync -ex full sync -a playback -t episodes
 ```
 ##### Playback progress from 7 days
 ```console
