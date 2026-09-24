@@ -65,7 +65,10 @@ $ ./trakt-sync search -a exact_query -t movie -q "tron legacy"
 $ ./trakt-sync -ex full search -a exact_query -t show -q dark
 ```
 ##### Export trending search results:
-Globally trending recent searches. `-t` takes one value: `movies`, `shows` or `people`; `-q` narrows the search text.
+Globally trending searches: the items people most often picked from Trakt search results, with `count` as the number
+of picks. It is not a list of trending movies, shows or people. `-t` takes one value: `movies`, `shows` or `people`.
+`-q` filters on the text people typed into search, not on the item's name, so `-t shows -q reacher` finds Reacher,
+but `-t people -q ritchson` is empty unless people searched for that name.
 ```console
 $ ./trakt-sync search -a trending -t movies
 ```
