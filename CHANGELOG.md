@@ -35,6 +35,7 @@ schedule. Releases up to v1.15.2 are listed on
 - `episodes -a watchnow -i <show> -season <n> -episode <n> -country <code>`: watch now sources for an episode, with the
   same `-links` and `-ex streaming_ranks` options as `shows -a watchnow`.
 - `seasons -a justwatch_links -i <show> -season <n> -country <code>`: the JustWatch link for a season.
+- `shows -a refresh_justwatch -i <id>`: queue a refresh of the show's JustWatch links (VIP only).
 
 ### Changed
 

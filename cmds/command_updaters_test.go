@@ -92,6 +92,7 @@ func TestModuleFlagUpdaters(t *testing.T) {
 		{name: "episodes watchnow", cmd: EpisodesCmd, args: []string{"-a", "watchnow", "-i", "the-sopranos", "-season", "1", "-episode", "2", "-country", "us"}, path: func(string) string { return "/shows/the-sopranos/seasons/1/episodes/2/watchnow/us" }},
 		{name: "episodes watchnow default country is rejected", cmd: EpisodesCmd, args: []string{"-a", "watchnow", "-i", "the-sopranos", "-season", "1", "-episode", "2"}, path: func(string) string { return "" }},
 		{name: "seasons justwatch_links", cmd: SeasonsCmd, args: []string{"-a", "justwatch_links", "-i", "the-sopranos", "-season", "1", "-country", "pl"}, path: func(string) string { return "/shows/the-sopranos/seasons/1/watchnow/justwatch_links/pl" }},
+		{name: "shows refresh_justwatch", cmd: ShowsCmd, args: []string{"-a", "refresh_justwatch", "-i", "the-sopranos"}, path: func(string) string { return "/shows/the-sopranos/refresh/justwatch" }},
 		{name: "shows -period", cmd: ShowsCmd, args: []string{"-a", "favorited", "-period", "daily"}, path: func(string) string { return "/shows/favorited/daily" }},
 		{name: "shows -start_date", cmd: ShowsCmd, args: []string{"-a", "updates", "-start_date", "2026-01-15"}, path: func(tz string) string { return "/shows/updates/" + startDate(tz) }},
 		{name: "shows default start", cmd: ShowsCmd, args: []string{"-a", "updates"}, path: func(tz string) string { return "/shows/updates/" + window(tz) }},
