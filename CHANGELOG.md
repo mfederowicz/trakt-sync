@@ -35,6 +35,10 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Changed
 
+- `users -a add_hidden_items|remove_hidden_items`: `-section` is now checked before the request, like
+  `hidden_items` (`calendar` is the default).
+- `users -a hidden_items`: `-section progress_watched_reset` is no longer accepted; it is not a section in
+  the Trakt API contract.
 - `sync -a get_collection`: `-t` is now checked before the request (`movies`, `shows`, `episodes`, `media`,
   `seasons`); an unknown type fails with an error instead of calling the API. `-t media` returns movies,
   shows and episodes together.

@@ -48,6 +48,9 @@ var SearchFieldConfig = map[string][]string{
 	"list":    {"name", "description"},
 }
 
+// hiddenSections are the users/hidden/{section} values from the API contract
+var hiddenSections = []string{"calendar", "progress_watched", "progress_collected", "recommendations", "comments", "dropped"}
+
 // ModuleActionConfig represents the configuration options depens on module:action key
 var ModuleActionConfig = map[string]OptionsConfig{
 
@@ -180,9 +183,14 @@ var ModuleActionConfig = map[string]OptionsConfig{
 			"watched", "collected"},
 	},
 	"users:hidden_items": {
-		Type: []string{"movie", "show", "season", "user"},
-		Section: []string{"calendar", "progress_watched", "progress_watched_reset",
-			"progress_collected", "recommendations", "comments", "dropped"},
+		Type:    []string{"movie", "show", "season", "user"},
+		Section: hiddenSections,
+	},
+	"users:add_hidden_items": {
+		Section: hiddenSections,
+	},
+	"users:remove_hidden_items": {
+		Section: hiddenSections,
 	},
 	"users:likes": {
 		Type: []string{"comments", "lists"},
