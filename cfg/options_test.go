@@ -59,3 +59,8 @@ func TestGetOutputForModuleMoviesHotStreaming(t *testing.T) {
 func TestGetOutputForModuleMoviesSentiments(t *testing.T) {
 	assert.Equal(t, "export_movies_sentiments_tron-legacy-2010.json", GetOutputForModule(&str.Options{Module: "movies", Action: "sentiments", InternalID: "tron-legacy-2010"}))
 }
+
+func TestGetOutputForModuleMoviesWatchNow(t *testing.T) {
+	assert.Equal(t, "export_movies_watchnow_tron-legacy-2010.json", GetOutputForModule(&str.Options{Module: "movies", Action: "watchnow", InternalID: "tron-legacy-2010"}))
+	assert.Equal(t, "export_movies_justwatch_links_tron-legacy-2010.json", GetOutputForModule(&str.Options{Module: "movies", Action: "justwatch_links", InternalID: "tron-legacy-2010"}))
+}

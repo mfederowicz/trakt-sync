@@ -32,6 +32,7 @@ type Options struct {
 	InternalID        string
 	Item              string
 	Language          string
+	Links             string
 	List              string
 	ListItemID        int
 	ItemID            int

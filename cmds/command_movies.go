@@ -20,13 +20,15 @@ var (
 	_moviesStartDate  = MoviesCmd.Flag.String("start_date", "", consts.StartDateUsage)
 	_moviesReason     = MoviesCmd.Flag.String("r", cfg.DefaultConfig().Reason, consts.ReasonUsage)
 	_moviesMessage    = MoviesCmd.Flag.String("message", cfg.DefaultConfig().Msg, consts.ReportMsgUsage)
+	_moviesLinks      = MoviesCmd.Flag.String("links", consts.EmptyString, consts.MoviesLinksUsage)
 
 	validActions = []string{
 		"trending", "popular", "favorited", "played", "watched", "collected",
 		"anticipated", "boxoffice", "updated", "updated_ids", "summary", "aliases",
 		"releases", "translations", "comments", "lists", "people", "ratings",
 		"releated", "stats", "studios", "watching", "videos", "refresh",
-		consts.Hot, consts.Streaming, consts.Report, consts.RefreshJustwatch, consts.Sentiments}
+		consts.Hot, consts.Streaming, consts.Report, consts.RefreshJustwatch, consts.Sentiments,
+		consts.WatchNow, consts.JustwatchLinks}
 )
 
 // MoviesCmd returns movies and episodes that a user has watched, sorted by most recent.
@@ -86,6 +88,9 @@ func moviesFunc(cmd *Command, _ ...string) error {
 		consts.Report:           handlers.MoviesReportHandler{},
 		consts.RefreshJustwatch: handlers.MoviesRefreshJustwatchHandler{},
 		consts.Sentiments:       handlers.MoviesSentimentsHandler{},
+
+		consts.WatchNow:       handlers.MoviesWatchNowHandler{},
+		consts.JustwatchLinks: handlers.MoviesJustwatchLinksHandler{},
 	}
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 

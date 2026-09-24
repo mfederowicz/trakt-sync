@@ -80,6 +80,7 @@ var Avflags = map[string]bool{
 	"item":               true,
 	"language":           true,
 	"languages":          true,
+	"links":              true,
 	"lists":              true,
 	"media":              true,
 	"list_item_id":       true,
@@ -1168,6 +1169,10 @@ func UpdateOptionsWithCommandMoviesFlags(c *Command, options *str.Options) *str.
 
 	if len(*_moviesMessage) > consts.ZeroValue {
 		options.Msg = *_moviesMessage
+	}
+
+	if len(*_moviesLinks) > consts.ZeroValue {
+		options.Links = *_moviesLinks
 	}
 
 	return options

@@ -73,6 +73,7 @@ const (
 	ImdbIDFormat         = "Imdb"
 	Item                 = "item"
 	Items                = "items"
+	JustwatchLinks       = "justwatch_links"
 	Languages            = "languages"
 	LastActivities       = "last_activities"
 	LastEpisode          = "last_episode"
@@ -163,6 +164,7 @@ const (
 	Watched              = "watched"
 	WatchedProgress      = "watched_progress"
 	Watching             = "watching"
+	WatchNow             = "watchnow"
 	Watchlist            = "watchlist"
 	WatchlistComments    = "watchlist_comments"
 )
