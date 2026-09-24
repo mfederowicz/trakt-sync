@@ -64,3 +64,23 @@ func TestSyncServiceShowProgress(t *testing.T) {
 		})
 	}
 }
+
+func TestSyncServiceGetUpNextNitro(t *testing.T) {
+	setup := Setup()
+	defer setup.Teardown()
+
+	setup.Mux.HandleFunc("/sync/progress/up_next_nitro", func(w http.ResponseWriter, r *http.Request) {
+		test.AssertMethod(t, r, http.MethodGet)
+		test.AssertNoDiff(t, "genres=action%2Cdrama&intent=continue&page=1&watchnow=subscriptions&years=2020-2026", r.URL.RawQuery)
+		test.SafeFprint(w, `[{"show":{"title":"Reacher"},"progress":{"aired":24,"completed":20}}]`)
+	})
+
+	got, _, err := setup.Client.Sync.GetUpNextNitro(context.Background(), &uri.UpNextNitroOptions{
+		Page: 1, Intent: "continue", WatchNow: "subscriptions", Genres: "action,drama", Years: "2020-2026",
+	})
+	test.AssertNilError(t, err)
+	test.AssertNoDiff(t, []*str.ShowProgress{{
+		Show:     &str.Show{Title: str.String("Reacher")},
+		Progress: &str.WatchedProgress{Aired: test.Ptr(24), Completed: test.Ptr(20)},
+	}}, got)
+}

@@ -720,7 +720,14 @@ func (s *SyncService) GetWatchedProgress(ctx context.Context, opts *uri.SyncProg
 	return s.getShowProgress(ctx, "sync/progress/watched", opts)
 }
 
-func (s *SyncService) getShowProgress(ctx context.Context, url string, opts *uri.SyncProgressOptions) ([]*str.ShowProgress, *str.Response, error) {
+// GetUpNextNitro Returns the up next progress for intent-based clients, with media filters.
+//
+// API docs: https://docs.trakt.tv/reference/getsyncprogressupnextnitro
+func (s *SyncService) GetUpNextNitro(ctx context.Context, opts *uri.UpNextNitroOptions) ([]*str.ShowProgress, *str.Response, error) {
+	return s.getShowProgress(ctx, "sync/progress/up_next_nitro", opts)
+}
+
+func (s *SyncService) getShowProgress(ctx context.Context, url string, opts any) ([]*str.ShowProgress, *str.Response, error) {
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err

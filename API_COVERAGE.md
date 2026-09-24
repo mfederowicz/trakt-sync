@@ -36,12 +36,12 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`shows`](#shows) | 58 | 0 | 0 | 2 | 60 |
 | [`smart-lists`](#smart-lists) | 0 | 0 | 2 | 0 | 2 |
 | [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 0 | 2 |
-| [`sync`](#sync) | 36 | 0 | 1 | 0 | 37 |
+| [`sync`](#sync) | 37 | 0 | 0 | 0 | 37 |
 | [`team`](#team) | 0 | 0 | 1 | 0 | 1 |
 | [`users`](#users) | 63 | 0 | 41 | 0 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **275** | **0** | **56** | **4** | **335** |
+| **Total** | **276** | **0** | **55** | **4** | **335** |
 
 ## calendars
 
@@ -368,7 +368,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/sync/playback/movies` | Get movie playback progress | `SyncService.GetPlaybackProgress` |
 | ✅ | DELETE | `/sync/playback/{id}` | Remove a playback item | `SyncService.RemovePlaybackItem` |
 | ✅ | GET | `/sync/progress/up_next` | Get up next | `SyncService.GetUpNext` |
-| ⬜ | GET | `/sync/progress/up_next_nitro` | Get up next nitro |  |
+| ✅ | GET | `/sync/progress/up_next_nitro` | Get up next nitro | `SyncService.GetUpNextNitro` |
 | ✅ | GET | `/sync/progress/watched` | Get watched progress | `SyncService.GetWatchedProgress` |
 | ✅ | POST | `/sync/ratings` | Add new ratings | `SyncService.AddItemsToRatings` |
 | ✅ | POST | `/sync/ratings/remove` | Remove ratings | `SyncService.RemoveItemsFromRatings` |

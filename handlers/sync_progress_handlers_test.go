@@ -53,6 +53,41 @@ func TestSyncProgressHandlers(t *testing.T) {
 			wantCall: "/sync/progress/watched?page=1",
 		},
 		{
+			name:     "up next nitro",
+			handler:  SyncGetUpNextNitroHandler{},
+			options:  str.Options{Action: consts.GetUpNextNitro},
+			wantCall: "/sync/progress/up_next_nitro?page=1",
+		},
+		{
+			name:    "up next nitro with every filter",
+			handler: SyncGetUpNextNitroHandler{},
+			options: str.Options{
+				Action: consts.GetUpNextNitro, Intent: "start", WatchNow: "free_all", Genres: "action", Subgenres: "heist",
+				Years: "2020", Ratings: "75-100", MediaStartDate: "2026-01-01", MediaEndDate: "2026-12-31", Runtimes: "30-60",
+				Countries: "us", Certifications: "tv-14", SortBy: "added", SortHow: "desc", PerPage: 20,
+			},
+			wantCall: "/sync/progress/up_next_nitro?certifications=tv-14&countries=us&end_date=2026-12-31&genres=action&intent=start&limit=20" +
+				"&page=1&ratings=75-100&runtimes=30-60&sort_by=added&sort_how=desc&start_date=2026-01-01&subgenres=heist&watchnow=free_all&years=2020",
+		},
+		{
+			name:     "up next nitro ignores progress-only flags",
+			handler:  SyncGetUpNextNitroHandler{},
+			options:  str.Options{Action: consts.GetUpNextNitro, IncludeStats: true, HideCompleted: true, ExtendedInfo: "full"},
+			wantCall: "/sync/progress/up_next_nitro?page=1",
+		},
+		{
+			name:    "up next nitro intent not in contract",
+			handler: SyncGetUpNextNitroHandler{},
+			options: str.Options{Action: consts.GetUpNextNitro, Intent: "paused"},
+			wantErr: "intent 'paused' is not valid",
+		},
+		{
+			name:    "up next nitro watchnow not in contract",
+			handler: SyncGetUpNextNitroHandler{},
+			options: str.Options{Action: consts.GetUpNextNitro, WatchNow: "rent"},
+			wantErr: "watchnow 'rent' is not valid",
+		},
+		{
 			name:    "watched progress with both hide filters",
 			handler: SyncGetWatchedProgressHandler{},
 			options: str.Options{Action: consts.GetWatchedProgress, HideCompleted: true, HideNotCompleted: true},

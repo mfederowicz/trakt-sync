@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -25,7 +26,10 @@ func (SyncGetUpNextHandler) Handle(options *str.Options, client *internal.Client
 		IncludeStats:  options.IncludeStats,
 		LifetimeStats: options.LifetimeStats,
 	}
-	result, err := fetchSyncProgress(client, options, opts, consts.DefaultPage, client.Sync.GetUpNext)
+	result, err := fetchSyncProgress(client, options, consts.DefaultPage, func(ctx context.Context, page int) ([]*str.ShowProgress, *str.Response, error) {
+		opts.Page = page
+		return client.Sync.GetUpNext(ctx, &opts)
+	})
 	if err != nil {
 		return fmt.Errorf("get up next error: %w", err)
 	}

@@ -41,6 +41,13 @@ var (
 var Avflags = map[string]bool{
 	"a":                  true,
 	"available_on":       true,
+	"end_date":           true,
+	"intent":             true,
+	"ratings":            true,
+	"runtimes":           true,
+	"subgenres":          true,
+	"watchnow":           true,
+	"years":              true,
 	"hide_completed":     true,
 	"hide_not_completed": true,
 	"include_stats":      true,
@@ -1007,6 +1014,17 @@ func UpdateOptionsWithCommandSyncFlags(c *Command, options *str.Options) *str.Op
 	options.HideCompleted = *_syncHideCompleted
 	options.HideNotCompleted = *_syncHideNotCompleted
 	options.OnlyRewatching = *_syncOnlyRewatching
+	options.Intent = *_syncIntent
+	options.WatchNow = *_syncWatchNow
+	options.Subgenres = *_syncSubgenres
+	options.Ratings = *_syncRatings
+	options.Certifications = *_syncCertifications
+	options.MediaStartDate = *_syncStartDate
+	options.MediaEndDate = *_syncEndDate
+	options.Genres = *_genres
+	options.Years = *_years
+	options.Countries = *_countries
+	options.Runtimes = *_runtimes
 
 	return options
 }

@@ -85,6 +85,7 @@ func TestSyncProgressSort(t *testing.T) {
 		{name: "up next drops default sort", action: consts.GetUpNext, wantBy: "", wantHow: ""},
 		{name: "watched progress keeps set sort", action: consts.GetWatchedProgress, sortBySet: true, sortHowSet: true, wantBy: "rank", wantHow: "asc"},
 		{name: "up next keeps only sort_how", action: consts.GetUpNext, sortHowSet: true, wantBy: "", wantHow: "asc"},
+		{name: "up next nitro drops default sort", action: consts.GetUpNextNitro, wantBy: "", wantHow: ""},
 		{name: "other action untouched", action: consts.GetWatchlist, wantBy: "rank", wantHow: "asc"},
 	}
 
@@ -137,4 +138,33 @@ func TestSyncProgressSortFromFlags(t *testing.T) {
 			assert.Equal(t, tt.wantHow, got.SortHow)
 		})
 	}
+}
+
+func TestSyncUpNextNitroFlags(t *testing.T) {
+	t.Cleanup(resetAllFlags)
+
+	fs := afero.NewMemMapFs()
+	tmpPath := "/tmp-nitro/"
+	assert.NoError(t, fs.MkdirAll(tmpPath, consts.X755))
+	assert.NoError(t, afero.WriteFile(fs, tmpPath+"token.json", []byte("{}"), consts.X644))
+	assert.NoError(t, afero.WriteFile(fs, tmpPath+"user_settings.json", []byte("{}"), consts.X644))
+
+	fileConfig := cfg.DefaultConfig()
+	fileConfig.ClientID = "a"
+	fileConfig.ClientSecret = "b"
+	fileConfig.TokenPath = tmpPath + "token.json"
+	fileConfig.SettingsPath = tmpPath + "user_settings.json"
+
+	var got *str.Options
+	command := &Command{Name: consts.Sync, Flag: SyncCmd.Flag, Run: func(c *Command, _ ...string) error {
+		got = c.UpdateOptionsWithCommandFlags(c.Options)
+		return nil
+	}}
+	args := []string{"-a", "get_up_next_nitro", "-intent", "continue", "-watchnow", "free", "-genres", "action", "-years", "2020", "-start_date", "2026-01-01"}
+	assert.NoError(t, command.Exec(fs, internal.NewClient(nil), fileConfig, args))
+	assert.Equal(t, "continue", got.Intent)
+	assert.Equal(t, "free", got.WatchNow)
+	assert.Equal(t, "action", got.Genres)
+	assert.Equal(t, "2020", got.Years)
+	assert.Equal(t, "2026-01-01", got.MediaStartDate)
 }

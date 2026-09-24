@@ -60,6 +60,12 @@ var SearchRecentTypes = []string{"movies", "shows", "people", "lists"}
 // SyncAvailableOn are the sync/collection available_on values from the API contract
 var SyncAvailableOn = []string{"plex"}
 
+// SyncUpNextIntents are the sync/progress/up_next_nitro intent values from the API contract
+var SyncUpNextIntents = []string{"all", "continue", "start", "completed"}
+
+// WatchNowFilters are the watchnow media filter values from the API contract
+var WatchNowFilters = []string{"favorites", "any", "any_all", "free", "free_all", "subscriptions", "subscriptions_all"}
+
 // hiddenSections are the users/hidden/{section} values from the API contract
 var hiddenSections = []string{"calendar", "progress_watched", "progress_collected", "recommendations", "comments", "dropped"}
 
@@ -156,6 +162,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 		Sort: []string{},
 	},
 	"sync:get_up_next": {
+		SortHow: []string{"asc", "desc"},
+	},
+	"sync:get_up_next_nitro": {
 		SortHow: []string{"asc", "desc"},
 	},
 	"sync:get_watched_progress": {
@@ -737,6 +746,8 @@ func getOutputForModuleSync(options *str.Options) string {
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Collection, options.Type)
 	case consts.GetUpNext:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, consts.UpNext)
+	case consts.GetUpNextNitro:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, consts.UpNextNitro)
 	case consts.GetWatchedProgress:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, consts.WatchedProgress)
 	case consts.GetMinimalCollection:
