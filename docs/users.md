@@ -470,7 +470,7 @@ $ ./trakt-sync users -a history -u username -t episodes
 ```
 ##### Get history filter for specific item
 ```console
-$ ./trakt-sync users -a history -u username -item_id 123456
+$ ./trakt-sync users -a history -u username -t movies -item_id 123456
 ```
 ##### Get user ratings - movies - all ratings
 ```console
