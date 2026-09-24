@@ -46,6 +46,12 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Fixed
 
+- `movies -a favorited|played|watched|collected -period <p>`: `-period` was ignored and `weekly` was always
+  used (the `shows` default overwrote it).
+- `movies|shows|people -a updates|updated_ids -start_date <date>`: `-start_date` was ignored and the last
+  60 days were always used. Without `-start_date` the last 60 days are still used.
+- `calendars -start_date <date>`: `-start_date` was ignored; the request used a date 60 days in the past in
+  the wrong format. The default is today again, for `-days` days (7).
 - `type` from the config file was ignored: commands that use the global `-t` flag (for example `sync`,
   `watchlist`, `collection`, `history`, `certifications`, `comments`) always used `-t`'s default `movies`
   when `-t` was not given. The config file value is now used, and `-t` still overrides it.
