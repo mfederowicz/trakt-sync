@@ -26,6 +26,7 @@ func TestShowsReportSentimentsHandlers(t *testing.T) {
 		method     string
 		path       string
 		status     int
+		body       string
 		wantErr    string
 		wantOutput bool
 	}{
@@ -35,6 +36,7 @@ func TestShowsReportSentimentsHandlers(t *testing.T) {
 		{name: "report default reason", handler: ShowsReportHandler{}, action: consts.Report, options: str.Options{InternalID: "the-sopranos", Reason: cfg.DefaultConfig().Reason}, wantErr: consts.EmptyReasonMsg},
 		{name: "report invalid reason", handler: ShowsReportHandler{}, action: consts.Report, options: str.Options{InternalID: "the-sopranos", Reason: "boring"}, wantErr: "reason 'boring' is not valid"},
 		{name: "sentiments", handler: ShowsSentimentsHandler{}, action: consts.Sentiments, options: sopranos, method: http.MethodGet, path: sentimentsPath, status: http.StatusOK, wantOutput: true},
+		{name: "sentiments empty object", handler: ShowsSentimentsHandler{}, action: consts.Sentiments, options: sopranos, method: http.MethodGet, path: sentimentsPath, status: http.StatusOK, body: `{}`, wantErr: "no sentiments for:the-sopranos"},
 		{name: "sentiments not found", handler: ShowsSentimentsHandler{}, action: consts.Sentiments, options: sopranos, method: http.MethodGet, path: sentimentsPath, status: http.StatusNotFound, wantErr: "not found show for:the-sopranos"},
 		{name: "sentiments without id", handler: ShowsSentimentsHandler{}, action: consts.Sentiments, wantErr: consts.EmptyShowIDMsg},
 	}
@@ -48,7 +50,11 @@ func TestShowsReportSentimentsHandlers(t *testing.T) {
 			s.Mux.HandleFunc("/shows/", func(w http.ResponseWriter, r *http.Request) {
 				calls[r.Method+" "+r.URL.Path]++
 				w.WriteHeader(tt.status)
-				test.SafeFprint(w, `{"good":[],"bad":[],"comment_count":0}`)
+				body := `{"good":[],"bad":[],"comment_count":0}`
+				if tt.body != "" {
+					body = tt.body
+				}
+				test.SafeFprint(w, body)
 			})
 
 			options := tt.options
@@ -65,6 +71,9 @@ func TestShowsReportSentimentsHandlers(t *testing.T) {
 			if tt.wantErr != "" {
 				if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
 					t.Fatalf("error is %v, want it to contain %q", err, tt.wantErr)
+				}
+				if _, statErr := os.Stat(options.Output); statErr == nil {
+					t.Error("output file was written on error")
 				}
 				return
 			}

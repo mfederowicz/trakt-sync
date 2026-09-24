@@ -33,6 +33,8 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Fixed
 
+- `movies -a sentiments` and `shows -a sentiments`: an unknown id wrote an empty `{}` file, because the API answers
+  it with an empty object instead of 404; it now fails with `no sentiments for:<id>` and writes nothing.
 - `movies -a hot` and `movies -a streaming`: the live Trakt API returns 404 for these routes; the error now says the
   route is documented but not served, instead of a bare 404.
 
