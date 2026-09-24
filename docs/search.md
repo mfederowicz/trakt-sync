@@ -36,16 +36,10 @@ $ ./trakt-sync search -a id_lookup --id_type tvdb -i 12601 -t movie -t show
 $ ./trakt-sync search -a id_lookup --id_type imdb -i 12601 -t movie
 ```
 ```console
-$ ./trakt-sync search -a id_lookup --id_type imdb -i 12601 -t podcast
-```
-```console
 $ ./trakt-sync search -a id_lookup --id_type imdb -i tt0266697
 ```
 ```console
 $ ./trakt-sync search -a id_lookup --id_type tvdb -i 75725
-```
-```console
-$ ./trakt-sync search -a id_lookup --id_type tvdb -i 75725 -t podcast
 ```
 ```console
 $ ./trakt-sync search -a id_lookup -i 75725

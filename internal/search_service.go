@@ -19,7 +19,7 @@ type SearchService Service
 // (i.e. title, overview, etc). Results are ordered by the most relevant score.
 // Specify the type of results by sending a single value or a comma delimited string for multiple types.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/search/text-query/get-text-query-results
+// API docs: https://docs.trakt.tv/reference/getsearchquery
 func (s *SearchService) GetTextQueryResults(ctx context.Context, searchType *string, opts *uri.ListOptions) ([]*str.SearchListItem, *str.Response, error) {
 	var url = fmt.Sprintf("search/%s", *searchType)
 	url, err := uri.AddQuery(url, opts)
@@ -28,7 +28,7 @@ func (s *SearchService) GetTextQueryResults(ctx context.Context, searchType *str
 	}
 
 	printer.Println("fetch text search url:" + url)
-	req, err := s.client.NewRequest("GET", url, nil)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -49,7 +49,7 @@ func (s *SearchService) GetTextQueryResults(ctx context.Context, searchType *str
 // if the id_type is not globally unique. Specify the type of results by
 // sending a single value or a comma delimited string for multiple types.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/search/id-lookup/get-id-lookup-results
+// API docs: https://docs.trakt.tv/reference/getsearchlookup
 func (s *SearchService) GetIDLookupResults(ctx context.Context, formatType *string, id *string, opts *uri.ListOptions) ([]*str.SearchListItem, *str.Response, error) {
 	var url = fmt.Sprintf("search/%s/%s", *formatType, *id)
 	url, err := uri.AddQuery(url, opts)
@@ -58,7 +58,7 @@ func (s *SearchService) GetIDLookupResults(ctx context.Context, formatType *stri
 	}
 
 	printer.Println("fetch id lookup search url:" + url)
-	req, err := s.client.NewRequest("GET", url, nil)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -69,6 +69,13 @@ func TestSearchHandlers(t *testing.T) {
 			wantErr:   "invalid --id_type flag value",
 		},
 		{
+			name:      "id lookup podcast type not in contract",
+			handler:   SearchIDLookupHandler{},
+			options:   str.Options{Action: consts.IDLookup, SearchIDType: "imdb", ID: "12601", SearchType: str.Slice{"podcast"}},
+			wantCalls: map[string]int{},
+			wantErr:   "invalid -t flag values",
+		},
+		{
 			name:      "exact query",
 			handler:   SearchExactQueryHandler{},
 			options:   str.Options{Action: consts.ExactQuery, SearchType: str.Slice{"show"}, Query: "dark"},

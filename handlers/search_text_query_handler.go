@@ -31,11 +31,15 @@ func (s SearchTextQueryHandler) Handle(options *str.Options, client *internal.Cl
 	}
 
 	if result == nil {
-		return errors.New("empty result")
+		return errors.New(consts.EmptyResult)
 	}
-	printer.Print("Found " + options.Action + " search data \n")
-	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
+	printer.Println("Found " + options.Action + " search data")
+	jsonData, err := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
+
+	printer.Println("write data to:" + options.Output)
 
 	writer.WriteJSON(options, jsonData)
 
