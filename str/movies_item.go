@@ -10,6 +10,8 @@ type MoviesItem struct {
 	PlayCount      *int       `json:"play_count,omitempty"`
 	CollectedCount *int       `json:"collected_count,omitempty"`
 	ListCount      *int       `json:"list_count,omitempty"`
+	Rank           *int       `json:"rank,omitempty"`
+	Delta          *int       `json:"delta,omitempty"`
 	Movie          *Movie     `json:"movie,omitempty"`
 }
 

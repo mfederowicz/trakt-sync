@@ -61,6 +61,13 @@ $ ./trakt-sync movies -a collected -period all
 ```console
 $ ./trakt-sync movies -a anticipated
 ```
+```console
+$ ./trakt-sync movies -a hot -> export_movies_hot.json
+```
+`streaming` accepts `-period daily|weekly|monthly` (default `weekly`).
+```console
+$ ./trakt-sync movies -a streaming -period daily -> export_movies_streaming_daily.json
+```
 ##### Get the weekend box office
 ```console
 $ ./trakt-sync movies -a boxoffice

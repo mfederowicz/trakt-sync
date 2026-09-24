@@ -68,6 +68,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 		Type: []string{"all", "movies", "shows", "seasons", "episodes", "lists"},
 		Sort: []string{"newest", "oldest", "likes", "replies", "highest", "lowest", "plays"},
 	},
+	"movies:streaming": {
+		Period: []string{"daily", "weekly", "monthly"},
+	},
 	"movies:comments": {
 		Type: []string{},
 		Sort: []string{"newest", "oldest", "likes", "replies", "highest", "lowest", "plays"},
@@ -736,9 +739,9 @@ func getOutputForModuleMedia(options *str.Options) string {
 
 func getOutputForModuleMovies(options *str.Options) string {
 	switch options.Action {
-	case consts.Trending, consts.Popular, consts.Anticipated, consts.Boxoffice, consts.Updates, consts.UpdatedIDs:
+	case consts.Trending, consts.Popular, consts.Anticipated, consts.Boxoffice, consts.Updates, consts.UpdatedIDs, consts.Hot:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
-	case consts.Favorited, consts.Played, consts.Watched, consts.Collected:
+	case consts.Favorited, consts.Played, consts.Watched, consts.Collected, consts.Streaming:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.Period)
 	case consts.Summary, consts.Aliases, consts.Releases, consts.Translations, consts.Comments, consts.Lists, consts.People, consts.Ratings, consts.Related, consts.Stats, consts.Studios, consts.Watching, consts.Videos:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.InternalID)

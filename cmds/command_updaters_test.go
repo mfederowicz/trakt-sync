@@ -42,6 +42,11 @@ func TestModuleFlagUpdaters(t *testing.T) {
 	config.ClientID, config.ClientSecret = "a", "b"
 	config.TokenPath, config.SettingsPath = "/upd/token.json", "/upd/user_settings.json"
 
+	// ConvertDateString gives a date-only -start_date the current full hour, so compute it the same way
+	startDate := func(tz string) string {
+		common := handlers.CommonLogic{}
+		return common.ConvertDateString("2026-01-15", consts.DefaultStartDateFormat, tz, true)
+	}
 	window := func(tz string) string {
 		common := handlers.CommonLogic{}
 		return common.DateLastDays(consts.DefaultStartAtDays, tz, true)
@@ -54,12 +59,15 @@ func TestModuleFlagUpdaters(t *testing.T) {
 	}{
 		{name: "movies -period", cmd: MoviesCmd, args: []string{"-a", "favorited", "-period", "daily"}, path: func(string) string { return "/movies/favorited/daily" }},
 		{name: "movies default period", cmd: MoviesCmd, args: []string{"-a", "favorited"}, path: func(string) string { return "/movies/favorited/" + cfg.DefaultConfig().MoviesPeriod }},
-		{name: "movies -start_date", cmd: MoviesCmd, args: []string{"-a", "updates", "-start_date", "2026-01-15"}, path: func(string) string { return "/movies/updates/2026-01-15T09:00:00Z" }},
+		{name: "movies -start_date", cmd: MoviesCmd, args: []string{"-a", "updates", "-start_date", "2026-01-15"}, path: func(tz string) string { return "/movies/updates/" + startDate(tz) }},
 		{name: "movies default start", cmd: MoviesCmd, args: []string{"-a", "updates"}, path: func(tz string) string { return "/movies/updates/" + window(tz) }},
+		{name: "movies streaming -period", cmd: MoviesCmd, args: []string{"-a", "streaming", "-period", "daily"}, path: func(string) string { return "/movies/streaming/daily" }},
+		{name: "movies streaming default period", cmd: MoviesCmd, args: []string{"-a", "streaming"}, path: func(string) string { return "/movies/streaming/" + cfg.DefaultConfig().MoviesPeriod }},
+		{name: "movies streaming -period all is rejected", cmd: MoviesCmd, args: []string{"-a", "streaming", "-period", "all"}, path: func(string) string { return "" }},
 		{name: "shows -period", cmd: ShowsCmd, args: []string{"-a", "favorited", "-period", "daily"}, path: func(string) string { return "/shows/favorited/daily" }},
-		{name: "shows -start_date", cmd: ShowsCmd, args: []string{"-a", "updates", "-start_date", "2026-01-15"}, path: func(string) string { return "/shows/updates/2026-01-15T09:00:00Z" }},
+		{name: "shows -start_date", cmd: ShowsCmd, args: []string{"-a", "updates", "-start_date", "2026-01-15"}, path: func(tz string) string { return "/shows/updates/" + startDate(tz) }},
 		{name: "shows default start", cmd: ShowsCmd, args: []string{"-a", "updates"}, path: func(tz string) string { return "/shows/updates/" + window(tz) }},
-		{name: "people -start_date", cmd: PeopleCmd, args: []string{"-a", "updates", "-start_date", "2026-01-15"}, path: func(string) string { return "/people/updates/2026-01-15T09:00:00Z" }},
+		{name: "people -start_date", cmd: PeopleCmd, args: []string{"-a", "updates", "-start_date", "2026-01-15"}, path: func(tz string) string { return "/people/updates/" + startDate(tz) }},
 		{name: "people default start", cmd: PeopleCmd, args: []string{"-a", "updates"}, path: func(tz string) string { return "/people/updates/" + window(tz) }},
 		{name: "calendars -start_date", cmd: CalendarsCmd, args: []string{"-a", "all-shows", "-start_date", "2026-01-15", "-days", "3"}, path: func(string) string { return "/calendars/all/shows/2026-01-15/3" }},
 		{name: "calendars default", cmd: CalendarsCmd, args: []string{"-a", "all-shows"}, path: func(string) string { return "/calendars/all/shows/" + time.Now().Format("2006-01-02") + "/7" }},

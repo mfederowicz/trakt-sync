@@ -702,3 +702,37 @@ func (m *MoviesService) RefreshMovieMetadata(ctx context.Context, id *string) (*
 
 	return resp, nil
 }
+
+// GetHotMovies Returns hot movies, based on current list activity.
+//
+// API docs: https://docs.trakt.tv/reference/getmovieshot
+func (m *MoviesService) GetHotMovies(ctx context.Context, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
+	return m.fetchMoviesItems(ctx, "movies/hot", opts)
+}
+
+// GetStreamingMovies Returns the most streamed movies in the specified time period.
+//
+// API docs: https://docs.trakt.tv/reference/getmoviesstreaming
+func (m *MoviesService) GetStreamingMovies(ctx context.Context, period *string, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
+	return m.fetchMoviesItems(ctx, fmt.Sprintf("movies/streaming/%s", *period), opts)
+}
+
+func (m *MoviesService) fetchMoviesItems(ctx context.Context, url string, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.MoviesItem{}
+	resp, err := m.client.Do(ctx, req, &list)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

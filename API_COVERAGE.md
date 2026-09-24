@@ -23,7 +23,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`languages`](#languages) | 1 | 0 | 0 | 1 |
 | [`lists`](#lists) | 15 | 0 | 0 | 15 |
 | [`media`](#media) | 3 | 0 | 0 | 3 |
-| [`movies`](#movies) | 24 | 0 | 7 | 31 |
+| [`movies`](#movies) | 26 | 0 | 5 | 31 |
 | [`networks`](#networks) | 1 | 0 | 0 | 1 |
 | [`notes`](#notes) | 5 | 0 | 0 | 5 |
 | [`oauth`](#oauth) | 3 | 0 | 2 | 5 |
@@ -40,7 +40,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 63 | 0 | 41 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 5 |
-| **Total** | **246** | **0** | **89** | **335** |
+| **Total** | **248** | **0** | **87** | **335** |
 
 ## calendars
 
@@ -158,10 +158,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/movies/boxoffice` | Get the weekend box office | `MoviesService.GetBoxoffice` |
 | ✅ | GET | `/movies/collected/{period}` | Get the most collected movies | `MoviesService.GetCollectedMovies` |
 | ✅ | GET | `/movies/favorited/{period}` | Get the most favorited movies | `MoviesService.GetFavoritedMovies` |
-| ⬜ | GET | `/movies/hot` | Get hot movies |  |
+| ✅ | GET | `/movies/hot` | Get hot movies | `MoviesService.GetHotMovies` |
 | ✅ | GET | `/movies/played/{period}` | Get the most played movies | `MoviesService.GetPlayedMovies` |
 | ✅ | GET | `/movies/popular` | Get popular movies | `MoviesService.GetPopularMovies` |
-| ⬜ | GET | `/movies/streaming/{period}` | Get streaming movies |  |
+| ✅ | GET | `/movies/streaming/{period}` | Get streaming movies | `MoviesService.GetStreamingMovies` |
 | ✅ | GET | `/movies/trending` | Get trending movies | `MoviesService.GetTrendingMovies` |
 | ✅ | GET | `/movies/updates/id/{start_date}` | Get recently updated movie Trakt IDs | `MoviesService.GetRecentlyUpdatedMoviesTraktIDs` |
 | ✅ | GET | `/movies/updates/{start_date}` | Get recently updated movies | `MoviesService.GetRecentlyUpdatedMovies` |
