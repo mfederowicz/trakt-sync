@@ -32,6 +32,8 @@ schedule. Releases up to v1.15.2 are listed on
   contract does not list the allowed types.
 - `lists -a items -sort_by <field> -sort_how asc|desc`: sort list items.
 - `lists -a report -trakt_id <id> -r <reason> [-message "..."]`: report a list for moderator review.
+- `movies -a hot`: hot movies based on current list activity.
+- `movies -a streaming -period daily|weekly|monthly`: the most streamed movies (default `weekly`).
 
 ### Changed
 

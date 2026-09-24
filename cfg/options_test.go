@@ -50,3 +50,8 @@ func TestGetOutputForModuleListsTrendingPopular(t *testing.T) {
 		assert.Equal(t, tt.want, GetOutputForModule(options))
 	}
 }
+
+func TestGetOutputForModuleMoviesHotStreaming(t *testing.T) {
+	assert.Equal(t, "export_movies_hot.json", GetOutputForModule(&str.Options{Module: "movies", Action: "hot"}))
+	assert.Equal(t, "export_movies_streaming_weekly.json", GetOutputForModule(&str.Options{Module: "movies", Action: "streaming", Period: DefaultConfig().MoviesPeriod}))
+}
