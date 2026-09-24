@@ -20,9 +20,14 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Added
 
+- `sync -a playback -t all`, and `-ex` for `sync -a playback`, which was not sent before.
+
 ### Changed
 
 ### Fixed
+
+- `sync -a playback` without `-t` returned only movies (the default type), although the docs describe it as all
+  playback. It now returns movies and episodes; `-t movies|episodes` still narrows it.
 
 ## [1.17.0] - 2026-09-25
 

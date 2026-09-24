@@ -7,6 +7,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/handlers"
+	"github.com/mfederowicz/trakt-sync/str"
 )
 
 var (
@@ -44,6 +45,7 @@ func syncFunc(cmd *Command, _ ...string) error {
 	options := cmd.Options
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
+	options.Type = syncPlaybackType(options, cmd.flagIsSet("t"))
 
 	err := cmd.ValidSort(options)
 	if err != nil {
@@ -98,4 +100,13 @@ var (
 
 func init() {
 	SyncCmd.Run = syncFunc
+}
+
+// syncPlaybackType makes playback without -t cover movies and episodes (the untyped sync/playback route)
+func syncPlaybackType(options *str.Options, typeSet bool) string {
+	if options.Action == consts.Playback && !typeSet {
+		return consts.ActionTypeAll
+	}
+
+	return options.Type
 }
