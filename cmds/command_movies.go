@@ -26,7 +26,7 @@ var (
 		"anticipated", "boxoffice", "updated", "updated_ids", "summary", "aliases",
 		"releases", "translations", "comments", "lists", "people", "ratings",
 		"releated", "stats", "studios", "watching", "videos", "refresh",
-		consts.Hot, consts.Streaming, consts.Report, consts.RefreshJustwatch}
+		consts.Hot, consts.Streaming, consts.Report, consts.RefreshJustwatch, consts.Sentiments}
 )
 
 // MoviesCmd returns movies and episodes that a user has watched, sorted by most recent.
@@ -85,6 +85,7 @@ func moviesFunc(cmd *Command, _ ...string) error {
 
 		consts.Report:           handlers.MoviesReportHandler{},
 		consts.RefreshJustwatch: handlers.MoviesRefreshJustwatchHandler{},
+		consts.Sentiments:       handlers.MoviesSentimentsHandler{},
 	}
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 

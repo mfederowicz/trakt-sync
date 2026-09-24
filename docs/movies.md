@@ -153,6 +153,9 @@ $ ./trakt-sync movies -a related -i the-sopranos
 ```console
 $ ./trakt-sync movies -a stats -i the-sopranos
 ```
+```console
+$ ./trakt-sync movies -a sentiments -i tron-legacy-2010 -> export_movies_sentiments_tron-legacy-2010.json
+```
 ##### Get movies studios
 ```console
 $ ./trakt-sync movies -a studios -i the-sopranos
