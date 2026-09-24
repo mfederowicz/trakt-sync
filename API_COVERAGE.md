@@ -31,7 +31,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`people`](#people) | 8 | 0 | 0 | 0 | 8 |
 | [`recommendations`](#recommendations) | 4 | 0 | 0 | 0 | 4 |
 | [`scrobble`](#scrobble) | 3 | 0 | 0 | 0 | 3 |
-| [`search`](#search) | 4 | 0 | 2 | 0 | 6 |
+| [`search`](#search) | 6 | 0 | 0 | 0 | 6 |
 | [`seasons`](#seasons) | 1 | 0 | 0 | 0 | 1 |
 | [`shows`](#shows) | 58 | 0 | 0 | 2 | 60 |
 | [`smart-lists`](#smart-lists) | 0 | 0 | 2 | 0 | 2 |
@@ -41,7 +41,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 63 | 0 | 41 | 0 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **266** | **0** | **65** | **4** | **335** |
+| **Total** | **268** | **0** | **63** | **4** | **335** |
 
 ## calendars
 
@@ -247,8 +247,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
-| ⬜ | POST | `/search/recent/` | Add recent search |  |
-| ⬜ | POST | `/search/recent/remove` | Remove recent search |  |
+| ✅ | POST | `/search/recent/` | Add recent search | `SearchService.AddRecentSearch` |
+| ✅ | POST | `/search/recent/remove` | Remove recent search | `SearchService.RemoveRecentSearch` |
 | ✅ | GET | `/search/recent_by_id/global/{type}` | Get trending search results | `SearchService.GetTrendingSearches` |
 | ✅ | GET | `/search/{id_type}/{id}` | Get ID lookup results | `SearchService.GetIDLookupResults` |
 | ✅ | GET | `/search/{type}` | Get text query results | `SearchService.GetTextQueryResults` |

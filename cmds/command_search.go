@@ -49,15 +49,17 @@ func searchFunc(cmd *Command, _ ...string) error {
 
 	var handler handlers.SearchHandler
 	allHandlers := map[string]handlers.Handler{
-		consts.TextQuery:  handlers.SearchTextQueryHandler{},
-		consts.IDLookup:   handlers.SearchIDLookupHandler{},
-		consts.ExactQuery: handlers.SearchExactQueryHandler{},
-		consts.Trending:   handlers.SearchTrendingHandler{},
+		consts.TextQuery:    handlers.SearchTextQueryHandler{},
+		consts.IDLookup:     handlers.SearchIDLookupHandler{},
+		consts.ExactQuery:   handlers.SearchExactQueryHandler{},
+		consts.Trending:     handlers.SearchTrendingHandler{},
+		consts.AddRecent:    handlers.SearchAddRecentHandler{},
+		consts.RemoveRecent: handlers.SearchRemoveRecentHandler{},
 	}
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	if err != nil {
-		cmd.common.GenActionsUsage(cmd.Name, []string{consts.TextQuery, consts.IDLookup, consts.ExactQuery, consts.Trending})
+		cmd.common.GenActionsUsage(cmd.Name, []string{consts.TextQuery, consts.IDLookup, consts.ExactQuery, consts.Trending, consts.AddRecent, consts.RemoveRecent})
 		return nil
 	}
 

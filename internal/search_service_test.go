@@ -3,6 +3,7 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"testing"
 
@@ -65,5 +66,43 @@ func TestSearchServiceErrors(t *testing.T) {
 	_, _, err = setup.Client.Search.GetTrendingSearches(context.Background(), str.String("shows"), &uri.ListOptions{})
 	if err == nil {
 		t.Error("trending: expected an error on 500")
+	}
+}
+
+func TestSearchServiceRecentSearch(t *testing.T) {
+	body := &str.RecentSearch{Query: "reacher", ID: 139606, Type: "shows"}
+	tests := []struct {
+		name   string
+		path   string
+		status int
+		call   func(c *Client) (*str.Response, error)
+	}{
+		{name: "add", path: "/search/recent", status: http.StatusCreated, call: func(c *Client) (*str.Response, error) {
+			return c.Search.AddRecentSearch(context.Background(), body)
+		}},
+		{name: "remove", path: "/search/recent/remove", status: http.StatusNoContent, call: func(c *Client) (*str.Response, error) {
+			return c.Search.RemoveRecentSearch(context.Background(), body)
+		}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			setup := Setup()
+			defer setup.Teardown()
+
+			setup.Mux.HandleFunc(tt.path, func(w http.ResponseWriter, r *http.Request) {
+				test.AssertMethod(t, r, http.MethodPost)
+				got := new(str.RecentSearch)
+				test.AssertNilError(t, json.NewDecoder(r.Body).Decode(got))
+				test.AssertNoDiff(t, body, got)
+				w.WriteHeader(tt.status)
+			})
+
+			resp, err := tt.call(setup.Client)
+			test.AssertNilError(t, err)
+			if got := resp.StatusCode; got != tt.status {
+				t.Errorf("status code is %d, want %d", got, tt.status)
+			}
+		})
 	}
 }

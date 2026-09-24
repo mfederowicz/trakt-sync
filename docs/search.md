@@ -75,3 +75,13 @@ $ ./trakt-sync search -a trending -t movies
 ```console
 $ ./trakt-sync search -a trending -t people -q keanu
 ```
+##### Add or remove a recent search:
+Records (or removes) that the item with Trakt ID `-i` was picked from search results for the text `-q`. This changes
+the global search trends that `search -a trending` returns for every user, not a personal search history. `-t` takes
+one value: `movies`, `shows`, `people` or `lists`; `-i` must be the numeric Trakt ID. Nothing is written to a file.
+```console
+$ ./trakt-sync search -a add_recent -t shows -q reacher -i 139606
+```
+```console
+$ ./trakt-sync search -a remove_recent -t shows -q reacher -i 139606
+```

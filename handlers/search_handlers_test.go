@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"io"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -120,6 +121,46 @@ func TestSearchHandlers(t *testing.T) {
 			wantCalls: map[string]int{},
 			wantErr:   "set one -t value for trending",
 		},
+		{
+			name:      "add recent",
+			handler:   SearchAddRecentHandler{},
+			options:   str.Options{Action: consts.AddRecent, SearchType: str.Slice{"shows"}, Query: "reacher", ID: "139606"},
+			wantCalls: map[string]int{`POST /search/recent {"query":"reacher","id":139606,"type":"shows"}`: 1},
+		},
+		{
+			name:      "remove recent",
+			handler:   SearchRemoveRecentHandler{},
+			options:   str.Options{Action: consts.RemoveRecent, SearchType: str.Slice{"lists"}, Query: "best of", ID: "55"},
+			wantCalls: map[string]int{`POST /search/recent/remove {"query":"best of","id":55,"type":"lists"}`: 1},
+		},
+		{
+			name:      "add recent singular type",
+			handler:   SearchAddRecentHandler{},
+			options:   str.Options{Action: consts.AddRecent, SearchType: str.Slice{"show"}, Query: "reacher", ID: "139606"},
+			wantCalls: map[string]int{},
+			wantErr:   "set one -t value for add_recent",
+		},
+		{
+			name:      "add recent without query",
+			handler:   SearchAddRecentHandler{},
+			options:   str.Options{Action: consts.AddRecent, SearchType: str.Slice{"shows"}, ID: "139606"},
+			wantCalls: map[string]int{},
+			wantErr:   consts.EmptySearchQueryMsg,
+		},
+		{
+			name:      "remove recent without id",
+			handler:   SearchRemoveRecentHandler{},
+			options:   str.Options{Action: consts.RemoveRecent, SearchType: str.Slice{"shows"}, Query: "reacher"},
+			wantCalls: map[string]int{},
+			wantErr:   consts.EmptySearchRecentIDMsg,
+		},
+		{
+			name:      "remove recent slug id",
+			handler:   SearchRemoveRecentHandler{},
+			options:   str.Options{Action: consts.RemoveRecent, SearchType: str.Slice{"shows"}, Query: "reacher", ID: "reacher"},
+			wantCalls: map[string]int{},
+			wantErr:   "trakt id must be a positive number",
+		},
 	}
 
 	for _, tt := range tests {
@@ -129,6 +170,12 @@ func TestSearchHandlers(t *testing.T) {
 
 			calls := map[string]int{}
 			s.Mux.HandleFunc("/search/", func(w http.ResponseWriter, r *http.Request) {
+				if r.Method == http.MethodPost {
+					body, _ := io.ReadAll(r.Body)
+					calls[r.Method+" "+r.URL.RequestURI()+" "+strings.TrimSpace(string(body))]++
+					w.WriteHeader(http.StatusCreated)
+					return
+				}
 				calls[r.Method+" "+r.URL.RequestURI()]++
 				test.SafeFprint(w, `[{"type":"movie","score":1,"movie":{"title":"Freddy"}}]`)
 			})
@@ -146,8 +193,9 @@ func TestSearchHandlers(t *testing.T) {
 				return
 			}
 			test.AssertNilError(t, err)
-			if _, statErr := os.Stat(options.Output); statErr != nil {
-				t.Errorf("output file was not written: %v", statErr)
+			_, statErr := os.Stat(options.Output)
+			if wantFile := !strings.HasSuffix(options.Action, "_recent"); wantFile != (statErr == nil) {
+				t.Errorf("output file written is %v, want %v", statErr == nil, wantFile)
 			}
 		})
 	}

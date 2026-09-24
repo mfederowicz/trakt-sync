@@ -54,6 +54,9 @@ var SearchExactTypes = []string{"movie", "show"}
 // SearchTrendingTypes are the search/recent_by_id/global/{type} values from the API contract
 var SearchTrendingTypes = []string{"movies", "shows", "people"}
 
+// SearchRecentTypes are the search/recent body type values from the API contract
+var SearchRecentTypes = []string{"movies", "shows", "people", "lists"}
+
 // hiddenSections are the users/hidden/{section} values from the API contract
 var hiddenSections = []string{"calendar", "progress_watched", "progress_collected", "recommendations", "comments", "dropped"}
 

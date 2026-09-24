@@ -121,3 +121,39 @@ func (s *SearchService) GetTrendingSearches(ctx context.Context, searchType *str
 
 	return list, resp, nil
 }
+
+// AddRecentSearch Add a recent search to the global search trends.
+//
+// API docs: https://docs.trakt.tv/reference/postsearchrecentadd
+func (s *SearchService) AddRecentSearch(ctx context.Context, search *str.RecentSearch) (*str.Response, error) {
+	var url = "search/recent"
+	req, err := s.client.NewRequest(http.MethodPost, url, search)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.client.Do(ctx, req, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// RemoveRecentSearch Remove a recent search from the global search trends.
+//
+// API docs: https://docs.trakt.tv/reference/postsearchrecentremove
+func (s *SearchService) RemoveRecentSearch(ctx context.Context, search *str.RecentSearch) (*str.Response, error) {
+	var url = "search/recent/remove"
+	req, err := s.client.NewRequest(http.MethodPost, url, search)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.client.Do(ctx, req, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}

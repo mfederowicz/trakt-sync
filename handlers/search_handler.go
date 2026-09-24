@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
@@ -69,4 +70,23 @@ func checkSearchSingleType(options *str.Options, valid []string) error {
 	}
 
 	return nil
+}
+
+// buildRecentSearch builds the search/recent body from -q, -i and -t
+func buildRecentSearch(options *str.Options) (*str.RecentSearch, error) {
+	if err := checkSearchSingleType(options, cfg.SearchRecentTypes); err != nil {
+		return nil, err
+	}
+	if len(options.Query) == consts.ZeroValue {
+		return nil, errors.New(consts.EmptySearchQueryMsg)
+	}
+	if len(options.ID) == consts.ZeroValue {
+		return nil, errors.New(consts.EmptySearchRecentIDMsg)
+	}
+	id, err := parseItemTraktID(options.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &str.RecentSearch{Query: options.Query, ID: id, Type: options.SearchType[consts.ZeroValue]}, nil
 }
