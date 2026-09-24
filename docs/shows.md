@@ -201,6 +201,19 @@ $ ./trakt-sync shows -a next_episode -i the-sopranos
 ```console
 $ ./trakt-sync shows -a last_episode -i the-sopranos
 ```
+##### Get where to watch
+```console
+$ ./trakt-sync shows -a watchnow -i the-sopranos -country us -> export_shows_watchnow_the-sopranos.json
+```
+```console
+$ ./trakt-sync -ex streaming_ranks shows -a watchnow -i the-sopranos -country us -links tvos,direct,android,webos
+```
+`-links` adds provider links (any of `tvos`, `direct`, `android`, `webos`); `-ex streaming_ranks` adds the JustWatch rank.
+```console
+$ ./trakt-sync shows -a justwatch_links -i the-sopranos -country pl -> export_shows_justwatch_links_the-sopranos.json
+```
+`watchnow` and `justwatch_links` need `-country` (2 character code) and are marked Limited Access by Trakt;
+an API app without access gets a limited access error.
 ##### Get all videos
 ```console
 $ ./trakt-sync shows -a videos -i the-sopranos

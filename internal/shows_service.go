@@ -1404,3 +1404,45 @@ func (s *ShowsService) GetShowSentiments(ctx context.Context, id *string) (*str.
 
 	return result, resp, nil
 }
+
+// GetShowWatchNow Returns streaming and watch now sources for a show in the requested country.
+//
+// API docs: https://docs.trakt.tv/reference/getshowswatchnow
+func (s *ShowsService) GetShowWatchNow(ctx context.Context, id *string, country *string, opts *uri.ListOptions) (map[string]*str.WatchNowSources, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/watchnow/%s", *id, *country)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := map[string]*str.WatchNowSources{}
+	resp, err := s.client.Do(ctx, req, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// GetShowJustwatchLinks Returns JustWatch links for a show in the requested country.
+//
+// API docs: https://docs.trakt.tv/reference/getshowsjustwatchlink
+func (s *ShowsService) GetShowJustwatchLinks(ctx context.Context, id *string, country *string) (map[string]string, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/watchnow/justwatch_links/%s", *id, *country)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := map[string]string{}
+	resp, err := s.client.Do(ctx, req, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}

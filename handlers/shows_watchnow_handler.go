@@ -13,19 +13,19 @@ import (
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
-// MoviesWatchNowHandler struct for handler
-type MoviesWatchNowHandler struct{}
+// ShowsWatchNowHandler struct for handler
+type ShowsWatchNowHandler struct{}
 
-// Handle to handle movies: watchnow action
-func (MoviesWatchNowHandler) Handle(options *str.Options, client *internal.Client) error {
-	if err := validIDCountryOptions(options, consts.EmptyMovieIDMsg); err != nil {
+// Handle to handle shows: watchnow action
+func (ShowsWatchNowHandler) Handle(options *str.Options, client *internal.Client) error {
+	if err := validIDCountryOptions(options, consts.EmptyShowIDMsg); err != nil {
 		return err
 	}
 
-	printer.Println("Returns streaming and watch now sources for a movie in the requested country (limited access).")
+	printer.Println("Returns streaming and watch now sources for a show in the requested country (limited access).")
 	opts := uri.ListOptions{Extended: options.ExtendedInfo, Links: options.Links}
-	result, resp, err := client.Movies.GetMovieWatchNow(client.BuildCtxFromOptions(options), &options.InternalID, &options.Country, &opts)
-	if err = watchNowError(consts.WatchNow, consts.Movie, options, resp, err); err != nil {
+	result, resp, err := client.Shows.GetShowWatchNow(client.BuildCtxFromOptions(options), &options.InternalID, &options.Country, &opts)
+	if err = watchNowError(consts.WatchNow, consts.Show, options, resp, err); err != nil {
 		return err
 	}
 

@@ -17,13 +17,13 @@ type MoviesJustwatchLinksHandler struct{}
 
 // Handle to handle movies: justwatch_links action
 func (MoviesJustwatchLinksHandler) Handle(options *str.Options, client *internal.Client) error {
-	if err := validMovieCountryOptions(options); err != nil {
+	if err := validIDCountryOptions(options, consts.EmptyMovieIDMsg); err != nil {
 		return err
 	}
 
 	printer.Println("Returns JustWatch links for a movie in the requested country (limited access).")
 	result, resp, err := client.Movies.GetMovieJustwatchLinks(client.BuildCtxFromOptions(options), &options.InternalID, &options.Country)
-	if err = movieWatchNowError(consts.JustwatchLinks, options, resp, err); err != nil {
+	if err = watchNowError(consts.JustwatchLinks, consts.Movie, options, resp, err); err != nil {
 		return err
 	}
 
