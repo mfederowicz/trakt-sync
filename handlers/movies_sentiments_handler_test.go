@@ -18,9 +18,11 @@ func TestMoviesSentimentsHandler(t *testing.T) {
 		name    string
 		id      string
 		status  int
+		body    string
 		wantErr string
 	}{
 		{name: "sentiments", id: "tron-legacy-2010", status: http.StatusOK},
+		{name: "unknown id answered with empty object", id: "tron-legacy-2010", status: http.StatusOK, body: `{}`, wantErr: "no sentiments for:tron-legacy-2010"},
 		{name: "not found", id: "tron-legacy-2010", status: http.StatusNotFound, wantErr: "not found movie for:tron-legacy-2010"},
 		{name: "without id", wantErr: consts.EmptyMovieIDMsg},
 	}
@@ -35,7 +37,11 @@ func TestMoviesSentimentsHandler(t *testing.T) {
 				calls++
 				test.AssertMethod(t, r, http.MethodGet)
 				w.WriteHeader(tt.status)
-				test.SafeFprint(w, `{"good":[],"bad":[],"comment_count":0}`)
+				body := `{"good":[],"bad":[],"comment_count":0}`
+				if tt.body != "" {
+					body = tt.body
+				}
+				test.SafeFprint(w, body)
 			})
 
 			output := filepath.Join(t.TempDir(), "out.json")
@@ -46,6 +52,9 @@ func TestMoviesSentimentsHandler(t *testing.T) {
 				}
 				if tt.id == "" && calls != 0 {
 					t.Error("API was called without an id")
+				}
+				if _, statErr := os.Stat(output); statErr == nil {
+					t.Error("output file was written on error")
 				}
 				return
 			}

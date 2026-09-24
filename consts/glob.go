@@ -52,6 +52,7 @@ const (
 	EmptyPersonIDMsg             = "set personId ie: -i john-wayne"
 	EmptyResult                  = "empty result"
 	EmptySeasonIDMsg             = "set Trakt ID, Trakt slug, or IMDB ID Example:  ie: -i 12345 or -i tron-legacy-2010"
+	EmptySentimentsMsg           = "no sentiments for:%s (unknown id, or nothing analyzed yet)"
 	EmptyShowIDMsg               = "set Trakt ID, Trakt slug, or IMDB ID Example:  ie: -i 12345 or -i tron-legacy-2010"
 	UnknownItemsListType         = "unknown items list type"
 	EmptyString                  = ""

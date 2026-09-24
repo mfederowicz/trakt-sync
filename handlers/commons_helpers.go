@@ -173,3 +173,8 @@ func watchNowError(action string, kind string, options *str.Options, resp *str.R
 
 	return nil
 }
+
+// isEmptySentiments reports a sentiments response with no data; the API answers an unknown id with {} instead of 404.
+func isEmptySentiments(s *str.Sentiments) bool {
+	return s == nil || (len(s.Good) == consts.ZeroValue && len(s.Bad) == consts.ZeroValue && s.CommentCount == nil && s.AnalyzedAt == nil)
+}

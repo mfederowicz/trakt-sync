@@ -31,6 +31,9 @@ func (ShowsSentimentsHandler) Handle(options *str.Options, client *internal.Clie
 	if err != nil {
 		return fmt.Errorf("fetch sentiments error: %w", err)
 	}
+	if isEmptySentiments(result) {
+		return fmt.Errorf(consts.EmptySentimentsMsg, options.InternalID)
+	}
 
 	printer.Println("write data to:" + options.Output)
 	jsonData, err := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
