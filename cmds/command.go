@@ -407,6 +407,8 @@ func setOptionsDependsOnModulePeople(options str.Options) str.Options {
 	options.Action = *_action
 	options.ID = *_personID
 	options.Type = *_action
+	options.Reason = *_peopleReason
+	options.Msg = *_peopleMessage
 	return options
 }
 

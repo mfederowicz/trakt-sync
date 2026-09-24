@@ -17,3 +17,8 @@ $ ./trakt-sync people -a shows -i john-wayne
 ```console
 $ ./trakt-sync people -a lists -i john-wayne
 ```
+##### Report a person
+```console
+$ ./trakt-sync people -a report -i john-wayne -r metadata -message "birthday is wrong"
+```
+`-r` is one of: `duplicate`, `remove`, `data_refresh`, `metadata`, `adult`, `language`, `spam`, `tmdb`, `other`.
