@@ -7,6 +7,7 @@ import "time"
 const (
 	ActionUsage                  = "allow use selected action"
 	AllPages                     = 10
+	AvailableOnUsage             = "filter by media server ie: -available_on plex"
 	BaseURLPath                  = "/trakt"
 	CMD                          = "cmd"
 	CheckinError                 = "checkin error:%w"

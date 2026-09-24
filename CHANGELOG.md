@@ -21,6 +21,8 @@ schedule. Releases up to v1.15.2 are listed on
 ### Added
 
 - `sync -a playback -t all`, and `-ex` for `sync -a playback`, which was not sent before.
+- `sync -a get_minimal_collection -t movies|shows|episodes [-available_on plex]`: the collection as a compact map of
+  Trakt IDs to collected dates (shows nested by season and episode), for syncing local state.
 
 ### Changed
 

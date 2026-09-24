@@ -656,3 +656,52 @@ func (s *SyncService) UpdateFavoriteItem(context context.Context, itemID int, up
 
 	return nil
 }
+
+// GetMinimalCollection Returns the movie or episode collection in a minimal format: Trakt ID -> collected_at.
+//
+// API docs: https://docs.trakt.tv/reference/getsynccollectionminimalmovies
+// API docs: https://docs.trakt.tv/reference/getsynccollectionminimalepisodes
+func (s *SyncService) GetMinimalCollection(ctx context.Context, strType *string, opts *uri.ListOptions) (str.MinimalCollection, *str.Response, error) {
+	var url = fmt.Sprintf("sync/collection/minimal/%s", *strType)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := str.MinimalCollection{}
+	resp, err := s.client.Do(ctx, req, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// GetMinimalShowCollection Returns the show collection in a minimal format: show Trakt ID -> season -> episode -> collected_at.
+//
+// API docs: https://docs.trakt.tv/reference/getsynccollectionminimalshows
+func (s *SyncService) GetMinimalShowCollection(ctx context.Context, opts *uri.ListOptions) (str.MinimalShowCollection, *str.Response, error) {
+	var url = "sync/collection/minimal/shows"
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := str.MinimalShowCollection{}
+	resp, err := s.client.Do(ctx, req, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}

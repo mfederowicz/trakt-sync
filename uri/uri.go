@@ -21,6 +21,7 @@ var (
 // ListOptions specifies the optional parameters to various List methods that
 // support offset pagination.
 type ListOptions struct {
+	AvailableOn       string           `url:"available_on,omitempty"`
 	Certifications    []string         `url:"certifications,omitempty"`
 	Countries         []string         `url:"countries,omitempty"`
 	EpisodeTypes      []string         `url:"episode_types,omitempty"`

@@ -57,6 +57,9 @@ var SearchTrendingTypes = []string{"movies", "shows", "people"}
 // SearchRecentTypes are the search/recent body type values from the API contract
 var SearchRecentTypes = []string{"movies", "shows", "people", "lists"}
 
+// SyncAvailableOn are the sync/collection available_on values from the API contract
+var SyncAvailableOn = []string{"plex"}
+
 // hiddenSections are the users/hidden/{section} values from the API contract
 var hiddenSections = []string{"calendar", "progress_watched", "progress_collected", "recommendations", "comments", "dropped"}
 
@@ -151,6 +154,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	"sync:playback": {
 		Type: []string{"all", "movies", "episodes"},
 		Sort: []string{},
+	},
+	"sync:get_minimal_collection": {
+		Type: []string{"movies", "shows", "episodes"},
 	},
 	"sync:get_collection": {
 		Type: []string{"movies", "shows", "episodes", "media", "seasons"},
@@ -723,6 +729,8 @@ func getOutputForModuleSync(options *str.Options) string {
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Watched, options.Type)
 	case consts.GetCollection:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Collection, options.Type)
+	case consts.GetMinimalCollection:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.MinimalCollection, options.Type)
 	case consts.LastActivities, consts.Playback, consts.AddToCollection, consts.RemoveFromCollection:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
 	default:

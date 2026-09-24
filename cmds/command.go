@@ -40,6 +40,7 @@ var (
 // Avflags contains all available flags
 var Avflags = map[string]bool{
 	"a":                  true,
+	"available_on":       true,
 	"c":                  true,
 	"calendars":          true,
 	"certifications":     true,
@@ -990,6 +991,10 @@ func UpdateOptionsWithCommandSyncFlags(c *Command, options *str.Options) *str.Op
 
 	if len(*_syncWatchlistNotes) > consts.ZeroValue {
 		options.Notes = *_syncWatchlistNotes
+	}
+
+	if len(*_syncAvailableOn) > consts.ZeroValue {
+		options.AvailableOn = *_syncAvailableOn
 	}
 
 	return options

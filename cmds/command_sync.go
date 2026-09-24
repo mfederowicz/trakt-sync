@@ -20,9 +20,10 @@ var (
 	_syncID                   = SyncCmd.Flag.Int("i", cfg.DefaultConfig().TraktID, consts.TraktIDUsage)
 	_syncWatchlistDescription = SyncCmd.Flag.String("description", cfg.DefaultConfig().Description, consts.WatchlistDescriptionUsage)
 	_syncWatchlistNotes       = SyncCmd.Flag.String("notes", cfg.DefaultConfig().Notes, consts.WatchlistNotesUsage)
+	_syncAvailableOn          = SyncCmd.Flag.String("available_on", consts.EmptyString, consts.AvailableOnUsage)
 
 	validSyncActions = []string{
-		"last_activities", "playback", "remove_playback", "get_collection",
+		"last_activities", "playback", "remove_playback", "get_collection", "get_minimal_collection",
 		"add_to_collection", "remove_from_collection", "get_watched",
 		"get_history", "add_to_history", "remove_from_history",
 		"get_ratings", "add_to_ratings", "remove_from_ratings",
@@ -57,6 +58,7 @@ func syncFunc(cmd *Command, _ ...string) error {
 		"playback":               handlers.SyncPlaybackHandler{},
 		"remove_playback":        handlers.SyncRemovePlaybackHandler{},
 		"get_collection":         handlers.SyncGetCollectionHandler{},
+		"get_minimal_collection": handlers.SyncGetMinimalCollectionHandler{},
 		"add_to_collection":      handlers.SyncAddToCollectionHandler{},
 		"remove_from_collection": handlers.SyncRemoveFromCollectionHandler{},
 		"get_watched":            handlers.SyncGetWatchedHandler{},
