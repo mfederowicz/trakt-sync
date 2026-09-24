@@ -49,9 +49,9 @@ func seasonsFunc(cmd *Command, _ ...string) error {
 		return fmt.Errorf("%s/%s: %w", cmd.Name, options.Action, err)
 	}
 
-	// season 0 is specials, so a report needs -season given explicitly
+	// report: -i is the show with -season, or the season's own Trakt ID without it
 	if options.Action == consts.Report && !cmd.flagIsSet(consts.Season) {
-		return fmt.Errorf("%s/%s: %s", cmd.Name, options.Action, consts.EmptySeasonMsg)
+		options.ID = options.InternalID
 	}
 
 	var handler handlers.SeasonsHandler

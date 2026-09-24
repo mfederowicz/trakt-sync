@@ -23,7 +23,7 @@ func (MoviesJustwatchLinksHandler) Handle(options *str.Options, client *internal
 
 	printer.Println("Returns JustWatch links for a movie in the requested country (limited access).")
 	result, resp, err := client.Movies.GetMovieJustwatchLinks(client.BuildCtxFromOptions(options), &options.InternalID, &options.Country)
-	if err = watchNowError(consts.JustwatchLinks, consts.Movie, options, resp, err); err != nil {
+	if err = watchNowError(consts.JustwatchLinks, consts.Movie, options.InternalID, resp, err); err != nil {
 		return err
 	}
 

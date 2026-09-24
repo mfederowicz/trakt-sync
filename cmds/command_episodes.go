@@ -51,12 +51,15 @@ func episodesFunc(cmd *Command, _ ...string) error {
 		return fmt.Errorf("%s/%s: %w", cmd.Name, options.Action, err)
 	}
 
-	// season 0 is specials, so a report needs -season and -episode given explicitly
-	if options.Action == consts.Report && !cmd.flagIsSet(consts.Season) {
-		return fmt.Errorf("%s/%s: %s", cmd.Name, options.Action, consts.EmptySeasonMsg)
-	}
-	if options.Action == consts.Report && !cmd.flagIsSet(consts.Episode) {
-		return fmt.Errorf("%s/%s: %s", cmd.Name, options.Action, consts.EmptyEpisodeMsg)
+	// report/watchnow: -i is the show with -season and -episode, or the episode's own Trakt ID without both
+	if options.Action == consts.Report || options.Action == consts.WatchNow {
+		seasonSet, episodeSet := cmd.flagIsSet(consts.Season), cmd.flagIsSet(consts.Episode)
+		if seasonSet != episodeSet {
+			return fmt.Errorf("%s/%s: %s", cmd.Name, options.Action, consts.EpisodeTargetMsg)
+		}
+		if !seasonSet {
+			options.ID = options.InternalID
+		}
 	}
 
 	var handler handlers.EpisodesHandler

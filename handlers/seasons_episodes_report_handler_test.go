@@ -17,6 +17,8 @@ func TestSeasonsEpisodesReportHandlers(t *testing.T) {
 	episode := str.Options{Module: consts.Episodes, InternalID: "the-sopranos", Season: 1, Episode: 2, Reason: "runtime"}
 	seasonPath := "/shows/the-sopranos/seasons/1/report"
 	episodePath := "/shows/the-sopranos/seasons/1/episodes/2/report"
+	seasonByID := str.Options{Module: consts.Seasons, ID: "3950", Reason: "metadata"}
+	episodeByID := str.Options{Module: consts.Episodes, ID: "73482", Reason: "runtime"}
 	withOptions := func(o str.Options, change func(*str.Options)) str.Options {
 		change(&o)
 		return o
@@ -34,7 +36,11 @@ func TestSeasonsEpisodesReportHandlers(t *testing.T) {
 		{name: "season report without id", handler: SeasonsReportHandler{}, options: withOptions(season, func(o *str.Options) { o.InternalID = "" }), wantErr: consts.EmptyShowIDMsg},
 		{name: "season report default reason", handler: SeasonsReportHandler{}, options: withOptions(season, func(o *str.Options) { o.Reason = cfg.DefaultConfig().Reason }), wantErr: consts.EmptyReasonMsg},
 		{name: "season report invalid reason", handler: SeasonsReportHandler{}, options: withOptions(season, func(o *str.Options) { o.Reason = "boring" }), wantErr: "reason 'boring' is not valid"},
+		{name: "season report by trakt id", handler: SeasonsReportHandler{}, options: seasonByID, path: "/seasons/3950/report", status: http.StatusCreated},
+		{name: "season report by trakt id pending", handler: SeasonsReportHandler{}, options: seasonByID, path: "/seasons/3950/report", status: http.StatusConflict, wantErr: "season 3950 already has a pending report"},
 		{name: "episode report", handler: EpisodesReportHandler{}, options: episode, path: episodePath, status: http.StatusCreated},
+		{name: "episode report by trakt id", handler: EpisodesReportHandler{}, options: episodeByID, path: "/episodes/73482/report", status: http.StatusCreated},
+		{name: "episode report by trakt id invalid reason", handler: EpisodesReportHandler{}, options: withOptions(episodeByID, func(o *str.Options) { o.Reason = "boring" }), wantErr: "reason 'boring' is not valid"},
 		{name: "episode report pending", handler: EpisodesReportHandler{}, options: episode, path: episodePath, status: http.StatusConflict, wantErr: "episode 1x2 of show the-sopranos already has a pending report"},
 		{name: "episode report default episode", handler: EpisodesReportHandler{}, options: withOptions(episode, func(o *str.Options) { o.Episode = cfg.DefaultConfig().Episode }), wantErr: consts.EmptyEpisodeMsg},
 		{name: "episode report invalid reason", handler: EpisodesReportHandler{}, options: withOptions(episode, func(o *str.Options) { o.Reason = "boring" }), wantErr: "reason 'boring' is not valid"},
@@ -46,11 +52,14 @@ func TestSeasonsEpisodesReportHandlers(t *testing.T) {
 			defer s.Teardown()
 
 			calls := map[string]int{}
-			s.Mux.HandleFunc("/shows/", func(w http.ResponseWriter, r *http.Request) {
+			handle := func(w http.ResponseWriter, r *http.Request) {
 				calls[r.Method+" "+r.URL.Path]++
 				w.WriteHeader(tt.status)
 				test.SafeFprint(w, `{}`)
-			})
+			}
+			for _, prefix := range []string{"/shows/", "/seasons/", "/episodes/"} {
+				s.Mux.HandleFunc(prefix, handle)
+			}
 
 			options := tt.options
 			options.Action = consts.Report

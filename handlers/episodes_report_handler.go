@@ -16,10 +16,11 @@ type EpisodesReportHandler struct{ common CommonLogic }
 
 // Handle to handle episodes: report action
 func (h EpisodesReportHandler) Handle(options *str.Options, client *internal.Client) error {
-	if len(options.InternalID) == consts.ZeroValue {
+	byID := len(options.ID) > consts.ZeroValue
+	if !byID && len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyShowIDMsg)
 	}
-	if options.Episode < consts.FirstEpisodeNumber {
+	if !byID && options.Episode < consts.FirstEpisodeNumber {
 		return errors.New(consts.EmptyEpisodeMsg)
 	}
 	if len(options.Reason) == consts.ZeroValue {
@@ -32,6 +33,14 @@ func (h EpisodesReportHandler) Handle(options *str.Options, client *internal.Cli
 	report := &str.EpisodeReport{Reason: &options.Reason}
 	if len(options.Msg) > consts.ZeroValue {
 		report.Message = &options.Msg
+	}
+
+	if byID {
+		if _, err := client.Episodes.ReportEpisode(client.BuildCtxFromOptions(options), &options.ID, report); err != nil {
+			return fmt.Errorf("report error: %w", err)
+		}
+		printer.Printf("reported episode %s\n", options.ID)
+		return nil
 	}
 
 	if _, err := client.Shows.ReportEpisode(client.BuildCtxFromOptions(options), &options.InternalID, &options.Season, &options.Episode, report); err != nil {

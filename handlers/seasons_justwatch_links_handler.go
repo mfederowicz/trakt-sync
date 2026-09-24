@@ -23,7 +23,7 @@ func (SeasonsJustwatchLinksHandler) Handle(options *str.Options, client *interna
 
 	printer.Println("Returns JustWatch links for a season in the requested country (limited access).")
 	result, resp, err := client.Shows.GetSeasonJustwatchLinks(client.BuildCtxFromOptions(options), &options.InternalID, &options.Season, &options.Country)
-	if err = watchNowError(consts.JustwatchLinks, consts.Season, options, resp, err); err != nil {
+	if err = watchNowError(consts.JustwatchLinks, consts.Season, options.InternalID, resp, err); err != nil {
 		return err
 	}
 

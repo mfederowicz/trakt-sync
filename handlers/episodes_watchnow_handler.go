@@ -3,6 +3,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -18,14 +19,30 @@ type EpisodesWatchNowHandler struct{}
 
 // Handle to handle episodes: watchnow action
 func (EpisodesWatchNowHandler) Handle(options *str.Options, client *internal.Client) error {
-	if err := validIDCountryOptions(options, consts.EmptyShowIDMsg); err != nil {
-		return err
+	byID := len(options.ID) > consts.ZeroValue
+	if byID && len(options.Country) == consts.ZeroValue {
+		return errors.New(consts.EmptyCountryMsg)
+	}
+	if !byID {
+		if err := validIDCountryOptions(options, consts.EmptyShowIDMsg); err != nil {
+			return err
+		}
 	}
 
 	printer.Println("Returns streaming and watch now sources for an episode in the requested country (limited access).")
+	ctx := client.BuildCtxFromOptions(options)
 	opts := uri.ListOptions{Extended: options.ExtendedInfo, Links: options.Links}
-	result, resp, err := client.Shows.GetEpisodeWatchNow(client.BuildCtxFromOptions(options), &options.InternalID, &options.Season, &options.Episode, &options.Country, &opts)
-	if err = watchNowError(consts.WatchNow, consts.Episode, options, resp, err); err != nil {
+	var result map[string]*str.WatchNowSources
+	var resp *str.Response
+	var err error
+	id := options.InternalID
+	if byID {
+		id = options.ID
+		result, resp, err = client.Episodes.GetEpisodeWatchNow(ctx, &options.ID, &options.Country, &opts)
+	} else {
+		result, resp, err = client.Shows.GetEpisodeWatchNow(ctx, &options.InternalID, &options.Season, &options.Episode, &options.Country, &opts)
+	}
+	if err = watchNowError(consts.WatchNow, consts.Episode, id, resp, err); err != nil {
 		return err
 	}
 
