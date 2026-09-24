@@ -32,8 +32,8 @@ func (h ShowsRefreshHandler) Handle(options *str.Options, client *internal.Clien
 		return fmt.Errorf("not found show for:%s", options.InternalID)
 	}
 
-	if resp.StatusCode == http.StatusUpgradeRequired {
-		return cli.HandleUpgrade(resp)
+	if vipErr := cli.HandleVIPResponse(resp, err); vipErr != nil {
+		return vipErr
 	}
 
 	if resp.StatusCode == http.StatusConflict {

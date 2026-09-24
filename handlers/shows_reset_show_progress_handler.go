@@ -37,8 +37,8 @@ func (ShowsResetShowProgressHandler) handleUndoResetShowProgress(options *str.Op
 		return fmt.Errorf("%w", err)
 	}
 
-	if resp.StatusCode == http.StatusUpgradeRequired {
-		return cli.HandleUpgrade(resp)
+	if vipErr := cli.HandleVIPResponse(resp, err); vipErr != nil {
+		return vipErr
 	}
 
 	if resp.StatusCode == http.StatusNoContent {
@@ -60,8 +60,8 @@ func (m ShowsResetShowProgressHandler) handleResetShowProgress(options *str.Opti
 		return fmt.Errorf("reset progress error:%w", err)
 	}
 
-	if resp.StatusCode == http.StatusUpgradeRequired {
-		return cli.HandleUpgrade(resp)
+	if vipErr := cli.HandleVIPResponse(resp, err); vipErr != nil {
+		return vipErr
 	}
 
 	if resp.StatusCode == http.StatusOK {

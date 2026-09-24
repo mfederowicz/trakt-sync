@@ -2099,7 +2099,7 @@ func (*CommonLogic) UsersAddPersonalList(client *internal.Client, options *str.O
 		list,
 	)
 	if err != nil {
-		return nil, nil, err
+		return nil, resp, err
 	}
 
 	return result, resp, nil
