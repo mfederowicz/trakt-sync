@@ -35,6 +35,10 @@ $ ./trakt-sync sync -a get_collection -t episodes -ex metadata
 ```console
 $ ./trakt-sync sync -a get_collection -t seasons -ex metadata
 ```
+##### Get collection - media (movies, shows and episodes together)
+```console
+$ ./trakt-sync sync -a get_collection -t media -ex metadata
+```
 ##### Add to collection - via -items flag
 ```console
 $ ./trakt-sync sync -t movies -a add_to_collection -items export_sync_collection_movies.json

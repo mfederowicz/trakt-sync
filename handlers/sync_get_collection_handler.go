@@ -19,6 +19,9 @@ type SyncGetCollectionHandler struct{ common CommonLogic }
 
 // Handle to handle sync: get_collection action
 func (s SyncGetCollectionHandler) Handle(options *str.Options, client *internal.Client) error {
+	if err := s.common.CheckTypes(options); err != nil {
+		return err
+	}
 	printer.Println("Get collection type:", options.Type)
 	items, err := s.syncGetCollection(client, options, consts.DefaultPage)
 	if err != nil {

@@ -122,6 +122,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 		Type: []string{"movies", "episodes"},
 		Sort: []string{},
 	},
+	"sync:get_collection": {
+		Type: []string{"movies", "shows", "episodes", "media", "seasons"},
+	},
 	"sync:get_watched": {
 		Type: []string{"movies", "shows", "episodes"},
 		Sort: []string{},
