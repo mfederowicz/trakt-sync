@@ -35,6 +35,9 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Changed
 
+- `sync -a get_collection`: `-t` is now checked before the request (`movies`, `shows`, `episodes`, `media`,
+  `seasons`); an unknown type fails with an error instead of calling the API. `-t media` returns movies,
+  shows and episodes together.
 - All modules: a failed action now prints its error as `<module>/<action>: <cause>`, with a space after the colon.
 
 ### Fixed

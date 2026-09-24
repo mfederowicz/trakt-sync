@@ -35,12 +35,12 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`shows`](#shows) | 49 | 0 | 11 | 60 |
 | [`smart-lists`](#smart-lists) | 0 | 0 | 2 | 2 |
 | [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 2 |
-| [`sync`](#sync) | 25 | 4 | 8 | 37 |
+| [`sync`](#sync) | 29 | 0 | 8 | 37 |
 | [`team`](#team) | 0 | 0 | 1 | 1 |
 | [`users`](#users) | 51 | 9 | 44 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 5 |
-| **Total** | **230** | **13** | **92** | **335** |
+| **Total** | **234** | **9** | **92** | **335** |
 
 ## calendars
 
@@ -343,14 +343,14 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
 | ✅ | POST | `/sync/collection` | Add items to collection | `SyncService.AddItemsToCollection` |
-| 🟡 | GET | `/sync/collection/episodes` | Get episode collection | `SyncService.GetCollection` |
-| 🟡 | GET | `/sync/collection/media` | Get media collection | `SyncService.GetCollection` |
+| ✅ | GET | `/sync/collection/episodes` | Get episode collection | `SyncService.GetCollection` |
+| ✅ | GET | `/sync/collection/media` | Get media collection | `SyncService.GetCollection` |
 | ⬜ | GET | `/sync/collection/minimal/episodes` | Get minimal episode collection |  |
 | ⬜ | GET | `/sync/collection/minimal/movies` | Get minimal movie collection |  |
 | ⬜ | GET | `/sync/collection/minimal/shows` | Get minimal show collection |  |
-| 🟡 | GET | `/sync/collection/movies` | Get movie collection | `SyncService.GetCollection` |
+| ✅ | GET | `/sync/collection/movies` | Get movie collection | `SyncService.GetCollection` |
 | ✅ | POST | `/sync/collection/remove` | Remove items from collection | `SyncService.RemoveItemsFromCollection` |
-| 🟡 | GET | `/sync/collection/shows` | Get show collection | `SyncService.GetCollection` |
+| ✅ | GET | `/sync/collection/shows` | Get show collection | `SyncService.GetCollection` |
 | ✅ | GET | `/sync/collection/{type}` | Get collection | `SyncService.GetCollection` |
 | ✅ | POST | `/sync/favorites` | Add items to favorites | `SyncService.AddItemsToFavorites` |
 | ✅ | PUT | `/sync/favorites` | Update favorites | `SyncService.UpdateFavorites` |
