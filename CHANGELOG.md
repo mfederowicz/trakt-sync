@@ -42,6 +42,9 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Changed
 
+- `search -a text_query` and `search -a id_lookup` replace `text-query` and `id-lookup`, to match the underscore action
+  names of the other modules. The old names still work and print a deprecation note.
+
 ### Fixed
 
 - `comments` on a season or episode always failed with `set traktId`, even with `-trakt_id`/`-i` given: the check
