@@ -44,6 +44,7 @@ schedule. Releases up to v1.15.2 are listed on
 
 - `search -a text_query` and `search -a id_lookup` replace `text-query` and `id-lookup`, to match the underscore action
   names of the other modules. The old names still work and print a deprecation note.
+- `search` with an unknown or missing `-a` prints the same "Available actions" list as the other modules.
 
 ### Fixed
 
