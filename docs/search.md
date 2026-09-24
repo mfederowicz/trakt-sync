@@ -20,6 +20,12 @@ $  ./trakt-sync search -a text_query -t person -t list -q freddy --field name
 ```console
 $  ./trakt-sync search -a text_query -t movie -t show -t list -q freddy --field title
 ```
+```console
+$  ./trakt-sync search -a text_query -t movie -t show -q freddy --field original_title
+```
+```console
+$  ./trakt-sync search -a text_query -t episode -q freddy --field show_title
+```
 ##### Export search result by Id lookup:
 ```console
 $ ./trakt-sync search -a id_lookup -i 12601 -t movie -t show
