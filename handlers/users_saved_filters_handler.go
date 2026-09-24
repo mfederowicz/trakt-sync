@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -27,8 +26,8 @@ func (UsersSavedFiltersHandler) Handle(options *str.Options, client *internal.Cl
 		return fmt.Errorf("fetch saved filters error:%w", err)
 	}
 
-	if resp.StatusCode == http.StatusUpgradeRequired {
-		return cli.HandleUpgrade(resp)
+	if vipErr := cli.HandleVIPResponse(resp, err); vipErr != nil {
+		return vipErr
 	}
 
 	if len(filters) == consts.ZeroValue {

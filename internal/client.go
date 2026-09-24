@@ -31,6 +31,9 @@ const (
 	HeaderRateLimit                          = "X-RateLimit"
 	HeaderRetryAfter                         = "Retry-After"
 	HeaderUpgradeURL                         = "X-Upgrade-URL"
+	HeaderVIPUser                            = "X-VIP-User"
+	HeaderAccountLimit                       = "X-Account-Limit"
+	DefaultUpgradeURL                        = upgradeURL
 	TimezoneKey               contextKey     = "timezone"
 	Version                                  = "2"
 	defaultBaseURL                           = "https://api.trakt.tv/"

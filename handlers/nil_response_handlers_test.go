@@ -118,3 +118,20 @@ func TestUsersReportHandlersWithoutMessage(t *testing.T) {
 		})
 	}
 }
+
+// TestListsItemsHandlerAccountLimitForVIP checks that a 420 for a VIP user is reported with the limit
+// (no browser is opened for a VIP user).
+func TestListsItemsHandlerAccountLimitForVIP(t *testing.T) {
+	s := setup(t)
+	defer s.Teardown()
+	s.Mux.HandleFunc("/lists/55/items/", func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("X-VIP-User", "true")
+		w.Header().Set("X-Account-Limit", "100")
+		w.WriteHeader(420)
+	})
+
+	err := ListsItemsHandler{}.Handle(&str.Options{InternalID: "55"}, s.Client)
+	if err == nil || err.Error() != "account limit exceeded (limit: 100)" {
+		t.Fatalf("error is %v, want %q", err, "account limit exceeded (limit: 100)")
+	}
+}

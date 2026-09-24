@@ -4,6 +4,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/mfederowicz/trakt-sync/cli"
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/internal"
@@ -24,6 +25,9 @@ func (u UsersAddListItemsHandler) Handle(options *str.Options, client *internal.
 	printer.Println("add list items")
 	toList := u.common.CreateItemsToAdd(input)
 	addResult, resp, err := u.usersAddListItems(client, options, &toList)
+	if vipErr := cli.HandleVIPResponse(resp, err); vipErr != nil {
+		return vipErr
+	}
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("list:%s not found", options.ID)

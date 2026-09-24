@@ -50,6 +50,11 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Fixed
 
+- VIP account limits (`420`) for `users -a add_list|add_list_items`, `sync -a add_to_watchlist` and
+  `lists -a items`: a non-VIP user now gets the Trakt VIP page opened (from `X-Upgrade-URL`), a VIP user gets
+  `account limit exceeded (limit: N)`. Before, the command showed a generic error.
+- VIP-only actions (`426`): when the response has no `X-Upgrade-URL` header, `https://trakt.tv/vip` is opened
+  instead of an empty URL.
 - `movies -a favorited|played|watched|collected -period <p>`: `-period` was ignored and `weekly` was always
   used (the `shows` default overwrote it).
 - `movies|shows|people -a updates|updated_ids -start_date <date>`: `-start_date` was ignored and the last

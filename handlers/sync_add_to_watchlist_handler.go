@@ -4,6 +4,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/mfederowicz/trakt-sync/cli"
 
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
@@ -23,6 +24,9 @@ func (m SyncAddToWatchlistHandler) Handle(options *str.Options, client *internal
 	printer.Println("add to watchlist")
 	toWatchlist := m.common.CreateItemsToAdd(items)
 	addResult, err := m.syncAddToWatchlist(client, options, &toWatchlist)
+	if vipErr := cli.HandleVIPResponse(nil, err); vipErr != nil {
+		return vipErr
+	}
 	if err != nil {
 		return fmt.Errorf("add to wtachlist error:%w", err)
 	}

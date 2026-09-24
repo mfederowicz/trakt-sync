@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/mfederowicz/trakt-sync/cli"
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -25,6 +26,9 @@ func (h ListsItemsHandler) Handle(options *str.Options, client *internal.Client)
 	}
 	printer.Println("Get all items on a list.")
 	result, err := h.fetchListItems(client, options, consts.DefaultPage)
+	if vipErr := cli.HandleVIPResponse(nil, err); vipErr != nil {
+		return vipErr
+	}
 	if err != nil {
 		return fmt.Errorf("fetch list error:%v", err)
 	}

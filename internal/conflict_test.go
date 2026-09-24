@@ -81,3 +81,26 @@ func TestUsersListReportConflictKeepsMessage(t *testing.T) {
 	assertConflict(t, resp, err)
 	test.AssertNoDiff(t, &str.ListReportResult{Message: str.String("report already pending")}, result)
 }
+
+func TestUsersAddPersonalListAccountLimit(t *testing.T) {
+	setup := Setup()
+	defer setup.Teardown()
+	setup.Mux.HandleFunc("/users/sean/lists", func(w http.ResponseWriter, r *http.Request) {
+		test.AssertMethod(t, r, http.MethodPost)
+		w.Header().Set(HeaderVIPUser, "false")
+		w.Header().Set(HeaderAccountLimit, "2")
+		w.WriteHeader(420)
+	})
+
+	_, resp, err := setup.Client.Users.AddPersonalList(context.Background(), str.String("sean"), &str.PersonalList{})
+	var limits *UpgradeUserLimitsError
+	if !errors.As(err, &limits) {
+		t.Fatalf("error is %v, want *UpgradeUserLimitsError", err)
+	}
+	if resp == nil || resp.StatusCode != 420 {
+		t.Fatalf("response is %v, want status 420", resp)
+	}
+	if got := limits.Response.Header.Get(HeaderAccountLimit); got != "2" {
+		t.Errorf("%s is %q, want %q", HeaderAccountLimit, got, "2")
+	}
+}

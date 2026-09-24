@@ -32,8 +32,8 @@ func (MoviesRefreshJustwatchHandler) Handle(options *str.Options, client *intern
 		return fmt.Errorf("not found movie for:%s", options.InternalID)
 	}
 
-	if resp.StatusCode == http.StatusUpgradeRequired {
-		return cli.HandleUpgrade(resp)
+	if vipErr := cli.HandleVIPResponse(resp, err); vipErr != nil {
+		return vipErr
 	}
 
 	if err != nil {

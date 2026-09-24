@@ -3,7 +3,6 @@ package internal
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -554,10 +553,6 @@ func (u *UsersService) AddPersonalList(ctx context.Context, user *string, list *
 
 	result := new(str.PersonalList)
 	resp, err := u.client.Do(ctx, req, result)
-
-	if resp != nil && resp.StatusCode == 420 {
-		return nil, nil, errors.New("use the /users/settings method to get all limits for a user account. In most cases, upgrading to Trakt VIP will increase the limits")
-	}
 
 	if err != nil {
 		return result, resp, err

@@ -4,6 +4,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/mfederowicz/trakt-sync/cli"
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/internal"
@@ -21,6 +22,9 @@ func (u UsersAddListHandler) Handle(options *str.Options, client *internal.Clien
 		return err
 	}
 	result, resp, err := u.common.UsersAddPersonalList(client, options, input.List)
+	if vipErr := cli.HandleVIPResponse(resp, err); vipErr != nil {
+		return vipErr
+	}
 	if err != nil {
 		return fmt.Errorf("add personal list error:%w", err)
 	}

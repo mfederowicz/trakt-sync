@@ -31,8 +31,8 @@ func (h PeopleRefreshHandler) Handle(options *str.Options, client *internal.Clie
 		return fmt.Errorf("not found person for:%s", options.ID)
 	}
 
-	if resp.StatusCode == http.StatusUpgradeRequired {
-		return cli.HandleUpgrade(resp)
+	if vipErr := cli.HandleVIPResponse(resp, err); vipErr != nil {
+		return vipErr
 	}
 
 	if resp.StatusCode == http.StatusConflict {
