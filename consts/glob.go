@@ -45,6 +45,7 @@ const (
 	EmptyReportMsg               = "set reason:  ie: -message \"xyz\""
 	EmptyListItemIDMsg           = "set List item ID Example:  ie: -list_item_id 12345"
 	EmptyListIDMsg               = "set traktId ie: -trakt_id 55"
+	EndpointNotLiveMsg           = "the Trakt API returns 404 for this route (documented, but not served by the live API): %w"
 	EmptyCountryMsg              = "set 2 character country code ie: -country us"
 	EmptyMovieIDMsg              = "set Trakt ID, Trakt slug, or IMDB ID Example:  ie: -i 12345 or -i tron-legacy-2010"
 	EmptyNotesIDMsg              = "set notesId ie: -i 12345678"

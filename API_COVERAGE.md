@@ -7,40 +7,41 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 - ✅ implemented: a service method in `internal/` calls this exact route.
 - 🟡 needs checking: a service method calls this route only through a generic path parameter (for example `sync/collection/%s`); confirm the CLI accepts this value.
 - ⬜ missing: no service method calls this route.
+- ⚠️ not served: listed in the contract, but the live API does not serve it (404, or another route answers; see [Findings](#findings)). The Go method column shows whether trakt-sync implements it anyway.
 - Update this file in the same PR that adds or removes an endpoint.
 
 ## Summary
 
-| Domain | ✅ | 🟡 | ⬜ | Total |
-| --- | ---: | ---: | ---: | ---: |
-| [`calendars`](#calendars) | 12 | 0 | 0 | 12 |
-| [`certifications`](#certifications) | 3 | 0 | 0 | 3 |
-| [`checkin`](#checkin) | 2 | 0 | 0 | 2 |
-| [`comments`](#comments) | 18 | 0 | 0 | 18 |
-| [`countries`](#countries) | 1 | 0 | 0 | 1 |
-| [`episodes`](#episodes) | 0 | 0 | 2 | 2 |
-| [`genres`](#genres) | 1 | 0 | 0 | 1 |
-| [`languages`](#languages) | 1 | 0 | 0 | 1 |
-| [`lists`](#lists) | 15 | 0 | 0 | 15 |
-| [`media`](#media) | 3 | 0 | 0 | 3 |
-| [`movies`](#movies) | 31 | 0 | 0 | 31 |
-| [`networks`](#networks) | 1 | 0 | 0 | 1 |
-| [`notes`](#notes) | 5 | 0 | 0 | 5 |
-| [`oauth`](#oauth) | 3 | 0 | 2 | 5 |
-| [`people`](#people) | 7 | 0 | 1 | 8 |
-| [`recommendations`](#recommendations) | 4 | 0 | 0 | 4 |
-| [`scrobble`](#scrobble) | 3 | 0 | 0 | 3 |
-| [`search`](#search) | 2 | 0 | 4 | 6 |
-| [`seasons`](#seasons) | 0 | 0 | 1 | 1 |
-| [`shows`](#shows) | 49 | 0 | 11 | 60 |
-| [`smart-lists`](#smart-lists) | 0 | 0 | 2 | 2 |
-| [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 2 |
-| [`sync`](#sync) | 29 | 0 | 8 | 37 |
-| [`team`](#team) | 0 | 0 | 1 | 1 |
-| [`users`](#users) | 63 | 0 | 41 | 104 |
-| [`watchnow`](#watchnow) | 0 | 0 | 2 | 2 |
-| [`younify`](#younify) | 0 | 0 | 5 | 5 |
-| **Total** | **253** | **0** | **82** | **335** |
+| Domain | ✅ | 🟡 | ⬜ | ⚠️ | Total |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| [`calendars`](#calendars) | 12 | 0 | 0 | 0 | 12 |
+| [`certifications`](#certifications) | 3 | 0 | 0 | 0 | 3 |
+| [`checkin`](#checkin) | 2 | 0 | 0 | 0 | 2 |
+| [`comments`](#comments) | 18 | 0 | 0 | 0 | 18 |
+| [`countries`](#countries) | 1 | 0 | 0 | 0 | 1 |
+| [`episodes`](#episodes) | 0 | 0 | 2 | 0 | 2 |
+| [`genres`](#genres) | 1 | 0 | 0 | 0 | 1 |
+| [`languages`](#languages) | 1 | 0 | 0 | 0 | 1 |
+| [`lists`](#lists) | 15 | 0 | 0 | 0 | 15 |
+| [`media`](#media) | 3 | 0 | 0 | 0 | 3 |
+| [`movies`](#movies) | 29 | 0 | 0 | 2 | 31 |
+| [`networks`](#networks) | 1 | 0 | 0 | 0 | 1 |
+| [`notes`](#notes) | 5 | 0 | 0 | 0 | 5 |
+| [`oauth`](#oauth) | 3 | 0 | 2 | 0 | 5 |
+| [`people`](#people) | 7 | 0 | 1 | 0 | 8 |
+| [`recommendations`](#recommendations) | 4 | 0 | 0 | 0 | 4 |
+| [`scrobble`](#scrobble) | 3 | 0 | 0 | 0 | 3 |
+| [`search`](#search) | 2 | 0 | 4 | 0 | 6 |
+| [`seasons`](#seasons) | 0 | 0 | 1 | 0 | 1 |
+| [`shows`](#shows) | 49 | 0 | 9 | 2 | 60 |
+| [`smart-lists`](#smart-lists) | 0 | 0 | 2 | 0 | 2 |
+| [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 0 | 2 |
+| [`sync`](#sync) | 29 | 0 | 8 | 0 | 37 |
+| [`team`](#team) | 0 | 0 | 1 | 0 | 1 |
+| [`users`](#users) | 63 | 0 | 41 | 0 | 104 |
+| [`watchnow`](#watchnow) | 0 | 0 | 2 | 0 | 2 |
+| [`younify`](#younify) | 0 | 0 | 5 | 0 | 5 |
+| **Total** | **251** | **0** | **80** | **4** | **335** |
 
 ## calendars
 
@@ -158,10 +159,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/movies/boxoffice` | Get the weekend box office | `MoviesService.GetBoxoffice` |
 | ✅ | GET | `/movies/collected/{period}` | Get the most collected movies | `MoviesService.GetCollectedMovies` |
 | ✅ | GET | `/movies/favorited/{period}` | Get the most favorited movies | `MoviesService.GetFavoritedMovies` |
-| ✅ | GET | `/movies/hot` | Get hot movies | `MoviesService.GetHotMovies` |
+| ⚠️ | GET | `/movies/hot` | Get hot movies | `MoviesService.GetHotMovies` |
 | ✅ | GET | `/movies/played/{period}` | Get the most played movies | `MoviesService.GetPlayedMovies` |
 | ✅ | GET | `/movies/popular` | Get popular movies | `MoviesService.GetPopularMovies` |
-| ✅ | GET | `/movies/streaming/{period}` | Get streaming movies | `MoviesService.GetStreamingMovies` |
+| ⚠️ | GET | `/movies/streaming/{period}` | Get streaming movies | `MoviesService.GetStreamingMovies` |
 | ✅ | GET | `/movies/trending` | Get trending movies | `MoviesService.GetTrendingMovies` |
 | ✅ | GET | `/movies/updates/id/{start_date}` | Get recently updated movie Trakt IDs | `MoviesService.GetRecentlyUpdatedMoviesTraktIDs` |
 | ✅ | GET | `/movies/updates/{start_date}` | Get recently updated movies | `MoviesService.GetRecentlyUpdatedMovies` |
@@ -266,10 +267,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/shows/anticipated` | Get the most anticipated shows | `ShowsService.GetAnticipatedShows` |
 | ✅ | GET | `/shows/collected/{period}` | Get the most collected shows | `ShowsService.GetCollectedShows` |
 | ✅ | GET | `/shows/favorited/{period}` | Get the most favorited shows | `ShowsService.GetFavoritedShows` |
-| ⬜ | GET | `/shows/hot` | Get hot shows |  |
+| ⚠️ | GET | `/shows/hot` | Get hot shows |  |
 | ✅ | GET | `/shows/played/{period}` | Get the most played shows | `ShowsService.GetPlayedShows` |
 | ✅ | GET | `/shows/popular` | Get popular shows | `ShowsService.GetPopularShows` |
-| ⬜ | GET | `/shows/streaming/{period}` | Get streaming shows |  |
+| ⚠️ | GET | `/shows/streaming/{period}` | Get streaming shows |  |
 | ✅ | GET | `/shows/trending` | Get trending shows | `ShowsService.GetTrendingShows` |
 | ✅ | GET | `/shows/updates/id/{start_date}` | Get recently updated show Trakt IDs | `ShowsService.GetRecentlyUpdatedShowsTraktIDs` |
 | ✅ | GET | `/shows/updates/{start_date}` | Get recently updated shows | `ShowsService.GetRecentlyUpdatedShows` |
@@ -520,3 +521,7 @@ Differences between the service code and the contract, found while building this
 | --- | --- | --- |
 | `EpisodesService.GetEpisode` | `GET episodes/{id}` | contract only has `POST /episodes/{id}/report` |
 | `SeasonsService.GetSeason` | `GET seasons/{id}` | contract only has `POST /seasons/{id}/report` |
+| `MoviesService.GetHotMovies` | `GET /movies/hot` | live API returns 404 (checked 2026-09-24); the CLI explains the 404. Upstream issue: TBD |
+| - | `GET /shows/hot` | live API routes it to `GET /shows/{id}` and returns the show with slug `hot` (checked 2026-09-24). Upstream issue: TBD |
+| `MoviesService.GetStreamingMovies` | `GET /movies/streaming/{period}` | live API returns 404 `{"error":"endpoint removed"}` (checked 2026-09-24); the CLI explains the 404. Upstream issue: TBD |
+| - | `GET /shows/streaming/{period}` | live API returns 404 `{"error":"endpoint removed"}` (checked 2026-09-24). Upstream issue: TBD |

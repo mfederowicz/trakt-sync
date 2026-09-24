@@ -34,3 +34,13 @@ func writeMoviesItems(options *str.Options, result []*str.MoviesItem) error {
 	writer.WriteJSON(options, jsonData)
 	return nil
 }
+
+// endpointNotLiveError explains a 404 from a route the API documents but does not serve yet.
+func endpointNotLiveError(err error) error {
+	var notFound *internal.NotFoundError
+	if errors.As(err, &notFound) {
+		return fmt.Errorf(consts.EndpointNotLiveMsg, err)
+	}
+
+	return err
+}

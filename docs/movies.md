@@ -65,6 +65,8 @@ $ ./trakt-sync movies -a anticipated
 $ ./trakt-sync movies -a hot -> export_movies_hot.json
 ```
 `streaming` accepts `-period daily|weekly|monthly` (default `weekly`).
+`hot` and `streaming` are in the Trakt API docs, but the live API currently returns 404 for them;
+the CLI then reports that the route is not served.
 ```console
 $ ./trakt-sync movies -a streaming -period daily -> export_movies_streaming_daily.json
 ```

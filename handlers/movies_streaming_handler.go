@@ -27,7 +27,7 @@ func (MoviesStreamingHandler) Handle(options *str.Options, client *internal.Clie
 		return client.Movies.GetStreamingMovies(client.BuildCtxFromOptions(options), &options.Period, opts)
 	})
 	if err != nil {
-		return err
+		return endpointNotLiveError(err)
 	}
 
 	return writeMoviesItems(options, result)
