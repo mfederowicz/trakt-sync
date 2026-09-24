@@ -48,6 +48,8 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Fixed
 
+- `search -a text_query --field <name>`: the field filter was sent as `field` instead of `fields`, so the API
+  ignored it and searched its default fields. It is now sent as `fields`.
 - `comments` on a season or episode always failed with `set traktId`, even with `-trakt_id`/`-i` given: the check
   read a field the `comments` module never sets. It now checks the id that is actually passed.
 - `checkin -a episode -trakt_id <id>` crashed with a nil pointer: the episode was looked up by an empty id instead of
