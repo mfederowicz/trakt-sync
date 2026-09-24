@@ -33,7 +33,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`scrobble`](#scrobble) | 3 | 0 | 0 | 0 | 3 |
 | [`search`](#search) | 2 | 0 | 4 | 0 | 6 |
 | [`seasons`](#seasons) | 0 | 0 | 1 | 0 | 1 |
-| [`shows`](#shows) | 49 | 0 | 9 | 2 | 60 |
+| [`shows`](#shows) | 51 | 0 | 7 | 2 | 60 |
 | [`smart-lists`](#smart-lists) | 0 | 0 | 2 | 0 | 2 |
 | [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 0 | 2 |
 | [`sync`](#sync) | 29 | 0 | 8 | 0 | 37 |
@@ -41,7 +41,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 63 | 0 | 41 | 0 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **251** | **0** | **80** | **4** | **335** |
+| **Total** | **253** | **0** | **78** | **4** | **335** |
 
 ## calendars
 
@@ -291,7 +291,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | POST | `/shows/{id}/refresh` | Refresh show metadata | `ShowsService.RefreshShowMetadata` |
 | ⬜ | POST | `/shows/{id}/refresh/justwatch` | Refresh show JustWatch links |  |
 | ✅ | GET | `/shows/{id}/related` | Get related shows | `ShowsService.GetRelatedShows` |
-| ⬜ | POST | `/shows/{id}/report` | Report a show |  |
+| ✅ | POST | `/shows/{id}/report` | Report a show | `ShowsService.ReportShow` |
 | ✅ | GET | `/shows/{id}/seasons` | Get all seasons for a show | `ShowsService.GetAllSeasonsForShow` |
 | ✅ | GET | `/shows/{id}/seasons/{season}` | Get all episodes for a single season | `ShowsService.GetAllEpisodesForSingleSeason` |
 | ✅ | GET | `/shows/{id}/seasons/{season}/comments/{sort}` | Get all season comments | `ShowsService.GetAllSeasonComments` |
@@ -316,7 +316,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/shows/{id}/seasons/{season}/videos` | Get all videos | `ShowsService.GetSeasonsVideos` |
 | ✅ | GET | `/shows/{id}/seasons/{season}/watching` | Get users watching right now | `ShowsService.GetSeasonsWatching` |
 | ⬜ | GET | `/shows/{id}/seasons/{season}/watchnow/justwatch_links/{country}` | Get season JustWatch links |  |
-| ⬜ | GET | `/shows/{id}/sentiments` | Get show sentiments |  |
+| ✅ | GET | `/shows/{id}/sentiments` | Get show sentiments | `ShowsService.GetShowSentiments` |
 | ✅ | GET | `/shows/{id}/stats` | Get show stats | `ShowsService.GetShowStats` |
 | ✅ | GET | `/shows/{id}/studios` | Get show studios | `ShowsService.GetShowStudios` |
 | ✅ | GET | `/shows/{id}/translations` | Get all show translations | `ShowsService.GetAllShowTranslations` |

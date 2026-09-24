@@ -181,6 +181,10 @@ $ ./trakt-sync shows -a ratings -i the-sopranos
 ```console
 $ ./trakt-sync shows -a related -i the-sopranos
 ```
+##### Get show sentiments
+```console
+$ ./trakt-sync shows -a sentiments -i the-sopranos -> export_shows_sentiments_the-sopranos.json
+```
 ##### Get show studios
 ```console
 $ ./trakt-sync shows -a studios -i the-sopranos
@@ -205,3 +209,8 @@ $ ./trakt-sync shows -a videos -i the-sopranos
 ```console
 $ ./trakt-sync shows -a refresh -i the-sopranos
 ```
+##### Report a show
+```console
+$ ./trakt-sync shows -a report -i the-sopranos -r metadata -message "overview is wrong"
+```
+`-r` is one of: `duplicate`, `remove`, `data_refresh`, `metadata`, `adult`, `runtime`, `language`, `spam`, `tmdb`, `other`.

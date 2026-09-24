@@ -85,6 +85,7 @@ const (
 	ListTypeUsage                = "list type for trending/popular, or item types for items ie: movie,show"
 	ListReportPending            = "list %s already has a pending report from this user"
 	LimitedAccessMsg             = "%s is limited access on Trakt and not available for this API app: %w"
+	ShowReportPending            = "show %s already has a pending report from this user"
 	MovieReportPending           = "movie %s already has a pending report from this user"
 	ListItem                     = "  - %s\n"
 	ItemIDUsage                  = "allow to overwrite item_id"

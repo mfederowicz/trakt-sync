@@ -23,12 +23,15 @@ var (
 	_showsStartDate     = ShowsCmd.Flag.String("start_date", "", consts.StartDateUsage)
 	_showsUndo          = ShowsCmd.Flag.Bool("undo", cfg.DefaultConfig().Undo, consts.UndoUsage)
 	_showsResetAt       = ShowsCmd.Flag.String("reset_at", "", consts.ResetAtUsage)
+	_showsReason        = ShowsCmd.Flag.String("r", cfg.DefaultConfig().Reason, consts.ReasonUsage)
+	_showsMessage       = ShowsCmd.Flag.String("message", cfg.DefaultConfig().Msg, consts.ReportMsgUsage)
 
 	validShowsActions = []string{
 		"trending", "popular", "favorited", "played", "watched", "collected",
 		"anticipated", "boxoffice", "updates", "updated_ids", "summary", "aliases", "certifications",
 		"collection_progress", "watched_progress", "releases", "translations", "comments", "lists", "people", "ratings",
-		"releated", "stats", "studios", "watching", "next_episode", "last_episode", "videos", "refresh"}
+		"releated", "stats", "studios", "watching", "next_episode", "last_episode", "videos", "refresh",
+		consts.Report, consts.Sentiments}
 )
 
 // ShowsCmd returns movies and episodes that a user has watched, sorted by most recent.
@@ -85,6 +88,9 @@ func showsFunc(cmd *Command, _ ...string) error {
 		"last_episode":        handlers.ShowsLastEpisodeHandler{},
 		"videos":              handlers.ShowsVideosHandler{},
 		"refresh":             handlers.ShowsRefreshHandler{},
+
+		consts.Report:     handlers.ShowsReportHandler{},
+		consts.Sentiments: handlers.ShowsSentimentsHandler{},
 	}
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
