@@ -31,7 +31,10 @@ func (h NotesNotesCollectionHandler) Handle(options *str.Options, client *intern
 		movie, _, _ := h.common.FetchMovie(client, options)
 		n.Movie = movie
 	case "episode":
-		episode, _ := h.common.FetchEpisode(client, options)
+		episode, err := h.common.EpisodeFromTraktID(options)
+		if err != nil {
+			return err
+		}
 		n.Episode = episode
 	default:
 		h.common.GenActionTypeItemUsage(options, []string{"movie", "episode"})

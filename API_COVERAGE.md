@@ -519,8 +519,6 @@ Differences between the service code and the contract, found while building this
 
 | Go method | Route | Note |
 | --- | --- | --- |
-| `EpisodesService.GetEpisode` | `GET episodes/{id}` | contract only has `POST /episodes/{id}/report` |
-| `SeasonsService.GetSeason` | `GET seasons/{id}` | contract only has `POST /seasons/{id}/report` |
 | `MoviesService.GetHotMovies` | `GET /movies/hot` | live API returns 404 (checked 2026-09-24); the CLI explains the 404. Upstream issue: TBD |
 | - | `GET /shows/hot` | live API routes it to `GET /shows/{id}` and returns the show with slug `hot` (checked 2026-09-24). Upstream issue: TBD |
 | `MoviesService.GetStreamingMovies` | `GET /movies/streaming/{period}` | live API returns 404 `{"error":"endpoint removed"}` (checked 2026-09-24); the CLI explains the 404. Upstream issue: TBD |

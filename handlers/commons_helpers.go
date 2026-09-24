@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/cli"
@@ -177,4 +178,14 @@ func watchNowError(action string, kind string, id string, resp *str.Response, er
 // isEmptySentiments reports a sentiments response with no data; the API answers an unknown id with {} instead of 404.
 func isEmptySentiments(s *str.Sentiments) bool {
 	return s == nil || (len(s.Good) == consts.ZeroValue && len(s.Bad) == consts.ZeroValue && s.CommentCount == nil && s.AnalyzedAt == nil)
+}
+
+// parseItemTraktID parses the numeric Trakt ID of a season or episode; those have no slugs.
+func parseItemTraktID(id string) (int64, error) {
+	traktID, err := strconv.ParseInt(id, consts.BaseInt, consts.BitSize)
+	if err != nil || traktID <= consts.ZeroValueInt64 {
+		return consts.ZeroValueInt64, fmt.Errorf("trakt id must be a positive number, got %q", id)
+	}
+
+	return traktID, nil
 }

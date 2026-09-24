@@ -17,13 +17,13 @@ type CommentsCommentsEpisodeHandler struct{ common CommonLogic }
 
 // Handle to handle comments: episode type
 func (h CommentsCommentsEpisodeHandler) Handle(options *str.Options, client *internal.Client) error {
-	if options.TraktID == consts.ZeroValue {
+	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
 	connections, _ := h.common.FetchUserConnections(client, options)
-	episode, err := h.common.FetchEpisode(client, options)
+	episode, err := h.common.EpisodeFromTraktID(options)
 	if err != nil {
-		return fmt.Errorf("fetch episode error:%w", err)
+		return err
 	}
 
 	c := new(str.Comment)

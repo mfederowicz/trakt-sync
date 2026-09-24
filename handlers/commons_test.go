@@ -179,6 +179,7 @@ func TestCreateCheckinForMovie(t *testing.T) {
 	assert.Equal(t, checkin.Movie.IDs.Trakt, test.Ptr(int64(consts.TestMovieTraktID)))
 }
 
+// checkin keeps the episode id in -trakt_id (options.TraktID); -i (InternalID) is not set by the checkin module.
 func TestCreateCheckinForEpisode(t *testing.T) {
 	testSetup := setup(t)
 	mux := testSetup.Mux
@@ -192,28 +193,46 @@ func TestCreateCheckinForEpisode(t *testing.T) {
 	s.Account = a
 	o.UserSettings = *s
 	o.Action = consts.Episode
-	o.InternalID = "12345"
-	mux.HandleFunc("/episodes/12345", func(w http.ResponseWriter, r *http.Request) {
-		test.AssertMethod(t, r, "GET")
-		test.SafeFprint(w,
-			`{
-				  "season": 6,
-				  "number": 21,
-				  "title": "Made in America",
-				  "ids": {
-					"trakt": 73629,
-					"tvdb": 329768,
-					"imdb": "tt0995839",
-					"tmdb": 63055,
-					"tvrage": null
-				  }
-				}`,
-		)
+	o.TraktID = consts.TestEpisodeTraktID
+	mux.HandleFunc("/episodes/", func(_ http.ResponseWriter, r *http.Request) {
+		t.Errorf("unexpected episode lookup: %s %s", r.Method, r.URL.Path)
 	})
 
-	checkin, _ := c.CreateCheckin(testSetup.Client, o)
+	checkin, err := c.CreateCheckin(testSetup.Client, o)
+	test.AssertNilError(t, err)
 	test.AssertType(t, checkin, consts.Fupper(consts.Checkin))
-	assert.Equal(t, checkin.Episode.IDs.Trakt, test.Ptr(int64(consts.TestEpisodeTraktID)))
+	test.AssertNoDiff(t, test.Ptr(int64(consts.TestEpisodeTraktID)), checkin.Episode.IDs.Trakt)
+}
+
+func TestSeasonEpisodeFromTraktID(t *testing.T) {
+	c := &CommonLogic{}
+	tests := []struct {
+		id      string
+		want    *int64
+		wantErr bool
+	}{
+		{id: "3950", want: test.Ptr(int64(3950))},
+		{id: "the-sopranos", wantErr: true},
+		{id: "", wantErr: true},
+		{id: "0", wantErr: true},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.id, func(t *testing.T) {
+			season, err := c.SeasonFromTraktID(&str.Options{InternalID: tt.id})
+			episode, episodeErr := c.EpisodeFromTraktID(&str.Options{InternalID: tt.id})
+			if tt.wantErr {
+				if err == nil || episodeErr == nil {
+					t.Fatalf("errors are %v / %v, want both set", err, episodeErr)
+				}
+				return
+			}
+			test.AssertNilError(t, err)
+			test.AssertNilError(t, episodeErr)
+			test.AssertNoDiff(t, &str.Season{IDs: &str.IDs{Trakt: tt.want}}, season)
+			test.AssertNoDiff(t, &str.Episode{IDs: &str.IDs{Trakt: tt.want}}, episode)
+		})
+	}
 }
 
 func TestCreateCheckinForShowEpisodeInvalidLength(t *testing.T) {

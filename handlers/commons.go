@@ -49,11 +49,11 @@ type CommonInterface interface {
 	DeleteComment(client *internal.Client, options *str.Options) (*str.Response, error)
 	DeleteNotes(client *internal.Client, options *str.Options) (*str.Response, error)
 	DenyFollowRequest(client *internal.Client, options *str.Options) (*str.FollowRequest, *str.Response, error)
+	EpisodeFromTraktID(options *str.Options) (*str.Episode, error)
 	FetchBlockedUsers(client *internal.Client, options *str.Options, page int) ([]*str.UserBlocked, error)
 	FetchComment(client *internal.Client, options *str.Options) (*str.Comment, error)
 	FetchCommentItem(client *internal.Client, options *str.Options) (*str.CommentMediaItem, error)
 	FetchCommentUserLikes(client *internal.Client, options *str.Options, page int) ([]*str.CommentUserLike, error)
-	FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error)
 	FetchUsersFavorites(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchUsersFavoritesComments(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	FetchFollowRequests(client *internal.Client, options *str.Options) ([]*str.FollowRequest, error)
@@ -70,7 +70,6 @@ type CommonInterface interface {
 	FetchPerson(client *internal.Client, options *str.Options) (*str.Person, error)
 	FetchRatings(client *internal.Client, options *str.Options, page int) ([]*str.RatingListItem, error)
 	FetchRecentComments(client *internal.Client, options *str.Options, page int) ([]*str.CommentItem, error)
-	FetchSeason(client *internal.Client, options *str.Options) (*str.Season, error)
 	FetchShow(client *internal.Client, options *str.Options) (*str.Show, error)
 	FetchShowRecommendations(client *internal.Client, options *str.Options, page int) ([]*str.Recommendation, error)
 	FetchTrendingComments(client *internal.Client, options *str.Options, page int) ([]*str.CommentItem, error)
@@ -100,6 +99,7 @@ type CommonInterface interface {
 	PauseScrobble(client *internal.Client, scrobble *str.Scrobble, options *str.Options) (*str.Scrobble, *str.Response, error)
 	ReadInput(options str.Options) (*str.ItemsList, error)
 	Reply(client *internal.Client, id *int, comment *str.Comment, options *str.Options) (*str.Comment, *str.Response, error)
+	SeasonFromTraktID(options *str.Options) (*str.Season, error)
 	StartScrobble(client *internal.Client, scrobble *str.Scrobble, options *str.Options) (*str.Scrobble, *str.Response, error)
 	StopScrobble(client *internal.Client, scrobble *str.Scrobble, options *str.Options) (*str.Scrobble, *str.Response, error)
 	ToTimestamp(at string) *str.Timestamp
@@ -405,10 +405,9 @@ func (c *CommonLogic) CreateCheckin(client *internal.Client, options *str.Option
 		movie, _, _ := c.FetchMovie(client, options)
 		checkin.Movie = movie
 	case consts.Episode:
-		episode, _ := c.FetchEpisode(client, options)
-		checkin.Episode = new(str.Episode)
-		checkin.Episode.IDs = new(str.IDs)
-		checkin.Episode.IDs.Trakt = episode.IDs.Trakt
+		// checkin keeps the episode id in -trakt_id (options.TraktID), not in -i
+		traktID := int64(options.TraktID)
+		checkin.Episode = &str.Episode{IDs: &str.IDs{Trakt: &traktID}}
 	case consts.ShowEpisode:
 		che, err := c.CreateCheckinShowEpisode(client, options)
 		if err != nil {
@@ -460,10 +459,11 @@ func (c *CommonLogic) CreateScrobble(client *internal.Client, options *str.Optio
 		movie, _, _ := c.FetchMovie(client, options)
 		scrobble.Movie = movie
 	case consts.Episode:
-		episode, _ := c.FetchEpisode(client, options)
-		scrobble.Episode = new(str.Episode)
-		scrobble.Episode.IDs = new(str.IDs)
-		scrobble.Episode.IDs.Trakt = episode.IDs.Trakt
+		episode, err := c.EpisodeFromTraktID(options)
+		if err != nil {
+			return nil, fmt.Errorf(consts.ScrobbleError, err)
+		}
+		scrobble.Episode = episode
 	case consts.ShowEpisode:
 		sc, err := c.CreateScrobbleShowEpisode(client, options)
 		if err != nil {
@@ -533,28 +533,24 @@ func (*CommonLogic) FetchShow(client *internal.Client, options *str.Options) (*s
 	return result, err
 }
 
-// FetchSeason helper function to fetch season object
-func (*CommonLogic) FetchSeason(client *internal.Client, options *str.Options) (*str.Season, error) {
-	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	seasonID := options.InternalID
-	result, _, err := client.Seasons.GetSeason(
-		client.BuildCtxFromOptions(options),
-		&seasonID,
-		&opts,
-	)
+// SeasonFromTraktID builds a season with only its Trakt ID (-i), which is all the comment, note and scrobble bodies need.
+func (*CommonLogic) SeasonFromTraktID(options *str.Options) (*str.Season, error) {
+	id, err := parseItemTraktID(options.InternalID)
+	if err != nil {
+		return nil, fmt.Errorf("season %w", err)
+	}
 
-	return result, err
+	return &str.Season{IDs: &str.IDs{Trakt: &id}}, nil
 }
 
-// FetchEpisode helper function to fetch episode object
-func (*CommonLogic) FetchEpisode(client *internal.Client, options *str.Options) (*str.Episode, error) {
-	episodeID := options.InternalID
-	result, _, err := client.Episodes.GetEpisode(
-		client.BuildCtxFromOptions(options),
-		&episodeID,
-	)
+// EpisodeFromTraktID builds an episode with only its Trakt ID (-i), which is all the comment, note and scrobble bodies need.
+func (*CommonLogic) EpisodeFromTraktID(options *str.Options) (*str.Episode, error) {
+	id, err := parseItemTraktID(options.InternalID)
+	if err != nil {
+		return nil, fmt.Errorf("episode %w", err)
+	}
 
-	return result, err
+	return &str.Episode{IDs: &str.IDs{Trakt: &id}}, nil
 }
 
 // FetchPerson helper function to fetch person object

@@ -20,7 +20,10 @@ func (h NotesNotesSeasonHandler) Handle(options *str.Options, client *internal.C
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
-	season, _ := h.common.FetchSeason(client, options)
+	season, err := h.common.SeasonFromTraktID(options)
+	if err != nil {
+		return err
+	}
 	n := new(str.Notes)
 	n.Season = season
 	n.Notes = &options.Notes
