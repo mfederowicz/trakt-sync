@@ -23,7 +23,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`languages`](#languages) | 1 | 0 | 0 | 1 |
 | [`lists`](#lists) | 15 | 0 | 0 | 15 |
 | [`media`](#media) | 3 | 0 | 0 | 3 |
-| [`movies`](#movies) | 29 | 0 | 2 | 31 |
+| [`movies`](#movies) | 31 | 0 | 0 | 31 |
 | [`networks`](#networks) | 1 | 0 | 0 | 1 |
 | [`notes`](#notes) | 5 | 0 | 0 | 5 |
 | [`oauth`](#oauth) | 3 | 0 | 2 | 5 |
@@ -40,7 +40,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 63 | 0 | 41 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 5 |
-| **Total** | **251** | **0** | **84** | **335** |
+| **Total** | **253** | **0** | **82** | **335** |
 
 ## calendars
 
@@ -183,8 +183,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/movies/{id}/translations` | Get all movie translations | `MoviesService.GetAllMovieTranslations` |
 | ✅ | GET | `/movies/{id}/videos` | Get all videos | `MoviesService.GetMovieVideos` |
 | ✅ | GET | `/movies/{id}/watching` | Get users watching right now | `MoviesService.GetMovieWatching` |
-| ⬜ | GET | `/movies/{id}/watchnow/justwatch_links/{country}` | Get movie JustWatch links |  |
-| ⬜ | GET | `/movies/{id}/watchnow/{country}` | Get movie watch now sources |  |
+| ✅ | GET | `/movies/{id}/watchnow/justwatch_links/{country}` | Get movie JustWatch links | `MoviesService.GetMovieJustwatchLinks` |
+| ✅ | GET | `/movies/{id}/watchnow/{country}` | Get movie watch now sources | `MoviesService.GetMovieWatchNow` |
 
 ## networks
 

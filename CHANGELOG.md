@@ -20,6 +20,10 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Added
 
+- `movies -a watchnow -i <id> -country <code>`: watch now sources (streaming, rent, purchase) for a movie in one country;
+  `-links tvos,direct,android,webos` adds provider links and `-ex streaming_ranks` adds the JustWatch rank.
+- `movies -a justwatch_links -i <id> -country <code>`: the JustWatch link for a movie in one country.
+
 ### Changed
 
 ### Fixed

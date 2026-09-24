@@ -35,6 +35,7 @@ type ListOptions struct {
 	Languages         []string         `url:"languages,omitempty"`
 	Translations      []string         `url:"translations,omitempty"`
 	Limit             int              `url:"limit,omitempty"`
+	Links             string           `url:"links,omitempty"`
 	Metascores        RatingRangeFloat `url:"metascores,omitempty"`
 	NetworkIDs        []int            `url:"network_ids,omitempty"`
 	Page              int              `url:"page,omitempty"`
