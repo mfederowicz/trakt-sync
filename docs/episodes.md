@@ -76,3 +76,8 @@ $ ./trakt-sync episodes -a watching -i the-sopranos -season 1 -episode 1
 ```console
 $ ./trakt-sync episodes -a videos -i the-sopranos -season 1 -episode 1
 ```
+##### Report an episode
+```console
+$ ./trakt-sync episodes -a report -i the-sopranos -season 1 -episode 2 -r runtime -message "runtime is 50 min"
+```
+`-season` and `-episode` are required. `-r` is one of: `duplicate`, `remove`, `data_refresh`, `metadata`, `adult`, `runtime`, `language`, `spam`, `tmdb`, `other`.

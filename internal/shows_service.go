@@ -1446,3 +1446,47 @@ func (s *ShowsService) GetShowJustwatchLinks(ctx context.Context, id *string, co
 
 	return result, resp, nil
 }
+
+// ReportSeason Report a season for moderator review.
+//
+// API docs: https://docs.trakt.tv/reference/postshowsseasonreport
+func (s *ShowsService) ReportSeason(ctx context.Context, id *string, season *int, report *str.SeasonReport) (*str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/seasons/%d/report", *id, *season)
+	req, err := s.client.NewRequest(http.MethodPost, url, report)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.client.Do(ctx, req, nil)
+	var conflict *ConflictError
+	if errors.As(err, &conflict) {
+		return resp, fmt.Errorf(consts.SeasonReportPending, *season, *id)
+	}
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// ReportEpisode Report an episode for moderator review.
+//
+// API docs: https://docs.trakt.tv/reference/postshowsepisodereport
+func (s *ShowsService) ReportEpisode(ctx context.Context, id *string, season *int, episode *int, report *str.EpisodeReport) (*str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/report", *id, *season, *episode)
+	req, err := s.client.NewRequest(http.MethodPost, url, report)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.client.Do(ctx, req, nil)
+	var conflict *ConflictError
+	if errors.As(err, &conflict) {
+		return resp, fmt.Errorf(consts.EpisodeReportPending, *season, *episode, *id)
+	}
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}

@@ -33,7 +33,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`scrobble`](#scrobble) | 3 | 0 | 0 | 0 | 3 |
 | [`search`](#search) | 2 | 0 | 4 | 0 | 6 |
 | [`seasons`](#seasons) | 0 | 0 | 1 | 0 | 1 |
-| [`shows`](#shows) | 53 | 0 | 5 | 2 | 60 |
+| [`shows`](#shows) | 55 | 0 | 3 | 2 | 60 |
 | [`smart-lists`](#smart-lists) | 0 | 0 | 2 | 0 | 2 |
 | [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 0 | 2 |
 | [`sync`](#sync) | 29 | 0 | 8 | 0 | 37 |
@@ -41,7 +41,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 63 | 0 | 41 | 0 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **255** | **0** | **76** | **4** | **335** |
+| **Total** | **257** | **0** | **74** | **4** | **335** |
 
 ## calendars
 
@@ -300,7 +300,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/shows/{id}/seasons/{season}/episodes/{episode}/lists/{type}/{sort}` | Get lists containing this episode | `ShowsService.GetListsContainingEpisode` |
 | ✅ | GET | `/shows/{id}/seasons/{season}/episodes/{episode}/people` | Get all people for an episode | `ShowsService.GetAllPeopleForEpisode` |
 | ✅ | GET | `/shows/{id}/seasons/{season}/episodes/{episode}/ratings` | Get episode ratings | `ShowsService.GetEpisodeRatings` |
-| ⬜ | POST | `/shows/{id}/seasons/{season}/episodes/{episode}/report` | Report an episode |  |
+| ✅ | POST | `/shows/{id}/seasons/{season}/episodes/{episode}/report` | Report an episode | `ShowsService.ReportEpisode` |
 | ✅ | GET | `/shows/{id}/seasons/{season}/episodes/{episode}/stats` | Get episode stats | `ShowsService.GetEpisodeStats` |
 | ✅ | GET | `/shows/{id}/seasons/{season}/episodes/{episode}/translations` | Get all episode translations | `ShowsService.GetAllEpisodeTranslations` |
 | ✅ | GET | `/shows/{id}/seasons/{season}/episodes/{episode}/videos` | Get all videos | `ShowsService.GetEpisodeVideos` |
@@ -310,7 +310,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/shows/{id}/seasons/{season}/lists/{type}/{sort}` | Get lists containing this season | `ShowsService.GetListsContainingSeason` |
 | ✅ | GET | `/shows/{id}/seasons/{season}/people` | Get all people for a season | `ShowsService.GetAllPeopleForSeason` |
 | ✅ | GET | `/shows/{id}/seasons/{season}/ratings` | Get season ratings | `ShowsService.GetSeasonRatings` |
-| ⬜ | POST | `/shows/{id}/seasons/{season}/report` | Report a season |  |
+| ✅ | POST | `/shows/{id}/seasons/{season}/report` | Report a season | `ShowsService.ReportSeason` |
 | ✅ | GET | `/shows/{id}/seasons/{season}/stats` | Get season stats | `ShowsService.GetSeasonStats` |
 | ✅ | GET | `/shows/{id}/seasons/{season}/translations` | Get all season translations | `ShowsService.GetAllSeasonTranslations` |
 | ✅ | GET | `/shows/{id}/seasons/{season}/videos` | Get all videos | `ShowsService.GetSeasonsVideos` |

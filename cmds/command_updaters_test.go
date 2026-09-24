@@ -19,6 +19,7 @@ import (
 )
 
 // resetAllFlags restores every flag default; flag values are package globals shared by all Exec calls.
+// Each command also gets a fresh FlagSet with the same flag values, so flagIsSet forgets flags parsed by earlier subtests.
 func resetAllFlags() {
 	reset := func(f *flag.Flag) {
 		if !strings.HasPrefix(f.Name, "test.") { // leave go test's own flags alone
@@ -27,7 +28,12 @@ func resetAllFlags() {
 	}
 	flag.VisitAll(reset)
 	for _, c := range Commands {
-		c.Flag.VisitAll(reset)
+		fresh := flag.NewFlagSet(c.Name, flag.ContinueOnError)
+		c.Flag.VisitAll(func(f *flag.Flag) {
+			reset(f)
+			fresh.Var(f.Value, f.Name, f.Usage)
+		})
+		c.Flag = *fresh
 	}
 }
 
@@ -77,6 +83,12 @@ func TestModuleFlagUpdaters(t *testing.T) {
 		{name: "shows watchnow", cmd: ShowsCmd, args: []string{"-a", "watchnow", "-i", "the-sopranos", "-country", "us"}, path: func(string) string { return "/shows/the-sopranos/watchnow/us" }},
 		{name: "shows watchnow default country is rejected", cmd: ShowsCmd, args: []string{"-a", "watchnow", "-i", "the-sopranos"}, path: func(string) string { return "" }},
 		{name: "shows justwatch_links", cmd: ShowsCmd, args: []string{"-a", "justwatch_links", "-i", "the-sopranos", "-country", "pl"}, path: func(string) string { return "/shows/the-sopranos/watchnow/justwatch_links/pl" }},
+		{name: "seasons report", cmd: SeasonsCmd, args: []string{"-a", "report", "-i", "the-sopranos", "-season", "1", "-r", "metadata"}, path: func(string) string { return "/shows/the-sopranos/seasons/1/report" }},
+		{name: "seasons report specials", cmd: SeasonsCmd, args: []string{"-a", "report", "-i", "the-sopranos", "-season", "0", "-r", "metadata"}, path: func(string) string { return "/shows/the-sopranos/seasons/0/report" }},
+		{name: "seasons report without -season is rejected", cmd: SeasonsCmd, args: []string{"-a", "report", "-i", "the-sopranos", "-r", "metadata"}, path: func(string) string { return "" }},
+		{name: "episodes report", cmd: EpisodesCmd, args: []string{"-a", "report", "-i", "the-sopranos", "-season", "1", "-episode", "2", "-r", "runtime"}, path: func(string) string { return "/shows/the-sopranos/seasons/1/episodes/2/report" }},
+		{name: "episodes report without -season is rejected", cmd: EpisodesCmd, args: []string{"-a", "report", "-i", "the-sopranos", "-episode", "2", "-r", "runtime"}, path: func(string) string { return "" }},
+		{name: "episodes report without -episode is rejected", cmd: EpisodesCmd, args: []string{"-a", "report", "-i", "the-sopranos", "-season", "1", "-r", "runtime"}, path: func(string) string { return "" }},
 		{name: "shows -period", cmd: ShowsCmd, args: []string{"-a", "favorited", "-period", "daily"}, path: func(string) string { return "/shows/favorited/daily" }},
 		{name: "shows -start_date", cmd: ShowsCmd, args: []string{"-a", "updates", "-start_date", "2026-01-15"}, path: func(tz string) string { return "/shows/updates/" + startDate(tz) }},
 		{name: "shows default start", cmd: ShowsCmd, args: []string{"-a", "updates"}, path: func(tz string) string { return "/shows/updates/" + window(tz) }},
