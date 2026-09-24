@@ -2,8 +2,12 @@
 package handlers
 
 import (
+	"errors"
+	"fmt"
+	"net/http"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -133,4 +137,39 @@ func reportMessage(message *string, err error) string {
 		return err.Error()
 	}
 	return consts.EmptyString
+}
+
+// validIDCountryOptions checks the id and country needed by the watch now routes.
+func validIDCountryOptions(options *str.Options, emptyIDMsg string) error {
+	if len(options.InternalID) == consts.ZeroValue {
+		return errors.New(emptyIDMsg)
+	}
+
+	if len(options.Country) == consts.ZeroValue {
+		return errors.New(consts.EmptyCountryMsg)
+	}
+
+	return nil
+}
+
+// watchNowError maps a watch now response to a readable error: 404, VIP limits and limited access (403).
+func watchNowError(action string, kind string, options *str.Options, resp *str.Response, err error) error {
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
+		return fmt.Errorf("not found %s for:%s", kind, options.InternalID)
+	}
+
+	if vipErr := cli.HandleVIPResponse(resp, err); vipErr != nil {
+		return vipErr
+	}
+
+	var forbidden *internal.ForbiddenError
+	if errors.As(err, &forbidden) {
+		return fmt.Errorf(consts.LimitedAccessMsg, action, err)
+	}
+
+	if err != nil {
+		return fmt.Errorf("fetch %s error: %w", action, err)
+	}
+
+	return nil
 }

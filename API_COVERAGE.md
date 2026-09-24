@@ -33,7 +33,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`scrobble`](#scrobble) | 3 | 0 | 0 | 0 | 3 |
 | [`search`](#search) | 2 | 0 | 4 | 0 | 6 |
 | [`seasons`](#seasons) | 0 | 0 | 1 | 0 | 1 |
-| [`shows`](#shows) | 51 | 0 | 7 | 2 | 60 |
+| [`shows`](#shows) | 53 | 0 | 5 | 2 | 60 |
 | [`smart-lists`](#smart-lists) | 0 | 0 | 2 | 0 | 2 |
 | [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 0 | 2 |
 | [`sync`](#sync) | 29 | 0 | 8 | 0 | 37 |
@@ -41,7 +41,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 63 | 0 | 41 | 0 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **253** | **0** | **78** | **4** | **335** |
+| **Total** | **255** | **0** | **76** | **4** | **335** |
 
 ## calendars
 
@@ -322,8 +322,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/shows/{id}/translations` | Get all show translations | `ShowsService.GetAllShowTranslations` |
 | ✅ | GET | `/shows/{id}/videos` | Get all videos | `ShowsService.GetShowVideos` |
 | ✅ | GET | `/shows/{id}/watching` | Get users watching right now | `ShowsService.GetShowWatching` |
-| ⬜ | GET | `/shows/{id}/watchnow/justwatch_links/{country}` | Get show JustWatch links |  |
-| ⬜ | GET | `/shows/{id}/watchnow/{country}` | Get show watch now sources |  |
+| ✅ | GET | `/shows/{id}/watchnow/justwatch_links/{country}` | Get show JustWatch links | `ShowsService.GetShowJustwatchLinks` |
+| ✅ | GET | `/shows/{id}/watchnow/{country}` | Get show watch now sources | `ShowsService.GetShowWatchNow` |
 
 ## smart-lists
 

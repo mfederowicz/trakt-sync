@@ -131,6 +131,7 @@ const (
 	ShowEpisodeErr               = "show episode error:%w"
 	ShowErr                      = "show error:%w"
 	ShowsCountSpecialsUsage      = "allow to overwrite specials"
+	ShowsLinksUsage              = "provider links to include, comma separated: tvos,direct,android,webos"
 	ShowsCountryUsage            = "allow to overwrite country"
 	ShowsHiddenUsage             = "allow to overwrite hidden"
 	ShowsLanguageUsage           = "allow to overwrite language"

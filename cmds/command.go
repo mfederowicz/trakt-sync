@@ -1224,5 +1224,9 @@ func UpdateOptionsWithCommandShowsFlags(c *Command, options *str.Options) *str.O
 		options.Msg = *_showsMessage
 	}
 
+	if len(*_showsLinks) > consts.ZeroValue {
+		options.Links = *_showsLinks
+	}
+
 	return options
 }

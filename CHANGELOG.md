@@ -25,6 +25,9 @@ schedule. Releases up to v1.15.2 are listed on
 - `movies -a justwatch_links -i <id> -country <code>`: the JustWatch link for a movie in one country.
 - `shows -a report -i <id> -r <reason> [-message "..."]`: report a show for moderator review.
 - `shows -a sentiments -i <id>`: good and bad sentiments from a show's comments and reactions.
+- `shows -a watchnow -i <id> -country <code>`: watch now sources for a show in one country, with the same
+  `-links` and `-ex streaming_ranks` options as `movies -a watchnow`.
+- `shows -a justwatch_links -i <id> -country <code>`: the JustWatch link for a show in one country.
 
 ### Changed
 
