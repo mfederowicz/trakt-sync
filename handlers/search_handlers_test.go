@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/mfederowicz/trakt-sync/consts"
+	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/test"
 )
@@ -66,6 +67,59 @@ func TestSearchHandlers(t *testing.T) {
 			wantCalls: map[string]int{},
 			wantErr:   "invalid --id_type flag value",
 		},
+		{
+			name:      "exact query",
+			handler:   SearchExactQueryHandler{},
+			options:   str.Options{Action: consts.ExactQuery, SearchType: str.Slice{"show"}, Query: "dark"},
+			wantCalls: map[string]int{"GET /search/show/exact?page=1&query=dark": 1},
+		},
+		{
+			name:      "exact query without query",
+			handler:   SearchExactQueryHandler{},
+			options:   str.Options{Action: consts.ExactQuery, SearchType: str.Slice{"movie"}},
+			wantCalls: map[string]int{},
+			wantErr:   consts.EmptySearchQueryMsg,
+		},
+		{
+			name:      "exact query type not in contract",
+			handler:   SearchExactQueryHandler{},
+			options:   str.Options{Action: consts.ExactQuery, SearchType: str.Slice{"person"}, Query: "keanu"},
+			wantCalls: map[string]int{},
+			wantErr:   "set one -t value for exact_query",
+		},
+		{
+			name:      "exact query two types",
+			handler:   SearchExactQueryHandler{},
+			options:   str.Options{Action: consts.ExactQuery, SearchType: str.Slice{"movie", "show"}, Query: "dark"},
+			wantCalls: map[string]int{},
+			wantErr:   "set one -t value for exact_query",
+		},
+		{
+			name:      "trending",
+			handler:   SearchTrendingHandler{},
+			options:   str.Options{Action: consts.Trending, SearchType: str.Slice{"movies"}},
+			wantCalls: map[string]int{"GET /search/recent_by_id/global/movies?page=1": 1},
+		},
+		{
+			name:      "trending with query",
+			handler:   SearchTrendingHandler{},
+			options:   str.Options{Action: consts.Trending, SearchType: str.Slice{"people"}, Query: "keanu"},
+			wantCalls: map[string]int{"GET /search/recent_by_id/global/people?page=1&query=keanu": 1},
+		},
+		{
+			name:      "trending singular type",
+			handler:   SearchTrendingHandler{},
+			options:   str.Options{Action: consts.Trending, SearchType: str.Slice{"movie"}},
+			wantCalls: map[string]int{},
+			wantErr:   "set one -t value for trending",
+		},
+		{
+			name:      "trending without type",
+			handler:   SearchTrendingHandler{},
+			options:   str.Options{Action: consts.Trending},
+			wantCalls: map[string]int{},
+			wantErr:   "set one -t value for trending",
+		},
 	}
 
 	for _, tt := range tests {
@@ -97,4 +151,23 @@ func TestSearchHandlers(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestSearchTrendingHandlerPages(t *testing.T) {
+	s := setup(t)
+	defer s.Teardown()
+
+	pages := []string{}
+	s.Mux.HandleFunc("/search/recent_by_id/global/shows", func(w http.ResponseWriter, r *http.Request) {
+		page := r.URL.Query().Get("page")
+		pages = append(pages, page)
+		w.Header().Set(internal.HeaderPaginationPage, page)
+		w.Header().Set(internal.HeaderPaginationPageCount, "2")
+		test.SafeFprint(w, `[{"id":1,"count":3,"type":"show","show":{"title":"Dark"}}]`)
+	})
+
+	options := str.Options{Module: consts.Search, Action: consts.Trending, SearchType: str.Slice{"shows"}, Output: filepath.Join(t.TempDir(), "out.json")}
+	err := SearchTrendingHandler{}.Handle(&options, s.Client)
+	test.AssertNilError(t, err)
+	test.AssertNoDiff(t, []string{"1", "2"}, pages)
 }

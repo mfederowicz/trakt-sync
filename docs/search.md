@@ -56,3 +56,19 @@ $ ./trakt-sync search -a id_lookup -i 75725 -t episode
 ```console
 $ ./trakt-sync search -a id_lookup --id_type tmdb -i 254265
 ```
+##### Export exact text query results:
+`-t` takes one value: `movie` or `show`; `-q` is required.
+```console
+$ ./trakt-sync search -a exact_query -t movie -q "tron legacy"
+```
+```console
+$ ./trakt-sync -ex full search -a exact_query -t show -q dark
+```
+##### Export trending search results:
+Globally trending recent searches. `-t` takes one value: `movies`, `shows` or `people`; `-q` narrows the search text.
+```console
+$ ./trakt-sync search -a trending -t movies
+```
+```console
+$ ./trakt-sync search -a trending -t people -q keanu
+```

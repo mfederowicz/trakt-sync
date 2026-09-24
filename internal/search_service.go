@@ -4,6 +4,7 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -67,6 +68,54 @@ func (s *SearchService) GetIDLookupResults(ctx context.Context, formatType *stri
 
 	if err != nil {
 		printer.Println("fetch lookup search err:" + err.Error())
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// GetExactTextQueryResults Search for exact movie or show matches for the query.
+//
+// API docs: https://docs.trakt.tv/reference/getsearchexact
+func (s *SearchService) GetExactTextQueryResults(ctx context.Context, searchType *string, opts *uri.ListOptions) ([]*str.SearchListItem, *str.Response, error) {
+	var url = fmt.Sprintf("search/%s/exact", *searchType)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.SearchListItem{}
+	resp, err := s.client.Do(ctx, req, &list)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// GetTrendingSearches Get globally trending recent searches by type.
+//
+// API docs: https://docs.trakt.tv/reference/getsearchtrending
+func (s *SearchService) GetTrendingSearches(ctx context.Context, searchType *string, opts *uri.ListOptions) ([]*str.SearchTrendingItem, *str.Response, error) {
+	var url = fmt.Sprintf("search/recent_by_id/global/%s", *searchType)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.SearchTrendingItem{}
+	resp, err := s.client.Do(ctx, req, &list)
+	if err != nil {
 		return nil, resp, err
 	}
 

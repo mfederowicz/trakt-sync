@@ -52,6 +52,7 @@ const (
 	EmptyNotesIDMsg              = "set notesId ie: -i 12345678"
 	EmptyPersonIDMsg             = "set personId ie: -i john-wayne"
 	EmptyResult                  = "empty result"
+	EmptySearchQueryMsg          = "set search query ie: -q freddy"
 	EmptySeasonIDMsg             = "set Trakt ID, Trakt slug, or IMDB ID Example:  ie: -i 12345 or -i tron-legacy-2010"
 	EmptySentimentsMsg           = "no sentiments for:%s (unknown id, or nothing analyzed yet)"
 	EpisodeTargetMsg             = "use -i <show> with both -season and -episode, or -i <episode trakt id> alone"

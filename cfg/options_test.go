@@ -51,6 +51,11 @@ func TestGetOutputForModuleListsTrendingPopular(t *testing.T) {
 	}
 }
 
+func TestGetOutputForModuleSearchExactTrending(t *testing.T) {
+	assert.Equal(t, "export_search_exact_query_movie.json", GetOutputForModule(&str.Options{Module: "search", Action: "exact_query", SearchType: str.Slice{"movie"}}))
+	assert.Equal(t, "export_search_trending_people.json", GetOutputForModule(&str.Options{Module: "search", Action: "trending", SearchType: str.Slice{"people"}}))
+}
+
 func TestGetOutputForModuleMoviesHotStreaming(t *testing.T) {
 	assert.Equal(t, "export_movies_hot.json", GetOutputForModule(&str.Options{Module: "movies", Action: "hot"}))
 	assert.Equal(t, "export_movies_streaming_weekly.json", GetOutputForModule(&str.Options{Module: "movies", Action: "streaming", Period: DefaultConfig().MoviesPeriod}))

@@ -48,6 +48,12 @@ var SearchFieldConfig = map[string][]string{
 	"list":    {"name", "description"},
 }
 
+// SearchExactTypes are the search/{type}/exact values from the API contract
+var SearchExactTypes = []string{"movie", "show"}
+
+// SearchTrendingTypes are the search/recent_by_id/global/{type} values from the API contract
+var SearchTrendingTypes = []string{"movies", "shows", "people"}
+
 // hiddenSections are the users/hidden/{section} values from the API contract
 var hiddenSections = []string{"calendar", "progress_watched", "progress_collected", "recommendations", "comments", "dropped"}
 
@@ -972,6 +978,12 @@ func getOutputForModuleSearch(options *str.Options) string {
 			options.Module,
 			consts.Lookup,
 			strings.ReplaceAll(options.SearchIDType, consts.CommaString, consts.EmptyString))
+	case consts.ExactQuery, consts.Trending:
+		options.Output = fmt.Sprintf(
+			consts.DefaultOutputFormat3,
+			options.Module,
+			options.Action,
+			strings.ReplaceAll(options.SearchType.String(), consts.CommaString, consts.EmptyString))
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat1, options.Module)
 	}

@@ -61,3 +61,12 @@ func checkSearchRequiredFields(options *str.Options) error {
 
 	return nil
 }
+
+// checkSearchSingleType checks that -t holds exactly one of the valid types
+func checkSearchSingleType(options *str.Options, valid []string) error {
+	if len(options.SearchType) != consts.OneValue || !cfg.IsValidConfigType(valid, options.SearchType[consts.ZeroValue]) {
+		return fmt.Errorf("set one -t value for %s, avaliable values: %v", options.Action, valid)
+	}
+
+	return nil
+}
