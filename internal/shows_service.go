@@ -1490,3 +1490,45 @@ func (s *ShowsService) ReportEpisode(ctx context.Context, id *string, season *in
 
 	return resp, nil
 }
+
+// GetEpisodeWatchNow Returns streaming and watch now sources for an episode in the requested country.
+//
+// API docs: https://docs.trakt.tv/reference/getshowsepisodewatchnow
+func (s *ShowsService) GetEpisodeWatchNow(ctx context.Context, id *string, season *int, episode *int, country *string, opts *uri.ListOptions) (map[string]*str.WatchNowSources, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/watchnow/%s", *id, *season, *episode, *country)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := map[string]*str.WatchNowSources{}
+	resp, err := s.client.Do(ctx, req, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// GetSeasonJustwatchLinks Returns JustWatch links for a season in the requested country.
+//
+// API docs: https://docs.trakt.tv/reference/getshowsseasonjustwatchlink
+func (s *ShowsService) GetSeasonJustwatchLinks(ctx context.Context, id *string, season *int, country *string) (map[string]string, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/seasons/%d/watchnow/justwatch_links/%s", *id, *season, *country)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := map[string]string{}
+	resp, err := s.client.Do(ctx, req, &result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}

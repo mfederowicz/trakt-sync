@@ -76,6 +76,14 @@ $ ./trakt-sync episodes -a watching -i the-sopranos -season 1 -episode 1
 ```console
 $ ./trakt-sync episodes -a videos -i the-sopranos -season 1 -episode 1
 ```
+##### Get where to watch an episode
+```console
+$ ./trakt-sync episodes -a watchnow -i the-sopranos -season 1 -episode 2 -country us -> export_episodes_watchnow_the-sopranos.json
+```
+```console
+$ ./trakt-sync -ex streaming_ranks episodes -a watchnow -i the-sopranos -season 1 -episode 2 -country us -links tvos,direct
+```
+`-country` is required; `-links` and `-ex streaming_ranks` work as in `shows -a watchnow`. Marked Limited Access by Trakt.
 ##### Report an episode
 ```console
 $ ./trakt-sync episodes -a report -i the-sopranos -season 1 -episode 2 -r runtime -message "runtime is 50 min"

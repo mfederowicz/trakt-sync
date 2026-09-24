@@ -788,7 +788,7 @@ func getOutputForModuleSeasons(options *str.Options) string {
 	switch options.Action {
 	case consts.Summary, consts.Season, consts.Episodes, consts.Translations,
 		consts.Comments, consts.Lists, consts.People, consts.Ratings, consts.Related, consts.Stats,
-		consts.Watching, consts.Videos:
+		consts.Watching, consts.Videos, consts.WatchNow, consts.JustwatchLinks:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.InternalID)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
@@ -801,7 +801,7 @@ func getOutputForModuleEpisodes(options *str.Options) string {
 	switch options.Action {
 	case consts.Summary, consts.Season, consts.Episodes, consts.Translations,
 		consts.Comments, consts.Lists, consts.People, consts.Ratings, consts.Related, consts.Stats,
-		consts.Watching, consts.Videos:
+		consts.Watching, consts.Videos, consts.WatchNow, consts.JustwatchLinks:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.InternalID)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)

@@ -19,10 +19,12 @@ var (
 	_episodesType       = EpisodesCmd.Flag.String("t", cfg.DefaultConfig().EpisodesType, consts.TypeUsage)
 	_episodesReason     = EpisodesCmd.Flag.String("r", cfg.DefaultConfig().Reason, consts.ReasonUsage)
 	_episodesMessage    = EpisodesCmd.Flag.String("message", cfg.DefaultConfig().Msg, consts.ReportMsgUsage)
+	_episodesCountry    = EpisodesCmd.Flag.String("country", consts.EmptyString, consts.CountryUsage)
+	_episodesLinks      = EpisodesCmd.Flag.String("links", consts.EmptyString, consts.LinksUsage)
 
 	_episodesActions = []string{
 		"summary", "translations", "comments", "lists",
-		"people", "ratings", "stats", "watching", "videos", consts.Report}
+		"people", "ratings", "stats", "watching", "videos", consts.Report, consts.WatchNow}
 )
 
 // EpisodesCmd returns episodes and episodes that a user has watched, sorted by most recent.
@@ -69,7 +71,8 @@ func episodesFunc(cmd *Command, _ ...string) error {
 		"watching":     handlers.EpisodesWatchingHandler{},
 		"videos":       handlers.EpisodesVideosHandler{},
 
-		consts.Report: handlers.EpisodesReportHandler{},
+		consts.Report:   handlers.EpisodesReportHandler{},
+		consts.WatchNow: handlers.EpisodesWatchNowHandler{},
 	}
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
