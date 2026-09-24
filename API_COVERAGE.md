@@ -36,12 +36,12 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`shows`](#shows) | 58 | 0 | 0 | 2 | 60 |
 | [`smart-lists`](#smart-lists) | 0 | 0 | 2 | 0 | 2 |
 | [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 0 | 2 |
-| [`sync`](#sync) | 31 | 0 | 6 | 0 | 37 |
+| [`sync`](#sync) | 34 | 0 | 3 | 0 | 37 |
 | [`team`](#team) | 0 | 0 | 1 | 0 | 1 |
 | [`users`](#users) | 63 | 0 | 41 | 0 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **270** | **0** | **61** | **4** | **335** |
+| **Total** | **273** | **0** | **58** | **4** | **335** |
 
 ## calendars
 
@@ -346,9 +346,9 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | POST | `/sync/collection` | Add items to collection | `SyncService.AddItemsToCollection` |
 | ✅ | GET | `/sync/collection/episodes` | Get episode collection | `SyncService.GetCollection` |
 | ✅ | GET | `/sync/collection/media` | Get media collection | `SyncService.GetCollection` |
-| ⬜ | GET | `/sync/collection/minimal/episodes` | Get minimal episode collection |  |
-| ⬜ | GET | `/sync/collection/minimal/movies` | Get minimal movie collection |  |
-| ⬜ | GET | `/sync/collection/minimal/shows` | Get minimal show collection |  |
+| ✅ | GET | `/sync/collection/minimal/episodes` | Get minimal episode collection | `SyncService.GetMinimalCollection` |
+| ✅ | GET | `/sync/collection/minimal/movies` | Get minimal movie collection | `SyncService.GetMinimalCollection` |
+| ✅ | GET | `/sync/collection/minimal/shows` | Get minimal show collection | `SyncService.GetMinimalShowCollection` |
 | ✅ | GET | `/sync/collection/movies` | Get movie collection | `SyncService.GetCollection` |
 | ✅ | POST | `/sync/collection/remove` | Remove items from collection | `SyncService.RemoveItemsFromCollection` |
 | ✅ | GET | `/sync/collection/shows` | Get show collection | `SyncService.GetCollection` |

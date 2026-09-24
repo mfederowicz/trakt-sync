@@ -43,6 +43,15 @@ $ ./trakt-sync sync -a get_collection -t seasons -ex metadata
 ```console
 $ ./trakt-sync sync -a get_collection -t media -ex metadata
 ```
+##### Get minimal collection
+A compact map for syncing local state: `-t movies|episodes` gives Trakt ID -> collected_at, `-t shows` gives
+show Trakt ID -> season -> episode -> collected_at. `-available_on plex` limits it to items available on Plex.
+```console
+$ ./trakt-sync sync -a get_minimal_collection -t movies
+```
+```console
+$ ./trakt-sync sync -a get_minimal_collection -t shows -available_on plex
+```
 ##### Add to collection - via -items flag
 ```console
 $ ./trakt-sync sync -t movies -a add_to_collection -items export_sync_collection_movies.json

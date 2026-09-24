@@ -4,6 +4,7 @@ package str
 // Options represents a app opions.
 type Options struct {
 	Action            string
+	AvailableOn       string
 	Items             string
 	Comment           string
 	CommentID         int
