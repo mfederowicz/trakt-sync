@@ -19,6 +19,12 @@ import (
 var _searchField str.Slice
 var _searchType str.Slice
 
+// legacySearchActions maps the old hyphenated action names to the current ones
+var legacySearchActions = map[string]string{
+	consts.LegacyIDLookup:  consts.IDLookup,
+	consts.LegacyTextQuery: consts.TextQuery,
+}
+
 var (
 	_searchAction = SearchCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
 	_searchQuery  = SearchCmd.Flag.String("q", cfg.DefaultConfig().Query, consts.QueryUsage)
@@ -49,19 +55,19 @@ func searchFunc(cmd *Command, _ ...string) error {
 	printer.Println("action:", options.Action)
 
 	switch options.Action {
-	case "text-query":
+	case consts.TextQuery:
 		err := runTextQuery(options, client)
 		if err != nil {
 			return err
 		}
-	case "id-lookup":
+	case consts.IDLookup:
 		err := runIDLookup(options, client)
 		if err != nil {
 			return err
 		}
 
 	default:
-		printer.Println("possible actions: text-query, id-lookup")
+		printer.Println("possible actions: " + consts.TextQuery + ", " + consts.IDLookup)
 	}
 	return nil
 }
@@ -187,8 +193,19 @@ func fetchSearchIDLookup(client *internal.Client, options *str.Options) ([]*str.
 	return list, nil
 }
 
+// normalizeSearchAction replaces a deprecated action name with the current one
+func normalizeSearchAction(action string) string {
+	current, found := legacySearchActions[action]
+	if !found {
+		return action
+	}
+
+	printer.Printf("action %s is deprecated, use %s\n", action, current)
+	return current
+}
+
 func noSearchTypeOrInvalidConfigTypeSlice(options *str.Options, slice []string) bool {
-	return (options.Action == "text-query" && len(options.SearchType) == consts.ZeroValue) || !cfg.IsValidConfigTypeSlice(slice, options.SearchType)
+	return (options.Action == consts.TextQuery && len(options.SearchType) == consts.ZeroValue) || !cfg.IsValidConfigTypeSlice(slice, options.SearchType)
 }
 
 func validSearchIDTypes(options *str.Options, slice []string) bool {

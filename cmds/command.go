@@ -388,7 +388,7 @@ func setOptionsDependsOnModuleSync(options str.Options) str.Options {
 }
 
 func setOptionsDependsOnModuleSearch(options str.Options) str.Options {
-	options.Action = *_searchAction
+	options.Action = normalizeSearchAction(*_searchAction)
 	options.SearchType = _searchType
 	options.SearchField = _searchField
 	options.ID = *_searchID
