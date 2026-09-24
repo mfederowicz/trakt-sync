@@ -140,8 +140,7 @@ func GenUsedFlagMap() map[string]bool {
 	flagset := map[string]bool{}
 
 	flag.Visit(func(f *flag.Flag) {
-		key := string(f.Name[0])
-		flagset[key] = true
+		flagset[f.Name] = true
 	})
 
 	return flagset
