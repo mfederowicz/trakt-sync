@@ -34,10 +34,16 @@ func (h NotesNotesRatingHandler) Handle(options *str.Options, client *internal.C
 		show, _ := h.common.FetchShow(client, options)
 		n.Show = show
 	case "season":
-		season, _ := h.common.FetchSeason(client, options)
+		season, err := h.common.SeasonFromTraktID(options)
+		if err != nil {
+			return err
+		}
 		n.Season = season
 	case "episode":
-		episode, _ := h.common.FetchEpisode(client, options)
+		episode, err := h.common.EpisodeFromTraktID(options)
+		if err != nil {
+			return err
+		}
 		n.Episode = episode
 	default:
 		h.common.GenActionTypeItemUsage(options, []string{"movie", "show", "season", "episode"})

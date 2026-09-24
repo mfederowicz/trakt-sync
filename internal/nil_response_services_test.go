@@ -33,7 +33,6 @@ func TestServicesWithoutResponse(t *testing.T) {
 			_, err := c.Recommendations.HideMovieRecommendation(ctx, str.String("tron"))
 			return err
 		}},
-		{name: "seasons", call: func(c *Client) error { _, _, err := c.Seasons.GetSeason(ctx, str.String("bb"), opts); return err }},
 		{name: "shows", call: func(c *Client) error { _, _, err := c.Shows.GetShow(ctx, str.String("bb"), opts); return err }},
 		{name: "sync", call: func(c *Client) error { _, err := c.Sync.RemovePlaybackItem(ctx, new(int)); return err }},
 		{name: "users", call: func(c *Client) error {

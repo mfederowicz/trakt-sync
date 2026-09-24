@@ -17,13 +17,13 @@ type CommentsCommentsSeasonHandler struct{ common CommonLogic }
 
 // Handle to handle comments: season type
 func (h CommentsCommentsSeasonHandler) Handle(options *str.Options, client *internal.Client) error {
-	if options.TraktID == consts.ZeroValue {
+	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
 	connections, _ := h.common.FetchUserConnections(client, options)
-	season, err := h.common.FetchSeason(client, options)
+	season, err := h.common.SeasonFromTraktID(options)
 	if err != nil {
-		return fmt.Errorf("fetch season error:%w", err)
+		return err
 	}
 
 	c := new(str.Comment)

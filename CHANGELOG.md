@@ -44,6 +44,14 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Fixed
 
+- `comments` on a season or episode always failed with `set traktId`, even with `-trakt_id`/`-i` given: the check
+  read a field the `comments` module never sets. It now checks the id that is actually passed.
+- `checkin -a episode -trakt_id <id>` crashed with a nil pointer: the episode was looked up by an empty id instead of
+  `-trakt_id`. It now sends the `-trakt_id` directly.
+- `notes -t season|episode`, `notes -t rating|collection -item season|episode`, `comments` on seasons and episodes, and
+  `scrobble -t episode` no longer look the item up with `GET seasons/{id}` / `GET episodes/{id}`, which are not in the
+  Trakt API docs. The request carries only the numeric Trakt ID from `-i`; a non-numeric id now fails before anything
+  is posted (notes used to post without the item).
 - `movies -a sentiments` and `shows -a sentiments`: an unknown id wrote an empty `{}` file, because the API answers
   it with an empty object instead of 404; it now fails with `no sentiments for:<id>` and writes nothing.
 - `movies -a hot` and `movies -a streaming`: the live Trakt API returns 404 for these routes; the error now says the

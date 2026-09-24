@@ -20,7 +20,10 @@ func (h NotesNotesEpisodeHandler) Handle(options *str.Options, client *internal.
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyMovieIDMsg)
 	}
-	episode, _ := h.common.FetchEpisode(client, options)
+	episode, err := h.common.EpisodeFromTraktID(options)
+	if err != nil {
+		return err
+	}
 	n := new(str.Notes)
 	n.Episode = episode
 	n.Notes = &options.Notes
