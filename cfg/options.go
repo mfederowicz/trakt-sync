@@ -155,6 +155,12 @@ var ModuleActionConfig = map[string]OptionsConfig{
 		Type: []string{"all", "movies", "episodes"},
 		Sort: []string{},
 	},
+	"sync:get_up_next": {
+		SortHow: []string{"asc", "desc"},
+	},
+	"sync:get_watched_progress": {
+		SortHow: []string{"asc", "desc"},
+	},
 	"sync:get_minimal_collection": {
 		Type: []string{"movies", "shows", "episodes"},
 	},
@@ -729,6 +735,10 @@ func getOutputForModuleSync(options *str.Options) string {
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Watched, options.Type)
 	case consts.GetCollection:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.Collection, options.Type)
+	case consts.GetUpNext:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, consts.UpNext)
+	case consts.GetWatchedProgress:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, consts.WatchedProgress)
 	case consts.GetMinimalCollection:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.MinimalCollection, options.Type)
 	case consts.LastActivities, consts.Playback, consts.AddToCollection, consts.RemoveFromCollection:

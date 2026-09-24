@@ -705,3 +705,37 @@ func (s *SyncService) GetMinimalShowCollection(ctx context.Context, opts *uri.Li
 
 	return result, resp, nil
 }
+
+// GetUpNext Returns the up next progress: shows with their next episode to watch.
+//
+// API docs: https://docs.trakt.tv/reference/getsyncprogressupnextstandard
+func (s *SyncService) GetUpNext(ctx context.Context, opts *uri.SyncProgressOptions) ([]*str.ShowProgress, *str.Response, error) {
+	return s.getShowProgress(ctx, "sync/progress/up_next", opts)
+}
+
+// GetWatchedProgress Returns the watched progress of the user's shows.
+//
+// API docs: https://docs.trakt.tv/reference/getsyncprogresswatched
+func (s *SyncService) GetWatchedProgress(ctx context.Context, opts *uri.SyncProgressOptions) ([]*str.ShowProgress, *str.Response, error) {
+	return s.getShowProgress(ctx, "sync/progress/watched", opts)
+}
+
+func (s *SyncService) getShowProgress(ctx context.Context, url string, opts *uri.SyncProgressOptions) ([]*str.ShowProgress, *str.Response, error) {
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.ShowProgress{}
+	resp, err := s.client.Do(ctx, req, &list)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

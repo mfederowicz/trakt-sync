@@ -52,6 +52,25 @@ $ ./trakt-sync sync -a get_minimal_collection -t movies
 ```console
 $ ./trakt-sync sync -a get_minimal_collection -t shows -available_on plex
 ```
+##### Up next
+Shows you are watching, each with its next episode and progress. `-include_stats` adds play count and minutes,
+`-lifetime_stats` counts across all rewatches instead of the current watch. `-sort_by` and `-sort_how` are sent only
+when given.
+```console
+$ ./trakt-sync sync -a get_up_next
+```
+```console
+$ ./trakt-sync sync -a get_up_next -include_stats -sort_by added -sort_how desc
+```
+##### Watched progress
+Progress of every show you have watched. Filter with `-hide_completed` or `-hide_not_completed` (not both), or
+`-only_rewatching`; `-lifetime_stats` works as for up next.
+```console
+$ ./trakt-sync sync -a get_watched_progress -hide_completed
+```
+```console
+$ ./trakt-sync sync -a get_watched_progress -only_rewatching -lifetime_stats
+```
 ##### Add to collection - via -items flag
 ```console
 $ ./trakt-sync sync -t movies -a add_to_collection -items export_sync_collection_movies.json

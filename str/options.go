@@ -5,6 +5,11 @@ package str
 type Options struct {
 	Action            string
 	AvailableOn       string
+	HideCompleted     bool
+	HideNotCompleted  bool
+	IncludeStats      bool
+	LifetimeStats     bool
+	OnlyRewatching    bool
 	Items             string
 	Comment           string
 	CommentID         int

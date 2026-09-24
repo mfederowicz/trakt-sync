@@ -21,9 +21,15 @@ var (
 	_syncWatchlistDescription = SyncCmd.Flag.String("description", cfg.DefaultConfig().Description, consts.WatchlistDescriptionUsage)
 	_syncWatchlistNotes       = SyncCmd.Flag.String("notes", cfg.DefaultConfig().Notes, consts.WatchlistNotesUsage)
 	_syncAvailableOn          = SyncCmd.Flag.String("available_on", consts.EmptyString, consts.AvailableOnUsage)
+	_syncIncludeStats         = SyncCmd.Flag.Bool("include_stats", false, consts.IncludeStatsUsage)
+	_syncLifetimeStats        = SyncCmd.Flag.Bool("lifetime_stats", false, consts.LifetimeStatsUsage)
+	_syncHideCompleted        = SyncCmd.Flag.Bool("hide_completed", false, consts.HideCompletedUsage)
+	_syncHideNotCompleted     = SyncCmd.Flag.Bool("hide_not_completed", false, consts.HideNotCompletedUsage)
+	_syncOnlyRewatching       = SyncCmd.Flag.Bool("only_rewatching", false, consts.OnlyRewatchingUsage)
 
 	validSyncActions = []string{
 		"last_activities", "playback", "remove_playback", "get_collection", "get_minimal_collection",
+		"get_up_next", "get_watched_progress",
 		"add_to_collection", "remove_from_collection", "get_watched",
 		"get_history", "add_to_history", "remove_from_history",
 		"get_ratings", "add_to_ratings", "remove_from_ratings",
@@ -52,6 +58,7 @@ func syncFunc(cmd *Command, _ ...string) error {
 	if err != nil {
 		return fmt.Errorf("%s/%s: %w", cmd.Name, options.Action, err)
 	}
+	syncProgressSort(options, cmd.flagIsSet("sort_by"), cmd.flagIsSet("sort_how"))
 	var handler handlers.SyncHandler
 	allHandlers := map[string]handlers.Handler{
 		"last_activities":        handlers.SyncLastActivitiesHandler{},
@@ -59,6 +66,8 @@ func syncFunc(cmd *Command, _ ...string) error {
 		"remove_playback":        handlers.SyncRemovePlaybackHandler{},
 		"get_collection":         handlers.SyncGetCollectionHandler{},
 		"get_minimal_collection": handlers.SyncGetMinimalCollectionHandler{},
+		"get_up_next":            handlers.SyncGetUpNextHandler{},
+		"get_watched_progress":   handlers.SyncGetWatchedProgressHandler{},
 		"add_to_collection":      handlers.SyncAddToCollectionHandler{},
 		"remove_from_collection": handlers.SyncRemoveFromCollectionHandler{},
 		"get_watched":            handlers.SyncGetWatchedHandler{},
@@ -111,4 +120,18 @@ func syncPlaybackType(options *str.Options, typeSet bool) string {
 	}
 
 	return options.Type
+}
+
+// syncProgressSort sends sort_by and sort_how for up next and watched progress only when set on the command line,
+// so the global defaults (rank, asc) do not override the API's own order
+func syncProgressSort(options *str.Options, sortBySet bool, sortHowSet bool) {
+	if options.Action != consts.GetUpNext && options.Action != consts.GetWatchedProgress {
+		return
+	}
+	if !sortBySet {
+		options.SortBy = consts.EmptyString
+	}
+	if !sortHowSet {
+		options.SortHow = consts.EmptyString
+	}
 }
