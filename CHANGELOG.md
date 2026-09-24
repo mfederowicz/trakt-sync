@@ -20,6 +20,14 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.16.0] - 2026-09-24
+
+### Added
+
 - `calendars -a {my,all}-media`: movies and shows releasing in the selected period.
 - `calendars -a {my,all}-streaming`: movies with a streaming release in the selected period.
 - `calendars -a hot-releases|hot-premieres|hot-new-shows|hot-finales`: hot releases, premieres,
@@ -114,5 +122,6 @@ schedule. Releases up to v1.15.2 are listed on
 - `-version` now shows the real version and commit for release binaries and `make build`
   builds, instead of `dev` / `none` or a Go pseudo-version.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.15.3...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.16.0...HEAD
+[1.16.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.15.3...v1.16.0
 [1.15.3]: https://github.com/mfederowicz/trakt-sync/compare/v1.15.2...v1.15.3
