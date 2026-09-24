@@ -46,6 +46,8 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Fixed
 
+- `users -a history -item_id <id>` without `-t`: the request URL had no type (`history//<id>`), which is
+  not an API route; the command now asks for `-t` (for example `-t movies`).
 - `lists -a trending`: the output file name was empty, so the export was not written; it is now
   `export_lists_trending.json`.
 - `lists -a items` without `-t`: it used the global default type `movies`, which is not a list item type;

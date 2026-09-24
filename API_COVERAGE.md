@@ -37,10 +37,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 2 |
 | [`sync`](#sync) | 29 | 0 | 8 | 37 |
 | [`team`](#team) | 0 | 0 | 1 | 1 |
-| [`users`](#users) | 55 | 5 | 44 | 104 |
+| [`users`](#users) | 61 | 2 | 41 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 5 |
-| **Total** | **238** | **5** | **92** | **335** |
+| **Total** | **244** | **2** | **89** | **335** |
 
 ## calendars
 
@@ -439,12 +439,12 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/users/{id}/following` | Get following | `UsersService.GetFollowing` |
 | ✅ | GET | `/users/{id}/friends` | Get friends | `UsersService.GetFriends` |
 | ✅ | GET | `/users/{id}/history/` | Get watched history | `UsersService.GetHistory` |
-| ⬜ | GET | `/users/{id}/history/episodes` | Get episode watched history |  |
-| 🟡 | GET | `/users/{id}/history/episodes/{item_id}` | Get history for an episode | `UsersService.GetHistory` |
-| ⬜ | GET | `/users/{id}/history/movies` | Get movie watched history |  |
-| 🟡 | GET | `/users/{id}/history/movies/{item_id}` | Get history for a movie | `UsersService.GetHistory` |
-| ⬜ | GET | `/users/{id}/history/shows` | Get show watched history |  |
-| 🟡 | GET | `/users/{id}/history/shows/{item_id}` | Get history for a show | `UsersService.GetHistory` |
+| ✅ | GET | `/users/{id}/history/episodes` | Get episode watched history | `UsersService.GetHistory` |
+| ✅ | GET | `/users/{id}/history/episodes/{item_id}` | Get history for an episode | `UsersService.GetHistory` |
+| ✅ | GET | `/users/{id}/history/movies` | Get movie watched history | `UsersService.GetHistory` |
+| ✅ | GET | `/users/{id}/history/movies/{item_id}` | Get history for a movie | `UsersService.GetHistory` |
+| ✅ | GET | `/users/{id}/history/shows` | Get show watched history | `UsersService.GetHistory` |
+| ✅ | GET | `/users/{id}/history/shows/{item_id}` | Get history for a show | `UsersService.GetHistory` |
 | ✅ | GET | `/users/{id}/history/{type}/{item_id}` | Get watched history | `UsersService.GetHistory` |
 | ✅ | GET | `/users/{id}/likes/{type}` | Get likes | `UsersService.GetLikes` |
 | ✅ | GET | `/users/{id}/lists` | Get a user's personal lists | `UsersService.GetUsersPersonalLists` |

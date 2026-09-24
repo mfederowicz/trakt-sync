@@ -3,6 +3,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -20,6 +21,9 @@ func (m UsersHistoryHandler) Handle(options *str.Options, client *internal.Clien
 	err := m.common.CheckTypes(options)
 	if err != nil {
 		return err
+	}
+	if options.ItemID > consts.ZeroValue && len(options.Type) == consts.ZeroValue {
+		return errors.New(consts.EmptyHistoryItemTypeMsg)
 	}
 
 	err = m.common.CheckDates(options.StartDate, options.EndDate, options.Timezone)

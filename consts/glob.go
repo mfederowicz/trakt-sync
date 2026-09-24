@@ -40,6 +40,7 @@ const (
 	EmptyUserNameMsg             = "set User slug, Example: -u sean"
 	EmptyReactionMsg             = "set reaction ie: -reaction like"
 	EmptyReasonMsg               = "set reason:  ie: -r duplicate"
+	EmptyHistoryItemTypeMsg      = "set type for -item_id ie: -t movies"
 	CommentReportPending         = "comment %d already has a pending report from this user"
 	EmptyReportMsg               = "set reason:  ie: -message \"xyz\""
 	EmptyListItemIDMsg           = "set List item ID Example:  ie: -list_item_id 12345"
