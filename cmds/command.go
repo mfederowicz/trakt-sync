@@ -1216,5 +1216,13 @@ func UpdateOptionsWithCommandShowsFlags(c *Command, options *str.Options) *str.O
 		options.ResetAt = c.common.ConvertDateString(*_showsResetAt, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
 	}
 
+	if len(*_showsReason) > consts.ZeroValue {
+		options.Reason = *_showsReason
+	}
+
+	if len(*_showsMessage) > consts.ZeroValue {
+		options.Msg = *_showsMessage
+	}
+
 	return options
 }

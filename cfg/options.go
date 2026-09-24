@@ -95,6 +95,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	"notes:item": {
 		Privacy: []string{"private", "friends", "public"},
 	},
+	"shows:report": {
+		Reason: []string{"duplicate", "remove", "data_refresh", "metadata", "adult", "runtime", "language", "spam", "tmdb", "other"},
+	},
 	"shows:comments": {
 		Type: []string{},
 		Sort: []string{"newest", "oldest", "likes", "replies", "highest", "lowest", "plays"},
@@ -765,7 +768,7 @@ func getOutputForModuleShows(options *str.Options) string {
 	case consts.Summary, consts.Aliases, consts.Releases, consts.Translations,
 		consts.Comments, consts.Lists, consts.CollectionProgress, consts.WatchedProgress,
 		consts.People, consts.Ratings, consts.Related, consts.Stats, consts.Studios,
-		consts.Watching, consts.Videos, consts.NextEpisode, consts.LastEpisode:
+		consts.Watching, consts.Videos, consts.NextEpisode, consts.LastEpisode, consts.Sentiments:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.InternalID)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)

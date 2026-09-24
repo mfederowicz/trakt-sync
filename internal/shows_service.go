@@ -3,6 +3,7 @@ package internal
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -1361,4 +1362,45 @@ func (s *ShowsService) GetEpisodeVideos(ctx context.Context, id *string, season 
 	}
 
 	return list, resp, nil
+}
+
+// ReportShow Report a show for moderator review.
+//
+// API docs: https://docs.trakt.tv/reference/postshowsreport
+func (s *ShowsService) ReportShow(ctx context.Context, id *string, report *str.ShowReport) (*str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/report", *id)
+	req, err := s.client.NewRequest(http.MethodPost, url, report)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.client.Do(ctx, req, nil)
+	var conflict *ConflictError
+	if errors.As(err, &conflict) {
+		return resp, fmt.Errorf(consts.ShowReportPending, *id)
+	}
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// GetShowSentiments Returns sentiment counts for comments and reactions attached to a show.
+//
+// API docs: https://docs.trakt.tv/reference/getshowssentiments
+func (s *ShowsService) GetShowSentiments(ctx context.Context, id *string) (*str.Sentiments, *str.Response, error) {
+	var url = fmt.Sprintf("shows/%s/sentiments", *id)
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.Sentiments)
+	resp, err := s.client.Do(ctx, req, result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
 }

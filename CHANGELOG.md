@@ -23,6 +23,8 @@ schedule. Releases up to v1.15.2 are listed on
 - `movies -a watchnow -i <id> -country <code>`: watch now sources (streaming, rent, purchase) for a movie in one country;
   `-links tvos,direct,android,webos` adds provider links and `-ex streaming_ranks` adds the JustWatch rank.
 - `movies -a justwatch_links -i <id> -country <code>`: the JustWatch link for a movie in one country.
+- `shows -a report -i <id> -r <reason> [-message "..."]`: report a show for moderator review.
+- `shows -a sentiments -i <id>`: good and bad sentiments from a show's comments and reactions.
 
 ### Changed
 
