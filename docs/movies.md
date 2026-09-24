@@ -169,4 +169,12 @@ $ ./trakt-sync movies -a videos -i the-sopranos
 ```console
 $ ./trakt-sync movies -a refresh -i the-sopranos
 ```
+```console
+$ ./trakt-sync movies -a refresh_justwatch -i tron-legacy-2010
+```
+`refresh_justwatch` is VIP only.
+```console
+$ ./trakt-sync movies -a report -i tron-legacy-2010 -r runtime -message "runtime is 125 min"
+```
+`-r` is one of: `duplicate`, `remove`, `data_refresh`, `metadata`, `adult`, `runtime`, `language`, `spam`, `tmdb`, `other`.
 

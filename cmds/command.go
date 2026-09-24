@@ -1162,6 +1162,14 @@ func UpdateOptionsWithCommandMoviesFlags(c *Command, options *str.Options) *str.
 		options.Type = *_moviesType
 	}
 
+	if len(*_moviesReason) > consts.ZeroValue {
+		options.Reason = *_moviesReason
+	}
+
+	if len(*_moviesMessage) > consts.ZeroValue {
+		options.Msg = *_moviesMessage
+	}
+
 	return options
 }
 

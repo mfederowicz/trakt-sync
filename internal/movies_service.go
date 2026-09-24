@@ -3,6 +3,7 @@ package internal
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -735,4 +736,39 @@ func (m *MoviesService) fetchMoviesItems(ctx context.Context, url string, opts *
 	}
 
 	return list, resp, nil
+}
+
+// ReportMovie Report a movie for moderator review.
+//
+// API docs: https://docs.trakt.tv/reference/postmoviesreport
+func (m *MoviesService) ReportMovie(ctx context.Context, id *string, report *str.MovieReport) (*str.Response, error) {
+	var url = fmt.Sprintf("movies/%s/report", *id)
+	req, err := m.client.NewRequest(http.MethodPost, url, report)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := m.client.Do(ctx, req, nil)
+	var conflict *ConflictError
+	if errors.As(err, &conflict) {
+		return resp, fmt.Errorf(consts.MovieReportPending, *id)
+	}
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// RefreshMovieJustwatch Queue a refresh of the movie's JustWatch links (VIP only).
+//
+// API docs: https://docs.trakt.tv/reference/postmoviesjustwatchrefresh
+func (m *MoviesService) RefreshMovieJustwatch(ctx context.Context, id *string) (*str.Response, error) {
+	var url = fmt.Sprintf("movies/%s/refresh/justwatch", *id)
+	req, err := m.client.NewRequest(http.MethodPost, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return m.client.Do(ctx, req, nil)
 }
