@@ -41,9 +41,9 @@ type OptionsConfig struct {
 
 // SearchFieldConfig represents the configuration options for search_field depens on type
 var SearchFieldConfig = map[string][]string{
-	"movie":   {"title", "tagline", "overview", "people", "translations", "aliases"},
-	"show":    {"title", "overview", "people", "translations", "aliases"},
-	"episode": {"title", "overview"},
+	"movie":   {"title", "original_title", "tagline", "overview", "people", "translations", "aliases"},
+	"show":    {"title", "original_title", "overview", "people", "translations", "aliases"},
+	"episode": {"title", "show_title", "overview"},
 	"person":  {"name", "biography"},
 	"list":    {"name", "description"},
 }
