@@ -60,3 +60,46 @@ func TestUsersReviewAndActivityFlags(t *testing.T) {
 		})
 	}
 }
+
+func TestUsersPlexFlags(t *testing.T) {
+	fs := afero.NewMemMapFs()
+	tmpPath := "/tmp-users-plex/"
+	assert.NoError(t, fs.MkdirAll(tmpPath, consts.X755))
+	assert.NoError(t, afero.WriteFile(fs, tmpPath+"token.json", []byte("{}"), consts.X644))
+	assert.NoError(t, afero.WriteFile(fs, tmpPath+"user_settings.json", []byte(`{"user":{"username":"sean"}}`), consts.X644))
+
+	fileConfig := cfg.DefaultConfig()
+	fileConfig.ClientID = "a"
+	fileConfig.ClientSecret = "b"
+	fileConfig.TokenPath = tmpPath + "token.json"
+	fileConfig.SettingsPath = tmpPath + "user_settings.json"
+
+	tests := []struct {
+		name    string
+		args    []string
+		wantURL string
+		wantAll bool
+		wantID  string
+	}{
+		{name: "connect default", args: []string{"-a", "plex_connect"}, wantURL: consts.DefaultReturnURL},
+		{name: "connect own url", args: []string{"-a", "plex_connect", "-return_url", "http://localhost:8080"}, wantURL: "http://localhost:8080"},
+		{name: "sync full", args: []string{"-a", "plex_sync", "-i", "abc", "-all_data"}, wantURL: consts.DefaultReturnURL, wantAll: true, wantID: "abc"},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			resetAllFlags()
+			t.Cleanup(resetAllFlags)
+
+			var got *str.Options
+			command := &Command{Name: consts.Users, Flag: UsersCmd.Flag, Run: func(c *Command, _ ...string) error {
+				got = c.UpdateOptionsWithCommandFlags(c.Options)
+				return nil
+			}}
+			assert.NoError(t, command.Exec(fs, internal.NewClient(nil), fileConfig, tt.args))
+			assert.Equal(t, tt.wantURL, got.ReturnURL)
+			assert.Equal(t, tt.wantAll, got.AllData)
+			assert.Equal(t, tt.wantID, got.ID)
+		})
+	}
+}

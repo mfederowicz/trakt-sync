@@ -468,6 +468,8 @@ func setOptionsDependsOnModuleUsers(options str.Options) str.Options {
 	options.Year = *_usersYear
 	options.Month = *_usersMonth
 	options.SortPath = *_usersSortPath
+	options.ReturnURL = *_usersReturnURL
+	options.AllData = *_usersAllData
 
 	return options
 }

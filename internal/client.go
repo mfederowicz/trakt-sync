@@ -556,8 +556,10 @@ func (*Client) genPreconditionFailedError(r *http.Response, errorResponse *str.E
 
 func (*Client) genInvalidUserError(r *http.Response, errorResponse *str.ErrorResponse) *InvalidUserError {
 	invalidUserError := &InvalidUserError{
-		Response: errorResponse.Response,
-		Message:  errorResponse.Message,
+		Response:  errorResponse.Response,
+		Message:   errorResponse.Message,
+		ErrorCode: errorResponse.ErrorCode,
+		Guidance:  errorResponse.Guidance,
 	}
 	if r.StatusCode == http.StatusUnauthorized {
 		return invalidUserError

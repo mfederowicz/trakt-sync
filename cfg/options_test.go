@@ -71,6 +71,13 @@ func TestGetOutputForModuleSocialRecommendations(t *testing.T) {
 	assert.Equal(t, "export_social_recommendations_shows.json", GetOutputForModule(&str.Options{Module: "social_recommendations", Action: "shows"}))
 }
 
+func TestGetOutputForModuleUsersPlex(t *testing.T) {
+	assert.Equal(t, "export_users_plex_settings.json", GetOutputForModule(&str.Options{Module: "users", Action: "plex_settings"}))
+	assert.Equal(t, "export_users_plex_servers.json", GetOutputForModule(&str.Options{Module: "users", Action: "plex_servers"}))
+	assert.Equal(t, "export_users_plex_server_abc.json", GetOutputForModule(&str.Options{Module: "users", Action: "plex_server", ID: "abc"}))
+	assert.Equal(t, "export_users_plex_connect_results.json", GetOutputForModule(&str.Options{Module: "users", Action: "plex_connect"}))
+}
+
 func TestGetOutputForModuleUsersDataSyncs(t *testing.T) {
 	assert.Equal(t, "export_users_data_syncs.json", GetOutputForModule(&str.Options{Module: "users", Action: "data_syncs"}))
 	assert.Equal(t, "export_users_data_syncs_plex.json", GetOutputForModule(&str.Options{Module: "users", Action: "data_syncs", Type: "plex"}))

@@ -1618,3 +1618,86 @@ func (u *UsersService) UndoDataSync(ctx context.Context, id int) (*str.Response,
 
 	return u.client.Do(ctx, req, nil)
 }
+
+// GetPlexSettings Returns the Plex connection, webhook, sync selection and toggles of the authenticated user.
+//
+// API docs: https://docs.trakt.tv/reference/getusersplexsettings
+func (u *UsersService) GetPlexSettings(ctx context.Context) (*str.PlexSettings, *str.Response, error) {
+	result := new(str.PlexSettings)
+	resp, err := u.plexRequest(ctx, http.MethodGet, "users/settings/plex", nil, result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// UpdatePlexSettings Writes Plex toggles, selection and home users; omitted keys are left unchanged (204).
+//
+// API docs: https://docs.trakt.tv/reference/putusersplexupdatesettings
+func (u *UsersService) UpdatePlexSettings(ctx context.Context, settings *str.PlexSettingsUpdate) (*str.Response, error) {
+	return u.plexRequest(ctx, http.MethodPut, "users/settings/plex", settings, nil)
+}
+
+// ConnectPlex Mints a Plex web auth URL that returns to returnURL.
+//
+// API docs: https://docs.trakt.tv/reference/postusersplexconnect
+func (u *UsersService) ConnectPlex(ctx context.Context, connect *str.PlexConnect) (*str.PlexConnectResult, *str.Response, error) {
+	result := new(str.PlexConnectResult)
+	resp, err := u.plexRequest(ctx, http.MethodPost, "users/settings/plex/connect", connect, result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// DisconnectPlex Destroys the Plex authorization and clears the selection and sync state (204).
+//
+// API docs: https://docs.trakt.tv/reference/deleteusersplexdisconnect
+func (u *UsersService) DisconnectPlex(ctx context.Context) (*str.Response, error) {
+	return u.plexRequest(ctx, http.MethodDelete, "users/settings/plex/connect", nil, nil)
+}
+
+// GetPlexServers Lists the user's Plex servers.
+//
+// API docs: https://docs.trakt.tv/reference/getusersplexservers
+func (u *UsersService) GetPlexServers(ctx context.Context) (*str.PlexServers, *str.Response, error) {
+	result := new(str.PlexServers)
+	resp, err := u.plexRequest(ctx, http.MethodGet, "users/settings/plex/servers", nil, result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// GetPlexServerAccounts Returns the home accounts and syncable libraries of a Plex server.
+//
+// API docs: https://docs.trakt.tv/reference/getusersplexserveraccounts
+func (u *UsersService) GetPlexServerAccounts(ctx context.Context, serverID *string) (*str.PlexServerAccounts, *str.Response, error) {
+	result := new(str.PlexServerAccounts)
+	resp, err := u.plexRequest(ctx, http.MethodGet, fmt.Sprintf("users/settings/plex/servers/%s", *serverID), nil, result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// SyncPlex Enqueues a Plex sync now (201); 422 when there is no server to sync.
+//
+// API docs: https://docs.trakt.tv/reference/postusersplexsync
+func (u *UsersService) SyncPlex(ctx context.Context, sync *str.PlexSyncRequest) (*str.Response, error) {
+	return u.plexRequest(ctx, http.MethodPost, "users/settings/plex/sync", sync, nil)
+}
+
+// plexRequest sends one Plex settings request and decodes the answer into result when it is not nil.
+func (u *UsersService) plexRequest(ctx context.Context, method string, url string, body any, result any) (*str.Response, error) {
+	req, err := u.client.NewRequest(method, url, body)
+	if err != nil {
+		return nil, err
+	}
+
+	return u.client.Do(ctx, req, result)
+}
