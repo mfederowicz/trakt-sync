@@ -49,6 +49,7 @@ type Config struct {
 	ID                string    `toml:"id"`
 	ItemID            int       `toml:"item_id"`
 	IgnoreCollected   string    `toml:"ignore_collected"`
+	IgnoreWatched     string    `toml:"ignore_watched"`
 	IgnoreWatchlisted string    `toml:"ignore_watchlisted"`
 	IncludeReplies    string    `toml:"include_replies"`
 	InternalID        string    `toml:"trakt_id"`
@@ -110,6 +111,7 @@ type Config struct {
 	UsersSection      string    `toml:"section"`
 	Verbose           bool      `toml:"verbose"`
 	WarningCode       int       `toml:"warningCode"`
+	WatchWindow       int       `toml:"watch_window"`
 }
 
 var (

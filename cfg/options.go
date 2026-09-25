@@ -694,25 +694,26 @@ func GetOptionTime(options *str.Options) string {
 // GetOutputForModule generates output value depends on module name
 func GetOutputForModule(options *str.Options) string {
 	allOutputs := map[string]string{
-		consts.Calendars:       getOutputForModuleCalendars(options),
-		consts.Certifications:  getOutputForModuleCertifications(options),
-		consts.Comments:        getOutputForModuleComments(options),
-		consts.Countries:       getOutputForModuleCountries(options),
-		consts.Genres:          getOutputForModuleGenres(options),
-		consts.Languages:       getOutputForModuleLanguages(options),
-		consts.Search:          getOutputForModuleSearch(options),
-		consts.Shows:           getOutputForModuleShows(options),
-		consts.Seasons:         getOutputForModuleSeasons(options),
-		consts.Episodes:        getOutputForModuleEpisodes(options),
-		consts.Users:           getOutputForModuleUsers(options),
-		consts.Lists:           getOutputForModuleLists(options),
-		consts.Media:           getOutputForModuleMedia(options),
-		consts.Movies:          getOutputForModuleMovies(options),
-		consts.Networks:        getOutputForModuleNetworks(options),
-		consts.Notes:           getOutputForModuleNotes(options),
-		consts.Recommendations: getOutputForModuleRecommendations(options),
-		consts.Sync:            getOutputForModuleSync(options),
-		consts.Team:            getOutputForModuleTeam(options),
+		consts.Calendars:             getOutputForModuleCalendars(options),
+		consts.Certifications:        getOutputForModuleCertifications(options),
+		consts.Comments:              getOutputForModuleComments(options),
+		consts.Countries:             getOutputForModuleCountries(options),
+		consts.Genres:                getOutputForModuleGenres(options),
+		consts.Languages:             getOutputForModuleLanguages(options),
+		consts.Search:                getOutputForModuleSearch(options),
+		consts.Shows:                 getOutputForModuleShows(options),
+		consts.Seasons:               getOutputForModuleSeasons(options),
+		consts.Episodes:              getOutputForModuleEpisodes(options),
+		consts.Users:                 getOutputForModuleUsers(options),
+		consts.Lists:                 getOutputForModuleLists(options),
+		consts.Media:                 getOutputForModuleMedia(options),
+		consts.Movies:                getOutputForModuleMovies(options),
+		consts.Networks:              getOutputForModuleNetworks(options),
+		consts.Notes:                 getOutputForModuleNotes(options),
+		consts.Recommendations:       getOutputForModuleRecommendations(options),
+		consts.Sync:                  getOutputForModuleSync(options),
+		consts.SocialRecommendations: getOutputForModuleSocialRecommendations(options),
+		consts.Team:                  getOutputForModuleTeam(options),
 	}
 
 	if output, found := allOutputs[options.Module]; found {
@@ -784,6 +785,10 @@ func getOutputForModuleNetworks(options *str.Options) string {
 }
 
 func getOutputForModuleMedia(options *str.Options) string {
+	return fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
+}
+
+func getOutputForModuleSocialRecommendations(options *str.Options) string {
 	return fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
 }
 

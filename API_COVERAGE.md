@@ -36,13 +36,13 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`seasons`](#seasons) | 1 | 0 | 0 | 0 | 0 | 1 |
 | [`shows`](#shows) | 58 | 0 | 0 | 2 | 0 | 60 |
 | [`smart-lists`](#smart-lists) | 0 | 0 | 2 | 0 | 0 | 2 |
-| [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 0 | 0 | 2 |
+| [`social_recommendations`](#social_recommendations) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
 | [`users`](#users) | 63 | 0 | 41 | 0 | 0 | 104 |
 | [`watchnow`](#watchnow) | 0 | 0 | 2 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 0 | 0 | 5 |
-| **Total** | **277** | **0** | **52** | **4** | **2** | **335** |
+| **Total** | **279** | **0** | **50** | **4** | **2** | **335** |
 
 ## calendars
 
@@ -337,8 +337,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
-| ⬜ | GET | `/social_recommendations/movies/` | Get social movie recommendations |  |
-| ⬜ | GET | `/social_recommendations/shows/` | Get social show recommendations |  |
+| ✅ | GET | `/social_recommendations/movies/` | Get social movie recommendations | `SocialRecommendationsService.GetSocialMovieRecommendations` |
+| ✅ | GET | `/social_recommendations/shows/` | Get social show recommendations | `SocialRecommendationsService.GetSocialShowRecommendations` |
 
 ## sync
 

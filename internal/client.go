@@ -52,36 +52,37 @@ type RequestOption func(req *http.Request)
 
 // A Client manages communication with the trakt.tv API.
 type Client struct {
-	RateLimitReset  time.Time
-	client          *http.Client
-	BaseURL         *url.URL
-	UpgradeURL      *url.URL
-	headers         map[string]any
-	common          Service
-	Oauth           *OauthService
-	Users           *UsersService
-	Sync            *SyncService
-	People          *PeopleService
-	Calendars       *CalendarsService
-	Certifications  *CertificationsService
-	Countries       *CountriesService
-	Checkin         *CheckinService
-	Comments        *CommentsService
-	Genres          *GenresService
-	Search          *SearchService
-	Languages       *LanguagesService
-	Lists           *ListsService
-	Media           *MediaService
-	Movies          *MoviesService
-	Networks        *NetworksService
-	Notes           *NotesService
-	Episodes        *EpisodesService
-	Recommendations *RecommendationsService
-	Shows           *ShowsService
-	Scrobble        *ScrobbleService
-	Seasons         *SeasonsService
-	Team            *TeamService
-	rateMu          sync.Mutex
+	RateLimitReset        time.Time
+	client                *http.Client
+	BaseURL               *url.URL
+	UpgradeURL            *url.URL
+	headers               map[string]any
+	common                Service
+	Oauth                 *OauthService
+	Users                 *UsersService
+	Sync                  *SyncService
+	People                *PeopleService
+	Calendars             *CalendarsService
+	Certifications        *CertificationsService
+	Countries             *CountriesService
+	Checkin               *CheckinService
+	Comments              *CommentsService
+	Genres                *GenresService
+	Search                *SearchService
+	Languages             *LanguagesService
+	Lists                 *ListsService
+	Media                 *MediaService
+	Movies                *MoviesService
+	Networks              *NetworksService
+	Notes                 *NotesService
+	Episodes              *EpisodesService
+	Recommendations       *RecommendationsService
+	Shows                 *ShowsService
+	Scrobble              *ScrobbleService
+	Seasons               *SeasonsService
+	SocialRecommendations *SocialRecommendationsService
+	Team                  *TeamService
+	rateMu                sync.Mutex
 }
 
 // BuildCtxFromOptions create ctx with custom options
@@ -159,6 +160,7 @@ func (c *Client) initialize() {
 	c.Shows = (*ShowsService)(&c.common)
 	c.Scrobble = (*ScrobbleService)(&c.common)
 	c.Seasons = (*SeasonsService)(&c.common)
+	c.SocialRecommendations = (*SocialRecommendationsService)(&c.common)
 	c.Team = (*TeamService)(&c.common)
 }
 
