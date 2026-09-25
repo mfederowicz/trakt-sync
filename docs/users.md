@@ -218,9 +218,9 @@ $ ./trakt-sync users -a lists -u username -i 123456 -t movies
 ```console
 $ ./trakt-sync users -a lists -u username
 ```
-##### Create personal list for selected user - via -item flag:
+##### Create personal list for selected user - via -items flag:
 ```console
-$ ./trakt-sync users -a add_list -item personal_list.json
+$ ./trakt-sync users -a add_list -items personal_list.json
 ```
 ##### Create personal list for selected user - via stdin:
 ```console

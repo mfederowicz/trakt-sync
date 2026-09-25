@@ -5,6 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"strconv"
 	"strings"
 
@@ -280,7 +281,14 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 		handleHelpError(HelpFunc(c, c.Name))
 	}
 	c.registerGlobalFlagsInSet(&c.Flag)
-	_ = c.Flag.Parse(args)
+	// Parse prints the help through c.Flag.Usage; its own error line is dropped, the returned error carries it
+	c.Flag.SetOutput(io.Discard)
+	if err = c.Flag.Parse(args); err != nil {
+		if errors.Is(err, flag.ErrHelp) {
+			return nil
+		}
+		return fmt.Errorf("%s: %w", c.Name, err)
+	}
 	m := c.fetchFlagsMap()
 	options, err := cfg.SyncOptionsFromFlags(fs, c.Config, m)
 
@@ -881,6 +889,9 @@ func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.O
 
 	if len(*_usersListID) > consts.ZeroValue {
 		options.ID = *_usersListID
+	}
+	if len(*_usersDescription) > consts.ZeroValue {
+		options.Description = *_usersDescription
 	}
 	if *_usersListItemID > consts.ZeroValue {
 		options.ListItemID = *_usersListItemID

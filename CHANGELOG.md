@@ -32,12 +32,17 @@ schedule.
 
 ### Changed
 
+- A flag the module does not know (e.g. a typo) now stops the command with `<module>: flag provided but not
+  defined: -x` after the help. Before, the rest of the flags were skipped and the command ran anyway.
 - `CHANGELOG.md` now covers every release back to 1.0.0.
 - GitHub release notes now show the version's `CHANGELOG.md` section (Added / Changed / Fixed) instead of a list of
   commits.
 
 ### Fixed
 
+- `-h` / `-help` after a module name printed the help and then ran the command; it now only prints the help.
+- `users -a update_list -description "..."`: `-description` was not a `users` flag, so the description was never
+  sent; `users` now accepts it.
 - A crash inside any command was caught but then reported nothing, as if the command had succeeded; it now
   prints `panic error:<reason>` (or `fatal error`).
 - `checkin -a movie -trakt_id <id>` and `checkin -a show_episode -trakt_id <id>` looked the item up without its ID
