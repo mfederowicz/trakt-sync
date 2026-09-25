@@ -32,6 +32,9 @@ schedule.
 - New [`team`](./docs/team.md) module: `team -a members [-ex full|images]` exports the Trakt team members to
   `export_team_members.json`. User profiles in JSON exports now also include `deleted` and `director` when the API
   sends them.
+- New [`social_recommendations`](./docs/social_recommendations.md) module: `social_recommendations -a movies|shows`
+  exports recommendations based on the people you follow, with `-ignore_watched`, `-ignore_collected`,
+  `-ignore_watchlisted`, `-watch_window <days>` and `-ex`.
 
 ### Changed
 

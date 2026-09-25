@@ -15,6 +15,7 @@ type Options struct {
 	Runtimes          string
 	Subgenres         string
 	WatchNow          string
+	WatchWindow       int
 	Years             string
 	HideCompleted     bool
 	HideNotCompleted  bool
@@ -44,6 +45,7 @@ type Options struct {
 	Hide              bool
 	ID                string
 	IgnoreCollected   string
+	IgnoreWatched     string
 	IgnoreWatchlisted string
 	IncludeReplies    string
 	InternalID        string

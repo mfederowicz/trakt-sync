@@ -29,6 +29,7 @@ type ListOptions struct {
 	Field             string           `url:"fields,omitempty"`
 	Genres            []string         `url:"genres,omitempty"`
 	IgnoreCollected   string           `url:"ignore_collected,omitempty"`
+	IgnoreWatched     string           `url:"ignore_watched,omitempty"`
 	IgnoreWatchlisted string           `url:"ignore_watchlisted,omitempty"`
 	ImdbRatings       RatingRange      `url:"imdb_ratings,omitempty"`
 	ImdbVotes         ImdbVotesRange   `url:"imdb_votes,omitempty"`
@@ -51,6 +52,7 @@ type ListOptions struct {
 	TmdbVotes         VotesRange       `url:"tmdb_votes,omitempty"`
 	Type              string           `url:"type,omitempty"`
 	Votes             VotesRange       `url:"votes,omitempty"`
+	WatchWindow       int              `url:"watch_window,omitempty"`
 	Years             string           `url:"years,omitempty"`
 	Hidden            string           `url:"hidden,omitempty"`
 	Specials          string           `url:"specials,omitempty"`
