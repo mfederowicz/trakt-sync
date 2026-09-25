@@ -27,8 +27,6 @@ func (m SyncAddToFavoritesHandler) Handle(options *str.Options, client *internal
 		return fmt.Errorf("add to favorites error:%w", err)
 	}
 
-	options.Output = "sync_add_to_favorites_results.json"
-
 	print("write result to:" + options.Output)
 	jsonDataResult, _ := json.MarshalIndent(addResult, "", "  ")
 	writer.WriteJSON(options, jsonDataResult)

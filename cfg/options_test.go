@@ -93,3 +93,35 @@ func TestGetOutputForModuleSeasonsEpisodesWatchNow(t *testing.T) {
 	assert.Equal(t, "export_episodes_watchnow_the-sopranos.json", GetOutputForModule(&str.Options{Module: "episodes", Action: "watchnow", InternalID: "the-sopranos"}))
 	assert.Equal(t, "export_seasons_justwatch_links_the-sopranos.json", GetOutputForModule(&str.Options{Module: "seasons", Action: "justwatch_links", InternalID: "the-sopranos"}))
 }
+
+// TestGetOutputForModuleWriteResults keeps the result file names the sync/users write handlers used before -o applied to them.
+func TestGetOutputForModuleWriteResults(t *testing.T) {
+	tests := []struct {
+		module, action, want string
+	}{
+		{module: "sync", action: "add_to_history", want: "sync_add_to_history_results.json"},
+		{module: "sync", action: "remove_from_history", want: "sync_remove_from_history_results.json"},
+		{module: "sync", action: "add_to_ratings", want: "sync_add_to_ratings_results.json"},
+		{module: "sync", action: "remove_from_ratings", want: "sync_remove_from_ratings_results.json"},
+		{module: "sync", action: "add_to_watchlist", want: "sync_add_to_watchlist_results.json"},
+		{module: "sync", action: "remove_from_watchlist", want: "sync_remove_from_watchlist_results.json"},
+		{module: "sync", action: "reorder_watchlist", want: "sync_reorder_watchlist_results.json"},
+		{module: "sync", action: "add_to_favorites", want: "sync_add_to_favorites_results.json"},
+		{module: "sync", action: "remove_from_favorites", want: "sync_remove_from_favorites_results.json"},
+		{module: "sync", action: "reorder_favorites", want: "sync_reorder_favorites_results.json"},
+		{module: "users", action: "add_list", want: "users_add_list_results.json"},
+		{module: "users", action: "reorder_lists", want: "users_reorder_lists_results.json"},
+		{module: "users", action: "add_list_items", want: "users_add_list_items_results.json"},
+		{module: "users", action: "remove_list_items", want: "users_remove_list_items_results.json"},
+		{module: "users", action: "reorder_list_items", want: "users_reorder_list_items_results.json"},
+		{module: "users", action: "add_hidden_items", want: "users_add_hidden_items_results.json"},
+		{module: "users", action: "remove_hidden_items", want: "users_remove_hidden_items_results.json"},
+		{module: "users", action: "update_list", want: "export_users_update_list_results.json"},
+		{module: "users", action: "watching", want: "export_users_watching_results.json"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.module+" "+tt.action, func(t *testing.T) {
+			assert.Equal(t, tt.want, GetOutputForModule(&str.Options{Module: tt.module, Action: tt.action, Type: "movies"}))
+		})
+	}
+}

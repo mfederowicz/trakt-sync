@@ -26,6 +26,8 @@ const (
 	DefaultOutputFormat1         = "export_%s.json"
 	DefaultOutputFormat2         = "export_%s_%s.json"
 	DefaultOutputFormat3         = "export_%s_%s_%s.json"
+	DefaultResultsFormat         = "%s_%s_results.json"
+	DefaultExportResultsFormat   = "export_%s_%s_results.json"
 	DefaultDateFormat            = time.DateOnly
 	DefaultStartDateFormat       = time.RFC3339
 	DefaultStartAtDays           = 60

@@ -33,7 +33,6 @@ func (u UsersAddListHandler) Handle(options *str.Options, client *internal.Clien
 		return fmt.Errorf("new personal list created for:%s", options.UserName)
 	}
 
-	options.Output = "users_add_list_results.json"
 	print("write result to:" + options.Output)
 	jsonDataResult, _ := json.MarshalIndent(result, "", "  ")
 	writer.WriteJSON(options, jsonDataResult)

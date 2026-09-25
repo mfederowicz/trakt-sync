@@ -42,6 +42,11 @@ schedule.
 
 ### Fixed
 
+- `-o` was ignored by the `sync` and `users` actions that write a result file (`add_*`, `remove_*`, `reorder_*`,
+  `users -a update_list`, `users -a add_list`, `users -a watching`, ...); it now sets that file. Without `-o` the file
+  names are unchanged.
+- `users -a lists -i <id>` wrote the list items over the lists overview (`export_users_lists.json`); the items now go
+  to `-o` (default `export_users_lists_<type>.json`) and the overview keeps its own file.
 - `-h` / `-help` after a module name printed the help and then ran the command; it now only prints the help.
 - `users -a update_list -description "..."`: `-description` was not a `users` flag, so the description was never
   sent; `users` now accepts it.

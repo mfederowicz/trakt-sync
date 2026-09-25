@@ -25,8 +25,6 @@ func (u UsersAddHiddenItemsHandler) Handle(options *str.Options, client *interna
 		return fmt.Errorf("add hidden items error:%w", err)
 	}
 
-	options.Output = "users_add_hidden_items_results.json"
-
 	print("write result to:" + options.Output)
 	jsonDataResult, _ := json.MarshalIndent(addResult, "", "  ")
 	writer.WriteJSON(options, jsonDataResult)

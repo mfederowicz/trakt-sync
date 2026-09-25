@@ -36,7 +36,6 @@ func (u UsersAddListItemsHandler) Handle(options *str.Options, client *internal.
 	if err != nil {
 		return fmt.Errorf("add list items error:%w", err)
 	}
-	options.Output = "users_add_list_items_results.json"
 	print("write result to:" + options.Output)
 	jsonDataResult, _ := json.MarshalIndent(addResult, "", "  ")
 	writer.WriteJSON(options, jsonDataResult)

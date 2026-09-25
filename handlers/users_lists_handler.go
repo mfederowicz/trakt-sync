@@ -28,11 +28,13 @@ func (UsersListsHandler) Handle(options *str.Options, client *internal.Client) e
 	if len(personalLists) == consts.ZeroValue {
 		return errors.New("empty personal lists")
 	}
-	options.Output = "export_users_lists.json"
+	// the lists overview keeps its own file; options.Output (-o) is for the list items
+	overview := *options
+	overview.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, consts.Lists)
 	printer.Printf("Found %d user list\n", len(personalLists))
-	print("write data to:" + options.Output + "\n")
+	print("write data to:" + overview.Output + "\n")
 	jsonData, _ := json.MarshalIndent(personalLists, "", "  ")
-	writer.WriteJSON(options, jsonData)
+	writer.WriteJSON(&overview, jsonData)
 
 	avLists := getAvlistsFromPersonals(personalLists)
 
