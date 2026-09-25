@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -232,4 +233,37 @@ func sortRouteType(section string, options *str.Options) (string, error) {
 	default:
 		return consts.EmptyString, fmt.Errorf("-sort works with -t all, movies or shows, not '%s'", options.Type)
 	}
+}
+
+// readStrictInput decodes the -items file or stdin into v; unknown keys are rejected so a typo fails before the request.
+func readStrictInput(common *CommonLogic, options *str.Options, v any) error {
+	data, err := common.ReadInputBytes(*options)
+	if err != nil {
+		return err
+	}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(v); err != nil {
+		return fmt.Errorf("invalid %s JSON: %w", options.Action, err)
+	}
+
+	return nil
+}
+
+// enumCheck is one optional input value that must be one of valid when it is sent.
+type enumCheck struct {
+	name  string
+	value *string
+	valid []string
+}
+
+// checkEnums returns an error for the first sent value that is not a contract value; "" is not valid.
+func checkEnums(checks []enumCheck) error {
+	for _, c := range checks {
+		if c.value != nil && !slices.Contains(c.valid, *c.value) {
+			return fmt.Errorf("%s '%s' is not valid, avaliable values: %v", c.name, *c.value, c.valid)
+		}
+	}
+	return nil
 }

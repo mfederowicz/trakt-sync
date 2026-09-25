@@ -34,6 +34,8 @@ schedule.
   contract's `/{type}/{sort}` routes (with `-t all`, `movies` or `shows`); without `-sort` nothing changes.
 - `users -a lists -i <id> -t movie|show|movie,show|movie,show,season,episode`: the singular list item types of the
   contract are documented (they already worked).
+- `users -a update_settings` (profile and browsing settings from `-items <file>` or stdin), `users -a add_saved_filters`
+  and `users -a delete_saved_filter -i <id>` (both VIP only).
 
 ### Changed
 
