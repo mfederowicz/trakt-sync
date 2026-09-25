@@ -66,6 +66,9 @@ var SyncUpNextIntents = []string{"all", "continue", "start", "completed"}
 // WatchNowFilters are the watchnow media filter values from the API contract
 var WatchNowFilters = []string{"favorites", "any", "any_all", "free", "free_all", "subscriptions", "subscriptions_all"}
 
+// SocialActivityTypes are the users/{id}/{type}/activities values from the API contract
+var SocialActivityTypes = []string{"friends", "followers", "following"}
+
 // SmartListSources are the smart list source values from the API contract
 var SmartListSources = []string{"trending", "popular", "anticipated", "recommendations", "discover", "watchlist", "library"}
 
@@ -993,6 +996,14 @@ func getOutputForModuleUsers(options *str.Options) string {
 			options.Action)
 	case consts.SmartList:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.ID)
+	case consts.CommentReactions:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
+	case consts.Activities:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.Type)
+	case consts.MonthInReview:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, fmt.Sprintf(consts.YearMonthFormat, options.Year, options.Month))
+	case consts.YearInReview:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, strconv.Itoa(options.Year))
 	case consts.List:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,

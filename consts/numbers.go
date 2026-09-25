@@ -17,6 +17,7 @@ const (
 	ImdbVotesRangeMin     = 0
 	MaxAcceptedStatus     = 299
 	MinSeasonNumberLength = 3
+	MonthsInYear          = 12
 	NextPageStep          = 1
 	OneValue              = 1
 	PagesLimit            = 2

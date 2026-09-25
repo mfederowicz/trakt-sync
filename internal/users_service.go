@@ -1381,3 +1381,81 @@ func (u *UsersService) DeleteSmartList(ctx context.Context, user *string, listID
 
 	return u.client.Do(ctx, req, nil)
 }
+
+// GetCommentReactions Returns comments the authenticated user has reacted to.
+//
+// API docs: https://docs.trakt.tv/reference/getusersreactionscomments
+func (u *UsersService) GetCommentReactions(ctx context.Context, opts *uri.ListOptions) ([]*str.CommentReaction, *str.Response, error) {
+	url, err := uri.AddQuery("users/reactions/comments", opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.CommentReaction{}
+	resp, err := u.client.Do(ctx, req, &list)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// GetSocialActivity Returns recent activity of a user's friends, followers or following.
+//
+// API docs: https://docs.trakt.tv/reference/getusersactivities
+func (u *UsersService) GetSocialActivity(ctx context.Context, user *string, activityType *string, opts *uri.SocialActivityOptions) ([]*str.SocialActivity, *str.Response, error) {
+	var url = fmt.Sprintf("users/%s/%s/activities", *user, *activityType)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.SocialActivity{}
+	resp, err := u.client.Do(ctx, req, &list)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// GetMonthInReview Returns a month-in-review summary for a user.
+//
+// API docs: https://docs.trakt.tv/reference/getusersmonth_in_review
+func (u *UsersService) GetMonthInReview(ctx context.Context, user *string, year int, month int, opts *uri.ListOptions) (*str.Review, *str.Response, error) {
+	return u.fetchReview(ctx, fmt.Sprintf("users/%s/mir/%d/%d", *user, year, month), opts)
+}
+
+// GetYearInReview Returns a year-in-review summary for a user.
+//
+// API docs: https://docs.trakt.tv/reference/getusersyear_in_review
+func (u *UsersService) GetYearInReview(ctx context.Context, user *string, year int, opts *uri.ListOptions) (*str.Review, *str.Response, error) {
+	return u.fetchReview(ctx, fmt.Sprintf("users/%s/yir/%d", *user, year), opts)
+}
+
+func (u *UsersService) fetchReview(ctx context.Context, url string, opts *uri.ListOptions) (*str.Review, *str.Response, error) {
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.Review)
+	resp, err := u.client.Do(ctx, req, result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}

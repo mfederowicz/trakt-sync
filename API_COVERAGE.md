@@ -39,10 +39,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`social_recommendations`](#social_recommendations) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
-| [`users`](#users) | 68 | 0 | 36 | 0 | 0 | 104 |
+| [`users`](#users) | 72 | 0 | 32 | 0 | 0 | 104 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **288** | **0** | **36** | **9** | **2** | **335** |
+| **Total** | **292** | **0** | **32** | **9** | **2** | **335** |
 
 ## calendars
 
@@ -401,7 +401,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/users/hidden/{section}` | Get hidden items | `UsersService.GetHiddenItems` |
 | ✅ | POST | `/users/hidden/{section}` | Add hidden items | `UsersService.AddHiddenItems` |
 | ✅ | POST | `/users/hidden/{section}/remove` | Remove hidden items | `UsersService.RemoveHiddenItems` |
-| ⬜ | GET | `/users/reactions/comments` | Get comment reactions |  |
+| ✅ | GET | `/users/reactions/comments` | Get comment reactions | `UsersService.GetCommentReactions` |
 | ✅ | GET | `/users/requests/` | Get follow requests | `UsersService.GetFollowRequests` |
 | ✅ | GET | `/users/requests/following` | Get pending following requests | `UsersService.GetPendingFollowingRequests` |
 | ✅ | POST | `/users/requests/{id}` | Approve follow request | `UsersService.ApproveFollowRequest` |
@@ -471,7 +471,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/users/{id}/lists/{list_id}/likes` | Get all users who liked a list | `UsersService.GetListLikes` |
 | ⬜ | POST | `/users/{id}/lists/{list_id}/reorder` | Reorder items on a list |  |
 | ✅ | POST | `/users/{id}/lists/{list_id}/report` | Report a user's list | `UsersService.ListReport` |
-| ⬜ | GET | `/users/{id}/mir/{year}/{month}` | Get month in review |  |
+| ✅ | GET | `/users/{id}/mir/{year}/{month}` | Get month in review | `UsersService.GetMonthInReview` |
 | ✅ | GET | `/users/{id}/notes/{type}` | Get notes | `UsersService.GetNotes` |
 | ✅ | GET | `/users/{id}/ratings/` | Get all ratings | `UsersService.GetRatings` |
 | ⬜ | GET | `/users/{id}/ratings/episodes` | Get episode ratings |  |
@@ -494,8 +494,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ⬜ | GET | `/users/{id}/watchlist/movies/{sort}` | Get movie watchlist |  |
 | ⬜ | GET | `/users/{id}/watchlist/shows/{sort}` | Get show watchlist |  |
 | ✅ | GET | `/users/{id}/watchlist/{type}/{sort_by}/{sort_how}` | Get watchlist | `UsersService.GetWatchlist` |
-| ⬜ | GET | `/users/{id}/yir/{year}` | Get year in review |  |
-| ⬜ | GET | `/users/{id}/{type}/activities` | Get social activity |  |
+| ✅ | GET | `/users/{id}/yir/{year}` | Get year in review | `UsersService.GetYearInReview` |
+| ✅ | GET | `/users/{id}/{type}/activities` | Get social activity | `UsersService.GetSocialActivity` |
 
 ## watchnow
 

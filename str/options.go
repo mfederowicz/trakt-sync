@@ -19,6 +19,8 @@ type Options struct {
 	ServiceID         string
 	ReturnURL         string
 	AllData           bool
+	Year              int
+	Month             int
 	Years             string
 	HideCompleted     bool
 	HideNotCompleted  bool

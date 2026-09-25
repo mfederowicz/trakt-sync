@@ -688,3 +688,26 @@ $ ./trakt-sync users -a report -u username -r spam -message "Spam or self-promot
 ```console
 $ ./trakt-sync users -a report -u username -r other -message "Anything else"
 ```
+##### Get comments you reacted to
+```console
+$ ./trakt-sync users -a comment_reactions -> export_users_comment_reactions.json
+```
+```console
+$ ./trakt-sync users -a comment_reactions -ex min
+```
+##### Get social activity (friends, followers or following)
+What people in your social graph watched, scrobbled or checked in to. `-t` is required; `-genres`, `-years`, `-runtimes`, `-countries` and `-ex` narrow the feed.
+```console
+$ ./trakt-sync users -a activities -t following -> export_users_activities_following.json
+```
+```console
+$ ./trakt-sync users -a activities -t friends -genres drama -years 2020-2026
+```
+##### Get month in review
+```console
+$ ./trakt-sync users -a month_in_review -year 2026 -month 8 -> export_users_month_in_review_2026-08.json
+```
+##### Get year in review
+```console
+$ ./trakt-sync users -a year_in_review -year 2025 -> export_users_year_in_review_2025.json
+```
