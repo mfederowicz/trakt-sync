@@ -16,6 +16,9 @@ type Options struct {
 	Subgenres         string
 	WatchNow          string
 	WatchWindow       int
+	ServiceID         string
+	ReturnURL         string
+	AllData           bool
 	Years             string
 	HideCompleted     bool
 	HideNotCompleted  bool

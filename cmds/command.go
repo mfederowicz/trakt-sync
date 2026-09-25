@@ -54,6 +54,7 @@ var Avflags = map[string]bool{
 	"include_stats":          true,
 	"lifetime_stats":         true,
 	"only_rewatching":        true,
+	"all_data":               true,
 	"c":                      true,
 	"calendars":              true,
 	"certifications":         true,
@@ -121,9 +122,11 @@ var Avflags = map[string]bool{
 	"remove":                 true,
 	"reply":                  true,
 	"reset_at":               true,
+	"return_url":             true,
 	"s":                      true,
 	"scrobble":               true,
 	"section":                true,
+	"service_id":             true,
 	"search":                 true,
 	"season":                 true,
 	"seasons":                true,
@@ -150,6 +153,7 @@ var Avflags = map[string]bool{
 	"version":                true,
 	"watch_window":           true,
 	"watchlist":              true,
+	"younify":                true,
 }
 
 type fatal struct{}
@@ -384,6 +388,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		consts.Sync:                  setOptionsDependsOnModuleSync(options),
 		consts.Team:                  setOptionsDependsOnModuleTeam(options),
 		consts.WatchNow:              setOptionsDependsOnModuleWatchNow(options),
+		consts.Younify:               setOptionsDependsOnModuleYounify(options),
 	}
 
 	if opt, found := allModules[module]; found {
@@ -509,6 +514,14 @@ func setOptionsDependsOnModuleSocialRecommendations(options str.Options) str.Opt
 
 func setOptionsDependsOnModuleTeam(options str.Options) str.Options {
 	options.Action = *_teamAction
+	return options
+}
+
+func setOptionsDependsOnModuleYounify(options str.Options) str.Options {
+	options.Action = *_younifyAction
+	options.ServiceID = *_younifyServiceID
+	options.ReturnURL = *_younifyReturnURL
+	options.AllData = *_younifyAllData
 	return options
 }
 

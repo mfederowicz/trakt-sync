@@ -19,6 +19,11 @@ schedule.
 
 ### Added
 
+- New `younify` module for streaming service connections: `younify -a connections` (services and your connection
+  status), `younify -a connect -service_id <id> [-return_url <url>]` (prints the web auth URL to link a service),
+  `younify -a refresh -service_id <id> [-all_data]` (queue an incremental or full re-sync) and
+  `younify -a disconnect -service_id <id>`.
+
 ### Changed
 
 ### Fixed

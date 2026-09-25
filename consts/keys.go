@@ -41,7 +41,10 @@ const (
 	CollectionProgress    = "collection_progress"
 	Comment               = "comment"
 	Comments              = "comments"
+	Connect               = "connect"
+	Connections           = "connections"
 	Countries             = "countries"
+	Disconnect            = "disconnect"
 	Dropped               = "dropped"
 	Dvd                   = "dvd"
 	Episode               = "episode"
@@ -126,6 +129,7 @@ const (
 	Ratings               = "ratings"
 	Recommendations       = "recommendations"
 	Related               = "related"
+	Refresh               = "refresh"
 	RefreshJustwatch      = "refresh_justwatch"
 	Releases              = "releases"
 	RemoveFromCollection  = "remove_from_collection"
@@ -185,6 +189,7 @@ const (
 	WatchNow              = "watchnow"
 	Watchlist             = "watchlist"
 	WatchlistComments     = "watchlist_comments"
+	Younify               = "younify"
 )
 
 // Fupper helper function to convert string in title format

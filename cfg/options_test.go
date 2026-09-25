@@ -71,6 +71,11 @@ func TestGetOutputForModuleSocialRecommendations(t *testing.T) {
 	assert.Equal(t, "export_social_recommendations_shows.json", GetOutputForModule(&str.Options{Module: "social_recommendations", Action: "shows"}))
 }
 
+func TestGetOutputForModuleYounify(t *testing.T) {
+	assert.Equal(t, "export_younify_connections.json", GetOutputForModule(&str.Options{Module: "younify", Action: "connections"}))
+	assert.Equal(t, "export_younify_connect_results.json", GetOutputForModule(&str.Options{Module: "younify", Action: "connect"}))
+}
+
 func TestGetOutputForModuleSmartLists(t *testing.T) {
 	assert.Equal(t, "export_smart_lists_summary_top-sci-fi.json", GetOutputForModule(&str.Options{Module: "smart_lists", Action: "summary", InternalID: "top-sci-fi"}))
 	assert.Equal(t, "export_smart_lists_items_top-sci-fi.json", GetOutputForModule(&str.Options{Module: "smart_lists", Action: "items", InternalID: "top-sci-fi"}))

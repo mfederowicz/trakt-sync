@@ -41,8 +41,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
 | [`users`](#users) | 63 | 0 | 41 | 0 | 0 | 104 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
-| [`younify`](#younify) | 0 | 0 | 5 | 0 | 0 | 5 |
-| **Total** | **283** | **0** | **46** | **4** | **2** | **335** |
+| [`younify`](#younify) | 5 | 0 | 0 | 0 | 0 | 5 |
+| **Total** | **288** | **0** | **41** | **4** | **2** | **335** |
 
 ## calendars
 
@@ -508,11 +508,11 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
-| ⬜ | POST | `/younify/connect` | Create a streaming connection |  |
-| ⬜ | GET | `/younify/connections` | Get streaming connections |  |
-| ⬜ | POST | `/younify/users/refresh/{service_id}` | Refresh a streaming service |  |
-| ⬜ | POST | `/younify/users/refresh/{service_id}/{all_data}` | Refresh a streaming service (full re-sync) |  |
-| ⬜ | DELETE | `/younify/users/services/{service_id}` | Unlink a streaming service |  |
+| ✅ | POST | `/younify/connect` | Create a streaming connection | `YounifyService.Connect` |
+| ✅ | GET | `/younify/connections` | Get streaming connections | `YounifyService.GetConnections` |
+| ✅ | POST | `/younify/users/refresh/{service_id}` | Refresh a streaming service | `YounifyService.RefreshService` |
+| ✅ | POST | `/younify/users/refresh/{service_id}/{all_data}` | Refresh a streaming service (full re-sync) | `YounifyService.RefreshService` |
+| ✅ | DELETE | `/younify/users/services/{service_id}` | Unlink a streaming service | `YounifyService.DisconnectService` |
 
 ## Findings
 
