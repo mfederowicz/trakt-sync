@@ -68,6 +68,7 @@ A value given on the command line (for example `-t shows`) wins over the same op
 - [`search`](./docs/search.md) - Searches can use queries or ID lookups.
 - [`seasons`](./docs/seasons.md) - Returns data about seasons: summary, season, episodes, translations, comments etc...
 - [`shows`](./docs/shows.md) - Returns data about movies: trending, popular, list, likes, like, items, comments etc...
+- [`smart_lists`](./docs/smart_lists.md) - Returns a smart list definition or the items it resolves to.
 - [`social_recommendations`](./docs/social_recommendations.md) - Movie and show recommendations based on the people you follow.
 - [`sync`](./docs/sync.md) - Sync data useful for mediacenters: activities, playbacks, collections, ratings, watchlists, favorites.
 - [`team`](./docs/team.md) - Returns Trakt team members.

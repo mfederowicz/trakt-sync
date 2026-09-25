@@ -80,6 +80,7 @@ type Client struct {
 	Shows                 *ShowsService
 	Scrobble              *ScrobbleService
 	Seasons               *SeasonsService
+	SmartLists            *SmartListsService
 	SocialRecommendations *SocialRecommendationsService
 	Team                  *TeamService
 	WatchNow              *WatchNowService
@@ -161,6 +162,7 @@ func (c *Client) initialize() {
 	c.Shows = (*ShowsService)(&c.common)
 	c.Scrobble = (*ScrobbleService)(&c.common)
 	c.Seasons = (*SeasonsService)(&c.common)
+	c.SmartLists = (*SmartListsService)(&c.common)
 	c.SocialRecommendations = (*SocialRecommendationsService)(&c.common)
 	c.Team = (*TeamService)(&c.common)
 	c.WatchNow = (*WatchNowService)(&c.common)

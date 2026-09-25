@@ -128,6 +128,7 @@ var Avflags = map[string]bool{
 	"season":                 true,
 	"seasons":                true,
 	"shows":                  true,
+	"smart_lists":            true,
 	"social_recommendations": true,
 	"sort_by":                true,
 	"sort_how":               true,
@@ -374,6 +375,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		consts.Calendars:             setOptionsDependsOnModuleCalendars(options),
 		consts.Search:                setOptionsDependsOnModuleSearch(options),
 		consts.Shows:                 setOptionsDependsOnModuleShows(options),
+		consts.SmartLists:            setOptionsDependsOnModuleSmartLists(options),
 		consts.SocialRecommendations: setOptionsDependsOnModuleSocialRecommendations(options),
 		consts.Seasons:               setOptionsDependsOnModuleSeasons(options),
 		consts.Watchlist:             setOptionsDependsOnModuleDefault(options),
@@ -477,6 +479,22 @@ func setOptionsDependsOnModuleNetworks(options str.Options) str.Options {
 
 func setOptionsDependsOnModuleMedia(options str.Options) str.Options {
 	options.Action = *_mediaAction
+	return options
+}
+
+func setOptionsDependsOnModuleSmartLists(options str.Options) str.Options {
+	options.Action = *_smartListsAction
+	options.InternalID = *_smartListsID
+	options.WatchNow = *_smartListsWatchNow
+	options.Subgenres = *_smartListsSubgenres
+	options.Ratings = *_smartListsRatings
+	options.Certifications = *_smartListsCertifications
+	options.IgnoreWatched = *_smartListsIgnoreWatched
+	options.IgnoreWatchlisted = *_smartListsIgnoreWatchlisted
+	options.Genres = *_genres
+	options.Years = *_years
+	options.Countries = *_countries
+	options.Runtimes = *_runtimes
 	return options
 }
 

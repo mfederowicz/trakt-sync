@@ -712,6 +712,7 @@ func GetOutputForModule(options *str.Options) string {
 		consts.Notes:                 getOutputForModuleNotes(options),
 		consts.Recommendations:       getOutputForModuleRecommendations(options),
 		consts.Sync:                  getOutputForModuleSync(options),
+		consts.SmartLists:            getOutputForModuleSmartLists(options),
 		consts.SocialRecommendations: getOutputForModuleSocialRecommendations(options),
 		consts.Team:                  getOutputForModuleTeam(options),
 		consts.WatchNow:              getOutputForModuleWatchNow(options),
@@ -787,6 +788,10 @@ func getOutputForModuleNetworks(options *str.Options) string {
 
 func getOutputForModuleMedia(options *str.Options) string {
 	return fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
+}
+
+func getOutputForModuleSmartLists(options *str.Options) string {
+	return fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.InternalID)
 }
 
 func getOutputForModuleSocialRecommendations(options *str.Options) string {

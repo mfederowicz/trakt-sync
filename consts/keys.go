@@ -152,6 +152,7 @@ const (
 	Show                  = "show"
 	ShowEpisode           = "show_episode"
 	Shows                 = "shows"
+	SmartLists            = "smart_lists"
 	SocialRecommendations = "social_recommendations"
 	Sources               = "sources"
 	Sentiments            = "sentiments"
