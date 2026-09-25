@@ -5,6 +5,17 @@ package str
 type Options struct {
 	Action            string
 	AvailableOn       string
+	Certifications    string
+	Countries         string
+	Genres            string
+	Intent            string
+	MediaEndDate      string
+	MediaStartDate    string
+	Ratings           string
+	Runtimes          string
+	Subgenres         string
+	WatchNow          string
+	Years             string
 	HideCompleted     bool
 	HideNotCompleted  bool
 	IncludeStats      bool

@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
@@ -32,7 +33,10 @@ func (SyncGetWatchedProgressHandler) Handle(options *str.Options, client *intern
 		HideNotCompleted: options.HideNotCompleted,
 		OnlyRewatching:   options.OnlyRewatching,
 	}
-	result, err := fetchSyncProgress(client, options, opts, consts.DefaultPage, client.Sync.GetWatchedProgress)
+	result, err := fetchSyncProgress(client, options, consts.DefaultPage, func(ctx context.Context, page int) ([]*str.ShowProgress, *str.Response, error) {
+		opts.Page = page
+		return client.Sync.GetWatchedProgress(ctx, &opts)
+	})
 	if err != nil {
 		return fmt.Errorf("get watched progress error: %w", err)
 	}

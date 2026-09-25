@@ -62,6 +62,18 @@ $ ./trakt-sync sync -a get_up_next
 ```console
 $ ./trakt-sync sync -a get_up_next -include_stats -sort_by added -sort_how desc
 ```
+##### Up next nitro
+Up next for intent-based clients, with media filters. `-intent` is `all`, `continue`, `start` or `completed`;
+`-watchnow` is `favorites`, `any`, `any_all`, `free`, `free_all`, `subscriptions` or `subscriptions_all`.
+Other filters are passed as given: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`,
+`-certifications`, `-start_date`, `-end_date` (comma separated where a filter takes several values).
+`-sort_by` and `-sort_how` are sent only when given.
+```console
+$ ./trakt-sync sync -a get_up_next_nitro -intent continue
+```
+```console
+$ ./trakt-sync sync -a get_up_next_nitro -intent start -watchnow subscriptions -genres action,drama -years 2020-2026
+```
 ##### Watched progress
 Progress of every show you have watched. Filter with `-hide_completed` or `-hide_not_completed` (not both), or
 `-only_rewatching`; `-lifetime_stats` works as for up next.

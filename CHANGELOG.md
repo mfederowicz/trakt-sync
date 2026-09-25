@@ -27,6 +27,9 @@ schedule. Releases up to v1.15.2 are listed on
   progress.
 - `sync -a get_watched_progress [-hide_completed | -hide_not_completed] [-only_rewatching] [-lifetime_stats]`:
   watched progress of your shows. Both actions take `-sort_by` / `-sort_how` (sent only when given) and `-ex`.
+- `sync -a get_up_next_nitro [-intent all|continue|start|completed] [-watchnow <filter>]`: up next with media filters
+  (`-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`, `-start_date`,
+  `-end_date`). The global `-genres`, `-years`, `-countries` and `-runtimes` flags were accepted before but not used.
 
 ### Changed
 

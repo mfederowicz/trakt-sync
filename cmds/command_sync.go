@@ -26,10 +26,17 @@ var (
 	_syncHideCompleted        = SyncCmd.Flag.Bool("hide_completed", false, consts.HideCompletedUsage)
 	_syncHideNotCompleted     = SyncCmd.Flag.Bool("hide_not_completed", false, consts.HideNotCompletedUsage)
 	_syncOnlyRewatching       = SyncCmd.Flag.Bool("only_rewatching", false, consts.OnlyRewatchingUsage)
+	_syncIntent               = SyncCmd.Flag.String("intent", consts.EmptyString, consts.IntentUsage)
+	_syncWatchNow             = SyncCmd.Flag.String("watchnow", consts.EmptyString, consts.WatchNowUsage)
+	_syncSubgenres            = SyncCmd.Flag.String("subgenres", consts.EmptyString, consts.SubgenresUsage)
+	_syncRatings              = SyncCmd.Flag.String("ratings", consts.EmptyString, consts.RatingsFilterUsage)
+	_syncCertifications       = SyncCmd.Flag.String("certifications", consts.EmptyString, consts.CertificationsUsage)
+	_syncStartDate            = SyncCmd.Flag.String("start_date", consts.EmptyString, consts.StartDateUsage)
+	_syncEndDate              = SyncCmd.Flag.String("end_date", consts.EmptyString, consts.EndDateUsage)
 
 	validSyncActions = []string{
 		"last_activities", "playback", "remove_playback", "get_collection", "get_minimal_collection",
-		"get_up_next", "get_watched_progress",
+		"get_up_next", "get_up_next_nitro", "get_watched_progress",
 		"add_to_collection", "remove_from_collection", "get_watched",
 		"get_history", "add_to_history", "remove_from_history",
 		"get_ratings", "add_to_ratings", "remove_from_ratings",
@@ -67,6 +74,7 @@ func syncFunc(cmd *Command, _ ...string) error {
 		"get_collection":         handlers.SyncGetCollectionHandler{},
 		"get_minimal_collection": handlers.SyncGetMinimalCollectionHandler{},
 		"get_up_next":            handlers.SyncGetUpNextHandler{},
+		"get_up_next_nitro":      handlers.SyncGetUpNextNitroHandler{},
 		"get_watched_progress":   handlers.SyncGetWatchedProgressHandler{},
 		"add_to_collection":      handlers.SyncAddToCollectionHandler{},
 		"remove_from_collection": handlers.SyncRemoveFromCollectionHandler{},
@@ -122,10 +130,10 @@ func syncPlaybackType(options *str.Options, typeSet bool) string {
 	return options.Type
 }
 
-// syncProgressSort sends sort_by and sort_how for up next and watched progress only when set on the command line,
+// syncProgressSort sends sort_by and sort_how for up next (nitro) and watched progress only when set on the command line,
 // so the global defaults (rank, asc) do not override the API's own order
 func syncProgressSort(options *str.Options, sortBySet bool, sortHowSet bool) {
-	if options.Action != consts.GetUpNext && options.Action != consts.GetWatchedProgress {
+	if options.Action != consts.GetUpNext && options.Action != consts.GetUpNextNitro && options.Action != consts.GetWatchedProgress {
 		return
 	}
 	if !sortBySet {

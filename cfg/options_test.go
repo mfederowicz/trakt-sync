@@ -62,6 +62,7 @@ func TestGetOutputForModuleSyncMinimalCollection(t *testing.T) {
 
 func TestGetOutputForModuleSyncProgress(t *testing.T) {
 	assert.Equal(t, "export_sync_up_next.json", GetOutputForModule(&str.Options{Module: "sync", Action: "get_up_next"}))
+	assert.Equal(t, "export_sync_up_next_nitro.json", GetOutputForModule(&str.Options{Module: "sync", Action: "get_up_next_nitro"}))
 	assert.Equal(t, "export_sync_watched_progress.json", GetOutputForModule(&str.Options{Module: "sync", Action: "get_watched_progress"}))
 }
 

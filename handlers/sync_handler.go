@@ -11,7 +11,6 @@ import (
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
-	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -21,12 +20,11 @@ type SyncHandler interface {
 }
 
 // syncProgressFetch fetches one page of up next or watched progress
-type syncProgressFetch func(ctx context.Context, opts *uri.SyncProgressOptions) ([]*str.ShowProgress, *str.Response, error)
+type syncProgressFetch func(ctx context.Context, page int) ([]*str.ShowProgress, *str.Response, error)
 
 // fetchSyncProgress fetches every page of up next or watched progress
-func fetchSyncProgress(client *internal.Client, options *str.Options, opts uri.SyncProgressOptions, page int, fetch syncProgressFetch) ([]*str.ShowProgress, error) {
-	opts.Page = page
-	list, resp, err := fetch(client.BuildCtxFromOptions(options), &opts)
+func fetchSyncProgress(client *internal.Client, options *str.Options, page int, fetch syncProgressFetch) ([]*str.ShowProgress, error) {
+	list, resp, err := fetch(client.BuildCtxFromOptions(options), page)
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +33,7 @@ func fetchSyncProgress(client *internal.Client, options *str.Options, opts uri.S
 	if client.HavePages(page, resp, options.PagesLimit) {
 		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
 		// Fetch items from the next page
-		nextPageItems, err := fetchSyncProgress(client, options, opts, page+consts.NextPageStep, fetch)
+		nextPageItems, err := fetchSyncProgress(client, options, page+consts.NextPageStep, fetch)
 		if err != nil {
 			return nil, err
 		}
