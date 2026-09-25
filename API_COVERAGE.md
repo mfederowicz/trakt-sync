@@ -8,40 +8,41 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 - 🟡 needs checking: a service method calls this route only through a generic path parameter (for example `sync/collection/%s`); confirm the CLI accepts this value.
 - ⬜ missing: no service method calls this route.
 - ⚠️ not served: listed in the contract, but the live API does not serve it (404, or another route answers; see [Findings](#findings)). The Go method column shows whether trakt-sync implements it anyway.
+- ➖ not used: the CLI has no use for this route; the Go method column says why. Not work to pick.
 - Update this file in the same PR that adds or removes an endpoint.
 
 ## Summary
 
-| Domain | ✅ | 🟡 | ⬜ | ⚠️ | Total |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| [`calendars`](#calendars) | 12 | 0 | 0 | 0 | 12 |
-| [`certifications`](#certifications) | 3 | 0 | 0 | 0 | 3 |
-| [`checkin`](#checkin) | 2 | 0 | 0 | 0 | 2 |
-| [`comments`](#comments) | 18 | 0 | 0 | 0 | 18 |
-| [`countries`](#countries) | 1 | 0 | 0 | 0 | 1 |
-| [`episodes`](#episodes) | 2 | 0 | 0 | 0 | 2 |
-| [`genres`](#genres) | 1 | 0 | 0 | 0 | 1 |
-| [`languages`](#languages) | 1 | 0 | 0 | 0 | 1 |
-| [`lists`](#lists) | 15 | 0 | 0 | 0 | 15 |
-| [`media`](#media) | 3 | 0 | 0 | 0 | 3 |
-| [`movies`](#movies) | 29 | 0 | 0 | 2 | 31 |
-| [`networks`](#networks) | 1 | 0 | 0 | 0 | 1 |
-| [`notes`](#notes) | 5 | 0 | 0 | 0 | 5 |
-| [`oauth`](#oauth) | 3 | 0 | 2 | 0 | 5 |
-| [`people`](#people) | 8 | 0 | 0 | 0 | 8 |
-| [`recommendations`](#recommendations) | 4 | 0 | 0 | 0 | 4 |
-| [`scrobble`](#scrobble) | 3 | 0 | 0 | 0 | 3 |
-| [`search`](#search) | 6 | 0 | 0 | 0 | 6 |
-| [`seasons`](#seasons) | 1 | 0 | 0 | 0 | 1 |
-| [`shows`](#shows) | 58 | 0 | 0 | 2 | 60 |
-| [`smart-lists`](#smart-lists) | 0 | 0 | 2 | 0 | 2 |
-| [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 0 | 2 |
-| [`sync`](#sync) | 37 | 0 | 0 | 0 | 37 |
-| [`team`](#team) | 0 | 0 | 1 | 0 | 1 |
-| [`users`](#users) | 63 | 0 | 41 | 0 | 104 |
-| [`watchnow`](#watchnow) | 0 | 0 | 2 | 0 | 2 |
-| [`younify`](#younify) | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **276** | **0** | **55** | **4** | **335** |
+| Domain | ✅ | 🟡 | ⬜ | ⚠️ | ➖ | Total |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| [`calendars`](#calendars) | 12 | 0 | 0 | 0 | 0 | 12 |
+| [`certifications`](#certifications) | 3 | 0 | 0 | 0 | 0 | 3 |
+| [`checkin`](#checkin) | 2 | 0 | 0 | 0 | 0 | 2 |
+| [`comments`](#comments) | 18 | 0 | 0 | 0 | 0 | 18 |
+| [`countries`](#countries) | 1 | 0 | 0 | 0 | 0 | 1 |
+| [`episodes`](#episodes) | 2 | 0 | 0 | 0 | 0 | 2 |
+| [`genres`](#genres) | 1 | 0 | 0 | 0 | 0 | 1 |
+| [`languages`](#languages) | 1 | 0 | 0 | 0 | 0 | 1 |
+| [`lists`](#lists) | 15 | 0 | 0 | 0 | 0 | 15 |
+| [`media`](#media) | 3 | 0 | 0 | 0 | 0 | 3 |
+| [`movies`](#movies) | 29 | 0 | 0 | 2 | 0 | 31 |
+| [`networks`](#networks) | 1 | 0 | 0 | 0 | 0 | 1 |
+| [`notes`](#notes) | 5 | 0 | 0 | 0 | 0 | 5 |
+| [`oauth`](#oauth) | 3 | 0 | 0 | 0 | 2 | 5 |
+| [`people`](#people) | 8 | 0 | 0 | 0 | 0 | 8 |
+| [`recommendations`](#recommendations) | 4 | 0 | 0 | 0 | 0 | 4 |
+| [`scrobble`](#scrobble) | 3 | 0 | 0 | 0 | 0 | 3 |
+| [`search`](#search) | 6 | 0 | 0 | 0 | 0 | 6 |
+| [`seasons`](#seasons) | 1 | 0 | 0 | 0 | 0 | 1 |
+| [`shows`](#shows) | 58 | 0 | 0 | 2 | 0 | 60 |
+| [`smart-lists`](#smart-lists) | 0 | 0 | 2 | 0 | 0 | 2 |
+| [`social_recommendations`](#social_recommendations) | 0 | 0 | 2 | 0 | 0 | 2 |
+| [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
+| [`team`](#team) | 0 | 0 | 1 | 0 | 0 | 1 |
+| [`users`](#users) | 63 | 0 | 41 | 0 | 0 | 104 |
+| [`watchnow`](#watchnow) | 0 | 0 | 2 | 0 | 0 | 2 |
+| [`younify`](#younify) | 0 | 0 | 5 | 0 | 0 | 5 |
+| **Total** | **276** | **0** | **53** | **4** | **2** | **335** |
 
 ## calendars
 
@@ -207,10 +208,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
-| ⬜ | GET | `/oauth/authorize` | Authorize Application |  |
+| ➖ | GET | `/oauth/authorize` | Authorize Application | not used: browser redirect flow for web apps; the CLI logs in with the device flow |
 | ✅ | POST | `/oauth/device/code` | Generate new device codes | `OauthService.GenerateNewDeviceCodes` |
 | ✅ | POST | `/oauth/device/token` | Poll for the access_token | `OauthService.PoolForTheAccessToken` |
-| ⬜ | POST | `/oauth/revoke` | Revoke an access_token |  |
+| ➖ | POST | `/oauth/revoke` | Revoke an access_token | not used: the CLI refreshes an expired token or starts a new device login |
 | ✅ | POST | `/oauth/token` | Exchange a token | `OauthService.ExchangeRefreshTokenForAccessToken` |
 
 ## people
