@@ -747,7 +747,8 @@ func (c *CommonLogic) FetchUpdatedComments(client *internal.Client, options *str
 
 // FetchMovieRecommendations helper function to fetch movie recommendations
 func (c *CommonLogic) FetchMovieRecommendations(client *internal.Client, options *str.Options, page int) ([]*str.Recommendation, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, IgnoreCollected: options.IgnoreCollected, IgnoreWatchlisted: options.IgnoreWatchlisted}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, IgnoreCollected: options.IgnoreCollected, IgnoreWatchlisted: options.IgnoreWatchlisted,
+		IgnoreWatched: options.IgnoreWatched, WatchWindow: options.WatchWindow}
 	list, resp, err := client.Recommendations.GetMovieRecommendations(
 		client.BuildCtxFromOptions(options),
 		&opts,
@@ -774,7 +775,8 @@ func (c *CommonLogic) FetchMovieRecommendations(client *internal.Client, options
 
 // FetchShowRecommendations helper function to fetch movie recommendations
 func (c *CommonLogic) FetchShowRecommendations(client *internal.Client, options *str.Options, page int) ([]*str.Recommendation, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, IgnoreCollected: options.IgnoreCollected, IgnoreWatchlisted: options.IgnoreWatchlisted}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, IgnoreCollected: options.IgnoreCollected, IgnoreWatchlisted: options.IgnoreWatchlisted,
+		IgnoreWatched: options.IgnoreWatched, WatchWindow: options.WatchWindow}
 	list, resp, err := client.Recommendations.GetShowRecommendations(
 		client.BuildCtxFromOptions(options),
 		&opts,
