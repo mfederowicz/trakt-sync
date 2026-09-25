@@ -84,6 +84,7 @@ type Client struct {
 	SocialRecommendations *SocialRecommendationsService
 	Team                  *TeamService
 	WatchNow              *WatchNowService
+	Younify               *YounifyService
 	rateMu                sync.Mutex
 }
 
@@ -166,6 +167,7 @@ func (c *Client) initialize() {
 	c.SocialRecommendations = (*SocialRecommendationsService)(&c.common)
 	c.Team = (*TeamService)(&c.common)
 	c.WatchNow = (*WatchNowService)(&c.common)
+	c.Younify = (*YounifyService)(&c.common)
 }
 
 // NewRequest creates an API request.

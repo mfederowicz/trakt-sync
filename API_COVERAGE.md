@@ -7,7 +7,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 - ✅ implemented: a service method in `internal/` calls this exact route.
 - 🟡 needs checking: a service method calls this route only through a generic path parameter (for example `sync/collection/%s`); confirm the CLI accepts this value.
 - ⬜ missing: no service method calls this route.
-- ⚠️ not served: listed in the contract, but the live API does not serve it (404, or another route answers; see [Findings](#findings)). The Go method column shows whether trakt-sync implements it anyway.
+- ⚠️ not served: listed in the contract, but the live API does not serve it (404, 401 for every API app, or another route answers; see [Findings](#findings)). The Go method column shows whether trakt-sync implements it anyway.
 - ➖ not used: the CLI has no use for this route; the Go method column says why. Not work to pick.
 - Update this file in the same PR that adds or removes an endpoint.
 
@@ -41,8 +41,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
 | [`users`](#users) | 63 | 0 | 41 | 0 | 0 | 104 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
-| [`younify`](#younify) | 0 | 0 | 5 | 0 | 0 | 5 |
-| **Total** | **283** | **0** | **46** | **4** | **2** | **335** |
+| [`younify`](#younify) | 0 | 0 | 0 | 5 | 0 | 5 |
+| **Total** | **283** | **0** | **41** | **9** | **2** | **335** |
 
 ## calendars
 
@@ -508,11 +508,11 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
-| ⬜ | POST | `/younify/connect` | Create a streaming connection |  |
-| ⬜ | GET | `/younify/connections` | Get streaming connections |  |
-| ⬜ | POST | `/younify/users/refresh/{service_id}` | Refresh a streaming service |  |
-| ⬜ | POST | `/younify/users/refresh/{service_id}/{all_data}` | Refresh a streaming service (full re-sync) |  |
-| ⬜ | DELETE | `/younify/users/services/{service_id}` | Unlink a streaming service |  |
+| ⚠️ | POST | `/younify/connect` | Create a streaming connection | `YounifyService.Connect` |
+| ⚠️ | GET | `/younify/connections` | Get streaming connections | `YounifyService.GetConnections` |
+| ⚠️ | POST | `/younify/users/refresh/{service_id}` | Refresh a streaming service | `YounifyService.RefreshService` |
+| ⚠️ | POST | `/younify/users/refresh/{service_id}/{all_data}` | Refresh a streaming service (full re-sync) | `YounifyService.RefreshService` |
+| ⚠️ | DELETE | `/younify/users/services/{service_id}` | Unlink a streaming service | `YounifyService.DisconnectService` |
 
 ## Findings
 
@@ -524,3 +524,4 @@ Differences between the service code and the contract, found while building this
 | - | `GET /shows/hot` | live API routes it to `GET /shows/{id}` and returns the show with slug `hot` (checked 2026-09-24). Upstream issue: TBD |
 | `MoviesService.GetStreamingMovies` | `GET /movies/streaming/{period}` | live API returns 404 `{"error":"endpoint removed"}` (checked 2026-09-24); the CLI explains the 404. Upstream issue: TBD |
 | - | `GET /shows/streaming/{period}` | live API returns 404 `{"error":"endpoint removed"}` (checked 2026-09-24). Upstream issue: TBD |
+| `YounifyService.*` | `/younify/*` (all 5 routes) | `GET /younify/connections` returns 401 for the maintainer's OAuth token, and the developer portal's own "try it" gets 401 too (checked 2026-09-25); younify looks limited to Trakt's own apps. The other 4 routes change the account and were not tried; assumed the same. The CLI explains a 401. Upstream issue: TBD |

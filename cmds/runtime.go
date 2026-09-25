@@ -44,6 +44,7 @@ var Commands = []*Command{
 	UsersCmd,
 	WatchlistCmd,
 	WatchNowCmd,
+	YounifyCmd,
 }
 
 // runtime consts

@@ -716,6 +716,7 @@ func GetOutputForModule(options *str.Options) string {
 		consts.SocialRecommendations: getOutputForModuleSocialRecommendations(options),
 		consts.Team:                  getOutputForModuleTeam(options),
 		consts.WatchNow:              getOutputForModuleWatchNow(options),
+		consts.Younify:               getOutputForModuleYounify(options),
 	}
 
 	if output, found := allOutputs[options.Module]; found {
@@ -799,6 +800,13 @@ func getOutputForModuleSocialRecommendations(options *str.Options) string {
 }
 
 func getOutputForModuleTeam(options *str.Options) string {
+	return fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
+}
+
+func getOutputForModuleYounify(options *str.Options) string {
+	if options.Action == consts.Connect {
+		return fmt.Sprintf(consts.DefaultExportResultsFormat, options.Module, options.Action)
+	}
 	return fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
 }
 
