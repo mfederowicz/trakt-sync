@@ -36,6 +36,7 @@ var (
 	_usersCommentsCommentType    = UsersCmd.Flag.String("comment_type", cfg.DefaultConfig().CommentType, consts.CommentTypeUsage)
 	_usersStartAt                = UsersCmd.Flag.String("start_at", cfg.DefaultConfig().StartAt, consts.StartAtUsage)
 	_usersEndAt                  = UsersCmd.Flag.String("end_at", cfg.DefaultConfig().EndAt, consts.EndAtUsage)
+	_usersDescription            = UsersCmd.Flag.String("description", cfg.DefaultConfig().Description, consts.WatchlistDescriptionUsage)
 )
 
 // UsersCmd Returns all personal lists for a user.

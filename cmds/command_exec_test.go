@@ -43,3 +43,38 @@ func TestExecReturnsRecoveredPanic(t *testing.T) {
 		})
 	}
 }
+
+// TestExecStopsOnFlagErrors checks that an unknown flag or -h stops Exec before the command runs.
+func TestExecStopsOnFlagErrors(t *testing.T) {
+	fs := afero.NewMemMapFs()
+	assert.NoError(t, fs.MkdirAll("/exec/", consts.X755))
+	assert.NoError(t, afero.WriteFile(fs, "/exec/token.json", []byte("{}"), consts.X644))
+	assert.NoError(t, afero.WriteFile(fs, "/exec/user_settings.json", []byte(`{"user":{"username":"sean"}}`), consts.X644))
+	config := cfg.DefaultConfig()
+	config.ClientID, config.ClientSecret = "a", "b"
+	config.TokenPath, config.SettingsPath = "/exec/token.json", "/exec/user_settings.json"
+
+	tests := []struct {
+		name    string
+		args    []string
+		wantRun bool
+		wantErr string
+	}{
+		{name: "unknown flag", args: []string{"-no_such_flag", "x"}, wantErr: "exec_test: flag provided but not defined: -no_such_flag"},
+		{name: "help", args: []string{"-h"}},
+		{name: "known flag", args: []string{"-o", "out.json"}, wantRun: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ran := false
+			cmd := &Command{Name: "exec_test", Run: func(*Command, ...string) error { ran = true; return nil }}
+			err := cmd.Exec(fs, internal.NewClient(nil), config, tt.args)
+			assert.Equal(t, tt.wantRun, ran)
+			if tt.wantErr == "" {
+				assert.NoError(t, err)
+				return
+			}
+			assert.EqualError(t, err, tt.wantErr)
+		})
+	}
+}
