@@ -714,6 +714,7 @@ func GetOutputForModule(options *str.Options) string {
 		consts.Sync:                  getOutputForModuleSync(options),
 		consts.SocialRecommendations: getOutputForModuleSocialRecommendations(options),
 		consts.Team:                  getOutputForModuleTeam(options),
+		consts.WatchNow:              getOutputForModuleWatchNow(options),
 	}
 
 	if output, found := allOutputs[options.Module]; found {
@@ -793,6 +794,13 @@ func getOutputForModuleSocialRecommendations(options *str.Options) string {
 }
 
 func getOutputForModuleTeam(options *str.Options) string {
+	return fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
+}
+
+func getOutputForModuleWatchNow(options *str.Options) string {
+	if len(options.Country) > consts.ZeroValue {
+		return fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.Country)
+	}
 	return fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
 }
 

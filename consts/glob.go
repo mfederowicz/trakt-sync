@@ -179,6 +179,7 @@ const (
 	TraktIDUsage                 = "allow to overwrite trakt_id"
 	TranslationsUsage            = "allow to overwrite translations"
 	WatchWindowUsage             = "watch window in days for the recommendations"
+	WatchNowCountryUsage         = "2 character country code, all countries when not set ie: -country us"
 	WatchNowUsage                = "where to watch: favorites, any, any_all, free, free_all, subscriptions, subscriptions_all"
 	WatchlistDescriptionUsage    = "allow to overwrite description"
 	WatchlistNotesUsage          = "allow to overwrite notes"

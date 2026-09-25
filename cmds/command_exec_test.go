@@ -66,6 +66,8 @@ func TestExecStopsOnFlagErrors(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			resetAllFlags()
+			t.Cleanup(resetAllFlags) // "known flag" sets the global -o; don't leak it into later tests
 			ran := false
 			cmd := &Command{Name: "exec_test", Run: func(*Command, ...string) error { ran = true; return nil }}
 			err := cmd.Exec(fs, internal.NewClient(nil), config, tt.args)

@@ -381,6 +381,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		consts.History:               setOptionsDependsOnModuleDefault(options),
 		consts.Sync:                  setOptionsDependsOnModuleSync(options),
 		consts.Team:                  setOptionsDependsOnModuleTeam(options),
+		consts.WatchNow:              setOptionsDependsOnModuleWatchNow(options),
 	}
 
 	if opt, found := allModules[module]; found {
@@ -490,6 +491,12 @@ func setOptionsDependsOnModuleSocialRecommendations(options str.Options) str.Opt
 
 func setOptionsDependsOnModuleTeam(options str.Options) str.Options {
 	options.Action = *_teamAction
+	return options
+}
+
+func setOptionsDependsOnModuleWatchNow(options str.Options) str.Options {
+	options.Action = *_watchNowAction
+	options.Country = *_watchNowCountry
 	return options
 }
 

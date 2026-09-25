@@ -13,6 +13,7 @@ import (
 )
 
 func TestSocialRecommendationsFlags(t *testing.T) {
+	resetAllFlags()
 	t.Cleanup(resetAllFlags)
 
 	fs := afero.NewMemMapFs()

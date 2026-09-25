@@ -73,6 +73,7 @@ A value given on the command line (for example `-t shows`) wins over the same op
 - [`team`](./docs/team.md) - Returns Trakt team members.
 - [`users`](./docs/users.md) - Returns all data for a user.
 - [`watchlist`](./docs/watchlist.md) - Returns all items in a user's watchlist filtered by type.
+- [`watchnow`](./docs/watchnow.md) - Returns watch now sources (streaming providers), all or by country.
 
 ## API documentation
 

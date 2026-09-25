@@ -71,6 +71,11 @@ func TestGetOutputForModuleSocialRecommendations(t *testing.T) {
 	assert.Equal(t, "export_social_recommendations_shows.json", GetOutputForModule(&str.Options{Module: "social_recommendations", Action: "shows"}))
 }
 
+func TestGetOutputForModuleWatchNowSources(t *testing.T) {
+	assert.Equal(t, "export_watchnow_sources.json", GetOutputForModule(&str.Options{Module: "watchnow", Action: "sources"}))
+	assert.Equal(t, "export_watchnow_sources_us.json", GetOutputForModule(&str.Options{Module: "watchnow", Action: "sources", Country: "us"}))
+}
+
 func TestGetOutputForModuleTeamMembers(t *testing.T) {
 	assert.Equal(t, "export_team_members.json", GetOutputForModule(&str.Options{Module: "team", Action: "members"}))
 }

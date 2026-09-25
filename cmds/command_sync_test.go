@@ -47,8 +47,9 @@ func TestSyncPlaybackTypeFromFlags(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			// -t shares its value with the global flag, so restore it for other tests
-			t.Cleanup(func() { *_strType = cfg.DefaultConfig().Type })
+			// flags share their values with the global flags, so reset them before and after
+			resetAllFlags()
+			t.Cleanup(resetAllFlags)
 
 			fs := afero.NewMemMapFs()
 			tmpPath := "/tmp-playback/"
@@ -112,6 +113,7 @@ func TestSyncProgressSortFromFlags(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			resetAllFlags()
 			t.Cleanup(resetAllFlags)
 
 			fs := afero.NewMemMapFs()
@@ -141,6 +143,7 @@ func TestSyncProgressSortFromFlags(t *testing.T) {
 }
 
 func TestSyncUpNextNitroFlags(t *testing.T) {
+	resetAllFlags()
 	t.Cleanup(resetAllFlags)
 
 	fs := afero.NewMemMapFs()

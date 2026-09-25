@@ -35,6 +35,9 @@ schedule.
 - New [`social_recommendations`](./docs/social_recommendations.md) module: `social_recommendations -a movies|shows`
   exports recommendations based on the people you follow, with `-ignore_watched`, `-ignore_collected`,
   `-ignore_watchlisted`, `-watch_window <days>` and `-ex`.
+- New [`watchnow`](./docs/watchnow.md) module: `watchnow -a sources [-country us]` exports the watch now sources
+  (streaming providers) supported by Trakt, for all countries or one. Trakt marks it limited access; without access
+  it fails with a "limited access" message.
 
 ### Changed
 

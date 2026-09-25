@@ -153,6 +153,7 @@ const (
 	ShowEpisode           = "show_episode"
 	Shows                 = "shows"
 	SocialRecommendations = "social_recommendations"
+	Sources               = "sources"
 	Sentiments            = "sentiments"
 	Stats                 = "stats"
 	Streaming             = "streaming"
