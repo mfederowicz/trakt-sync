@@ -192,6 +192,7 @@ const (
 	WatchNowUsage                = "where to watch: favorites, any, any_all, free, free_all, subscriptions, subscriptions_all"
 	WatchlistDescriptionUsage    = "allow to overwrite description"
 	WatchlistNotesUsage          = "allow to overwrite notes"
+	YounifyUnauthorizedMsg       = "younify %s: Trakt answered 401; younify is not open to API apps yet (the developer portal gets 401 too): %w"
 	TypeUsage                    = "allow to overwrite type"
 	UndoUsage                    = "allow undo item"
 	UnknownCheckinAction         = "uknown checkin action"

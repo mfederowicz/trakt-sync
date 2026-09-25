@@ -22,7 +22,8 @@ schedule.
 - New `younify` module for streaming service connections: `younify -a connections` (services and your connection
   status), `younify -a connect -service_id <id> [-return_url <url>]` (prints the web auth URL to link a service),
   `younify -a refresh -service_id <id> [-all_data]` (queue an incremental or full re-sync) and
-  `younify -a disconnect -service_id <id>`.
+  `younify -a disconnect -service_id <id>`. Trakt does not open younify to API apps yet: `connections` answers
+  401 (the developer portal too), which the CLI reports as `younify is not open to API apps yet`.
 
 ### Changed
 

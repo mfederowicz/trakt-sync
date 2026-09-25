@@ -118,8 +118,8 @@ func (m *NetworksService) GetNetworksList(ctx context.Context, opts *uri.ListOpt
 Update `docs/<module>.md` (actions, flags, example invocations) and the
 command list in `README.md`. Mark the route ✅ in `API_COVERAGE.md`, with the Go
 method, and update that domain's counts in the summary table. Pick new work
-from its ⬜ rows. A route the contract lists but the live API answers with 404
-is marked ⚠️ with a row in the Findings table (Go method, what the live API
+from its ⬜ rows. A route the contract lists but the live API answers with 404 (or with 401/403 for
+every API app, even with a working token) is marked ⚠️ with a row in the Findings table (Go method, what the live API
 returns, date checked, upstream issue). Implemented ⚠️ routes stay in the CLI
 and turn the 404 into a clear "documented, but not served" error.
 A route the CLI has no use for is marked ➖ with the reason in the Go method

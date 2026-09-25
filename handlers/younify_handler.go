@@ -25,8 +25,14 @@ func validServiceID(options *str.Options) error {
 	return nil
 }
 
-// younifyError maps a younify response to a readable error: unknown service (404), VIP gating (422 / 426) and a rejected return_url (400).
+// younifyError maps a younify response to a readable error: not open to API apps (401), unknown service (404),
+// VIP gating (422 / 426) and a rejected return_url (400).
 func younifyError(action string, serviceID string, resp *str.Response, err error) error {
+	// the developer portal gets 401 too, so a 401 here is not an expired token of this app
+	if resp != nil && resp.StatusCode == http.StatusUnauthorized {
+		return fmt.Errorf(consts.YounifyUnauthorizedMsg, action, err)
+	}
+
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found streaming service for:%s", serviceID)
 	}
