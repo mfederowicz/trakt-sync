@@ -13,8 +13,7 @@ Versioning follows [SemVer](https://semver.org/):
   behavior change.
 
 A version is tagged once a module (or a meaningful fix) is done - there's no fixed release
-schedule. Releases up to v1.15.2 are listed on
-[GitHub Releases](https://github.com/mfederowicz/trakt-sync/releases).
+schedule.
 
 ## [Unreleased]
 
@@ -33,6 +32,7 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Changed
 
+- `CHANGELOG.md` now covers every release back to 1.0.0.
 - GitHub release notes now show the version's `CHANGELOG.md` section (Added / Changed / Fixed) instead of a list of
   commits.
 
@@ -198,7 +198,306 @@ schedule. Releases up to v1.15.2 are listed on
 - `-version` now shows the real version and commit for release binaries and `make build`
   builds, instead of `dev` / `none` or a Go pseudo-version.
 
+## [1.15.2] - 2026-06-16
+
+### Fixed
+
+- `sync -a get_watched` and `users -a watched` returned only the first page of results; they now fetch every page
+  (up to `pages_limit`).
+
+## [1.15.1] - 2026-06-16
+
+### Changed
+
+- Module docs moved from `README.md` into `docs/<module>.md`; the README links to them.
+
+### Fixed
+
+- `collection` returned only the first page of results; it now fetches every page (up to `pages_limit`).
+
+## [1.15.0] - 2026-05-26
+
+### Added
+
+- `users`: many new actions for the user endpoints: `profile`, `follower_requests`,
+  `following_requests`, `follow_request`, `hidden_items`, `add_hidden_items`, `remove_hidden_items`, `likes`,
+  `collection`, `comments`, `notes`, `history`, `ratings`, `watchlist`, `watchlist_comments`, `favorites`,
+  `favorites_comments`, `watching`, `report`.
+- `users`: manage personal lists with `list`, `add_list`, `update_list`, `delete_list`, `reorder_lists`,
+  `collaborations`, `list_likes`, `list_like`, `list_items`, `add_list_items`, `remove_list_items`,
+  `reorder_list_items`, `update_list_item`, `list_comments` and `list_report`.
+- `users`: social actions `follow`, `unfollow`, `followers`, `following`, `friends`, `blocked_users`, `block` and
+  `unblock`.
+
+### Changed
+
+- `README.md` and `sync` action descriptions updated.
+
+## [1.14.0] - 2026-05-11
+
+### Added
+
+- New `sync` module: `last_activities`, `playback`, `remove_playback`.
+- `sync -a get_collection|add_to_collection|remove_from_collection`.
+- `sync -a get_watched|get_history|add_to_history|remove_from_history`.
+- `sync -a get_ratings|add_to_ratings|remove_from_ratings`.
+- `sync -a get_watchlist` (with `-sort_by` / `-sort_how`), `update_watchlist`, `add_to_watchlist`,
+  `remove_from_watchlist`, `reorder_watchlist`, `update_watchlist_item`.
+- `sync -a get_favorites`, `update_favorites`, `add_to_favorites`, `remove_from_favorites`, `reorder_favorites`,
+  `update_favorite_item`.
+
+## [1.13.0] - 2025-06-01
+
+### Added
+
+- New `episodes` module: `summary`, `translations`, `comments`, `lists`, `people`, `ratings`, `stats`, `watching`,
+  `videos`.
+
+## [1.12.0] - 2025-05-30
+
+### Added
+
+- New `seasons` module: `summary`, `season`, `episodes`, `translations`, `comments`, `lists`, `people`, `ratings`,
+  `stats`, `watching`, `videos`.
+
+## [1.11.0] - 2025-05-27
+
+### Changed
+
+- Dates are handled in the timezone from your Trakt account settings. The settings are downloaded after login and
+  stored in the JSON file set by `settings_path` in the config file.
+- `-start_date` is rounded down to the full hour, and dates default to the RFC 3339 format.
+
+### Fixed
+
+- An invalid or missing settings or token file no longer stops the program; the file is created or refreshed.
+
+## [1.10.0] - 2025-05-21
+
+### Added
+
+- New `shows` module: `trending`, `popular`, `favorited`, `played`, `watched`, `collected`, `anticipated`,
+  `updates`, `updated_ids`, `summary`, `aliases`, `certifications`, `translations`, `comments`, `lists`,
+  `collection_progress`, `watched_progress`, `reset_show_progress`, `people`, `ratings`, `related`, `stats`,
+  `studios`, `watching`, `next_episode`, `last_episode`, `videos`, `refresh`.
+
+## [1.9.1] - 2025-05-04
+
+### Changed
+
+- Internal: linter and `gofmt` cleanup, and a lint check in GitHub Actions.
+
+## [1.9.0] - 2025-05-04
+
+### Added
+
+- New `networks` module: `networks -a list`.
+- New `notes` module: add notes to movies, shows, seasons, episodes, people, history, collection and rating items
+  (`notes -a notes -t <type> -i <id> -notes "..."`), and get, update or delete one (`notes -a note -i <id>`), or
+  get its item (`notes -a item -i <id>`).
+- New `recommendations` module: `recommendations -a movies|shows`, with `-ignore_collected`,
+  `-ignore_watchlisted`, or `-i <id> -hide` to hide a recommendation.
+- New `scrobble` module: `scrobble -a start|pause|stop -t movie|episode|show_episode -i <id> -progress <n>`; for
+  `show_episode` pick the episode with `-episode_code 1x5` or `-episode_abs 164`.
+
+### Changed
+
+- `README.md` reorganized with a section per module.
+- Tests run in GitHub Actions.
+
+## [1.8.0] - 2025-03-26
+
+### Added
+
+- New `movies` module: `trending`, `popular`, `favorited`, `played`, `watched`, `collected` (with `-period`),
+  `anticipated`, `boxoffice`, `updates`, `updated_ids`, `summary`, `aliases`, `releases`, `translations`,
+  `comments`, `lists`, `people`, `ratings`, `related`, `stats`, `studios`, `watching`, `videos`, `refresh`.
+
+### Changed
+
+- `lists` and `comments` accept a Trakt slug as well as a numeric Trakt ID.
+
+## [1.7.0] - 2025-03-16
+
+### Added
+
+- New `countries`, `genres` and `languages` modules: `-t movies|shows` exports the list for movies or shows.
+
+## [1.6.1] - 2025-03-15
+
+### Added
+
+- `pages_limit` in the config file limits how many pages paginated exports fetch.
+
+## [1.6.0] - 2025-03-11
+
+### Added
+
+- New `comments` module: `comment` (get, update or `-delete`), `comments` (post on a movie, show, season, episode
+  or list), `replies`, `item`, `likes`, `like` (`-remove` to unlike), `trending`, `recent` and `updates`.
+- New `certifications` module: `-t movies|shows` exports the certifications.
+
+## [1.5.0] - 2025-02-26
+
+### Added
+
+- New `checkin` module: `checkin -a movie|episode -trakt_id <id> -msg "..."`,
+  `checkin -a show_episode -trakt_id <id> -episode_code 1x5` (or `-episode_abs 6`), and `checkin -a delete`.
+- `users -a settings`: settings of the current user.
+- `people -a refresh`: queue a refresh of a person's data.
+
+## [1.4.2] - 2025-02-21
+
+### Changed
+
+- `help` lists the commands in alphabetical order.
+- `lists` docs updated.
+
+## [1.4.1] - 2025-02-20
+
+### Changed
+
+- Same code as 1.4.0; this is the GitHub release for it.
+
+## [1.4.0] - 2025-02-20
+
+### Added
+
+- New `lists` module: `trending`, `popular`, `list`, `likes`, `like` (`-remove` to unlike), `items` (filter with
+  `-t movie,show`) and `comments`, selected with `-trakt_id <id>`.
+
+## [1.3.1] - 2024-12-07
+
+### Changed
+
+- Internal: error handling cleanup.
+
+## [1.3.0] - 2024-11-12
+
+### Added
+
+- `users -a watched -t movies|shows -u <user>`: watched movies or shows of a user; `-ex noseasons` leaves out the
+  seasons.
+
+## [1.2.0] - 2024-11-07
+
+### Added
+
+- `users -a stats -u <user>`: stats of a user.
+
+## [1.1.0] - 2024-10-29
+
+### Added
+
+- `users -a saved_filters -u <user>`: saved filters of a user (VIP); without VIP it opens the upgrade page in the
+  browser.
+
+### Changed
+
+- **Breaking:** the `lists` command moved to `users -a lists` (`users -a lists -u <user> [-i <list id> -t <type>]`).
+
+## [1.0.10] - 2024-10-14
+
+### Fixed
+
+- `people -a updates` and `people -a updated_ids` ignored `-start_date` and always used the current date.
+- `lists -u <user>` ignored the `-u` flag.
+
+## [1.0.9] - 2024-10-14
+
+### Changed
+
+- Internal: linter cleanup and refactoring.
+
+## [1.0.8] - 2024-10-13
+
+### Changed
+
+- Internal: linter cleanup and refactoring.
+
+## [1.0.7] - 2024-10-06
+
+### Changed
+
+- Internal: linter cleanup and refactoring.
+
+## [1.0.6] - 2024-10-04
+
+### Changed
+
+- Internal: linter cleanup and refactoring of the `people` command.
+
+## [1.0.5] - 2024-10-03
+
+### Changed
+
+- Internal: linter cleanup, console output moved to one printer package, unhandled errors checked.
+
+## [1.0.4] - 2024-09-30
+
+### Fixed
+
+- `-version` printed `dev` for binaries installed with `go install` instead of the module version.
+
+## [1.0.3] - 2024-09-30
+
+### Changed
+
+- Internal: linter cleanup.
+
+## [1.0.2] - 2024-09-29
+
+### Changed
+
+- Internal: linter cleanup.
+
+## [1.0.1] - 2024-09-12
+
+### Added
+
+- Release binaries built and published with GoReleaser.
+
+## [1.0.0] - 2024-09-12
+
+### Added
+
+- First release, with the `calendars`, `collection`, `help`, `history`, `lists`, `people`, `search` and `watchlist`
+  commands exporting Trakt data to JSON.
+
 [Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.17.0...HEAD
 [1.17.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.16.0...v1.17.0
 [1.16.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.15.3...v1.16.0
 [1.15.3]: https://github.com/mfederowicz/trakt-sync/compare/v1.15.2...v1.15.3
+[1.15.2]: https://github.com/mfederowicz/trakt-sync/compare/v1.15.1...v1.15.2
+[1.15.1]: https://github.com/mfederowicz/trakt-sync/compare/v1.15.0...v1.15.1
+[1.15.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.14.0...v1.15.0
+[1.14.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.13.0...v1.14.0
+[1.13.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.12.0...v1.13.0
+[1.12.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.11.0...v1.12.0
+[1.11.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.10.0...v1.11.0
+[1.10.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.9.1...v1.10.0
+[1.9.1]: https://github.com/mfederowicz/trakt-sync/compare/v1.9.0...v1.9.1
+[1.9.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.8.0...v1.9.0
+[1.8.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.7.0...v1.8.0
+[1.7.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.6.1...v1.7.0
+[1.6.1]: https://github.com/mfederowicz/trakt-sync/compare/v1.6.0...v1.6.1
+[1.6.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.5.0...v1.6.0
+[1.5.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.4.2...v1.5.0
+[1.4.2]: https://github.com/mfederowicz/trakt-sync/compare/v1.4.1...v1.4.2
+[1.4.1]: https://github.com/mfederowicz/trakt-sync/compare/v1.4.0...v1.4.1
+[1.4.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.3.1...v1.4.0
+[1.3.1]: https://github.com/mfederowicz/trakt-sync/compare/v1.3.0...v1.3.1
+[1.3.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.2.0...v1.3.0
+[1.2.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.0.10...v1.1.0
+[1.0.10]: https://github.com/mfederowicz/trakt-sync/compare/v1.0.9...v1.0.10
+[1.0.9]: https://github.com/mfederowicz/trakt-sync/compare/v1.0.8...v1.0.9
+[1.0.8]: https://github.com/mfederowicz/trakt-sync/compare/v1.0.7...v1.0.8
+[1.0.7]: https://github.com/mfederowicz/trakt-sync/compare/v1.0.6...v1.0.7
+[1.0.6]: https://github.com/mfederowicz/trakt-sync/compare/v1.0.5...v1.0.6
+[1.0.5]: https://github.com/mfederowicz/trakt-sync/compare/v1.0.4...v1.0.5
+[1.0.4]: https://github.com/mfederowicz/trakt-sync/compare/v1.0.3...v1.0.4
+[1.0.3]: https://github.com/mfederowicz/trakt-sync/compare/v1.0.2...v1.0.3
+[1.0.2]: https://github.com/mfederowicz/trakt-sync/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/mfederowicz/trakt-sync/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/mfederowicz/trakt-sync/releases/tag/v1.0.0
