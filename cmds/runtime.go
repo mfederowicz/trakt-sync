@@ -37,6 +37,7 @@ var Commands = []*Command{
 	SearchCmd,
 	SeasonsCmd,
 	ShowsCmd,
+	SmartListsCmd,
 	SocialRecommendationsCmd,
 	SyncCmd,
 	TeamCmd,

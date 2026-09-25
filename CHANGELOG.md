@@ -40,6 +40,10 @@ schedule.
   it fails with a "limited access" message.
 - `recommendations -a movies|shows` takes `-ignore_watched true|false` and `-watch_window <days>`, like
   `social_recommendations`.
+- New [`smart_lists`](./docs/smart_lists.md) module: `smart_lists -a summary -i <slug>` exports a smart list definition
+  (name, media type, filters) and `smart_lists -a items -i <slug>` the movies or shows it resolves to, with media
+  filters (`-watchnow`, `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`),
+  `-ignore_watched`, `-ignore_watchlisted` and `-ex`.
 
 ### Changed
 
