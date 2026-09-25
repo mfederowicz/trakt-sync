@@ -256,6 +256,43 @@ $ ./trakt-sync users -a update_list -u username -i 123456 -sort_by added -sort_h
 ```console
 $ ./trakt-sync users -a delete_list -u username -i 123456
 ```
+##### Fetch smart lists for selected user:
+Smart lists are saved filters on a source (`trending`, `popular`, `anticipated`, `recommendations`, `discover`, `watchlist`, `library`);
+`smart_lists -a items -i <slug>` returns what a list resolves to.
+```console
+$ ./trakt-sync users -a smart_lists -> export_users_smart_lists.json
+```
+##### Fetch single smart list (slug):
+```console
+$ ./trakt-sync users -a smart_list -i <slug> -> export_users_smart_list_<slug>.json
+```
+##### Create smart list - via -items flag or stdin:
+`name`, `source` and `media_type` (`movies`, `shows`, `media`) are required; `filters` and `privacy` (`public`, `private`, `friends`) are optional.
+Smart lists are VIP Enhanced: a non-VIP account has a limit on how many it can create.
+```json
+{
+  "name": "Popular sci-fi",
+  "source": "popular",
+  "media_type": "movies",
+  "filters": {"genres": ["science-fiction"], "years": [2015, 2026], "ratings": [70, 100], "ignore_watched": true},
+  "privacy": "private"
+}
+```
+```console
+$ ./trakt-sync users -a add_smart_list -items smart_list.json -> users_add_smart_list_results.json
+```
+```console
+$ cat smart_list.json | ./trakt-sync users -a add_smart_list
+```
+##### Update smart list (slug) - via -items flag or stdin:
+Send only the fields to change; the slug stays the same.
+```console
+$ echo '{"privacy":"public"}' | ./trakt-sync users -a update_smart_list -i <slug> -> export_users_update_smart_list_results.json
+```
+##### Delete smart list (slug):
+```console
+$ ./trakt-sync users -a delete_smart_list -i <slug>
+```
 ##### Fetch all users who liked a list (Trakt ID or Trakt slug):
 ```console
 $ ./trakt-sync users -a list_likes -u username -i 123456

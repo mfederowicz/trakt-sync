@@ -66,6 +66,15 @@ var SyncUpNextIntents = []string{"all", "continue", "start", "completed"}
 // WatchNowFilters are the watchnow media filter values from the API contract
 var WatchNowFilters = []string{"favorites", "any", "any_all", "free", "free_all", "subscriptions", "subscriptions_all"}
 
+// SmartListSources are the smart list source values from the API contract
+var SmartListSources = []string{"trending", "popular", "anticipated", "recommendations", "discover", "watchlist", "library"}
+
+// SmartListMediaTypes are the smart list media_type values from the API contract
+var SmartListMediaTypes = []string{"movies", "shows", "media"}
+
+// SmartListPrivacy are the smart list privacy values from the API contract
+var SmartListPrivacy = []string{"public", "private", "friends"}
+
 // hiddenSections are the users/hidden/{section} values from the API contract
 var hiddenSections = []string{"calendar", "progress_watched", "progress_collected", "recommendations", "comments", "dropped"}
 
@@ -977,11 +986,13 @@ func getOutputForModuleUsers(options *str.Options) string {
 			options.Module,
 			options.Action,
 			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
-	case consts.Stats, consts.Collaborations:
+	case consts.Stats, consts.Collaborations, consts.SmartLists:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
 			options.Action)
+	case consts.SmartList:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.ID)
 	case consts.List:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
@@ -1017,9 +1028,9 @@ func getOutputForModuleUsers(options *str.Options) string {
 			options.Module,
 			options.Action)
 	case consts.AddList, consts.ReorderLists, consts.AddListItems, consts.RemoveListItems, consts.ReorderListItems,
-		consts.AddHiddenItems, consts.RemoveHiddenItems:
+		consts.AddHiddenItems, consts.RemoveHiddenItems, consts.AddSmartList:
 		options.Output = fmt.Sprintf(consts.DefaultResultsFormat, options.Module, options.Action)
-	case consts.UpdateList, consts.Watching:
+	case consts.UpdateList, consts.Watching, consts.UpdateSmartList:
 		options.Output = fmt.Sprintf(consts.DefaultExportResultsFormat, options.Module, options.Action)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)

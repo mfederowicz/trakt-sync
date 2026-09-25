@@ -24,6 +24,8 @@ schedule.
   `younify -a refresh -service_id <id> [-all_data]` (queue an incremental or full re-sync) and
   `younify -a disconnect -service_id <id>`. Trakt does not open younify to API apps yet: `connections` answers
   401 (the developer portal too), which the CLI reports as `younify is not open to API apps yet`.
+- `users -a smart_lists|smart_list|add_smart_list|update_smart_list|delete_smart_list`: list, get, create, update and
+  delete your smart lists. Create and update read the smart list JSON from `-items <file>` or stdin, like `add_list`.
 
 ### Changed
 
