@@ -29,6 +29,9 @@ schedule.
 - `sync -a get_up_next_nitro [-intent all|continue|start|completed] [-watchnow <filter>]`: up next with media filters
   (`-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`, `-start_date`,
   `-end_date`). The global `-genres`, `-years`, `-countries` and `-runtimes` flags were accepted before but not used.
+- New [`team`](./docs/team.md) module: `team -a members [-ex full|images]` exports the Trakt team members to
+  `export_team_members.json`. User profiles in JSON exports now also include `deleted` and `director` when the API
+  sends them.
 
 ### Changed
 

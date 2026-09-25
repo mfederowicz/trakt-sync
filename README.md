@@ -69,6 +69,7 @@ A value given on the command line (for example `-t shows`) wins over the same op
 - [`seasons`](./docs/seasons.md) - Returns data about seasons: summary, season, episodes, translations, comments etc...
 - [`shows`](./docs/shows.md) - Returns data about movies: trending, popular, list, likes, like, items, comments etc...
 - [`sync`](./docs/sync.md) - Sync data useful for mediacenters: activities, playbacks, collections, ratings, watchlists, favorites.
+- [`team`](./docs/team.md) - Returns Trakt team members.
 - [`users`](./docs/users.md) - Returns all data for a user.
 - [`watchlist`](./docs/watchlist.md) - Returns all items in a user's watchlist filtered by type.
 

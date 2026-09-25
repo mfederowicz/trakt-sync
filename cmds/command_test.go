@@ -99,3 +99,13 @@ func TestUsersWatchedType(t *testing.T) {
 		})
 	}
 }
+
+// TestAvflagsHasEveryCommand checks that ValidFlags accepts every module name;
+// a module missing from Avflags fails with "invalid flags" before its action runs.
+func TestAvflagsHasEveryCommand(t *testing.T) {
+	for _, cmd := range Commands {
+		if !Avflags[cmd.Name] {
+			t.Errorf("command %q is missing from Avflags", cmd.Name)
+		}
+	}
+}
