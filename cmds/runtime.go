@@ -38,6 +38,7 @@ var Commands = []*Command{
 	SeasonsCmd,
 	ShowsCmd,
 	SyncCmd,
+	TeamCmd,
 	UsersCmd,
 	WatchlistCmd,
 }

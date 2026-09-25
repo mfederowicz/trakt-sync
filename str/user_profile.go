@@ -5,9 +5,11 @@ package str
 type UserProfile struct {
 	Username      *string    `json:"username,omitempty"`
 	Private       *bool      `json:"private,omitempty"`
+	Deleted       *bool      `json:"deleted,omitempty"`
 	Name          *string    `json:"name,omitempty"`
 	Vip           *bool      `json:"vip,omitempty"`
 	VipEp         *bool      `json:"vip_ep,omitempty"`
+	Director      *bool      `json:"director,omitempty"`
 	IDs           *IDs       `json:"ids,omitempty"`
 	JoinedAt      *Timestamp `json:"joined_at,omitempty"`
 	HiddenAt      *Timestamp `json:"hidden_at,omitempty"`

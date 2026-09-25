@@ -137,6 +137,7 @@ var Avflags = map[string]bool{
 	"stop":               true,
 	"sync":               true,
 	"t":                  true,
+	"team":               true,
 	"trakt_id":           true,
 	"translations":       true,
 	"u":                  true,
@@ -375,6 +376,7 @@ func setOptionsDependsOnModule(module string, options str.Options) str.Options {
 		consts.Collection:      setOptionsDependsOnModuleDefault(options),
 		consts.History:         setOptionsDependsOnModuleDefault(options),
 		consts.Sync:            setOptionsDependsOnModuleSync(options),
+		consts.Team:            setOptionsDependsOnModuleTeam(options),
 	}
 
 	if opt, found := allModules[module]; found {
@@ -470,6 +472,11 @@ func setOptionsDependsOnModuleNetworks(options str.Options) str.Options {
 
 func setOptionsDependsOnModuleMedia(options str.Options) str.Options {
 	options.Action = *_mediaAction
+	return options
+}
+
+func setOptionsDependsOnModuleTeam(options str.Options) str.Options {
+	options.Action = *_teamAction
 	return options
 }
 

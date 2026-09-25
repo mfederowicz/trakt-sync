@@ -66,6 +66,10 @@ func TestGetOutputForModuleSyncProgress(t *testing.T) {
 	assert.Equal(t, "export_sync_watched_progress.json", GetOutputForModule(&str.Options{Module: "sync", Action: "get_watched_progress"}))
 }
 
+func TestGetOutputForModuleTeamMembers(t *testing.T) {
+	assert.Equal(t, "export_team_members.json", GetOutputForModule(&str.Options{Module: "team", Action: "members"}))
+}
+
 func TestGetOutputForModuleMoviesHotStreaming(t *testing.T) {
 	assert.Equal(t, "export_movies_hot.json", GetOutputForModule(&str.Options{Module: "movies", Action: "hot"}))
 	assert.Equal(t, "export_movies_streaming_weekly.json", GetOutputForModule(&str.Options{Module: "movies", Action: "streaming", Period: DefaultConfig().MoviesPeriod}))
