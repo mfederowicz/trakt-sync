@@ -61,6 +61,7 @@ func TestUsersWriteHandlersUseOutput(t *testing.T) {
 			testSetup := setup(t)
 			defer testSetup.Teardown()
 			for path, body := range tt.routes {
+				path, body := path, body // go 1.21 in go.mod: loop variables are shared between iterations
 				testSetup.Mux.HandleFunc(path, func(w http.ResponseWriter, _ *http.Request) {
 					_, _ = w.Write([]byte(body))
 				})

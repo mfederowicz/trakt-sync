@@ -10,6 +10,7 @@ const (
 	DefaultPerPage        = 100
 	DefaultProgress       = 0.00
 	EmptyBuildInfoLen     = 0
+	ErrorExitCode         = 1
 	FirstArgElement       = 0
 	FirstEpisodeNumber    = 1
 	ImdbVotesRangeMax     = 3000000
