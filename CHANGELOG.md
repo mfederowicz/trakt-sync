@@ -38,6 +38,8 @@ schedule.
 
 ### Fixed
 
+- `sync` and `users` ignored `-o` and always wrote to their generated file name (e.g.
+  `export_sync_history_movies.json`); `-o` now sets the output file.
 - `sync -a playback` without `-t` returned only movies (the default type), although the docs describe it as all
   playback. It now returns movies and episodes; `-t movies|episodes` still narrows it.
 

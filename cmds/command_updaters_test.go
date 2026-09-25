@@ -4,7 +4,6 @@ package cmds
 import (
 	"flag"
 	"net/http"
-	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -109,12 +108,6 @@ func TestModuleFlagUpdaters(t *testing.T) {
 		{name: "users history default window", cmd: UsersCmd, args: []string{"-a", "history", "-u", "sean"}, path: func(string) string { return "/users/sean/history/movies" }},
 	}
 
-	// sync and users ignore -o (their updaters recompute Output), so run in a temp dir
-	wd, err := os.Getwd()
-	assert.NoError(t, err)
-	assert.NoError(t, os.Chdir(t.TempDir()))
-	t.Cleanup(func() { _ = os.Chdir(wd) })
-
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			resetAllFlags()
@@ -137,6 +130,42 @@ func TestModuleFlagUpdaters(t *testing.T) {
 				// history keeps its bounded default window instead of the whole history
 				assert.Equal(t, window(tz), gotStartAt)
 			}
+		})
+	}
+}
+
+// TestOutputFlag checks that -o sets the output file for modules whose updaters build their own file name.
+func TestOutputFlag(t *testing.T) {
+	fs := afero.NewMemMapFs()
+	assert.NoError(t, fs.MkdirAll("/out/", consts.X755))
+	assert.NoError(t, afero.WriteFile(fs, "/out/token.json", []byte("{}"), consts.X644))
+	assert.NoError(t, afero.WriteFile(fs, "/out/user_settings.json", []byte(`{"user":{"username":"sean"}}`), consts.X644))
+	config := cfg.DefaultConfig()
+	config.ClientID, config.ClientSecret = "a", "b"
+	config.TokenPath, config.SettingsPath = "/out/token.json", "/out/user_settings.json"
+
+	tests := []struct {
+		name string
+		cmd  *Command
+		args []string
+	}{
+		{name: "sync", cmd: SyncCmd, args: []string{"-a", "get_history", "-t", "movies"}},
+		{name: "users", cmd: UsersCmd, args: []string{"-a", "history", "-u", "sean"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			resetAllFlags()
+			t.Cleanup(resetAllFlags)
+
+			setup := internal.Setup()
+			defer setup.Teardown()
+			setup.Mux.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
+				_, _ = w.Write([]byte(`[]`))
+			})
+
+			output := filepath.Join(t.TempDir(), "out.json")
+			_ = tt.cmd.Exec(fs, setup.Client, config, append([]string{"-o", output}, tt.args...))
+			assert.Equal(t, output, tt.cmd.Options.Output)
 		})
 	}
 }

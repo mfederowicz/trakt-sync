@@ -949,7 +949,9 @@ func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.O
 	if options.Action == consts.Watched && options.Type == "" {
 		options.Type = consts.Movies
 	}
-	options.Output = cfg.GetOutputForModule(options)
+	if len(*_output) == consts.ZeroValue {
+		options.Output = cfg.GetOutputForModule(options)
+	}
 
 	return options
 }
@@ -964,7 +966,9 @@ func UpdateOptionsWithCommandSyncFlags(c *Command, options *str.Options) *str.Op
 	if len(*_syncAction) > consts.ZeroValue {
 		options.Action = *_syncAction
 	}
-	options.Output = cfg.GetOutputForModule(options)
+	if len(*_output) == consts.ZeroValue {
+		options.Output = cfg.GetOutputForModule(options)
+	}
 
 	options.FullHour = true
 	if len(*_syncStartAt) > consts.ZeroValue {
