@@ -1091,6 +1091,14 @@ func UpdateOptionsWithCommandRecommendationsFlags(options *str.Options) *str.Opt
 		options.IgnoreWatchlisted = *_recommendationsIgnoreWatchlisted
 	}
 
+	if len(*_recommendationsIgnoreWatched) > consts.ZeroValue {
+		options.IgnoreWatched = *_recommendationsIgnoreWatched
+	}
+
+	if *_recommendationsWatchWindow > consts.ZeroValue {
+		options.WatchWindow = *_recommendationsWatchWindow
+	}
+
 	return options
 }
 

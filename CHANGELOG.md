@@ -38,6 +38,8 @@ schedule.
 - New [`watchnow`](./docs/watchnow.md) module: `watchnow -a sources [-country us]` exports the watch now sources
   (streaming providers) supported by Trakt, for all countries or one. Trakt marks it limited access; without access
   it fails with a "limited access" message.
+- `recommendations -a movies|shows` takes `-ignore_watched true|false` and `-watch_window <days>`, like
+  `social_recommendations`.
 
 ### Changed
 
