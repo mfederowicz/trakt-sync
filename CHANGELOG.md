@@ -38,6 +38,10 @@ schedule.
 
 ### Fixed
 
+- `checkin -a movie -trakt_id <id>` and `checkin -a show_episode -trakt_id <id>` looked the item up without its ID
+  (`GET /movies/`, `GET /shows/`) since 1.8.0, so the checkin could not work; they now use `-trakt_id`.
+- `checkin -a show_episode`: an active checkin (409) without an expiry time in the response now reports the
+  existing checkin instead of crashing.
 - `sync` and `users` ignored `-o` and always wrote to their generated file name (e.g.
   `export_sync_history_movies.json`); `-o` now sets the output file.
 - `sync -a playback` without `-t` returned only movies (the default type), although the docs describe it as all

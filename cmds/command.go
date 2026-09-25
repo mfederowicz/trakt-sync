@@ -563,6 +563,10 @@ func setOptionsDependsOnModuleLists(options str.Options) str.Options {
 func setOptionsDependsOnModuleCheckin(options str.Options) str.Options {
 	options.Action = *_checkinAction
 	options.TraktID = *_checkinTraktID
+	// movie and show_episode look the item up by InternalID
+	if *_checkinTraktID > consts.ZeroValue {
+		options.InternalID = strconv.Itoa(*_checkinTraktID)
+	}
 	return options
 }
 
