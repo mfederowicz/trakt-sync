@@ -19,6 +19,14 @@ schedule.
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.19.0] - 2026-09-25
+
+### Added
+
 - New `younify` module for streaming service connections: `younify -a connections` (services and your connection
   status), `younify -a connect -service_id <id> [-return_url <url>]` (prints the web auth URL to link a service),
   `younify -a refresh -service_id <id> [-all_data]` (queue an incremental or full re-sync) and
@@ -32,8 +40,6 @@ schedule.
   apps yet`.
 - `users -a watchlist|favorites -sort <rank|added|title|released|runtime|popularity|percentage|votes>` uses the
   contract's `/{type}/{sort}` routes (with `-t all`, `movies` or `shows`); without `-sort` nothing changes.
-- `users -a lists -i <id> -t movie|show|movie,show|movie,show,season,episode`: the singular list item types of the
-  contract are documented (they already worked).
 - `users -a update_settings` (profile and browsing settings from `-items <file>` or stdin), `users -a add_saved_filters`
   and `users -a delete_saved_filter -i <id>` (both VIP only).
 - `users -a data_syncs [-t younify|plex|import]`, `users -a data_sync|data_sync_paused|data_sync_skipped -i <id>` and
@@ -47,6 +53,9 @@ schedule.
   apps yet`.
 
 ### Changed
+
+- `docs/users.md` documents the contract's singular list item types for `users -a lists -i <id> -t`: `movie`, `show`,
+  `movie,show`, `movie,show,season,episode` (the action passes `-t` through unchanged).
 
 ### Fixed
 
@@ -546,7 +555,8 @@ schedule.
 - First release, with the `calendars`, `collection`, `help`, `history`, `lists`, `people`, `search` and `watchlist`
   commands exporting Trakt data to JSON.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.18.0...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.19.0...HEAD
+[1.19.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.18.0...v1.19.0
 [1.18.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.17.0...v1.18.0
 [1.17.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.16.0...v1.17.0
 [1.16.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.15.3...v1.16.0
