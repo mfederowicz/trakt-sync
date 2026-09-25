@@ -29,7 +29,7 @@ func TestCommentsServiceGetCommentReactions(t *testing.T) {
 	got, _, err := setup.Client.Comments.GetCommentReactions(context.Background(), test.Ptr(417), &uri.ListOptions{Page: 2})
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, []*str.CommentReaction{
-		{Reaction: &str.Reaction{Type: str.String("love")}, User: &str.UserProfile{Userame: str.String("sean")}},
+		{Reaction: &str.Reaction{Type: str.String("love")}, User: &str.UserProfile{Username: str.String("sean")}},
 	}, got)
 }
 
