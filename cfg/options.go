@@ -746,6 +746,10 @@ func getOutputForModuleSync(options *str.Options) string {
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, consts.MinimalCollection, options.Type)
 	case consts.LastActivities, consts.Playback, consts.AddToCollection, consts.RemoveFromCollection:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
+	case consts.AddToHistory, consts.RemoveFromHistory, consts.AddToRatings, consts.RemoveFromRatings,
+		consts.AddToWatchlist, consts.RemoveFromWatchlist, consts.ReorderWatchlist,
+		consts.AddToFavorites, consts.RemoveFromFavorites, consts.ReorderFavorites:
+		options.Output = fmt.Sprintf(consts.DefaultResultsFormat, options.Module, options.Action)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
 	}
@@ -953,7 +957,7 @@ func getOutputForModuleUsers(options *str.Options) string {
 			options.Module,
 			fmt.Sprintf(consts.StringString, "list_trakt_", options.ID),
 		)
-	case consts.Lists, consts.RemoveListItems:
+	case consts.Lists:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
@@ -981,6 +985,11 @@ func getOutputForModuleUsers(options *str.Options) string {
 			consts.DefaultOutputFormat2,
 			options.Module,
 			options.Action)
+	case consts.AddList, consts.ReorderLists, consts.AddListItems, consts.RemoveListItems, consts.ReorderListItems,
+		consts.AddHiddenItems, consts.RemoveHiddenItems:
+		options.Output = fmt.Sprintf(consts.DefaultResultsFormat, options.Module, options.Action)
+	case consts.UpdateList, consts.Watching:
+		options.Output = fmt.Sprintf(consts.DefaultExportResultsFormat, options.Module, options.Action)
 	default:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Type)
 	}

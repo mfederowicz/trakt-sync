@@ -33,7 +33,6 @@ func (m UsersWatchingHandler) Handle(options *str.Options, client *internal.Clie
 	if err != nil {
 		return fmt.Errorf("watching error:%w", err)
 	}
-	options.Output = "export_users_watching_results.json"
 	printer.Println("write result to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(result, "", "  ")
 	writer.WriteJSON(options, jsonData)

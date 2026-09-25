@@ -26,7 +26,6 @@ func (m SyncReorderFavoritesHandler) Handle(options *str.Options, client *intern
 	if err != nil {
 		return fmt.Errorf("reorder favorites error:%w", err)
 	}
-	options.Output = "sync_reorder_favorites_results.json"
 	printer.Println("write result to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(result, "", "  ")
 	writer.WriteJSON(options, jsonData)

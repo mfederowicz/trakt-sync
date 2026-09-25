@@ -169,6 +169,7 @@ const (
 	UpdatedIDs           = "updated_ids"
 	UpdateWatchlist      = "update_watchlist"
 	UpdateFavorites      = "update_favorites"
+	UpdateList           = "update_list"
 	Updates              = "updates"
 	Users                = "users"
 	User                 = "user"

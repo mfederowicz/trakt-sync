@@ -27,8 +27,6 @@ func (m SyncRemoveFromWatchlistHandler) Handle(options *str.Options, client *int
 		return fmt.Errorf("clean watchlist error:%w", err)
 	}
 
-	options.Output = "sync_remove_from_watchlist_results.json"
-
 	printer.Println("write cleanup result to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(result, "", "  ")
 	writer.WriteJSON(options, jsonData)

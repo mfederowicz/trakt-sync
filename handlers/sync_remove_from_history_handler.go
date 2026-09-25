@@ -28,8 +28,6 @@ func (m SyncRemoveFromHistoryHandler) Handle(options *str.Options, client *inter
 		return fmt.Errorf("clean history error:%w", err)
 	}
 
-	options.Output = "sync_remove_from_history_results.json"
-
 	printer.Println("write cleanup result to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(result, "", "  ")
 	writer.WriteJSON(options, jsonData)

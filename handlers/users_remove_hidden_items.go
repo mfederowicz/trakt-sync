@@ -25,8 +25,6 @@ func (u UsersRemoveHiddenItemsHandler) Handle(options *str.Options, client *inte
 		return fmt.Errorf("remove hidden items error:%w", err)
 	}
 
-	options.Output = "users_remove_hidden_items_results.json"
-
 	print("write result to:" + options.Output)
 	jsonDataResult, _ := json.MarshalIndent(addResult, "", "  ")
 	writer.WriteJSON(options, jsonDataResult)

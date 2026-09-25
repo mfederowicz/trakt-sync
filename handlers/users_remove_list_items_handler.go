@@ -32,7 +32,6 @@ func (u UsersRemoveListItemsHandler) Handle(options *str.Options, client *intern
 	if err != nil {
 		return fmt.Errorf("remove list items error:%w", err)
 	}
-	options.Output = "users_remove_list_items_results.json"
 	print("write result to:" + options.Output)
 	jsonDataResult, _ := json.MarshalIndent(removeResult, "", "  ")
 	writer.WriteJSON(options, jsonDataResult)

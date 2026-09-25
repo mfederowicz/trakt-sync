@@ -50,7 +50,6 @@ func (m UsersUpdateListHandler) Handle(options *str.Options, client *internal.Cl
 	if err != nil {
 		return fmt.Errorf("update personal list error:%w", err)
 	}
-	options.Output = "export_users_update_list_results.json"
 	print("write data to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(result, "", "  ")
 	writer.WriteJSON(options, jsonData)

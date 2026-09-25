@@ -25,7 +25,6 @@ func (m UsersReorderListItemsHandler) Handle(options *str.Options, client *inter
 	if err != nil {
 		return fmt.Errorf("reorder list items error:%w", err)
 	}
-	options.Output = "users_reorder_list_items_results.json"
 	printer.Println("write result to:" + options.Output)
 	jsonData, _ := json.MarshalIndent(result, "", "  ")
 	writer.WriteJSON(options, jsonData)

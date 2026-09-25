@@ -31,8 +31,6 @@ func (m SyncAddToWatchlistHandler) Handle(options *str.Options, client *internal
 		return fmt.Errorf("add to wtachlist error:%w", err)
 	}
 
-	options.Output = "sync_add_to_watchlist_results.json"
-
 	print("write result to:" + options.Output)
 	jsonDataResult, _ := json.MarshalIndent(addResult, "", "  ")
 	writer.WriteJSON(options, jsonDataResult)
