@@ -970,15 +970,20 @@ func UpdateOptionsWithCommandSyncFlags(c *Command, options *str.Options) *str.Op
 		options.Output = cfg.GetOutputForModule(options)
 	}
 
+	startAt, endAt := *_syncStartAt, *_syncEndAt
+	if c.Name == consts.Users {
+		startAt, endAt = *_usersStartAt, *_usersEndAt
+	}
+
 	options.FullHour = true
-	if len(*_syncStartAt) > consts.ZeroValue {
-		options.StartDate = c.common.ConvertDateString(*_syncStartAt, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
+	if len(startAt) > consts.ZeroValue {
+		options.StartDate = c.common.ConvertDateString(startAt, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
 	} else {
 		options.StartDate = c.common.DateLastDays(consts.DefaultStartAtDays, options.Timezone, options.FullHour)
 	}
 
-	if len(*_syncEndAt) > consts.ZeroValue {
-		options.EndDate = c.common.ConvertDateString(*_syncEndAt, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
+	if len(endAt) > consts.ZeroValue {
+		options.EndDate = c.common.ConvertDateString(endAt, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
 	} else {
 		options.EndDate = c.common.CurrentDateString(options.Timezone, options.FullHour)
 	}
