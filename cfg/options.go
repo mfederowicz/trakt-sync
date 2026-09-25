@@ -205,14 +205,6 @@ var ModuleActionConfig = map[string]OptionsConfig{
 			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
 			"watched", "collected"},
 	},
-	"sync:remove_watchlist": {
-		Type:    []string{"movies", "shows", "seasons", "episodes", "all"},
-		SortHow: []string{"asc", "desc"},
-		SortBy: []string{"rank", "added", "title", "released", "runtime", "popularity",
-			"random", "percentage", "imdb_rating", "tmdb_rating", "rt_tomatometer",
-			"rt_audience", "metascore", "votes", "imdb_votes", "tmdb_votes", "my_rating",
-			"watched", "collected"},
-	},
 	"sync:get_favorites": {
 		Type:    []string{"movies", "shows", "seasons", "episodes", "all"},
 		Rating:  []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},

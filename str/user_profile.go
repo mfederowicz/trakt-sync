@@ -3,7 +3,7 @@ package str
 
 // UserProfile represents JSON user profile object
 type UserProfile struct {
-	Userame       *string    `json:"username,omitempty"`
+	Username      *string    `json:"username,omitempty"`
 	Private       *bool      `json:"private,omitempty"`
 	Name          *string    `json:"name,omitempty"`
 	Vip           *bool      `json:"vip,omitempty"`

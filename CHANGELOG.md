@@ -32,6 +32,8 @@ schedule.
 
 ### Changed
 
+- Go API: the `str.UserProfile.Userame` field is renamed to `Username` (JSON output unchanged). Also removed an unused
+  `sync:remove_watchlist` config entry.
 - A flag the module does not know (e.g. a typo) now stops the command with `<module>: flag provided but not
   defined: -x` after the help. Before, the rest of the flags were skipped and the command ran anyway.
 - `CHANGELOG.md` now covers every release back to 1.0.0.
