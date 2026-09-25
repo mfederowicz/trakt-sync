@@ -19,11 +19,15 @@ jobs:
         uses: actions/setup-go@v7
         with:
           go-version: stable
+      - name: Build release notes
+        run: |
+          make release-notes VERSION="${GITHUB_REF_NAME#v}" > "$RUNNER_TEMP/notes.md"
+          grep -q '^### ' "$RUNNER_TEMP/notes.md" || { echo "no CHANGELOG.md section for $GITHUB_REF_NAME"; exit 1; }
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v7
         with:
           distribution: goreleaser
           version: '~> v2'
-          args: release --clean
+          args: release --clean --release-notes=${{ runner.temp }}/notes.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

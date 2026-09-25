@@ -33,6 +33,9 @@ schedule. Releases up to v1.15.2 are listed on
 
 ### Changed
 
+- GitHub release notes now show the version's `CHANGELOG.md` section (Added / Changed / Fixed) instead of a list of
+  commits.
+
 ### Fixed
 
 - `sync -a playback` without `-t` returned only movies (the default type), although the docs describe it as all

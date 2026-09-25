@@ -31,3 +31,7 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
+
+release:
+  footer: |
+    **Full Changelog**: https://github.com/mfederowicz/trakt-sync/compare/{{ .PreviousTag }}...{{ .Tag }}

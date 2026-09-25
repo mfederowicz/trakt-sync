@@ -28,3 +28,6 @@ cleanup:
 
 clean:
 	@rm -rf *.json
+
+release-notes:
+	@awk -v ver="$(VERSION)" -f .github/release-notes.awk CHANGELOG.md
