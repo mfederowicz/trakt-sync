@@ -40,6 +40,9 @@ schedule.
   `users -a undo_data_sync -i <id>`: the syncs your connected apps ran, their paused and skipped items (with the keys
   specific to the source kept), and undoing a sync. Trakt answers `data_syncs` with 401 for API apps for now; the CLI
   reports it as `this route is not open to API apps yet`.
+- Plex settings in `users`: `plex_settings`, `update_plex_settings` (JSON from `-items <file>` or stdin),
+  `plex_connect [-return_url <url>]`, `plex_disconnect`, `plex_servers`, `plex_server -i <server id>` and
+  `plex_sync [-i <server id>] [-all_data]`. Plex's own errors (e.g. `bad_auth`) are shown with Trakt's guidance.
 
 ### Changed
 

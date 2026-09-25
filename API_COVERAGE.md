@@ -39,10 +39,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`social_recommendations`](#social_recommendations) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
-| [`users`](#users) | 85 | 0 | 7 | 11 | 1 | 104 |
+| [`users`](#users) | 92 | 0 | 0 | 11 | 1 | 104 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **305** | **0** | **7** | **20** | **3** | **335** |
+| **Total** | **312** | **0** | **0** | **20** | **3** | **335** |
 
 ## calendars
 
@@ -412,13 +412,13 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ⚠️ | PUT | `/users/set_cover` | Update cover image |  |
 | ✅ | GET | `/users/settings` | Retrieve settings | `UsersService.RetrieveSettings` |
 | ✅ | PUT | `/users/settings` | Update settings | `UsersService.UpdateSettings` |
-| ⬜ | GET | `/users/settings/plex/` | Get Plex settings |  |
-| ⬜ | PUT | `/users/settings/plex/` | Update Plex settings |  |
-| ⬜ | POST | `/users/settings/plex/connect` | Connect Plex |  |
-| ⬜ | DELETE | `/users/settings/plex/connect` | Disconnect Plex |  |
-| ⬜ | GET | `/users/settings/plex/servers` | Get Plex servers |  |
-| ⬜ | GET | `/users/settings/plex/servers/{server_id}` | Get Plex server accounts and libraries |  |
-| ⬜ | POST | `/users/settings/plex/sync` | Sync Plex now |  |
+| ✅ | GET | `/users/settings/plex/` | Get Plex settings | `UsersService.GetPlexSettings` |
+| ✅ | PUT | `/users/settings/plex/` | Update Plex settings | `UsersService.UpdatePlexSettings` |
+| ✅ | POST | `/users/settings/plex/connect` | Connect Plex | `UsersService.ConnectPlex` |
+| ✅ | DELETE | `/users/settings/plex/connect` | Disconnect Plex | `UsersService.DisconnectPlex` |
+| ✅ | GET | `/users/settings/plex/servers` | Get Plex servers | `UsersService.GetPlexServers` |
+| ✅ | GET | `/users/settings/plex/servers/{server_id}` | Get Plex server accounts and libraries | `UsersService.GetPlexServerAccounts` |
+| ✅ | POST | `/users/settings/plex/sync` | Sync Plex now | `UsersService.SyncPlex` |
 | ⚠️ | GET | `/users/syncs/` | Get data syncs | `UsersService.GetDataSyncs` |
 | ⚠️ | GET | `/users/syncs/{id}` | Get a data sync | `UsersService.GetDataSync` |
 | ⚠️ | DELETE | `/users/syncs/{id}` | Undo a data sync | `UsersService.UndoDataSync` |

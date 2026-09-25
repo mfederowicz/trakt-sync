@@ -770,3 +770,32 @@ Reverses every item the sync imported (history, ratings, paused, watchlist, coll
 ```console
 $ ./trakt-sync users -a undo_data_sync -i 157
 ```
+##### Plex settings
+Connection status, real-time scrobbler webhook, sync selection and toggles.
+```console
+$ ./trakt-sync users -a plex_settings -> export_users_plex_settings.json
+```
+Update toggles, selection or home users - via -items flag or stdin (send only what changes; `trigger_sync` also queues a sync):
+```console
+$ echo '{"sync":{"toggles":{"movie":{"watched":true}}}}' | ./trakt-sync users -a update_plex_settings
+```
+##### Connect or disconnect Plex
+`plex_connect` prints a Plex web auth URL to open; `-return_url` must be `trakt://...`, `http(s)://localhost` or `https://*.trakt.tv` (default `https://trakt.tv`).
+```console
+$ ./trakt-sync users -a plex_connect -> export_users_plex_connect_results.json
+```
+```console
+$ ./trakt-sync users -a plex_disconnect
+```
+##### Plex servers and their libraries
+```console
+$ ./trakt-sync users -a plex_servers -> export_users_plex_servers.json
+```
+```console
+$ ./trakt-sync users -a plex_server -i <server id> -> export_users_plex_server_<server id>.json
+```
+##### Sync Plex now
+Without `-i` every selected server is synced; `-all_data` re-pulls the full history.
+```console
+$ ./trakt-sync users -a plex_sync -i <server id> -all_data
+```

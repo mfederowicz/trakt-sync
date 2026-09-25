@@ -1015,8 +1015,12 @@ func getOutputForModuleUsers(options *str.Options) string {
 		if len(options.Type) > consts.ZeroValue {
 			options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.Type)
 		}
-	case consts.DataSync, consts.DataSyncPaused, consts.DataSyncSkipped:
+	case consts.DataSync, consts.DataSyncPaused, consts.DataSyncSkipped, consts.PlexServer:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.ID)
+	case consts.PlexSettings, consts.PlexServers:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
+	case consts.PlexConnect:
+		options.Output = fmt.Sprintf(consts.DefaultExportResultsFormat, options.Module, options.Action)
 	case consts.Activities:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.Type)
 	case consts.MonthInReview:

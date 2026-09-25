@@ -11,8 +11,10 @@ import (
 
 // InvalidUserError occurs when trakt.tv returns 401 error
 type InvalidUserError struct {
-	Response *http.Response
-	Message  string `json:"message"`
+	Response  *http.Response
+	Message   string `json:"message"`
+	ErrorCode string `json:"error_code,omitempty"` // set by Plex routes, e.g. bad_auth
+	Guidance  string `json:"guidance,omitempty"`
 }
 
 func (r *InvalidUserError) Error() string {
