@@ -32,6 +32,8 @@ schedule.
 
 ### Changed
 
+- trakt-sync now exits with status 1 when a command fails (API error, unknown command or flag, invalid
+  config); before it always exited with 0.
 - Go API: the `str.UserProfile.Userame` field is renamed to `Username` (JSON output unchanged). Also removed an unused
   `sync:remove_watchlist` config entry.
 - A flag the module does not know (e.g. a typo) now stops the command with `<module>: flag provided but not
@@ -42,6 +44,8 @@ schedule.
 
 ### Fixed
 
+- `users -a add_list` treated a created list (201) as an error and did not write its result file;
+  `sync -a remove_playback` reported a successful removal (204) as an error.
 - `-o` was ignored by the `sync` and `users` actions that write a result file (`add_*`, `remove_*`, `reorder_*`,
   `users -a update_list`, `users -a add_list`, `users -a watching`, ...); it now sets that file. Without `-o` the file
   names are unchanged.

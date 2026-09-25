@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -30,7 +31,7 @@ func (u UsersAddListHandler) Handle(options *str.Options, client *internal.Clien
 	}
 
 	if resp.StatusCode == http.StatusCreated {
-		return fmt.Errorf("new personal list created for:%s", options.UserName)
+		printer.Printf("new personal list created for:%s\n", options.UserName)
 	}
 
 	print("write result to:" + options.Output)

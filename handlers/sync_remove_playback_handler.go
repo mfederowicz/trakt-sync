@@ -42,7 +42,7 @@ func (SyncRemovePlaybackHandler) syncRemovePlaybackItem(client *internal.Client,
 	}
 
 	if resp.StatusCode == http.StatusNoContent {
-		return nil, fmt.Errorf("result: success, remove playback item:%d", options.PlaybackID)
+		printer.Printf("result: success, remove playback item:%d\n", options.PlaybackID)
 	}
 
 	return nil, nil

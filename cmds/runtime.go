@@ -3,6 +3,7 @@ package cmds
 
 import (
 	"flag"
+	"fmt"
 	"strings"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
@@ -47,15 +48,16 @@ const (
 	NotFound = 0
 )
 
-func runFoundedModule(cmd *Command, fs afero.Fs, client *internal.Client, config *cfg.Config, args []string) {
+func runFoundedModule(cmd *Command, fs afero.Fs, client *internal.Client, config *cfg.Config, args []string) error {
 	err := cmd.Exec(fs, client, config, args)
 	if err != nil {
 		printer.Println(err)
 	}
+	return err
 }
 
-// ModulesRuntime core function for process commands
-func ModulesRuntime(args []string, fs afero.Fs, config *cfg.Config, client *internal.Client) {
+// ModulesRuntime core function for process commands; the returned error is already printed
+func ModulesRuntime(args []string, fs afero.Fs, config *cfg.Config, client *internal.Client) error {
 	var found []*Command
 	sub, args := args[NotFound], args[FoundOne:]
 find:
@@ -71,12 +73,14 @@ find:
 
 	switch cnt := len(found); cnt {
 	case FoundOne:
-		runFoundedModule(found[0], fs, client, config, args)
+		return runFoundedModule(found[0], fs, client, config, args)
 	case NotFound:
 		printer.Fprintf(stdout, "error: unknown command %q\n\n", sub)
 		flag.Usage()
+		return fmt.Errorf("unknown command %q", sub)
 	default:
 		printer.Fprintf(stdout, "error: non-unique command prefix %q (matched %d commands)\n\n", sub, cnt)
 		flag.Usage()
+		return fmt.Errorf("non-unique command prefix %q", sub)
 	}
 }

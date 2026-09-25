@@ -3,6 +3,7 @@ package main
 
 import (
 	"flag"
+	"os"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/cli"
@@ -34,13 +35,13 @@ func main() {
 	config, err := cfg.InitConfig(fs)
 	if err != nil {
 		printer.Printf("Error: %v\n", err)
-		return
+		os.Exit(consts.ErrorExitCode)
 	}
 	client := internal.NewClient(nil)
 	options, err := cfg.OptionsFromConfig(fs, config)
 	if err != nil {
 		printer.Printf("Error: %v\n", err)
-		return
+		os.Exit(consts.ErrorExitCode)
 	}
 
 	args, noflags := handleArgs()
@@ -50,7 +51,10 @@ func main() {
 
 	client.UpdateHeaders(options.Headers)
 	cli.HandleToken(fs, config, client, options)
-	cmds.ModulesRuntime(args, fs, config, client)
+	err = cmds.ModulesRuntime(args, fs, config, client)
+	if err != nil {
+		os.Exit(consts.ErrorExitCode)
+	}
 }
 
 func handleArgs() ([]string, bool) {

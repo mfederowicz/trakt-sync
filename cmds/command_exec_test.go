@@ -78,3 +78,39 @@ func TestExecStopsOnFlagErrors(t *testing.T) {
 		})
 	}
 }
+
+// TestModulesRuntimeReturnsErrors checks that ModulesRuntime returns an error (so main exits with 1)
+// for an unknown command, an ambiguous prefix and a failing command, and nil on success.
+func TestModulesRuntimeReturnsErrors(t *testing.T) {
+	fs := afero.NewMemMapFs()
+	assert.NoError(t, fs.MkdirAll("/exec/", consts.X755))
+	assert.NoError(t, afero.WriteFile(fs, "/exec/token.json", []byte("{}"), consts.X644))
+	assert.NoError(t, afero.WriteFile(fs, "/exec/user_settings.json", []byte(`{"user":{"username":"sean"}}`), consts.X644))
+	config := cfg.DefaultConfig()
+	config.ClientID, config.ClientSecret = "a", "b"
+	config.TokenPath, config.SettingsPath = "/exec/token.json", "/exec/user_settings.json"
+
+	tests := []struct {
+		name    string
+		args    []string
+		wantErr string
+	}{
+		{name: "unknown command", args: []string{"no_such_command"}, wantErr: `unknown command "no_such_command"`},
+		{name: "ambiguous prefix", args: []string{"s"}, wantErr: `non-unique command prefix "s"`},
+		{name: "failing command", args: []string{"checkin", "-no_such_flag"}, wantErr: "checkin: flag provided but not defined: -no_such_flag"},
+		{name: "success", args: []string{"help"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			resetAllFlags()
+			t.Cleanup(resetAllFlags)
+
+			err := ModulesRuntime(tt.args, fs, config, internal.NewClient(nil))
+			if tt.wantErr == "" {
+				assert.NoError(t, err)
+				return
+			}
+			assert.EqualError(t, err, tt.wantErr)
+		})
+	}
+}
