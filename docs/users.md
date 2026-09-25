@@ -744,6 +744,9 @@ $ ./trakt-sync users -a month_in_review -year 2026 -month 8 -> export_users_mont
 $ ./trakt-sync users -a year_in_review -year 2025 -> export_users_year_in_review_2025.json
 ```
 ##### Get data syncs (younify, plex, import)
+> **Note:** as of 2026-09-25 Trakt answers `data_syncs` with 401 for API apps (other OAuth routes work with the same token), and the
+> other data sync actions are expected to do the same; they fail with `this route is not open to API apps yet`.
+
 Syncs your connected apps ran for you, with added counts per section. `-t younify|plex|import` filters by the app.
 ```console
 $ ./trakt-sync users -a data_syncs -> export_users_data_syncs.json

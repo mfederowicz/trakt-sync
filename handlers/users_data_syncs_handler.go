@@ -29,6 +29,9 @@ func (UsersDataSyncsHandler) Handle(options *str.Options, client *internal.Clien
 	result, err := fetchAllPages(client, options, consts.DefaultPage, func(opts *uri.ListOptions) ([]*str.DataSync, *str.Response, error) {
 		return client.Users.GetDataSyncs(client.BuildCtxFromOptions(options), &options.Type, opts)
 	})
+	if apiErr := notOpenToAPIApps(options.Action, err); apiErr != nil {
+		return apiErr
+	}
 	if err != nil {
 		return fmt.Errorf("fetch data syncs error: %w", err)
 	}
@@ -123,6 +126,9 @@ func dataSyncID(options *str.Options) (int, error) {
 func dataSyncError(action string, id int, resp *str.Response, err error) error {
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found data sync:%d", id)
+	}
+	if apiErr := notOpenToAPIApps(action, err); apiErr != nil {
+		return apiErr
 	}
 	if err != nil {
 		return fmt.Errorf("%s error: %w", action, err)

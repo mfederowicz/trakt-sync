@@ -39,10 +39,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`social_recommendations`](#social_recommendations) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
-| [`users`](#users) | 91 | 0 | 7 | 5 | 1 | 104 |
+| [`users`](#users) | 85 | 0 | 7 | 11 | 1 | 104 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **311** | **0** | **7** | **14** | **3** | **335** |
+| **Total** | **305** | **0** | **7** | **20** | **3** | **335** |
 
 ## calendars
 
@@ -419,12 +419,12 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ⬜ | GET | `/users/settings/plex/servers` | Get Plex servers |  |
 | ⬜ | GET | `/users/settings/plex/servers/{server_id}` | Get Plex server accounts and libraries |  |
 | ⬜ | POST | `/users/settings/plex/sync` | Sync Plex now |  |
-| ✅ | GET | `/users/syncs/` | Get data syncs | `UsersService.GetDataSyncs` |
-| ✅ | GET | `/users/syncs/{id}` | Get a data sync | `UsersService.GetDataSync` |
-| ✅ | DELETE | `/users/syncs/{id}` | Undo a data sync | `UsersService.UndoDataSync` |
-| ✅ | GET | `/users/syncs/{id}/paused` | Get paused sync items | `UsersService.GetDataSyncItems` |
-| ✅ | GET | `/users/syncs/{id}/skipped` | Get skipped sync items | `UsersService.GetDataSyncItems` |
-| ✅ | GET | `/users/syncs/{type}` | Get data syncs by type | `UsersService.GetDataSyncs` |
+| ⚠️ | GET | `/users/syncs/` | Get data syncs | `UsersService.GetDataSyncs` |
+| ⚠️ | GET | `/users/syncs/{id}` | Get a data sync | `UsersService.GetDataSync` |
+| ⚠️ | DELETE | `/users/syncs/{id}` | Undo a data sync | `UsersService.UndoDataSync` |
+| ⚠️ | GET | `/users/syncs/{id}/paused` | Get paused sync items | `UsersService.GetDataSyncItems` |
+| ⚠️ | GET | `/users/syncs/{id}/skipped` | Get skipped sync items | `UsersService.GetDataSyncItems` |
+| ⚠️ | GET | `/users/syncs/{type}` | Get data syncs by type | `UsersService.GetDataSyncs` |
 | ✅ | GET | `/users/{id}/` | Get user profile | `UsersService.GetProfile`, `UsersService.GetUserProfile` |
 | ✅ | POST | `/users/{id}/block` | Block this user | `UsersService.Block` |
 | ✅ | DELETE | `/users/{id}/block` | Unblock this user | `UsersService.Unblock` |
@@ -527,3 +527,4 @@ Differences between the service code and the contract, found while building this
 | `YounifyService.*` | `/younify/*` (all 5 routes) | `GET /younify/connections` returns 401 for the maintainer's OAuth token, and the developer portal's own "try it" gets 401 too (checked 2026-09-25); younify looks limited to Trakt's own apps. The other 4 routes change the account and were not tried; assumed the same. The CLI explains a 401. Upstream issue: TBD |
 | `UsersService.GetMonthInReview`, `GetYearInReview`, `GetSocialActivity` | `GET /users/{id}/mir/{year}/{month}`, `/users/{id}/yir/{year}`, `/users/{id}/{type}/activities` | live API returns 401 while `GET /users/reactions/comments` (OAuth required) works with the same token (checked 2026-09-25); looks not open to API apps. The CLI explains the 401. Upstream issue: TBD |
 | - | `PUT /users/avatar`, `PUT /users/set_cover` | the contract marks both Limited Access: "available only to first-party Trakt applications. Third-party applications receive a `401` response even with a valid OAuth token." Not implemented. |
+| `UsersService.GetDataSyncs`, `GetDataSync`, `GetDataSyncItems`, `UndoDataSync` | `/users/syncs/*` (all 6 routes) | `GET /users/syncs/` returns 401 with the maintainer's token (checked 2026-09-25), which works on other OAuth routes such as `/users/reactions/comments`; looks not open to API apps. The other routes were not tried; assumed the same. The CLI explains a 401. Upstream issue: TBD |
