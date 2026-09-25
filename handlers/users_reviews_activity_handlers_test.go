@@ -50,6 +50,12 @@ func TestUsersReviewsAndActivityHandlers(t *testing.T) {
 			wantErr: "set -month 1-12", wantNoAPI: true},
 		{name: "year in review", handler: UsersYearInReviewHandler{}, options: str.Options{Action: consts.YearInReview, Year: 2025, ExtendedInfo: "full"},
 			path: "/users/sean/yir/2025", query: "extended=full", status: http.StatusOK, body: review},
+		{name: "activities not open to API apps", handler: UsersActivitiesHandler{}, options: str.Options{Action: consts.Activities, Type: "friends"},
+			path: "/users/sean/friends/activities", query: "page=1", status: http.StatusUnauthorized, body: `{}`, wantErr: "activities: Trakt answered 401"},
+		{name: "month in review not open to API apps", handler: UsersMonthInReviewHandler{}, options: str.Options{Action: consts.MonthInReview, Year: 2026, Month: 8},
+			path: "/users/sean/mir/2026/8", status: http.StatusUnauthorized, body: `{}`, wantErr: "this route is not open to API apps yet"},
+		{name: "year in review not open to API apps", handler: UsersYearInReviewHandler{}, options: str.Options{Action: consts.YearInReview, Year: 2025},
+			path: "/users/sean/yir/2025", status: http.StatusUnauthorized, body: `{}`, wantErr: "year_in_review: Trakt answered 401"},
 		{name: "year in review without year", handler: UsersYearInReviewHandler{}, options: str.Options{Action: consts.YearInReview},
 			wantErr: "set -year for year_in_review", wantNoAPI: true},
 	}

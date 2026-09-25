@@ -53,6 +53,9 @@ func writeReview(options *str.Options, period string, result *str.Review, resp *
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("no %s for %s (user %s)", options.Action, period, options.UserName)
 	}
+	if apiErr := notOpenToAPIApps(options.Action, err); apiErr != nil {
+		return apiErr
+	}
 	if err != nil {
 		return fmt.Errorf("fetch %s error: %w", options.Action, err)
 	}

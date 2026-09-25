@@ -137,6 +137,7 @@ const (
 	NotesNotFoundWithID          = "notes not found with Id:%s"
 	PlaybackNotFoundWithID       = "playback not found with Id:%d"
 	MonthUsage                   = "review month 1-12 ie: -month 8"
+	NotOpenToAPIAppsMsg          = "%s: Trakt answered 401 although your token works on other routes; this route is not open to API apps yet: %w"
 	NotesUsage                   = "allow to overwrite notes"
 	OnlyRewatchingUsage          = "only shows you are rewatching ie: -only_rewatching"
 	OutputUsage                  = "allow to overwrite default output filename"

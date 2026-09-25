@@ -34,6 +34,9 @@ func (h UsersActivitiesHandler) Handle(options *str.Options, client *internal.Cl
 		Countries: options.Countries,
 	}
 	result, err := h.fetchActivities(client, options, &opts, consts.DefaultPage)
+	if apiErr := notOpenToAPIApps(options.Action, err); apiErr != nil {
+		return apiErr
+	}
 	if err != nil {
 		return fmt.Errorf("fetch %s activities error: %w", options.Type, err)
 	}

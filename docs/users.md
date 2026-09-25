@@ -696,6 +696,9 @@ $ ./trakt-sync users -a comment_reactions -> export_users_comment_reactions.json
 $ ./trakt-sync users -a comment_reactions -ex min
 ```
 ##### Get social activity (friends, followers or following)
+> **Note:** as of 2026-09-25 Trakt answers `activities`, `month_in_review` and `year_in_review` with 401 for API apps (other OAuth
+> routes work with the same token); they fail with `this route is not open to API apps yet` and are kept for when Trakt opens them.
+
 What people in your social graph watched, scrobbled or checked in to. `-t` is required; `-genres`, `-years`, `-runtimes`, `-countries` and `-ex` narrow the feed.
 ```console
 $ ./trakt-sync users -a activities -t following -> export_users_activities_following.json

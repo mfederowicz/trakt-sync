@@ -28,6 +28,8 @@ schedule.
   delete your smart lists. Create and update read the smart list JSON from `-items <file>` or stdin, like `add_list`.
 - `users -a comment_reactions` (comments you reacted to), `users -a activities -t friends|followers|following` (what
   your social graph watched), `users -a month_in_review -year <y> -month <m>` and `users -a year_in_review -year <y>`.
+  Trakt answers the last three with 401 for API apps for now; the CLI reports it as `this route is not open to API
+  apps yet`.
 
 ### Changed
 

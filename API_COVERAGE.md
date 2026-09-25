@@ -39,10 +39,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`social_recommendations`](#social_recommendations) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
-| [`users`](#users) | 72 | 0 | 32 | 0 | 0 | 104 |
+| [`users`](#users) | 69 | 0 | 32 | 3 | 0 | 104 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **292** | **0** | **32** | **9** | **2** | **335** |
+| **Total** | **289** | **0** | **32** | **12** | **2** | **335** |
 
 ## calendars
 
@@ -471,7 +471,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/users/{id}/lists/{list_id}/likes` | Get all users who liked a list | `UsersService.GetListLikes` |
 | ⬜ | POST | `/users/{id}/lists/{list_id}/reorder` | Reorder items on a list |  |
 | ✅ | POST | `/users/{id}/lists/{list_id}/report` | Report a user's list | `UsersService.ListReport` |
-| ✅ | GET | `/users/{id}/mir/{year}/{month}` | Get month in review | `UsersService.GetMonthInReview` |
+| ⚠️ | GET | `/users/{id}/mir/{year}/{month}` | Get month in review | `UsersService.GetMonthInReview` |
 | ✅ | GET | `/users/{id}/notes/{type}` | Get notes | `UsersService.GetNotes` |
 | ✅ | GET | `/users/{id}/ratings/` | Get all ratings | `UsersService.GetRatings` |
 | ⬜ | GET | `/users/{id}/ratings/episodes` | Get episode ratings |  |
@@ -494,8 +494,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ⬜ | GET | `/users/{id}/watchlist/movies/{sort}` | Get movie watchlist |  |
 | ⬜ | GET | `/users/{id}/watchlist/shows/{sort}` | Get show watchlist |  |
 | ✅ | GET | `/users/{id}/watchlist/{type}/{sort_by}/{sort_how}` | Get watchlist | `UsersService.GetWatchlist` |
-| ✅ | GET | `/users/{id}/yir/{year}` | Get year in review | `UsersService.GetYearInReview` |
-| ✅ | GET | `/users/{id}/{type}/activities` | Get social activity | `UsersService.GetSocialActivity` |
+| ⚠️ | GET | `/users/{id}/yir/{year}` | Get year in review | `UsersService.GetYearInReview` |
+| ⚠️ | GET | `/users/{id}/{type}/activities` | Get social activity | `UsersService.GetSocialActivity` |
 
 ## watchnow
 
@@ -525,3 +525,4 @@ Differences between the service code and the contract, found while building this
 | `MoviesService.GetStreamingMovies` | `GET /movies/streaming/{period}` | live API returns 404 `{"error":"endpoint removed"}` (checked 2026-09-24); the CLI explains the 404. Upstream issue: TBD |
 | - | `GET /shows/streaming/{period}` | live API returns 404 `{"error":"endpoint removed"}` (checked 2026-09-24). Upstream issue: TBD |
 | `YounifyService.*` | `/younify/*` (all 5 routes) | `GET /younify/connections` returns 401 for the maintainer's OAuth token, and the developer portal's own "try it" gets 401 too (checked 2026-09-25); younify looks limited to Trakt's own apps. The other 4 routes change the account and were not tried; assumed the same. The CLI explains a 401. Upstream issue: TBD |
+| `UsersService.GetMonthInReview`, `GetYearInReview`, `GetSocialActivity` | `GET /users/{id}/mir/{year}/{month}`, `/users/{id}/yir/{year}`, `/users/{id}/{type}/activities` | live API returns 401 while `GET /users/reactions/comments` (OAuth required) works with the same token (checked 2026-09-25); looks not open to API apps. The CLI explains the 401. Upstream issue: TBD |

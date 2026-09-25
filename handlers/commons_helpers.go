@@ -204,3 +204,12 @@ func writeResult(options *str.Options, data any) error {
 	writer.WriteJSON(options, jsonData)
 	return nil
 }
+
+// notOpenToAPIApps turns a 401 on a route that other OAuth calls pass into a readable error; nil for any other error.
+func notOpenToAPIApps(action string, err error) error {
+	var invalidUser *internal.InvalidUserError
+	if errors.As(err, &invalidUser) {
+		return fmt.Errorf(consts.NotOpenToAPIAppsMsg, action, err)
+	}
+	return nil
+}
