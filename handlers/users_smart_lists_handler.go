@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"slices"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -58,6 +59,9 @@ func validSmartListWrite(list *str.SmartListWrite, create bool) error {
 	if !create && list.Name == nil && list.Source == nil && list.MediaType == nil && list.Filters == nil && list.Privacy == nil {
 		return errors.New("smart list update needs at least one of name, source, media_type, filters, privacy")
 	}
+	if list.Name != nil && len(*list.Name) == consts.ZeroValue {
+		return errors.New("smart list name must not be empty")
+	}
 
 	checks := []struct {
 		name  string
@@ -68,8 +72,9 @@ func validSmartListWrite(list *str.SmartListWrite, create bool) error {
 		{name: "media_type", value: list.MediaType, valid: cfg.SmartListMediaTypes},
 		{name: "privacy", value: list.Privacy, valid: cfg.SmartListPrivacy},
 	}
+	// a field that is sent must hold a contract value; cfg.IsValidConfigType would accept ""
 	for _, c := range checks {
-		if c.value != nil && !cfg.IsValidConfigType(c.valid, *c.value) {
+		if c.value != nil && !slices.Contains(c.valid, *c.value) {
 			return fmt.Errorf("%s '%s' is not valid, avaliable values: %v", c.name, *c.value, c.valid)
 		}
 	}

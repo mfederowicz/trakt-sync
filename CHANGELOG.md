@@ -35,6 +35,9 @@ schedule.
 
 ### Fixed
 
+- `users -a add_smart_list|update_smart_list`: an empty `source`, `media_type` or `privacy` in the JSON (e.g.
+  `"source": ""`), or an empty `name` on update, passed the input check and was sent to Trakt; it is now rejected before the
+  request.
 - `trakt-sync help`: the command list is sized to the longest command name; before, the summary of
   `social_recommendations` was shifted out of its column.
 
