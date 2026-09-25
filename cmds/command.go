@@ -273,7 +273,7 @@ func handleHelpError(err error) {
 }
 
 // Exec core command function
-func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config, args []string) error {
+func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config, args []string) (err error) {
 	c.Client = client
 	c.Config = config
 	c.Flag.Usage = func() {
@@ -304,6 +304,7 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 
 	processVerbose(&options)
 
+	// err is the named result, so a recovered panic is returned instead of nil
 	defer func() {
 		if r := recover(); r != nil {
 			if _, ok := r.(fatal); ok {
