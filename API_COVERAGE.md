@@ -39,10 +39,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`social_recommendations`](#social_recommendations) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
-| [`users`](#users) | 63 | 0 | 41 | 0 | 0 | 104 |
+| [`users`](#users) | 68 | 0 | 36 | 0 | 0 | 104 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **283** | **0** | **41** | **9** | **2** | **335** |
+| **Total** | **288** | **0** | **36** | **9** | **2** | **335** |
 
 ## calendars
 
@@ -479,11 +479,11 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ⬜ | GET | `/users/{id}/ratings/shows` | Get show ratings |  |
 | ✅ | GET | `/users/{id}/ratings/{type}/{rating}` | Get ratings | `UsersService.GetRatings` |
 | ✅ | POST | `/users/{id}/report` | Report a user | `UsersService.Report` |
-| ⬜ | GET | `/users/{id}/smart-lists` | Get a user's smart lists |  |
-| ⬜ | POST | `/users/{id}/smart-lists` | Create smart list |  |
-| ⬜ | GET | `/users/{id}/smart-lists/{list_id}/` | Get smart list |  |
-| ⬜ | PUT | `/users/{id}/smart-lists/{list_id}/` | Update smart list |  |
-| ⬜ | DELETE | `/users/{id}/smart-lists/{list_id}/` | Delete a user's smart list |  |
+| ✅ | GET | `/users/{id}/smart-lists` | Get a user's smart lists | `UsersService.GetSmartLists` |
+| ✅ | POST | `/users/{id}/smart-lists` | Create smart list | `UsersService.AddSmartList` |
+| ✅ | GET | `/users/{id}/smart-lists/{list_id}/` | Get smart list | `UsersService.GetSmartList` |
+| ✅ | PUT | `/users/{id}/smart-lists/{list_id}/` | Update smart list | `UsersService.UpdateSmartList` |
+| ✅ | DELETE | `/users/{id}/smart-lists/{list_id}/` | Delete a user's smart list | `UsersService.DeleteSmartList` |
 | ✅ | GET | `/users/{id}/stats` | Get stats | `UsersService.GetStats` |
 | ✅ | GET | `/users/{id}/watched/movies` | Get watched movies | `UsersService.GetWatched` |
 | ✅ | GET | `/users/{id}/watched/shows` | Get watched shows | `UsersService.GetWatched` |

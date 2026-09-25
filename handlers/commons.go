@@ -98,6 +98,7 @@ type CommonInterface interface {
 	Notes(client *internal.Client, notes *str.Notes, options *str.Options) (*str.Notes, *str.Response, error)
 	PauseScrobble(client *internal.Client, scrobble *str.Scrobble, options *str.Options) (*str.Scrobble, *str.Response, error)
 	ReadInput(options str.Options) (*str.ItemsList, error)
+	ReadInputBytes(options str.Options) ([]byte, error)
 	Reply(client *internal.Client, id *int, comment *str.Comment, options *str.Options) (*str.Comment, *str.Response, error)
 	SeasonFromTraktID(options *str.Options) (*str.Season, error)
 	StartScrobble(client *internal.Client, scrobble *str.Scrobble, options *str.Options) (*str.Scrobble, *str.Response, error)
@@ -1545,6 +1546,16 @@ func (c *CommonLogic) ConvertBytes(data []byte, options str.Options) (*str.Items
 
 // ReadInput read data from stdin or from file
 func (c *CommonLogic) ReadInput(options str.Options) (*str.ItemsList, error) {
+	data, err := c.ReadInputBytes(options)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.ConvertBytes(data, options)
+}
+
+// ReadInputBytes reads the raw input from the -items file or from stdin
+func (*CommonLogic) ReadInputBytes(options str.Options) ([]byte, error) {
 	filePath := options.Items
 	if filePath != consts.EmptyString {
 		data, err := os.ReadFile(filePath)
@@ -1552,7 +1563,7 @@ func (c *CommonLogic) ReadInput(options str.Options) (*str.ItemsList, error) {
 			return nil, fmt.Errorf("failed to read file %s: %w", filePath, err)
 		}
 
-		return c.ConvertBytes(data, options)
+		return data, nil
 	}
 
 	// Check if there's data in stdin to avoid blocking
@@ -1572,7 +1583,7 @@ func (c *CommonLogic) ReadInput(options str.Options) (*str.ItemsList, error) {
 		return nil, fmt.Errorf("failed to read from stdin: %w", err)
 	}
 
-	return c.ConvertBytes(data, options)
+	return data, nil
 }
 
 // FetchHistoryList returns movies and episodes that a user has watched, sorted by most recent.

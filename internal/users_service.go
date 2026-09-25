@@ -1292,3 +1292,92 @@ func (u *UsersService) Report(ctx context.Context, user *string, report *str.Use
 
 	return result, resp, nil
 }
+
+// GetSmartLists Returns all smart list definitions for a user.
+//
+// API docs: https://docs.trakt.tv/reference/getuserssmartlistspersonal
+func (u *UsersService) GetSmartLists(ctx context.Context, user *string) ([]*str.SmartList, *str.Response, error) {
+	var url = fmt.Sprintf("users/%s/smart-lists", *user)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.SmartList{}
+	resp, err := u.client.Do(ctx, req, &list)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// GetSmartList Returns a single smart list definition of a user.
+//
+// API docs: https://docs.trakt.tv/reference/getuserssmartlistssmartlistsummary
+func (u *UsersService) GetSmartList(ctx context.Context, user *string, listID *string) (*str.SmartList, *str.Response, error) {
+	var url = fmt.Sprintf("users/%s/smart-lists/%s", *user, *listID)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.SmartList)
+	resp, err := u.client.Do(ctx, req, result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// AddSmartList Create a new smart list; the response holds its ids.
+//
+// API docs: https://docs.trakt.tv/reference/postuserssmartlistscreate
+func (u *UsersService) AddSmartList(ctx context.Context, user *string, list *str.SmartListWrite) (*str.SmartList, *str.Response, error) {
+	var url = fmt.Sprintf("users/%s/smart-lists", *user)
+	req, err := u.client.NewRequest(http.MethodPost, url, list)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.SmartList)
+	resp, err := u.client.Do(ctx, req, result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// UpdateSmartList Update a smart list by sending 1 or more parameters; the slug is retained.
+//
+// API docs: https://docs.trakt.tv/reference/putuserssmartlistssmartlistupdate
+func (u *UsersService) UpdateSmartList(ctx context.Context, user *string, listID *string, update *str.SmartListWrite) (*str.SmartList, *str.Response, error) {
+	var url = fmt.Sprintf("users/%s/smart-lists/%s", *user, *listID)
+	req, err := u.client.NewRequest(http.MethodPut, url, update)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.SmartList)
+	resp, err := u.client.Do(ctx, req, result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// DeleteSmartList Remove a smart list.
+//
+// API docs: https://docs.trakt.tv/reference/deleteuserssmartlistssmartlistdelete
+func (u *UsersService) DeleteSmartList(ctx context.Context, user *string, listID *string) (*str.Response, error) {
+	var url = fmt.Sprintf("users/%s/smart-lists/%s", *user, *listID)
+	req, err := u.client.NewRequest(http.MethodDelete, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return u.client.Do(ctx, req, nil)
+}
