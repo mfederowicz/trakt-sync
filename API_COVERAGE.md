@@ -40,9 +40,9 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
 | [`users`](#users) | 63 | 0 | 41 | 0 | 0 | 104 |
-| [`watchnow`](#watchnow) | 0 | 0 | 2 | 0 | 0 | 2 |
+| [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 5 | 0 | 0 | 5 |
-| **Total** | **279** | **0** | **50** | **4** | **2** | **335** |
+| **Total** | **281** | **0** | **48** | **4** | **2** | **335** |
 
 ## calendars
 
@@ -501,8 +501,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
-| ⬜ | GET | `/watchnow/sources` | Get watch now sources |  |
-| ⬜ | GET | `/watchnow/sources/{countryCode}` | Get watch now sources by country |  |
+| ✅ | GET | `/watchnow/sources` | Get watch now sources | `WatchNowService.GetWatchNowSources` |
+| ✅ | GET | `/watchnow/sources/{countryCode}` | Get watch now sources by country | `WatchNowService.GetWatchNowSourcesByCountry` |
 
 ## younify
 

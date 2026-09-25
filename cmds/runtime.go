@@ -42,6 +42,7 @@ var Commands = []*Command{
 	TeamCmd,
 	UsersCmd,
 	WatchlistCmd,
+	WatchNowCmd,
 }
 
 // runtime consts
