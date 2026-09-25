@@ -105,6 +105,7 @@ const (
 	MinimalCollection     = "minimal_collection"
 	MonthInReview         = "month_in_review"
 	Movie                 = "movie"
+	MovieShow             = "movie,show"
 	Movies                = "movies"
 	MyDvd                 = "my-dvd"
 	MyFinales             = "my-finales"

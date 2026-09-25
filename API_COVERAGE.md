@@ -39,10 +39,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`social_recommendations`](#social_recommendations) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
-| [`users`](#users) | 69 | 0 | 32 | 3 | 0 | 104 |
+| [`users`](#users) | 82 | 0 | 19 | 3 | 0 | 104 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **289** | **0** | **32** | **12** | **2** | **335** |
+| **Total** | **302** | **0** | **19** | **12** | **2** | **335** |
 
 ## calendars
 
@@ -431,9 +431,9 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/users/{id}/collection/{type}` | Get collection | `UsersService.GetCollection` |
 | ✅ | GET | `/users/{id}/comments/{comment_type}/{type}` | Get comments | `UsersService.GetComments` |
 | ✅ | GET | `/users/{id}/favorites/comments/{sort}` | Get all favorites comments | `UsersService.GetFavoritesComments` |
-| ⬜ | GET | `/users/{id}/favorites/media/{sort}` | Get favorite media |  |
-| ⬜ | GET | `/users/{id}/favorites/movies/{sort}` | Get favorite movies |  |
-| ⬜ | GET | `/users/{id}/favorites/shows/{sort}` | Get favorite shows |  |
+| ✅ | GET | `/users/{id}/favorites/media/{sort}` | Get favorite media | `UsersService.GetFavoritesBySort` |
+| ✅ | GET | `/users/{id}/favorites/movies/{sort}` | Get favorite movies | `UsersService.GetFavoritesBySort` |
+| ✅ | GET | `/users/{id}/favorites/shows/{sort}` | Get favorite shows | `UsersService.GetFavoritesBySort` |
 | ✅ | GET | `/users/{id}/favorites/{type}/{sort_by}/{sort_how}` | Get favorites | `UsersService.GetFavorites` |
 | ✅ | POST | `/users/{id}/follow` | Follow this user | `UsersService.Follow` |
 | ✅ | DELETE | `/users/{id}/follow` | Unfollow this user | `UsersService.Unfollow` |
@@ -458,12 +458,12 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | DELETE | `/users/{id}/lists/{list_id}/` | Delete a user's personal list | `UsersService.DeleteList` |
 | ✅ | GET | `/users/{id}/lists/{list_id}/comments/{sort}` | Get all list comments | `UsersService.GetListComments` |
 | ✅ | POST | `/users/{id}/lists/{list_id}/items` | Add items to personal list | `UsersService.AddListItems` |
-| ⬜ | GET | `/users/{id}/lists/{list_id}/items/movie` | Get movie list items |  |
-| ⬜ | GET | `/users/{id}/lists/{list_id}/items/movie,show` | Get media list items |  |
-| ⬜ | GET | `/users/{id}/lists/{list_id}/items/movie,show,season,episode` | Get all list items |  |
+| ✅ | GET | `/users/{id}/lists/{list_id}/items/movie` | Get movie list items | `UsersService.GetItemstOnAPersonalList` |
+| ✅ | GET | `/users/{id}/lists/{list_id}/items/movie,show` | Get media list items | `UsersService.GetItemstOnAPersonalList` |
+| ✅ | GET | `/users/{id}/lists/{list_id}/items/movie,show,season,episode` | Get all list items | `UsersService.GetItemstOnAPersonalList` |
 | ✅ | POST | `/users/{id}/lists/{list_id}/items/remove` | Remove items from personal list | `UsersService.RemoveListItems` |
 | ✅ | POST | `/users/{id}/lists/{list_id}/items/reorder` | Reorder items on a list | `UsersService.ReorderListItems` |
-| ⬜ | GET | `/users/{id}/lists/{list_id}/items/show` | Get show list items |  |
+| ✅ | GET | `/users/{id}/lists/{list_id}/items/show` | Get show list items | `UsersService.GetItemstOnAPersonalList` |
 | ✅ | PUT | `/users/{id}/lists/{list_id}/items/{list_item_id}` | Update a list item | `UsersService.UpdateListItem` |
 | ✅ | GET | `/users/{id}/lists/{list_id}/items/{type}/{sort_by}/{sort_how}` | Get items on a personal list | `UsersService.GetItemstOnAPersonalList`, `UsersService.GetListItems` |
 | ✅ | POST | `/users/{id}/lists/{list_id}/like` | Like a list | `UsersService.ListLike` |
@@ -474,9 +474,9 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ⚠️ | GET | `/users/{id}/mir/{year}/{month}` | Get month in review | `UsersService.GetMonthInReview` |
 | ✅ | GET | `/users/{id}/notes/{type}` | Get notes | `UsersService.GetNotes` |
 | ✅ | GET | `/users/{id}/ratings/` | Get all ratings | `UsersService.GetRatings` |
-| ⬜ | GET | `/users/{id}/ratings/episodes` | Get episode ratings |  |
-| ⬜ | GET | `/users/{id}/ratings/movies` | Get movie ratings |  |
-| ⬜ | GET | `/users/{id}/ratings/shows` | Get show ratings |  |
+| ✅ | GET | `/users/{id}/ratings/episodes` | Get episode ratings | `UsersService.GetRatings` |
+| ✅ | GET | `/users/{id}/ratings/movies` | Get movie ratings | `UsersService.GetRatings` |
+| ✅ | GET | `/users/{id}/ratings/shows` | Get show ratings | `UsersService.GetRatings` |
 | ✅ | GET | `/users/{id}/ratings/{type}/{rating}` | Get ratings | `UsersService.GetRatings` |
 | ✅ | POST | `/users/{id}/report` | Report a user | `UsersService.Report` |
 | ✅ | GET | `/users/{id}/smart-lists` | Get a user's smart lists | `UsersService.GetSmartLists` |
@@ -490,9 +490,9 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/users/{id}/watched/{type}` | Get watched | `UsersService.GetWatched` |
 | ✅ | GET | `/users/{id}/watching` | Get watching | `UsersService.Watching` |
 | ✅ | GET | `/users/{id}/watchlist/comments/{sort}` | Get all watchlist comments | `UsersService.GetWatchlistComments` |
-| ⬜ | GET | `/users/{id}/watchlist/movie,show/{sort}` | Get media watchlist |  |
-| ⬜ | GET | `/users/{id}/watchlist/movies/{sort}` | Get movie watchlist |  |
-| ⬜ | GET | `/users/{id}/watchlist/shows/{sort}` | Get show watchlist |  |
+| ✅ | GET | `/users/{id}/watchlist/movie,show/{sort}` | Get media watchlist | `UsersService.GetWatchlistBySort` |
+| ✅ | GET | `/users/{id}/watchlist/movies/{sort}` | Get movie watchlist | `UsersService.GetWatchlistBySort` |
+| ✅ | GET | `/users/{id}/watchlist/shows/{sort}` | Get show watchlist | `UsersService.GetWatchlistBySort` |
 | ✅ | GET | `/users/{id}/watchlist/{type}/{sort_by}/{sort_how}` | Get watchlist | `UsersService.GetWatchlist` |
 | ⚠️ | GET | `/users/{id}/yir/{year}` | Get year in review | `UsersService.GetYearInReview` |
 | ⚠️ | GET | `/users/{id}/{type}/activities` | Get social activity | `UsersService.GetSocialActivity` |

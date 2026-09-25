@@ -69,6 +69,9 @@ var WatchNowFilters = []string{"favorites", "any", "any_all", "free", "free_all"
 // SocialActivityTypes are the users/{id}/{type}/activities values from the API contract
 var SocialActivityTypes = []string{"friends", "followers", "following"}
 
+// UsersSortPathValues are the {sort} values of the users watchlist / favorites /{type}/{sort} routes
+var UsersSortPathValues = []string{"rank", "added", "title", "released", "runtime", "popularity", "percentage", "votes"}
+
 // SmartListSources are the smart list source values from the API contract
 var SmartListSources = []string{"trending", "popular", "anticipated", "recommendations", "discover", "watchlist", "library"}
 

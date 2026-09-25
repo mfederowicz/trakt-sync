@@ -21,6 +21,12 @@ func (m UsersFavoritesHandler) Handle(options *str.Options, client *internal.Cli
 	if err != nil {
 		return err
 	}
+	// -sort switches to the /{type}/{sort} route; check it before any request
+	if len(options.SortPath) > consts.ZeroValue {
+		if _, err := sortRouteType(consts.Favorites, options); err != nil {
+			return err
+		}
+	}
 
 	printer.Println("Returns the top 100 shows and movies a user has favorited filtered by type:", options.Type)
 

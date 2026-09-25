@@ -2396,14 +2396,27 @@ func (c CommonLogic) FetchUsersHistory(client *internal.Client, options *str.Opt
 // FetchUsersWatchlist helper function to fetch watchlist.
 func (c CommonLogic) FetchUsersWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
-	list, resp, err := client.Users.GetWatchlist(
-		client.BuildCtxFromOptions(options),
-		&options.UserName,
-		&options.Type,
-		&options.SortBy,
-		&options.SortHow,
-		&opts,
+	var (
+		list []*str.ExportlistItem
+		resp *str.Response
+		err  error
 	)
+	if len(options.SortPath) > consts.ZeroValue {
+		routeType, typeErr := sortRouteType(consts.Watchlist, options)
+		if typeErr != nil {
+			return nil, typeErr
+		}
+		list, resp, err = client.Users.GetWatchlistBySort(client.BuildCtxFromOptions(options), &options.UserName, &routeType, &options.SortPath, &opts)
+	} else {
+		list, resp, err = client.Users.GetWatchlist(
+			client.BuildCtxFromOptions(options),
+			&options.UserName,
+			&options.Type,
+			&options.SortBy,
+			&options.SortHow,
+			&opts,
+		)
+	}
 
 	if err != nil {
 		return nil, err
@@ -2458,14 +2471,27 @@ func (c CommonLogic) FetchUsersWatchlistComments(client *internal.Client, option
 // FetchUsersFavorites helper function to fetch favorited shows and movies by user.
 func (c CommonLogic) FetchUsersFavorites(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
-	list, resp, err := client.Users.GetFavorites(
-		client.BuildCtxFromOptions(options),
-		&options.UserName,
-		&options.Type,
-		&options.SortBy,
-		&options.SortHow,
-		&opts,
+	var (
+		list []*str.ExportlistItem
+		resp *str.Response
+		err  error
 	)
+	if len(options.SortPath) > consts.ZeroValue {
+		routeType, typeErr := sortRouteType(consts.Favorites, options)
+		if typeErr != nil {
+			return nil, typeErr
+		}
+		list, resp, err = client.Users.GetFavoritesBySort(client.BuildCtxFromOptions(options), &options.UserName, &routeType, &options.SortPath, &opts)
+	} else {
+		list, resp, err = client.Users.GetFavorites(
+			client.BuildCtxFromOptions(options),
+			&options.UserName,
+			&options.Type,
+			&options.SortBy,
+			&options.SortHow,
+			&opts,
+		)
+	}
 
 	if err != nil {
 		return nil, err

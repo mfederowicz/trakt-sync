@@ -1459,3 +1459,40 @@ func (u *UsersService) fetchReview(ctx context.Context, url string, opts *uri.Li
 
 	return result, resp, nil
 }
+
+// GetWatchlistBySort Returns watchlist items of one type sorted by the {sort} path value; routeType is movies, shows or movie,show.
+//
+// API docs: https://docs.trakt.tv/reference/getuserswatchlistmovies
+// API docs: https://docs.trakt.tv/reference/getuserswatchlistshows
+// API docs: https://docs.trakt.tv/reference/getuserswatchlistall
+func (u *UsersService) GetWatchlistBySort(ctx context.Context, user *string, routeType *string, sort *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+	return u.fetchSortedItems(ctx, fmt.Sprintf("users/%s/watchlist/%s/%s", *user, *routeType, *sort), opts)
+}
+
+// GetFavoritesBySort Returns favorites of one type sorted by the {sort} path value; routeType is movies, shows or media.
+//
+// API docs: https://docs.trakt.tv/reference/getusersfavoritesmedia
+// API docs: https://docs.trakt.tv/reference/getusersfavoritesmovies
+// API docs: https://docs.trakt.tv/reference/getusersfavoritesshows
+func (u *UsersService) GetFavoritesBySort(ctx context.Context, user *string, routeType *string, sort *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+	return u.fetchSortedItems(ctx, fmt.Sprintf("users/%s/favorites/%s/%s", *user, *routeType, *sort), opts)
+}
+
+func (u *UsersService) fetchSortedItems(ctx context.Context, url string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.ExportlistItem{}
+	resp, err := u.client.Do(ctx, req, &list)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

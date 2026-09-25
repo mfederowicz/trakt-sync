@@ -134,6 +134,7 @@ var Avflags = map[string]bool{
 	"shows":                  true,
 	"smart_lists":            true,
 	"social_recommendations": true,
+	"sort":                   true,
 	"sort_by":                true,
 	"sort_how":               true,
 	"specials":               true,
@@ -466,6 +467,7 @@ func setOptionsDependsOnModuleUsers(options str.Options) str.Options {
 	options.DisplayNumbers = *_usersDisplayNumbers
 	options.Year = *_usersYear
 	options.Month = *_usersMonth
+	options.SortPath = *_usersSortPath
 
 	return options
 }

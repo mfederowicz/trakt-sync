@@ -214,6 +214,11 @@ $ ./trakt-sync users -a lists -u username -i 123456 -t shows
 ```console
 $ ./trakt-sync users -a lists -u username -i 123456 -t movies
 ```
+The API contract names the list item types in the singular, and several can be combined: `movie`, `show`, `movie,show`,
+`movie,show,season,episode`.
+```console
+$ ./trakt-sync users -a lists -u username -i 123456 -t movie,show
+```
 ##### Fetch lists for selected user:
 ```console
 $ ./trakt-sync users -a lists -u username
@@ -565,6 +570,11 @@ $ ./trakt-sync users -a watchlist -u username -t movies -sort_by percentage
 🔥VIP Only sort_by including imdb_rating, tmdb_rating, rt_tomatometer, rt_audience, metascore, votes,
 imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to rank.
 ```
+`-sort` uses the `/{type}/{sort}` route instead (`rank`, `added`, `title`, `released`, `runtime`, `popularity`, `percentage`,
+`votes`; with `-t all`, `movies` or `shows`):
+```console
+$ ./trakt-sync users -a watchlist -u username -t movies -sort added
+```
 ##### Get user watchlist comments
 ```console
 $ ./trakt-sync users -a watchlist_comments -u username -s likes
@@ -622,6 +632,10 @@ $ ./trakt-sync users -a favorites -t movies -sort_by percentage
 
 🔥VIP Only sort_by including imdb_rating, tmdb_rating, rt_tomatometer, rt_audience, metascore, votes,
 imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to rank.
+```
+`-sort` uses the `/{type}/{sort}` route instead (same values as for the watchlist; `-t all` asks for `media`):
+```console
+$ ./trakt-sync users -a favorites -sort released
 ```
 ##### Get user favorites comments
 ```console
