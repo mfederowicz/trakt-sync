@@ -38,6 +38,8 @@ schedule.
 
 ### Fixed
 
+- A crash inside any command was caught but then reported nothing, as if the command had succeeded; it now
+  prints `panic error:<reason>` (or `fatal error`).
 - `users -a history -start_at <date> -end_at <date>` failed with `flag provided but not defined: -start_at` and
   silently used the default window; `users` now accepts both flags.
 - `sync` and `users` ignored `-o` and always wrote to their generated file name (e.g.
