@@ -1538,3 +1538,83 @@ func (u *UsersService) DeleteSavedFilter(ctx context.Context, id int) (*str.Resp
 
 	return u.client.Do(ctx, req, nil)
 }
+
+// GetDataSyncs Returns the authenticated user's data syncs; a non-empty syncType (younify, plex, import) filters them.
+//
+// API docs: https://docs.trakt.tv/reference/getuserssyncslist
+// API docs: https://docs.trakt.tv/reference/getuserssyncslistbytype
+func (u *UsersService) GetDataSyncs(ctx context.Context, syncType *string, opts *uri.ListOptions) ([]*str.DataSync, *str.Response, error) {
+	var url = "users/syncs"
+	if len(*syncType) > consts.ZeroValue {
+		url = fmt.Sprintf("users/syncs/%s", *syncType)
+	}
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.DataSync{}
+	resp, err := u.client.Do(ctx, req, &list)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// GetDataSync Returns a single data sync of the authenticated user.
+//
+// API docs: https://docs.trakt.tv/reference/getuserssyncsdetails
+func (u *UsersService) GetDataSync(ctx context.Context, id int) (*str.DataSync, *str.Response, error) {
+	req, err := u.client.NewRequest(http.MethodGet, fmt.Sprintf("users/syncs/%d", id), nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.DataSync)
+	resp, err := u.client.Do(ctx, req, result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// GetDataSyncItems Returns the paused or skipped items of a data sync; section is paused or skipped.
+//
+// API docs: https://docs.trakt.tv/reference/getuserssyncspaused
+// API docs: https://docs.trakt.tv/reference/getuserssyncsskipped
+func (u *UsersService) GetDataSyncItems(ctx context.Context, id int, section *string, opts *uri.ListOptions) ([]*str.SyncItem, *str.Response, error) {
+	url, err := uri.AddQuery(fmt.Sprintf("users/syncs/%d/%s", id, *section), opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.SyncItem{}
+	resp, err := u.client.Do(ctx, req, &list)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
+// UndoDataSync Undoes a data sync: reverses every item it imported.
+//
+// API docs: https://docs.trakt.tv/reference/deleteuserssyncsundo
+func (u *UsersService) UndoDataSync(ctx context.Context, id int) (*str.Response, error) {
+	req, err := u.client.NewRequest(http.MethodDelete, fmt.Sprintf("users/syncs/%d", id), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return u.client.Do(ctx, req, nil)
+}

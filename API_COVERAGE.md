@@ -39,10 +39,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`social_recommendations`](#social_recommendations) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
-| [`users`](#users) | 85 | 0 | 13 | 5 | 1 | 104 |
+| [`users`](#users) | 91 | 0 | 7 | 5 | 1 | 104 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **305** | **0** | **13** | **14** | **3** | **335** |
+| **Total** | **311** | **0** | **7** | **14** | **3** | **335** |
 
 ## calendars
 
@@ -419,12 +419,12 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ⬜ | GET | `/users/settings/plex/servers` | Get Plex servers |  |
 | ⬜ | GET | `/users/settings/plex/servers/{server_id}` | Get Plex server accounts and libraries |  |
 | ⬜ | POST | `/users/settings/plex/sync` | Sync Plex now |  |
-| ⬜ | GET | `/users/syncs/` | Get data syncs |  |
-| ⬜ | GET | `/users/syncs/{id}` | Get a data sync |  |
-| ⬜ | DELETE | `/users/syncs/{id}` | Undo a data sync |  |
-| ⬜ | GET | `/users/syncs/{id}/paused` | Get paused sync items |  |
-| ⬜ | GET | `/users/syncs/{id}/skipped` | Get skipped sync items |  |
-| ⬜ | GET | `/users/syncs/{type}` | Get data syncs by type |  |
+| ✅ | GET | `/users/syncs/` | Get data syncs | `UsersService.GetDataSyncs` |
+| ✅ | GET | `/users/syncs/{id}` | Get a data sync | `UsersService.GetDataSync` |
+| ✅ | DELETE | `/users/syncs/{id}` | Undo a data sync | `UsersService.UndoDataSync` |
+| ✅ | GET | `/users/syncs/{id}/paused` | Get paused sync items | `UsersService.GetDataSyncItems` |
+| ✅ | GET | `/users/syncs/{id}/skipped` | Get skipped sync items | `UsersService.GetDataSyncItems` |
+| ✅ | GET | `/users/syncs/{type}` | Get data syncs by type | `UsersService.GetDataSyncs` |
 | ✅ | GET | `/users/{id}/` | Get user profile | `UsersService.GetProfile`, `UsersService.GetUserProfile` |
 | ✅ | POST | `/users/{id}/block` | Block this user | `UsersService.Block` |
 | ✅ | DELETE | `/users/{id}/block` | Unblock this user | `UsersService.Unblock` |

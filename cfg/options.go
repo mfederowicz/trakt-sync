@@ -78,6 +78,9 @@ var SettingsSpoilerValues = []string{"show", "hide"}
 // SettingsDarkKnightValues are the browsing.dark_knight values of a users/settings update
 var SettingsDarkKnightValues = []string{"true", "false", "auto"}
 
+// DataSyncTypes are the users/syncs/{type} values from the API contract
+var DataSyncTypes = []string{"younify", "plex", "import"}
+
 // SmartListSources are the smart list source values from the API contract
 var SmartListSources = []string{"trending", "popular", "anticipated", "recommendations", "discover", "watchlist", "library"}
 
@@ -1007,6 +1010,13 @@ func getOutputForModuleUsers(options *str.Options) string {
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.ID)
 	case consts.CommentReactions:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
+	case consts.DataSyncs:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
+		if len(options.Type) > consts.ZeroValue {
+			options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.Type)
+		}
+	case consts.DataSync, consts.DataSyncPaused, consts.DataSyncSkipped:
+		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.ID)
 	case consts.Activities:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.Type)
 	case consts.MonthInReview:

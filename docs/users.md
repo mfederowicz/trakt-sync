@@ -743,3 +743,27 @@ $ ./trakt-sync users -a month_in_review -year 2026 -month 8 -> export_users_mont
 ```console
 $ ./trakt-sync users -a year_in_review -year 2025 -> export_users_year_in_review_2025.json
 ```
+##### Get data syncs (younify, plex, import)
+Syncs your connected apps ran for you, with added counts per section. `-t younify|plex|import` filters by the app.
+```console
+$ ./trakt-sync users -a data_syncs -> export_users_data_syncs.json
+```
+```console
+$ ./trakt-sync users -a data_syncs -t import -> export_users_data_syncs_import.json
+```
+##### Get one data sync, and its paused or skipped items
+Items are exported as Trakt stores them: keys specific to the source (e.g. from Netflix) are kept.
+```console
+$ ./trakt-sync users -a data_sync -i 157 -> export_users_data_sync_157.json
+```
+```console
+$ ./trakt-sync users -a data_sync_paused -i 157 -> export_users_data_sync_paused_157.json
+```
+```console
+$ ./trakt-sync users -a data_sync_skipped -i 157 -> export_users_data_sync_skipped_157.json
+```
+##### Undo a data sync
+Reverses every item the sync imported (history, ratings, paused, watchlist, collection).
+```console
+$ ./trakt-sync users -a undo_data_sync -i 157
+```

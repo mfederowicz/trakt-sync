@@ -36,6 +36,9 @@ schedule.
   contract are documented (they already worked).
 - `users -a update_settings` (profile and browsing settings from `-items <file>` or stdin), `users -a add_saved_filters`
   and `users -a delete_saved_filter -i <id>` (both VIP only).
+- `users -a data_syncs [-t younify|plex|import]`, `users -a data_sync|data_sync_paused|data_sync_skipped -i <id>` and
+  `users -a undo_data_sync -i <id>`: the syncs your connected apps ran, their paused and skipped items (with the keys
+  specific to the source kept), and undoing a sync.
 
 ### Changed
 
