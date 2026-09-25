@@ -127,6 +127,11 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		consts.UpdateSettings:    handlers.UsersUpdateSettingsHandler{},
 		consts.AddSavedFilters:   handlers.UsersAddSavedFiltersHandler{},
 		consts.DeleteSavedFilter: handlers.UsersDeleteSavedFilterHandler{},
+		consts.DataSyncs:         handlers.UsersDataSyncsHandler{},
+		consts.DataSync:          handlers.UsersDataSyncHandler{},
+		consts.DataSyncPaused:    handlers.UsersDataSyncItemsHandler{},
+		consts.DataSyncSkipped:   handlers.UsersDataSyncItemsHandler{},
+		consts.UndoDataSync:      handlers.UsersUndoDataSyncHandler{},
 	}
 
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
@@ -142,7 +147,8 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		"watchlist", "watchlist_comments", "favorites", "favorites_comments", "watching",
 		"watched", "stats", "report", consts.SmartLists, consts.SmartList, consts.AddSmartList,
 		consts.UpdateSmartList, consts.DeleteSmartList, consts.CommentReactions, consts.Activities, consts.MonthInReview,
-		consts.YearInReview, consts.UpdateSettings, consts.AddSavedFilters, consts.DeleteSavedFilter}
+		consts.YearInReview, consts.UpdateSettings, consts.AddSavedFilters, consts.DeleteSavedFilter, consts.DataSyncs,
+		consts.DataSync, consts.DataSyncPaused, consts.DataSyncSkipped, consts.UndoDataSync}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil
