@@ -120,6 +120,8 @@ from its ⬜ rows. A route the contract lists but the live API answers with 404
 is marked ⚠️ with a row in the Findings table (Go method, what the live API
 returns, date checked, upstream issue). Implemented ⚠️ routes stay in the CLI
 and turn the 404 into a clear "documented, but not served" error.
+A route the CLI has no use for is marked ➖ with the reason in the Go method
+column and counted in the ➖ summary column.
 Add a `CHANGELOG.md` entry under `[Unreleased]` (see `project.md`).
 
 ## 8. Tests
