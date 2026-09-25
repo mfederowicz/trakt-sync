@@ -39,6 +39,7 @@ var (
 	_usersDescription            = UsersCmd.Flag.String("description", cfg.DefaultConfig().Description, consts.WatchlistDescriptionUsage)
 	_usersYear                   = UsersCmd.Flag.Int("year", consts.ZeroValue, consts.YearUsage)
 	_usersMonth                  = UsersCmd.Flag.Int("month", consts.ZeroValue, consts.MonthUsage)
+	_usersSortPath               = UsersCmd.Flag.String("sort", consts.EmptyString, consts.SortPathUsage)
 )
 
 // UsersCmd Returns all personal lists for a user.

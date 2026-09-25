@@ -30,6 +30,10 @@ schedule.
   your social graph watched), `users -a month_in_review -year <y> -month <m>` and `users -a year_in_review -year <y>`.
   Trakt answers the last three with 401 for API apps for now; the CLI reports it as `this route is not open to API
   apps yet`.
+- `users -a watchlist|favorites -sort <rank|added|title|released|runtime|popularity|percentage|votes>` uses the
+  contract's `/{type}/{sort}` routes (with `-t all`, `movies` or `shows`); without `-sort` nothing changes.
+- `users -a lists -i <id> -t movie|show|movie,show|movie,show,season,episode`: the singular list item types of the
+  contract are documented (they already worked).
 
 ### Changed
 

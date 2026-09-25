@@ -21,6 +21,12 @@ func (m UsersWatchlistHandler) Handle(options *str.Options, client *internal.Cli
 	if err != nil {
 		return err
 	}
+	// -sort switches to the /{type}/{sort} route; check it before any request
+	if len(options.SortPath) > consts.ZeroValue {
+		if _, err := sortRouteType(consts.Watchlist, options); err != nil {
+			return err
+		}
+	}
 
 	printer.Println("Returns all items in a user's watchlist filtered by type:", options.Type)
 

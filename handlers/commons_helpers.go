@@ -6,9 +6,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"strconv"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
@@ -212,4 +214,22 @@ func notOpenToAPIApps(action string, err error) error {
 		return fmt.Errorf(consts.NotOpenToAPIAppsMsg, action, err)
 	}
 	return nil
+}
+
+// sortRouteType maps -t to the {type} of the users watchlist / favorites /{type}/{sort} routes and checks -sort.
+func sortRouteType(section string, options *str.Options) (string, error) {
+	if !slices.Contains(cfg.UsersSortPathValues, options.SortPath) {
+		return consts.EmptyString, fmt.Errorf("sort '%s' is not valid, avaliable values: %v", options.SortPath, cfg.UsersSortPathValues)
+	}
+	switch options.Type {
+	case consts.Movies, consts.Shows:
+		return options.Type, nil
+	case consts.ActionTypeAll:
+		if section == consts.Favorites {
+			return consts.Media, nil
+		}
+		return consts.MovieShow, nil
+	default:
+		return consts.EmptyString, fmt.Errorf("-sort works with -t all, movies or shows, not '%s'", options.Type)
+	}
 }

@@ -179,6 +179,7 @@ const (
 	ServiceIDUsage               = "streaming service id ie: netflix (see younify -a connections)"
 	SmartListNotFoundMsg         = "not found smart list for:%s (private lists are visible only to their owner)"
 	SmartListIDUsage             = "smart list slug (ids.slug)"
+	SortPathUsage                = "watchlist / favorites sort in the path: rank, added, title, released, runtime, popularity, percentage, votes"
 	SpoilerUsage                 = "allow to overwrite spoiler"
 	StartAtUsage                 = "allow to overwrite start_at"
 	StartDateUsage               = "allow to overwrite start_date"

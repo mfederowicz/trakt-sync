@@ -21,6 +21,7 @@ type Options struct {
 	AllData           bool
 	Year              int
 	Month             int
+	SortPath          string
 	Years             string
 	HideCompleted     bool
 	HideNotCompleted  bool
