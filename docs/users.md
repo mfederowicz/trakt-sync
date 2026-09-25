@@ -3,6 +3,12 @@
 ```console
 $ ./trakt-sync users -a settings
 ```
+##### Update settings - via -items flag or stdin:
+Send only the values to change: a `user` block (`name`, `about`, `location`, `private`, `dob`) and/or a `browsing` block
+(`genres`, `spoilers` with `show`/`hide`, `watchnow`, `dark_knight` `true`/`false`/`auto`, `watch_only_once`, `show_rating_prompt`, `locale`).
+```console
+$ echo '{"browsing":{"spoilers":{"episodes":"hide"}}}' | ./trakt-sync users -a update_settings
+```
 ##### Following requests:
 ```console
 $ ./trakt-sync users -a following_requests
@@ -22,6 +28,15 @@ $ ./trakt-sync users -a follower_requests -follower_request 123 -deny
 ##### Fetch saved filters for selected user:
 ```console
 $ ./trakt-sync users -a saved_filters -u username
+```
+##### Add saved filters (VIP only) - via -items flag or stdin:
+A JSON array of `name` + `url` (a trakt.tv page with its filters).
+```console
+$ echo '[{"name":"Sci-fi","url":"https://trakt.tv/movies/trending?genres=science-fiction"}]' | ./trakt-sync users -a add_saved_filters -> users_add_saved_filters_results.json
+```
+##### Delete saved filter (VIP only):
+```console
+$ ./trakt-sync users -a delete_saved_filter -i 101
 ```
 ##### Export hidden items for a section (movie,show,season,user):
 Sections: `calendar` (default), `progress_watched`, `progress_collected`, `recommendations`, `comments`, `dropped`.

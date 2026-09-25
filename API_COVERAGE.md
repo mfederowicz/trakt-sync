@@ -39,10 +39,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`social_recommendations`](#social_recommendations) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
-| [`users`](#users) | 82 | 0 | 19 | 3 | 0 | 104 |
+| [`users`](#users) | 85 | 0 | 13 | 5 | 1 | 104 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **302** | **0** | **19** | **12** | **2** | **335** |
+| **Total** | **305** | **0** | **13** | **14** | **3** | **335** |
 
 ## calendars
 
@@ -392,7 +392,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
-| ⬜ | PUT | `/users/avatar` | Update avatar |  |
+| ⚠️ | PUT | `/users/avatar` | Update avatar |  |
 | ✅ | GET | `/users/blocked` | Get blocked users | `UsersService.GetBlockedUsers` |
 | ✅ | POST | `/users/hidden/calendar/remove` | Remove hidden calendar items | `UsersService.RemoveHiddenItems` |
 | ✅ | GET | `/users/hidden/dropped` | Get dropped shows | `UsersService.GetHiddenItems` |
@@ -406,12 +406,12 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/users/requests/following` | Get pending following requests | `UsersService.GetPendingFollowingRequests` |
 | ✅ | POST | `/users/requests/{id}` | Approve follow request | `UsersService.ApproveFollowRequest` |
 | ✅ | DELETE | `/users/requests/{id}` | Deny follow request | `UsersService.DenyFollowRequest` |
-| ⬜ | POST | `/users/saved_filters` | Add saved filters |  |
-| ⬜ | DELETE | `/users/saved_filters/{id}` | Delete saved filter |  |
+| ✅ | POST | `/users/saved_filters` | Add saved filters | `UsersService.AddSavedFilters` |
+| ✅ | DELETE | `/users/saved_filters/{id}` | Delete saved filter | `UsersService.DeleteSavedFilter` |
 | ✅ | GET | `/users/saved_filters/{section}` | Get saved filters | `UsersService.GetSavedFilters` |
-| ⬜ | PUT | `/users/set_cover` | Update cover image |  |
+| ⚠️ | PUT | `/users/set_cover` | Update cover image |  |
 | ✅ | GET | `/users/settings` | Retrieve settings | `UsersService.RetrieveSettings` |
-| ⬜ | PUT | `/users/settings` | Update settings |  |
+| ✅ | PUT | `/users/settings` | Update settings | `UsersService.UpdateSettings` |
 | ⬜ | GET | `/users/settings/plex/` | Get Plex settings |  |
 | ⬜ | PUT | `/users/settings/plex/` | Update Plex settings |  |
 | ⬜ | POST | `/users/settings/plex/connect` | Connect Plex |  |
@@ -469,7 +469,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | POST | `/users/{id}/lists/{list_id}/like` | Like a list | `UsersService.ListLike` |
 | ✅ | DELETE | `/users/{id}/lists/{list_id}/like` | Remove like on a list | `UsersService.RemoveListLike` |
 | ✅ | GET | `/users/{id}/lists/{list_id}/likes` | Get all users who liked a list | `UsersService.GetListLikes` |
-| ⬜ | POST | `/users/{id}/lists/{list_id}/reorder` | Reorder items on a list |  |
+| ➖ | POST | `/users/{id}/lists/{list_id}/reorder` | Reorder items on a list | not used: same request as `/users/{id}/lists/{list_id}/items/reorder`, which `users -a reorder_list_items` calls |
 | ✅ | POST | `/users/{id}/lists/{list_id}/report` | Report a user's list | `UsersService.ListReport` |
 | ⚠️ | GET | `/users/{id}/mir/{year}/{month}` | Get month in review | `UsersService.GetMonthInReview` |
 | ✅ | GET | `/users/{id}/notes/{type}` | Get notes | `UsersService.GetNotes` |
@@ -526,3 +526,4 @@ Differences between the service code and the contract, found while building this
 | - | `GET /shows/streaming/{period}` | live API returns 404 `{"error":"endpoint removed"}` (checked 2026-09-24). Upstream issue: TBD |
 | `YounifyService.*` | `/younify/*` (all 5 routes) | `GET /younify/connections` returns 401 for the maintainer's OAuth token, and the developer portal's own "try it" gets 401 too (checked 2026-09-25); younify looks limited to Trakt's own apps. The other 4 routes change the account and were not tried; assumed the same. The CLI explains a 401. Upstream issue: TBD |
 | `UsersService.GetMonthInReview`, `GetYearInReview`, `GetSocialActivity` | `GET /users/{id}/mir/{year}/{month}`, `/users/{id}/yir/{year}`, `/users/{id}/{type}/activities` | live API returns 401 while `GET /users/reactions/comments` (OAuth required) works with the same token (checked 2026-09-25); looks not open to API apps. The CLI explains the 401. Upstream issue: TBD |
+| - | `PUT /users/avatar`, `PUT /users/set_cover` | the contract marks both Limited Access: "available only to first-party Trakt applications. Third-party applications receive a `401` response even with a valid OAuth token." Not implemented. |

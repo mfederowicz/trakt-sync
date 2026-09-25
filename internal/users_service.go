@@ -1496,3 +1496,45 @@ func (u *UsersService) fetchSortedItems(ctx context.Context, url string, opts *u
 
 	return list, resp, nil
 }
+
+// UpdateSettings Update settings of the authenticated user; Trakt answers 201 without a body.
+//
+// API docs: https://docs.trakt.tv/reference/putuserssavesettings
+func (u *UsersService) UpdateSettings(ctx context.Context, settings *str.SettingsUpdate) (*str.Response, error) {
+	req, err := u.client.NewRequest(http.MethodPut, "users/settings", settings)
+	if err != nil {
+		return nil, err
+	}
+
+	return u.client.Do(ctx, req, nil)
+}
+
+// AddSavedFilters Create saved filters for the authenticated user.
+//
+// API docs: https://docs.trakt.tv/reference/postusersfiltersadd
+func (u *UsersService) AddSavedFilters(ctx context.Context, filters []*str.SavedFilterAdd) (*str.SavedFiltersResult, *str.Response, error) {
+	req, err := u.client.NewRequest(http.MethodPost, "users/saved_filters", filters)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.SavedFiltersResult)
+	resp, err := u.client.Do(ctx, req, result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// DeleteSavedFilter Delete a saved filter by id.
+//
+// API docs: https://docs.trakt.tv/reference/deleteusersfiltersdelete
+func (u *UsersService) DeleteSavedFilter(ctx context.Context, id int) (*str.Response, error) {
+	req, err := u.client.NewRequest(http.MethodDelete, fmt.Sprintf("users/saved_filters/%d", id), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return u.client.Do(ctx, req, nil)
+}

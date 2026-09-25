@@ -72,6 +72,12 @@ var SocialActivityTypes = []string{"friends", "followers", "following"}
 // UsersSortPathValues are the {sort} values of the users watchlist / favorites /{type}/{sort} routes
 var UsersSortPathValues = []string{"rank", "added", "title", "released", "runtime", "popularity", "percentage", "votes"}
 
+// SettingsSpoilerValues are the browsing.spoilers values of a users/settings update
+var SettingsSpoilerValues = []string{"show", "hide"}
+
+// SettingsDarkKnightValues are the browsing.dark_knight values of a users/settings update
+var SettingsDarkKnightValues = []string{"true", "false", "auto"}
+
 // SmartListSources are the smart list source values from the API contract
 var SmartListSources = []string{"trending", "popular", "anticipated", "recommendations", "discover", "watchlist", "library"}
 
@@ -1042,7 +1048,7 @@ func getOutputForModuleUsers(options *str.Options) string {
 			options.Module,
 			options.Action)
 	case consts.AddList, consts.ReorderLists, consts.AddListItems, consts.RemoveListItems, consts.ReorderListItems,
-		consts.AddHiddenItems, consts.RemoveHiddenItems, consts.AddSmartList:
+		consts.AddHiddenItems, consts.RemoveHiddenItems, consts.AddSmartList, consts.AddSavedFilters:
 		options.Output = fmt.Sprintf(consts.DefaultResultsFormat, options.Module, options.Action)
 	case consts.UpdateList, consts.Watching, consts.UpdateSmartList:
 		options.Output = fmt.Sprintf(consts.DefaultExportResultsFormat, options.Module, options.Action)
