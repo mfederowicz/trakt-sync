@@ -2,6 +2,9 @@
 package handlers
 
 import (
+	"fmt"
+
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -20,6 +23,9 @@ func (SmartListsSummaryHandler) Handle(options *str.Options, client *internal.Cl
 	result, resp, err := client.SmartLists.GetSmartList(client.BuildCtxFromOptions(options), &options.InternalID)
 	if err = smartListError(options.Action, options.InternalID, resp, err); err != nil {
 		return err
+	}
+	if isEmptySmartList(result) {
+		return fmt.Errorf(consts.SmartListNotFoundMsg, options.InternalID)
 	}
 
 	return writeSmartList(options, result)

@@ -28,6 +28,8 @@ func TestSmartListsHandlers(t *testing.T) {
 		{name: "summary", handler: SmartListsSummaryHandler{}, options: str.Options{Action: consts.Summary, InternalID: "top-sci-fi"}, status: http.StatusOK, body: `{"name":"Top Sci-Fi"}`},
 		{name: "summary not found", handler: SmartListsSummaryHandler{}, options: str.Options{Action: consts.Summary, InternalID: "top-sci-fi"}, status: http.StatusNotFound, body: `{}`,
 			wantErr: "not found smart list for:top-sci-fi"},
+		{name: "summary empty object", handler: SmartListsSummaryHandler{}, options: str.Options{Action: consts.Summary, InternalID: "no-such-list"}, status: http.StatusOK, body: `{}`,
+			wantErr: "not found smart list for:no-such-list"},
 		{name: "summary without id", handler: SmartListsSummaryHandler{}, options: str.Options{Action: consts.Summary}, wantErr: consts.EmptySmartListIDMsg, wantNoAPI: true},
 		{name: "items", handler: SmartListsItemsHandler{}, options: str.Options{Action: consts.Items, InternalID: "top-sci-fi"}, status: http.StatusOK,
 			body: `[{"rank":1,"type":"movie","movie":{"title":"Arrival"}}]`},

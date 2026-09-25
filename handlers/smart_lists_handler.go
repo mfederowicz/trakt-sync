@@ -22,7 +22,7 @@ type SmartListsHandler interface {
 // smartListError maps a smart list response to a readable error; private lists answer 404 unless you own them.
 func smartListError(action string, id string, resp *str.Response, err error) error {
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		return fmt.Errorf("not found smart list for:%s (private lists are visible only to their owner)", id)
+		return fmt.Errorf(consts.SmartListNotFoundMsg, id)
 	}
 
 	if err != nil {
@@ -30,6 +30,11 @@ func smartListError(action string, id string, resp *str.Response, err error) err
 	}
 
 	return nil
+}
+
+// isEmptySmartList reports a smart list response with no data; the API answers an unknown slug with {} instead of 404.
+func isEmptySmartList(s *str.SmartList) bool {
+	return s == nil || (s.IDs == nil && s.Name == nil)
 }
 
 // writeSmartList writes a smart list result to the output file.
