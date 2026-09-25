@@ -38,6 +38,8 @@ schedule.
 
 ### Fixed
 
+- `users -a history -start_at <date> -end_at <date>` failed with `flag provided but not defined: -start_at` and
+  silently used the default window; `users` now accepts both flags.
 - `sync` and `users` ignored `-o` and always wrote to their generated file name (e.g.
   `export_sync_history_movies.json`); `-o` now sets the output file.
 - `sync -a playback` without `-t` returned only movies (the default type), although the docs describe it as all
