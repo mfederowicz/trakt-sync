@@ -34,6 +34,8 @@ var (
 	_usersItems                  = UsersCmd.Flag.String("items", consts.EmptyString, consts.ItemsUsage)
 	_usersCommentsIncludeReplies = UsersCmd.Flag.String("include_replies", cfg.DefaultConfig().IncludeReplies, consts.IncludeRepliesUsage)
 	_usersCommentsCommentType    = UsersCmd.Flag.String("comment_type", cfg.DefaultConfig().CommentType, consts.CommentTypeUsage)
+	_usersStartAt                = UsersCmd.Flag.String("start_at", cfg.DefaultConfig().StartAt, consts.StartAtUsage)
+	_usersEndAt                  = UsersCmd.Flag.String("end_at", cfg.DefaultConfig().EndAt, consts.EndAtUsage)
 )
 
 // UsersCmd Returns all personal lists for a user.
