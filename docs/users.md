@@ -771,6 +771,9 @@ Reverses every item the sync imported (history, ratings, paused, watchlist, coll
 $ ./trakt-sync users -a undo_data_sync -i 157
 ```
 ##### Plex settings
+> **Note:** as of 2026-09-25 Trakt answers `plex_settings` and `plex_servers` with 401 for API apps (other OAuth routes work with the
+> same token), and the other Plex actions are expected to do the same; they fail with `this route is not open to API apps yet`.
+
 Connection status, real-time scrobbler webhook, sync selection and toggles.
 ```console
 $ ./trakt-sync users -a plex_settings -> export_users_plex_settings.json

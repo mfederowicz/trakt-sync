@@ -39,10 +39,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`social_recommendations`](#social_recommendations) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
-| [`users`](#users) | 92 | 0 | 0 | 11 | 1 | 104 |
+| [`users`](#users) | 85 | 0 | 0 | 18 | 1 | 104 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **312** | **0** | **0** | **20** | **3** | **335** |
+| **Total** | **305** | **0** | **0** | **27** | **3** | **335** |
 
 ## calendars
 
@@ -412,13 +412,13 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ⚠️ | PUT | `/users/set_cover` | Update cover image |  |
 | ✅ | GET | `/users/settings` | Retrieve settings | `UsersService.RetrieveSettings` |
 | ✅ | PUT | `/users/settings` | Update settings | `UsersService.UpdateSettings` |
-| ✅ | GET | `/users/settings/plex/` | Get Plex settings | `UsersService.GetPlexSettings` |
-| ✅ | PUT | `/users/settings/plex/` | Update Plex settings | `UsersService.UpdatePlexSettings` |
-| ✅ | POST | `/users/settings/plex/connect` | Connect Plex | `UsersService.ConnectPlex` |
-| ✅ | DELETE | `/users/settings/plex/connect` | Disconnect Plex | `UsersService.DisconnectPlex` |
-| ✅ | GET | `/users/settings/plex/servers` | Get Plex servers | `UsersService.GetPlexServers` |
-| ✅ | GET | `/users/settings/plex/servers/{server_id}` | Get Plex server accounts and libraries | `UsersService.GetPlexServerAccounts` |
-| ✅ | POST | `/users/settings/plex/sync` | Sync Plex now | `UsersService.SyncPlex` |
+| ⚠️ | GET | `/users/settings/plex/` | Get Plex settings | `UsersService.GetPlexSettings` |
+| ⚠️ | PUT | `/users/settings/plex/` | Update Plex settings | `UsersService.UpdatePlexSettings` |
+| ⚠️ | POST | `/users/settings/plex/connect` | Connect Plex | `UsersService.ConnectPlex` |
+| ⚠️ | DELETE | `/users/settings/plex/connect` | Disconnect Plex | `UsersService.DisconnectPlex` |
+| ⚠️ | GET | `/users/settings/plex/servers` | Get Plex servers | `UsersService.GetPlexServers` |
+| ⚠️ | GET | `/users/settings/plex/servers/{server_id}` | Get Plex server accounts and libraries | `UsersService.GetPlexServerAccounts` |
+| ⚠️ | POST | `/users/settings/plex/sync` | Sync Plex now | `UsersService.SyncPlex` |
 | ⚠️ | GET | `/users/syncs/` | Get data syncs | `UsersService.GetDataSyncs` |
 | ⚠️ | GET | `/users/syncs/{id}` | Get a data sync | `UsersService.GetDataSync` |
 | ⚠️ | DELETE | `/users/syncs/{id}` | Undo a data sync | `UsersService.UndoDataSync` |
@@ -528,3 +528,4 @@ Differences between the service code and the contract, found while building this
 | `UsersService.GetMonthInReview`, `GetYearInReview`, `GetSocialActivity` | `GET /users/{id}/mir/{year}/{month}`, `/users/{id}/yir/{year}`, `/users/{id}/{type}/activities` | live API returns 401 while `GET /users/reactions/comments` (OAuth required) works with the same token (checked 2026-09-25); looks not open to API apps. The CLI explains the 401. Upstream issue: TBD |
 | - | `PUT /users/avatar`, `PUT /users/set_cover` | the contract marks both Limited Access: "available only to first-party Trakt applications. Third-party applications receive a `401` response even with a valid OAuth token." Not implemented. |
 | `UsersService.GetDataSyncs`, `GetDataSync`, `GetDataSyncItems`, `UndoDataSync` | `/users/syncs/*` (all 6 routes) | `GET /users/syncs/` returns 401 with the maintainer's token (checked 2026-09-25), which works on other OAuth routes such as `/users/reactions/comments`; looks not open to API apps. The other routes were not tried; assumed the same. The CLI explains a 401. Upstream issue: TBD |
+| `UsersService.GetPlexSettings`, `UpdatePlexSettings`, `ConnectPlex`, `DisconnectPlex`, `GetPlexServers`, `GetPlexServerAccounts`, `SyncPlex` | `/users/settings/plex/*` (all 7 routes) | `GET /users/settings/plex/` and `GET /users/settings/plex/servers` return 401 with the maintainer's token (checked 2026-09-25), which works on other OAuth routes; looks not open to API apps. The write routes were not tried; assumed the same. The CLI explains a 401 (a Plex `error_code` 401 is reported as a Plex error instead). Upstream issue: TBD |
