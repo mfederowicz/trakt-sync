@@ -48,7 +48,7 @@ func (h CheckinShowEpisodeHandler) CreateCheckinForEpisodeCode(options *str.Opti
 	}
 
 	if resp != nil && resp.StatusCode == http.StatusConflict {
-		return fmt.Errorf("checkin for show:%s, season:%d, episode:%d exists, expires:%s", *checkin.Show.Title, *checkin.Episode.Season, *checkin.Episode.Number, result.Expires.Local())
+		return fmt.Errorf("checkin for show:%s, season:%d, episode:%d exists%s", *checkin.Show.Title, *checkin.Episode.Season, *checkin.Episode.Number, checkinExpires(result))
 	}
 
 	if err != nil {
@@ -76,7 +76,7 @@ func (h CheckinShowEpisodeHandler) CreateCheckinForEpisodeAbs(options *str.Optio
 	}
 
 	if resp != nil && resp.StatusCode == http.StatusConflict {
-		return fmt.Errorf("checkin for show:%s, episode_abs:%d exists, expires:%s", *checkin.Show.Title, options.EpisodeAbs, result.Expires.Local())
+		return fmt.Errorf("checkin for show:%s, episode_abs:%d exists%s", *checkin.Show.Title, options.EpisodeAbs, checkinExpires(result))
 	}
 
 	if err != nil {
@@ -88,4 +88,12 @@ func (h CheckinShowEpisodeHandler) CreateCheckinForEpisodeAbs(options *str.Optio
 	}
 
 	return nil
+}
+
+// checkinExpires formats when the active checkin expires; the 409 body may not include it.
+func checkinExpires(result *str.Checkin) string {
+	if result == nil || result.Expires == nil {
+		return consts.EmptyString
+	}
+	return fmt.Sprintf(", expires:%s", result.Expires.Local())
 }
