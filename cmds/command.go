@@ -102,6 +102,7 @@ var Avflags = map[string]bool{
 	"list_item_id":           true,
 	"item_id":                true,
 	"movies":                 true,
+	"month":                  true,
 	"msg":                    true,
 	"message":                true,
 	"networks":               true,
@@ -153,6 +154,7 @@ var Avflags = map[string]bool{
 	"version":                true,
 	"watch_window":           true,
 	"watchlist":              true,
+	"year":                   true,
 	"younify":                true,
 }
 
@@ -462,6 +464,8 @@ func setOptionsDependsOnModuleUsers(options str.Options) str.Options {
 	options.Privacy = *_usersPrivacy
 	options.AllowComments = *_usersAllowComments
 	options.DisplayNumbers = *_usersDisplayNumbers
+	options.Year = *_usersYear
+	options.Month = *_usersMonth
 
 	return options
 }

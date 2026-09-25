@@ -17,6 +17,7 @@ const (
 	AddToHistory          = "add_to_history"
 	AddToRatings          = "add_to_ratings"
 	AddToWatchlist        = "add_to_watchlist"
+	Activities            = "activities"
 	AddList               = "add_list"
 	AddListItems          = "add_list_items"
 	AddSmartList          = "add_smart_list"
@@ -41,6 +42,7 @@ const (
 	Collection            = "collection"
 	CollectionProgress    = "collection_progress"
 	Comment               = "comment"
+	CommentReactions      = "comment_reactions"
 	Comments              = "comments"
 	Connect               = "connect"
 	Connections           = "connections"
@@ -101,6 +103,7 @@ const (
 	Media                 = "media"
 	Members               = "members"
 	MinimalCollection     = "minimal_collection"
+	MonthInReview         = "month_in_review"
 	Movie                 = "movie"
 	Movies                = "movies"
 	MyDvd                 = "my-dvd"
@@ -193,6 +196,7 @@ const (
 	WatchNow              = "watchnow"
 	Watchlist             = "watchlist"
 	WatchlistComments     = "watchlist_comments"
+	YearInReview          = "year_in_review"
 	Younify               = "younify"
 )
 

@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -11,8 +12,10 @@ import (
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
+	"github.com/mfederowicz/trakt-sync/writer"
 )
 
 func isMovieType(stype string) bool {
@@ -188,4 +191,25 @@ func parseItemTraktID(id string) (int64, error) {
 	}
 
 	return traktID, nil
+}
+
+// writeResult marshals data and writes it to the output file.
+func writeResult(options *str.Options, data any) error {
+	printer.Println("write data to:" + options.Output)
+	jsonData, err := json.MarshalIndent(data, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("marshal %s error: %w", options.Action, err)
+	}
+
+	writer.WriteJSON(options, jsonData)
+	return nil
+}
+
+// notOpenToAPIApps turns a 401 on a route that other OAuth calls pass into a readable error; nil for any other error.
+func notOpenToAPIApps(action string, err error) error {
+	var invalidUser *internal.InvalidUserError
+	if errors.As(err, &invalidUser) {
+		return fmt.Errorf(consts.NotOpenToAPIAppsMsg, action, err)
+	}
+	return nil
 }

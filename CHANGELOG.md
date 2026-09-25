@@ -26,6 +26,10 @@ schedule.
   401 (the developer portal too), which the CLI reports as `younify is not open to API apps yet`.
 - `users -a smart_lists|smart_list|add_smart_list|update_smart_list|delete_smart_list`: list, get, create, update and
   delete your smart lists. Create and update read the smart list JSON from `-items <file>` or stdin, like `add_list`.
+- `users -a comment_reactions` (comments you reacted to), `users -a activities -t friends|followers|following` (what
+  your social graph watched), `users -a month_in_review -year <y> -month <m>` and `users -a year_in_review -year <y>`.
+  Trakt answers the last three with 401 for API apps for now; the CLI reports it as `this route is not open to API
+  apps yet`.
 
 ### Changed
 
