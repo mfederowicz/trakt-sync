@@ -21,6 +21,9 @@ schedule.
 
 ### Changed
 
+- CI: workflows run on `ubuntu-26.04` and use Node 24-based `actions/checkout@v7` / `actions/setup-go@v7`,
+  which clears the Node.js 20 deprecation and `ubuntu-latest` migration warnings.
+
 ### Fixed
 
 ## [1.19.0] - 2026-09-25
