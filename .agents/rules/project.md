@@ -122,6 +122,11 @@ meaningful fix is done. There is no fixed schedule.
    the version ldflags and publishes the GitHub release. Agents never create
    tags, push tags or publish releases.
 
+The release body is the `## [X.Y.Z]` section of `CHANGELOG.md` (under a
+`## What's Changed` heading, with a Full Changelog compare link), so write those
+entries for the GitHub release page too. The workflow fails if the section is
+missing. Preview it with `make release-notes VERSION=X.Y.Z`.
+
 Check release config changes locally with `goreleaser check` and
 `goreleaser build --snapshot --clean --single-target`. Note that `--clean` wipes `dist/`.
 
