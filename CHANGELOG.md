@@ -19,6 +19,14 @@ schedule.
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.18.0] - 2026-09-25
+
+### Added
+
 - `sync -a playback -t all`, and `-ex` for `sync -a playback`, which was not sent before.
 - `sync -a get_minimal_collection -t movies|shows|episodes [-available_on plex]`: the collection as a compact map of
   Trakt IDs to collected dates (shows nested by season and episode), for syncing local state.
@@ -29,18 +37,18 @@ schedule.
 - `sync -a get_up_next_nitro [-intent all|continue|start|completed] [-watchnow <filter>]`: up next with media filters
   (`-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`, `-start_date`,
   `-end_date`). The global `-genres`, `-years`, `-countries` and `-runtimes` flags were accepted before but not used.
-- New [`team`](./docs/team.md) module: `team -a members [-ex full|images]` exports the Trakt team members to
+- New `team` module: `team -a members [-ex full|images]` exports the Trakt team members to
   `export_team_members.json`. User profiles in JSON exports now also include `deleted` and `director` when the API
   sends them.
-- New [`social_recommendations`](./docs/social_recommendations.md) module: `social_recommendations -a movies|shows`
+- New `social_recommendations` module: `social_recommendations -a movies|shows`
   exports recommendations based on the people you follow, with `-ignore_watched`, `-ignore_collected`,
   `-ignore_watchlisted`, `-watch_window <days>` and `-ex`.
-- New [`watchnow`](./docs/watchnow.md) module: `watchnow -a sources [-country us]` exports the watch now sources
+- New `watchnow` module: `watchnow -a sources [-country us]` exports the watch now sources
   (streaming providers) supported by Trakt, for all countries or one. Trakt marks it limited access; without access
   it fails with a "limited access" message.
 - `recommendations -a movies|shows` takes `-ignore_watched true|false` and `-watch_window <days>`, like
   `social_recommendations`.
-- New [`smart_lists`](./docs/smart_lists.md) module: `smart_lists -a summary -i <slug>` exports a smart list definition
+- New `smart_lists` module: `smart_lists -a summary -i <slug>` exports a smart list definition
   (name, media type, filters) and `smart_lists -a items -i <slug>` the movies or shows it resolves to, with media
   filters (`-watchnow`, `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`),
   `-ignore_watched`, `-ignore_watchlisted` and `-ex`.
@@ -61,11 +69,13 @@ schedule.
 
 - `users -a add_list` treated a created list (201) as an error and did not write its result file;
   `sync -a remove_playback` reported a successful removal (204) as an error.
-- `-o` was ignored by the `sync` and `users` actions that write a result file (`add_*`, `remove_*`, `reorder_*`,
-  `users -a update_list`, `users -a add_list`, `users -a watching`, ...); it now sets that file. Without `-o` the file
-  names are unchanged.
+- `-o` was ignored by `sync` and `users`, which always wrote to their generated file name (e.g.
+  `export_sync_history_movies.json`), including the actions that write a result file (`add_*`, `remove_*`,
+  `reorder_*`, `users -a update_list`, `users -a add_list`, `users -a watching`, ...); `-o` now sets the output file.
+  Without `-o` the file names are unchanged.
 - `users -a lists -i <id>` wrote the list items over the lists overview (`export_users_lists.json`); the items now go
-  to `-o` (default `export_users_lists_<type>.json`) and the overview keeps its own file.
+  to `-o` (default `export_users_lists_<type>.json`) and the overview keeps its own file. Scripts that read the
+  items from `export_users_lists.json` should read `export_users_lists_<type>.json` (or pass `-o`).
 - `-h` / `-help` after a module name printed the help and then ran the command; it now only prints the help.
 - `users -a update_list -description "..."`: `-description` was not a `users` flag, so the description was never
   sent; `users` now accepts it.
@@ -77,8 +87,6 @@ schedule.
   existing checkin instead of crashing.
 - `users -a history -start_at <date> -end_at <date>` failed with `flag provided but not defined: -start_at` and
   silently used the default window; `users` now accepts both flags.
-- `sync` and `users` ignored `-o` and always wrote to their generated file name (e.g.
-  `export_sync_history_movies.json`); `-o` now sets the output file.
 - `sync -a playback` without `-t` returned only movies (the default type), although the docs describe it as all
   playback. It now returns movies and episodes; `-t movies|episodes` still narrows it.
 
@@ -505,7 +513,8 @@ schedule.
 - First release, with the `calendars`, `collection`, `help`, `history`, `lists`, `people`, `search` and `watchlist`
   commands exporting Trakt data to JSON.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.17.0...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.18.0...HEAD
+[1.18.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.17.0...v1.18.0
 [1.17.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.16.0...v1.17.0
 [1.16.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.15.3...v1.16.0
 [1.15.3]: https://github.com/mfederowicz/trakt-sync/compare/v1.15.2...v1.15.3
