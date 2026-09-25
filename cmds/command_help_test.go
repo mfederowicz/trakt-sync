@@ -4,6 +4,7 @@ package cmds
 import (
 	"bytes"
 	"regexp"
+	"strings"
 	"testing"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
@@ -100,5 +101,38 @@ func genTestsList(c *cfg.Config) []TestsList {
 				`--godoc`,
 			},
 		},
+	}
+}
+
+// TestHelpCommandListAligned checks that every summary in the command list starts in the same column,
+// also after a command name longer than the others (social_recommendations).
+func TestHelpCommandListAligned(t *testing.T) {
+	buf := new(bytes.Buffer)
+	if err := render(buf, generalHelp, Commands); err != nil {
+		t.Fatal(err)
+	}
+
+	lines := strings.Split(buf.String(), "\n")
+	column := -1
+	for _, cmd := range Commands {
+		for _, line := range lines {
+			fields := strings.Fields(line)
+			if len(fields) < 2 || fields[0] != cmd.Name {
+				continue
+			}
+			start := strings.Index(line, cmd.Summary)
+			if start < 0 {
+				t.Fatalf("summary of %q not found in %q", cmd.Name, line)
+			}
+			if column == -1 {
+				column = start
+			}
+			if start != column {
+				t.Errorf("summary of %q starts at column %d, want %d:\n%s", cmd.Name, start, column, line)
+			}
+		}
+	}
+	if column == -1 {
+		t.Fatal("command list not found in help output")
 	}
 }
