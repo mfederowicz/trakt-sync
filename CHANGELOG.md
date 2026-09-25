@@ -23,6 +23,9 @@ schedule.
 
 ### Fixed
 
+- `trakt-sync help`: the command list is sized to the longest command name; before, the summary of
+  `social_recommendations` was shifted out of its column.
+
 ## [1.18.0] - 2026-09-25
 
 ### Added

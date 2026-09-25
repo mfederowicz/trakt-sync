@@ -119,6 +119,19 @@ var templateFuncs = template.FuncMap{
 	"trim": func(s string) string {
 		return strings.TrimSpace(s)
 	},
+	// commandName pads a command name to the longest one, so the summaries line up
+	"commandName": func(name string) string {
+		return fmt.Sprintf("%-*s", commandNameWidth(), name)
+	},
+}
+
+// commandNameWidth returns the length of the longest command name.
+func commandNameWidth() int {
+	width := consts.ZeroValue
+	for _, cmd := range Commands {
+		width = max(width, len(cmd.Name))
+	}
+	return width
 }
 
 var stdout io.Writer = tabConverter{os.Stdout}
@@ -142,7 +155,7 @@ func render(w io.Writer, tpl string, data any) error {
 var generalHelp = `	trakt-sync [<options>] [<command> [<suboptions>] [<arguments> ...]]
 {{flags 2}}
 Commands:{{range .}}
-	{{.Name | printf "%-16s"}} {{.Summary}}{{end}}
+	{{.Name | commandName}} {{.Summary}}{{end}}
 
 Use "trakt-sync help <command>" for more help with a command.
 `
