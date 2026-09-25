@@ -38,6 +38,10 @@ schedule.
 
 ### Fixed
 
+- `checkin -a movie -trakt_id <id>` and `checkin -a show_episode -trakt_id <id>` looked the item up without its ID
+  (`GET /movies/`, `GET /shows/`) since 1.8.0, so the checkin could not work; they now use `-trakt_id`.
+- `checkin -a show_episode`: an active checkin (409) without an expiry time in the response now reports the
+  existing checkin instead of crashing.
 - `users -a history -start_at <date> -end_at <date>` failed with `flag provided but not defined: -start_at` and
   silently used the default window; `users` now accepts both flags.
 - `sync` and `users` ignored `-o` and always wrote to their generated file name (e.g.
