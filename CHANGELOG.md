@@ -21,10 +21,14 @@ schedule.
 
 ### Changed
 
+### Fixed
+
+## [1.19.1] - 2026-09-26
+
+### Changed
+
 - CI: workflows run on `ubuntu-26.04` and use Node 24-based `actions/checkout@v7` / `actions/setup-go@v7`,
   which clears the Node.js 20 deprecation and `ubuntu-latest` migration warnings.
-
-### Fixed
 
 ## [1.19.0] - 2026-09-25
 
@@ -558,7 +562,8 @@ schedule.
 - First release, with the `calendars`, `collection`, `help`, `history`, `lists`, `people`, `search` and `watchlist`
   commands exporting Trakt data to JSON.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.19.0...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.19.1...HEAD
+[1.19.1]: https://github.com/mfederowicz/trakt-sync/compare/v1.19.0...v1.19.1
 [1.19.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.18.0...v1.19.0
 [1.18.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.17.0...v1.18.0
 [1.17.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.16.0...v1.17.0
