@@ -37,7 +37,7 @@ func (h NotesNotesCollectionHandler) Handle(options *str.Options, client *intern
 		}
 		n.Episode = episode
 	default:
-		h.common.GenActionTypeItemUsage(options, []string{"movie", "episode"})
+		h.common.GenActionTypeItemUsage(options, []string{consts.Movie, consts.Episode})
 		return nil
 	}
 	p := "private"

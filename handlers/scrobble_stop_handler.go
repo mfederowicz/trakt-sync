@@ -23,7 +23,7 @@ func (s ScrobbleStopHandler) Handle(options *str.Options, client *internal.Clien
 
 	handler, err := s.common.GetHandlerForMap(options.Type, allHandlers)
 
-	validTypes := []string{"movie", "episode", "show_episode"}
+	validTypes := []string{consts.Movie, consts.Episode, consts.ShowEpisode}
 	if err != nil {
 		s.common.GenActionTypeUsage(options, validTypes)
 		return nil

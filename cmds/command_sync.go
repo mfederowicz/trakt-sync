@@ -35,15 +35,15 @@ var (
 	_syncEndDate              = SyncCmd.Flag.String("end_date", consts.EmptyString, consts.EndDateUsage)
 
 	validSyncActions = []string{
-		"last_activities", "playback", "remove_playback", "get_collection", "get_minimal_collection",
-		"get_up_next", "get_up_next_nitro", "get_watched_progress",
-		"add_to_collection", "remove_from_collection", "get_watched",
-		"get_history", "add_to_history", "remove_from_history",
-		"get_ratings", "add_to_ratings", "remove_from_ratings",
-		"get_watchlist", "update_watchlist", "add_to_watchlist",
-		"remove_from_watchlist", "reorder_watchlist", "update_watchlist_item",
-		"get_favorites", "update_favorites", "add_to_favorites",
-		"remove_from_favorites", "reorder_favorites", "update_favorite_item"}
+		consts.LastActivities, consts.Playback, consts.RemovePlayback, consts.GetCollection, consts.GetMinimalCollection,
+		consts.GetUpNext, consts.GetUpNextNitro, consts.GetWatchedProgress,
+		consts.AddToCollection, consts.RemoveFromCollection, consts.GetWatched,
+		consts.GetHistory, consts.AddToHistory, consts.RemoveFromHistory,
+		consts.GetRatings, consts.AddToRatings, consts.RemoveFromRatings,
+		consts.GetWatchlist, consts.UpdateWatchlist, consts.AddToWatchlist,
+		consts.RemoveFromWatchlist, consts.ReorderWatchlist, consts.UpdateWatchlistItem,
+		consts.GetFavorites, consts.UpdateFavorites, consts.AddToFavorites,
+		consts.RemoveFromFavorites, consts.ReorderFavorites, consts.UpdateFavoriteItem}
 )
 
 // SyncCmd returns movies and episodes that a user has watched, sorted by most recent.

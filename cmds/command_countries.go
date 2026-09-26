@@ -28,7 +28,7 @@ func countriesFunc(cmd *Command, _ ...string) error {
 
 	handler, err := cmd.common.GetHandlerForMap(options.Type, allHandlers)
 
-	validTypes := []string{"movies", "shows"}
+	validTypes := []string{consts.Movies, consts.Shows}
 	if err != nil {
 		cmd.common.GenTypeUsage(cmd.Name, validTypes)
 		return nil

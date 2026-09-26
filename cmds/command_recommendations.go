@@ -33,13 +33,13 @@ func recommendationsFunc(cmd *Command, _ ...string) error {
 	options = cmd.UpdateOptionsWithCommandFlags(options)
 	var handler handlers.RecommendationsHandler
 	var recommendationsHandlers = map[string]handlers.Handler{
-		"movies": handlers.RecommendationsMoviesHandler{},
-		"shows":  handlers.RecommendationsShowsHandler{},
+		consts.Movies: handlers.RecommendationsMoviesHandler{},
+		consts.Shows:  handlers.RecommendationsShowsHandler{},
 	}
 	handler, err := cmd.common.GetHandlerForMap(options.Action, recommendationsHandlers)
 
 	if err != nil {
-		cmd.common.GenActionsUsage(cmd.Name, []string{"movies", "shows"})
+		cmd.common.GenActionsUsage(cmd.Name, []string{consts.Movies, consts.Shows})
 		return nil
 	}
 

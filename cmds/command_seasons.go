@@ -21,8 +21,8 @@ var (
 	_seasonsCountry    = SeasonsCmd.Flag.String("country", consts.EmptyString, consts.CountryUsage)
 
 	_seasonsActions = []string{
-		"summary", "season", "episodes", "translations", "comments", "lists",
-		"people", "ratings", "stats", "watching", "videos", consts.Report, consts.JustwatchLinks}
+		consts.Summary, consts.Season, consts.Episodes, consts.Translations, consts.Comments, consts.Lists,
+		consts.People, consts.Ratings, consts.Stats, consts.Watching, consts.Videos, consts.Report, consts.JustwatchLinks}
 )
 
 // SeasonsCmd returns seasons and episodes that a user has watched, sorted by most recent.

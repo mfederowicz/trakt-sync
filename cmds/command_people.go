@@ -45,7 +45,7 @@ func peopleFunc(cmd *Command, _ ...string) error {
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	if err != nil {
-		cmd.common.GenActionsUsage(cmd.Name, []string{"updates", "updated_ids", "summary", "movies", "shows", "lists", "refresh", consts.Report})
+		cmd.common.GenActionsUsage(cmd.Name, []string{consts.Updates, consts.UpdatedIDs, consts.Summary, consts.Movies, consts.Shows, consts.Lists, consts.Refresh, consts.Report})
 		return nil
 	}
 

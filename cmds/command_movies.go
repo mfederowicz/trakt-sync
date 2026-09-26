@@ -23,10 +23,10 @@ var (
 	_moviesLinks      = MoviesCmd.Flag.String("links", consts.EmptyString, consts.MoviesLinksUsage)
 
 	validActions = []string{
-		"trending", "popular", "favorited", "played", "watched", "collected",
-		"anticipated", "boxoffice", "updated", "updated_ids", "summary", "aliases",
-		"releases", "translations", "comments", "lists", "people", "ratings",
-		"releated", "stats", "studios", "watching", "videos", "refresh",
+		consts.Trending, consts.Popular, consts.Favorited, consts.Played, consts.Watched, consts.Collected,
+		consts.Anticipated, consts.Boxoffice, "updated", consts.UpdatedIDs, consts.Summary, consts.Aliases,
+		consts.Releases, consts.Translations, consts.Comments, consts.Lists, consts.People, consts.Ratings,
+		"releated", consts.Stats, consts.Studios, consts.Watching, consts.Videos, consts.Refresh,
 		consts.Hot, consts.Streaming, consts.Report, consts.RefreshJustwatch, consts.Sentiments,
 		consts.WatchNow, consts.JustwatchLinks}
 )

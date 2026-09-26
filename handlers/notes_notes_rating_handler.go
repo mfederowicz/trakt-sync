@@ -46,7 +46,7 @@ func (h NotesNotesRatingHandler) Handle(options *str.Options, client *internal.C
 		}
 		n.Episode = episode
 	default:
-		h.common.GenActionTypeItemUsage(options, []string{"movie", "show", "season", "episode"})
+		h.common.GenActionTypeItemUsage(options, []string{consts.Movie, consts.Show, consts.Season, consts.Episode})
 		return nil
 	}
 	p := "private"

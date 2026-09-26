@@ -23,8 +23,8 @@ var (
 	_episodesLinks      = EpisodesCmd.Flag.String("links", consts.EmptyString, consts.LinksUsage)
 
 	_episodesActions = []string{
-		"summary", "translations", "comments", "lists",
-		"people", "ratings", "stats", "watching", "videos", consts.Report, consts.WatchNow}
+		consts.Summary, consts.Translations, consts.Comments, consts.Lists,
+		consts.People, consts.Ratings, consts.Stats, consts.Watching, consts.Videos, consts.Report, consts.WatchNow}
 )
 
 // EpisodesCmd returns episodes and episodes that a user has watched, sorted by most recent.

@@ -130,6 +130,7 @@ const (
 	Networks              = "networks"
 	NewShows              = "new_shows"
 	NextEpisode           = "next_episode"
+	Note                  = "note"
 	Notes                 = "notes"
 	Pause                 = "pause"
 	People                = "people"

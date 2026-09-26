@@ -28,10 +28,10 @@ var (
 	_showsLinks         = ShowsCmd.Flag.String("links", consts.EmptyString, consts.ShowsLinksUsage)
 
 	validShowsActions = []string{
-		"trending", "popular", "favorited", "played", "watched", "collected",
-		"anticipated", "boxoffice", "updates", "updated_ids", "summary", "aliases", "certifications",
-		"collection_progress", "watched_progress", "releases", "translations", "comments", "lists", "people", "ratings",
-		"releated", "stats", "studios", "watching", "next_episode", "last_episode", "videos", "refresh",
+		consts.Trending, consts.Popular, consts.Favorited, consts.Played, consts.Watched, consts.Collected,
+		consts.Anticipated, consts.Boxoffice, consts.Updates, consts.UpdatedIDs, consts.Summary, consts.Aliases, consts.Certifications,
+		consts.CollectionProgress, consts.WatchedProgress, consts.Releases, consts.Translations, consts.Comments, consts.Lists, consts.People, consts.Ratings,
+		"releated", consts.Stats, consts.Studios, consts.Watching, consts.NextEpisode, consts.LastEpisode, consts.Videos, consts.Refresh,
 		consts.Report, consts.Sentiments, consts.WatchNow, consts.JustwatchLinks, consts.RefreshJustwatch}
 )
 

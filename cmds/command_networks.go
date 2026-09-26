@@ -27,12 +27,12 @@ func networksFunc(cmd *Command, _ ...string) error {
 	options = cmd.UpdateOptionsWithCommandFlags(options)
 	var handler handlers.NetworksHandler
 	var networksHandlers = map[string]handlers.Handler{
-		"list": handlers.NetworksListsHandler{},
+		consts.List: handlers.NetworksListsHandler{},
 	}
 	handler, err := cmd.common.GetHandlerForMap(options.Action, networksHandlers)
 
 	if err != nil {
-		cmd.common.GenActionsUsage(cmd.Name, []string{"list"})
+		cmd.common.GenActionsUsage(cmd.Name, []string{consts.List})
 		return nil
 	}
 
