@@ -46,15 +46,15 @@ func commentsFunc(cmd *Command, _ ...string) error {
 
 	var handler handlers.CommentsHandler
 	allHandlers := map[string]handlers.Handler{
-		"comments": handlers.CommentsCommentsHandler{},
-		"comment":  handlers.CommentsCommentHandler{},
-		"replies":  handlers.CommentsRepliesHandler{},
-		"item":     handlers.CommentsItemHandler{},
-		"likes":    handlers.CommentsLikesHandler{},
-		"like":     handlers.CommentsLikeHandler{},
-		"trending": handlers.CommentsTrendingHandler{},
-		"recent":   handlers.CommentsRecentHandler{},
-		"updates":  handlers.CommentsUpdatesHandler{},
+		consts.Comments: handlers.CommentsCommentsHandler{},
+		consts.Comment:  handlers.CommentsCommentHandler{},
+		consts.Replies:  handlers.CommentsRepliesHandler{},
+		consts.Item:     handlers.CommentsItemHandler{},
+		consts.Likes:    handlers.CommentsLikesHandler{},
+		consts.Like:     handlers.CommentsLikeHandler{},
+		consts.Trending: handlers.CommentsTrendingHandler{},
+		consts.Recent:   handlers.CommentsRecentHandler{},
+		consts.Updates:  handlers.CommentsUpdatesHandler{},
 
 		consts.Reactions:        handlers.CommentsReactionsHandler{},
 		consts.ReactionsSummary: handlers.CommentsReactionsSummaryHandler{},
@@ -64,9 +64,9 @@ func commentsFunc(cmd *Command, _ ...string) error {
 
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
-	validActions = []string{
-		"comments", "comment", "replies", "item", "likes", "like",
-		"trending", "recent", "updates",
+	validActions := []string{
+		consts.Comments, consts.Comment, consts.Replies, consts.Item, consts.Likes, consts.Like,
+		consts.Trending, consts.Recent, consts.Updates,
 		consts.Reactions, consts.ReactionsSummary, consts.Reaction, consts.Report,
 	}
 	if err != nil {

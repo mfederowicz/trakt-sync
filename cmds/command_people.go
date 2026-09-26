@@ -32,20 +32,20 @@ func peopleFunc(cmd *Command, _ ...string) error {
 	options = cmd.UpdateOptionsWithCommandFlags(options)
 	var handler handlers.PeopleHandler
 	var allHandlers = map[string]handlers.Handler{
-		"updates":     handlers.PeopleUpdatesHandler{},
-		"updated_ids": handlers.PeopleUpdatedIDsHandler{},
-		"summary":     handlers.PeopleSummaryHandler{},
-		"movies":      handlers.PeopleMoviesHandler{},
-		"shows":       handlers.PeopleShowsHandler{},
-		"lists":       handlers.PeopleListsHandler{},
-		"refresh":     handlers.PeopleRefreshHandler{},
+		consts.Updates:    handlers.PeopleUpdatesHandler{},
+		consts.UpdatedIDs: handlers.PeopleUpdatedIDsHandler{},
+		consts.Summary:    handlers.PeopleSummaryHandler{},
+		consts.Movies:     handlers.PeopleMoviesHandler{},
+		consts.Shows:      handlers.PeopleShowsHandler{},
+		consts.Lists:      handlers.PeopleListsHandler{},
+		consts.Refresh:    handlers.PeopleRefreshHandler{},
 
 		consts.Report: handlers.PeopleReportHandler{},
 	}
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	if err != nil {
-		cmd.common.GenActionsUsage(cmd.Name, []string{"updates", "updated_ids", "summary", "movies", "shows", "lists", "refresh", consts.Report})
+		cmd.common.GenActionsUsage(cmd.Name, []string{consts.Updates, consts.UpdatedIDs, consts.Summary, consts.Movies, consts.Shows, consts.Lists, consts.Refresh, consts.Report})
 		return nil
 	}
 

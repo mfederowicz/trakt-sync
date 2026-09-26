@@ -23,8 +23,8 @@ var (
 	_episodesLinks      = EpisodesCmd.Flag.String("links", consts.EmptyString, consts.LinksUsage)
 
 	_episodesActions = []string{
-		"summary", "translations", "comments", "lists",
-		"people", "ratings", "stats", "watching", "videos", consts.Report, consts.WatchNow}
+		consts.Summary, consts.Translations, consts.Comments, consts.Lists,
+		consts.People, consts.Ratings, consts.Stats, consts.Watching, consts.Videos, consts.Report, consts.WatchNow}
 )
 
 // EpisodesCmd returns episodes and episodes that a user has watched, sorted by most recent.
@@ -64,15 +64,15 @@ func episodesFunc(cmd *Command, _ ...string) error {
 
 	var handler handlers.EpisodesHandler
 	allHandlers := map[string]handlers.Handler{
-		"summary":      handlers.EpisodesSummaryHandler{},
-		"translations": handlers.EpisodesTranslationsHandler{},
-		"comments":     handlers.EpisodesCommentsHandler{},
-		"lists":        handlers.EpisodesListsHandler{},
-		"people":       handlers.EpisodesPeopleHandler{},
-		"ratings":      handlers.EpisodesRatingsHandler{},
-		"stats":        handlers.EpisodesStatsHandler{},
-		"watching":     handlers.EpisodesWatchingHandler{},
-		"videos":       handlers.EpisodesVideosHandler{},
+		consts.Summary:      handlers.EpisodesSummaryHandler{},
+		consts.Translations: handlers.EpisodesTranslationsHandler{},
+		consts.Comments:     handlers.EpisodesCommentsHandler{},
+		consts.Lists:        handlers.EpisodesListsHandler{},
+		consts.People:       handlers.EpisodesPeopleHandler{},
+		consts.Ratings:      handlers.EpisodesRatingsHandler{},
+		consts.Stats:        handlers.EpisodesStatsHandler{},
+		consts.Watching:     handlers.EpisodesWatchingHandler{},
+		consts.Videos:       handlers.EpisodesVideosHandler{},
 
 		consts.Report:   handlers.EpisodesReportHandler{},
 		consts.WatchNow: handlers.EpisodesWatchNowHandler{},

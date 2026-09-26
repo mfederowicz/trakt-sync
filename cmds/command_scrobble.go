@@ -34,14 +34,14 @@ func scrobbleFunc(cmd *Command, _ ...string) error {
 
 	var handler handlers.ScrobbleHandler
 	allHandlers := map[string]handlers.Handler{
-		"start": handlers.ScrobbleStartHandler{},
-		"pause": handlers.ScrobblePauseHandler{},
-		"stop":  handlers.ScrobbleStopHandler{},
+		consts.Start: handlers.ScrobbleStartHandler{},
+		consts.Pause: handlers.ScrobblePauseHandler{},
+		consts.Stop:  handlers.ScrobbleStopHandler{},
 	}
 
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
-	validActions = []string{"start", "pause", "stop"}
+	validActions := []string{consts.Start, consts.Pause, consts.Stop}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

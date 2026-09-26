@@ -36,31 +36,31 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 	printer.Println("days:", options.Days)
 	var handler handlers.CalendarsHandler
 	allHandlers := map[string]handlers.Handler{
-		"my-shows":             handlers.CalendarsShowsHandler{},
-		"all-shows":            handlers.CalendarsShowsHandler{},
-		"my-new-shows":         handlers.CalendarsNewShowsHandler{},
-		"all-new-shows":        handlers.CalendarsNewShowsHandler{},
-		"my-season-premieres":  handlers.CalendarsSeasonPremieresHandler{},
-		"all-season-premieres": handlers.CalendarsSeasonPremieresHandler{},
-		"my-finales":           handlers.CalendarsFinalesHandler{},
-		"all-finales":          handlers.CalendarsFinalesHandler{},
-		"my-movies":            handlers.CalendarsMoviesHandler{},
-		"all-movies":           handlers.CalendarsMoviesHandler{},
-		"my-dvd":               handlers.CalendarsDvdHandler{},
-		"all-dvd":              handlers.CalendarsDvdHandler{},
-		consts.MyMedia:         handlers.CalendarsMediaHandler{},
-		consts.AllMedia:        handlers.CalendarsMediaHandler{},
-		consts.MyStreaming:     handlers.CalendarsStreamingHandler{},
-		consts.AllStreaming:    handlers.CalendarsStreamingHandler{},
-		consts.HotReleases:     handlers.CalendarsHotReleasesHandler{},
-		consts.HotPremieres:    handlers.CalendarsHotPremieresHandler{},
-		consts.HotNewShows:     handlers.CalendarsHotNewShowsHandler{},
-		consts.HotFinales:      handlers.CalendarsHotFinalesHandler{},
+		consts.MyShows:            handlers.CalendarsShowsHandler{},
+		consts.AllShows:           handlers.CalendarsShowsHandler{},
+		consts.MyNewShows:         handlers.CalendarsNewShowsHandler{},
+		consts.AllNewShows:        handlers.CalendarsNewShowsHandler{},
+		consts.MySeasonPremieres:  handlers.CalendarsSeasonPremieresHandler{},
+		consts.AllSeasonPremieres: handlers.CalendarsSeasonPremieresHandler{},
+		consts.MyFinales:          handlers.CalendarsFinalesHandler{},
+		consts.AllFinales:         handlers.CalendarsFinalesHandler{},
+		consts.MyMovies:           handlers.CalendarsMoviesHandler{},
+		consts.AllMovies:          handlers.CalendarsMoviesHandler{},
+		consts.MyDvd:              handlers.CalendarsDvdHandler{},
+		consts.AllDvd:             handlers.CalendarsDvdHandler{},
+		consts.MyMedia:            handlers.CalendarsMediaHandler{},
+		consts.AllMedia:           handlers.CalendarsMediaHandler{},
+		consts.MyStreaming:        handlers.CalendarsStreamingHandler{},
+		consts.AllStreaming:       handlers.CalendarsStreamingHandler{},
+		consts.HotReleases:        handlers.CalendarsHotReleasesHandler{},
+		consts.HotPremieres:       handlers.CalendarsHotPremieresHandler{},
+		consts.HotNewShows:        handlers.CalendarsHotNewShowsHandler{},
+		consts.HotFinales:         handlers.CalendarsHotFinalesHandler{},
 	}
 
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
-	validActions = []string{
+	validActions := []string{
 		"{my,all}-shows", "{my,all}-new-shows", "{my,all}-season-premieres", "{my,all}-finales", "{my,all}-movies", "{my,all}-dvd",
 		"{my,all}-media", "{my,all}-streaming", consts.HotReleases, consts.HotPremieres, consts.HotNewShows, consts.HotFinales,
 	}

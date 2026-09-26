@@ -22,11 +22,11 @@ var (
 	_moviesMessage    = MoviesCmd.Flag.String("message", cfg.DefaultConfig().Msg, consts.ReportMsgUsage)
 	_moviesLinks      = MoviesCmd.Flag.String("links", consts.EmptyString, consts.MoviesLinksUsage)
 
-	validActions = []string{
-		"trending", "popular", "favorited", "played", "watched", "collected",
-		"anticipated", "boxoffice", "updated", "updated_ids", "summary", "aliases",
-		"releases", "translations", "comments", "lists", "people", "ratings",
-		"releated", "stats", "studios", "watching", "videos", "refresh",
+	validMoviesActions = []string{
+		consts.Trending, consts.Popular, consts.Favorited, consts.Played, consts.Watched, consts.Collected,
+		consts.Anticipated, consts.Boxoffice, consts.Updates, consts.UpdatedIDs, consts.Summary, consts.Aliases,
+		consts.Releases, consts.Translations, consts.Comments, consts.Lists, consts.People, consts.Ratings,
+		consts.Related, consts.Stats, consts.Studios, consts.Watching, consts.Videos, consts.Refresh,
 		consts.Hot, consts.Streaming, consts.Report, consts.RefreshJustwatch, consts.Sentiments,
 		consts.WatchNow, consts.JustwatchLinks}
 )
@@ -57,30 +57,30 @@ func moviesFunc(cmd *Command, _ ...string) error {
 
 	var handler handlers.MoviesHandler
 	allHandlers := map[string]handlers.Handler{
-		"trending":     handlers.MoviesTrendingHandler{},
-		"popular":      handlers.MoviesPopularHandler{},
-		"favorited":    handlers.MoviesFavoritedHandler{},
-		"played":       handlers.MoviesPlayedHandler{},
-		"watched":      handlers.MoviesWatchedHandler{},
-		"collected":    handlers.MoviesCollectedHandler{},
-		"anticipated":  handlers.MoviesAnticipatedHandler{},
-		"boxoffice":    handlers.MoviesBoxofficeHandler{},
-		"updates":      handlers.MoviesUpdatesHandler{},
-		"updated_ids":  handlers.MoviesUpdatedIDsHandler{},
-		"summary":      handlers.MoviesSummaryHandler{},
-		"aliases":      handlers.MoviesAliasesHandler{},
-		"releases":     handlers.MoviesReleasesHandler{},
-		"translations": handlers.MoviesTranslationsHandler{},
-		"comments":     handlers.MoviesCommentsHandler{},
-		"lists":        handlers.MoviesListsHandler{},
-		"people":       handlers.MoviesPeopleHandler{},
-		"ratings":      handlers.MoviesRatingsHandler{},
-		"related":      handlers.MoviesRelatedHandler{},
-		"stats":        handlers.MoviesStatsHandler{},
-		"studios":      handlers.MoviesStudiosHandler{},
-		"watching":     handlers.MoviesWatchingHandler{},
-		"videos":       handlers.MoviesVideosHandler{},
-		"refresh":      handlers.MoviesRefreshHandler{},
+		consts.Trending:     handlers.MoviesTrendingHandler{},
+		consts.Popular:      handlers.MoviesPopularHandler{},
+		consts.Favorited:    handlers.MoviesFavoritedHandler{},
+		consts.Played:       handlers.MoviesPlayedHandler{},
+		consts.Watched:      handlers.MoviesWatchedHandler{},
+		consts.Collected:    handlers.MoviesCollectedHandler{},
+		consts.Anticipated:  handlers.MoviesAnticipatedHandler{},
+		consts.Boxoffice:    handlers.MoviesBoxofficeHandler{},
+		consts.Updates:      handlers.MoviesUpdatesHandler{},
+		consts.UpdatedIDs:   handlers.MoviesUpdatedIDsHandler{},
+		consts.Summary:      handlers.MoviesSummaryHandler{},
+		consts.Aliases:      handlers.MoviesAliasesHandler{},
+		consts.Releases:     handlers.MoviesReleasesHandler{},
+		consts.Translations: handlers.MoviesTranslationsHandler{},
+		consts.Comments:     handlers.MoviesCommentsHandler{},
+		consts.Lists:        handlers.MoviesListsHandler{},
+		consts.People:       handlers.MoviesPeopleHandler{},
+		consts.Ratings:      handlers.MoviesRatingsHandler{},
+		consts.Related:      handlers.MoviesRelatedHandler{},
+		consts.Stats:        handlers.MoviesStatsHandler{},
+		consts.Studios:      handlers.MoviesStudiosHandler{},
+		consts.Watching:     handlers.MoviesWatchingHandler{},
+		consts.Videos:       handlers.MoviesVideosHandler{},
+		consts.Refresh:      handlers.MoviesRefreshHandler{},
 
 		consts.Hot:       handlers.MoviesHotHandler{},
 		consts.Streaming: handlers.MoviesStreamingHandler{},
@@ -95,7 +95,7 @@ func moviesFunc(cmd *Command, _ ...string) error {
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	if err != nil {
-		cmd.common.GenActionsUsage(cmd.Name, validActions)
+		cmd.common.GenActionsUsage(cmd.Name, validMoviesActions)
 		return nil
 	}
 

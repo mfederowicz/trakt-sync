@@ -4,6 +4,7 @@ package cmds
 import (
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/handlers"
 )
 
@@ -21,13 +22,13 @@ func certificationsFunc(cmd *Command, _ ...string) error {
 	options = cmd.UpdateOptionsWithCommandFlags(options)
 	var handler handlers.CertificationsHandler
 	allHandlers := map[string]handlers.Handler{
-		"movies": handlers.CertificationsTypesHandler{},
-		"shows":  handlers.CertificationsTypesHandler{},
+		consts.Movies: handlers.CertificationsTypesHandler{},
+		consts.Shows:  handlers.CertificationsTypesHandler{},
 	}
 
 	handler, err := cmd.common.GetHandlerForMap(options.Type, allHandlers)
 
-	validTypes := []string{"movies", "shows"}
+	validTypes := []string{consts.Movies, consts.Shows}
 	if err != nil {
 		cmd.common.GenTypeUsage(cmd.Name, validTypes)
 		return nil

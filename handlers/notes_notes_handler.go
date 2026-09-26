@@ -4,6 +4,7 @@ package handlers
 import (
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -18,19 +19,19 @@ func (n NotesNotesHandler) Handle(options *str.Options, client *internal.Client)
 
 	var handler NotesHandler
 	allHandlers := map[string]Handler{
-		"movie":      NotesNotesMovieHandler{},
-		"show":       NotesNotesShowHandler{},
-		"season":     NotesNotesSeasonHandler{},
-		"episode":    NotesNotesEpisodeHandler{},
-		"person":     NotesNotesPersonHandler{},
-		"history":    NotesNotesHistoryHandler{},
-		"collection": NotesNotesCollectionHandler{},
-		"rating":     NotesNotesRatingHandler{},
+		consts.Movie:      NotesNotesMovieHandler{},
+		consts.Show:       NotesNotesShowHandler{},
+		consts.Season:     NotesNotesSeasonHandler{},
+		consts.Episode:    NotesNotesEpisodeHandler{},
+		consts.Person:     NotesNotesPersonHandler{},
+		consts.History:    NotesNotesHistoryHandler{},
+		consts.Collection: NotesNotesCollectionHandler{},
+		consts.Rating:     NotesNotesRatingHandler{},
 	}
 
 	handler, err := n.common.GetHandlerForMap(options.Type, allHandlers)
 
-	validTypes := []string{"movie", "show", "season", "episode", "person", "history", "collection", "rating"}
+	validTypes := []string{consts.Movie, consts.Show, consts.Season, consts.Episode, consts.Person, consts.History, consts.Collection, consts.Rating}
 	if err != nil {
 		n.common.GenActionTypeUsage(options, validTypes)
 		return nil

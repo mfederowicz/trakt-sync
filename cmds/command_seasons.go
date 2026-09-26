@@ -21,8 +21,8 @@ var (
 	_seasonsCountry    = SeasonsCmd.Flag.String("country", consts.EmptyString, consts.CountryUsage)
 
 	_seasonsActions = []string{
-		"summary", "season", "episodes", "translations", "comments", "lists",
-		"people", "ratings", "stats", "watching", "videos", consts.Report, consts.JustwatchLinks}
+		consts.Summary, consts.Season, consts.Episodes, consts.Translations, consts.Comments, consts.Lists,
+		consts.People, consts.Ratings, consts.Stats, consts.Watching, consts.Videos, consts.Report, consts.JustwatchLinks}
 )
 
 // SeasonsCmd returns seasons and episodes that a user has watched, sorted by most recent.
@@ -56,17 +56,17 @@ func seasonsFunc(cmd *Command, _ ...string) error {
 
 	var handler handlers.SeasonsHandler
 	allHandlers := map[string]handlers.Handler{
-		"summary":      handlers.SeasonsSummaryHandler{},
-		"season":       handlers.SeasonsSeasonHandler{},
-		"episodes":     handlers.SeasonsEpisodesHandler{},
-		"translations": handlers.SeasonsTranslationsHandler{},
-		"comments":     handlers.SeasonsCommentsHandler{},
-		"lists":        handlers.SeasonsListsHandler{},
-		"people":       handlers.SeasonsPeopleHandler{},
-		"ratings":      handlers.SeasonsRatingsHandler{},
-		"stats":        handlers.SeasonsStatsHandler{},
-		"watching":     handlers.SeasonsWatchingHandler{},
-		"videos":       handlers.SeasonsVideosHandler{},
+		consts.Summary:      handlers.SeasonsSummaryHandler{},
+		consts.Season:       handlers.SeasonsSeasonHandler{},
+		consts.Episodes:     handlers.SeasonsEpisodesHandler{},
+		consts.Translations: handlers.SeasonsTranslationsHandler{},
+		consts.Comments:     handlers.SeasonsCommentsHandler{},
+		consts.Lists:        handlers.SeasonsListsHandler{},
+		consts.People:       handlers.SeasonsPeopleHandler{},
+		consts.Ratings:      handlers.SeasonsRatingsHandler{},
+		consts.Stats:        handlers.SeasonsStatsHandler{},
+		consts.Watching:     handlers.SeasonsWatchingHandler{},
+		consts.Videos:       handlers.SeasonsVideosHandler{},
 
 		consts.Report:         handlers.SeasonsReportHandler{},
 		consts.JustwatchLinks: handlers.SeasonsJustwatchLinksHandler{},

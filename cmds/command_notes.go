@@ -40,14 +40,14 @@ func notesFunc(cmd *Command, _ ...string) error {
 
 	var handler handlers.NotesHandler
 	var notesHandlers = map[string]handlers.Handler{
-		"notes": handlers.NotesNotesHandler{},
-		"note":  handlers.NotesNoteHandler{},
-		"item":  handlers.NotesItemHandler{},
+		consts.Notes: handlers.NotesNotesHandler{},
+		consts.Note:  handlers.NotesNoteHandler{},
+		consts.Item:  handlers.NotesItemHandler{},
 	}
 	handler, err = cmd.common.GetHandlerForMap(options.Action, notesHandlers)
 
 	if err != nil {
-		cmd.common.GenActionsUsage(cmd.Name, []string{"notes", "note", "item"})
+		cmd.common.GenActionsUsage(cmd.Name, []string{consts.Notes, consts.Note, consts.Item})
 		return nil
 	}
 

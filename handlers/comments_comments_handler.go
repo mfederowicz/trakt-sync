@@ -4,6 +4,7 @@ package handlers
 import (
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -18,15 +19,15 @@ func (CommentsCommentsHandler) Handle(options *str.Options, client *internal.Cli
 
 	var handler CommentsHandler
 	switch options.Type {
-	case "movie":
+	case consts.Movie:
 		handler = CommentsCommentsMovieHandler{}
-	case "show":
+	case consts.Show:
 		handler = CommentsCommentsShowHandler{}
-	case "season":
+	case consts.Season:
 		handler = CommentsCommentsSeasonHandler{}
-	case "episode":
+	case consts.Episode:
 		handler = CommentsCommentsEpisodeHandler{}
-	case "list":
+	case consts.List:
 		handler = CommentsCommentsListHandler{}
 	default:
 		printer.Println("possible types: movie,show,season,episode,list")

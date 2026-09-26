@@ -23,6 +23,11 @@ schedule.
 
 ### Fixed
 
+- The list of available actions printed for an unknown `-a` now shows only real actions: `movies` lists
+  `updates` and `related` instead of `updated` and `releated`; `shows` lists `related` and
+  `reset_show_progress` and no longer offers `boxoffice`, `releases` or `releated`; `users` no longer
+  offers `follow_request`.
+
 ## [1.19.1] - 2026-09-26
 
 ### Changed
