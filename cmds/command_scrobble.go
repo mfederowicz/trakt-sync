@@ -34,9 +34,9 @@ func scrobbleFunc(cmd *Command, _ ...string) error {
 
 	var handler handlers.ScrobbleHandler
 	allHandlers := map[string]handlers.Handler{
-		"start": handlers.ScrobbleStartHandler{},
-		"pause": handlers.ScrobblePauseHandler{},
-		"stop":  handlers.ScrobbleStopHandler{},
+		consts.Start: handlers.ScrobbleStartHandler{},
+		consts.Pause: handlers.ScrobblePauseHandler{},
+		consts.Stop:  handlers.ScrobbleStopHandler{},
 	}
 
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)

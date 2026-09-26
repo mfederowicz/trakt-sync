@@ -35,14 +35,14 @@ func listsFunc(cmd *Command, _ ...string) error {
 
 	var handler handlers.ListsHandler
 	allHandlers := map[string]handlers.Handler{
-		"trending": handlers.ListsTrendingHandler{},
-		"popular":  handlers.ListsPopularHandler{},
-		"list":     handlers.ListsListHandler{},
-		"likes":    handlers.ListsLikesHandler{},
-		"like":     handlers.ListsLikeHandler{},
-		"items":    handlers.ListsItemsHandler{},
-		"comments": handlers.ListsCommentsHandler{},
-		"report":   handlers.ListsReportHandler{},
+		consts.Trending: handlers.ListsTrendingHandler{},
+		consts.Popular:  handlers.ListsPopularHandler{},
+		consts.List:     handlers.ListsListHandler{},
+		consts.Likes:    handlers.ListsLikesHandler{},
+		consts.Like:     handlers.ListsLikeHandler{},
+		consts.Items:    handlers.ListsItemsHandler{},
+		consts.Comments: handlers.ListsCommentsHandler{},
+		consts.Report:   handlers.ListsReportHandler{},
 	}
 
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)

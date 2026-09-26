@@ -4,6 +4,7 @@ package cmds
 import (
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/handlers"
 )
 
@@ -21,8 +22,8 @@ func countriesFunc(cmd *Command, _ ...string) error {
 	options = cmd.UpdateOptionsWithCommandFlags(options)
 	var handler handlers.CountriesHandler
 	allHandlers := map[string]handlers.Handler{
-		"movies": handlers.CountriesTypesHandler{},
-		"shows":  handlers.CountriesTypesHandler{},
+		consts.Movies: handlers.CountriesTypesHandler{},
+		consts.Shows:  handlers.CountriesTypesHandler{},
 	}
 
 	handler, err := cmd.common.GetHandlerForMap(options.Type, allHandlers)

@@ -33,10 +33,10 @@ func checkinFunc(cmd *Command, _ ...string) error {
 
 	var handler handlers.CheckinHandler
 	allHandlers := map[string]handlers.Handler{
-		"movie":        handlers.CheckinMovieHandler{},
-		"episode":      handlers.CheckinEpisodeHandler{},
-		"show_episode": handlers.CheckinShowEpisodeHandler{},
-		"delete":       handlers.CheckinDeleteHandler{},
+		consts.Movie:       handlers.CheckinMovieHandler{},
+		consts.Episode:     handlers.CheckinEpisodeHandler{},
+		consts.ShowEpisode: handlers.CheckinShowEpisodeHandler{},
+		consts.Delete:      handlers.CheckinDeleteHandler{},
 	}
 
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)

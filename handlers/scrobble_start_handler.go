@@ -4,6 +4,7 @@ package handlers
 import (
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 )
@@ -15,9 +16,9 @@ type ScrobbleStartHandler struct{ common CommonLogic }
 func (s ScrobbleStartHandler) Handle(options *str.Options, client *internal.Client) error {
 	var handler ScrobbleHandler
 	allHandlers := map[string]Handler{
-		"movie":        ScrobbleStartMovieHandler{},
-		"episode":      ScrobbleStartEpisodeHandler{},
-		"show_episode": ScrobbleStartShowEpisodeHandler{},
+		consts.Movie:       ScrobbleStartMovieHandler{},
+		consts.Episode:     ScrobbleStartEpisodeHandler{},
+		consts.ShowEpisode: ScrobbleStartShowEpisodeHandler{},
 	}
 
 	handler, err := s.common.GetHandlerForMap(options.Type, allHandlers)
