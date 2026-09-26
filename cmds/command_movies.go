@@ -22,11 +22,11 @@ var (
 	_moviesMessage    = MoviesCmd.Flag.String("message", cfg.DefaultConfig().Msg, consts.ReportMsgUsage)
 	_moviesLinks      = MoviesCmd.Flag.String("links", consts.EmptyString, consts.MoviesLinksUsage)
 
-	validActions = []string{
+	validMoviesActions = []string{
 		consts.Trending, consts.Popular, consts.Favorited, consts.Played, consts.Watched, consts.Collected,
-		consts.Anticipated, consts.Boxoffice, "updated", consts.UpdatedIDs, consts.Summary, consts.Aliases,
+		consts.Anticipated, consts.Boxoffice, consts.Updates, consts.UpdatedIDs, consts.Summary, consts.Aliases,
 		consts.Releases, consts.Translations, consts.Comments, consts.Lists, consts.People, consts.Ratings,
-		"releated", consts.Stats, consts.Studios, consts.Watching, consts.Videos, consts.Refresh,
+		consts.Related, consts.Stats, consts.Studios, consts.Watching, consts.Videos, consts.Refresh,
 		consts.Hot, consts.Streaming, consts.Report, consts.RefreshJustwatch, consts.Sentiments,
 		consts.WatchNow, consts.JustwatchLinks}
 )
@@ -95,7 +95,7 @@ func moviesFunc(cmd *Command, _ ...string) error {
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	if err != nil {
-		cmd.common.GenActionsUsage(cmd.Name, validActions)
+		cmd.common.GenActionsUsage(cmd.Name, validMoviesActions)
 		return nil
 	}
 

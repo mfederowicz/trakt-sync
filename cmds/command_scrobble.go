@@ -41,7 +41,7 @@ func scrobbleFunc(cmd *Command, _ ...string) error {
 
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
-	validActions = []string{consts.Start, consts.Pause, consts.Stop}
+	validActions := []string{consts.Start, consts.Pause, consts.Stop}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

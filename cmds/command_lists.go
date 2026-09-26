@@ -47,7 +47,7 @@ func listsFunc(cmd *Command, _ ...string) error {
 
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
-	validActions = []string{consts.Trending, consts.Popular, consts.List, consts.Likes, consts.Like, consts.Items, consts.Comments, consts.Report}
+	validActions := []string{consts.Trending, consts.Popular, consts.List, consts.Likes, consts.Like, consts.Items, consts.Comments, consts.Report}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

@@ -145,8 +145,8 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
-	validActions = []string{consts.Settings, consts.FollowingRequests, consts.FollowerRequests,
-		"follow_request", consts.SavedFilters, consts.HiddenItems, consts.AddHiddenItems,
+	validActions := []string{consts.Settings, consts.FollowingRequests, consts.FollowerRequests,
+		consts.SavedFilters, consts.HiddenItems, consts.AddHiddenItems,
 		consts.RemoveHiddenItems, consts.Profile, consts.Likes, consts.Collection, consts.Comments,
 		consts.Notes, consts.Lists, consts.AddList, consts.ReorderLists, consts.Collaborations, consts.List,
 		consts.UpdateList, consts.DeleteList, consts.ListLikes, consts.ListLike, consts.ListItems,

@@ -41,7 +41,7 @@ func checkinFunc(cmd *Command, _ ...string) error {
 
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
-	validActions = []string{consts.Movie, consts.Episode, consts.ShowEpisode, consts.Delete}
+	validActions := []string{consts.Movie, consts.Episode, consts.ShowEpisode, consts.Delete}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
 		return nil

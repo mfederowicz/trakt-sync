@@ -60,7 +60,7 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
-	validActions = []string{
+	validActions := []string{
 		"{my,all}-shows", "{my,all}-new-shows", "{my,all}-season-premieres", "{my,all}-finales", "{my,all}-movies", "{my,all}-dvd",
 		"{my,all}-media", "{my,all}-streaming", consts.HotReleases, consts.HotPremieres, consts.HotNewShows, consts.HotFinales,
 	}
