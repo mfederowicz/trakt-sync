@@ -9,7 +9,6 @@ import (
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/cmds"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 
@@ -48,11 +47,7 @@ func main() {
 		return
 	}
 
-	client := internal.NewClient(nil).WithClientID(config.ClientID).WithUserAgent(cli.UserAgent())
-	if len(options.Token.AccessToken) > consts.ZeroValue {
-		client = client.WithAuthToken(options.Token.AccessToken)
-	}
-	client = cli.HandleToken(fs, config, client, options)
+	client := cli.HandleToken(fs, config, cli.NewClient(config, options.Token), options)
 	err = cmds.ModulesRuntime(args, fs, config, client)
 	if err != nil {
 		os.Exit(consts.ErrorExitCode)
