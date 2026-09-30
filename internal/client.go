@@ -205,20 +205,29 @@ func (c *Client) NewRequest(method, urlStr string, body any, opts ...RequestOpti
 	return req, nil
 }
 
-func (c *Client) requestSetHeaders(r *http.Request, body any) *http.Request {
-	if body != nil {
-		r.Header.Set("Content-Type", "application/json")
+func (c *Client) requestSetHeaders(r *http.Request, _ any) *http.Request {
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("trakt-api-version", Version)
+	r.Header.Set("User-Agent", c.headerValue("User-Agent", consts.AppName))
+
+	if key := c.headerValue("trakt-api-key", consts.EmptyString); len(key) > consts.ZeroValue {
+		r.Header.Set("trakt-api-key", key)
 	}
 
-	if c.headers["Authorization"] != nil {
-		r.Header.Set("Authorization", c.headers["Authorization"].(string))
-	}
-
-	if c.headers["trakt-api-key"] != nil {
-		r.Header.Set("trakt-api-key", c.headers["trakt-api-key"].(string))
+	if auth := c.headerValue("Authorization", consts.EmptyString); len(auth) > consts.ZeroValue {
+		r.Header.Set("Authorization", auth)
 	}
 
 	return r
+}
+
+// headerValue returns a string header from the client map, or fallback when missing or empty
+func (c *Client) headerValue(name string, fallback string) string {
+	if value, ok := c.headers[name].(string); ok && len(value) > consts.ZeroValue {
+		return value
+	}
+
+	return fallback
 }
 
 // Do sends an API request and returns the API response. The API response is

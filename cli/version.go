@@ -18,6 +18,24 @@ var (
 
 // GenAppVersion gen app verrsion string
 func GenAppVersion() error {
+	return fmt.Errorf("Version:\t%s\n%s", AppVersion(), genBuildInfo())
+}
+
+// AppVersion returns the app version from ldflags, or from build info for go install
+func AppVersion() string {
+	if version == "dev" {
+		version = genDev(genBuildInfo())
+	}
+
+	return version
+}
+
+// UserAgent returns the User-Agent sent to the Trakt API, e.g. trakt-sync/1.19.1
+func UserAgent() string {
+	return consts.AppName + "/" + AppVersion()
+}
+
+func genBuildInfo() string {
 	var buildInfo string
 	if date != "unknown" && builtBy != "unknown" {
 		buildInfo = fmt.Sprintf("Built\t\t%s by %s", date, builtBy)
@@ -27,11 +45,7 @@ func GenAppVersion() error {
 		buildInfo = fmt.Sprintf("Commit:\t\t%s\n%s", commit, buildInfo)
 	}
 
-	if version == "dev" {
-		version = genDev(buildInfo)
-	}
-
-	return fmt.Errorf("Version:\t%s\n%s", version, buildInfo)
+	return buildInfo
 }
 
 func genDev(info string) string {

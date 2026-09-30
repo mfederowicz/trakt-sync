@@ -12,6 +12,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/writer"
 	"github.com/spf13/afero"
 )
 
@@ -108,7 +109,7 @@ func refreshToken(config *cfg.Config, client *internal.Client, options *str.Opti
 
 	if resp.StatusCode == http.StatusOK {
 		tokenjson, _ := json.Marshal(newToken)
-		if err := os.WriteFile(config.TokenPath, tokenjson, consts.X644); err != nil {
+		if err := writer.WritePrivateFile(config.TokenPath, tokenjson); err != nil {
 			printer.Println(err.Error())
 			return false
 		}
@@ -132,7 +133,7 @@ func RefreshUserSettings(config *cfg.Config, client *internal.Client, options *s
 
 	if resp.StatusCode == http.StatusOK {
 		settingsjson, _ := json.Marshal(newSettings)
-		if err := os.WriteFile(config.SettingsPath, settingsjson, consts.X644); err != nil {
+		if err := writer.WritePrivateFile(config.SettingsPath, settingsjson); err != nil {
 			printer.Println(err.Error())
 			return false
 		}

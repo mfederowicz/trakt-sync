@@ -1,6 +1,7 @@
 <!-- TOC -->
 
 - [trakt-sync](#trakt-sync)
+  - [Intended use](#intended-use)
   - [Installation](#installation)
   - [Configuration](#configuration)
   - [Usage](#usage)
@@ -10,6 +11,14 @@
   - [License](#license)
 
 <!-- /TOC -->
+
+## Intended use
+
+`trakt-sync` is a tool for managing and exporting **your own** Trakt data (history, collection,
+watchlist, ratings, lists, ...). It must not be used to bulk-collect public data such as other
+users' lists, comments or ratings, or to feed that data into other services. Paging options
+(`per_page`, `pages_limit`) exist to fetch your own data efficiently, not to crawl the API.
+Every use has to follow the Trakt API Use Policy.
 
 ## Installation
 ```bash

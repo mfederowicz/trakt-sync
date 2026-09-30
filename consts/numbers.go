@@ -15,6 +15,7 @@ const (
 	FirstEpisodeNumber    = 1
 	ImdbVotesRangeMax     = 3000000
 	ImdbVotesRangeMin     = 0
+	MaskVisibleChars      = 4
 	MaxAcceptedStatus     = 299
 	MinSeasonNumberLength = 3
 	MonthsInYear          = 12
@@ -32,6 +33,7 @@ const (
 	TwoValue              = 2
 	VotesRangeMax         = 100000
 	VotesRangeMin         = 0
+	X600                  = 0600
 	X644                  = 0644
 	X755                  = 0755
 	ZeroValue             = 0

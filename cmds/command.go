@@ -342,8 +342,12 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 
 func processVerbose(options *str.Options) {
 	if options.Verbose {
-		printer.Println("Authorization header:" + options.Headers["Authorization"].(string))
-		printer.Println("trakt-api-key header:" + options.Headers["trakt-api-key"].(string))
+		auth, _ := options.Headers["Authorization"].(string)
+		apiKey, _ := options.Headers["trakt-api-key"].(string)
+		printer.Println("Authorization header:" + maskSecret(strings.TrimPrefix(auth, consts.BearerPrefix)))
+		printer.Println("trakt-api-key header:" + maskSecret(apiKey))
+		userAgent, _ := options.Headers["User-Agent"].(string)
+		printer.Println("User-Agent header:" + userAgent)
 		printer.Println("token expiration in seconds:" + strconv.Itoa(options.Token.ExpiritySeconds()))
 		printer.Println("Extended info:" + *_extendedInfo)
 		if len(options.Module) > consts.ZeroValue {
@@ -354,6 +358,17 @@ func processVerbose(options *str.Options) {
 				options.UserName, options.Module, options.Type, options.PerPage, options.Format, options.Action, options.Sort),
 		)
 	}
+}
+
+// maskSecret keeps only the last few chars of a token so verbose output never leaks it
+func maskSecret(secret string) string {
+	if len(secret) == consts.ZeroValue {
+		return consts.NotSetValue
+	}
+	if len(secret) <= consts.MaskVisibleChars {
+		return consts.MaskedValue
+	}
+	return consts.MaskedValue + secret[len(secret)-consts.MaskVisibleChars:]
 }
 
 func selectFirstNonEmpty(values ...string) string {
