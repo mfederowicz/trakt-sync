@@ -36,6 +36,67 @@ func TestNewRequest(t *testing.T) {
 	}
 }
 
+// TestNewRequestHeaders checks every request carries the headers Trakt requires.
+func TestNewRequestHeaders(t *testing.T) {
+	tests := []struct {
+		name    string
+		headers map[string]any
+		want    map[string]string
+	}{
+		{
+			name: "all set",
+			headers: map[string]any{
+				"User-Agent":    "trakt-sync/1.19.1",
+				"trakt-api-key": "client-id",
+				"Authorization": "Bearer token",
+			},
+			want: map[string]string{
+				"Content-Type":      "application/json",
+				"trakt-api-version": "2",
+				"User-Agent":        "trakt-sync/1.19.1",
+				"trakt-api-key":     "client-id",
+				"Authorization":     "Bearer token",
+			},
+		},
+		{
+			name:    "no headers",
+			headers: nil,
+			want: map[string]string{
+				"Content-Type":      "application/json",
+				"trakt-api-version": "2",
+				"User-Agent":        "trakt-sync",
+				"trakt-api-key":     "",
+				"Authorization":     "",
+			},
+		},
+		{
+			name:    "empty authorization",
+			headers: map[string]any{"Authorization": "", "trakt-api-key": "client-id"},
+			want: map[string]string{
+				"User-Agent":    "trakt-sync",
+				"trakt-api-key": "client-id",
+				"Authorization": "",
+			},
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			c := NewClient(nil)
+			c.UpdateHeaders(tt.headers)
+			req, err := c.NewRequest(http.MethodGet, "/foo", nil)
+			assert.NoError(t, err)
+			for name, want := range tt.want {
+				assert.Equal(t, want, req.Header.Get(name), name)
+			}
+			if tt.want["Authorization"] == "" {
+				_, present := req.Header["Authorization"]
+				assert.False(t, present, "Authorization must not be sent empty")
+			}
+		})
+	}
+}
+
 func TestHavePages(t *testing.T) {
 	t.Helper()
 	testSetup := Setup()

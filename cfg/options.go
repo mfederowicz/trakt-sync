@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"os"
 	"slices"
 	"strconv"
 	"strings"
@@ -14,6 +13,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/writer"
 
 	"github.com/spf13/afero"
 )
@@ -665,7 +665,8 @@ func genDefaultToken(filePath string) {
 	var token str.Token
 	token.CreatedAt = time.Now().Add(-24 * time.Hour).Unix()
 	tokenjson, _ := json.Marshal(token)
-	os.WriteFile(filePath, tokenjson, consts.X644)
+	// a failed write surfaces as a read error in readTokenFromFile
+	_ = writer.WritePrivateFile(filePath, tokenjson)
 }
 
 // readUserSettingsFromFile reads the user settings from the specified file
@@ -697,7 +698,8 @@ func genDefaultSettings(filePath string) {
 	a.Timezone = &tz
 	settings.Account = a
 	settingsjson, _ := json.Marshal(settings)
-	os.WriteFile(filePath, settingsjson, consts.X644)
+	// a failed write surfaces as a read error in readUserSettingsFromFile
+	_ = writer.WritePrivateFile(filePath, settingsjson)
 }
 
 // GetOptionTime config Time depends on Module name

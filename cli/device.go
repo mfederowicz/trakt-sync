@@ -13,6 +13,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/writer"
 )
 
 func fail(err string) {
@@ -40,7 +41,7 @@ func deviceCodeVerification(deviceToken *str.NewDeviceToken, client *internal.Cl
 
 	if resp.StatusCode == http.StatusOK {
 		tokenjson, _ := json.Marshal(token)
-		if err := os.WriteFile(config.TokenPath, tokenjson, consts.X644); err != nil {
+		if err := writer.WritePrivateFile(config.TokenPath, tokenjson); err != nil {
 			printer.Println(err.Error())
 		}
 

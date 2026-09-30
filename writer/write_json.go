@@ -3,14 +3,13 @@ package writer
 
 import (
 	"log"
-	"os"
 
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
 // WriteJSON write results to file
 func WriteJSON(options *str.Options, results []byte) {
-	err := os.WriteFile(options.Output, results, os.ModePerm)
+	err := WritePrivateFile(options.Output, results)
 	if err != nil {
 		log.Println("write error")
 	}

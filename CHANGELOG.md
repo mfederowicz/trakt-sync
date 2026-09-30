@@ -23,6 +23,20 @@ schedule.
 
 ### Fixed
 
+## [1.20.0] - 2026-09-30
+
+### Changed
+
+- `token.json`, `user_settings.json` and JSON exports (`-o`) are now written readable only by the owner
+  (0600); an existing 0644 token or settings file is tightened the next time it is written.
+- Every request now sends `User-Agent: trakt-sync/<version>`, `trakt-api-version: 2` and
+  `Content-Type: application/json`, and no longer sends an empty `Authorization` header. `-v` prints the
+  User-Agent that is sent.
+- README: new "Intended use" section - trakt-sync is for your own Trakt data only.
+
+### Fixed
+
+- `-v` printed the full access token and client ID; both are now masked to their last 4 characters.
 - The list of available actions printed for an unknown `-a` now shows only real actions: `movies` lists
   `updates` and `related` instead of `updated` and `releated`; `shows` lists `related` and
   `reset_show_progress` and no longer offers `boxoffice`, `releases` or `releated`; `users` no longer
@@ -567,7 +581,8 @@ schedule.
 - First release, with the `calendars`, `collection`, `help`, `history`, `lists`, `people`, `search` and `watchlist`
   commands exporting Trakt data to JSON.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.19.1...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.20.0...HEAD
+[1.20.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.19.1...v1.20.0
 [1.19.1]: https://github.com/mfederowicz/trakt-sync/compare/v1.19.0...v1.19.1
 [1.19.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.18.0...v1.19.0
 [1.18.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.17.0...v1.18.0

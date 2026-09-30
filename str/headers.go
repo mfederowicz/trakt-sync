@@ -5,7 +5,7 @@ package str
 var Headers = map[string]any{
 	"Accept":            "application/json",
 	"Content-Type":      "application/json",
-	"User-Agent":        "Trakt exporter",
+	"User-Agent":        "trakt-sync",
 	"Connection":        "Keep-Alive",
 	"trakt-api-version": "2",
 	"trakt-api-key":     "",

@@ -49,6 +49,7 @@ func main() {
 		return
 	}
 
+	options.Headers["User-Agent"] = cli.UserAgent()
 	client.UpdateHeaders(options.Headers)
 	cli.HandleToken(fs, config, client, options)
 	err = cmds.ModulesRuntime(args, fs, config, client)
