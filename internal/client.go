@@ -85,7 +85,9 @@ type Client struct {
 	Team                  *TeamService
 	WatchNow              *WatchNowService
 	Younify               *YounifyService
-	rateMu                sync.Mutex
+	// DebugLogger, when set, gets the debug lines: every request just before it is sent, and service notes.
+	DebugLogger func(v ...any)
+	rateMu      sync.Mutex
 }
 
 // BuildCtxFromOptions create ctx with custom options
@@ -108,6 +110,13 @@ func (*Client) GetTimezone(ctx context.Context) *time.Location {
 		return time.UTC
 	}
 	return loc
+}
+
+// debug passes v to DebugLogger; without a logger it does nothing.
+func (c *Client) debug(v ...any) {
+	if c.DebugLogger != nil {
+		c.DebugLogger(v...)
+	}
 }
 
 // UpdateHeaders is for update client headers map
@@ -322,6 +331,11 @@ func (c *Client) BareDo(ctx context.Context, req *http.Request) (*str.Response, 
 	skipResp, skipErr := c.skipCheck(ctx, req)
 	if skipErr != nil {
 		return skipResp, skipErr
+	}
+
+	if c.DebugLogger != nil {
+		u := *req.URL
+		c.debug(req.Method + " " + uri.SanitizeURL(&u).String())
 	}
 
 	resp, err := c.client.Do(req)

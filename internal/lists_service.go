@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -28,7 +27,7 @@ func (l *ListsService) GetTrendingLists(ctx context.Context, opts *uri.ListOptio
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch trending url:" + url)
+	l.client.debug("fetch trending url:" + url)
 	req, err := l.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -38,7 +37,7 @@ func (l *ListsService) GetTrendingLists(ctx context.Context, opts *uri.ListOptio
 	resp, err := l.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		l.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -56,7 +55,7 @@ func (l *ListsService) GetPopularLists(ctx context.Context, opts *uri.ListOption
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch trending url:" + url)
+	l.client.debug("fetch trending url:" + url)
 	req, err := l.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -66,7 +65,7 @@ func (l *ListsService) GetPopularLists(ctx context.Context, opts *uri.ListOption
 	resp, err := l.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		l.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -78,7 +77,7 @@ func (l *ListsService) GetPopularLists(ctx context.Context, opts *uri.ListOption
 // API docs: https://trakt.docs.apiary.io/#reference/lists/list/get-list
 func (l *ListsService) GetList(ctx context.Context, id *string) (*str.PersonalList, *str.Response, error) {
 	var url = fmt.Sprintf("lists/%s", *id)
-	printer.Println("fetch single list:" + url)
+	l.client.debug("fetch single list:" + url)
 	req, err := l.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -107,7 +106,7 @@ func (l *ListsService) GetAllUsersWhoLikedList(ctx context.Context, opts *uri.Li
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch likes url:" + url)
+	l.client.debug("fetch likes url:" + url)
 	req, err := l.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -117,7 +116,7 @@ func (l *ListsService) GetAllUsersWhoLikedList(ctx context.Context, opts *uri.Li
 	resp, err := l.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		l.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -129,7 +128,7 @@ func (l *ListsService) GetAllUsersWhoLikedList(ctx context.Context, opts *uri.Li
 // API docs: https://trakt.docs.apiary.io/#reference/lists/list-like/like-a-list
 func (l *ListsService) LikeList(ctx context.Context, id *string) (*str.Response, error) {
 	var url = fmt.Sprintf("lists/%s/like", *id)
-	printer.Println("send like for single list:" + url)
+	l.client.debug("send like for single list:" + url)
 	req, err := l.client.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
 		return nil, err
@@ -148,7 +147,7 @@ func (l *ListsService) LikeList(ctx context.Context, id *string) (*str.Response,
 // API docs: https://trakt.docs.apiary.io/#reference/lists/list-like/remove-like-on-a-list
 func (l *ListsService) RemoveLikeList(ctx context.Context, id *string) (*str.Response, error) {
 	var url = fmt.Sprintf("lists/%s/like", *id)
-	printer.Println("remove like for single list:" + url)
+	l.client.debug("remove like for single list:" + url)
 	req, err := l.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
@@ -178,7 +177,7 @@ func (l *ListsService) GetListItems(ctx context.Context, id *string, t *string, 
 		return nil, nil, err
 	}
 
-	printer.Println("list url:" + url)
+	l.client.debug("list url:" + url)
 	req, err := l.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -188,7 +187,7 @@ func (l *ListsService) GetListItems(ctx context.Context, id *string, t *string, 
 	resp, err := l.client.Do(ctx, req, &lists)
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		l.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -211,7 +210,7 @@ func (l *ListsService) GetListComments(ctx context.Context, id *string, sort *st
 		return nil, nil, err
 	}
 
-	printer.Println("list url:" + url)
+	l.client.debug("list url:" + url)
 	req, err := l.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err

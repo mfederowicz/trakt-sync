@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
@@ -19,7 +18,7 @@ type CountriesService Service
 // API docs: https://trakt.docs.apiary.io/#reference/countries/list/get-countries
 func (c *CountriesService) GetCountries(ctx context.Context, strType *string) ([]*str.Country, *str.Response, error) {
 	var url = fmt.Sprintf("countries/%s", *strType)
-	printer.Println("fetch countries url:" + url)
+	c.client.debug("fetch countries url:" + url)
 
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -29,7 +28,7 @@ func (c *CountriesService) GetCountries(ctx context.Context, strType *string) ([
 	resp, err := c.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch countries err:", err.Error())
+		c.client.debug("fetch countries err:", err.Error())
 		return nil, resp, err
 	}
 

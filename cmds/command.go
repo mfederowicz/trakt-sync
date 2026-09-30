@@ -323,6 +323,7 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	}
 
 	processVerbose(&options)
+	client.DebugLogger = debugLogger(options.Verbose)
 
 	// err is the named result, so a recovered panic is returned instead of nil
 	defer func() {
@@ -338,6 +339,14 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 	err = c.Run(c, c.Flag.Args()...)
 
 	return err
+}
+
+// debugLogger returns the -v debug output for the client, or nil when -v is off.
+func debugLogger(verbose bool) func(v ...any) {
+	if !verbose {
+		return nil
+	}
+	return printer.Println
 }
 
 func processVerbose(options *str.Options) {

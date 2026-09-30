@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -29,7 +28,7 @@ func (p *PeopleService) GetListsContainingThisPerson(ctx context.Context, id *st
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch lists url:" + url)
+	p.client.debug("fetch lists url:" + url)
 	req, err := p.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -39,7 +38,7 @@ func (p *PeopleService) GetListsContainingThisPerson(ctx context.Context, id *st
 	resp, err := p.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		p.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -60,7 +59,7 @@ func (p *PeopleService) GetAllPeopleForShow(ctx context.Context, id *string, opt
 		return nil, nil, err
 	}
 
-	printer.Println("fetch people url:" + url)
+	p.client.debug("fetch people url:" + url)
 	req, err := p.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -73,7 +72,7 @@ func (p *PeopleService) GetAllPeopleForShow(ctx context.Context, id *string, opt
 	}
 
 	if err != nil {
-		printer.Println("fetch people err:" + err.Error())
+		p.client.debug("fetch people err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -91,7 +90,7 @@ func (p *PeopleService) GetMovieCredits(ctx context.Context, id *string, opts *u
 		return nil, nil, err
 	}
 
-	printer.Println("fetch movie credits url:" + url)
+	p.client.debug("fetch movie credits url:" + url)
 	req, err := p.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -101,7 +100,7 @@ func (p *PeopleService) GetMovieCredits(ctx context.Context, id *string, opts *u
 	resp, err := p.client.Do(ctx, req, &result)
 
 	if err != nil {
-		printer.Println("fetch person err:" + err.Error())
+		p.client.debug("fetch person err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -119,7 +118,7 @@ func (p *PeopleService) GetShowCredits(ctx context.Context, id *string, opts *ur
 		return nil, nil, err
 	}
 
-	printer.Println("fetch shows credits url:" + url)
+	p.client.debug("fetch shows credits url:" + url)
 	req, err := p.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -129,7 +128,7 @@ func (p *PeopleService) GetShowCredits(ctx context.Context, id *string, opts *ur
 	resp, err := p.client.Do(ctx, req, &result)
 
 	if err != nil {
-		printer.Println("fetch shows credits err:" + err.Error())
+		p.client.debug("fetch shows credits err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -147,7 +146,7 @@ func (p *PeopleService) GetSinglePerson(ctx context.Context, id *string, opts *u
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch person url:" + url)
+	p.client.debug("fetch person url:" + url)
 	req, err := p.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -157,7 +156,7 @@ func (p *PeopleService) GetSinglePerson(ctx context.Context, id *string, opts *u
 	resp, err := p.client.Do(ctx, req, &result)
 
 	if err != nil {
-		printer.Println("fetch person err:" + err.Error())
+		p.client.debug("fetch person err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -175,7 +174,7 @@ func (p *PeopleService) GetRecentlyUpdatedPeople(ctx context.Context, startDate 
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch updates url:" + url)
+	p.client.debug("fetch updates url:" + url)
 	req, err := p.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -185,7 +184,7 @@ func (p *PeopleService) GetRecentlyUpdatedPeople(ctx context.Context, startDate 
 	resp, err := p.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		p.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -204,7 +203,7 @@ func (p *PeopleService) GetRecentlyUpdatedPeopleTraktIDs(ctx context.Context, st
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch updates url:" + url)
+	p.client.debug("fetch updates url:" + url)
 	req, err := p.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -214,7 +213,7 @@ func (p *PeopleService) GetRecentlyUpdatedPeopleTraktIDs(ctx context.Context, st
 	resp, err := p.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		p.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -227,7 +226,7 @@ func (p *PeopleService) GetRecentlyUpdatedPeopleTraktIDs(ctx context.Context, st
 // API docs: https://trakt.docs.apiary.io/#reference/people/refresh/refresh-person-metadata
 func (p *PeopleService) RefreshPersonMetadata(ctx context.Context, id *string) (*str.Response, error) {
 	var url = fmt.Sprintf("people/%s/refresh", *id)
-	printer.Println("refresh people:" + url)
+	p.client.debug("refresh people:" + url)
 	req, err := p.client.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
 		return nil, err

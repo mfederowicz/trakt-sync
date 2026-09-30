@@ -5,7 +5,6 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
@@ -17,7 +16,7 @@ type ScrobbleService Service
 // API docs:https://trakt.docs.apiary.io/#reference/scrobble/start/start-watching-in-a-media-center
 func (s *ScrobbleService) StartScrobble(ctx context.Context, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error) {
 	var url = "scrobble/start"
-	printer.Println("start scrobble")
+	s.client.debug("start scrobble")
 	req, err := s.client.NewRequest(http.MethodPost, url, scrobble)
 	if err != nil {
 		return nil, nil, err
@@ -36,7 +35,7 @@ func (s *ScrobbleService) StartScrobble(ctx context.Context, scrobble *str.Scrob
 // API docs: https://trakt.docs.apiary.io/#reference/scrobble/pause/pause-watching-in-a-media-center
 func (s *ScrobbleService) PauseScrobble(ctx context.Context, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error) {
 	var url = "scrobble/pause"
-	printer.Println("pause scrobble")
+	s.client.debug("pause scrobble")
 	req, err := s.client.NewRequest(http.MethodPost, url, scrobble)
 	if err != nil {
 		return nil, nil, err
@@ -55,7 +54,7 @@ func (s *ScrobbleService) PauseScrobble(ctx context.Context, scrobble *str.Scrob
 // API docs: https://trakt.docs.apiary.io/#reference/scrobble/stop/stop-or-finish-watching-in-a-media-center
 func (s *ScrobbleService) StopScrobble(ctx context.Context, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error) {
 	var url = "scrobble/stop"
-	printer.Println("stop scrobble")
+	s.client.debug("stop scrobble")
 	req, err := s.client.NewRequest(http.MethodPost, url, scrobble)
 	if err != nil {
 		return nil, nil, err

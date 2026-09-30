@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
@@ -19,7 +18,7 @@ type LanguagesService Service
 // API docs: https://trakt.docs.apiary.io/#reference/languages/list/get-languages
 func (g *LanguagesService) GetLanguages(ctx context.Context, strType *string) ([]*str.Language, *str.Response, error) {
 	var url = fmt.Sprintf("languages/%s", *strType)
-	printer.Println("fetch languages url:" + url)
+	g.client.debug("fetch languages url:" + url)
 
 	req, err := g.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -29,7 +28,7 @@ func (g *LanguagesService) GetLanguages(ctx context.Context, strType *string) ([
 	resp, err := g.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch languages err:", err.Error())
+		g.client.debug("fetch languages err:", err.Error())
 		return nil, resp, err
 	}
 
