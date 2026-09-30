@@ -2,7 +2,11 @@
 package str
 
 import (
+	"fmt"
 	"net/http"
+
+	"github.com/mfederowicz/trakt-sync/consts"
+	"github.com/mfederowicz/trakt-sync/uri"
 )
 
 // ErrorResponse represents reponse with message
@@ -19,6 +23,16 @@ func (r ErrorResponse) String() string {
 	return Stringify(r)
 }
 
+// Error formats the error like the typed client errors: method, URL, status and API message.
 func (r *ErrorResponse) Error() string {
-	return Stringify(r)
+	if r.Response == nil || r.Response.Request == nil || r.Response.Request.URL == nil {
+		return Stringify(r)
+	}
+	u := *r.Response.Request.URL
+	return fmt.Sprintf(consts.ErrorsPlaceholders,
+		r.Response.Request.Method,
+		uri.SanitizeURL(&u),
+		r.Response.StatusCode,
+		r.Message,
+	)
 }

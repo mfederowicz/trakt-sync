@@ -159,20 +159,21 @@ func (UsersPlexSyncHandler) Handle(options *str.Options, client *internal.Client
 
 // plexError maps a Plex settings response to a readable error. A 401 with an error_code is Plex's own
 // auth failure (e.g. bad_auth); a 401 without it means Trakt does not open the route to API apps.
-// Client.Do returns no error for statuses it has no type for (502, 503, 504), so the status is checked too.
-func plexError(action string, resp *str.Response, err error) error {
+// Statuses without their own error type (502, 503, 504) come as *str.ErrorResponse and keep Plex's error_code too.
+func plexError(action string, _ *str.Response, err error) error {
 	var invalidUser *internal.InvalidUserError
 	if errors.As(err, &invalidUser) && len(invalidUser.ErrorCode) > consts.ZeroValue {
 		return fmt.Errorf("%s: Plex %s: %s %s", action, invalidUser.ErrorCode, invalidUser.Message, invalidUser.Guidance)
+	}
+	var plexErr *str.ErrorResponse
+	if errors.As(err, &plexErr) && len(plexErr.ErrorCode) > consts.ZeroValue {
+		return fmt.Errorf("%s: Plex %s: %s %s", action, plexErr.ErrorCode, plexErr.Message, plexErr.Guidance)
 	}
 	if apiErr := notOpenToAPIApps(action, err); apiErr != nil {
 		return apiErr
 	}
 	if err != nil {
 		return fmt.Errorf("%s error: %w", action, err)
-	}
-	if resp != nil && resp.StatusCode >= http.StatusBadRequest {
-		return fmt.Errorf("%s: Plex request failed with status %d", action, resp.StatusCode)
 	}
 	return nil
 }

@@ -249,9 +249,8 @@ func TestBareDo_rate_limit_reset(t *testing.T) {
 	}
 
 	resp, err := client.BareDo(ctx, req)
-	if err != nil {
-		t.Fatalf("client.BareDo returned error: %s", err)
-	}
+	var rateErr *AbuseRateLimitError
+	assert.ErrorAs(t, err, &rateErr)
 	assert.Equal(t, resp.StatusCode, http.StatusTooManyRequests)
 
 	reset := client.RateLimitReset
@@ -309,9 +308,8 @@ func TestBareDo_upgrade_required(t *testing.T) {
 	}
 
 	resp, err := client.BareDo(ctx, req)
-	if err != nil {
-		t.Fatalf("client.BareDo returned error: %s", err)
-	}
+	var upgradeErr *UpgradeRequiredError
+	assert.ErrorAs(t, err, &upgradeErr)
 	assert.Equal(t, resp.StatusCode, http.StatusUpgradeRequired)
 	assert.Equal(t, client.UpgradeURL.String(), "https://trakt.tv/vip")
 }
@@ -329,6 +327,13 @@ func TestDo_returnsTypedErrors(t *testing.T) {
 		{name: "409", status: http.StatusConflict, as: func(err error) bool { var e *ConflictError; return errors.As(err, &e) }},
 		{name: "420", status: 420, as: func(err error) bool { var e *UpgradeUserLimitsError; return errors.As(err, &e) }},
 		{name: "500", status: http.StatusInternalServerError, as: func(err error) bool { var e *ServerError; return errors.As(err, &e) }},
+		// these returned no error before (or panicked for 426/429 without their headers)
+		{name: "405", status: http.StatusMethodNotAllowed, as: func(err error) bool { var e *str.ErrorResponse; return errors.As(err, &e) }},
+		{name: "412", status: http.StatusPreconditionFailed, as: func(err error) bool { var e *PreconditionFailedRequestError; return errors.As(err, &e) }},
+		{name: "426", status: http.StatusUpgradeRequired, as: func(err error) bool { var e *UpgradeRequiredError; return errors.As(err, &e) }},
+		{name: "429", status: http.StatusTooManyRequests, as: func(err error) bool { var e *AbuseRateLimitError; return errors.As(err, &e) }},
+		{name: "502", status: http.StatusBadGateway, as: func(err error) bool { var e *str.ErrorResponse; return errors.As(err, &e) }},
+		{name: "503", status: http.StatusServiceUnavailable, as: func(err error) bool { var e *str.ErrorResponse; return errors.As(err, &e) }},
 	}
 
 	for _, tt := range tests {

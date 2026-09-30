@@ -17,7 +17,6 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -356,8 +355,10 @@ func prepareResponse(c *Client, resp *http.Response) (*str.Response, error) {
 			return response, e
 		case *AbuseRateLimitError:
 			updateRateLimitReset(c, e)
+			return response, e
 		case *UpgradeRequiredError:
 			upgradeAccountRequired(c, e)
+			return response, e
 		case *InvalidUserError:
 			return response, e
 		case *NotFoundError:
@@ -374,7 +375,7 @@ func prepareResponse(c *Client, resp *http.Response) (*str.Response, error) {
 			response.Errors = e.Errors
 			return response, errors.New("validation error")
 		default:
-			printer.Println("General error occurred:", errCheck.Error())
+			return response, errCheck
 		}
 	}
 
@@ -595,11 +596,8 @@ func (c *Client) genUpgradeRequiredError(r *http.Response, errorResponse *str.Er
 		Response: errorResponse.Response,
 		Message:  errorResponse.Message,
 	}
-	if upgradeURL := c.ParseUpgradeUser(r); upgradeURL != nil {
-		upgradeRequiredError.UpgradeURL = upgradeURL
-		return upgradeRequiredError
-	}
-	return nil
+	upgradeRequiredError.UpgradeURL = c.ParseUpgradeUser(r)
+	return upgradeRequiredError
 }
 
 func (c *Client) genRateLimitError(r *http.Response, errorResponse *str.ErrorResponse) *AbuseRateLimitError {
@@ -607,11 +605,8 @@ func (c *Client) genRateLimitError(r *http.Response, errorResponse *str.ErrorRes
 		Response: errorResponse.Response,
 		Message:  errorResponse.Message,
 	}
-	if retryAfter := c.ParseRateLimit(r); retryAfter != nil {
-		abuseRateLimitError.RetryAfter = retryAfter
-		return abuseRateLimitError
-	}
-	return nil
+	abuseRateLimitError.RetryAfter = c.ParseRateLimit(r)
+	return abuseRateLimitError
 }
 
 func (*Client) genUpgradeUserLimitsError(r *http.Response, errorResponse *str.ErrorResponse) *UpgradeUserLimitsError {
