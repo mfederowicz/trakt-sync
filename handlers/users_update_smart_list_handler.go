@@ -2,16 +2,16 @@
 package handlers
 
 import (
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // UsersUpdateSmartListHandler struct for handler
 type UsersUpdateSmartListHandler struct{ common CommonLogic }
 
 // Handle to handle users: update_smart_list action
-func (h UsersUpdateSmartListHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h UsersUpdateSmartListHandler) Handle(options *str.Options, client *trakt.Client) error {
 	options.InternalID = options.ID
 	if err := validSmartListID(options); err != nil {
 		return err

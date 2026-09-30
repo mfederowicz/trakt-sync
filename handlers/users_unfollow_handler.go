@@ -7,15 +7,15 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // UsersUnfollowHandler struct for handler
 type UsersUnfollowHandler struct{ common CommonLogic }
 
 // Handle to handle users: unfollow action
-func (m UsersUnfollowHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m UsersUnfollowHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.UserName) == consts.ZeroValue {
 		return errors.New(consts.EmptyUserNameMsg)
 	}
@@ -32,7 +32,7 @@ func (m UsersUnfollowHandler) Handle(options *str.Options, client *internal.Clie
 	return nil
 }
 
-func (UsersUnfollowHandler) usersUnfollow(client *internal.Client, options *str.Options) (*str.Response, error) {
+func (UsersUnfollowHandler) usersUnfollow(client *trakt.Client, options *str.Options) (*str.Response, error) {
 	resp, err := client.Users.Unfollow(client.BuildCtxFromOptions(options), &options.UserName)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {

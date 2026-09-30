@@ -10,9 +10,9 @@ import (
 	"testing"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/test"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 func TestSmartListsHandlers(t *testing.T) {
@@ -93,8 +93,8 @@ func TestSmartListsItemsHandlerFetchesAllPages(t *testing.T) {
 			t.Errorf("query is %q, want genres=drama, ignore_watched=true and limit=1", r.URL.RawQuery)
 		}
 		page := q.Get("page")
-		w.Header().Set(internal.HeaderPaginationPage, page)
-		w.Header().Set(internal.HeaderPaginationPageCount, "2")
+		w.Header().Set(trakt.HeaderPaginationPage, page)
+		w.Header().Set(trakt.HeaderPaginationPageCount, "2")
 		test.SafeFprint(w, pages[page])
 	})
 

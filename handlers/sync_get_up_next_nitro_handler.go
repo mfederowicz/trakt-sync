@@ -7,9 +7,9 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
 
@@ -17,7 +17,7 @@ import (
 type SyncGetUpNextNitroHandler struct{}
 
 // Handle to handle sync: get_up_next_nitro action
-func (SyncGetUpNextNitroHandler) Handle(options *str.Options, client *internal.Client) error {
+func (SyncGetUpNextNitroHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.Intent) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.SyncUpNextIntents, options.Intent) {
 		return fmt.Errorf("intent '%s' is not valid, avaliable values: %v", options.Intent, cfg.SyncUpNextIntents)
 	}

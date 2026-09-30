@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -16,7 +16,7 @@ import (
 type UsersStatsHandler struct{}
 
 // Handle to handle users: stats action
-func (UsersStatsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersStatsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("fetch stats for:" + options.UserName)
 	stats, resp, err := fetchUsersStats(client, options)
 	if err != nil {
@@ -36,7 +36,7 @@ func (UsersStatsHandler) Handle(options *str.Options, client *internal.Client) e
 	return nil
 }
 
-func fetchUsersStats(client *internal.Client, options *str.Options) (*str.UserStats, *str.Response, error) {
+func fetchUsersStats(client *trakt.Client, options *str.Options) (*str.UserStats, *str.Response, error) {
 	username := options.UserName
 	stats, resp, err := client.Users.GetStats(
 		client.BuildCtxFromOptions(options),

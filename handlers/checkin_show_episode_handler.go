@@ -7,16 +7,16 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // CheckinShowEpisodeHandler struct for handler
 type CheckinShowEpisodeHandler struct{ common CommonLogic }
 
 // Handle to handle checkin: episode action
-func (h CheckinShowEpisodeHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h CheckinShowEpisodeHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if options.TraktID == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
@@ -36,7 +36,7 @@ func (h CheckinShowEpisodeHandler) Handle(options *str.Options, client *internal
 }
 
 // CreateCheckinForEpisodeCode to handle checkin: episode code
-func (h CheckinShowEpisodeHandler) CreateCheckinForEpisodeCode(options *str.Options, client *internal.Client) error {
+func (h CheckinShowEpisodeHandler) CreateCheckinForEpisodeCode(options *str.Options, client *trakt.Client) error {
 	checkin, err := h.common.CreateCheckin(client, options)
 	if err != nil {
 		return printer.Errorf(consts.CheckinError, err)
@@ -63,7 +63,7 @@ func (h CheckinShowEpisodeHandler) CreateCheckinForEpisodeCode(options *str.Opti
 }
 
 // CreateCheckinForEpisodeAbs to handle checkin: episode abs
-func (h CheckinShowEpisodeHandler) CreateCheckinForEpisodeAbs(options *str.Options, client *internal.Client) error {
+func (h CheckinShowEpisodeHandler) CreateCheckinForEpisodeAbs(options *str.Options, client *trakt.Client) error {
 	checkin, err := h.common.CreateCheckin(client, options)
 	if err != nil {
 		return printer.Errorf(consts.CheckinError, err)

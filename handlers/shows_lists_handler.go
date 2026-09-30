@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -18,7 +18,7 @@ import (
 type ShowsListsHandler struct{ common CommonLogic }
 
 // Handle to handle shows: lists action
-func (m ShowsListsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m ShowsListsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns all lists that contain this show.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyShowIDMsg)
@@ -44,7 +44,7 @@ func (m ShowsListsHandler) Handle(options *str.Options, client *internal.Client)
 	return nil
 }
 
-func (m ShowsListsHandler) fetchShowsLists(client *internal.Client, options *str.Options, page int) ([]*str.PersonalList, *str.Response, error) {
+func (m ShowsListsHandler) fetchShowsLists(client *trakt.Client, options *str.Options, page int) ([]*str.PersonalList, *str.Response, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetListsContainingShow(
 		client.BuildCtxFromOptions(options),

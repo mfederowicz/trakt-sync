@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -18,7 +18,7 @@ import (
 type CommentsCommentHandler struct{ common CommonLogic }
 
 // Handle to handle comments: comment action
-func (h CommentsCommentHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h CommentsCommentHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if options.CommentID == consts.ZeroValue {
 		return errors.New(consts.EmptyCommentIDMsg)
 	}
@@ -42,7 +42,7 @@ func (h CommentsCommentHandler) Handle(options *str.Options, client *internal.Cl
 }
 
 // HandleModify modify exiting comment
-func (h CommentsCommentHandler) HandleModify(options *str.Options, client *internal.Client) error {
+func (h CommentsCommentHandler) HandleModify(options *str.Options, client *trakt.Client) error {
 	c := new(str.Comment)
 	c.Comment = &options.Comment
 	c.Spoiler = &options.Spoiler
@@ -59,7 +59,7 @@ func (h CommentsCommentHandler) HandleModify(options *str.Options, client *inter
 }
 
 // HandleDelete handle delete comment
-func (h CommentsCommentHandler) HandleDelete(options *str.Options, client *internal.Client) error {
+func (h CommentsCommentHandler) HandleDelete(options *str.Options, client *trakt.Client) error {
 	resp, err := h.common.DeleteComment(client, options)
 	if err != nil {
 		return fmt.Errorf("delete comment error:%w", err)

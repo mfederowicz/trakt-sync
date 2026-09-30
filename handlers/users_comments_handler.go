@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,7 +17,7 @@ import (
 type UsersCommentsHandler struct{ common CommonLogic }
 
 // Handle to handle users: comments action
-func (u UsersCommentsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (u UsersCommentsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	err := u.common.CheckCommentsFilters(options)
 	if err != nil {
 		return err
@@ -40,7 +40,7 @@ func (u UsersCommentsHandler) Handle(options *str.Options, client *internal.Clie
 	return nil
 }
 
-func (u UsersCommentsHandler) fetchComments(client *internal.Client, options *str.Options, page int) ([]*str.CommentItem, error) {
+func (u UsersCommentsHandler) fetchComments(client *trakt.Client, options *str.Options, page int) ([]*str.CommentItem, error) {
 	comments, err := u.common.FetchUsersComments(client, options, page)
 	if err != nil {
 		return nil, fmt.Errorf("fetch comments error:%w", err)

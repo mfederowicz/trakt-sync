@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -15,7 +15,7 @@ import (
 type SyncRemoveFromCollectionHandler struct{ common CommonLogic }
 
 // Handle to handle sync: add_to_collection action
-func (m SyncRemoveFromCollectionHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m SyncRemoveFromCollectionHandler) Handle(options *str.Options, client *trakt.Client) error {
 	items, err := m.common.ReadInput(*options)
 	if err != nil {
 		return err
@@ -33,7 +33,7 @@ func (m SyncRemoveFromCollectionHandler) Handle(options *str.Options, client *in
 	return nil
 }
 
-func (SyncRemoveFromCollectionHandler) syncRemoveFromCollection(client *internal.Client, options *str.Options, items *str.ItemsList) (*str.CollectionRemoveResult, error) {
+func (SyncRemoveFromCollectionHandler) syncRemoveFromCollection(client *trakt.Client, options *str.Options, items *str.ItemsList) (*str.CollectionRemoveResult, error) {
 	result, err := client.Sync.RemoveItemsFromCollection(
 		client.BuildCtxFromOptions(options),
 		items,

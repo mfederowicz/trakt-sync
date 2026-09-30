@@ -6,9 +6,9 @@ import (
 	"errors"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -16,7 +16,7 @@ import (
 type EpisodesTranslationsHandler struct{}
 
 // Handle to handle seasons: translations action
-func (m EpisodesTranslationsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m EpisodesTranslationsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns all translations for a specific season of a show.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyInternalIDMsg)
@@ -36,7 +36,7 @@ func (m EpisodesTranslationsHandler) Handle(options *str.Options, client *intern
 	return nil
 }
 
-func (EpisodesTranslationsHandler) fetchEpisodesTranslations(client *internal.Client, options *str.Options) ([]*str.Translation, *str.Response, error) {
+func (EpisodesTranslationsHandler) fetchEpisodesTranslations(client *trakt.Client, options *str.Options) ([]*str.Translation, *str.Response, error) {
 	result, resp, err := client.Shows.GetAllEpisodeTranslations(
 		client.BuildCtxFromOptions(options),
 		&options.InternalID,

@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,7 +17,7 @@ import (
 type UsersHistoryHandler struct{ common CommonLogic }
 
 // Handle to handle users: history action
-func (m UsersHistoryHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m UsersHistoryHandler) Handle(options *str.Options, client *trakt.Client) error {
 	err := m.common.CheckTypes(options)
 	if err != nil {
 		return err
@@ -44,7 +44,7 @@ func (m UsersHistoryHandler) Handle(options *str.Options, client *internal.Clien
 	return nil
 }
 
-func (m UsersHistoryHandler) usersHistory(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+func (m UsersHistoryHandler) usersHistory(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	items, err := m.common.FetchUsersHistory(client, options, page)
 
 	if err != nil {

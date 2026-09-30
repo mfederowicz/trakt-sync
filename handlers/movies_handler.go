@@ -7,15 +7,15 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
 // MoviesHandler interface to handle movies module action
 type MoviesHandler interface {
-	Handle(options *str.Options, client *internal.Client) error
+	Handle(options *str.Options, client *trakt.Client) error
 }
 
 // writeMoviesItems writes a fetched movies list to the output file.
@@ -37,7 +37,7 @@ func writeMoviesItems(options *str.Options, result []*str.MoviesItem) error {
 
 // endpointNotLiveError explains a 404 from a route the API documents but does not serve yet.
 func endpointNotLiveError(err error) error {
-	var notFound *internal.NotFoundError
+	var notFound *trakt.NotFoundError
 	if errors.As(err, &notFound) {
 		return fmt.Errorf(consts.EndpointNotLiveMsg, err)
 	}

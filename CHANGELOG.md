@@ -21,12 +21,12 @@ schedule.
 
 ### Changed
 
+- The Trakt API client is now an importable Go package, `github.com/mfederowicz/trakt-sync/trakt` (it was `internal/`, which other modules cannot import). It is experimental: its API may still change in minor releases. Nothing changes for CLI users.
 - Debug lines such as `fetch ... url:` and `create new checkin` now print only with `-v`, which also shows each API request as `METHOD <url>` (with `client_secret` redacted). This covers `calendars`, `checkin`, `comments`, `lists`, `movies`, `notes`, `people`, `recommendations`, `scrobble`, `search`, `shows`, `sync`, `users`, `countries`, `certifications`, `genres`, `languages` and `networks`. Errors are still printed as before.
 
 ### Fixed
 
 - After an expired access token was refreshed, user settings were fetched with the old token, so that settings refresh failed. They are now fetched with the new token.
-
 - Some API errors were only printed as `General error occurred:` or dropped: 412, 502, 503, 504 and other statuses without their own error type. The command then carried on as if the request had worked. These errors now stop the command with a readable message (`GET <url>: 503 <message>`) and exit status 1.
 - A 429 (rate limit) response without a `Retry-After` header, or a 426 (VIP required) response without an `X-Upgrade-URL` header, ended the command with a `panic error` (nil pointer). It now reports the API error instead.
 - `lists -a items` and `sync -a add_to_watchlist` now open the VIP upgrade page on a 426, as the other VIP actions already did.

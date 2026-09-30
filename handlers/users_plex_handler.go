@@ -7,16 +7,16 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // UsersPlexSettingsHandler struct for handler
 type UsersPlexSettingsHandler struct{}
 
 // Handle to handle users: plex_settings action
-func (UsersPlexSettingsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersPlexSettingsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns your Plex connection, webhook, sync selection and toggles.")
 	result, resp, err := client.Users.GetPlexSettings(client.BuildCtxFromOptions(options))
 	if err = plexError(options.Action, resp, err); err != nil {
@@ -30,7 +30,7 @@ func (UsersPlexSettingsHandler) Handle(options *str.Options, client *internal.Cl
 type UsersUpdatePlexSettingsHandler struct{ common CommonLogic }
 
 // Handle to handle users: update_plex_settings action
-func (h UsersUpdatePlexSettingsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h UsersUpdatePlexSettingsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	settings := new(str.PlexSettingsUpdate)
 	if err := readStrictInput(&h.common, options, settings); err != nil {
 		return err
@@ -53,7 +53,7 @@ func (h UsersUpdatePlexSettingsHandler) Handle(options *str.Options, client *int
 type UsersPlexConnectHandler struct{}
 
 // Handle to handle users: plex_connect action
-func (UsersPlexConnectHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersPlexConnectHandler) Handle(options *str.Options, client *trakt.Client) error {
 	returnURL := options.ReturnURL
 	if len(returnURL) == consts.ZeroValue {
 		returnURL = consts.DefaultReturnURL
@@ -79,7 +79,7 @@ func (UsersPlexConnectHandler) Handle(options *str.Options, client *internal.Cli
 type UsersPlexDisconnectHandler struct{}
 
 // Handle to handle users: plex_disconnect action
-func (UsersPlexDisconnectHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersPlexDisconnectHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Disconnect Plex: clears the authorization, selection and sync state.")
 	resp, err := client.Users.DisconnectPlex(client.BuildCtxFromOptions(options))
 	if err = plexError(options.Action, resp, err); err != nil {
@@ -94,7 +94,7 @@ func (UsersPlexDisconnectHandler) Handle(options *str.Options, client *internal.
 type UsersPlexServersHandler struct{}
 
 // Handle to handle users: plex_servers action
-func (UsersPlexServersHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersPlexServersHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns your Plex servers.")
 	result, resp, err := client.Users.GetPlexServers(client.BuildCtxFromOptions(options))
 	if err = plexError(options.Action, resp, err); err != nil {
@@ -112,7 +112,7 @@ func (UsersPlexServersHandler) Handle(options *str.Options, client *internal.Cli
 type UsersPlexServerHandler struct{}
 
 // Handle to handle users: plex_server action
-func (UsersPlexServerHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersPlexServerHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.ID) == consts.ZeroValue {
 		return errors.New("set Plex server id ie: -i <id from users -a plex_servers>")
 	}
@@ -133,7 +133,7 @@ func (UsersPlexServerHandler) Handle(options *str.Options, client *internal.Clie
 type UsersPlexSyncHandler struct{}
 
 // Handle to handle users: plex_sync action
-func (UsersPlexSyncHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersPlexSyncHandler) Handle(options *str.Options, client *trakt.Client) error {
 	request := &str.PlexSyncRequest{}
 	target := "every selected server"
 	if len(options.ID) > consts.ZeroValue {
@@ -161,7 +161,7 @@ func (UsersPlexSyncHandler) Handle(options *str.Options, client *internal.Client
 // auth failure (e.g. bad_auth); a 401 without it means Trakt does not open the route to API apps.
 // Statuses without their own error type (502, 503, 504) come as *str.ErrorResponse and keep Plex's error_code too.
 func plexError(action string, _ *str.Response, err error) error {
-	var invalidUser *internal.InvalidUserError
+	var invalidUser *trakt.InvalidUserError
 	if errors.As(err, &invalidUser) && len(invalidUser.ErrorCode) > consts.ZeroValue {
 		return fmt.Errorf("%s: Plex %s: %s %s", action, invalidUser.ErrorCode, invalidUser.Message, invalidUser.Guidance)
 	}

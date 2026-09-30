@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,7 +17,7 @@ import (
 type CommentsReactionsSummaryHandler struct{}
 
 // Handle to handle comments: reactions_summary action
-func (CommentsReactionsSummaryHandler) Handle(options *str.Options, client *internal.Client) error {
+func (CommentsReactionsSummaryHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if options.CommentID == consts.ZeroValue {
 		return errors.New(consts.EmptyCommentIDMsg)
 	}

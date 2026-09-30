@@ -5,15 +5,15 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // ScrobbleStopHandler struct for handler
 type ScrobbleStopHandler struct{ common CommonLogic }
 
 // Handle to handle scrobble: stop action
-func (s ScrobbleStopHandler) Handle(options *str.Options, client *internal.Client) error {
+func (s ScrobbleStopHandler) Handle(options *str.Options, client *trakt.Client) error {
 	var handler ScrobbleHandler
 	allHandlers := map[string]Handler{
 		consts.Movie:       ScrobbleStopMovieHandler{},

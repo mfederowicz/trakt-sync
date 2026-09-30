@@ -2,16 +2,16 @@
 package handlers
 
 import (
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // UsersDeleteSmartListHandler struct for handler
 type UsersDeleteSmartListHandler struct{}
 
 // Handle to handle users: delete_smart_list action
-func (UsersDeleteSmartListHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersDeleteSmartListHandler) Handle(options *str.Options, client *trakt.Client) error {
 	options.InternalID = options.ID
 	if err := validSmartListID(options); err != nil {
 		return err

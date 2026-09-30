@@ -8,16 +8,16 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // MoviesRefreshJustwatchHandler struct for handler
 type MoviesRefreshJustwatchHandler struct{}
 
 // Handle to handle movies: refresh_justwatch action
-func (MoviesRefreshJustwatchHandler) Handle(options *str.Options, client *internal.Client) error {
+func (MoviesRefreshJustwatchHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyMovieIDMsg)
 	}

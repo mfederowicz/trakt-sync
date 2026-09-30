@@ -6,9 +6,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
 
@@ -16,7 +16,7 @@ import (
 type UsersCommentReactionsHandler struct{}
 
 // Handle to handle users: comment_reactions action
-func (UsersCommentReactionsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersCommentReactionsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns comments you have reacted to.")
 	result, err := fetchAllPages(client, options, consts.DefaultPage, func(opts *uri.ListOptions) ([]*str.CommentReaction, *str.Response, error) {
 		return client.Users.GetCommentReactions(client.BuildCtxFromOptions(options), opts)

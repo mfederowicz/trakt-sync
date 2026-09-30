@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
 
@@ -17,7 +17,7 @@ import (
 type SyncGetWatchedProgressHandler struct{}
 
 // Handle to handle sync: get_watched_progress action
-func (SyncGetWatchedProgressHandler) Handle(options *str.Options, client *internal.Client) error {
+func (SyncGetWatchedProgressHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if options.HideCompleted && options.HideNotCompleted {
 		return errors.New(consts.HideBothProgressMsg)
 	}

@@ -4,16 +4,16 @@ package handlers
 import (
 	"fmt"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // SearchRemoveRecentHandler struct for handler
 type SearchRemoveRecentHandler struct{}
 
 // Handle to handle search: remove_recent action
-func (SearchRemoveRecentHandler) Handle(options *str.Options, client *internal.Client) error {
+func (SearchRemoveRecentHandler) Handle(options *str.Options, client *trakt.Client) error {
 	search, err := buildRecentSearch(options)
 	if err != nil {
 		return err

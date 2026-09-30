@@ -7,9 +7,9 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -18,7 +18,7 @@ import (
 type ShowsLastEpisodeHandler struct{}
 
 // Handle to handle shows: last_episode action
-func (m ShowsLastEpisodeHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m ShowsLastEpisodeHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns the last scheduled to air episode.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyShowIDMsg)
@@ -42,7 +42,7 @@ func (m ShowsLastEpisodeHandler) Handle(options *str.Options, client *internal.C
 	return nil
 }
 
-func (ShowsLastEpisodeHandler) fetchShowsLastEpisode(client *internal.Client, options *str.Options) (*str.Episode, *str.Response, error) {
+func (ShowsLastEpisodeHandler) fetchShowsLastEpisode(client *trakt.Client, options *str.Options) (*str.Episode, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	show, resp, err := client.Shows.GetLastEpisode(
 		client.BuildCtxFromOptions(options),

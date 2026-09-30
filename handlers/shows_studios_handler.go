@@ -6,9 +6,9 @@ import (
 	"errors"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -16,7 +16,7 @@ import (
 type ShowsStudiosHandler struct{}
 
 // Handle to handle shows: studios action
-func (m ShowsStudiosHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m ShowsStudiosHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns all studios for a show")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyShowIDMsg)
@@ -36,7 +36,7 @@ func (m ShowsStudiosHandler) Handle(options *str.Options, client *internal.Clien
 	return nil
 }
 
-func (ShowsStudiosHandler) fetchShowsStudios(client *internal.Client, options *str.Options) ([]*str.Studio, *str.Response, error) {
+func (ShowsStudiosHandler) fetchShowsStudios(client *trakt.Client, options *str.Options) ([]*str.Studio, *str.Response, error) {
 	result, resp, err := client.Shows.GetShowStudios(
 		client.BuildCtxFromOptions(options),
 		&options.InternalID,

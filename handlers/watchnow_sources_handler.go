@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,7 +17,7 @@ import (
 type WatchNowSourcesHandler struct{}
 
 // Handle to handle watchnow: sources action
-func (WatchNowSourcesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (WatchNowSourcesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	ctx := client.BuildCtxFromOptions(options)
 	var (
 		result []map[string][]*str.WatchNowSource

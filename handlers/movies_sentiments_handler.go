@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -18,7 +18,7 @@ import (
 type MoviesSentimentsHandler struct{}
 
 // Handle to handle movies: sentiments action
-func (MoviesSentimentsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (MoviesSentimentsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyMovieIDMsg)
 	}

@@ -9,7 +9,7 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -59,7 +59,7 @@ func TestActionsUsageListsRegisteredActions(t *testing.T) {
 			resetAllFlags()
 			t.Cleanup(resetAllFlags)
 			out := captureStdout(t, func() {
-				assert.NoError(t, tt.cmd.Exec(fs, internal.NewClient(nil), config, []string{"-a", "no_such_action"}))
+				assert.NoError(t, tt.cmd.Exec(fs, trakt.NewClient(nil), config, []string{"-a", "no_such_action"}))
 			})
 			assert.Contains(t, out, "Available actions:")
 			for _, a := range tt.want {

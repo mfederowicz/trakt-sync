@@ -6,9 +6,9 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
 
@@ -16,7 +16,7 @@ import (
 type MoviesStreamingHandler struct{}
 
 // Handle to handle movies: streaming action
-func (MoviesStreamingHandler) Handle(options *str.Options, client *internal.Client) error {
+func (MoviesStreamingHandler) Handle(options *str.Options, client *trakt.Client) error {
 	periods := cfg.ModuleActionConfig[consts.Movies+":"+consts.Streaming].Period
 	if !cfg.IsValidConfigType(periods, options.Period) {
 		return fmt.Errorf("period '%s' is not valid for streaming, avaliable periods:%s", options.Period, periods)

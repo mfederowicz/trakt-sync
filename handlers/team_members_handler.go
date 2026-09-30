@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -18,7 +18,7 @@ import (
 type TeamMembersHandler struct{}
 
 // Handle to handle team: members action
-func (TeamMembersHandler) Handle(options *str.Options, client *internal.Client) error {
+func (TeamMembersHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns Trakt team members.")
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.Team.GetTeamMembers(client.BuildCtxFromOptions(options), &opts)

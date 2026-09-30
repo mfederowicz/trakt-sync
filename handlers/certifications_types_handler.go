@@ -6,9 +6,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -16,7 +16,7 @@ import (
 type CertificationsTypesHandler struct{}
 
 // Handle to handle certifications: movies and shows types
-func (CertificationsTypesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (CertificationsTypesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("certifications handler:" + options.Type)
 
 	certifications, _, err := fetchCertifications(client, options)
@@ -35,7 +35,7 @@ func (CertificationsTypesHandler) Handle(options *str.Options, client *internal.
 	return nil
 }
 
-func fetchCertifications(client *internal.Client, options *str.Options) (*str.Certifications, *str.Response, error) {
+func fetchCertifications(client *trakt.Client, options *str.Options) (*str.Certifications, *str.Response, error) {
 	results, resp, err := client.Certifications.GetCertifications(client.BuildCtxFromOptions(options), &options.Type)
 
 	return results, resp, err

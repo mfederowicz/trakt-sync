@@ -4,16 +4,16 @@ package handlers
 import (
 	"fmt"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // SyncUpdateWatchlistItemHandler struct for handler
 type SyncUpdateWatchlistItemHandler struct{ common CommonLogic }
 
 // Handle to handle sync: update_watchlist_item action
-func (m SyncUpdateWatchlistItemHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m SyncUpdateWatchlistItemHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Update the watchlist item note.")
 
 	err := m.syncUpdateWatchlistItem(client, options)
@@ -25,7 +25,7 @@ func (m SyncUpdateWatchlistItemHandler) Handle(options *str.Options, client *int
 	return nil
 }
 
-func (SyncUpdateWatchlistItemHandler) syncUpdateWatchlistItem(client *internal.Client, options *str.Options) error {
+func (SyncUpdateWatchlistItemHandler) syncUpdateWatchlistItem(client *trakt.Client, options *str.Options) error {
 	update := new(str.WatchlistItem)
 	update.Notes = &options.Notes
 

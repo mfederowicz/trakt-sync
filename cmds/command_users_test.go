@@ -10,8 +10,8 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/handlers"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt/trakttest"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -29,7 +29,7 @@ func TestUsersHistoryDates(t *testing.T) {
 	resetAllFlags()
 	t.Cleanup(resetAllFlags)
 
-	setup := internal.Setup()
+	setup := trakttest.Setup()
 	defer setup.Teardown()
 	var gotStartAt, gotEndAt string
 	setup.Mux.HandleFunc("/users/sean/history/movies", func(w http.ResponseWriter, r *http.Request) {
@@ -60,7 +60,7 @@ func TestUsersUpdateListDescription(t *testing.T) {
 	resetAllFlags()
 	t.Cleanup(resetAllFlags)
 
-	setup := internal.Setup()
+	setup := trakttest.Setup()
 	defer setup.Teardown()
 	var gotDescription string
 	setup.Mux.HandleFunc("/users/sean/lists/123456", func(w http.ResponseWriter, r *http.Request) {

@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -18,7 +18,7 @@ import (
 type ListsListHandler struct{}
 
 // Handle to handle lists: list action
-func (h ListsListHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h ListsListHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyListIDMsg)
 	}
@@ -43,7 +43,7 @@ func (h ListsListHandler) Handle(options *str.Options, client *internal.Client) 
 	return nil
 }
 
-func (ListsListHandler) fetchSingleList(client *internal.Client, options *str.Options) (*str.PersonalList, *str.Response, error) {
+func (ListsListHandler) fetchSingleList(client *trakt.Client, options *str.Options) (*str.PersonalList, *str.Response, error) {
 	listID := options.InternalID
 	result, resp, err := client.Lists.GetList(
 		client.BuildCtxFromOptions(options),

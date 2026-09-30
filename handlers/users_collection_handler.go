@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,7 +17,7 @@ import (
 type UsersCollectionHandler struct{ common CommonLogic }
 
 // Handle to handle users: collection action
-func (u UsersCollectionHandler) Handle(options *str.Options, client *internal.Client) error {
+func (u UsersCollectionHandler) Handle(options *str.Options, client *trakt.Client) error {
 	err := u.common.CheckTypes(options)
 	if err != nil {
 		return err
@@ -40,7 +40,7 @@ func (u UsersCollectionHandler) Handle(options *str.Options, client *internal.Cl
 	return nil
 }
 
-func (u UsersCollectionHandler) fetchCollection(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+func (u UsersCollectionHandler) fetchCollection(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	items, err := u.common.FetchUsersCollection(client, options, page)
 	if err != nil {
 		return nil, fmt.Errorf("fetch collection error:%w", err)

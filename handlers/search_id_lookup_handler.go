@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -18,7 +18,7 @@ import (
 type SearchIDLookupHandler struct{}
 
 // Handle to handle search: id_lookup action
-func (s SearchIDLookupHandler) Handle(options *str.Options, client *internal.Client) error {
+func (s SearchIDLookupHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Get search: " + options.Action)
 	printer.Println("search id_type: " + options.SearchIDType)
 	printer.Println("search id: " + options.ID)
@@ -45,7 +45,7 @@ func (s SearchIDLookupHandler) Handle(options *str.Options, client *internal.Cli
 	return nil
 }
 
-func (SearchIDLookupHandler) fetchSearchIDLookup(client *internal.Client, options *str.Options) ([]*str.SearchListItem, error) {
+func (SearchIDLookupHandler) fetchSearchIDLookup(client *trakt.Client, options *str.Options) ([]*str.SearchListItem, error) {
 	err := checkSearchRequiredFields(options)
 
 	if err != nil {

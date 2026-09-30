@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -15,7 +15,7 @@ import (
 type UsersReorderListsHandler struct{ common CommonLogic }
 
 // Handle to handle users: reorder_lists action
-func (m UsersReorderListsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m UsersReorderListsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	items, err := m.common.ReadInput(*options)
 	if err != nil {
 		return err
@@ -31,7 +31,7 @@ func (m UsersReorderListsHandler) Handle(options *str.Options, client *internal.
 	return nil
 }
 
-func (UsersReorderListsHandler) usersReorderLists(client *internal.Client, options *str.Options, items *str.ItemsToReorder) (*str.ReorderResults, error) {
+func (UsersReorderListsHandler) usersReorderLists(client *trakt.Client, options *str.Options, items *str.ItemsToReorder) (*str.ReorderResults, error) {
 	user := options.UserName
 	result, _, err := client.Users.ReorderLists(
 		client.BuildCtxFromOptions(options),

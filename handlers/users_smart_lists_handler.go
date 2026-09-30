@@ -10,16 +10,16 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // UsersSmartListsHandler struct for handler
 type UsersSmartListsHandler struct{}
 
 // Handle to handle users: smart_lists action
-func (UsersSmartListsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersSmartListsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns all smart lists of: " + options.UserName)
 	result, _, err := client.Users.GetSmartLists(client.BuildCtxFromOptions(options), &options.UserName)
 	if err != nil {

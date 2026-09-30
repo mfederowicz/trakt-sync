@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,7 +17,7 @@ import (
 type CommentsRecentHandler struct{ common CommonLogic }
 
 // Handle to handle comments: recent action
-func (h CommentsRecentHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h CommentsRecentHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns the most recently written comments across all of Trakt.")
 
 	result, err := h.common.FetchRecentComments(client, options, consts.DefaultPage)

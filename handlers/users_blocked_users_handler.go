@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,7 +17,7 @@ import (
 type UsersBlockedUsersHandler struct{ common CommonLogic }
 
 // Handle to handle users: blocked_users action
-func (u UsersBlockedUsersHandler) Handle(options *str.Options, client *internal.Client) error {
+func (u UsersBlockedUsersHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns all users you have blocked, including when each user was blocked.")
 
 	items, err := u.fetchBlockedUsers(client, options, consts.DefaultPage)
@@ -31,7 +31,7 @@ func (u UsersBlockedUsersHandler) Handle(options *str.Options, client *internal.
 	return nil
 }
 
-func (u UsersBlockedUsersHandler) fetchBlockedUsers(client *internal.Client, options *str.Options, page int) ([]*str.UserBlocked, error) {
+func (u UsersBlockedUsersHandler) fetchBlockedUsers(client *trakt.Client, options *str.Options, page int) ([]*str.UserBlocked, error) {
 	users, err := u.common.FetchBlockedUsers(client, options, page)
 	if err != nil {
 		return nil, fmt.Errorf("fetch blocked users error:%w", err)

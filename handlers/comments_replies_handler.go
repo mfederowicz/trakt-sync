@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -20,7 +20,7 @@ import (
 type CommentsRepliesHandler struct{ common CommonLogic }
 
 // Handle to handle comments: replies action
-func (h CommentsRepliesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h CommentsRepliesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if options.CommentID == consts.ZeroValue {
 		return errors.New(consts.EmptyCommentIDMsg)
 	}
@@ -32,7 +32,7 @@ func (h CommentsRepliesHandler) Handle(options *str.Options, client *internal.Cl
 	return h.allCommentReplies(client, options)
 }
 
-func (h CommentsRepliesHandler) allCommentReplies(client *internal.Client, options *str.Options) error {
+func (h CommentsRepliesHandler) allCommentReplies(client *trakt.Client, options *str.Options) error {
 	printer.Println("Returns all replies for a comment.")
 	result, err := h.fetchCommentReplies(client, options, consts.DefaultPage)
 	if err != nil {
@@ -53,7 +53,7 @@ func (h CommentsRepliesHandler) allCommentReplies(client *internal.Client, optio
 	return nil
 }
 
-func (h CommentsRepliesHandler) fetchCommentReplies(client *internal.Client, options *str.Options, page int) ([]*str.Comment, error) {
+func (h CommentsRepliesHandler) fetchCommentReplies(client *trakt.Client, options *str.Options, page int) ([]*str.Comment, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Comments.GetRepliesForComment(
 		client.BuildCtxFromOptions(options),
@@ -83,7 +83,7 @@ func (h CommentsRepliesHandler) fetchCommentReplies(client *internal.Client, opt
 	return list, nil
 }
 
-func (h CommentsRepliesHandler) replyForComment(client *internal.Client, options *str.Options) error {
+func (h CommentsRepliesHandler) replyForComment(client *trakt.Client, options *str.Options) error {
 	c := new(str.Comment)
 	c.Comment = &options.Reply
 	c.Spoiler = &options.Spoiler

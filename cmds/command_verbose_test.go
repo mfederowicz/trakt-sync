@@ -7,8 +7,8 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -80,7 +80,7 @@ func TestExecSetsDebugLogger(t *testing.T) {
 			config.ClientID, config.ClientSecret = "a", "b"
 			config.TokenPath, config.SettingsPath = "/verbose/token.json", "/verbose/user_settings.json"
 			config.Verbose = tt.verbose
-			client := internal.NewClient(nil)
+			client := trakt.NewClient(nil)
 			// a logger left from an earlier run must not survive a run without -v
 			client.DebugLogger = func(...any) {}
 

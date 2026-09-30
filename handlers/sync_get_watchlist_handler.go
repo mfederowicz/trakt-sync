@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,7 +17,7 @@ import (
 type SyncGetWatchlistHandler struct{ common CommonLogic }
 
 // Handle to handle sync: get_watchlist action
-func (m SyncGetWatchlistHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m SyncGetWatchlistHandler) Handle(options *str.Options, client *trakt.Client) error {
 	err := m.common.CheckTypes(options)
 	if err != nil {
 		return err
@@ -36,7 +36,7 @@ func (m SyncGetWatchlistHandler) Handle(options *str.Options, client *internal.C
 	return nil
 }
 
-func (m SyncGetWatchlistHandler) syncGetWatchlist(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+func (m SyncGetWatchlistHandler) syncGetWatchlist(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	watchlist, err := m.common.FetchWatchlist(client, options, page)
 	if err != nil {
 		return nil, fmt.Errorf("fetch watchlist error:%w", err)

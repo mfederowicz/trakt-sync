@@ -8,9 +8,9 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -18,7 +18,7 @@ import (
 type UsersSavedFiltersHandler struct{}
 
 // Handle to handle users: saved filters action
-func (UsersSavedFiltersHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersSavedFiltersHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("users saved filters handler:" + options.UserName)
 
 	filters, resp, err := fetchUsersSavedFilters(client, options)
@@ -42,7 +42,7 @@ func (UsersSavedFiltersHandler) Handle(options *str.Options, client *internal.Cl
 	return nil
 }
 
-func fetchUsersSavedFilters(client *internal.Client, options *str.Options) ([]*str.SavedFilter, *str.Response, error) {
+func fetchUsersSavedFilters(client *trakt.Client, options *str.Options) ([]*str.SavedFilter, *str.Response, error) {
 	lists, resp, err := client.Users.GetSavedFilters(
 		client.BuildCtxFromOptions(options),
 		&options.Type,

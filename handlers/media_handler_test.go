@@ -8,9 +8,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/test"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 func TestMediaTrendingHandlerFetchesAllPages(t *testing.T) {
@@ -24,8 +24,8 @@ func TestMediaTrendingHandlerFetchesAllPages(t *testing.T) {
 	s.Mux.HandleFunc("/media/trending", func(w http.ResponseWriter, r *http.Request) {
 		test.AssertMethod(t, r, http.MethodGet)
 		page := r.URL.Query().Get("page")
-		w.Header().Set(internal.HeaderPaginationPage, page)
-		w.Header().Set(internal.HeaderPaginationPageCount, "2")
+		w.Header().Set(trakt.HeaderPaginationPage, page)
+		w.Header().Set(trakt.HeaderPaginationPageCount, "2")
 		test.SafeFprint(w, pages[page])
 	})
 

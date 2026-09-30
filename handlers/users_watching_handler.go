@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -19,7 +19,7 @@ import (
 type UsersWatchingHandler struct{ common CommonLogic }
 
 // Handle to handle users: watching action
-func (m UsersWatchingHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m UsersWatchingHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.UserName) == consts.ZeroValue {
 		return errors.New(consts.EmptyUserNameMsg)
 	}
@@ -39,7 +39,7 @@ func (m UsersWatchingHandler) Handle(options *str.Options, client *internal.Clie
 	return nil
 }
 
-func (UsersWatchingHandler) usersWatching(client *internal.Client, options *str.Options) (*str.WatchingResult, *str.Response, error) {
+func (UsersWatchingHandler) usersWatching(client *trakt.Client, options *str.Options) (*str.WatchingResult, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	user := options.UserName
 	result, resp, err := client.Users.Watching(

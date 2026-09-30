@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,7 +17,7 @@ import (
 type UsersFriendsHandler struct{ common CommonLogic }
 
 // Handle to handle users: friends action
-func (u UsersFriendsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (u UsersFriendsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns all friends for a user including when the relationship began.")
 
 	items, err := u.fetchFriends(client, options, consts.DefaultPage)
@@ -31,7 +31,7 @@ func (u UsersFriendsHandler) Handle(options *str.Options, client *internal.Clien
 	return nil
 }
 
-func (u UsersFriendsHandler) fetchFriends(client *internal.Client, options *str.Options, page int) ([]*str.Friend, error) {
+func (u UsersFriendsHandler) fetchFriends(client *trakt.Client, options *str.Options, page int) ([]*str.Friend, error) {
 	items, err := u.common.FetchFriends(client, options, page)
 	if err != nil {
 		return nil, fmt.Errorf("fetch friends error:%w", err)

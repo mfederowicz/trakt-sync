@@ -7,8 +7,8 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -16,7 +16,7 @@ import (
 type NotesItemHandler struct{ common CommonLogic }
 
 // Handle to handle notes: item action
-func (n NotesItemHandler) Handle(options *str.Options, client *internal.Client) error {
+func (n NotesItemHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyNotesIDMsg)
 	}

@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,7 +17,7 @@ import (
 type UsersCollaborationsHandler struct{ common CommonLogic }
 
 // Handle to handle users: collaborations action
-func (u UsersCollaborationsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (u UsersCollaborationsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Get all lists a user can collaborate on")
 	items, err := u.fetchCollaborations(client, options, consts.DefaultPage)
 	if err != nil {
@@ -30,7 +30,7 @@ func (u UsersCollaborationsHandler) Handle(options *str.Options, client *interna
 	return nil
 }
 
-func (u UsersCollaborationsHandler) fetchCollaborations(client *internal.Client, options *str.Options, page int) ([]*str.PersonalList, error) {
+func (u UsersCollaborationsHandler) fetchCollaborations(client *trakt.Client, options *str.Options, page int) ([]*str.PersonalList, error) {
 	collaborations, err := u.common.FetchUsersCollaborations(client, options, page)
 	if err != nil {
 		return nil, fmt.Errorf("fetch collaborations error:%w", err)

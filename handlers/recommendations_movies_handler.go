@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -18,7 +18,7 @@ import (
 type RecommendationsMoviesHandler struct{ common CommonLogic }
 
 // Handle to handle recommendations: movies action
-func (r RecommendationsMoviesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (r RecommendationsMoviesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if options.Hide {
 		return r.HandleHide(client, options)
 	}
@@ -35,7 +35,7 @@ func (r RecommendationsMoviesHandler) Handle(options *str.Options, client *inter
 }
 
 // HandleHide hide recommendation for movie
-func (r RecommendationsMoviesHandler) HandleHide(client *internal.Client, options *str.Options) error {
+func (r RecommendationsMoviesHandler) HandleHide(client *trakt.Client, options *str.Options) error {
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyMovieIDMsg)
 	}

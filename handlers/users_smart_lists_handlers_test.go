@@ -9,9 +9,9 @@ import (
 	"testing"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/test"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 func TestUsersSmartListsHandlers(t *testing.T) {
@@ -95,7 +95,7 @@ func TestUsersSmartListsHandlers(t *testing.T) {
 					t.Errorf("path is %q, want %q", r.URL.Path, tt.path)
 				}
 				if tt.vipUser {
-					w.Header().Set(internal.HeaderVIPUser, "true")
+					w.Header().Set(trakt.HeaderVIPUser, "true")
 				}
 				w.WriteHeader(tt.status)
 				test.SafeFprint(w, tt.body)

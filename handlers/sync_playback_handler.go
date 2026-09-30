@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -18,7 +18,7 @@ import (
 type SyncPlaybackHandler struct{ common CommonLogic }
 
 // Handle to handle sync: playback action
-func (m SyncPlaybackHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m SyncPlaybackHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns playback progress.")
 
 	err := m.common.CheckTypes(options)
@@ -47,7 +47,7 @@ func (m SyncPlaybackHandler) Handle(options *str.Options, client *internal.Clien
 	return nil
 }
 
-func (m SyncPlaybackHandler) syncPlayback(client *internal.Client, options *str.Options, page int) ([]*str.PlaybackProgress, *str.Response, error) {
+func (m SyncPlaybackHandler) syncPlayback(client *trakt.Client, options *str.Options, page int) ([]*str.PlaybackProgress, *str.Response, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, StartAt: options.StartDate, EndAt: options.EndDate}
 	// all is the untyped sync/playback route
 	var types *string

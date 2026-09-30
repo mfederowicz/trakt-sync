@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -19,7 +19,7 @@ import (
 type ShowsPopularHandler struct{}
 
 // Handle to handle shows: popular action
-func (h ShowsPopularHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h ShowsPopularHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns the most popular shows. Popularity is calculated using the rating percentage and the number of ratings.")
 	result, err := h.fetchShowsPopular(client, options, consts.DefaultPage)
 	if err != nil {
@@ -41,7 +41,7 @@ func (h ShowsPopularHandler) Handle(options *str.Options, client *internal.Clien
 	return nil
 }
 
-func (h ShowsPopularHandler) fetchShowsPopular(client *internal.Client, options *str.Options, page int) ([]*str.Show, error) {
+func (h ShowsPopularHandler) fetchShowsPopular(client *trakt.Client, options *str.Options, page int) ([]*str.Show, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetPopularShows(
 		client.BuildCtxFromOptions(options),

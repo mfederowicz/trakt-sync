@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -18,7 +18,7 @@ import (
 type ShowsRelatedHandler struct{ common CommonLogic }
 
 // Handle to handle shows: related action
-func (m ShowsRelatedHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m ShowsRelatedHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns related and similar shows.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyShowIDMsg)
@@ -38,7 +38,7 @@ func (m ShowsRelatedHandler) Handle(options *str.Options, client *internal.Clien
 	return nil
 }
 
-func (m ShowsRelatedHandler) fetchShowsRelated(client *internal.Client, options *str.Options, page int) ([]*str.Show, *str.Response, error) {
+func (m ShowsRelatedHandler) fetchShowsRelated(client *trakt.Client, options *str.Options, page int) ([]*str.Show, *str.Response, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetRelatedShows(
 		client.BuildCtxFromOptions(options),

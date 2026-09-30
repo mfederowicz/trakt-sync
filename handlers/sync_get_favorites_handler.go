@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,7 +17,7 @@ import (
 type SyncGetFavoritesHandler struct{ common CommonLogic }
 
 // Handle to handle sync: get_favorites action
-func (m SyncGetFavoritesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m SyncGetFavoritesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	err := m.common.CheckTypes(options)
 	if err != nil {
 		return err
@@ -36,7 +36,7 @@ func (m SyncGetFavoritesHandler) Handle(options *str.Options, client *internal.C
 	return nil
 }
 
-func (m SyncGetFavoritesHandler) syncGetFavorites(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+func (m SyncGetFavoritesHandler) syncGetFavorites(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	favorites, err := m.common.FetchFavorites(client, options, page)
 	if err != nil {
 		return nil, fmt.Errorf("fetch favorites error:%w", err)

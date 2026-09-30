@@ -8,7 +8,8 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/trakt"
+	"github.com/mfederowicz/trakt-sync/trakt/trakttest"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -38,7 +39,7 @@ func TestUsersTypedRoutes(t *testing.T) {
 			resetAllFlags()
 			t.Cleanup(resetAllFlags)
 
-			setup := internal.Setup()
+			setup := trakttest.Setup()
 			defer setup.Teardown()
 			var gotPaths []string
 			setup.Mux.HandleFunc("/users/", func(w http.ResponseWriter, r *http.Request) {
@@ -77,7 +78,7 @@ func TestUsersListItemsTypeFlag(t *testing.T) {
 				gotType, gotID = got.Type, got.ID
 				return nil
 			}}
-			assert.NoError(t, command.Exec(fs, internal.NewClient(nil), config, []string{"-a", "lists", "-i", "55", "-t", typ}))
+			assert.NoError(t, command.Exec(fs, trakt.NewClient(nil), config, []string{"-a", "lists", "-i", "55", "-t", typ}))
 			assert.Equal(t, typ, gotType)
 			assert.Equal(t, "55", gotID)
 		})
@@ -116,7 +117,7 @@ func TestUsersSortPathRoutes(t *testing.T) {
 			resetAllFlags()
 			t.Cleanup(resetAllFlags)
 
-			setup := internal.Setup()
+			setup := trakttest.Setup()
 			defer setup.Teardown()
 			var gotPaths []string
 			setup.Mux.HandleFunc("/users/", func(w http.ResponseWriter, r *http.Request) {

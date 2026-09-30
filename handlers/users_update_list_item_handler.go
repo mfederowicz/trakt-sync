@@ -7,15 +7,15 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // UsersUpdateListItemHandler struct for handler
 type UsersUpdateListItemHandler struct{ common CommonLogic }
 
 // Handle to handle sync: update_list_item action
-func (m UsersUpdateListItemHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m UsersUpdateListItemHandler) Handle(options *str.Options, client *trakt.Client) error {
 	err := m.common.CheckTypes(options)
 	if err != nil {
 		return err
@@ -37,7 +37,7 @@ func (m UsersUpdateListItemHandler) Handle(options *str.Options, client *interna
 	return nil
 }
 
-func (UsersUpdateListItemHandler) usersUpdateListItem(client *internal.Client, options *str.Options) (*str.Response, error) {
+func (UsersUpdateListItemHandler) usersUpdateListItem(client *trakt.Client, options *str.Options) (*str.Response, error) {
 	item := new(str.PersonalListItem)
 	if len(options.Notes) > consts.ZeroValue {
 		item.Notes = &options.Notes

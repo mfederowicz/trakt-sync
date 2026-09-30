@@ -7,9 +7,9 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -18,7 +18,7 @@ import (
 type SyncGetMinimalCollectionHandler struct{ common CommonLogic }
 
 // Handle to handle sync: get_minimal_collection action
-func (s SyncGetMinimalCollectionHandler) Handle(options *str.Options, client *internal.Client) error {
+func (s SyncGetMinimalCollectionHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if err := s.common.CheckTypes(options); err != nil {
 		return err
 	}
@@ -43,7 +43,7 @@ func (s SyncGetMinimalCollectionHandler) Handle(options *str.Options, client *in
 	return nil
 }
 
-func (SyncGetMinimalCollectionHandler) fetchMinimalCollection(client *internal.Client, options *str.Options) (any, error) {
+func (SyncGetMinimalCollectionHandler) fetchMinimalCollection(client *trakt.Client, options *str.Options) (any, error) {
 	ctx := client.BuildCtxFromOptions(options)
 	opts := uri.ListOptions{AvailableOn: options.AvailableOn}
 	if options.Type == consts.Shows {

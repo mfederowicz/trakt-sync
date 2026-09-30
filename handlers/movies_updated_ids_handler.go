@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -19,7 +19,7 @@ import (
 type MoviesUpdatedIDsHandler struct{}
 
 // Handle to handle people: updated_ids action
-func (m MoviesUpdatedIDsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m MoviesUpdatedIDsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Get recently updated movies Trakt IDs for date:" + options.StartDate)
 	date := options.StartDate
 	updates, err := m.fetchMoviesUpdatedIDs(client, options, date, consts.DefaultPage)
@@ -46,7 +46,7 @@ func (m MoviesUpdatedIDsHandler) Handle(options *str.Options, client *internal.C
 	return nil
 }
 
-func (m MoviesUpdatedIDsHandler) fetchMoviesUpdatedIDs(client *internal.Client, options *str.Options, startDate string, page int) ([]*int, error) {
+func (m MoviesUpdatedIDsHandler) fetchMoviesUpdatedIDs(client *trakt.Client, options *str.Options, startDate string, page int) ([]*int, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Movies.GetRecentlyUpdatedMoviesTraktIDs(
 		client.BuildCtxFromOptions(options),

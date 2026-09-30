@@ -9,9 +9,9 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -20,7 +20,7 @@ import (
 type SearchExactQueryHandler struct{}
 
 // Handle to handle search: exact_query action
-func (s SearchExactQueryHandler) Handle(options *str.Options, client *internal.Client) error {
+func (s SearchExactQueryHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if err := checkSearchSingleType(options, cfg.SearchExactTypes); err != nil {
 		return err
 	}
@@ -46,7 +46,7 @@ func (s SearchExactQueryHandler) Handle(options *str.Options, client *internal.C
 	return nil
 }
 
-func (s SearchExactQueryHandler) fetchSearchExactQuery(client *internal.Client, options *str.Options, page int) ([]*str.SearchListItem, error) {
+func (s SearchExactQueryHandler) fetchSearchExactQuery(client *trakt.Client, options *str.Options, page int) ([]*str.SearchListItem, error) {
 	searchType := options.SearchType[consts.ZeroValue]
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Query: options.Query}
 	list, resp, err := client.Search.GetExactTextQueryResults(

@@ -7,13 +7,13 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // SearchHandler interface to handle search module action
 type SearchHandler interface {
-	Handle(options *str.Options, client *internal.Client) error
+	Handle(options *str.Options, client *trakt.Client) error
 }
 
 func noSearchTypeOrInvalidConfigTypeSlice(options *str.Options, slice []string) bool {

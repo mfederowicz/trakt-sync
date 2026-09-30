@@ -2,9 +2,9 @@
 package handlers
 
 import (
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
 
@@ -12,7 +12,7 @@ import (
 type SocialRecommendationsMoviesHandler struct{}
 
 // Handle to handle social_recommendations: movies action
-func (SocialRecommendationsMoviesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (SocialRecommendationsMoviesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns movie recommendations based on the people you follow.")
 	return exportSocialRecommendations(client, options, func(opts *uri.ListOptions) ([]*str.Recommendation, *str.Response, error) {
 		return client.SocialRecommendations.GetSocialMovieRecommendations(client.BuildCtxFromOptions(options), opts)

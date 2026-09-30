@@ -29,8 +29,8 @@ func (m *NetworksService) GetNetworksList(ctx context.Context, opts *uri.ListOpt
 - File names are lowercase snake_case: `^[_a-z][_a-z0-9]*\.go$`
   (`filename-format`).
 - Naming patterns: `cmds/command_<module>.go`,
-  `handlers/<module>_<action>_handler.go`, `internal/<module>_service.go`,
-  `internal/<status>_error.go`, `str/<type_name>.go` (one type per file).
+  `handlers/<module>_<action>_handler.go`, `trakt/<module>_service.go`,
+  `trakt/<status>_error.go`, `str/<type_name>.go` (one type per file).
 
 ## Naming
 
@@ -40,7 +40,7 @@ func (m *NetworksService) GetNetworksList(ctx context.Context, opts *uri.ListOpt
   `Remove...`, `Update...`, `Delete...` (e.g. `GetNetworksList`).
 - Common variable names: `ctx` (context), `url` (endpoint path), `opts` (query
   options), `req`, `resp`, `err`, `list` / `result` (decoded data), `options`
-  (`*str.Options`), `client` (`*internal.Client`).
+  (`*str.Options`), `client` (`*trakt.Client`).
 - Initialisms keep their case: `ID`, `URL`, `JSON`, `IMDB` (`var-naming`).
 
 ## Types
@@ -77,7 +77,7 @@ Keep each `const` block sorted as it is.
   (`errorf`).
 - Error strings are lowercase, no trailing punctuation (`error-strings`).
 - Error types are named `XxxError`, sentinel values `errXxx` / `ErrXxx`
-  (`error-naming`); HTTP status errors live in `internal/*_error.go`.
+  (`error-naming`); HTTP status errors live in `trakt/*_error.go`.
 - `error` is always the last return value (`error-return`).
 - Never ignore an error silently in new code; if it is truly safe to ignore,
   say why in a comment.

@@ -6,16 +6,16 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // SeasonsReportHandler struct for handler
 type SeasonsReportHandler struct{ common CommonLogic }
 
 // Handle to handle seasons: report action
-func (h SeasonsReportHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h SeasonsReportHandler) Handle(options *str.Options, client *trakt.Client) error {
 	byID := len(options.ID) > consts.ZeroValue
 	if !byID && len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyShowIDMsg)

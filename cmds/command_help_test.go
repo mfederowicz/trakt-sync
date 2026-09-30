@@ -9,7 +9,7 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/trakt"
 
 	"github.com/spf13/afero"
 )
@@ -17,7 +17,7 @@ import (
 type TestsList struct {
 	Fs     afero.Fs
 	Desc   string
-	Client *internal.Client
+	Client *trakt.Client
 	Config *cfg.Config
 	Args   []string
 	Regex  []string
@@ -71,7 +71,7 @@ func genTestsList(c *cfg.Config) []TestsList {
 		{
 			Fs:     AppFs,
 			Desc:   "Usage",
-			Client: &internal.Client{},
+			Client: &trakt.Client{},
 			Config: c,
 			Args:   []string{},
 			Regex: []string{
@@ -82,7 +82,7 @@ func genTestsList(c *cfg.Config) []TestsList {
 		{
 			Fs:     AppFs,
 			Desc:   "No Command",
-			Client: &internal.Client{},
+			Client: &trakt.Client{},
 			Config: c,
 			Args:   []string{"frobber"},
 			Regex: []string{
@@ -92,7 +92,7 @@ func genTestsList(c *cfg.Config) []TestsList {
 		{
 			Fs:     AppFs,
 			Desc:   "Help help",
-			Client: &internal.Client{},
+			Client: &trakt.Client{},
 			Config: c,
 			Args:   []string{"help"},
 			Regex: []string{

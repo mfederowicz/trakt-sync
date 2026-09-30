@@ -5,16 +5,16 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // UsersSmartListHandler struct for handler
 type UsersSmartListHandler struct{}
 
 // Handle to handle users: smart_list action
-func (UsersSmartListHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersSmartListHandler) Handle(options *str.Options, client *trakt.Client) error {
 	options.InternalID = options.ID
 	if err := validSmartListID(options); err != nil {
 		return err

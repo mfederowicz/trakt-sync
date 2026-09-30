@@ -7,16 +7,16 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // UsersAddSavedFiltersHandler struct for handler
 type UsersAddSavedFiltersHandler struct{ common CommonLogic }
 
 // Handle to handle users: add_saved_filters action
-func (h UsersAddSavedFiltersHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h UsersAddSavedFiltersHandler) Handle(options *str.Options, client *trakt.Client) error {
 	filters := []*str.SavedFilterAdd{}
 	if err := readStrictInput(&h.common, options, &filters); err != nil {
 		return err

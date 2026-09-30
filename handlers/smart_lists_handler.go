@@ -8,15 +8,15 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
 // SmartListsHandler interface to handle smart_lists module action
 type SmartListsHandler interface {
-	Handle(options *str.Options, client *internal.Client) error
+	Handle(options *str.Options, client *trakt.Client) error
 }
 
 // smartListError maps a smart list response to a readable error; private lists answer 404 unless you own them.

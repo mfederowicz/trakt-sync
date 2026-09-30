@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -19,7 +19,7 @@ import (
 type ShowsTrendingHandler struct{}
 
 // Handle to handle shows: trending action
-func (h ShowsTrendingHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h ShowsTrendingHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns the most watched shows over the last 24 hours.")
 	result, err := h.fetchShowsTrending(client, options, consts.DefaultPage)
 	if err != nil {
@@ -41,7 +41,7 @@ func (h ShowsTrendingHandler) Handle(options *str.Options, client *internal.Clie
 	return nil
 }
 
-func (h ShowsTrendingHandler) fetchShowsTrending(client *internal.Client, options *str.Options, page int) ([]*str.ShowsItem, error) {
+func (h ShowsTrendingHandler) fetchShowsTrending(client *trakt.Client, options *str.Options, page int) ([]*str.ShowsItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetTrendingShows(
 		client.BuildCtxFromOptions(options),

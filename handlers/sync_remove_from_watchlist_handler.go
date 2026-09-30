@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -15,7 +15,7 @@ import (
 type SyncRemoveFromWatchlistHandler struct{ common CommonLogic }
 
 // Handle to handle sync: remove_from_watchlist action
-func (m SyncRemoveFromWatchlistHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m SyncRemoveFromWatchlistHandler) Handle(options *str.Options, client *trakt.Client) error {
 	items, err := m.common.ReadInput(*options)
 	if err != nil {
 		return err
@@ -33,7 +33,7 @@ func (m SyncRemoveFromWatchlistHandler) Handle(options *str.Options, client *int
 	return nil
 }
 
-func (SyncRemoveFromWatchlistHandler) syncRemoveFromWatchlist(client *internal.Client, options *str.Options, items *str.ItemsToRemove) (*str.RemoveResult, error) {
+func (SyncRemoveFromWatchlistHandler) syncRemoveFromWatchlist(client *trakt.Client, options *str.Options, items *str.ItemsToRemove) (*str.RemoveResult, error) {
 	result, err := client.Sync.RemoveItemsFromWatchlist(
 		client.BuildCtxFromOptions(options),
 		items,

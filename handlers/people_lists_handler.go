@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -19,7 +19,7 @@ import (
 type PeopleListsHandler struct{}
 
 // Handle to handle people: shows action
-func (p PeopleListsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (p PeopleListsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.ID) == consts.ZeroValue {
 		return errors.New(consts.EmptyPersonIDMsg)
 	}
@@ -44,7 +44,7 @@ func (p PeopleListsHandler) Handle(options *str.Options, client *internal.Client
 	return nil
 }
 
-func (p PeopleListsHandler) fetchListsContainingThisPerson(client *internal.Client, options *str.Options, page int) ([]*str.PersonalList, error) {
+func (p PeopleListsHandler) fetchListsContainingThisPerson(client *trakt.Client, options *str.Options, page int) ([]*str.PersonalList, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.People.GetListsContainingThisPerson(
 		client.BuildCtxFromOptions(options),

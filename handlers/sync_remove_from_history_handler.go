@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -15,7 +15,7 @@ import (
 type SyncRemoveFromHistoryHandler struct{ common CommonLogic }
 
 // Handle to handle sync: remove_from_history action
-func (m SyncRemoveFromHistoryHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m SyncRemoveFromHistoryHandler) Handle(options *str.Options, client *trakt.Client) error {
 	items, err := m.common.ReadInput(*options)
 	if err != nil {
 		return err
@@ -34,7 +34,7 @@ func (m SyncRemoveFromHistoryHandler) Handle(options *str.Options, client *inter
 	return nil
 }
 
-func (SyncRemoveFromHistoryHandler) syncRemoveFromHistory(client *internal.Client, options *str.Options, items *str.ItemsToRemove) (*str.RemoveResult, error) {
+func (SyncRemoveFromHistoryHandler) syncRemoveFromHistory(client *trakt.Client, options *str.Options, items *str.ItemsToRemove) (*str.RemoveResult, error) {
 	result, err := client.Sync.RemoveItemsFromHistory(
 		client.BuildCtxFromOptions(options),
 		items,

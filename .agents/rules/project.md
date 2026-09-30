@@ -18,12 +18,16 @@ A request flows top to bottom through these packages:
 ```
 main.go             # flags, config, token, then cmds.ModulesRuntime
 cmds/               # one command_<module>.go per CLI module; registered in runtime.go
-handlers/           # <module>_<action>_handler.go, implements Handler.Handle(*str.Options, *internal.Client) error
+handlers/           # <module>_<action>_handler.go, implements Handler.Handle(*str.Options, *trakt.Client) error
                     # commons.go / commons_helpers.go hold shared CommonLogic
-internal/           # Client (client.go), <module>_service.go, typed HTTP errors (*_error.go)
+trakt/              # Client (client.go), <module>_service.go, typed HTTP errors (*_error.go)
 str/                # JSON request/response types, one type per file
 uri/                # query option structs (`url:` tags), AddQuery, ranges
 ```
+
+`trakt/` is the public, importable API client (`github.com/mfederowicz/trakt-sync/trakt`,
+experimental for now); keep CLI concerns (printing, config, `str.Options`) out of it.
+`trakt/trakttest` holds its mock server for tests in other packages.
 
 Supporting packages: `cfg/` (TOML config and `str.Options`), `consts/` (named
 constants and usage strings), `printer/` (all console output), `writer/`

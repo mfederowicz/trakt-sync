@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -18,7 +18,7 @@ import (
 type EpisodesWatchNowHandler struct{}
 
 // Handle to handle episodes: watchnow action
-func (EpisodesWatchNowHandler) Handle(options *str.Options, client *internal.Client) error {
+func (EpisodesWatchNowHandler) Handle(options *str.Options, client *trakt.Client) error {
 	byID := len(options.ID) > consts.ZeroValue
 	if byID && len(options.Country) == consts.ZeroValue {
 		return errors.New(consts.EmptyCountryMsg)

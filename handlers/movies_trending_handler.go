@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -19,7 +19,7 @@ import (
 type MoviesTrendingHandler struct{}
 
 // Handle to handle movies: trending action
-func (h MoviesTrendingHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h MoviesTrendingHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns the most watched movies over the last 24 hours.")
 	result, err := h.fetchMoviesTrending(client, options, consts.DefaultPage)
 	if err != nil {
@@ -41,7 +41,7 @@ func (h MoviesTrendingHandler) Handle(options *str.Options, client *internal.Cli
 	return nil
 }
 
-func (h MoviesTrendingHandler) fetchMoviesTrending(client *internal.Client, options *str.Options, page int) ([]*str.MoviesItem, error) {
+func (h MoviesTrendingHandler) fetchMoviesTrending(client *trakt.Client, options *str.Options, page int) ([]*str.MoviesItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Movies.GetTrendingMovies(
 		client.BuildCtxFromOptions(options),

@@ -9,15 +9,15 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 	"github.com/spf13/afero"
 )
 
 // ValidAccessToken valid if access_token is expired or not, and refresh if expired
-func ValidAccessToken(config *cfg.Config, client *internal.Client, options *str.Options) bool {
+func ValidAccessToken(config *cfg.Config, client *trakt.Client, options *str.Options) bool {
 	token, err := ReadTokenFromFile(config.TokenPath)
 	if err != nil {
 		printer.Println("Error reading token:", err)
@@ -81,7 +81,7 @@ func ReadTokenFromFile(filePath string) (*str.Token, error) {
 }
 
 // refresh access token to new one
-func refreshToken(config *cfg.Config, client *internal.Client, options *str.Options) bool {
+func refreshToken(config *cfg.Config, client *trakt.Client, options *str.Options) bool {
 	token, err := ReadTokenFromFile(config.TokenPath)
 	if err != nil {
 		printer.Println("Error reading token:", err)
@@ -122,7 +122,7 @@ func refreshToken(config *cfg.Config, client *internal.Client, options *str.Opti
 }
 
 // RefreshUserSettings user settings
-func RefreshUserSettings(config *cfg.Config, client *internal.Client, options *str.Options) bool {
+func RefreshUserSettings(config *cfg.Config, client *trakt.Client, options *str.Options) bool {
 	newSettings, resp, err := client.Users.RetrieveSettings(
 		client.BuildCtxFromOptions(options),
 	)
@@ -146,7 +146,7 @@ func RefreshUserSettings(config *cfg.Config, client *internal.Client, options *s
 }
 
 // HandleToken process token check and refresh, and returns the client with the current access token
-func HandleToken(fs afero.Fs, config *cfg.Config, client *internal.Client, options str.Options) *internal.Client {
+func HandleToken(fs afero.Fs, config *cfg.Config, client *trakt.Client, options str.Options) *trakt.Client {
 	if !ValidAccessToken(config, client, &options) {
 		PoolNewDeviceCode(config, client, &options)
 	}

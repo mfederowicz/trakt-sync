@@ -8,13 +8,13 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // YounifyHandler interface to handle younify module action
 type YounifyHandler interface {
-	Handle(options *str.Options, client *internal.Client) error
+	Handle(options *str.Options, client *trakt.Client) error
 }
 
 // validServiceID checks the streaming service id needed by connect, refresh and disconnect.
@@ -46,7 +46,7 @@ func younifyError(action string, serviceID string, resp *str.Response, err error
 		return fmt.Errorf("streaming service %s is not connectable on your plan (VIP only?): %w", serviceID, err)
 	}
 
-	var badRequest *internal.BadRequestError
+	var badRequest *trakt.BadRequestError
 	if errors.As(err, &badRequest) {
 		return fmt.Errorf("younify %s rejected (return_url must be trakt://... or https://*.trakt.tv): %w", action, err)
 	}

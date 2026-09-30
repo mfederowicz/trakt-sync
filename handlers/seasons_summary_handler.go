@@ -6,9 +6,9 @@ import (
 	"errors"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -17,7 +17,7 @@ import (
 type SeasonsSummaryHandler struct{}
 
 // Handle to handle seasons: summary action
-func (m SeasonsSummaryHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m SeasonsSummaryHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns all seasons for a show including the number of episodes in each season.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptySeasonIDMsg)
@@ -37,7 +37,7 @@ func (m SeasonsSummaryHandler) Handle(options *str.Options, client *internal.Cli
 	return nil
 }
 
-func (SeasonsSummaryHandler) fetchSeasonsSummary(client *internal.Client, options *str.Options) ([]*str.Season, *str.Response, error) {
+func (SeasonsSummaryHandler) fetchSeasonsSummary(client *trakt.Client, options *str.Options) ([]*str.Season, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Shows.GetAllSeasonsForShow(
 		client.BuildCtxFromOptions(options),

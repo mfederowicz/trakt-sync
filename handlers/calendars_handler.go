@@ -8,9 +8,9 @@ import (
 	"strings"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -20,7 +20,7 @@ var (
 
 // CalendarsHandler interface to handle calendars module action
 type CalendarsHandler interface {
-	Handle(options *str.Options, client *internal.Client) error
+	Handle(options *str.Options, client *trakt.Client) error
 }
 
 // calendarTarget returns the calendar target (my or all) encoded in a {my,all}-* action.

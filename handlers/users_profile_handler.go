@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -16,7 +16,7 @@ import (
 type UsersProfileHandler struct{}
 
 // Handle to handle users: profile action
-func (UsersProfileHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersProfileHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("fetch profile for:" + options.UserName)
 	stats, resp, err := fetchUserProfile(client, options)
 	if err != nil {
@@ -36,7 +36,7 @@ func (UsersProfileHandler) Handle(options *str.Options, client *internal.Client)
 	return nil
 }
 
-func fetchUserProfile(client *internal.Client, options *str.Options) (*str.UserProfile, *str.Response, error) {
+func fetchUserProfile(client *trakt.Client, options *str.Options) (*str.UserProfile, *str.Response, error) {
 	username := options.UserName
 	profile, resp, err := client.Users.GetProfile(
 		client.BuildCtxFromOptions(options),

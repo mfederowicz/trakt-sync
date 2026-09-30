@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -19,7 +19,7 @@ import (
 type PeopleUpdatesHandler struct{}
 
 // Handle to handle people: updates action
-func (p PeopleUpdatesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (p PeopleUpdatesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Get recently updated people for date:" + options.StartDate)
 	date := options.StartDate
 	updates, err := p.fetchPeoplesUpdates(client, options, date, consts.DefaultPage)
@@ -44,7 +44,7 @@ func (p PeopleUpdatesHandler) Handle(options *str.Options, client *internal.Clie
 	return nil
 }
 
-func (p PeopleUpdatesHandler) fetchPeoplesUpdates(client *internal.Client, options *str.Options, startDate string, page int) ([]*str.PersonItem, error) {
+func (p PeopleUpdatesHandler) fetchPeoplesUpdates(client *trakt.Client, options *str.Options, startDate string, page int) ([]*str.PersonItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.People.GetRecentlyUpdatedPeople(
 		client.BuildCtxFromOptions(options),

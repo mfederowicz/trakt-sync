@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -19,7 +19,7 @@ import (
 type ShowsFavoritedHandler struct{}
 
 // Handle to handle shows: favorited action
-func (h ShowsFavoritedHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h ShowsFavoritedHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns the most favorited shows in the specified time period")
 	result, err := h.fetchShowsFavorited(client, options, consts.DefaultPage)
 	if err != nil {
@@ -41,7 +41,7 @@ func (h ShowsFavoritedHandler) Handle(options *str.Options, client *internal.Cli
 	return nil
 }
 
-func (h ShowsFavoritedHandler) fetchShowsFavorited(client *internal.Client, options *str.Options, page int) ([]*str.ShowsItem, error) {
+func (h ShowsFavoritedHandler) fetchShowsFavorited(client *trakt.Client, options *str.Options, page int) ([]*str.ShowsItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	period := options.Period
 	list, resp, err := client.Shows.GetFavoritedShows(

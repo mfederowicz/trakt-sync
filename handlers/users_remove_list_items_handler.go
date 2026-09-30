@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -16,7 +16,7 @@ import (
 type UsersRemoveListItemsHandler struct{ common CommonLogic }
 
 // Handle to handle users: remove list items action
-func (u UsersRemoveListItemsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (u UsersRemoveListItemsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	input, err := u.common.ReadInput(*options)
 	if err != nil {
 		return err
@@ -38,7 +38,7 @@ func (u UsersRemoveListItemsHandler) Handle(options *str.Options, client *intern
 	return nil
 }
 
-func (UsersRemoveListItemsHandler) usersRemoveListItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.RemoveResult, *str.Response, error) {
+func (UsersRemoveListItemsHandler) usersRemoveListItems(client *trakt.Client, options *str.Options, items *str.HistoryItems) (*str.RemoveResult, *str.Response, error) {
 	user := options.UserName
 	listID := options.ID
 	result, resp, err := client.Users.RemoveListItems(

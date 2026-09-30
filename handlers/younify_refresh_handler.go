@@ -2,16 +2,16 @@
 package handlers
 
 import (
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // YounifyRefreshHandler struct for handler
 type YounifyRefreshHandler struct{}
 
 // Handle to handle younify: refresh action
-func (YounifyRefreshHandler) Handle(options *str.Options, client *internal.Client) error {
+func (YounifyRefreshHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if err := validServiceID(options); err != nil {
 		return err
 	}

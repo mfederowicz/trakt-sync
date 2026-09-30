@@ -7,9 +7,9 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,7 +17,7 @@ import (
 type UsersFollowerRequestsHandler struct{ common CommonLogic }
 
 // Handle to handle users: follower_requests action
-func (u UsersFollowerRequestsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (u UsersFollowerRequestsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if options.FollowerRequest == consts.ZeroValue {
 		return u.HandleFollowerRequests(options, client)
 	}
@@ -30,7 +30,7 @@ func (u UsersFollowerRequestsHandler) Handle(options *str.Options, client *inter
 }
 
 // HandleApprove approve follower request by id.
-func (u UsersFollowerRequestsHandler) HandleApprove(options *str.Options, client *internal.Client) error {
+func (u UsersFollowerRequestsHandler) HandleApprove(options *str.Options, client *trakt.Client) error {
 	result, resp, err := u.common.ApproveFollowRequest(client, options)
 	if err != nil {
 		return fmt.Errorf("approve follower error:%w", err)
@@ -47,7 +47,7 @@ func (u UsersFollowerRequestsHandler) HandleApprove(options *str.Options, client
 }
 
 // HandleFollowerRequestsDeny deny follower request by id.
-func (u UsersFollowerRequestsHandler) HandleFollowerRequestsDeny(options *str.Options, client *internal.Client) error {
+func (u UsersFollowerRequestsHandler) HandleFollowerRequestsDeny(options *str.Options, client *trakt.Client) error {
 	result, resp, err := u.common.DenyFollowRequest(client, options)
 	if err != nil {
 		return fmt.Errorf("deny follower error:%w", err)
@@ -64,7 +64,7 @@ func (u UsersFollowerRequestsHandler) HandleFollowerRequestsDeny(options *str.Op
 }
 
 // HandleFollowerRequests get follower requests.
-func (u UsersFollowerRequestsHandler) HandleFollowerRequests(options *str.Options, client *internal.Client) error {
+func (u UsersFollowerRequestsHandler) HandleFollowerRequests(options *str.Options, client *trakt.Client) error {
 	printer.Println("get follow requests")
 	items, err := u.common.FetchFollowRequests(client, options)
 	if err != nil {

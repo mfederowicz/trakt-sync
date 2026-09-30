@@ -8,9 +8,9 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -19,7 +19,7 @@ import (
 type SearchTrendingHandler struct{}
 
 // Handle to handle search: trending action
-func (s SearchTrendingHandler) Handle(options *str.Options, client *internal.Client) error {
+func (s SearchTrendingHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if err := checkSearchSingleType(options, cfg.SearchTrendingTypes); err != nil {
 		return err
 	}
@@ -42,7 +42,7 @@ func (s SearchTrendingHandler) Handle(options *str.Options, client *internal.Cli
 	return nil
 }
 
-func (s SearchTrendingHandler) fetchSearchTrending(client *internal.Client, options *str.Options, page int) ([]*str.SearchTrendingItem, error) {
+func (s SearchTrendingHandler) fetchSearchTrending(client *trakt.Client, options *str.Options, page int) ([]*str.SearchTrendingItem, error) {
 	searchType := options.SearchType[consts.ZeroValue]
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Query: options.Query}
 	list, resp, err := client.Search.GetTrendingSearches(

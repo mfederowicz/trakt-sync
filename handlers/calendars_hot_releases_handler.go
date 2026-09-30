@@ -4,9 +4,9 @@ package handlers
 import (
 	"fmt"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
 
@@ -14,7 +14,7 @@ import (
 type CalendarsHotReleasesHandler struct{}
 
 // Handle to handle calendars: hot-releases action
-func (CalendarsHotReleasesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (CalendarsHotReleasesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Get calendar: " + options.Action)
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.Calendars.GetHotReleases(client.BuildCtxFromOptions(options), &options.StartDate, &options.Days, &opts)

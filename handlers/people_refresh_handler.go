@@ -8,16 +8,16 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // PeopleRefreshHandler struct for handler
 type PeopleRefreshHandler struct{}
 
 // Handle to handle people: refresh action
-func (h PeopleRefreshHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h PeopleRefreshHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.ID) == consts.ZeroValue {
 		return errors.New(consts.EmptyPersonIDMsg)
 	}
@@ -50,7 +50,7 @@ func (h PeopleRefreshHandler) Handle(options *str.Options, client *internal.Clie
 	return nil
 }
 
-func (PeopleRefreshHandler) refreshPerson(client *internal.Client, options *str.Options) (*str.Response, error) {
+func (PeopleRefreshHandler) refreshPerson(client *trakt.Client, options *str.Options) (*str.Response, error) {
 	personID := options.ID
 	resp, err := client.People.RefreshPersonMetadata(
 		client.BuildCtxFromOptions(options),
