@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -27,7 +26,7 @@ func (u *UsersService) GetItemstOnAPersonalList(ctx context.Context, id *string,
 	} else {
 		url = "users/me/lists/watchlist/items/movies"
 	}
-	printer.Println("personal list url:" + url)
+	u.client.debug("personal list url:" + url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -37,7 +36,7 @@ func (u *UsersService) GetItemstOnAPersonalList(ctx context.Context, id *string,
 	resp, err := u.client.Do(ctx, req, &lists)
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		u.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -65,7 +64,7 @@ func (u *UsersService) GetUsersPersonalLists(ctx context.Context, id *string) ([
 	resp, err := u.client.Do(ctx, req, &lists)
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		u.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -116,7 +115,7 @@ func (u *UsersService) GetSavedFilters(ctx context.Context, section *string) ([]
 	resp, err := u.client.Do(ctx, req, &lists)
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		u.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -255,7 +254,7 @@ func (u *UsersService) ApproveFollowRequest(ctx context.Context, request int) (*
 
 	url = fmt.Sprintf("users/requests/%d", *&request)
 
-	printer.Println("approve follower")
+	u.client.debug("approve follower")
 	req, err := u.client.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -277,7 +276,7 @@ func (u *UsersService) DenyFollowRequest(ctx context.Context, request int) (*str
 
 	url = fmt.Sprintf("users/requests/%d", *&request)
 
-	printer.Println("deny follower")
+	u.client.debug("deny follower")
 	req, err := u.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -330,7 +329,7 @@ func (u *UsersService) GetHiddenItems(ctx context.Context, section *string, opts
 func (u *UsersService) AddHiddenItems(ctx context.Context, items *str.HistoryItems, section string) (*str.AddResult, error) {
 	var url string
 	url = fmt.Sprintf("users/hidden/%s", section)
-	printer.Println("add hidden items")
+	u.client.debug("add hidden items")
 	req, err := u.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
 		return nil, err
@@ -350,7 +349,7 @@ func (u *UsersService) AddHiddenItems(ctx context.Context, items *str.HistoryIte
 func (u *UsersService) RemoveHiddenItems(ctx context.Context, items *str.HistoryItems, section string) (*str.RemoveResult, error) {
 	var url string
 	url = fmt.Sprintf("users/hidden/%s/remove", section)
-	printer.Println("remove hidden items")
+	u.client.debug("remove hidden items")
 	req, err := u.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
 		return nil, err
@@ -545,7 +544,7 @@ func (u *UsersService) GetNotes(ctx context.Context, user *string, strType *stri
 func (u *UsersService) AddPersonalList(ctx context.Context, user *string, list *str.PersonalList) (*str.PersonalList, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists", *user)
-	printer.Println("create new personal list")
+	u.client.debug("create new personal list")
 	req, err := u.client.NewRequest(http.MethodPost, url, list)
 	if err != nil {
 		return nil, nil, err
@@ -566,7 +565,7 @@ func (u *UsersService) AddPersonalList(ctx context.Context, user *string, list *
 func (u *UsersService) ReorderLists(ctx context.Context, user *string, items *str.ItemsToReorder) (*str.ReorderResults, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/reorder", *user)
-	printer.Println("reorder user lists")
+	u.client.debug("reorder user lists")
 	req, err := u.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
 		return nil, nil, err
@@ -787,7 +786,7 @@ func (u *UsersService) RemoveListItems(ctx context.Context, user *string, listID
 func (u *UsersService) ReorderListItems(ctx context.Context, user *string, listID *string, items *str.ItemsToReorder) (*str.ReorderResults, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s/items/reorder", *user, *listID)
-	printer.Println("reorder list items")
+	u.client.debug("reorder list items")
 	req, err := u.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
 		return nil, nil, err
@@ -808,7 +807,7 @@ func (u *UsersService) ReorderListItems(ctx context.Context, user *string, listI
 func (u *UsersService) UpdateListItem(ctx context.Context, user *string, listID *string, listItemID *int, item *str.PersonalListItem) (*str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s/items/%d", *user, *listID, *listItemID)
-	printer.Println("update list item")
+	u.client.debug("update list item")
 	req, err := u.client.NewRequest(http.MethodPut, url, item)
 	if err != nil {
 		return nil, err
@@ -859,7 +858,7 @@ func (u *UsersService) GetListComments(ctx context.Context, user *string, listID
 func (u *UsersService) ListReport(ctx context.Context, user *string, listID *string, report *str.ListReport) (*str.ListReportResult, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s/report", *user, *listID)
-	printer.Println("list report")
+	u.client.debug("list report")
 	req, err := u.client.NewRequest(http.MethodPost, url, report)
 	if err != nil {
 		return nil, nil, err
@@ -881,7 +880,7 @@ func (u *UsersService) ListReport(ctx context.Context, user *string, listID *str
 func (u *UsersService) Follow(ctx context.Context, user *string) (*str.FollowResult, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/follow", *user)
-	printer.Println("follow user")
+	u.client.debug("follow user")
 	req, err := u.client.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -902,7 +901,7 @@ func (u *UsersService) Follow(ctx context.Context, user *string) (*str.FollowRes
 func (u *UsersService) Unfollow(ctx context.Context, user *string) (*str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/follow", *user)
-	printer.Println("unfollow user")
+	u.client.debug("unfollow user")
 	req, err := u.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
@@ -951,7 +950,7 @@ func (u *UsersService) GetBlockedUsers(ctx context.Context, options *uri.ListOpt
 func (u *UsersService) Block(ctx context.Context, user *string) (*str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/block", *user)
-	printer.Println("block user")
+	u.client.debug("block user")
 	req, err := u.client.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
 		return nil, err
@@ -971,7 +970,7 @@ func (u *UsersService) Block(ctx context.Context, user *string) (*str.Response, 
 func (u *UsersService) Unblock(ctx context.Context, user *string) (*str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/block", *user)
-	printer.Println("unblock user")
+	u.client.debug("unblock user")
 	req, err := u.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
@@ -1115,7 +1114,7 @@ func (u *UsersService) GetRatings(ctx context.Context, user *string, strType *st
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch ratings url:" + url)
+	u.client.debug("fetch ratings url:" + url)
 	req, err := u.client.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1125,7 +1124,7 @@ func (u *UsersService) GetRatings(ctx context.Context, user *string, strType *st
 	resp, err := u.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		u.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1142,7 +1141,7 @@ func (u *UsersService) GetWatchlist(ctx context.Context, user *string, types *st
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch watchlist url:" + url)
+	u.client.debug("fetch watchlist url:" + url)
 	req, err := u.client.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1152,7 +1151,7 @@ func (u *UsersService) GetWatchlist(ctx context.Context, user *string, types *st
 	resp, err := u.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		u.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1171,7 +1170,7 @@ func (u *UsersService) GetWatchlistComments(ctx context.Context, user *string, s
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch watchlist comments url:" + url)
+	u.client.debug("fetch watchlist comments url:" + url)
 	req, err := u.client.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1181,7 +1180,7 @@ func (u *UsersService) GetWatchlistComments(ctx context.Context, user *string, s
 	resp, err := u.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch watchlist comments err:" + err.Error())
+		u.client.debug("fetch watchlist comments err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1199,7 +1198,7 @@ func (u *UsersService) GetFavorites(ctx context.Context, user *string, strType *
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch favorites url:" + url)
+	u.client.debug("fetch favorites url:" + url)
 	req, err := u.client.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1209,7 +1208,7 @@ func (u *UsersService) GetFavorites(ctx context.Context, user *string, strType *
 	resp, err := u.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch favorites err:" + err.Error())
+		u.client.debug("fetch favorites err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1227,7 +1226,7 @@ func (u *UsersService) GetFavoritesComments(ctx context.Context, user *string, s
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch favorites comments url:" + url)
+	u.client.debug("fetch favorites comments url:" + url)
 	req, err := u.client.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1237,7 +1236,7 @@ func (u *UsersService) GetFavoritesComments(ctx context.Context, user *string, s
 	resp, err := u.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch favorites comments err:" + err.Error())
+		u.client.debug("fetch favorites comments err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1254,7 +1253,7 @@ func (u *UsersService) Watching(ctx context.Context, user *string, options *uri.
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch watching url:" + url)
+	u.client.debug("fetch watching url:" + url)
 	req, err := u.client.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1264,7 +1263,7 @@ func (u *UsersService) Watching(ctx context.Context, user *string, options *uri.
 	resp, err := u.client.Do(ctx, req, &result)
 
 	if err != nil {
-		printer.Println("fetch watching err:" + err.Error())
+		u.client.debug("fetch watching err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1278,7 +1277,7 @@ func (u *UsersService) Watching(ctx context.Context, user *string, options *uri.
 func (u *UsersService) Report(ctx context.Context, user *string, report *str.UserReport) (*str.UserReportResult, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/report", *user)
-	printer.Println("user report")
+	u.client.debug("user report")
 	req, err := u.client.NewRequest(http.MethodPost, url, report)
 	if err != nil {
 		return nil, nil, err
