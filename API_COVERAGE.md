@@ -73,14 +73,14 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
-| ✅ | POST | `/checkin` | Check into an item | `CheckinService.CheckintoAnItem` |
+| ✅ | POST | `/checkin` | Check into an item | `CheckinService.CheckIn` |
 | ✅ | DELETE | `/checkin` | Delete any active checkins | `CheckinService.DeleteAnyActiveCheckins` |
 
 ## comments
 
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
-| ✅ | POST | `/comments/` | Post a comment | `CommentsService.PostAComment` |
+| ✅ | POST | `/comments/` | Post a comment | `CommentsService.AddComment` |
 | ✅ | GET | `/comments/recent/{comment_type}/{type}` | Get recently created comments | `CommentsService.GetRecentComments` |
 | ✅ | GET | `/comments/trending/{comment_type}/{type}` | Get trending comments | `CommentsService.GetTrendingComments` |
 | ✅ | GET | `/comments/updates/{comment_type}/{type}` | Get recently updated comments | `CommentsService.GetUpdatedComments` |
@@ -210,7 +210,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | :---: | --- | --- | --- | --- |
 | ➖ | GET | `/oauth/authorize` | Authorize Application | not used: browser redirect flow for web apps; the CLI logs in with the device flow |
 | ✅ | POST | `/oauth/device/code` | Generate new device codes | `OauthService.GenerateNewDeviceCodes` |
-| ✅ | POST | `/oauth/device/token` | Poll for the access_token | `OauthService.PoolForTheAccessToken` |
+| ✅ | POST | `/oauth/device/token` | Poll for the access_token | `OauthService.PollForAccessToken` |
 | ➖ | POST | `/oauth/revoke` | Revoke an access_token | not used: the CLI refreshes an expired token or starts a new device login |
 | ✅ | POST | `/oauth/token` | Exchange a token | `OauthService.ExchangeRefreshTokenForAccessToken` |
 
@@ -410,7 +410,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | DELETE | `/users/saved_filters/{id}` | Delete saved filter | `UsersService.DeleteSavedFilter` |
 | ✅ | GET | `/users/saved_filters/{section}` | Get saved filters | `UsersService.GetSavedFilters` |
 | ⚠️ | PUT | `/users/set_cover` | Update cover image |  |
-| ✅ | GET | `/users/settings` | Retrieve settings | `UsersService.RetrieveSettings` |
+| ✅ | GET | `/users/settings` | Retrieve settings | `UsersService.GetSettings` |
 | ✅ | PUT | `/users/settings` | Update settings | `UsersService.UpdateSettings` |
 | ⚠️ | GET | `/users/settings/plex/` | Get Plex settings | `UsersService.GetPlexSettings` |
 | ⚠️ | PUT | `/users/settings/plex/` | Update Plex settings | `UsersService.UpdatePlexSettings` |
@@ -458,14 +458,14 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | DELETE | `/users/{id}/lists/{list_id}/` | Delete a user's personal list | `UsersService.DeleteList` |
 | ✅ | GET | `/users/{id}/lists/{list_id}/comments/{sort}` | Get all list comments | `UsersService.GetListComments` |
 | ✅ | POST | `/users/{id}/lists/{list_id}/items` | Add items to personal list | `UsersService.AddListItems` |
-| ✅ | GET | `/users/{id}/lists/{list_id}/items/movie` | Get movie list items | `UsersService.GetItemstOnAPersonalList` |
-| ✅ | GET | `/users/{id}/lists/{list_id}/items/movie,show` | Get media list items | `UsersService.GetItemstOnAPersonalList` |
-| ✅ | GET | `/users/{id}/lists/{list_id}/items/movie,show,season,episode` | Get all list items | `UsersService.GetItemstOnAPersonalList` |
+| ✅ | GET | `/users/{id}/lists/{list_id}/items/movie` | Get movie list items | `UsersService.GetListItemsByType` |
+| ✅ | GET | `/users/{id}/lists/{list_id}/items/movie,show` | Get media list items | `UsersService.GetListItemsByType` |
+| ✅ | GET | `/users/{id}/lists/{list_id}/items/movie,show,season,episode` | Get all list items | `UsersService.GetListItemsByType` |
 | ✅ | POST | `/users/{id}/lists/{list_id}/items/remove` | Remove items from personal list | `UsersService.RemoveListItems` |
 | ✅ | POST | `/users/{id}/lists/{list_id}/items/reorder` | Reorder items on a list | `UsersService.ReorderListItems` |
-| ✅ | GET | `/users/{id}/lists/{list_id}/items/show` | Get show list items | `UsersService.GetItemstOnAPersonalList` |
+| ✅ | GET | `/users/{id}/lists/{list_id}/items/show` | Get show list items | `UsersService.GetListItemsByType` |
 | ✅ | PUT | `/users/{id}/lists/{list_id}/items/{list_item_id}` | Update a list item | `UsersService.UpdateListItem` |
-| ✅ | GET | `/users/{id}/lists/{list_id}/items/{type}/{sort_by}/{sort_how}` | Get items on a personal list | `UsersService.GetItemstOnAPersonalList`, `UsersService.GetListItems` |
+| ✅ | GET | `/users/{id}/lists/{list_id}/items/{type}/{sort_by}/{sort_how}` | Get items on a personal list | `UsersService.GetListItems` |
 | ✅ | POST | `/users/{id}/lists/{list_id}/like` | Like a list | `UsersService.ListLike` |
 | ✅ | DELETE | `/users/{id}/lists/{list_id}/like` | Remove like on a list | `UsersService.RemoveListLike` |
 | ✅ | GET | `/users/{id}/lists/{list_id}/likes` | Get all users who liked a list | `UsersService.GetListLikes` |

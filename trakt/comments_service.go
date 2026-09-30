@@ -15,10 +15,10 @@ import (
 // methods of the Trakt API.
 type CommentsService Service
 
-// PostAComment Add a new comment to a movie, show, season, episode, or list.
+// AddComment Add a new comment to a movie, show, season, episode, or list.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/comments/comments/post-a-comment
-func (c *CommentsService) PostAComment(ctx context.Context, comment *str.Comment) (*str.Comment, *str.Response, error) {
+func (c *CommentsService) AddComment(ctx context.Context, comment *str.Comment) (*str.Comment, *str.Response, error) {
 	var url = "comments"
 	c.client.debug("create new comment")
 	req, err := c.client.NewRequest(http.MethodPost, url, comment)

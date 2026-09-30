@@ -37,7 +37,7 @@ func TestCheckinConflictKeepsExpiresAt(t *testing.T) {
 	defer setup.Teardown()
 	conflictMux(t, setup.Mux, "/checkin", `{"expires_at":"2026-09-24T20:00:00.000Z"}`)
 
-	result, resp, err := setup.Client.Checkin.CheckintoAnItem(context.Background(), &str.Checkin{})
+	result, resp, err := setup.Client.Checkin.CheckIn(context.Background(), &str.Checkin{})
 	assertConflict(t, resp, err)
 	if result == nil || result.Expires == nil {
 		t.Fatal("expires_at from the 409 body was not decoded")
@@ -77,7 +77,7 @@ func TestUsersListReportConflictKeepsMessage(t *testing.T) {
 	defer setup.Teardown()
 	conflictMux(t, setup.Mux, "/users/sean/lists/star-wars/report", `{"message":"report already pending"}`)
 
-	result, resp, err := setup.Client.Users.ListReport(context.Background(), str.String("sean"), str.String("star-wars"), &str.ListReport{Reason: str.String("spam")})
+	result, resp, err := setup.Client.Users.ReportList(context.Background(), str.String("sean"), str.String("star-wars"), &str.ListReport{Reason: str.String("spam")})
 	assertConflict(t, resp, err)
 	test.AssertNoDiff(t, &str.ListReportResult{Message: str.String("report already pending")}, result)
 }

@@ -861,7 +861,7 @@ func (*CommonLogic) HideShowRecommendation(client *trakt.Client, options *str.Op
 
 // FetchUserConnections helper function to fetch connections object
 func (*CommonLogic) FetchUserConnections(client *trakt.Client, options *str.Options) (*str.Connections, error) {
-	result, _, err := client.Users.RetrieveSettings(
+	result, _, err := client.Users.GetSettings(
 		cli.ContextFromOptions(options),
 	)
 	if err != nil {
@@ -903,7 +903,7 @@ func (*CommonLogic) PauseScrobble(client *trakt.Client, scrobble *str.Scrobble, 
 
 // Checkin helper function to post checkin object
 func (*CommonLogic) Checkin(client *trakt.Client, checkin *str.Checkin, options *str.Options) (*str.Checkin, *str.Response, error) {
-	result, resp, err := client.Checkin.CheckintoAnItem(
+	result, resp, err := client.Checkin.CheckIn(
 		cli.ContextFromOptions(options),
 		checkin,
 	)
@@ -913,7 +913,7 @@ func (*CommonLogic) Checkin(client *trakt.Client, checkin *str.Checkin, options 
 
 // Comment helper function to post comment object
 func (*CommonLogic) Comment(client *trakt.Client, comment *str.Comment, options *str.Options) (*str.Comment, *str.Response, error) {
-	result, resp, err := client.Comments.PostAComment(
+	result, resp, err := client.Comments.AddComment(
 		cli.ContextFromOptions(options),
 		comment,
 	)
@@ -2176,7 +2176,7 @@ func (*CommonLogic) UsersRemoveListLike(client *trakt.Client, options *str.Optio
 func (*CommonLogic) UsersListLike(client *trakt.Client, options *str.Options) (*str.Response, error) {
 	user := options.UserName
 	listID := options.ID
-	resp, err := client.Users.ListLike(
+	resp, err := client.Users.LikeList(
 		cli.ContextFromOptions(options),
 		&user,
 		&listID,

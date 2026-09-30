@@ -22,7 +22,7 @@ func TestUsersServiceListLike(t *testing.T) {
 			name:   "like a list",
 			method: http.MethodPost,
 			call: func(s *UsersService, user *string, listID *string) (*str.Response, error) {
-				return s.ListLike(context.Background(), user, listID)
+				return s.LikeList(context.Background(), user, listID)
 			},
 		},
 		{

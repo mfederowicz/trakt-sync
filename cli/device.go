@@ -22,7 +22,7 @@ func fail(err string) {
 
 // check if user accept device code or not
 func deviceCodeVerification(deviceToken *str.NewDeviceToken, client *trakt.Client, config *cfg.Config, options *str.Options) bool {
-	token, resp, err := client.Oauth.PoolForTheAccessToken(ContextFromOptions(options), deviceToken)
+	token, resp, err := client.Oauth.PollForAccessToken(ContextFromOptions(options), deviceToken)
 
 	if (resp.StatusCode != http.StatusBadRequest && resp.StatusCode != http.StatusTeapot) && err != nil {
 		printer.Println("Error:", err)

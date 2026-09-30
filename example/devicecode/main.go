@@ -54,7 +54,7 @@ func waitForToken(ctx context.Context, client *trakt.Client, code *str.DeviceCod
 	for time.Now().Before(deadline) {
 		time.Sleep(interval)
 
-		token, resp, err := client.Oauth.PoolForTheAccessToken(ctx, request)
+		token, resp, err := client.Oauth.PollForAccessToken(ctx, request)
 		if err == nil {
 			return token, nil
 		}
