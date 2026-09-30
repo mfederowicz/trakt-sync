@@ -49,9 +49,9 @@ func (p PeopleListsHandler) fetchListsContainingThisPerson(client *trakt.Client,
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.People.GetListsContainingThisPerson(
 		cli.ContextFromOptions(options),
-		&options.ID,
-		&options.Type,
-		&options.Sort,
+		options.ID,
+		options.Type,
+		options.Sort,
 		&opts,
 	)
 

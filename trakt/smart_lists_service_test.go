@@ -23,7 +23,7 @@ func TestSmartListsServiceGetSmartList(t *testing.T) {
 			`"filters":{"genres":["science-fiction"],"genres_operator":"and","years":[2000,2026],"imdb_ratings":[7.5,10],"ignore_watched":true}}`)
 	})
 
-	got, _, err := setup.Client.SmartLists.GetSmartList(context.Background(), str.String("top-sci-fi"))
+	got, _, err := setup.Client.SmartLists.GetSmartList(context.Background(), "top-sci-fi")
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, &str.SmartList{
 		Name:      str.String("Top Sci-Fi"),
@@ -62,7 +62,7 @@ func TestSmartListsServiceGetSmartListItems(t *testing.T) {
 		Page: 2, Limit: 10, Extended: "full", WatchNow: "free", Genres: "action", Subgenres: "space", Years: "2020-2026",
 		Ratings: "75-100", Runtimes: "90-150", Countries: "us", Certifications: "pg-13", IgnoreWatched: "true", IgnoreWatchlisted: "false",
 	}
-	got, _, err := setup.Client.SmartLists.GetSmartListItems(context.Background(), str.String("top-sci-fi"), opts)
+	got, _, err := setup.Client.SmartLists.GetSmartListItems(context.Background(), "top-sci-fi", opts)
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, []*str.UserListItem{
 		{Rank: test.Ptr(1), Type: str.String("movie"), Movie: &str.Movie{Title: str.String("Arrival"), Year: test.Ptr(2016)}},
@@ -77,7 +77,7 @@ func TestSmartListsServiceNotFound(t *testing.T) {
 		w.WriteHeader(http.StatusNotFound)
 	})
 
-	got, resp, err := setup.Client.SmartLists.GetSmartList(context.Background(), str.String("private-list"))
+	got, resp, err := setup.Client.SmartLists.GetSmartList(context.Background(), "private-list")
 	if err == nil {
 		t.Fatal("expected an error")
 	}

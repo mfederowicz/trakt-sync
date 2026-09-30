@@ -45,7 +45,7 @@ func (PeopleMoviesHandler) fetchMovieCredits(client *trakt.Client, options *str.
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetMovieCredits(
 		cli.ContextFromOptions(options),
-		&options.ID,
+		options.ID,
 		&opts,
 	)
 

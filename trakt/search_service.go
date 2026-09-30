@@ -18,8 +18,8 @@ type SearchService Service
 // Specify the type of results by sending a single value or a comma delimited string for multiple types.
 //
 // API docs: https://docs.trakt.tv/reference/getsearchquery
-func (s *SearchService) GetTextQueryResults(ctx context.Context, searchType *string, opts *uri.ListOptions) ([]*str.SearchListItem, *str.Response, error) {
-	var url = fmt.Sprintf("search/%s", *searchType)
+func (s *SearchService) GetTextQueryResults(ctx context.Context, searchType string, opts *uri.ListOptions) ([]*str.SearchListItem, *str.Response, error) {
+	var url = fmt.Sprintf("search/%s", searchType)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -48,8 +48,8 @@ func (s *SearchService) GetTextQueryResults(ctx context.Context, searchType *str
 // sending a single value or a comma delimited string for multiple types.
 //
 // API docs: https://docs.trakt.tv/reference/getsearchlookup
-func (s *SearchService) GetIDLookupResults(ctx context.Context, formatType *string, id *string, opts *uri.ListOptions) ([]*str.SearchListItem, *str.Response, error) {
-	var url = fmt.Sprintf("search/%s/%s", *formatType, *id)
+func (s *SearchService) GetIDLookupResults(ctx context.Context, formatType string, id string, opts *uri.ListOptions) ([]*str.SearchListItem, *str.Response, error) {
+	var url = fmt.Sprintf("search/%s/%s", formatType, id)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -75,8 +75,8 @@ func (s *SearchService) GetIDLookupResults(ctx context.Context, formatType *stri
 // GetExactTextQueryResults Search for exact movie or show matches for the query.
 //
 // API docs: https://docs.trakt.tv/reference/getsearchexact
-func (s *SearchService) GetExactTextQueryResults(ctx context.Context, searchType *string, opts *uri.ListOptions) ([]*str.SearchListItem, *str.Response, error) {
-	var url = fmt.Sprintf("search/%s/exact", *searchType)
+func (s *SearchService) GetExactTextQueryResults(ctx context.Context, searchType string, opts *uri.ListOptions) ([]*str.SearchListItem, *str.Response, error) {
+	var url = fmt.Sprintf("search/%s/exact", searchType)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -99,8 +99,8 @@ func (s *SearchService) GetExactTextQueryResults(ctx context.Context, searchType
 // GetTrendingSearches Get globally trending recent searches by type.
 //
 // API docs: https://docs.trakt.tv/reference/getsearchtrending
-func (s *SearchService) GetTrendingSearches(ctx context.Context, searchType *string, opts *uri.ListOptions) ([]*str.SearchTrendingItem, *str.Response, error) {
-	var url = fmt.Sprintf("search/recent_by_id/global/%s", *searchType)
+func (s *SearchService) GetTrendingSearches(ctx context.Context, searchType string, opts *uri.ListOptions) ([]*str.SearchTrendingItem, *str.Response, error) {
+	var url = fmt.Sprintf("search/recent_by_id/global/%s", searchType)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err

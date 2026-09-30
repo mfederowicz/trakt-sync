@@ -33,7 +33,7 @@ func (h CommentsReportHandler) Handle(options *str.Options, client *trakt.Client
 	}
 
 	commentID := options.CommentID
-	if _, err := client.Comments.ReportComment(cli.ContextFromOptions(options), &commentID, report); err != nil {
+	if _, err := client.Comments.ReportComment(cli.ContextFromOptions(options), commentID, report); err != nil {
 		return fmt.Errorf("report error: %w", err)
 	}
 

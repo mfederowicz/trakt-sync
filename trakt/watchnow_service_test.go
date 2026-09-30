@@ -40,7 +40,7 @@ func TestWatchNowServiceGetSources(t *testing.T) {
 			name: "country",
 			path: "/watchnow/sources/us",
 			call: func(s *WatchNowService) ([]map[string][]*str.WatchNowSource, *str.Response, error) {
-				return s.GetWatchNowSourcesByCountry(context.Background(), str.String("us"))
+				return s.GetWatchNowSourcesByCountry(context.Background(), "us")
 			},
 		},
 	}

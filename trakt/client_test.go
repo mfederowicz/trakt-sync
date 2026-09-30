@@ -124,7 +124,7 @@ func TestWithMethodsReturnCopies(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Empty(t, req.Header.Get("Authorization"), "the original client must keep no token")
 
-	_, _, err = authed.Countries.GetCountries(context.Background(), test.Ptr("movies"))
+	_, _, err = authed.Countries.GetCountries(context.Background(), "movies")
 	assert.NoError(t, err)
 }
 
@@ -247,7 +247,7 @@ func TestDebugLogger(t *testing.T) {
 		logged = append(logged, fmt.Sprint(v...))
 	}
 
-	_, _, err := client.Countries.GetCountries(context.Background(), test.Ptr("movies"))
+	_, _, err := client.Countries.GetCountries(context.Background(), "movies")
 	assert.NoError(t, err)
 
 	req, err := client.NewRequest(http.MethodGet, consts.TestURL+"?client_secret=secret-value", nil)

@@ -63,7 +63,7 @@ func (s SearchTextQueryHandler) fetchSearchTextQuery(client *trakt.Client, optio
 		Field:    searchField}
 	list, resp, err := client.Search.GetTextQueryResults(
 		cli.ContextFromOptions(options),
-		&searchType,
+		searchType,
 		&opts,
 	)
 

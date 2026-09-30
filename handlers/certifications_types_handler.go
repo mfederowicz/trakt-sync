@@ -37,7 +37,7 @@ func (CertificationsTypesHandler) Handle(options *str.Options, client *trakt.Cli
 }
 
 func fetchCertifications(client *trakt.Client, options *str.Options) (*str.Certifications, *str.Response, error) {
-	results, resp, err := client.Certifications.GetCertifications(cli.ContextFromOptions(options), &options.Type)
+	results, resp, err := client.Certifications.GetCertifications(cli.ContextFromOptions(options), options.Type)
 
 	return results, resp, err
 }

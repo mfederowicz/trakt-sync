@@ -22,7 +22,7 @@ func TestSearchServiceGetExactTextQueryResults(t *testing.T) {
 		test.SafeFprint(w, `[{"type":"movie","score":1000,"movie":{"title":"TRON","ids":{"trakt":1}}}]`)
 	})
 
-	got, _, err := setup.Client.Search.GetExactTextQueryResults(context.Background(), str.String("movie"), &uri.ListOptions{Page: 2, Limit: 10, Query: "tron"})
+	got, _, err := setup.Client.Search.GetExactTextQueryResults(context.Background(), "movie", &uri.ListOptions{Page: 2, Limit: 10, Query: "tron"})
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, []*str.SearchListItem{{
 		Type:  str.String("movie"),
@@ -41,7 +41,7 @@ func TestSearchServiceGetTrendingSearches(t *testing.T) {
 		test.SafeFprint(w, `[{"id":12345,"count":7,"type":"person","person":{"name":"Keanu Reeves"}}]`)
 	})
 
-	got, _, err := setup.Client.Search.GetTrendingSearches(context.Background(), str.String("people"), &uri.ListOptions{Page: 1, Query: "keanu"})
+	got, _, err := setup.Client.Search.GetTrendingSearches(context.Background(), "people", &uri.ListOptions{Page: 1, Query: "keanu"})
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, []*str.SearchTrendingItem{{
 		ID:     test.Ptr(int64(12345)),
@@ -59,11 +59,11 @@ func TestSearchServiceErrors(t *testing.T) {
 		w.WriteHeader(http.StatusInternalServerError)
 	})
 
-	_, _, err := setup.Client.Search.GetExactTextQueryResults(context.Background(), str.String("show"), &uri.ListOptions{Query: "x"})
+	_, _, err := setup.Client.Search.GetExactTextQueryResults(context.Background(), "show", &uri.ListOptions{Query: "x"})
 	if err == nil {
 		t.Error("exact query: expected an error on 500")
 	}
-	_, _, err = setup.Client.Search.GetTrendingSearches(context.Background(), str.String("shows"), &uri.ListOptions{})
+	_, _, err = setup.Client.Search.GetTrendingSearches(context.Background(), "shows", &uri.ListOptions{})
 	if err == nil {
 		t.Error("trending: expected an error on 500")
 	}

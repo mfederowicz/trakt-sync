@@ -30,14 +30,14 @@ func (h CommentsReactionHandler) Handle(options *str.Options, client *trakt.Clie
 	commentID := options.CommentID
 	ctx := cli.ContextFromOptions(options)
 	if options.Remove {
-		if _, err := client.Comments.RemoveCommentReaction(ctx, &commentID, &options.Reaction); err != nil {
+		if _, err := client.Comments.RemoveCommentReaction(ctx, commentID, options.Reaction); err != nil {
 			return fmt.Errorf("remove reaction error: %w", err)
 		}
 		printer.Printf("removed reaction %s from comment %d\n", options.Reaction, commentID)
 		return nil
 	}
 
-	if _, err := client.Comments.AddCommentReaction(ctx, &commentID, &options.Reaction); err != nil {
+	if _, err := client.Comments.AddCommentReaction(ctx, commentID, options.Reaction); err != nil {
 		return fmt.Errorf("add reaction error: %w", err)
 	}
 	printer.Printf("added reaction %s to comment %d\n", options.Reaction, commentID)

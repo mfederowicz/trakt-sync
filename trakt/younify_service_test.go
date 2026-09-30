@@ -66,15 +66,15 @@ func TestYounifyServiceRefreshAndDisconnect(t *testing.T) {
 	}{
 		{name: "refresh", method: http.MethodPost, path: "/younify/users/refresh/netflix",
 			call: func(s *YounifyService) (*str.Response, error) {
-				return s.RefreshService(context.Background(), str.String("netflix"), false)
+				return s.RefreshService(context.Background(), "netflix", false)
 			}},
 		{name: "refresh all data", method: http.MethodPost, path: "/younify/users/refresh/netflix/all_data",
 			call: func(s *YounifyService) (*str.Response, error) {
-				return s.RefreshService(context.Background(), str.String("netflix"), true)
+				return s.RefreshService(context.Background(), "netflix", true)
 			}},
 		{name: "disconnect", method: http.MethodDelete, path: "/younify/users/services/netflix",
 			call: func(s *YounifyService) (*str.Response, error) {
-				return s.DisconnectService(context.Background(), str.String("netflix"))
+				return s.DisconnectService(context.Background(), "netflix")
 			}},
 	}
 

@@ -34,7 +34,7 @@ func (GenresTypesHandler) Handle(options *str.Options, client *trakt.Client) err
 }
 
 func fetchGenres(client *trakt.Client, options *str.Options) ([]*str.Genre, *str.Response, error) {
-	results, resp, err := client.Genres.GetGenres(cli.ContextFromOptions(options), &options.Type)
+	results, resp, err := client.Genres.GetGenres(cli.ContextFromOptions(options), options.Type)
 
 	return results, resp, err
 }

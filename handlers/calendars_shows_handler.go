@@ -48,9 +48,9 @@ func fetchCalendarShows(client *trakt.Client, options *str.Options) ([]*str.Cale
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Calendars.GetShows(
 		cli.ContextFromOptions(options),
-		&actionType,
-		&options.StartDate,
-		&options.Days,
+		actionType,
+		options.StartDate,
+		options.Days,
 		&opts,
 	)
 

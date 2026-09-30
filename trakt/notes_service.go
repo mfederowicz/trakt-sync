@@ -53,8 +53,8 @@ func (n *NotesService) AddNotes(ctx context.Context, notes *str.Notes) (*str.Not
 // DeleteNotes Delete a single note.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/notes/note/delete-a-note
-func (n *NotesService) DeleteNotes(ctx context.Context, id *string) (*str.Response, error) {
-	var url = fmt.Sprintf("notes/%s", *id)
+func (n *NotesService) DeleteNotes(ctx context.Context, id string) (*str.Response, error) {
+	var url = fmt.Sprintf("notes/%s", id)
 	n.client.debug("delete notes")
 	req, err := n.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
@@ -64,11 +64,11 @@ func (n *NotesService) DeleteNotes(ctx context.Context, id *string) (*str.Respon
 	resp, err := n.client.Do(ctx, req, nil)
 
 	if resp != nil && resp.StatusCode == http.StatusUnauthorized {
-		err = fmt.Errorf(consts.InvalidUserForNotes, *id)
+		err = fmt.Errorf(consts.InvalidUserForNotes, id)
 	}
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf(consts.NotesNotFoundWithID, *id)
+		err = fmt.Errorf(consts.NotesNotFoundWithID, id)
 	}
 
 	if err != nil {
@@ -81,8 +81,8 @@ func (n *NotesService) DeleteNotes(ctx context.Context, id *string) (*str.Respon
 // UpdateNotes Update a single note (500 maximum characters).
 //
 // API docs:https://trakt.docs.apiary.io/#reference/notes/note/update-a-note
-func (n *NotesService) UpdateNotes(ctx context.Context, id *string, notes *str.Notes) (*str.Notes, *str.Response, error) {
-	var url = fmt.Sprintf("notes/%s", *id)
+func (n *NotesService) UpdateNotes(ctx context.Context, id string, notes *str.Notes) (*str.Notes, *str.Response, error) {
+	var url = fmt.Sprintf("notes/%s", id)
 	n.client.debug("update notes")
 	req, err := n.client.NewRequest(http.MethodPut, url, notes)
 	if err != nil {
@@ -104,8 +104,8 @@ func (n *NotesService) UpdateNotes(ctx context.Context, id *string, notes *str.N
 // GetNotes Return a single note.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/notes/note/get-a-note
-func (n *NotesService) GetNotes(ctx context.Context, id *string) (*str.Notes, *str.Response, error) {
-	var url = fmt.Sprintf("notes/%s", *id)
+func (n *NotesService) GetNotes(ctx context.Context, id string) (*str.Notes, *str.Response, error) {
+	var url = fmt.Sprintf("notes/%s", id)
 	n.client.debug("fetch notes url:" + url)
 	req, err := n.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -116,11 +116,11 @@ func (n *NotesService) GetNotes(ctx context.Context, id *string) (*str.Notes, *s
 	resp, err := n.client.Do(ctx, req, &result)
 
 	if resp != nil && resp.StatusCode == http.StatusUnauthorized {
-		err = fmt.Errorf(consts.InvalidUserForNotes, *id)
+		err = fmt.Errorf(consts.InvalidUserForNotes, id)
 	}
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf(consts.NotesNotFoundWithID, *id)
+		err = fmt.Errorf(consts.NotesNotFoundWithID, id)
 	}
 
 	if err != nil {
@@ -133,8 +133,8 @@ func (n *NotesService) GetNotes(ctx context.Context, id *string) (*str.Notes, *s
 // GetNotesItem Returns the item this note is attached_to.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/notes/item/get-the-attached-item
-func (n *NotesService) GetNotesItem(ctx context.Context, id *string) (*str.NotesItem, *str.Response, error) {
-	var url = fmt.Sprintf("notes/%s/item", *id)
+func (n *NotesService) GetNotesItem(ctx context.Context, id string) (*str.NotesItem, *str.Response, error) {
+	var url = fmt.Sprintf("notes/%s/item", id)
 	n.client.debug("fetch notes item url:" + url)
 	req, err := n.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -145,11 +145,11 @@ func (n *NotesService) GetNotesItem(ctx context.Context, id *string) (*str.Notes
 	resp, err := n.client.Do(ctx, req, &result)
 
 	if resp != nil && resp.StatusCode == http.StatusUnauthorized {
-		err = fmt.Errorf(consts.InvalidUserForNotes, *id)
+		err = fmt.Errorf(consts.InvalidUserForNotes, id)
 	}
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf(consts.NotesNotFoundWithID, *id)
+		err = fmt.Errorf(consts.NotesNotFoundWithID, id)
 	}
 
 	if err != nil {

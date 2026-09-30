@@ -16,8 +16,8 @@ type RecommendationsService Service
 
 // HideMovieRecommendation to hide a movie from getting recommended anymore..
 // API docs:https://trakt.docs.apiary.io/#reference/recommendations/hide-movie/hide-a-movie-recommendation
-func (m *RecommendationsService) HideMovieRecommendation(ctx context.Context, id *string) (*str.Response, error) {
-	var url = fmt.Sprintf("recommendations/movies/%s", *id)
+func (m *RecommendationsService) HideMovieRecommendation(ctx context.Context, id string) (*str.Response, error) {
+	var url = fmt.Sprintf("recommendations/movies/%s", id)
 	m.client.debug("hide recommendations")
 	req, err := m.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
@@ -26,7 +26,7 @@ func (m *RecommendationsService) HideMovieRecommendation(ctx context.Context, id
 
 	resp, err := m.client.Do(ctx, req, nil)
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf(consts.RecommendationNotFoundWithID, *id)
+		err = fmt.Errorf(consts.RecommendationNotFoundWithID, id)
 	}
 
 	if err != nil {
@@ -38,8 +38,8 @@ func (m *RecommendationsService) HideMovieRecommendation(ctx context.Context, id
 
 // HideShowRecommendation to hide a show from getting recommended anymore.
 // API docs:https://trakt.docs.apiary.io/#reference/recommendations/hide-show/hide-a-show-recommendation
-func (m *RecommendationsService) HideShowRecommendation(ctx context.Context, id *string) (*str.Response, error) {
-	var url = fmt.Sprintf("recommendations/shows/%s", *id)
+func (m *RecommendationsService) HideShowRecommendation(ctx context.Context, id string) (*str.Response, error) {
+	var url = fmt.Sprintf("recommendations/shows/%s", id)
 	m.client.debug("hide recommendations")
 	req, err := m.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
@@ -48,7 +48,7 @@ func (m *RecommendationsService) HideShowRecommendation(ctx context.Context, id 
 
 	resp, err := m.client.Do(ctx, req, nil)
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf(consts.RecommendationNotFoundWithID, *id)
+		err = fmt.Errorf(consts.RecommendationNotFoundWithID, id)
 	}
 
 	if err != nil {

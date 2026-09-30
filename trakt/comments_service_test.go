@@ -26,7 +26,7 @@ func TestCommentsServiceGetCommentReactions(t *testing.T) {
 		test.SafeFprint(w, `[{"reaction":{"type":"love"},"user":{"username":"sean"}}]`)
 	})
 
-	got, _, err := setup.Client.Comments.GetCommentReactions(context.Background(), test.Ptr(417), &uri.ListOptions{Page: 2})
+	got, _, err := setup.Client.Comments.GetCommentReactions(context.Background(), 417, &uri.ListOptions{Page: 2})
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, []*str.CommentReaction{
 		{Reaction: &str.Reaction{Type: str.String("love")}, User: &str.UserProfile{Username: str.String("sean")}},
@@ -42,7 +42,7 @@ func TestCommentsServiceGetCommentReactionsSummary(t *testing.T) {
 		test.SafeFprint(w, `{"reaction_count":3,"user_count":2,"distribution":{"like":2,"love":1}}`)
 	})
 
-	got, _, err := setup.Client.Comments.GetCommentReactionsSummary(context.Background(), test.Ptr(417))
+	got, _, err := setup.Client.Comments.GetCommentReactionsSummary(context.Background(), 417)
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, &str.ReactionSummary{
 		ReactionCount: test.Ptr(3),
@@ -56,13 +56,13 @@ func TestCommentsServiceCommentReaction(t *testing.T) {
 		name   string
 		method string
 		status int
-		call   func(s *CommentsService, id *int, reaction *string) (*str.Response, error)
+		call   func(s *CommentsService, id int, reaction string) (*str.Response, error)
 	}{
 		{
 			name:   "add reaction",
 			method: http.MethodPost,
 			status: http.StatusCreated,
-			call: func(s *CommentsService, id *int, reaction *string) (*str.Response, error) {
+			call: func(s *CommentsService, id int, reaction string) (*str.Response, error) {
 				return s.AddCommentReaction(context.Background(), id, reaction)
 			},
 		},
@@ -70,7 +70,7 @@ func TestCommentsServiceCommentReaction(t *testing.T) {
 			name:   "remove reaction",
 			method: http.MethodDelete,
 			status: http.StatusNoContent,
-			call: func(s *CommentsService, id *int, reaction *string) (*str.Response, error) {
+			call: func(s *CommentsService, id int, reaction string) (*str.Response, error) {
 				return s.RemoveCommentReaction(context.Background(), id, reaction)
 			},
 		},
@@ -86,7 +86,7 @@ func TestCommentsServiceCommentReaction(t *testing.T) {
 				w.WriteHeader(tt.status)
 			})
 
-			resp, err := tt.call(setup.Client.Comments, test.Ptr(417), str.String("love"))
+			resp, err := tt.call(setup.Client.Comments, 417, "love")
 			test.AssertNilError(t, err)
 			if got := resp.StatusCode; got != tt.status {
 				t.Errorf("status code is %d, want %d", got, tt.status)
@@ -107,7 +107,7 @@ func TestCommentsServiceReportComment(t *testing.T) {
 		w.WriteHeader(http.StatusCreated)
 	})
 
-	resp, err := setup.Client.Comments.ReportComment(context.Background(), test.Ptr(417), &str.CommentReport{Reason: str.String("spam"), Message: str.String("ad link")})
+	resp, err := setup.Client.Comments.ReportComment(context.Background(), 417, &str.CommentReport{Reason: str.String("spam"), Message: str.String("ad link")})
 	test.AssertNilError(t, err)
 	if got, want := resp.StatusCode, http.StatusCreated; got != want {
 		t.Errorf("status code is %d, want %d", got, want)
@@ -123,7 +123,7 @@ func TestCommentsServiceReportCommentConflict(t *testing.T) {
 		test.SafeFprint(w, `{"message":"report already pending"}`)
 	})
 
-	_, err := setup.Client.Comments.ReportComment(context.Background(), test.Ptr(417), &str.CommentReport{Reason: str.String("spam")})
+	_, err := setup.Client.Comments.ReportComment(context.Background(), 417, &str.CommentReport{Reason: str.String("spam")})
 	if got, want := fmt.Sprint(err), fmt.Sprintf(consts.CommentReportPending, 417); got != want {
 		t.Errorf("error is %q, want %q", got, want)
 	}

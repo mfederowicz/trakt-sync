@@ -35,7 +35,7 @@ func (m SyncRemovePlaybackHandler) Handle(options *str.Options, client *trakt.Cl
 func (SyncRemovePlaybackHandler) syncRemovePlaybackItem(client *trakt.Client, options *str.Options) (*str.Response, error) {
 	resp, err := client.Sync.RemovePlaybackItem(
 		cli.ContextFromOptions(options),
-		&options.PlaybackID,
+		options.PlaybackID,
 	)
 
 	if err != nil {

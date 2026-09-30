@@ -52,6 +52,6 @@ func (SyncGetMinimalCollectionHandler) fetchMinimalCollection(client *trakt.Clie
 		return result, err
 	}
 
-	result, _, err := client.Sync.GetMinimalCollection(ctx, &options.Type, &opts)
+	result, _, err := client.Sync.GetMinimalCollection(ctx, options.Type, &opts)
 	return result, err
 }

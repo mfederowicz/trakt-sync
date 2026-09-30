@@ -43,7 +43,7 @@ func (ShowsPeopleHandler) fetchShowPeople(client *trakt.Client, options *str.Opt
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.People.GetAllPeopleForShow(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 		&opts,
 	)
 

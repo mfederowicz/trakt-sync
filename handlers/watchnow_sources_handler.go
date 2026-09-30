@@ -29,7 +29,7 @@ func (WatchNowSourcesHandler) Handle(options *str.Options, client *trakt.Client)
 	if len(options.Country) > consts.ZeroValue {
 		country = options.Country
 		printer.Println("Returns watch now sources available in: " + country + " (limited access).")
-		result, resp, err = client.WatchNow.GetWatchNowSourcesByCountry(ctx, &options.Country)
+		result, resp, err = client.WatchNow.GetWatchNowSourcesByCountry(ctx, options.Country)
 	} else {
 		printer.Println("Returns all watch now sources supported by Trakt (limited access).")
 		result, resp, err = client.WatchNow.GetWatchNowSources(ctx)

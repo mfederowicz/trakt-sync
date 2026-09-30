@@ -15,8 +15,8 @@ type GenresService Service
 // GetGenres Get a list of all genres, including names and slugs.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/genres/list/get-genres
-func (g *GenresService) GetGenres(ctx context.Context, strType *string) ([]*str.Genre, *str.Response, error) {
-	var url = fmt.Sprintf("genres/%s", *strType)
+func (g *GenresService) GetGenres(ctx context.Context, strType string) ([]*str.Genre, *str.Response, error) {
+	var url = fmt.Sprintf("genres/%s", strType)
 	g.client.debug("fetch genres url:" + url)
 
 	req, err := g.client.NewRequest(http.MethodGet, url, nil)

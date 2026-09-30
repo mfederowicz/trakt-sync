@@ -28,7 +28,7 @@ func TestCalendarsServiceNewRoutes(t *testing.T) {
 			path: "/calendars/my/media/2026-09-24/7",
 			body: `[{"released":"2026-09-25","movie":{"title":"Tron: Ares"}}]`,
 			call: func(s *CalendarsService) ([]*str.CalendarList, *str.Response, error) {
-				return s.GetMedia(context.Background(), str.String("my"), &startDate, &days, opts)
+				return s.GetMedia(context.Background(), "my", startDate, days, opts)
 			},
 			want: []*str.CalendarList{{Released: str.String("2026-09-25"), Movie: &str.Movie{Title: str.String("Tron: Ares")}}},
 		},
@@ -37,7 +37,7 @@ func TestCalendarsServiceNewRoutes(t *testing.T) {
 			path: "/calendars/all/streaming/2026-09-24/7",
 			body: `[{"released":"2026-09-26","movie":{"title":"Weapons"}}]`,
 			call: func(s *CalendarsService) ([]*str.CalendarList, *str.Response, error) {
-				return s.GetStreamingReleases(context.Background(), str.String("all"), &startDate, &days, opts)
+				return s.GetStreamingReleases(context.Background(), "all", startDate, days, opts)
 			},
 			want: []*str.CalendarList{{Released: str.String("2026-09-26"), Movie: &str.Movie{Title: str.String("Weapons")}}},
 		},
@@ -46,7 +46,7 @@ func TestCalendarsServiceNewRoutes(t *testing.T) {
 			path: "/calendars/releases/hot/2026-09-24/7",
 			body: `[{"show":{"title":"Andor"}}]`,
 			call: func(s *CalendarsService) ([]*str.CalendarList, *str.Response, error) {
-				return s.GetHotReleases(context.Background(), &startDate, &days, opts)
+				return s.GetHotReleases(context.Background(), startDate, days, opts)
 			},
 			want: []*str.CalendarList{{Show: &str.Show{Title: str.String("Andor")}}},
 		},
@@ -55,7 +55,7 @@ func TestCalendarsServiceNewRoutes(t *testing.T) {
 			path: "/calendars/releases/hot/premieres/2026-09-24/7",
 			body: `[{"show":{"title":"Severance"}}]`,
 			call: func(s *CalendarsService) ([]*str.CalendarList, *str.Response, error) {
-				return s.GetHotPremieres(context.Background(), &startDate, &days, opts)
+				return s.GetHotPremieres(context.Background(), startDate, days, opts)
 			},
 			want: []*str.CalendarList{{Show: &str.Show{Title: str.String("Severance")}}},
 		},
@@ -64,7 +64,7 @@ func TestCalendarsServiceNewRoutes(t *testing.T) {
 			path: "/calendars/releases/hot/new/2026-09-24/7",
 			body: `[{"show":{"title":"Pluribus"}}]`,
 			call: func(s *CalendarsService) ([]*str.CalendarList, *str.Response, error) {
-				return s.GetHotNewShows(context.Background(), &startDate, &days, opts)
+				return s.GetHotNewShows(context.Background(), startDate, days, opts)
 			},
 			want: []*str.CalendarList{{Show: &str.Show{Title: str.String("Pluribus")}}},
 		},
@@ -73,7 +73,7 @@ func TestCalendarsServiceNewRoutes(t *testing.T) {
 			path: "/calendars/releases/hot/finales/2026-09-24/7",
 			body: `[{"show":{"title":"The Bear"}}]`,
 			call: func(s *CalendarsService) ([]*str.CalendarList, *str.Response, error) {
-				return s.GetHotFinales(context.Background(), &startDate, &days, opts)
+				return s.GetHotFinales(context.Background(), startDate, days, opts)
 			},
 			want: []*str.CalendarList{{Show: &str.Show{Title: str.String("The Bear")}}},
 		},

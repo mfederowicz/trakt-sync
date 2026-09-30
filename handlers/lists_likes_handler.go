@@ -50,7 +50,7 @@ func (h ListsLikesHandler) fetchListsLikes(client *trakt.Client, options *str.Op
 	list, resp, err := client.Lists.GetAllUsersWhoLikedList(
 		cli.ContextFromOptions(options),
 		&opts,
-		&options.InternalID,
+		options.InternalID,
 	)
 
 	if err != nil {

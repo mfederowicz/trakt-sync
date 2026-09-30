@@ -45,8 +45,8 @@ func (c *CommentsService) AddComment(ctx context.Context, comment *str.Comment) 
 
 // UpdateComment to update a single comment.
 // API docs: https://trakt.docs.apiary.io/#reference/comments/comment/update-a-comment-or-reply
-func (c *CommentsService) UpdateComment(ctx context.Context, id *int, comment *str.Comment) (*str.Comment, *str.Response, error) {
-	var url = fmt.Sprintf("comments/%d", *id)
+func (c *CommentsService) UpdateComment(ctx context.Context, id int, comment *str.Comment) (*str.Comment, *str.Response, error) {
+	var url = fmt.Sprintf("comments/%d", id)
 	c.client.debug("update comment")
 	req, err := c.client.NewRequest(http.MethodPut, url, comment)
 	if err != nil {
@@ -66,8 +66,8 @@ func (c *CommentsService) UpdateComment(ctx context.Context, id *int, comment *s
 }
 
 // GetComment Returns comment object.
-func (c *CommentsService) GetComment(ctx context.Context, id *int) (*str.Comment, *str.Response, error) {
-	var url = fmt.Sprintf("comments/%d", *id)
+func (c *CommentsService) GetComment(ctx context.Context, id int) (*str.Comment, *str.Response, error) {
+	var url = fmt.Sprintf("comments/%d", id)
 	c.client.debug("fetch comment url:" + url)
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -78,7 +78,7 @@ func (c *CommentsService) GetComment(ctx context.Context, id *int) (*str.Comment
 	resp, err := c.client.Do(ctx, req, &result)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf(consts.CommentNotFoundWithID, *id)
+		err = fmt.Errorf(consts.CommentNotFoundWithID, id)
 	}
 
 	if err != nil {
@@ -90,8 +90,8 @@ func (c *CommentsService) GetComment(ctx context.Context, id *int) (*str.Comment
 
 // GetCommentItem Returns comment media item object.
 // API docs: https://trakt.docs.apiary.io/#reference/comments/item/get-the-attached-media-item
-func (c *CommentsService) GetCommentItem(ctx context.Context, id *int, opts *uri.ListOptions) (*str.CommentMediaItem, *str.Response, error) {
-	var url = fmt.Sprintf("comments/%d/item", *id)
+func (c *CommentsService) GetCommentItem(ctx context.Context, id int, opts *uri.ListOptions) (*str.CommentMediaItem, *str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/item", id)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -107,7 +107,7 @@ func (c *CommentsService) GetCommentItem(ctx context.Context, id *int, opts *uri
 	resp, err := c.client.Do(ctx, req, &result)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf("comment item not found with commentId:%d", *id)
+		err = fmt.Errorf("comment item not found with commentId:%d", id)
 	}
 
 	if err != nil {
@@ -119,8 +119,8 @@ func (c *CommentsService) GetCommentItem(ctx context.Context, id *int, opts *uri
 
 // DeleteComment to delete a single comment.
 // API docs: https://trakt.docs.apiary.io/#reference/comments/comment/delete-a-comment-or-reply
-func (c *CommentsService) DeleteComment(ctx context.Context, id *int) (*str.Response, error) {
-	var url = fmt.Sprintf("comments/%d", *id)
+func (c *CommentsService) DeleteComment(ctx context.Context, id int) (*str.Response, error) {
+	var url = fmt.Sprintf("comments/%d", id)
 	c.client.debug("delete comment")
 	req, err := c.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
@@ -129,7 +129,7 @@ func (c *CommentsService) DeleteComment(ctx context.Context, id *int) (*str.Resp
 
 	resp, err := c.client.Do(ctx, req, nil)
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf(consts.CommentNotFoundWithID, *id)
+		err = fmt.Errorf(consts.CommentNotFoundWithID, id)
 	}
 
 	if err != nil {
@@ -141,8 +141,8 @@ func (c *CommentsService) DeleteComment(ctx context.Context, id *int) (*str.Resp
 
 // GetRepliesForComment Returns all replies for a comment.
 // API docs: https://trakt.docs.apiary.io/#reference/comments/replies/get-replies-for-a-comment
-func (c *CommentsService) GetRepliesForComment(ctx context.Context, opts *uri.ListOptions, id *int) ([]*str.Comment, *str.Response, error) {
-	var url = fmt.Sprintf("comments/%d/replies", *id)
+func (c *CommentsService) GetRepliesForComment(ctx context.Context, opts *uri.ListOptions, id int) ([]*str.Comment, *str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/replies", id)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -166,8 +166,8 @@ func (c *CommentsService) GetRepliesForComment(ctx context.Context, opts *uri.Li
 
 // GetCommentUserLikes Returns all users who liked a comment.
 // API docs: https://trakt.docs.apiary.io/#reference/comments/item/get-all-users-who-liked-a-comment
-func (c *CommentsService) GetCommentUserLikes(ctx context.Context, id *int, opts *uri.ListOptions) ([]*str.CommentUserLike, *str.Response, error) {
-	var url = fmt.Sprintf("comments/%d/likes", *id)
+func (c *CommentsService) GetCommentUserLikes(ctx context.Context, id int, opts *uri.ListOptions) ([]*str.CommentUserLike, *str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/likes", id)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -192,8 +192,8 @@ func (c *CommentsService) GetCommentUserLikes(ctx context.Context, id *int, opts
 // LikeComment Votes help determine popular comments. Only one like is allowed per comment per user.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/comments/like/like-a-comment
-func (c *CommentsService) LikeComment(ctx context.Context, id *int) (*str.Response, error) {
-	var url = fmt.Sprintf("comments/%d/like", *id)
+func (c *CommentsService) LikeComment(ctx context.Context, id int) (*str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/like", id)
 	c.client.debug("send like for single comment:" + url)
 	req, err := c.client.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
@@ -211,8 +211,8 @@ func (c *CommentsService) LikeComment(ctx context.Context, id *int) (*str.Respon
 // RemoveLikeComment Remove a like on a comment.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/comments/like/remove-like-on-a-comment
-func (c *CommentsService) RemoveLikeComment(ctx context.Context, id *int) (*str.Response, error) {
-	var url = fmt.Sprintf("comments/%d/like", *id)
+func (c *CommentsService) RemoveLikeComment(ctx context.Context, id int) (*str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/like", id)
 	c.client.debug("remove like for single comment:" + url)
 	req, err := c.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
@@ -229,8 +229,8 @@ func (c *CommentsService) RemoveLikeComment(ctx context.Context, id *int) (*str.
 
 // ReplyAComment Add a new reply to an existing comment.
 // API docs:https://trakt.docs.apiary.io/#reference/comments/replies/post-a-reply-for-a-comment
-func (c *CommentsService) ReplyAComment(ctx context.Context, id *int, reply *str.Comment) (*str.Comment, *str.Response, error) {
-	var url = fmt.Sprintf("comments/%d/replies", *id)
+func (c *CommentsService) ReplyAComment(ctx context.Context, id int, reply *str.Comment) (*str.Comment, *str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/replies", id)
 	c.client.debug("reply comment")
 	req, err := c.client.NewRequest(http.MethodPost, url, reply)
 	if err != nil {
@@ -241,7 +241,7 @@ func (c *CommentsService) ReplyAComment(ctx context.Context, id *int, reply *str
 	resp, err := c.client.Do(ctx, req, com)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf(consts.CommentNotFoundWithID, *id)
+		err = fmt.Errorf(consts.CommentNotFoundWithID, id)
 	}
 
 	if err != nil {
@@ -253,8 +253,8 @@ func (c *CommentsService) ReplyAComment(ctx context.Context, id *int, reply *str
 
 // GetTrendingComments Returns all comments with the most likes and replies over the last 7 days.
 // API docs: https://trakt.docs.apiary.io/#reference/comments/trending/get-trending-comments
-func (c *CommentsService) GetTrendingComments(ctx context.Context, contentType *string, strType *string, opts *uri.ListOptions) ([]*str.CommentItem, *str.Response, error) {
-	var url = fmt.Sprintf("comments/trending/%s/%s", *contentType, *strType)
+func (c *CommentsService) GetTrendingComments(ctx context.Context, contentType string, strType string, opts *uri.ListOptions) ([]*str.CommentItem, *str.Response, error) {
+	var url = fmt.Sprintf("comments/trending/%s/%s", contentType, strType)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -278,8 +278,8 @@ func (c *CommentsService) GetTrendingComments(ctx context.Context, contentType *
 
 // GetRecentComments Returns the most recently written comments across all of Trakt.
 // API docs: https://trakt.docs.apiary.io/#reference/comments/recent/get-recently-created-comments
-func (c *CommentsService) GetRecentComments(ctx context.Context, contentType *string, strType *string, opts *uri.ListOptions) ([]*str.CommentItem, *str.Response, error) {
-	var url = fmt.Sprintf("comments/recent/%s/%s", *contentType, *strType)
+func (c *CommentsService) GetRecentComments(ctx context.Context, contentType string, strType string, opts *uri.ListOptions) ([]*str.CommentItem, *str.Response, error) {
+	var url = fmt.Sprintf("comments/recent/%s/%s", contentType, strType)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -303,8 +303,8 @@ func (c *CommentsService) GetRecentComments(ctx context.Context, contentType *st
 
 // GetUpdatedComments Returns the most recently updated comments across all of Trakt.
 // API docs: https://trakt.docs.apiary.io/#reference/comments/updates/get-recently-updated-comments
-func (c *CommentsService) GetUpdatedComments(ctx context.Context, contentType *string, strType *string, opts *uri.ListOptions) ([]*str.CommentItem, *str.Response, error) {
-	var url = fmt.Sprintf("comments/updates/%s/%s", *contentType, *strType)
+func (c *CommentsService) GetUpdatedComments(ctx context.Context, contentType string, strType string, opts *uri.ListOptions) ([]*str.CommentItem, *str.Response, error) {
+	var url = fmt.Sprintf("comments/updates/%s/%s", contentType, strType)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -329,8 +329,8 @@ func (c *CommentsService) GetUpdatedComments(ctx context.Context, contentType *s
 // GetCommentReactions Returns users and reaction details for every reaction on a comment.
 //
 // API docs: https://docs.trakt.tv/reference/getcommentsreactionsall
-func (c *CommentsService) GetCommentReactions(ctx context.Context, id *int, opts *uri.ListOptions) ([]*str.CommentReaction, *str.Response, error) {
-	var url = fmt.Sprintf("comments/%d/reactions", *id)
+func (c *CommentsService) GetCommentReactions(ctx context.Context, id int, opts *uri.ListOptions) ([]*str.CommentReaction, *str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/reactions", id)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -353,8 +353,8 @@ func (c *CommentsService) GetCommentReactions(ctx context.Context, id *int, opts
 // GetCommentReactionsSummary Returns reaction totals for a comment, grouped by reaction type.
 //
 // API docs: https://docs.trakt.tv/reference/getcommentsreactionssummary
-func (c *CommentsService) GetCommentReactionsSummary(ctx context.Context, id *int) (*str.ReactionSummary, *str.Response, error) {
-	var url = fmt.Sprintf("comments/%d/reactions/summary", *id)
+func (c *CommentsService) GetCommentReactionsSummary(ctx context.Context, id int) (*str.ReactionSummary, *str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/reactions/summary", id)
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -372,8 +372,8 @@ func (c *CommentsService) GetCommentReactionsSummary(ctx context.Context, id *in
 // AddCommentReaction Add a reaction to a comment.
 //
 // API docs: https://docs.trakt.tv/reference/postcommentsreactionsadd
-func (c *CommentsService) AddCommentReaction(ctx context.Context, id *int, reactionType *string) (*str.Response, error) {
-	var url = fmt.Sprintf("comments/%d/reactions/%s", *id, *reactionType)
+func (c *CommentsService) AddCommentReaction(ctx context.Context, id int, reactionType string) (*str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/reactions/%s", id, reactionType)
 	req, err := c.client.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
 		return nil, err
@@ -385,8 +385,8 @@ func (c *CommentsService) AddCommentReaction(ctx context.Context, id *int, react
 // RemoveCommentReaction Remove a reaction from a comment.
 //
 // API docs: https://docs.trakt.tv/reference/deletecommentsreactionsremove
-func (c *CommentsService) RemoveCommentReaction(ctx context.Context, id *int, reactionType *string) (*str.Response, error) {
-	var url = fmt.Sprintf("comments/%d/reactions/%s", *id, *reactionType)
+func (c *CommentsService) RemoveCommentReaction(ctx context.Context, id int, reactionType string) (*str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/reactions/%s", id, reactionType)
 	req, err := c.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
@@ -398,8 +398,8 @@ func (c *CommentsService) RemoveCommentReaction(ctx context.Context, id *int, re
 // ReportComment Report a comment for moderator review.
 //
 // API docs: https://docs.trakt.tv/reference/postcommentsreport
-func (c *CommentsService) ReportComment(ctx context.Context, id *int, report *str.CommentReport) (*str.Response, error) {
-	var url = fmt.Sprintf("comments/%d/report", *id)
+func (c *CommentsService) ReportComment(ctx context.Context, id int, report *str.CommentReport) (*str.Response, error) {
+	var url = fmt.Sprintf("comments/%d/report", id)
 	req, err := c.client.NewRequest(http.MethodPost, url, report)
 	if err != nil {
 		return nil, err
@@ -408,7 +408,7 @@ func (c *CommentsService) ReportComment(ctx context.Context, id *int, report *st
 	resp, err := c.client.Do(ctx, req, nil)
 	var conflict *ConflictError
 	if errors.As(err, &conflict) {
-		return resp, fmt.Errorf(consts.CommentReportPending, *id)
+		return resp, fmt.Errorf(consts.CommentReportPending, id)
 	}
 	if err != nil {
 		return resp, err

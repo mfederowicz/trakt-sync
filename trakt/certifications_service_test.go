@@ -45,7 +45,7 @@ func TestCertificationsServiceGetCertifications(t *testing.T) {
 				test.SafeFprint(w, tt.body)
 			})
 
-			got, _, err := setup.Client.Certifications.GetCertifications(context.Background(), str.String(tt.strType))
+			got, _, err := setup.Client.Certifications.GetCertifications(context.Background(), tt.strType)
 			test.AssertNilError(t, err)
 			test.AssertNoDiff(t, tt.want, got)
 		})

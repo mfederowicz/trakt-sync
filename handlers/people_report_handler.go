@@ -32,7 +32,7 @@ func (h PeopleReportHandler) Handle(options *str.Options, client *trakt.Client) 
 		report.Message = &options.Msg
 	}
 
-	if _, err := client.People.ReportPerson(cli.ContextFromOptions(options), &options.ID, report); err != nil {
+	if _, err := client.People.ReportPerson(cli.ContextFromOptions(options), options.ID, report); err != nil {
 		return fmt.Errorf("report error: %w", err)
 	}
 

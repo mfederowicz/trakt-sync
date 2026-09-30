@@ -51,7 +51,7 @@ func (p PeopleUpdatedIDsHandler) fetchPeoplesUpdatedIDs(client *trakt.Client, op
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.People.GetRecentlyUpdatedPeopleTraktIDs(
 		cli.ContextFromOptions(options),
-		&startDate,
+		startDate,
 		&opts,
 	)
 

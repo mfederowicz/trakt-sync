@@ -74,8 +74,8 @@ func (l *ListsService) GetPopularLists(ctx context.Context, opts *uri.ListOption
 // GetList Returns a single list. Use the /lists/:id/items method to get the actual items this list contains.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/lists/list/get-list
-func (l *ListsService) GetList(ctx context.Context, id *string) (*str.PersonalList, *str.Response, error) {
-	var url = fmt.Sprintf("lists/%s", *id)
+func (l *ListsService) GetList(ctx context.Context, id string) (*str.PersonalList, *str.Response, error) {
+	var url = fmt.Sprintf("lists/%s", id)
 	l.client.debug("fetch single list:" + url)
 	req, err := l.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -86,7 +86,7 @@ func (l *ListsService) GetList(ctx context.Context, id *string) (*str.PersonalLi
 	resp, err := l.client.Do(ctx, req, &list)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf("list not found with traktId:%s", *id)
+		err = fmt.Errorf("list not found with traktId:%s", id)
 	}
 
 	if err != nil {
@@ -99,8 +99,8 @@ func (l *ListsService) GetList(ctx context.Context, id *string) (*str.PersonalLi
 // GetAllUsersWhoLikedList Returns all users who liked a list.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/lists/list-likes/get-all-users-who-liked-a-list
-func (l *ListsService) GetAllUsersWhoLikedList(ctx context.Context, opts *uri.ListOptions, id *string) ([]*str.UserLike, *str.Response, error) {
-	var url = fmt.Sprintf("lists/%s/likes", *id)
+func (l *ListsService) GetAllUsersWhoLikedList(ctx context.Context, opts *uri.ListOptions, id string) ([]*str.UserLike, *str.Response, error) {
+	var url = fmt.Sprintf("lists/%s/likes", id)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -125,8 +125,8 @@ func (l *ListsService) GetAllUsersWhoLikedList(ctx context.Context, opts *uri.Li
 // LikeList Votes help determine popular lists. Only one like is allowed per list per user.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/lists/list-like/like-a-list
-func (l *ListsService) LikeList(ctx context.Context, id *string) (*str.Response, error) {
-	var url = fmt.Sprintf("lists/%s/like", *id)
+func (l *ListsService) LikeList(ctx context.Context, id string) (*str.Response, error) {
+	var url = fmt.Sprintf("lists/%s/like", id)
 	l.client.debug("send like for single list:" + url)
 	req, err := l.client.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
@@ -144,8 +144,8 @@ func (l *ListsService) LikeList(ctx context.Context, id *string) (*str.Response,
 // RemoveLikeList Remove a like on a list.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/lists/list-like/remove-like-on-a-list
-func (l *ListsService) RemoveLikeList(ctx context.Context, id *string) (*str.Response, error) {
-	var url = fmt.Sprintf("lists/%s/like", *id)
+func (l *ListsService) RemoveLikeList(ctx context.Context, id string) (*str.Response, error) {
+	var url = fmt.Sprintf("lists/%s/like", id)
 	l.client.debug("remove like for single list:" + url)
 	req, err := l.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
@@ -160,16 +160,16 @@ func (l *ListsService) RemoveLikeList(ctx context.Context, id *string) (*str.Res
 	return resp, nil
 }
 
-// GetListItems Returns items from single list.
+// GetListItems Returns items from single list. An empty t returns items of all types.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/lists/list-items/get-items-on-a-list
-func (l *ListsService) GetListItems(ctx context.Context, id *string, t *string, opts *uri.ListOptions) ([]*str.UserListItem, *str.Response, error) {
+func (l *ListsService) GetListItems(ctx context.Context, id string, t string, opts *uri.ListOptions) ([]*str.UserListItem, *str.Response, error) {
 	var url string
 
-	if t != nil {
-		url = fmt.Sprintf("lists/%s/items/%s", *id, *t)
+	if t != consts.EmptyString {
+		url = fmt.Sprintf("lists/%s/items/%s", id, t)
 	} else {
-		url = fmt.Sprintf("lists/%s/items", *id)
+		url = fmt.Sprintf("lists/%s/items", id)
 	}
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
@@ -193,16 +193,16 @@ func (l *ListsService) GetListItems(ctx context.Context, id *string, t *string, 
 	return lists, resp, nil
 }
 
-// GetListComments Returns comments from single list.
+// GetListComments Returns comments from single list. An empty sort uses the API default.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/lists/list-comments/get-all-list-comments
-func (l *ListsService) GetListComments(ctx context.Context, id *string, sort *string, opts *uri.ListOptions) ([]*str.ListComment, *str.Response, error) {
+func (l *ListsService) GetListComments(ctx context.Context, id string, sort string, opts *uri.ListOptions) ([]*str.ListComment, *str.Response, error) {
 	var url string
 
-	if sort != nil {
-		url = fmt.Sprintf("lists/%s/comments/%s", *id, *sort)
+	if sort != consts.EmptyString {
+		url = fmt.Sprintf("lists/%s/comments/%s", id, sort)
 	} else {
-		url = fmt.Sprintf("lists/%s/comments", *id)
+		url = fmt.Sprintf("lists/%s/comments", id)
 	}
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
@@ -230,22 +230,22 @@ func (l *ListsService) GetListComments(ctx context.Context, id *string, sort *st
 // GetTrendingListsByType Returns trending lists of the given type, ordered by current activity.
 //
 // API docs: https://docs.trakt.tv/reference/getliststrendingbytype
-func (l *ListsService) GetTrendingListsByType(ctx context.Context, listType *string, opts *uri.ListOptions) ([]*str.List, *str.Response, error) {
-	return l.fetchLists(ctx, fmt.Sprintf("lists/trending/%s", *listType), opts)
+func (l *ListsService) GetTrendingListsByType(ctx context.Context, listType string, opts *uri.ListOptions) ([]*str.List, *str.Response, error) {
+	return l.fetchLists(ctx, fmt.Sprintf("lists/trending/%s", listType), opts)
 }
 
 // GetPopularListsByType Returns popular lists of the given type, ordered by long-term activity.
 //
 // API docs: https://docs.trakt.tv/reference/getlistspopularbytype
-func (l *ListsService) GetPopularListsByType(ctx context.Context, listType *string, opts *uri.ListOptions) ([]*str.List, *str.Response, error) {
-	return l.fetchLists(ctx, fmt.Sprintf("lists/popular/%s", *listType), opts)
+func (l *ListsService) GetPopularListsByType(ctx context.Context, listType string, opts *uri.ListOptions) ([]*str.List, *str.Response, error) {
+	return l.fetchLists(ctx, fmt.Sprintf("lists/popular/%s", listType), opts)
 }
 
 // ReportList Report a list for moderator review.
 //
 // API docs: https://docs.trakt.tv/reference/postlistsreport
-func (l *ListsService) ReportList(ctx context.Context, id *string, report *str.ListReport) (*str.Response, error) {
-	var url = fmt.Sprintf("lists/%s/report", *id)
+func (l *ListsService) ReportList(ctx context.Context, id string, report *str.ListReport) (*str.Response, error) {
+	var url = fmt.Sprintf("lists/%s/report", id)
 	req, err := l.client.NewRequest(http.MethodPost, url, report)
 	if err != nil {
 		return nil, err
@@ -254,7 +254,7 @@ func (l *ListsService) ReportList(ctx context.Context, id *string, report *str.L
 	resp, err := l.client.Do(ctx, req, nil)
 	var conflict *ConflictError
 	if errors.As(err, &conflict) {
-		return resp, fmt.Errorf(consts.ListReportPending, *id)
+		return resp, fmt.Errorf(consts.ListReportPending, id)
 	}
 	if err != nil {
 		return resp, err

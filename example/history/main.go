@@ -29,10 +29,9 @@ func main() {
 	// timestamps in responses are converted to this location
 	ctx := trakt.WithTimezone(context.Background(), time.Local)
 
-	noID := 0 // 0 means all items, not one history entry
 	opts := &uri.ListOptions{Page: 1, Limit: 20}
 	for {
-		items, resp, err := client.Sync.GetWatchedHistory(ctx, &noID, nil, opts)
+		items, resp, err := client.Sync.GetWatchedHistory(ctx, 0, "", opts) // 0 and "": all entries of all types
 		if err != nil {
 			log.Fatalf("history page %d: %v", opts.Page, err)
 		}

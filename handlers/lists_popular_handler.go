@@ -49,7 +49,7 @@ func (h ListsPopularHandler) fetchListsPopular(client *trakt.Client, options *st
 	var resp *str.Response
 	var err error
 	if len(options.Type) > consts.ZeroValue {
-		list, resp, err = client.Lists.GetPopularListsByType(ctx, &options.Type, &opts)
+		list, resp, err = client.Lists.GetPopularListsByType(ctx, options.Type, &opts)
 	} else {
 		list, resp, err = client.Lists.GetPopularLists(ctx, &opts)
 	}

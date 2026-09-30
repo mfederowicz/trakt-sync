@@ -48,7 +48,7 @@ func (ListsListHandler) fetchSingleList(client *trakt.Client, options *str.Optio
 	listID := options.InternalID
 	result, resp, err := client.Lists.GetList(
 		cli.ContextFromOptions(options),
-		&listID,
+		listID,
 	)
 
 	return result, resp, err

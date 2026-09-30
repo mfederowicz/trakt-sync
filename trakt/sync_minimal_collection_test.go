@@ -24,7 +24,7 @@ func TestSyncServiceGetMinimalCollection(t *testing.T) {
 				test.SafeFprint(w, `{"12601":"2026-09-01T10:20:30.000Z"}`)
 			})
 
-			got, _, err := setup.Client.Sync.GetMinimalCollection(context.Background(), &strType, &uri.ListOptions{AvailableOn: "plex"})
+			got, _, err := setup.Client.Sync.GetMinimalCollection(context.Background(), strType, &uri.ListOptions{AvailableOn: "plex"})
 			test.AssertNilError(t, err)
 			test.AssertNoDiff(t, str.MinimalCollection{
 				"12601": {Time: time.Date(2026, time.September, 1, 10, 20, 30, 0, time.UTC)},

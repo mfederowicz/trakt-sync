@@ -16,8 +16,8 @@ type SmartListsService Service
 // GetSmartList Returns a single smart list definition by its slug.
 //
 // API docs: https://docs.trakt.tv/reference/getsmart_listssummary
-func (s *SmartListsService) GetSmartList(ctx context.Context, id *string) (*str.SmartList, *str.Response, error) {
-	var url = fmt.Sprintf("smart-lists/%s", *id)
+func (s *SmartListsService) GetSmartList(ctx context.Context, id string) (*str.SmartList, *str.Response, error) {
+	var url = fmt.Sprintf("smart-lists/%s", id)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -35,8 +35,8 @@ func (s *SmartListsService) GetSmartList(ctx context.Context, id *string) (*str.
 // GetSmartListItems Returns the dynamic items a smart list resolves to.
 //
 // API docs: https://docs.trakt.tv/reference/getsmart_listsitems
-func (s *SmartListsService) GetSmartListItems(ctx context.Context, id *string, opts *uri.SmartListItemsOptions) ([]*str.UserListItem, *str.Response, error) {
-	var url = fmt.Sprintf("smart-lists/%s/items", *id)
+func (s *SmartListsService) GetSmartListItems(ctx context.Context, id string, opts *uri.SmartListItemsOptions) ([]*str.UserListItem, *str.Response, error) {
+	var url = fmt.Sprintf("smart-lists/%s/items", id)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err

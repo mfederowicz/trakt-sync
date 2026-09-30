@@ -561,7 +561,7 @@ func (*CommonLogic) FetchPerson(client *trakt.Client, options *str.Options) (*st
 	personID := options.InternalID
 	result, _, err := client.People.GetSinglePerson(
 		cli.ContextFromOptions(options),
-		&personID,
+		personID,
 		&opts,
 	)
 
@@ -573,7 +573,7 @@ func (*CommonLogic) FetchList(client *trakt.Client, options *str.Options) (*str.
 	listID := options.InternalID
 	result, _, err := client.Lists.GetList(
 		cli.ContextFromOptions(options),
-		&listID,
+		listID,
 	)
 
 	return result, err
@@ -584,7 +584,7 @@ func (*CommonLogic) FetchComment(client *trakt.Client, options *str.Options) (*s
 	commentID := options.CommentID
 	result, _, err := client.Comments.GetComment(
 		cli.ContextFromOptions(options),
-		&commentID,
+		commentID,
 	)
 
 	return result, err
@@ -595,7 +595,7 @@ func (*CommonLogic) FetchNotes(client *trakt.Client, options *str.Options) (*str
 	notesID := options.InternalID
 	result, _, err := client.Notes.GetNotes(
 		cli.ContextFromOptions(options),
-		&notesID,
+		notesID,
 	)
 
 	return result, err
@@ -606,7 +606,7 @@ func (*CommonLogic) FetchNotesItem(client *trakt.Client, options *str.Options) (
 	notesID := options.InternalID
 	result, _, err := client.Notes.GetNotesItem(
 		cli.ContextFromOptions(options),
-		&notesID,
+		notesID,
 	)
 
 	return result, err
@@ -618,7 +618,7 @@ func (*CommonLogic) FetchCommentItem(client *trakt.Client, options *str.Options)
 	commentID := options.CommentID
 	result, _, err := client.Comments.GetCommentItem(
 		cli.ContextFromOptions(options),
-		&commentID,
+		commentID,
 		&opts,
 	)
 
@@ -631,7 +631,7 @@ func (c *CommonLogic) FetchCommentUserLikes(client *trakt.Client, options *str.O
 	commentID := options.CommentID
 	list, resp, err := client.Comments.GetCommentUserLikes(
 		cli.ContextFromOptions(options),
-		&commentID,
+		commentID,
 		&opts,
 	)
 
@@ -661,8 +661,8 @@ func (c *CommonLogic) FetchTrendingComments(client *trakt.Client, options *str.O
 	strType := options.Type
 	list, resp, err := client.Comments.GetTrendingComments(
 		cli.ContextFromOptions(options),
-		&commentType,
-		&strType,
+		commentType,
+		strType,
 		&opts,
 	)
 
@@ -692,8 +692,8 @@ func (c *CommonLogic) FetchRecentComments(client *trakt.Client, options *str.Opt
 	strType := options.Type
 	list, resp, err := client.Comments.GetRecentComments(
 		cli.ContextFromOptions(options),
-		&commentType,
-		&strType,
+		commentType,
+		strType,
 		&opts,
 	)
 
@@ -723,8 +723,8 @@ func (c *CommonLogic) FetchUpdatedComments(client *trakt.Client, options *str.Op
 	strType := options.Type
 	list, resp, err := client.Comments.GetUpdatedComments(
 		cli.ContextFromOptions(options),
-		&commentType,
-		&strType,
+		commentType,
+		strType,
 		&opts,
 	)
 
@@ -808,7 +808,7 @@ func (*CommonLogic) UpdateComment(client *trakt.Client, options *str.Options, co
 	commentID := options.CommentID
 	result, resp, err := client.Comments.UpdateComment(
 		cli.ContextFromOptions(options),
-		&commentID,
+		commentID,
 		comment,
 	)
 
@@ -820,7 +820,7 @@ func (*CommonLogic) DeleteComment(client *trakt.Client, options *str.Options) (*
 	commentID := options.CommentID
 	resp, err := client.Comments.DeleteComment(
 		cli.ContextFromOptions(options),
-		&commentID,
+		commentID,
 	)
 
 	return resp, err
@@ -831,7 +831,7 @@ func (*CommonLogic) DeleteNotes(client *trakt.Client, options *str.Options) (*st
 	notesID := options.InternalID
 	resp, err := client.Notes.DeleteNotes(
 		cli.ContextFromOptions(options),
-		&notesID,
+		notesID,
 	)
 
 	return resp, err
@@ -842,7 +842,7 @@ func (*CommonLogic) HideMovieRecommendation(client *trakt.Client, options *str.O
 	movieID := options.InternalID
 	resp, err := client.Recommendations.HideMovieRecommendation(
 		cli.ContextFromOptions(options),
-		&movieID,
+		movieID,
 	)
 
 	return resp, err
@@ -853,7 +853,7 @@ func (*CommonLogic) HideShowRecommendation(client *trakt.Client, options *str.Op
 	showID := options.InternalID
 	resp, err := client.Recommendations.HideShowRecommendation(
 		cli.ContextFromOptions(options),
-		&showID,
+		showID,
 	)
 
 	return resp, err
@@ -933,7 +933,7 @@ func (*CommonLogic) Notes(client *trakt.Client, notes *str.Notes, options *str.O
 func (*CommonLogic) Reply(client *trakt.Client, id *int, reply *str.Comment, options *str.Options) (*str.Comment, *str.Response, error) {
 	result, resp, err := client.Comments.ReplyAComment(
 		cli.ContextFromOptions(options),
-		id,
+		*id,
 		reply,
 	)
 	return result, resp, err
@@ -1592,8 +1592,8 @@ func (c CommonLogic) FetchHistoryList(client *trakt.Client, options *str.Options
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, StartAt: options.StartDate, EndAt: options.EndDate, Extended: options.ExtendedInfo}
 	list, resp, err := client.Sync.GetWatchedHistory(
 		cli.ContextFromOptions(options),
-		&options.TraktID,
-		&options.Type,
+		options.TraktID,
+		options.Type,
 		&opts,
 	)
 
@@ -1625,8 +1625,8 @@ func (c CommonLogic) FetchRatings(client *trakt.Client, options *str.Options, pa
 	r := options.Rating.String()
 	list, resp, err := client.Sync.GetRatings(
 		cli.ContextFromOptions(options),
-		&options.Type,
-		&r,
+		options.Type,
+		r,
 		&opts,
 	)
 
@@ -1744,7 +1744,7 @@ func (*CommonLogic) UpdateNotes(client *trakt.Client, options *str.Options, note
 	notesID := options.InternalID
 	result, resp, err := client.Notes.UpdateNotes(
 		cli.ContextFromOptions(options),
-		&notesID,
+		notesID,
 		notes,
 	)
 
@@ -1756,9 +1756,9 @@ func (c *CommonLogic) FetchWatchlist(client *trakt.Client, options *str.Options,
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Sync.GetWatchlist(
 		cli.ContextFromOptions(options),
-		&options.Type,
-		&options.SortBy,
-		&options.SortHow,
+		options.Type,
+		options.SortBy,
+		options.SortHow,
 		&opts,
 	)
 
@@ -1787,9 +1787,9 @@ func (c CommonLogic) FetchFavorites(client *trakt.Client, options *str.Options, 
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Sync.GetFavorites(
 		cli.ContextFromOptions(options),
-		&options.Type,
-		&options.SortBy,
-		&options.SortHow,
+		options.Type,
+		options.SortBy,
+		options.SortHow,
 		&opts,
 	)
 

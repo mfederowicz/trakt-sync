@@ -51,9 +51,9 @@ func (m SyncPlaybackHandler) Handle(options *str.Options, client *trakt.Client) 
 func (m SyncPlaybackHandler) syncPlayback(client *trakt.Client, options *str.Options, page int) ([]*str.PlaybackProgress, *str.Response, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, StartAt: options.StartDate, EndAt: options.EndDate}
 	// all is the untyped sync/playback route
-	var types *string
-	if options.Type != consts.ActionTypeAll {
-		types = &options.Type
+	types := options.Type
+	if types == consts.ActionTypeAll {
+		types = consts.EmptyString
 	}
 	list, resp, err := client.Sync.GetPlaybackProgress(
 		cli.ContextFromOptions(options),

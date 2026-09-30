@@ -53,8 +53,8 @@ func (y *YounifyService) Connect(ctx context.Context, connect *str.YounifyConnec
 //
 // API docs: https://docs.trakt.tv/reference/postyounifyrefresh
 // API docs: https://docs.trakt.tv/reference/postyounifyrefreshall
-func (y *YounifyService) RefreshService(ctx context.Context, serviceID *string, allData bool) (*str.Response, error) {
-	var url = fmt.Sprintf("younify/users/refresh/%s", *serviceID)
+func (y *YounifyService) RefreshService(ctx context.Context, serviceID string, allData bool) (*str.Response, error) {
+	var url = fmt.Sprintf("younify/users/refresh/%s", serviceID)
 	if allData {
 		url = fmt.Sprintf("%s/%s", url, consts.AllDataSegment)
 	}
@@ -69,8 +69,8 @@ func (y *YounifyService) RefreshService(ctx context.Context, serviceID *string, 
 // DisconnectService Unlinks a streaming service from the user.
 //
 // API docs: https://docs.trakt.tv/reference/deleteyounifydisconnect
-func (y *YounifyService) DisconnectService(ctx context.Context, serviceID *string) (*str.Response, error) {
-	var url = fmt.Sprintf("younify/users/services/%s", *serviceID)
+func (y *YounifyService) DisconnectService(ctx context.Context, serviceID string) (*str.Response, error) {
+	var url = fmt.Sprintf("younify/users/services/%s", serviceID)
 	req, err := y.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err

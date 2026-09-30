@@ -52,7 +52,7 @@ func (s SearchExactQueryHandler) fetchSearchExactQuery(client *trakt.Client, opt
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Query: options.Query}
 	list, resp, err := client.Search.GetExactTextQueryResults(
 		cli.ContextFromOptions(options),
-		&searchType,
+		searchType,
 		&opts,
 	)
 	if err != nil {

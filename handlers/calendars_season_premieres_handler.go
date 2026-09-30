@@ -46,9 +46,9 @@ func fetchCalendarSeasonPremieres(client *trakt.Client, options *str.Options) ([
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Calendars.GetSeasonPremieres(
 		cli.ContextFromOptions(options),
-		&actionType,
-		&options.StartDate,
-		&options.Days,
+		actionType,
+		options.StartDate,
+		options.Days,
 		&opts,
 	)
 

@@ -54,7 +54,7 @@ func (PeopleRefreshHandler) refreshPerson(client *trakt.Client, options *str.Opt
 	personID := options.ID
 	resp, err := client.People.RefreshPersonMetadata(
 		cli.ContextFromOptions(options),
-		&personID,
+		personID,
 	)
 	return resp, err
 }

@@ -46,9 +46,9 @@ func fetchCalendarMovies(client *trakt.Client, options *str.Options) ([]*str.Cal
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Calendars.GetMovies(
 		cli.ContextFromOptions(options),
-		&actionType,
-		&options.StartDate,
-		&options.Days,
+		actionType,
+		options.StartDate,
+		options.Days,
 		&opts,
 	)
 

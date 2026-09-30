@@ -59,7 +59,7 @@ func (h CommentsRepliesHandler) fetchCommentReplies(client *trakt.Client, option
 	list, resp, err := client.Comments.GetRepliesForComment(
 		cli.ContextFromOptions(options),
 		&opts,
-		&options.CommentID,
+		options.CommentID,
 	)
 
 	if err != nil {

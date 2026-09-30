@@ -46,7 +46,7 @@ func (PeopleSummaryHandler) fetchSinglePerson(client *trakt.Client, options *str
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetSinglePerson(
 		cli.ContextFromOptions(options),
-		&options.ID,
+		options.ID,
 		&opts,
 	)
 

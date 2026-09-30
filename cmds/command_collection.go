@@ -75,7 +75,7 @@ func fetchCollectionList(client *trakt.Client, options *str.Options, page int) (
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Sync.GetCollection(
 		cli.ContextFromOptions(options),
-		&options.Type,
+		options.Type,
 		&opts,
 	)
 

@@ -48,14 +48,14 @@ func (ListsLikeHandler) likeSingleList(client *trakt.Client, options *str.Option
 	if !options.Remove {
 		resp, err := client.Lists.LikeList(
 			cli.ContextFromOptions(options),
-			&listID,
+			listID,
 		)
 		return resp, err
 	}
 
 	resp, err := client.Lists.RemoveLikeList(
 		cli.ContextFromOptions(options),
-		&listID,
+		listID,
 	)
 
 	return resp, err
