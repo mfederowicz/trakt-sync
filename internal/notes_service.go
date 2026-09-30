@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
@@ -21,7 +20,7 @@ type NotesService Service
 // API docs:https://trakt.docs.apiary.io/#reference/notes/notes/add-notes
 func (n *NotesService) AddNotes(ctx context.Context, notes *str.Notes) (*str.Notes, *str.Response, error) {
 	var url = "notes"
-	printer.Println("create new notes")
+	n.client.debug("create new notes")
 	req, err := n.client.NewRequest(http.MethodPost, url, notes)
 	if err != nil {
 		return nil, nil, err
@@ -57,7 +56,7 @@ func (n *NotesService) AddNotes(ctx context.Context, notes *str.Notes) (*str.Not
 // API docs: https://trakt.docs.apiary.io/#reference/notes/note/delete-a-note
 func (n *NotesService) DeleteNotes(ctx context.Context, id *string) (*str.Response, error) {
 	var url = fmt.Sprintf("notes/%s", *id)
-	printer.Println("delete notes")
+	n.client.debug("delete notes")
 	req, err := n.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
@@ -85,7 +84,7 @@ func (n *NotesService) DeleteNotes(ctx context.Context, id *string) (*str.Respon
 // API docs:https://trakt.docs.apiary.io/#reference/notes/note/update-a-note
 func (n *NotesService) UpdateNotes(ctx context.Context, id *string, notes *str.Notes) (*str.Notes, *str.Response, error) {
 	var url = fmt.Sprintf("notes/%s", *id)
-	printer.Println("update notes")
+	n.client.debug("update notes")
 	req, err := n.client.NewRequest(http.MethodPut, url, notes)
 	if err != nil {
 		return nil, nil, err
@@ -108,7 +107,7 @@ func (n *NotesService) UpdateNotes(ctx context.Context, id *string, notes *str.N
 // API docs:https://trakt.docs.apiary.io/#reference/notes/note/get-a-note
 func (n *NotesService) GetNotes(ctx context.Context, id *string) (*str.Notes, *str.Response, error) {
 	var url = fmt.Sprintf("notes/%s", *id)
-	printer.Println("fetch notes url:" + url)
+	n.client.debug("fetch notes url:" + url)
 	req, err := n.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -137,7 +136,7 @@ func (n *NotesService) GetNotes(ctx context.Context, id *string) (*str.Notes, *s
 // API docs:https://trakt.docs.apiary.io/#reference/notes/item/get-the-attached-item
 func (n *NotesService) GetNotesItem(ctx context.Context, id *string) (*str.NotesItem, *str.Response, error) {
 	var url = fmt.Sprintf("notes/%s/item", *id)
-	printer.Println("fetch notes item url:" + url)
+	n.client.debug("fetch notes item url:" + url)
 	req, err := n.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err

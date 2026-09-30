@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -20,7 +19,7 @@ type RecommendationsService Service
 // API docs:https://trakt.docs.apiary.io/#reference/recommendations/hide-movie/hide-a-movie-recommendation
 func (m *RecommendationsService) HideMovieRecommendation(ctx context.Context, id *string) (*str.Response, error) {
 	var url = fmt.Sprintf("recommendations/movies/%s", *id)
-	printer.Println("hide recommendations")
+	m.client.debug("hide recommendations")
 	req, err := m.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
@@ -42,7 +41,7 @@ func (m *RecommendationsService) HideMovieRecommendation(ctx context.Context, id
 // API docs:https://trakt.docs.apiary.io/#reference/recommendations/hide-show/hide-a-show-recommendation
 func (m *RecommendationsService) HideShowRecommendation(ctx context.Context, id *string) (*str.Response, error) {
 	var url = fmt.Sprintf("recommendations/shows/%s", *id)
-	printer.Println("hide recommendations")
+	m.client.debug("hide recommendations")
 	req, err := m.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
@@ -68,7 +67,7 @@ func (m *RecommendationsService) GetMovieRecommendations(ctx context.Context, op
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch recommendations url:" + url)
+	m.client.debug("fetch recommendations url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -78,7 +77,7 @@ func (m *RecommendationsService) GetMovieRecommendations(ctx context.Context, op
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch recommendations err:" + err.Error())
+		m.client.debug("fetch recommendations err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -93,7 +92,7 @@ func (m *RecommendationsService) GetShowRecommendations(ctx context.Context, opt
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch recommendations url:" + url)
+	m.client.debug("fetch recommendations url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -103,7 +102,7 @@ func (m *RecommendationsService) GetShowRecommendations(ctx context.Context, opt
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch recommendations err:" + err.Error())
+		m.client.debug("fetch recommendations err:" + err.Error())
 		return nil, resp, err
 	}
 

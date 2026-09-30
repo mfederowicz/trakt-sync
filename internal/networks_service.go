@@ -6,7 +6,6 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -22,7 +21,7 @@ func (m *NetworksService) GetNetworksList(ctx context.Context, opts *uri.ListOpt
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch networks url:" + url)
+	m.client.debug("fetch networks url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -36,7 +35,7 @@ func (m *NetworksService) GetNetworksList(ctx context.Context, opts *uri.ListOpt
 	}
 
 	if err != nil {
-		printer.Println("fetch networks err:" + err.Error())
+		m.client.debug("fetch networks err:" + err.Error())
 		return nil, resp, err
 	}
 

@@ -3,6 +3,7 @@ package internal
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -183,6 +184,45 @@ func TestBareDo_returnsOpenBody(t *testing.T) {
 	if err := resp.Body.Close(); err != nil {
 		t.Fatalf("resp.Body.Close() returned error: %v", err)
 	}
+}
+
+// TestDebugLogger checks DebugLogger gets the service note and the request line, with client_secret redacted.
+func TestDebugLogger(t *testing.T) {
+	testSetup := Setup()
+	client := testSetup.Client
+	mux := testSetup.Mux
+	teardown := testSetup.Teardown
+
+	defer teardown()
+
+	mux.HandleFunc("/countries/movies", func(w http.ResponseWriter, r *http.Request) {
+		test.AssertMethod(t, r, http.MethodGet)
+		printer.Fprint(w, "[]")
+	})
+	mux.HandleFunc("/"+consts.TestURL, func(_ http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "secret-value", r.URL.Query().Get("client_secret"))
+	})
+
+	logged := []string{}
+	client.DebugLogger = func(v ...any) {
+		logged = append(logged, fmt.Sprint(v...))
+	}
+
+	_, _, err := client.Countries.GetCountries(context.Background(), test.Ptr("movies"))
+	assert.NoError(t, err)
+
+	req, err := client.NewRequest(http.MethodGet, consts.TestURL+"?client_secret=secret-value", nil)
+	if err != nil {
+		t.Fatalf(consts.ClientNewRequestFatal, err)
+	}
+	_, err = client.Do(context.Background(), req, nil)
+	assert.NoError(t, err)
+
+	assert.Equal(t, []string{
+		"fetch countries url:countries/movies",
+		http.MethodGet + " " + client.BaseURL.String() + "countries/movies",
+		http.MethodGet + " " + client.BaseURL.String() + consts.TestURL + "?client_secret=REDACTED",
+	}, logged)
 }
 
 func TestBareDo_rate_limit_reset(t *testing.T) {

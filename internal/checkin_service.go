@@ -5,7 +5,6 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
@@ -18,7 +17,7 @@ type CheckinService Service
 // API docs: https://trakt.docs.apiary.io/#reference/checkin/checkin/delete-any-active-checkins
 func (c *CheckinService) DeleteAnyActiveCheckins(ctx context.Context) (*str.Response, error) {
 	var url = "checkin"
-	printer.Println("delete any active checkins")
+	c.client.debug("delete any active checkins")
 	req, err := c.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
@@ -37,7 +36,7 @@ func (c *CheckinService) DeleteAnyActiveCheckins(ctx context.Context) (*str.Resp
 // API docs: https://trakt.docs.apiary.io/#reference/checkin/checkin/check-into-an-item
 func (c *CheckinService) CheckintoAnItem(ctx context.Context, checkin *str.Checkin) (*str.Checkin, *str.Response, error) {
 	var url = "checkin"
-	printer.Println("create new checkin")
+	c.client.debug("create new checkin")
 	req, err := c.client.NewRequest(http.MethodPost, url, checkin)
 	if err != nil {
 		return nil, nil, err

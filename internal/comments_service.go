@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -22,7 +21,7 @@ type CommentsService Service
 // API docs:https://trakt.docs.apiary.io/#reference/comments/comments/post-a-comment
 func (c *CommentsService) PostAComment(ctx context.Context, comment *str.Comment) (*str.Comment, *str.Response, error) {
 	var url = "comments"
-	printer.Println("create new comment")
+	c.client.debug("create new comment")
 	req, err := c.client.NewRequest(http.MethodPost, url, comment)
 	if err != nil {
 		return nil, nil, err
@@ -49,7 +48,7 @@ func (c *CommentsService) PostAComment(ctx context.Context, comment *str.Comment
 // API docs: https://trakt.docs.apiary.io/#reference/comments/comment/update-a-comment-or-reply
 func (c *CommentsService) UpdateComment(ctx context.Context, id *int, comment *str.Comment) (*str.Comment, *str.Response, error) {
 	var url = fmt.Sprintf("comments/%d", *id)
-	printer.Println("update comment")
+	c.client.debug("update comment")
 	req, err := c.client.NewRequest(http.MethodPut, url, comment)
 	if err != nil {
 		return nil, nil, err
@@ -70,7 +69,7 @@ func (c *CommentsService) UpdateComment(ctx context.Context, id *int, comment *s
 // GetComment Returns comment object.
 func (c *CommentsService) GetComment(ctx context.Context, id *int) (*str.Comment, *str.Response, error) {
 	var url = fmt.Sprintf("comments/%d", *id)
-	printer.Println("fetch comment url:" + url)
+	c.client.debug("fetch comment url:" + url)
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -99,7 +98,7 @@ func (c *CommentsService) GetCommentItem(ctx context.Context, id *int, opts *uri
 		return nil, nil, err
 	}
 
-	printer.Println("fetch comment madia item url:" + url)
+	c.client.debug("fetch comment madia item url:" + url)
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -123,7 +122,7 @@ func (c *CommentsService) GetCommentItem(ctx context.Context, id *int, opts *uri
 // API docs: https://trakt.docs.apiary.io/#reference/comments/comment/delete-a-comment-or-reply
 func (c *CommentsService) DeleteComment(ctx context.Context, id *int) (*str.Response, error) {
 	var url = fmt.Sprintf("comments/%d", *id)
-	printer.Println("delete comment")
+	c.client.debug("delete comment")
 	req, err := c.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
@@ -149,7 +148,7 @@ func (c *CommentsService) GetRepliesForComment(ctx context.Context, opts *uri.Li
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch replies url:" + url)
+	c.client.debug("fetch replies url:" + url)
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -159,7 +158,7 @@ func (c *CommentsService) GetRepliesForComment(ctx context.Context, opts *uri.Li
 	resp, err := c.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch replies err:" + err.Error())
+		c.client.debug("fetch replies err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -174,7 +173,7 @@ func (c *CommentsService) GetCommentUserLikes(ctx context.Context, id *int, opts
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch likes url:" + url)
+	c.client.debug("fetch likes url:" + url)
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -184,7 +183,7 @@ func (c *CommentsService) GetCommentUserLikes(ctx context.Context, id *int, opts
 	resp, err := c.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch likes err:" + err.Error())
+		c.client.debug("fetch likes err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -196,7 +195,7 @@ func (c *CommentsService) GetCommentUserLikes(ctx context.Context, id *int, opts
 // API docs: https://trakt.docs.apiary.io/#reference/comments/like/like-a-comment
 func (c *CommentsService) LikeComment(ctx context.Context, id *int) (*str.Response, error) {
 	var url = fmt.Sprintf("comments/%d/like", *id)
-	printer.Println("send like for single comment:" + url)
+	c.client.debug("send like for single comment:" + url)
 	req, err := c.client.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
 		return nil, err
@@ -215,7 +214,7 @@ func (c *CommentsService) LikeComment(ctx context.Context, id *int) (*str.Respon
 // API docs: https://trakt.docs.apiary.io/#reference/comments/like/remove-like-on-a-comment
 func (c *CommentsService) RemoveLikeComment(ctx context.Context, id *int) (*str.Response, error) {
 	var url = fmt.Sprintf("comments/%d/like", *id)
-	printer.Println("remove like for single comment:" + url)
+	c.client.debug("remove like for single comment:" + url)
 	req, err := c.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
@@ -233,7 +232,7 @@ func (c *CommentsService) RemoveLikeComment(ctx context.Context, id *int) (*str.
 // API docs:https://trakt.docs.apiary.io/#reference/comments/replies/post-a-reply-for-a-comment
 func (c *CommentsService) ReplyAComment(ctx context.Context, id *int, reply *str.Comment) (*str.Comment, *str.Response, error) {
 	var url = fmt.Sprintf("comments/%d/replies", *id)
-	printer.Println("reply comment")
+	c.client.debug("reply comment")
 	req, err := c.client.NewRequest(http.MethodPost, url, reply)
 	if err != nil {
 		return nil, nil, err
@@ -261,7 +260,7 @@ func (c *CommentsService) GetTrendingComments(ctx context.Context, contentType *
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch trending url:" + url)
+	c.client.debug("fetch trending url:" + url)
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -271,7 +270,7 @@ func (c *CommentsService) GetTrendingComments(ctx context.Context, contentType *
 	resp, err := c.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch trending err:" + err.Error())
+		c.client.debug("fetch trending err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -286,7 +285,7 @@ func (c *CommentsService) GetRecentComments(ctx context.Context, contentType *st
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch recent url:" + url)
+	c.client.debug("fetch recent url:" + url)
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -296,7 +295,7 @@ func (c *CommentsService) GetRecentComments(ctx context.Context, contentType *st
 	resp, err := c.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch recent err:" + err.Error())
+		c.client.debug("fetch recent err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -311,7 +310,7 @@ func (c *CommentsService) GetUpdatedComments(ctx context.Context, contentType *s
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch updated url:" + url)
+	c.client.debug("fetch updated url:" + url)
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -321,7 +320,7 @@ func (c *CommentsService) GetUpdatedComments(ctx context.Context, contentType *s
 	resp, err := c.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch updated err:" + err.Error())
+		c.client.debug("fetch updated err:" + err.Error())
 		return nil, resp, err
 	}
 

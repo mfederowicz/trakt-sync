@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 )
 
@@ -19,7 +18,7 @@ type GenresService Service
 // API docs: https://trakt.docs.apiary.io/#reference/genres/list/get-genres
 func (g *GenresService) GetGenres(ctx context.Context, strType *string) ([]*str.Genre, *str.Response, error) {
 	var url = fmt.Sprintf("genres/%s", *strType)
-	printer.Println("fetch genres url:" + url)
+	g.client.debug("fetch genres url:" + url)
 
 	req, err := g.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -29,7 +28,7 @@ func (g *GenresService) GetGenres(ctx context.Context, strType *string) ([]*str.
 	resp, err := g.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch genres err:", err.Error())
+		g.client.debug("fetch genres err:", err.Error())
 		return nil, resp, err
 	}
 
