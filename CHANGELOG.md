@@ -21,6 +21,12 @@ schedule.
 
 ### Changed
 
+### Fixed
+
+## [1.20.0] - 2026-09-30
+
+### Changed
+
 - `token.json`, `user_settings.json` and JSON exports (`-o`) are now written readable only by the owner
   (0600); an existing 0644 token or settings file is tightened the next time it is written.
 - Every request now sends `User-Agent: trakt-sync/<version>`, `trakt-api-version: 2` and
@@ -575,7 +581,8 @@ schedule.
 - First release, with the `calendars`, `collection`, `help`, `history`, `lists`, `people`, `search` and `watchlist`
   commands exporting Trakt data to JSON.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.19.1...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.20.0...HEAD
+[1.20.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.19.1...v1.20.0
 [1.19.1]: https://github.com/mfederowicz/trakt-sync/compare/v1.19.0...v1.19.1
 [1.19.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.18.0...v1.19.0
 [1.18.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.17.0...v1.18.0
