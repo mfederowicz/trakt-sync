@@ -24,14 +24,14 @@ func TestListsServiceListsByType(t *testing.T) {
 			name: "trending",
 			path: "/lists/trending/personal",
 			call: func(s *ListsService, opts *uri.ListOptions) ([]*str.List, *str.Response, error) {
-				return s.GetTrendingListsByType(context.Background(), str.String("personal"), opts)
+				return s.GetTrendingListsByType(context.Background(), "personal", opts)
 			},
 		},
 		{
 			name: "popular",
 			path: "/lists/popular/official",
 			call: func(s *ListsService, opts *uri.ListOptions) ([]*str.List, *str.Response, error) {
-				return s.GetPopularListsByType(context.Background(), str.String("official"), opts)
+				return s.GetPopularListsByType(context.Background(), "official", opts)
 			},
 		},
 	}
@@ -69,7 +69,7 @@ func TestListsServiceGetListItemsSortQuery(t *testing.T) {
 		test.SafeFprint(w, `[]`)
 	})
 
-	_, _, err := setup.Client.Lists.GetListItems(context.Background(), str.String("55"), str.String("movie"), &uri.ListOptions{SortBy: "added", SortHow: "desc"})
+	_, _, err := setup.Client.Lists.GetListItems(context.Background(), "55", "movie", &uri.ListOptions{SortBy: "added", SortHow: "desc"})
 	test.AssertNilError(t, err)
 }
 
@@ -85,7 +85,7 @@ func TestListsServiceReportList(t *testing.T) {
 		w.WriteHeader(http.StatusCreated)
 	})
 
-	resp, err := setup.Client.Lists.ReportList(context.Background(), str.String("55"), &str.ListReport{Reason: str.String("spam"), Message: str.String("ads")})
+	resp, err := setup.Client.Lists.ReportList(context.Background(), "55", &str.ListReport{Reason: str.String("spam"), Message: str.String("ads")})
 	test.AssertNilError(t, err)
 	if got, want := resp.StatusCode, http.StatusCreated; got != want {
 		t.Errorf("status code is %d, want %d", got, want)
@@ -97,7 +97,7 @@ func TestListsServiceReportListConflict(t *testing.T) {
 	defer setup.Teardown()
 	conflictMux(t, setup.Mux, "/lists/55/report", `{}`)
 
-	_, err := setup.Client.Lists.ReportList(context.Background(), str.String("55"), &str.ListReport{Reason: str.String("spam")})
+	_, err := setup.Client.Lists.ReportList(context.Background(), "55", &str.ListReport{Reason: str.String("spam")})
 	if got, want := fmt.Sprint(err), fmt.Sprintf(consts.ListReportPending, "55"); got != want {
 		t.Errorf("error is %q, want %q", got, want)
 	}

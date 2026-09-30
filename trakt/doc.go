@@ -46,7 +46,7 @@ more pages exist:
 
 	opts := &uri.ListOptions{Page: 1, Limit: 100}
 	for {
-		items, resp, err := client.Sync.GetWatchedHistory(ctx, &noID, nil, opts)
+		items, resp, err := client.Sync.GetWatchedHistory(ctx, 0, "", opts) // 0 and "": all entries of all types
 		// ... use items, handle err
 		if !client.HavePages(opts.Page, resp, 0) {
 			break

@@ -15,8 +15,8 @@ type CountriesService Service
 // GetCountries Get a list of all countries, including names and codes.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/countries/list/get-countries
-func (c *CountriesService) GetCountries(ctx context.Context, strType *string) ([]*str.Country, *str.Response, error) {
-	var url = fmt.Sprintf("countries/%s", *strType)
+func (c *CountriesService) GetCountries(ctx context.Context, strType string) ([]*str.Country, *str.Response, error) {
+	var url = fmt.Sprintf("countries/%s", strType)
 	c.client.debug("fetch countries url:" + url)
 
 	req, err := c.client.NewRequest(http.MethodGet, url, nil)

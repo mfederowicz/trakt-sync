@@ -48,14 +48,14 @@ func (CommentsLikeHandler) likeSingleComment(client *trakt.Client, options *str.
 	if !options.Remove {
 		resp, err := client.Comments.LikeComment(
 			cli.ContextFromOptions(options),
-			&commentID,
+			commentID,
 		)
 		return resp, err
 	}
 
 	resp, err := client.Comments.RemoveLikeComment(
 		cli.ContextFromOptions(options),
-		&commentID,
+		commentID,
 	)
 
 	return resp, err

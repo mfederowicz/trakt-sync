@@ -32,7 +32,7 @@ func (h ListsReportHandler) Handle(options *str.Options, client *trakt.Client) e
 		report.Message = &options.Msg
 	}
 
-	if _, err := client.Lists.ReportList(cli.ContextFromOptions(options), &options.InternalID, report); err != nil {
+	if _, err := client.Lists.ReportList(cli.ContextFromOptions(options), options.InternalID, report); err != nil {
 		return fmt.Errorf("report error: %w", err)
 	}
 

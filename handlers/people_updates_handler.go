@@ -49,7 +49,7 @@ func (p PeopleUpdatesHandler) fetchPeoplesUpdates(client *trakt.Client, options 
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.People.GetRecentlyUpdatedPeople(
 		cli.ContextFromOptions(options),
-		&startDate,
+		startDate,
 		&opts,
 	)
 

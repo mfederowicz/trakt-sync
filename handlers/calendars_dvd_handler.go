@@ -46,9 +46,9 @@ func fetchCalendarDvdReleases(client *trakt.Client, options *str.Options) ([]*st
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Calendars.GetDVDReleases(
 		cli.ContextFromOptions(options),
-		&actionType,
-		&options.StartDate,
-		&options.Days,
+		actionType,
+		options.StartDate,
+		options.Days,
 		&opts,
 	)
 

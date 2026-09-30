@@ -58,8 +58,8 @@ func (SearchIDLookupHandler) fetchSearchIDLookup(client *trakt.Client, options *
 	opts := uri.ListOptions{Extended: options.ExtendedInfo, Type: searchType}
 	list, _, err := client.Search.GetIDLookupResults(
 		cli.ContextFromOptions(options),
-		&options.SearchIDType,
-		&options.ID,
+		options.SearchIDType,
+		options.ID,
 		&opts,
 	)
 

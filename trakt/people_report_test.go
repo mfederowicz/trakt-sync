@@ -25,7 +25,7 @@ func TestPeopleServiceReportPerson(t *testing.T) {
 		w.WriteHeader(http.StatusCreated)
 	})
 
-	resp, err := setup.Client.People.ReportPerson(context.Background(), str.String("john-wayne"), &str.PersonReport{Reason: str.String("metadata"), Message: str.String("wrong birthday")})
+	resp, err := setup.Client.People.ReportPerson(context.Background(), "john-wayne", &str.PersonReport{Reason: str.String("metadata"), Message: str.String("wrong birthday")})
 	test.AssertNilError(t, err)
 	if got, want := resp.StatusCode, http.StatusCreated; got != want {
 		t.Errorf("status code is %d, want %d", got, want)
@@ -37,7 +37,7 @@ func TestPeopleServiceReportPersonConflict(t *testing.T) {
 	defer setup.Teardown()
 	conflictMux(t, setup.Mux, "/people/john-wayne/report", `{}`)
 
-	_, err := setup.Client.People.ReportPerson(context.Background(), str.String("john-wayne"), &str.PersonReport{Reason: str.String("spam")})
+	_, err := setup.Client.People.ReportPerson(context.Background(), "john-wayne", &str.PersonReport{Reason: str.String("spam")})
 	if got, want := fmt.Sprint(err), fmt.Sprintf(consts.PersonReportPending, "john-wayne"); got != want {
 		t.Errorf("error is %q, want %q", got, want)
 	}

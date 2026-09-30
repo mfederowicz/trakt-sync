@@ -37,7 +37,7 @@ func (h EpisodesReportHandler) Handle(options *str.Options, client *trakt.Client
 	}
 
 	if byID {
-		if _, err := client.Episodes.ReportEpisode(cli.ContextFromOptions(options), &options.ID, report); err != nil {
+		if _, err := client.Episodes.ReportEpisode(cli.ContextFromOptions(options), options.ID, report); err != nil {
 			return fmt.Errorf("report error: %w", err)
 		}
 		printer.Printf("reported episode %s\n", options.ID)

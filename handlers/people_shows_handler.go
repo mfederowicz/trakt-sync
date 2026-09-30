@@ -46,7 +46,7 @@ func (PeopleShowsHandler) fetchShowCredits(client *trakt.Client, options *str.Op
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetShowCredits(
 		cli.ContextFromOptions(options),
-		&options.ID,
+		options.ID,
 		&opts,
 	)
 

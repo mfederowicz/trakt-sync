@@ -42,7 +42,7 @@ func (m SyncGetWatchedHandler) syncGetWatchedItems(client *trakt.Client, options
 	opts := uri.ListOptions{Page: page, Limit: consts.PerPage, Extended: options.ExtendedInfo}
 	items, resp, err := client.Sync.GetWatched(
 		cli.ContextFromOptions(options),
-		&options.Type,
+		options.Type,
 		&opts,
 	)
 	if err != nil {

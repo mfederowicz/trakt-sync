@@ -27,7 +27,7 @@ func (CommentsReactionsHandler) Handle(options *str.Options, client *trakt.Clien
 	printer.Println("Get all reactions on a comment.")
 	commentID := options.CommentID
 	result, err := fetchAllPages(client, options, consts.DefaultPage, func(opts *uri.ListOptions) ([]*str.CommentReaction, *str.Response, error) {
-		return client.Comments.GetCommentReactions(cli.ContextFromOptions(options), &commentID, opts)
+		return client.Comments.GetCommentReactions(cli.ContextFromOptions(options), commentID, opts)
 	})
 	if err != nil {
 		return fmt.Errorf("fetch reactions error: %w", err)

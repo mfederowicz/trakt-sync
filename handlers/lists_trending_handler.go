@@ -49,7 +49,7 @@ func (h ListsTrendingHandler) fetchListsTrending(client *trakt.Client, options *
 	var resp *str.Response
 	var err error
 	if len(options.Type) > consts.ZeroValue {
-		list, resp, err = client.Lists.GetTrendingListsByType(ctx, &options.Type, &opts)
+		list, resp, err = client.Lists.GetTrendingListsByType(ctx, options.Type, &opts)
 	} else {
 		list, resp, err = client.Lists.GetTrendingLists(ctx, &opts)
 	}

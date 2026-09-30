@@ -39,7 +39,7 @@ func (EpisodesWatchNowHandler) Handle(options *str.Options, client *trakt.Client
 	id := options.InternalID
 	if byID {
 		id = options.ID
-		result, resp, err = client.Episodes.GetEpisodeWatchNow(ctx, &options.ID, &options.Country, &opts)
+		result, resp, err = client.Episodes.GetEpisodeWatchNow(ctx, options.ID, options.Country, &opts)
 	} else {
 		result, resp, err = client.Shows.GetEpisodeWatchNow(ctx, &options.InternalID, &options.Season, &options.Episode, &options.Country, &opts)
 	}

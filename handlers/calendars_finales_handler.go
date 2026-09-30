@@ -45,9 +45,9 @@ func fetchCalendarFinales(client *trakt.Client, options *str.Options) ([]*str.Ca
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Calendars.GetFinales(
 		cli.ContextFromOptions(options),
-		&actionType,
-		&options.StartDate,
-		&options.Days,
+		actionType,
+		options.StartDate,
+		options.Days,
 		&opts,
 	)
 

@@ -26,7 +26,7 @@ func TestSeasonsServiceReportSeason(t *testing.T) {
 		w.WriteHeader(http.StatusCreated)
 	})
 
-	resp, err := setup.Client.Seasons.ReportSeason(context.Background(), str.String("3950"), &str.SeasonReport{Reason: str.String("metadata")})
+	resp, err := setup.Client.Seasons.ReportSeason(context.Background(), "3950", &str.SeasonReport{Reason: str.String("metadata")})
 	test.AssertNilError(t, err)
 	if got, want := resp.StatusCode, http.StatusCreated; got != want {
 		t.Errorf("status code is %d, want %d", got, want)
@@ -38,7 +38,7 @@ func TestSeasonsServiceReportSeasonConflict(t *testing.T) {
 	defer setup.Teardown()
 	conflictMux(t, setup.Mux, "/seasons/3950/report", `{}`)
 
-	_, err := setup.Client.Seasons.ReportSeason(context.Background(), str.String("3950"), &str.SeasonReport{Reason: str.String("spam")})
+	_, err := setup.Client.Seasons.ReportSeason(context.Background(), "3950", &str.SeasonReport{Reason: str.String("spam")})
 	if got, want := fmt.Sprint(err), fmt.Sprintf(consts.SeasonIDReportPending, "3950"); got != want {
 		t.Errorf("error is %q, want %q", got, want)
 	}
@@ -56,7 +56,7 @@ func TestEpisodesServiceReportEpisode(t *testing.T) {
 		w.WriteHeader(http.StatusCreated)
 	})
 
-	resp, err := setup.Client.Episodes.ReportEpisode(context.Background(), str.String("73482"), &str.EpisodeReport{Reason: str.String("runtime"), Message: str.String("50 min")})
+	resp, err := setup.Client.Episodes.ReportEpisode(context.Background(), "73482", &str.EpisodeReport{Reason: str.String("runtime"), Message: str.String("50 min")})
 	test.AssertNilError(t, err)
 	if got, want := resp.StatusCode, http.StatusCreated; got != want {
 		t.Errorf("status code is %d, want %d", got, want)
@@ -68,7 +68,7 @@ func TestEpisodesServiceReportEpisodeConflict(t *testing.T) {
 	defer setup.Teardown()
 	conflictMux(t, setup.Mux, "/episodes/73482/report", `{}`)
 
-	_, err := setup.Client.Episodes.ReportEpisode(context.Background(), str.String("73482"), &str.EpisodeReport{Reason: str.String("spam")})
+	_, err := setup.Client.Episodes.ReportEpisode(context.Background(), "73482", &str.EpisodeReport{Reason: str.String("spam")})
 	if got, want := fmt.Sprint(err), fmt.Sprintf(consts.EpisodeIDReportPending, "73482"); got != want {
 		t.Errorf("error is %q, want %q", got, want)
 	}
@@ -86,7 +86,7 @@ func TestEpisodesServiceGetEpisodeWatchNow(t *testing.T) {
 		test.SafeFprint(w, `{"us":{"subscription":[{"source":"max","link":"watchnow.trakt.tv/watchnow/1","link_tvos":"https://tv.example/1"}]}}`)
 	})
 
-	got, _, err := setup.Client.Episodes.GetEpisodeWatchNow(context.Background(), str.String("73482"), str.String("us"), &uri.ListOptions{Links: "tvos"})
+	got, _, err := setup.Client.Episodes.GetEpisodeWatchNow(context.Background(), "73482", "us", &uri.ListOptions{Links: "tvos"})
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, map[string]*str.WatchNowSources{"us": {
 		Subscription: []*str.WatchNowService{{Source: str.String("max"), Link: str.String("watchnow.trakt.tv/watchnow/1"), LinkTvos: str.String("https://tv.example/1")}},

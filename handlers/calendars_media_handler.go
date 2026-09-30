@@ -19,7 +19,7 @@ func (CalendarsMediaHandler) Handle(options *str.Options, client *trakt.Client) 
 	printer.Println("Get calendar: " + options.Action)
 	target := calendarTarget(options.Action)
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	result, _, err := client.Calendars.GetMedia(cli.ContextFromOptions(options), &target, &options.StartDate, &options.Days, &opts)
+	result, _, err := client.Calendars.GetMedia(cli.ContextFromOptions(options), target, options.StartDate, options.Days, &opts)
 	if err != nil {
 		return fmt.Errorf("fetch calendar %s error: %w", options.Action, err)
 	}

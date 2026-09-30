@@ -49,8 +49,8 @@ func (h ListsCommentsHandler) fetchListComments(client *trakt.Client, options *s
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Lists.GetListComments(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
-		&options.Sort,
+		options.InternalID,
+		options.Sort,
 		&opts,
 	)
 

@@ -26,15 +26,15 @@ func TestServicesWithoutResponse(t *testing.T) {
 		{name: "networks", call: func(c *Client) error { _, _, err := c.Networks.GetNetworksList(ctx, opts); return err }},
 		{name: "notes", call: func(c *Client) error { _, _, err := c.Notes.AddNotes(ctx, &str.Notes{}); return err }},
 		{name: "people", call: func(c *Client) error {
-			_, _, err := c.People.GetAllPeopleForShow(ctx, str.String("bb"), opts)
+			_, _, err := c.People.GetAllPeopleForShow(ctx, "bb", opts)
 			return err
 		}},
 		{name: "recommendations", call: func(c *Client) error {
-			_, err := c.Recommendations.HideMovieRecommendation(ctx, str.String("tron"))
+			_, err := c.Recommendations.HideMovieRecommendation(ctx, "tron")
 			return err
 		}},
 		{name: "shows", call: func(c *Client) error { _, _, err := c.Shows.GetShow(ctx, str.String("bb"), opts); return err }},
-		{name: "sync", call: func(c *Client) error { _, err := c.Sync.RemovePlaybackItem(ctx, new(int)); return err }},
+		{name: "sync", call: func(c *Client) error { _, err := c.Sync.RemovePlaybackItem(ctx, 0); return err }},
 		{name: "users", call: func(c *Client) error {
 			_, _, err := c.Users.AddPersonalList(ctx, str.String("sean"), &str.PersonalList{})
 			return err

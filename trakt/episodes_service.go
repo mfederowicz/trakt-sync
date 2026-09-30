@@ -18,8 +18,8 @@ type EpisodesService Service
 // ReportEpisode Report an episode, by its Trakt ID, for moderator review.
 //
 // API docs: https://docs.trakt.tv/reference/postepisodesreport
-func (m *EpisodesService) ReportEpisode(ctx context.Context, id *string, report *str.EpisodeReport) (*str.Response, error) {
-	var url = fmt.Sprintf("episodes/%s/report", *id)
+func (m *EpisodesService) ReportEpisode(ctx context.Context, id string, report *str.EpisodeReport) (*str.Response, error) {
+	var url = fmt.Sprintf("episodes/%s/report", id)
 	req, err := m.client.NewRequest(http.MethodPost, url, report)
 	if err != nil {
 		return nil, err
@@ -28,7 +28,7 @@ func (m *EpisodesService) ReportEpisode(ctx context.Context, id *string, report 
 	resp, err := m.client.Do(ctx, req, nil)
 	var conflict *ConflictError
 	if errors.As(err, &conflict) {
-		return resp, fmt.Errorf(consts.EpisodeIDReportPending, *id)
+		return resp, fmt.Errorf(consts.EpisodeIDReportPending, id)
 	}
 	if err != nil {
 		return resp, err
@@ -40,8 +40,8 @@ func (m *EpisodesService) ReportEpisode(ctx context.Context, id *string, report 
 // GetEpisodeWatchNow Returns streaming and watch now sources for an episode, by its Trakt ID, in the requested country.
 //
 // API docs: https://docs.trakt.tv/reference/getepisodeswatchnow
-func (m *EpisodesService) GetEpisodeWatchNow(ctx context.Context, id *string, country *string, opts *uri.ListOptions) (map[string]*str.WatchNowSources, *str.Response, error) {
-	var url = fmt.Sprintf("episodes/%s/watchnow/%s", *id, *country)
+func (m *EpisodesService) GetEpisodeWatchNow(ctx context.Context, id string, country string, opts *uri.ListOptions) (map[string]*str.WatchNowSources, *str.Response, error) {
+	var url = fmt.Sprintf("episodes/%s/watchnow/%s", id, country)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err

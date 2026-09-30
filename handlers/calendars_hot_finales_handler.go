@@ -18,7 +18,7 @@ type CalendarsHotFinalesHandler struct{}
 func (CalendarsHotFinalesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Get calendar: " + options.Action)
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	result, _, err := client.Calendars.GetHotFinales(cli.ContextFromOptions(options), &options.StartDate, &options.Days, &opts)
+	result, _, err := client.Calendars.GetHotFinales(cli.ContextFromOptions(options), options.StartDate, options.Days, &opts)
 	if err != nil {
 		return fmt.Errorf("fetch calendar %s error: %w", options.Action, err)
 	}

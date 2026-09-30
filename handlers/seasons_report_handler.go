@@ -34,7 +34,7 @@ func (h SeasonsReportHandler) Handle(options *str.Options, client *trakt.Client)
 	}
 
 	if byID {
-		if _, err := client.Seasons.ReportSeason(cli.ContextFromOptions(options), &options.ID, report); err != nil {
+		if _, err := client.Seasons.ReportSeason(cli.ContextFromOptions(options), options.ID, report); err != nil {
 			return fmt.Errorf("report error: %w", err)
 		}
 		printer.Printf("reported season %s\n", options.ID)

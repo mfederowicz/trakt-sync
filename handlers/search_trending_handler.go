@@ -48,7 +48,7 @@ func (s SearchTrendingHandler) fetchSearchTrending(client *trakt.Client, options
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Query: options.Query}
 	list, resp, err := client.Search.GetTrendingSearches(
 		cli.ContextFromOptions(options),
-		&searchType,
+		searchType,
 		&opts,
 	)
 	if err != nil {

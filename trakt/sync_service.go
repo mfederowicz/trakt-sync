@@ -16,14 +16,14 @@ import (
 // methods of the Trakt API.
 type SyncService Service
 
-// GetCollection Get all collected items in a user's collection.
+// GetCollection Get all collected items in a user's collection. An empty types returns all types.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/sync/get-collection/get-collection
-func (s *SyncService) GetCollection(ctx context.Context, types *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+func (s *SyncService) GetCollection(ctx context.Context, types string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 
-	if types != nil {
-		url = fmt.Sprintf("sync/collection/%s", *types)
+	if types != consts.EmptyString {
+		url = fmt.Sprintf("sync/collection/%s", types)
 	} else {
 		url = "sync/collection"
 	}
@@ -51,19 +51,20 @@ func (s *SyncService) GetCollection(ctx context.Context, types *string, opts *ur
 }
 
 // GetWatchedHistory Returns movies and episodes that a user has watched, sorted by most recent.
+// An empty types returns all types; an id of 0 returns all entries instead of one history item.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/sync/get-watched/get-watched-history
-func (s *SyncService) GetWatchedHistory(ctx context.Context, id *int, types *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+func (s *SyncService) GetWatchedHistory(ctx context.Context, id int, types string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 
-	if types != nil {
-		url = fmt.Sprintf("sync/history/%s", *types)
+	if types != consts.EmptyString {
+		url = fmt.Sprintf("sync/history/%s", types)
 	} else {
 		url = "sync/history"
 	}
 
-	if *id > consts.ZeroValue {
-		url = fmt.Sprintf(url+"/%d", *id)
+	if id > consts.ZeroValue {
+		url = fmt.Sprintf(url+"/%d", id)
 	}
 
 	url, err := uri.AddQuery(url, opts)
@@ -88,13 +89,14 @@ func (s *SyncService) GetWatchedHistory(ctx context.Context, id *int, types *str
 }
 
 // GetWatchlist Returns all items in a user's watchlist filtered by type.
+// The type and sort segments are sent only when types, sortBy and sortHow are all set.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/sync/get-watchlist/get-watchlist
-func (s *SyncService) GetWatchlist(ctx context.Context, types *string, sortBy *string, sortHow *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+func (s *SyncService) GetWatchlist(ctx context.Context, types string, sortBy string, sortHow string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 
-	if types != nil && sortBy != nil && sortHow != nil {
-		url = fmt.Sprintf("sync/watchlist/%s/%s/%s", *types, *sortBy, *sortHow)
+	if types != consts.EmptyString && sortBy != consts.EmptyString && sortHow != consts.EmptyString {
+		url = fmt.Sprintf("sync/watchlist/%s/%s/%s", types, sortBy, sortHow)
 	} else {
 		url = "sync/watchlist"
 	}
@@ -143,13 +145,13 @@ func (s *SyncService) GetLastActivity(ctx context.Context) (*str.UserLastActivit
 	return result, resp, nil
 }
 
-// GetPlaybackProgress Returns playback progress; types movies or episodes narrows it, nil returns both.
+// GetPlaybackProgress Returns playback progress; types movies or episodes narrows it, an empty types returns both.
 //
 // API docs: https://docs.trakt.tv/reference/getsyncprogressplayback
-func (s *SyncService) GetPlaybackProgress(ctx context.Context, types *string, opts *uri.ListOptions) ([]*str.PlaybackProgress, *str.Response, error) {
+func (s *SyncService) GetPlaybackProgress(ctx context.Context, types string, opts *uri.ListOptions) ([]*str.PlaybackProgress, *str.Response, error) {
 	var url string
-	if types != nil {
-		url = fmt.Sprintf("sync/playback/%s", *types)
+	if types != consts.EmptyString {
+		url = fmt.Sprintf("sync/playback/%s", types)
 	} else {
 		url = "sync/playback"
 	}
@@ -176,8 +178,8 @@ func (s *SyncService) GetPlaybackProgress(ctx context.Context, types *string, op
 // RemovePlaybackItem removes playback item with selected id
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/remove-playback/remove-a-playback-item
-func (s *SyncService) RemovePlaybackItem(ctx context.Context, id *int) (*str.Response, error) {
-	var url = fmt.Sprintf("sync/playback/%d", *id)
+func (s *SyncService) RemovePlaybackItem(ctx context.Context, id int) (*str.Response, error) {
+	var url = fmt.Sprintf("sync/playback/%d", id)
 	req, err := s.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
@@ -186,7 +188,7 @@ func (s *SyncService) RemovePlaybackItem(ctx context.Context, id *int) (*str.Res
 	resp, err := s.client.Do(ctx, req, nil)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		err = fmt.Errorf(consts.PlaybackNotFoundWithID, *id)
+		err = fmt.Errorf(consts.PlaybackNotFoundWithID, id)
 	}
 
 	if err != nil {
@@ -220,7 +222,7 @@ func (s *SyncService) AddItemsToCollection(ctx context.Context, items *str.Items
 func (s *SyncService) GetCollectedSeasons(ctx context.Context, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	// fetch collected shows
 	strType := consts.Shows
-	shows, resp, err := s.GetCollection(ctx, &strType, options)
+	shows, resp, err := s.GetCollection(ctx, strType, options)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -281,9 +283,9 @@ func (s *SyncService) RemoveItemsFromCollection(ctx context.Context, items *str.
 // GetWatched Returns all movies or shows a user has watched sorted by most plays.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/get-watched/get-watched
-func (s *SyncService) GetWatched(ctx context.Context, watchType *string, opts *uri.ListOptions) ([]*str.UserWatched, *str.Response, error) {
+func (s *SyncService) GetWatched(ctx context.Context, watchType string, opts *uri.ListOptions) ([]*str.UserWatched, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("sync/watched/%s", *watchType)
+	url = fmt.Sprintf("sync/watched/%s", watchType)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -342,15 +344,15 @@ func (s *SyncService) RemoveItemsFromHistory(ctx context.Context, items *str.Ite
 	return result, resp, nil
 }
 
-// GetRatings Returns users ratings.
+// GetRatings Returns users ratings. An empty rating returns all ratings.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/sync/get-ratings/get-ratings
-func (s *SyncService) GetRatings(ctx context.Context, types *string, rating *string, opts *uri.ListOptions) ([]*str.RatingListItem, *str.Response, error) {
+func (s *SyncService) GetRatings(ctx context.Context, types string, rating string, opts *uri.ListOptions) ([]*str.RatingListItem, *str.Response, error) {
 	var url string
 
-	url = fmt.Sprintf("sync/ratings/%s", *types)
-	if len(*rating) > consts.ZeroValue {
-		url = fmt.Sprintf("sync/ratings/%s/%s", *types, *rating)
+	url = fmt.Sprintf("sync/ratings/%s", types)
+	if len(rating) > consts.ZeroValue {
+		url = fmt.Sprintf("sync/ratings/%s/%s", types, rating)
 	}
 
 	url, err := uri.AddQuery(url, opts)
@@ -540,13 +542,14 @@ func (s *SyncService) ReorderWatchlistItems(ctx context.Context, reorder *str.It
 }
 
 // GetFavorites Returns all items in a user's favorites filtered by type.
+// The type and sort segments are sent only when types, sortBy and sortHow are all set.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/sync/get-favorites/get-favorites
-func (s *SyncService) GetFavorites(ctx context.Context, types *string, sortBy *string, sortHow *string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+func (s *SyncService) GetFavorites(ctx context.Context, types string, sortBy string, sortHow string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 
-	if types != nil && sortBy != nil && sortHow != nil {
-		url = fmt.Sprintf("sync/favorites/%s/%s/%s", *types, *sortBy, *sortHow)
+	if types != consts.EmptyString && sortBy != consts.EmptyString && sortHow != consts.EmptyString {
+		url = fmt.Sprintf("sync/favorites/%s/%s/%s", types, sortBy, sortHow)
 	} else {
 		url = "sync/favorites"
 	}
@@ -657,8 +660,8 @@ func (s *SyncService) UpdateFavoriteItem(ctx context.Context, itemID int, update
 //
 // API docs: https://docs.trakt.tv/reference/getsynccollectionminimalmovies
 // API docs: https://docs.trakt.tv/reference/getsynccollectionminimalepisodes
-func (s *SyncService) GetMinimalCollection(ctx context.Context, strType *string, opts *uri.ListOptions) (str.MinimalCollection, *str.Response, error) {
-	var url = fmt.Sprintf("sync/collection/minimal/%s", *strType)
+func (s *SyncService) GetMinimalCollection(ctx context.Context, strType string, opts *uri.ListOptions) (str.MinimalCollection, *str.Response, error) {
+	var url = fmt.Sprintf("sync/collection/minimal/%s", strType)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err

@@ -76,6 +76,10 @@ func (m *NetworksService) GetNetworksList(ctx context.Context, opts *uri.ListOpt
 ```
 
 - Signature: `(ctx context.Context, <path params>, opts *uri.X[, body]) (T, *str.Response, error)`.
+- Path params are values (`id string`, `days int`), not pointers. An optional
+  segment uses the zero value (`""`, `0`) to mean "leave it out"; say so in the
+  doc comment. Request bodies and `*uri.X` options stay pointers. (movies, shows
+  and users still take pointers until they are converted.)
 - Use `http.Method*` constants; path built with `fmt.Sprintf` from path params.
 - Check `err` before touching `resp`.
 - Add `uri.AddQuery` to the URL before `NewRequest`; otherwise the query is dropped.
