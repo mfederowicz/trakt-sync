@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -24,7 +23,7 @@ func (s *ShowsService) GetShow(ctx context.Context, id *string, opts *uri.ListOp
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch show url:" + url)
+	s.client.debug("fetch show url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 
 	if err != nil {
@@ -54,7 +53,7 @@ func (s *ShowsService) GetSingleEpisodeForShow(ctx context.Context, id *string, 
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch single episode url:" + url)
+	s.client.debug("fetch single episode url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -64,7 +63,7 @@ func (s *ShowsService) GetSingleEpisodeForShow(ctx context.Context, id *string, 
 	resp, err := s.client.Do(ctx, req, &result)
 
 	if err != nil {
-		printer.Println("fetch episode err:" + err.Error())
+		s.client.debug("fetch episode err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -80,7 +79,7 @@ func (s *ShowsService) GetTrendingShows(ctx context.Context, opts *uri.ListOptio
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch shows url:" + url)
+	s.client.debug("fetch shows url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -90,7 +89,7 @@ func (s *ShowsService) GetTrendingShows(ctx context.Context, opts *uri.ListOptio
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch shows err:" + err.Error())
+		s.client.debug("fetch shows err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -106,7 +105,7 @@ func (s *ShowsService) GetPopularShows(ctx context.Context, opts *uri.ListOption
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch shows url:" + url)
+	s.client.debug("fetch shows url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -116,7 +115,7 @@ func (s *ShowsService) GetPopularShows(ctx context.Context, opts *uri.ListOption
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch shows err:" + err.Error())
+		s.client.debug("fetch shows err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -132,7 +131,7 @@ func (s *ShowsService) GetFavoritedShows(ctx context.Context, opts *uri.ListOpti
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch shows url:" + url)
+	s.client.debug("fetch shows url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -142,7 +141,7 @@ func (s *ShowsService) GetFavoritedShows(ctx context.Context, opts *uri.ListOpti
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch shows err:" + err.Error())
+		s.client.debug("fetch shows err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -158,7 +157,7 @@ func (s *ShowsService) GetPlayedShows(ctx context.Context, opts *uri.ListOptions
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch shows url:" + url)
+	s.client.debug("fetch shows url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -166,7 +165,7 @@ func (s *ShowsService) GetPlayedShows(ctx context.Context, opts *uri.ListOptions
 	list := []*str.ShowsItem{}
 	resp, err := s.client.Do(ctx, req, &list)
 	if err != nil {
-		printer.Println("fetch shows err:" + err.Error())
+		s.client.debug("fetch shows err:" + err.Error())
 		return nil, resp, err
 	}
 	return list, resp, nil
@@ -181,7 +180,7 @@ func (s *ShowsService) GetWatchedShows(ctx context.Context, opts *uri.ListOption
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch shows url:" + url)
+	s.client.debug("fetch shows url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -190,7 +189,7 @@ func (s *ShowsService) GetWatchedShows(ctx context.Context, opts *uri.ListOption
 	list := []*str.ShowsItem{}
 	resp, err := s.client.Do(ctx, req, &list)
 	if err != nil {
-		printer.Println("fetch shows err:" + err.Error())
+		s.client.debug("fetch shows err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -206,7 +205,7 @@ func (s *ShowsService) GetCollectedShows(ctx context.Context, opts *uri.ListOpti
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch shows url:" + url)
+	s.client.debug("fetch shows url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -216,7 +215,7 @@ func (s *ShowsService) GetCollectedShows(ctx context.Context, opts *uri.ListOpti
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch shows err:" + err.Error())
+		s.client.debug("fetch shows err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -231,7 +230,7 @@ func (s *ShowsService) GetAnticipatedShows(ctx context.Context, opts *uri.ListOp
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch shows url:" + url)
+	s.client.debug("fetch shows url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -241,7 +240,7 @@ func (s *ShowsService) GetAnticipatedShows(ctx context.Context, opts *uri.ListOp
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch shows err:" + err.Error())
+		s.client.debug("fetch shows err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -258,7 +257,7 @@ func (s *ShowsService) GetRecentlyUpdatedShows(ctx context.Context, startDate *s
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch updates url:" + url)
+	s.client.debug("fetch updates url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -268,7 +267,7 @@ func (s *ShowsService) GetRecentlyUpdatedShows(ctx context.Context, startDate *s
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch updates err:" + err.Error())
+		s.client.debug("fetch updates err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -286,7 +285,7 @@ func (s *ShowsService) GetRecentlyUpdatedShowsTraktIDs(ctx context.Context, star
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch updates url:" + url)
+	s.client.debug("fetch updates url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -296,7 +295,7 @@ func (s *ShowsService) GetRecentlyUpdatedShowsTraktIDs(ctx context.Context, star
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch updates err:" + err.Error())
+		s.client.debug("fetch updates err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -307,7 +306,7 @@ func (s *ShowsService) GetRecentlyUpdatedShowsTraktIDs(ctx context.Context, star
 // API docs: https://trakt.docs.apiary.io/#reference/shows/aliases/get-all-show-aliases
 func (s *ShowsService) GetAllShowAliases(ctx context.Context, id *string) ([]*str.Alias, *str.Response, error) {
 	url := fmt.Sprintf("shows/%s/aliases", *id)
-	printer.Println("fetch aliases url:" + url)
+	s.client.debug("fetch aliases url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -321,7 +320,7 @@ func (s *ShowsService) GetAllShowAliases(ctx context.Context, id *string) ([]*st
 	}
 
 	if err != nil {
-		printer.Println("fetch aliases err:" + err.Error())
+		s.client.debug("fetch aliases err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -332,7 +331,7 @@ func (s *ShowsService) GetAllShowAliases(ctx context.Context, id *string) ([]*st
 // API docs: https://trakt.docs.apiary.io/#reference/shows/certifications/get-all-show-certifications
 func (s *ShowsService) GetAllShowCertifications(ctx context.Context, id *string) ([]*str.Certification, *str.Response, error) {
 	url := fmt.Sprintf("shows/%s/certifications", *id)
-	printer.Println("fetch certifications url:" + url)
+	s.client.debug("fetch certifications url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -350,7 +349,7 @@ func (s *ShowsService) GetAllShowCertifications(ctx context.Context, id *string)
 	}
 
 	if err != nil {
-		printer.Println("fetch certifications err:" + err.Error())
+		s.client.debug("fetch certifications err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -367,7 +366,7 @@ func (s *ShowsService) GetAllShowTranslations(ctx context.Context, id *string, l
 		url = fmt.Sprintf("shows/%s/translations", *id)
 	}
 
-	printer.Println("fetch translations url:" + url)
+	s.client.debug("fetch translations url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -381,7 +380,7 @@ func (s *ShowsService) GetAllShowTranslations(ctx context.Context, id *string, l
 	}
 
 	if err != nil {
-		printer.Println("fetch translations err:" + err.Error())
+		s.client.debug("fetch translations err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -398,7 +397,7 @@ func (s *ShowsService) GetAllEpisodeTranslations(ctx context.Context, id *string
 		url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/translations", *id, *season, *episode)
 	}
 
-	printer.Println("fetch translations url:" + url)
+	s.client.debug("fetch translations url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -412,7 +411,7 @@ func (s *ShowsService) GetAllEpisodeTranslations(ctx context.Context, id *string
 	}
 
 	if err != nil {
-		printer.Println("fetch translations err:" + err.Error())
+		s.client.debug("fetch translations err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -437,7 +436,7 @@ func (s *ShowsService) GetAllShowComments(ctx context.Context, id *string, sort 
 		return nil, nil, err
 	}
 
-	printer.Println("fetch comments url:" + url)
+	s.client.debug("fetch comments url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -451,7 +450,7 @@ func (s *ShowsService) GetAllShowComments(ctx context.Context, id *string, sort 
 	}
 
 	if err != nil {
-		printer.Println("fetch comments err:" + err.Error())
+		s.client.debug("fetch comments err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -476,7 +475,7 @@ func (s *ShowsService) GetAllEpisodeComments(ctx context.Context, id *string, se
 		return nil, nil, err
 	}
 
-	printer.Println("fetch comments url:" + url)
+	s.client.debug("fetch comments url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -490,7 +489,7 @@ func (s *ShowsService) GetAllEpisodeComments(ctx context.Context, id *string, se
 	}
 
 	if err != nil {
-		printer.Println("fetch comments err:" + err.Error())
+		s.client.debug("fetch comments err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -514,7 +513,7 @@ func (s *ShowsService) GetListsContainingShow(ctx context.Context, id *string, t
 		return nil, nil, err
 	}
 
-	printer.Println("fetch lists url:" + url)
+	s.client.debug("fetch lists url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -528,7 +527,7 @@ func (s *ShowsService) GetListsContainingShow(ctx context.Context, id *string, t
 	}
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		s.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -547,7 +546,7 @@ func (s *ShowsService) GetShowCollectionProgress(ctx context.Context, id *string
 		return nil, err
 	}
 
-	printer.Println("fetch collection progress url:" + url)
+	s.client.debug("fetch collection progress url:" + url)
 
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -576,7 +575,7 @@ func (s *ShowsService) GetShowWatchedProgress(ctx context.Context, id *string, o
 		return nil, err
 	}
 
-	printer.Println("fetch watched progress url:" + url)
+	s.client.debug("fetch watched progress url:" + url)
 
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -615,7 +614,7 @@ func (s *ShowsService) ResetShowProgress(ctx context.Context, id *string, progre
 // API docs:https://trakt.docs.apiary.io/#reference/shows/reset-watched-progress/undo-reset-show-progress
 func (s *ShowsService) UndoResetShowProgress(ctx context.Context, id *string) (*str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/progress/watched/reset", *id)
-	printer.Println("undo reset watched progress")
+	s.client.debug("undo reset watched progress")
 	req, err := s.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
@@ -633,7 +632,7 @@ func (s *ShowsService) UndoResetShowProgress(ctx context.Context, id *string) (*
 // API docs: https://trakt.docs.apiary.io/#reference/shows/ratings/get-show-ratings
 func (s *ShowsService) GetShowRatings(ctx context.Context, id *string) (*str.ShowRatings, *str.Response, error) {
 	url := fmt.Sprintf("shows/%s/ratings", *id)
-	printer.Println("fetch ratings url:" + url)
+	s.client.debug("fetch ratings url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -646,7 +645,7 @@ func (s *ShowsService) GetShowRatings(ctx context.Context, id *string) (*str.Sho
 	}
 
 	if err != nil {
-		printer.Println("fetch ratings err:" + err.Error())
+		s.client.debug("fetch ratings err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -664,7 +663,7 @@ func (s *ShowsService) GetRelatedShows(ctx context.Context, id *string, opts *ur
 		return nil, nil, err
 	}
 
-	printer.Println("fetch related url:" + url)
+	s.client.debug("fetch related url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -678,7 +677,7 @@ func (s *ShowsService) GetRelatedShows(ctx context.Context, id *string, opts *ur
 	}
 
 	if err != nil {
-		printer.Println("fetch related err:" + err.Error())
+		s.client.debug("fetch related err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -689,7 +688,7 @@ func (s *ShowsService) GetRelatedShows(ctx context.Context, id *string, opts *ur
 // API docs: https://trakt.docs.apiary.io/#reference/shows/stats/get-show-stats
 func (s *ShowsService) GetShowStats(ctx context.Context, id *string) (*str.ShowStats, *str.Response, error) {
 	url := fmt.Sprintf("shows/%s/stats", *id)
-	printer.Println("fetch stats url:" + url)
+	s.client.debug("fetch stats url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -702,7 +701,7 @@ func (s *ShowsService) GetShowStats(ctx context.Context, id *string) (*str.ShowS
 	}
 
 	if err != nil {
-		printer.Println("fetch stats err:" + err.Error())
+		s.client.debug("fetch stats err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -713,7 +712,7 @@ func (s *ShowsService) GetShowStats(ctx context.Context, id *string) (*str.ShowS
 // API docs: https://trakt.docs.apiary.io/#reference/shows/studios/get-show-studios
 func (s *ShowsService) GetShowStudios(ctx context.Context, id *string) ([]*str.Studio, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/studios", *id)
-	printer.Println("fetch studios url:" + url)
+	s.client.debug("fetch studios url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -727,7 +726,7 @@ func (s *ShowsService) GetShowStudios(ctx context.Context, id *string) ([]*str.S
 	}
 
 	if err != nil {
-		printer.Println("fetch studios err:" + err.Error())
+		s.client.debug("fetch studios err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -744,7 +743,7 @@ func (s *ShowsService) GetShowWatching(ctx context.Context, id *string, opts *ur
 		return nil, nil, err
 	}
 
-	printer.Println("fetch watching url:" + url)
+	s.client.debug("fetch watching url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -758,7 +757,7 @@ func (s *ShowsService) GetShowWatching(ctx context.Context, id *string, opts *ur
 	}
 
 	if err != nil {
-		printer.Println("fetch watching err:" + err.Error())
+		s.client.debug("fetch watching err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -775,7 +774,7 @@ func (s *ShowsService) GetShowVideos(ctx context.Context, id *string, opts *uri.
 		return nil, nil, err
 	}
 
-	printer.Println("fetch video url:" + url)
+	s.client.debug("fetch video url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -789,7 +788,7 @@ func (s *ShowsService) GetShowVideos(ctx context.Context, id *string, opts *uri.
 	}
 
 	if err != nil {
-		printer.Println("fetch video err:" + err.Error())
+		s.client.debug("fetch video err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -801,7 +800,7 @@ func (s *ShowsService) GetShowVideos(ctx context.Context, id *string, opts *uri.
 // API docs: https://trakt.docs.apiary.io/#reference/shows/refresh/refresh-show-metadata
 func (s *ShowsService) RefreshShowMetadata(ctx context.Context, id *string) (*str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/refresh", *id)
-	printer.Println("refresh show:" + url)
+	s.client.debug("refresh show:" + url)
 	req, err := s.client.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
 		return nil, err
@@ -820,7 +819,7 @@ func (s *ShowsService) RefreshShowMetadata(ctx context.Context, id *string) (*st
 func (s *ShowsService) GetNextEpisode(ctx context.Context, id *string, opts *uri.ListOptions) (*str.Episode, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/next_episode", *id)
 	url, err := uri.AddQuery(url, opts)
-	printer.Println("fetch next episode url:" + url)
+	s.client.debug("fetch next episode url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -829,7 +828,7 @@ func (s *ShowsService) GetNextEpisode(ctx context.Context, id *string, opts *uri
 	resp, err := s.client.Do(ctx, req, &result)
 
 	if err != nil {
-		printer.Println("fetch next episode err:" + err.Error())
+		s.client.debug("fetch next episode err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -841,7 +840,7 @@ func (s *ShowsService) GetNextEpisode(ctx context.Context, id *string, opts *uri
 func (s *ShowsService) GetLastEpisode(ctx context.Context, id *string, opts *uri.ListOptions) (*str.Episode, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/last_episode", *id)
 	url, err := uri.AddQuery(url, opts)
-	printer.Println("fetch last episode url:" + url)
+	s.client.debug("fetch last episode url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -850,7 +849,7 @@ func (s *ShowsService) GetLastEpisode(ctx context.Context, id *string, opts *uri
 	resp, err := s.client.Do(ctx, req, &result)
 
 	if err != nil {
-		printer.Println("fetch last episode err:" + err.Error())
+		s.client.debug("fetch last episode err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -862,7 +861,7 @@ func (s *ShowsService) GetLastEpisode(ctx context.Context, id *string, opts *uri
 func (s *ShowsService) GetAllSeasonsForShow(ctx context.Context, id *string, opts *uri.ListOptions) ([]*str.Season, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/seasons", *id)
 	url, err := uri.AddQuery(url, opts)
-	printer.Println("fetch all seasons url:" + url)
+	s.client.debug("fetch all seasons url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -872,7 +871,7 @@ func (s *ShowsService) GetAllSeasonsForShow(ctx context.Context, id *string, opt
 	resp, err := s.client.Do(ctx, req, &result)
 
 	if err != nil {
-		printer.Println("fetch seasons err:" + err.Error())
+		s.client.debug("fetch seasons err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -884,7 +883,7 @@ func (s *ShowsService) GetAllSeasonsForShow(ctx context.Context, id *string, opt
 func (s *ShowsService) GetSingleSeasonsForShow(ctx context.Context, id *string, season *int, opts *uri.ListOptions) (*str.Season, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/seasons/%d/info", *id, *season)
 	url, err := uri.AddQuery(url, opts)
-	printer.Println("fetch single seasons url:" + url)
+	s.client.debug("fetch single seasons url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -894,7 +893,7 @@ func (s *ShowsService) GetSingleSeasonsForShow(ctx context.Context, id *string, 
 	resp, err := s.client.Do(ctx, req, &result)
 
 	if err != nil {
-		printer.Println("fetch seasons err:" + err.Error())
+		s.client.debug("fetch seasons err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -906,7 +905,7 @@ func (s *ShowsService) GetSingleSeasonsForShow(ctx context.Context, id *string, 
 func (s *ShowsService) GetAllEpisodesForSingleSeason(ctx context.Context, id *string, season *int, opts *uri.ListOptions) ([]*str.Episode, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/seasons/%d", *id, *season)
 	url, err := uri.AddQuery(url, opts)
-	printer.Println("fetch season episodes url:" + url)
+	s.client.debug("fetch season episodes url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -916,7 +915,7 @@ func (s *ShowsService) GetAllEpisodesForSingleSeason(ctx context.Context, id *st
 	resp, err := s.client.Do(ctx, req, &result)
 
 	if err != nil {
-		printer.Println("fetch season episodes err:" + err.Error())
+		s.client.debug("fetch season episodes err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -933,7 +932,7 @@ func (s *ShowsService) GetAllSeasonTranslations(ctx context.Context, id *string,
 	}
 
 	url, err := uri.AddQuery(url, opts)
-	printer.Println("fetch season translations url:" + url)
+	s.client.debug("fetch season translations url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -943,7 +942,7 @@ func (s *ShowsService) GetAllSeasonTranslations(ctx context.Context, id *string,
 	resp, err := s.client.Do(ctx, req, &result)
 
 	if err != nil {
-		printer.Println("fetch season translations err:" + err.Error())
+		s.client.debug("fetch season translations err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -969,7 +968,7 @@ func (s *ShowsService) GetAllSeasonComments(ctx context.Context, id *string, sea
 		return nil, nil, err
 	}
 
-	printer.Println("fetch comments url:" + url)
+	s.client.debug("fetch comments url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -983,7 +982,7 @@ func (s *ShowsService) GetAllSeasonComments(ctx context.Context, id *string, sea
 	}
 
 	if err != nil {
-		printer.Println("fetch comments err:" + err.Error())
+		s.client.debug("fetch comments err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1008,7 +1007,7 @@ func (s *ShowsService) GetListsContainingSeason(ctx context.Context, id *string,
 		return nil, nil, err
 	}
 
-	printer.Println("fetch lists url:" + url)
+	s.client.debug("fetch lists url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1022,7 +1021,7 @@ func (s *ShowsService) GetListsContainingSeason(ctx context.Context, id *string,
 	}
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		s.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1047,7 +1046,7 @@ func (s *ShowsService) GetListsContainingEpisode(ctx context.Context, id *string
 		return nil, nil, err
 	}
 
-	printer.Println("fetch lists url:" + url)
+	s.client.debug("fetch lists url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1061,7 +1060,7 @@ func (s *ShowsService) GetListsContainingEpisode(ctx context.Context, id *string
 	}
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		s.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1082,7 +1081,7 @@ func (s *ShowsService) GetAllPeopleForSeason(ctx context.Context, id *string, se
 		return nil, nil, err
 	}
 
-	printer.Println("fetch season people url:" + url)
+	s.client.debug("fetch season people url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1095,7 +1094,7 @@ func (s *ShowsService) GetAllPeopleForSeason(ctx context.Context, id *string, se
 	}
 
 	if err != nil {
-		printer.Println("fetch season people err:" + err.Error())
+		s.client.debug("fetch season people err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1116,7 +1115,7 @@ func (s *ShowsService) GetAllPeopleForEpisode(ctx context.Context, id *string, s
 		return nil, nil, err
 	}
 
-	printer.Println("fetch episode people url:" + url)
+	s.client.debug("fetch episode people url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1129,7 +1128,7 @@ func (s *ShowsService) GetAllPeopleForEpisode(ctx context.Context, id *string, s
 	}
 
 	if err != nil {
-		printer.Println("fetch episode people err:" + err.Error())
+		s.client.debug("fetch episode people err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1141,7 +1140,7 @@ func (s *ShowsService) GetAllPeopleForEpisode(ctx context.Context, id *string, s
 // API docs: https://trakt.docs.apiary.io/#reference/seasons/ratings/get-season-ratings
 func (s *ShowsService) GetSeasonRatings(ctx context.Context, id *string, season *int) (*str.SeasonRatings, *str.Response, error) {
 	url := fmt.Sprintf("shows/%s/seasons/%d/ratings", *id, *season)
-	printer.Println("fetch season ratings url:" + url)
+	s.client.debug("fetch season ratings url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1154,7 +1153,7 @@ func (s *ShowsService) GetSeasonRatings(ctx context.Context, id *string, season 
 	}
 
 	if err != nil {
-		printer.Println("fetch seasons ratings err:" + err.Error())
+		s.client.debug("fetch seasons ratings err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1166,7 +1165,7 @@ func (s *ShowsService) GetSeasonRatings(ctx context.Context, id *string, season 
 // API docs: https://trakt.docs.apiary.io/#reference/episodes/ratings/get-episode-ratings
 func (s *ShowsService) GetEpisodeRatings(ctx context.Context, id *string, season *int, episode *int) (*str.EpisodeRatings, *str.Response, error) {
 	url := fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/ratings", *id, *season, *episode)
-	printer.Println("fetch episode ratings url:" + url)
+	s.client.debug("fetch episode ratings url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1179,7 +1178,7 @@ func (s *ShowsService) GetEpisodeRatings(ctx context.Context, id *string, season
 	}
 
 	if err != nil {
-		printer.Println("fetch episode ratings err:" + err.Error())
+		s.client.debug("fetch episode ratings err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1191,7 +1190,7 @@ func (s *ShowsService) GetEpisodeRatings(ctx context.Context, id *string, season
 // API docs: https://trakt.docs.apiary.io/#reference/seasons/stats/get-season-stats
 func (s *ShowsService) GetSeasonStats(ctx context.Context, id *string, season *int) (*str.SeasonStats, *str.Response, error) {
 	url := fmt.Sprintf("shows/%s/seasons/%d/stats", *id, *season)
-	printer.Println("fetch season stats url:" + url)
+	s.client.debug("fetch season stats url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1204,7 +1203,7 @@ func (s *ShowsService) GetSeasonStats(ctx context.Context, id *string, season *i
 	}
 
 	if err != nil {
-		printer.Println("fetch season stats err:" + err.Error())
+		s.client.debug("fetch season stats err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1216,7 +1215,7 @@ func (s *ShowsService) GetSeasonStats(ctx context.Context, id *string, season *i
 // API docs: https://trakt.docs.apiary.io/#reference/episodes/stats/get-episode-stats
 func (s *ShowsService) GetEpisodeStats(ctx context.Context, id *string, season *int, episode *int) (*str.EpisodeStats, *str.Response, error) {
 	url := fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/stats", *id, *season, *episode)
-	printer.Println("fetch episode stats url:" + url)
+	s.client.debug("fetch episode stats url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1229,7 +1228,7 @@ func (s *ShowsService) GetEpisodeStats(ctx context.Context, id *string, season *
 	}
 
 	if err != nil {
-		printer.Println("fetch episode stats err:" + err.Error())
+		s.client.debug("fetch episode stats err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1247,7 +1246,7 @@ func (s *ShowsService) GetSeasonsWatching(ctx context.Context, id *string, seaso
 		return nil, nil, err
 	}
 
-	printer.Println("fetch seasons watching url:" + url)
+	s.client.debug("fetch seasons watching url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1261,7 +1260,7 @@ func (s *ShowsService) GetSeasonsWatching(ctx context.Context, id *string, seaso
 	}
 
 	if err != nil {
-		printer.Println("fetch season watching err:" + err.Error())
+		s.client.debug("fetch season watching err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1279,7 +1278,7 @@ func (s *ShowsService) GetEpisodesWatching(ctx context.Context, id *string, seas
 		return nil, nil, err
 	}
 
-	printer.Println("fetch episodes watching url:" + url)
+	s.client.debug("fetch episodes watching url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1293,7 +1292,7 @@ func (s *ShowsService) GetEpisodesWatching(ctx context.Context, id *string, seas
 	}
 
 	if err != nil {
-		printer.Println("fetch episodes watching err:" + err.Error())
+		s.client.debug("fetch episodes watching err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1311,7 +1310,7 @@ func (s *ShowsService) GetSeasonsVideos(ctx context.Context, id *string, season 
 		return nil, nil, err
 	}
 
-	printer.Println("fetch season video url:" + url)
+	s.client.debug("fetch season video url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1325,7 +1324,7 @@ func (s *ShowsService) GetSeasonsVideos(ctx context.Context, id *string, season 
 	}
 
 	if err != nil {
-		printer.Println("fetch season video err:" + err.Error())
+		s.client.debug("fetch season video err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -1343,7 +1342,7 @@ func (s *ShowsService) GetEpisodeVideos(ctx context.Context, id *string, season 
 		return nil, nil, err
 	}
 
-	printer.Println("fetch episode video url:" + url)
+	s.client.debug("fetch episode video url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1357,7 +1356,7 @@ func (s *ShowsService) GetEpisodeVideos(ctx context.Context, id *string, season 
 	}
 
 	if err != nil {
-		printer.Println("fetch episode video err:" + err.Error())
+		s.client.debug("fetch episode video err:" + err.Error())
 		return nil, resp, err
 	}
 
