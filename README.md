@@ -86,6 +86,25 @@ A value given on the command line (for example `-t shows`) wins over the same op
 - [`watchnow`](./docs/watchnow.md) - Returns watch now sources (streaming providers), all or by country.
 - [`younify`](./docs/younify.md) - Streaming service connections: connections, connect, refresh, disconnect.
 
+## Library usage
+
+The API client behind the CLI is also a Go package, `github.com/mfederowicz/trakt-sync/trakt`.
+It is **experimental**: its API may still change in minor releases.
+
+```bash
+go get github.com/mfederowicz/trakt-sync/trakt
+```
+```go
+client := trakt.NewClient(nil).
+	WithClientID(os.Getenv("TRAKT_CLIENT_ID")).
+	WithUserAgent("my-app/1.0")
+
+movies, _, err := client.Movies.GetTrendingMovies(context.Background(), &uri.ListOptions{Limit: 10})
+```
+Package docs: [pkg.go.dev/github.com/mfederowicz/trakt-sync/trakt](https://pkg.go.dev/github.com/mfederowicz/trakt-sync/trakt).
+Runnable programs (device login, trending, paginated history, errors) are in [`example/`](./example).
+The [Trakt API Use Policy](https://developer.trakt.tv/?section=guides&guide=api-use-policy) applies to every app built on it.
+
 ## API documentation
 
 - [Trakt developer portal](https://developer.trakt.tv) - official guides (authentication, pagination, rate limiting, required headers) and management of your API apps.

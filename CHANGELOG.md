@@ -19,6 +19,8 @@ schedule.
 
 ### Added
 
+- Library docs for the `trakt` package: a package overview for pkg.go.dev, a "Library usage" section in the README, and runnable programs in `example/` (device login, trending movies, paginated history, error handling).
+
 ### Changed
 
 - The Trakt API client is now an importable Go package, `github.com/mfederowicz/trakt-sync/trakt` (it was `internal/`, which other modules cannot import). It is experimental: its API may still change in minor releases. Nothing changes for CLI users.
