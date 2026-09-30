@@ -123,7 +123,7 @@ func refreshToken(config *cfg.Config, client *trakt.Client, options *str.Options
 
 // RefreshUserSettings user settings
 func RefreshUserSettings(config *cfg.Config, client *trakt.Client, options *str.Options) bool {
-	newSettings, resp, err := client.Users.RetrieveSettings(
+	newSettings, resp, err := client.Users.GetSettings(
 		ContextFromOptions(options),
 	)
 

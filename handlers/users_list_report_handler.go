@@ -48,7 +48,7 @@ func (UsersListReportHandler) usersListReport(client *trakt.Client, options *str
 	report.Reason = &options.Reason
 	report.Message = &options.Msg
 
-	result, resp, err := client.Users.ListReport(
+	result, resp, err := client.Users.ReportList(
 		cli.ContextFromOptions(options),
 		&options.UserName,
 		&options.ID,

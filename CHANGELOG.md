@@ -24,6 +24,7 @@ schedule.
 ### Changed
 
 - The Trakt API client is now an importable Go package, `github.com/mfederowicz/trakt-sync/trakt` (it was `internal/`, which other modules cannot import). It is experimental: its API may still change in minor releases. Nothing changes for CLI users.
+- Library: `trakt` API cleanup before its first release. Methods get consistent names: `Oauth.PollForAccessToken`, `Checkin.CheckIn`, `Comments.AddComment`, `Users.GetSettings`, `Users.LikeList`, `Users.ReportList`, `Users.GetWatching` and `Users.GetListItemsByType`. Nothing changes for CLI users.
 - Debug lines such as `fetch ... url:` and `create new checkin` now print only with `-v`, which also shows each API request as `METHOD <url>` (with `client_secret` redacted). This covers `calendars`, `checkin`, `comments`, `lists`, `movies`, `notes`, `people`, `recommendations`, `scrobble`, `search`, `shows`, `sync`, `users`, `countries`, `certifications`, `genres`, `languages` and `networks`. Errors are still printed as before.
 
 ### Fixed

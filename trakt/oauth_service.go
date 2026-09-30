@@ -32,10 +32,10 @@ func (o *OauthService) GenerateNewDeviceCodes(ctx context.Context, code *str.New
 	return d, resp, nil
 }
 
-// PoolForTheAccessToken Use the device_code and poll at the interval (in seconds) to check if the user has authorized you app.
+// PollForAccessToken Use the device_code and poll at the interval (in seconds) to check if the user has authorized you app.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/authentication-devices/get-token/poll-for-the-access_token
-func (o *OauthService) PoolForTheAccessToken(ctx context.Context, deviceToken *str.NewDeviceToken) (*str.DeviceToken, *str.Response, error) {
+func (o *OauthService) PollForAccessToken(ctx context.Context, deviceToken *str.NewDeviceToken) (*str.DeviceToken, *str.Response, error) {
 	u := "oauth/device/token"
 	req, err := o.client.NewRequest("POST", u, deviceToken)
 	if err != nil {

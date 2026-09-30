@@ -34,7 +34,7 @@ user's account needs an OAuth access token:
 	userClient := client.WithAuthToken(accessToken)
 
 Command line and TV-style apps get a token with the device flow: client.Oauth.GenerateNewDeviceCodes, then poll
-client.Oauth.PoolForTheAccessToken until the user approves the code. See example/devicecode in the repository.
+client.Oauth.PollForAccessToken until the user approves the code. See example/devicecode in the repository.
 Tokens expire; exchange the refresh token with client.Oauth.ExchangeRefreshTokenForAccessToken.
 The app's client secret is needed only by these two token calls and goes in their request body
 (str.NewDeviceToken, str.CurrentDeviceToken); the client never stores it or sends it on other requests.

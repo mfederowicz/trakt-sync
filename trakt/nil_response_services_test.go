@@ -21,7 +21,7 @@ func TestServicesWithoutResponse(t *testing.T) {
 		name string
 		call func(c *Client) error
 	}{
-		{name: "comments", call: func(c *Client) error { _, _, err := c.Comments.PostAComment(ctx, &str.Comment{}); return err }},
+		{name: "comments", call: func(c *Client) error { _, _, err := c.Comments.AddComment(ctx, &str.Comment{}); return err }},
 		{name: "movies", call: func(c *Client) error { _, _, err := c.Movies.GetMovie(ctx, str.String("tron"), opts); return err }},
 		{name: "networks", call: func(c *Client) error { _, _, err := c.Networks.GetNetworksList(ctx, opts); return err }},
 		{name: "notes", call: func(c *Client) error { _, _, err := c.Notes.AddNotes(ctx, &str.Notes{}); return err }},
@@ -63,7 +63,7 @@ func TestPostWithoutValidationErrors(t *testing.T) {
 		path string
 		call func(c *Client) error
 	}{
-		{name: "comments", path: "/comments", call: func(c *Client) error { _, _, err := c.Comments.PostAComment(ctx, &str.Comment{}); return err }},
+		{name: "comments", path: "/comments", call: func(c *Client) error { _, _, err := c.Comments.AddComment(ctx, &str.Comment{}); return err }},
 		{name: "notes", path: "/notes", call: func(c *Client) error { _, _, err := c.Notes.AddNotes(ctx, &str.Notes{}); return err }},
 	}
 

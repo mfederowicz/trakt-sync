@@ -30,10 +30,10 @@ func (c *CheckinService) DeleteAnyActiveCheckins(ctx context.Context) (*str.Resp
 	return resp, nil
 }
 
-// CheckintoAnItem Check into a movie or episode.
+// CheckIn Check into a movie or episode.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/checkin/checkin/check-into-an-item
-func (c *CheckinService) CheckintoAnItem(ctx context.Context, checkin *str.Checkin) (*str.Checkin, *str.Response, error) {
+func (c *CheckinService) CheckIn(ctx context.Context, checkin *str.Checkin) (*str.Checkin, *str.Response, error) {
 	var url = "checkin"
 	c.client.debug("create new checkin")
 	req, err := c.client.NewRequest(http.MethodPost, url, checkin)

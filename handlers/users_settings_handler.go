@@ -34,7 +34,7 @@ func (UsersSettingsHandler) Handle(options *str.Options, client *trakt.Client) e
 }
 
 func fetchUsersSettings(client *trakt.Client, options *str.Options) (*str.UserSettings, *str.Response, error) {
-	settings, resp, err := client.Users.RetrieveSettings(cli.ContextFromOptions(options))
+	settings, resp, err := client.Users.GetSettings(cli.ContextFromOptions(options))
 
 	return settings, resp, err
 }

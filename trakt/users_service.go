@@ -14,10 +14,10 @@ import (
 // methods of the Trakt API.
 type UsersService Service
 
-// GetItemstOnAPersonalList Get all items on a personal list.
+// GetListItemsByType Get the items of one type on a personal list, unsorted (see GetListItems for sorting).
 //
 // API docs: https://trakt.docs.apiary.io/#reference/users/list-items/get-items-on-a-personal-list
-func (u *UsersService) GetItemstOnAPersonalList(ctx context.Context, id *string, listID *string, t *string) ([]*str.UserListItem, *str.Response, error) {
+func (u *UsersService) GetListItemsByType(ctx context.Context, id *string, listID *string, t *string) ([]*str.UserListItem, *str.Response, error) {
 	var url string
 
 	if id != nil {
@@ -180,9 +180,9 @@ func (u *UsersService) GetWatched(ctx context.Context, id *string, watchType *st
 	return watched, resp, nil
 }
 
-// RetrieveSettings Get the user's settings so you can align your app's experience with what they're used to on the trakt website.
+// GetSettings Get the user's settings so you can align your app's experience with what they're used to on the trakt website.
 // API docs: https://trakt.docs.apiary.io/#reference/users/settings/retrieve-settings
-func (u *UsersService) RetrieveSettings(ctx context.Context) (*str.UserSettings, *str.Response, error) {
+func (u *UsersService) GetSettings(ctx context.Context) (*str.UserSettings, *str.Response, error) {
 	url := "users/settings"
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -695,9 +695,9 @@ func (u *UsersService) RemoveListLike(ctx context.Context, user *string, listID 
 	return resp, nil
 }
 
-// ListLike Votes help determine popular lists. Only one like is allowed per list per user.
+// LikeList Votes help determine popular lists. Only one like is allowed per list per user.
 // API docs:https://trakt.docs.apiary.io/#reference/users/list-like/like-a-list
-func (u *UsersService) ListLike(ctx context.Context, user *string, listID *string) (*str.Response, error) {
+func (u *UsersService) LikeList(ctx context.Context, user *string, listID *string) (*str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s/like", *user, *listID)
 	req, err := u.client.NewRequest(http.MethodPost, url, nil)
@@ -850,11 +850,11 @@ func (u *UsersService) GetListComments(ctx context.Context, user *string, listID
 	return items, resp, nil
 }
 
-// ListReport Report a user's list for moderator review.
+// ReportList Report a user's list for moderator review.
 // Send a reason and optional message with additional context.
 // A user can only have one pending report per list.
 // API docs:https://trakt.docs.apiary.io/#reference/users/list-report/report-a-user's-list
-func (u *UsersService) ListReport(ctx context.Context, user *string, listID *string, report *str.ListReport) (*str.ListReportResult, *str.Response, error) {
+func (u *UsersService) ReportList(ctx context.Context, user *string, listID *string, report *str.ListReport) (*str.ListReportResult, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s/report", *user, *listID)
 	u.client.debug("list report")
@@ -1242,10 +1242,10 @@ func (u *UsersService) GetFavoritesComments(ctx context.Context, user *string, s
 	return list, resp, nil
 }
 
-// Watching Returns a movie or episode if the user is currently watching something.
+// GetWatching Returns a movie or episode if the user is currently watching something.
 // If they are not, it returns no data and a 204 HTTP status code.
 // API docs:https://trakt.docs.apiary.io/#reference/users/watching/get-watching
-func (u *UsersService) Watching(ctx context.Context, user *string, options *uri.ListOptions) (*str.WatchingResult, *str.Response, error) {
+func (u *UsersService) GetWatching(ctx context.Context, user *string, options *uri.ListOptions) (*str.WatchingResult, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/watching", *user)
 	url, err := uri.AddQuery(url, options)
