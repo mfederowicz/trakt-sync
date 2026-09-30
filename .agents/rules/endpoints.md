@@ -1,13 +1,13 @@
 ---
 description: 'Checklist for adding or changing a Trakt API endpoint: contract -> str type -> uri options -> service -> handler -> command -> docs -> tests. Read when touching endpoints.'
-applyTo: 'internal/**,handlers/**,cmds/**,str/**,uri/**'
+applyTo: 'trakt/**,handlers/**,cmds/**,str/**,uri/**'
 ---
 
 # Endpoints
 
 Every endpoint follows the same chain. Worked reference: `networks`
 (`cmds/command_networks.go` -> `handlers/networks_lists_handler.go` ->
-`internal/networks_service.go` -> `str.TvNetwork`), backed by the contract
+`trakt/networks_service.go` -> `str.TvNetwork`), backed by the contract
 `projects/api/src/contracts/networks/index.ts` in trakt/trakt-api.
 
 ## 1. Read the contract
@@ -52,7 +52,7 @@ the TypeScript implementation details.
 - Endpoint-specific params get an options struct with `url:"...,omitempty"`
   tags; ranges reuse the existing range types.
 
-## 4. Service method in `internal/<module>_service.go`
+## 4. Service method in `trakt/<module>_service.go`
 
 ```go
 // GetNetworksList Get a list of all TV networks, including the name, country, and ids.
@@ -93,7 +93,7 @@ func (m *NetworksService) GetNetworksList(ctx context.Context, opts *uri.ListOpt
 ## 5. Handler in `handlers/<module>_<action>_handler.go`
 
 - `type XYHandler struct{}` with
-  `Handle(options *str.Options, client *internal.Client) error`.
+  `Handle(options *str.Options, client *trakt.Client) error`.
 - Validate required options first and return clear errors.
 - Paginated endpoints recurse with `client.HavePages(page, resp, options.PagesLimit)`,
   sleeping `consts.SleepNumberOfSeconds` between pages and advancing by

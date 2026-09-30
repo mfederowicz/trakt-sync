@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -18,7 +18,7 @@ import (
 type MoviesBoxofficeHandler struct{}
 
 // Handle to handle movies: boxoffice action
-func (h MoviesBoxofficeHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h MoviesBoxofficeHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns the top 10 grossing movies in the U.S. box office last weekend. Updated every Monday morning.")
 	result, err := h.fetchMoviesBoxoffice(client, options)
 	if err != nil {
@@ -40,7 +40,7 @@ func (h MoviesBoxofficeHandler) Handle(options *str.Options, client *internal.Cl
 	return nil
 }
 
-func (MoviesBoxofficeHandler) fetchMoviesBoxoffice(client *internal.Client, options *str.Options) ([]*str.MoviesItem, error) {
+func (MoviesBoxofficeHandler) fetchMoviesBoxoffice(client *trakt.Client, options *str.Options) ([]*str.MoviesItem, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Movies.GetBoxoffice(
 		client.BuildCtxFromOptions(options),

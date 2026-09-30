@@ -6,8 +6,8 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -45,7 +45,7 @@ func TestWatchNowFlags(t *testing.T) {
 				got = c.UpdateOptionsWithCommandFlags(c.Options)
 				return nil
 			}}
-			assert.NoError(t, command.Exec(fs, internal.NewClient(nil), fileConfig, tt.args))
+			assert.NoError(t, command.Exec(fs, trakt.NewClient(nil), fileConfig, tt.args))
 			assert.Equal(t, consts.Sources, got.Action)
 			assert.Equal(t, tt.wantCountry, got.Country)
 			assert.Equal(t, tt.wantOutput, got.Output)

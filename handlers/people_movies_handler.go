@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -18,7 +18,7 @@ import (
 type PeopleMoviesHandler struct{}
 
 // Handle to handle people: movies action
-func (p PeopleMoviesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (p PeopleMoviesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.ID) == consts.ZeroValue {
 		return errors.New(consts.EmptyPersonIDMsg)
 	}
@@ -40,7 +40,7 @@ func (p PeopleMoviesHandler) Handle(options *str.Options, client *internal.Clien
 	return nil
 }
 
-func (PeopleMoviesHandler) fetchMovieCredits(client *internal.Client, options *str.Options) (*str.PersonMovies, error) {
+func (PeopleMoviesHandler) fetchMovieCredits(client *trakt.Client, options *str.Options) (*str.PersonMovies, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetMovieCredits(
 		client.BuildCtxFromOptions(options),

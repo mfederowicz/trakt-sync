@@ -10,9 +10,9 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -21,7 +21,7 @@ func fail(err string) {
 }
 
 // check if user accept device code or not
-func deviceCodeVerification(deviceToken *str.NewDeviceToken, client *internal.Client, config *cfg.Config, options *str.Options) bool {
+func deviceCodeVerification(deviceToken *str.NewDeviceToken, client *trakt.Client, config *cfg.Config, options *str.Options) bool {
 	token, resp, err := client.Oauth.PoolForTheAccessToken(client.BuildCtxFromOptions(options), deviceToken)
 
 	if (resp.StatusCode != http.StatusBadRequest && resp.StatusCode != http.StatusTeapot) && err != nil {
@@ -57,7 +57,7 @@ func deviceCodeVerification(deviceToken *str.NewDeviceToken, client *internal.Cl
 }
 
 // fetch new device code for client
-func fetchNewDeviceCodeForClient(config *cfg.Config, client *internal.Client, options *str.Options) (*str.DeviceCode, error) {
+func fetchNewDeviceCodeForClient(config *cfg.Config, client *trakt.Client, options *str.Options) (*str.DeviceCode, error) {
 	code, resp, err := client.Oauth.GenerateNewDeviceCodes(
 		client.BuildCtxFromOptions(options),
 		&str.NewDeviceCode{ClientID: &config.ClientID})
@@ -74,7 +74,7 @@ func fetchNewDeviceCodeForClient(config *cfg.Config, client *internal.Client, op
 }
 
 // PoolNewDeviceCode pool new device code (open browser and wait for correct code activation)
-func PoolNewDeviceCode(config *cfg.Config, client *internal.Client, options *str.Options) error {
+func PoolNewDeviceCode(config *cfg.Config, client *trakt.Client, options *str.Options) error {
 	printer.Println("Polling for new device code...")
 
 	device, err := fetchNewDeviceCodeForClient(config, client, options)
@@ -100,7 +100,7 @@ func showCodeAndOpenBrowser(device *str.DeviceCode) {
 }
 
 // verify device code in loop with intervals
-func verifyCode(device *str.DeviceCode, config *cfg.Config, client *internal.Client, options *str.Options) {
+func verifyCode(device *str.DeviceCode, config *cfg.Config, client *trakt.Client, options *str.Options) {
 	const (
 		counterNoSeconds = 0
 	)

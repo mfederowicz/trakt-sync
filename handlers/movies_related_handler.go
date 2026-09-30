@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -18,7 +18,7 @@ import (
 type MoviesRelatedHandler struct{ common CommonLogic }
 
 // Handle to handle movies: related action
-func (m MoviesRelatedHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m MoviesRelatedHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns related and similar movies.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyMovieIDMsg)
@@ -38,7 +38,7 @@ func (m MoviesRelatedHandler) Handle(options *str.Options, client *internal.Clie
 	return nil
 }
 
-func (m MoviesRelatedHandler) fetchMoviesRelated(client *internal.Client, options *str.Options, page int) ([]*str.Movie, *str.Response, error) {
+func (m MoviesRelatedHandler) fetchMoviesRelated(client *trakt.Client, options *str.Options, page int) ([]*str.Movie, *str.Response, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Movies.GetRelatedMovies(
 		client.BuildCtxFromOptions(options),

@@ -7,15 +7,15 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // UsersListReportHandler struct for handler
 type UsersListReportHandler struct{ common CommonLogic }
 
 // Handle to handle sync: list_report action
-func (m UsersListReportHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m UsersListReportHandler) Handle(options *str.Options, client *trakt.Client) error {
 	err := m.common.ValidReason(options)
 	if err != nil {
 		return err
@@ -42,7 +42,7 @@ func (m UsersListReportHandler) Handle(options *str.Options, client *internal.Cl
 	return nil
 }
 
-func (UsersListReportHandler) usersListReport(client *internal.Client, options *str.Options) (*str.Response, error) {
+func (UsersListReportHandler) usersListReport(client *trakt.Client, options *str.Options) (*str.Response, error) {
 	report := new(str.ListReport)
 	report.Reason = &options.Reason
 	report.Message = &options.Msg

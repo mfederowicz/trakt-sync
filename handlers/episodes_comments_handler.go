@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -18,7 +18,7 @@ import (
 type EpisodesCommentsHandler struct{}
 
 // Handle to handle episodes: comments action
-func (m EpisodesCommentsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m EpisodesCommentsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns all top level comments for a episode.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyInternalIDMsg)
@@ -38,7 +38,7 @@ func (m EpisodesCommentsHandler) Handle(options *str.Options, client *internal.C
 	return nil
 }
 
-func (m EpisodesCommentsHandler) fetchEpisodesComments(client *internal.Client, options *str.Options, page int) ([]*str.Comment, *str.Response, error) {
+func (m EpisodesCommentsHandler) fetchEpisodesComments(client *trakt.Client, options *str.Options, page int) ([]*str.Comment, *str.Response, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetAllEpisodeComments(
 		client.BuildCtxFromOptions(options),

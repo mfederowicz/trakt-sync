@@ -6,16 +6,16 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // UsersUpdateSettingsHandler struct for handler
 type UsersUpdateSettingsHandler struct{ common CommonLogic }
 
 // Handle to handle users: update_settings action
-func (h UsersUpdateSettingsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h UsersUpdateSettingsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	settings := new(str.SettingsUpdate)
 	if err := readStrictInput(&h.common, options, settings); err != nil {
 		return err

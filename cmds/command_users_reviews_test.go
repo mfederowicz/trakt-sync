@@ -6,8 +6,8 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -52,7 +52,7 @@ func TestUsersReviewAndActivityFlags(t *testing.T) {
 				got = c.UpdateOptionsWithCommandFlags(c.Options)
 				return nil
 			}}
-			assert.NoError(t, command.Exec(fs, internal.NewClient(nil), fileConfig, tt.args))
+			assert.NoError(t, command.Exec(fs, trakt.NewClient(nil), fileConfig, tt.args))
 			assert.Equal(t, tt.wantYear, got.Year)
 			assert.Equal(t, tt.wantMonth, got.Month)
 			assert.Equal(t, tt.wantType, got.Type)
@@ -96,7 +96,7 @@ func TestUsersPlexFlags(t *testing.T) {
 				got = c.UpdateOptionsWithCommandFlags(c.Options)
 				return nil
 			}}
-			assert.NoError(t, command.Exec(fs, internal.NewClient(nil), fileConfig, tt.args))
+			assert.NoError(t, command.Exec(fs, trakt.NewClient(nil), fileConfig, tt.args))
 			assert.Equal(t, tt.wantURL, got.ReturnURL)
 			assert.Equal(t, tt.wantAll, got.AllData)
 			assert.Equal(t, tt.wantID, got.ID)

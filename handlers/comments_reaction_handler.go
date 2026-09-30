@@ -6,16 +6,16 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // CommentsReactionHandler struct for handler
 type CommentsReactionHandler struct{ common CommonLogic }
 
 // Handle to handle comments: reaction action, adds a reaction or removes it with -remove
-func (h CommentsReactionHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h CommentsReactionHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if options.CommentID == consts.ZeroValue {
 		return errors.New(consts.EmptyCommentIDMsg)
 	}

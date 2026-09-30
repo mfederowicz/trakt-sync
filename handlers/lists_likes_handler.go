@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -19,7 +19,7 @@ import (
 type ListsLikesHandler struct{}
 
 // Handle to handle lists: likes action
-func (h ListsLikesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h ListsLikesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyListIDMsg)
 	}
@@ -44,7 +44,7 @@ func (h ListsLikesHandler) Handle(options *str.Options, client *internal.Client)
 	return nil
 }
 
-func (h ListsLikesHandler) fetchListsLikes(client *internal.Client, options *str.Options, page int) ([]*str.UserLike, error) {
+func (h ListsLikesHandler) fetchListsLikes(client *trakt.Client, options *str.Options, page int) ([]*str.UserLike, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Lists.GetAllUsersWhoLikedList(
 		client.BuildCtxFromOptions(options),

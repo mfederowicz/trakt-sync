@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -18,7 +18,7 @@ import (
 type PeopleShowsHandler struct{}
 
 // Handle to handle people: shows action
-func (p PeopleShowsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (p PeopleShowsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.ID) == consts.ZeroValue {
 		return errors.New(consts.EmptyPersonIDMsg)
 	}
@@ -41,7 +41,7 @@ func (p PeopleShowsHandler) Handle(options *str.Options, client *internal.Client
 	return nil
 }
 
-func (PeopleShowsHandler) fetchShowCredits(client *internal.Client, options *str.Options) (*str.PersonShows, error) {
+func (PeopleShowsHandler) fetchShowCredits(client *trakt.Client, options *str.Options) (*str.PersonShows, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetShowCredits(
 		client.BuildCtxFromOptions(options),

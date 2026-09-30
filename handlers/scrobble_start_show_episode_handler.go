@@ -7,16 +7,16 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // ScrobbleStartShowEpisodeHandler struct for handler
 type ScrobbleStartShowEpisodeHandler struct{ common CommonLogic }
 
 // Handle to handle scrobble: start show_episode type
-func (s ScrobbleStartShowEpisodeHandler) Handle(options *str.Options, client *internal.Client) error {
+func (s ScrobbleStartShowEpisodeHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
@@ -36,7 +36,7 @@ func (s ScrobbleStartShowEpisodeHandler) Handle(options *str.Options, client *in
 }
 
 // CreateScrobbleForEpisodeCode to handle scrobble: episode code
-func (s ScrobbleStartShowEpisodeHandler) CreateScrobbleForEpisodeCode(options *str.Options, client *internal.Client) error {
+func (s ScrobbleStartShowEpisodeHandler) CreateScrobbleForEpisodeCode(options *str.Options, client *trakt.Client) error {
 	scrobble, err := s.common.CreateScrobble(client, options)
 	if err != nil {
 		return fmt.Errorf(consts.ScrobbleError, err)
@@ -59,7 +59,7 @@ func (s ScrobbleStartShowEpisodeHandler) CreateScrobbleForEpisodeCode(options *s
 }
 
 // CreateScrobbleForEpisodeAbs to handle scrobble: episode abs
-func (s ScrobbleStartShowEpisodeHandler) CreateScrobbleForEpisodeAbs(options *str.Options, client *internal.Client) error {
+func (s ScrobbleStartShowEpisodeHandler) CreateScrobbleForEpisodeAbs(options *str.Options, client *trakt.Client) error {
 	scrobble, err := s.common.CreateScrobble(client, options)
 	if err != nil {
 		return fmt.Errorf(consts.ScrobbleError, err)

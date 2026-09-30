@@ -7,16 +7,16 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // CommentsCommentsMovieHandler struct for handler
 type CommentsCommentsMovieHandler struct{ common CommonLogic }
 
 // Handle to handle comments: movie type
-func (h CommentsCommentsMovieHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h CommentsCommentsMovieHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}

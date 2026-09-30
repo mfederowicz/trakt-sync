@@ -7,7 +7,7 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -34,7 +34,7 @@ func TestExecReturnsRecoveredPanic(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			cmd := &Command{Name: "exec_test", Run: tt.run}
-			err := cmd.Exec(fs, internal.NewClient(nil), config, []string{})
+			err := cmd.Exec(fs, trakt.NewClient(nil), config, []string{})
 			if tt.wantErr == "" {
 				assert.NoError(t, err)
 				return
@@ -70,7 +70,7 @@ func TestExecStopsOnFlagErrors(t *testing.T) {
 			t.Cleanup(resetAllFlags) // "known flag" sets the global -o; don't leak it into later tests
 			ran := false
 			cmd := &Command{Name: "exec_test", Run: func(*Command, ...string) error { ran = true; return nil }}
-			err := cmd.Exec(fs, internal.NewClient(nil), config, tt.args)
+			err := cmd.Exec(fs, trakt.NewClient(nil), config, tt.args)
 			assert.Equal(t, tt.wantRun, ran)
 			if tt.wantErr == "" {
 				assert.NoError(t, err)
@@ -107,7 +107,7 @@ func TestModulesRuntimeReturnsErrors(t *testing.T) {
 			resetAllFlags()
 			t.Cleanup(resetAllFlags)
 
-			err := ModulesRuntime(tt.args, fs, config, internal.NewClient(nil))
+			err := ModulesRuntime(tt.args, fs, config, trakt.NewClient(nil))
 			if tt.wantErr == "" {
 				assert.NoError(t, err)
 				return

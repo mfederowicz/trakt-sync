@@ -8,16 +8,16 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // ShowsRefreshJustwatchHandler struct for handler
 type ShowsRefreshJustwatchHandler struct{}
 
 // Handle to handle shows: refresh_justwatch action
-func (ShowsRefreshJustwatchHandler) Handle(options *str.Options, client *internal.Client) error {
+func (ShowsRefreshJustwatchHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyShowIDMsg)
 	}

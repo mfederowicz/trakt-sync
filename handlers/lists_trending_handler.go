@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -19,7 +19,7 @@ import (
 type ListsTrendingHandler struct{}
 
 // Handle to handle lists: trending action
-func (h ListsTrendingHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h ListsTrendingHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns all lists with the most likes and comments over the last 7 days.")
 	result, err := h.fetchListsTrending(client, options, consts.DefaultPage)
 	if err != nil {
@@ -41,7 +41,7 @@ func (h ListsTrendingHandler) Handle(options *str.Options, client *internal.Clie
 	return nil
 }
 
-func (h ListsTrendingHandler) fetchListsTrending(client *internal.Client, options *str.Options, page int) ([]*str.List, error) {
+func (h ListsTrendingHandler) fetchListsTrending(client *trakt.Client, options *str.Options, page int) ([]*str.List, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	ctx := client.BuildCtxFromOptions(options)
 	var list []*str.List

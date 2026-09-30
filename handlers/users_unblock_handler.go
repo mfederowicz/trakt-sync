@@ -7,15 +7,15 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // UsersUnblockHandler struct for handler
 type UsersUnblockHandler struct{ common CommonLogic }
 
 // Handle to handle users: unblock action
-func (m UsersUnblockHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m UsersUnblockHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.UserName) == consts.ZeroValue {
 		return errors.New(consts.EmptyUserNameMsg)
 	}
@@ -32,7 +32,7 @@ func (m UsersUnblockHandler) Handle(options *str.Options, client *internal.Clien
 	return nil
 }
 
-func (UsersUnblockHandler) usersUnblock(client *internal.Client, options *str.Options) (*str.Response, error) {
+func (UsersUnblockHandler) usersUnblock(client *trakt.Client, options *str.Options) (*str.Response, error) {
 	resp, err := client.Users.Unblock(client.BuildCtxFromOptions(options), &options.UserName)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {

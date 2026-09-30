@@ -5,16 +5,16 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // SmartListsSummaryHandler struct for handler
 type SmartListsSummaryHandler struct{}
 
 // Handle to handle smart_lists: summary action
-func (SmartListsSummaryHandler) Handle(options *str.Options, client *internal.Client) error {
+func (SmartListsSummaryHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if err := validSmartListID(options); err != nil {
 		return err
 	}

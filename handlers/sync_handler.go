@@ -8,22 +8,22 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
 // SyncHandler interface to handle sync module action
 type SyncHandler interface {
-	Handle(options *str.Options, client *internal.Client) error
+	Handle(options *str.Options, client *trakt.Client) error
 }
 
 // syncProgressFetch fetches one page of up next or watched progress
 type syncProgressFetch func(ctx context.Context, page int) ([]*str.ShowProgress, *str.Response, error)
 
 // fetchSyncProgress fetches every page of up next or watched progress
-func fetchSyncProgress(client *internal.Client, options *str.Options, page int, fetch syncProgressFetch) ([]*str.ShowProgress, error) {
+func fetchSyncProgress(client *trakt.Client, options *str.Options, page int, fetch syncProgressFetch) ([]*str.ShowProgress, error) {
 	list, resp, err := fetch(client.BuildCtxFromOptions(options), page)
 	if err != nil {
 		return nil, err

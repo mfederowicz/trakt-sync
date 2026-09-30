@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -19,7 +19,7 @@ import (
 type ShowsWatchedHandler struct{}
 
 // Handle to handle shows: watched action
-func (h ShowsWatchedHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h ShowsWatchedHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns the most watched (unique users) shows in the specified time period, defaulting to weekly.")
 	result, err := h.fetchShowsWatched(client, options, consts.DefaultPage)
 	if err != nil {
@@ -41,7 +41,7 @@ func (h ShowsWatchedHandler) Handle(options *str.Options, client *internal.Clien
 	return nil
 }
 
-func (h ShowsWatchedHandler) fetchShowsWatched(client *internal.Client, options *str.Options, page int) ([]*str.ShowsItem, error) {
+func (h ShowsWatchedHandler) fetchShowsWatched(client *trakt.Client, options *str.Options, page int) ([]*str.ShowsItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	period := options.Period
 	list, resp, err := client.Shows.GetWatchedShows(

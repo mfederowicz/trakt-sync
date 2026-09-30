@@ -8,16 +8,16 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // MoviesRefreshHandler struct for handler
 type MoviesRefreshHandler struct{}
 
 // Handle to handle movie: refresh action
-func (h MoviesRefreshHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h MoviesRefreshHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Queue this movie for a full metadata and image refresh.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyMovieIDMsg)
@@ -51,7 +51,7 @@ func (h MoviesRefreshHandler) Handle(options *str.Options, client *internal.Clie
 	return nil
 }
 
-func (MoviesRefreshHandler) refreshMovie(client *internal.Client, options *str.Options) (*str.Response, error) {
+func (MoviesRefreshHandler) refreshMovie(client *trakt.Client, options *str.Options) (*str.Response, error) {
 	movieID := options.InternalID
 	resp, err := client.Movies.RefreshMovieMetadata(
 		client.BuildCtxFromOptions(options),

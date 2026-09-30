@@ -13,9 +13,9 @@ import (
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/handlers"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 
 	"github.com/spf13/afero"
 )
@@ -166,7 +166,7 @@ type fatal struct{}
 type Command struct {
 	Flag    flag.FlagSet
 	Run     func(cmd *Command, args ...string) error
-	Client  *internal.Client
+	Client  *trakt.Client
 	Config  *cfg.Config
 	Options *str.Options
 	Name    string
@@ -287,7 +287,7 @@ func handleHelpError(err error) {
 }
 
 // Exec core command function
-func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config, args []string) (err error) {
+func (c *Command) Exec(fs afero.Fs, client *trakt.Client, config *cfg.Config, args []string) (err error) {
 	c.Client = client
 	c.Config = config
 	c.Flag.Usage = func() {

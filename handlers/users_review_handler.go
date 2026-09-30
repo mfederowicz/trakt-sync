@@ -7,9 +7,9 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
 
@@ -17,7 +17,7 @@ import (
 type UsersMonthInReviewHandler struct{}
 
 // Handle to handle users: month_in_review action
-func (UsersMonthInReviewHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersMonthInReviewHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if options.Year <= consts.ZeroValue {
 		return errors.New("set -year for month_in_review ie: -year 2025 -month 8")
 	}
@@ -36,7 +36,7 @@ func (UsersMonthInReviewHandler) Handle(options *str.Options, client *internal.C
 type UsersYearInReviewHandler struct{}
 
 // Handle to handle users: year_in_review action
-func (UsersYearInReviewHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersYearInReviewHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if options.Year <= consts.ZeroValue {
 		return errors.New("set -year for year_in_review ie: -year 2025")
 	}

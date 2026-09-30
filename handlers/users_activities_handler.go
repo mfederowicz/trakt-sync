@@ -8,9 +8,9 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
 
@@ -18,7 +18,7 @@ import (
 type UsersActivitiesHandler struct{}
 
 // Handle to handle users: activities action
-func (h UsersActivitiesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h UsersActivitiesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	// IsValidConfigType accepts an empty value, but the route needs a type
 	if len(options.Type) == consts.ZeroValue || !cfg.IsValidConfigType(cfg.SocialActivityTypes, options.Type) {
 		return fmt.Errorf("set -t to one of %v for activities", cfg.SocialActivityTypes)
@@ -49,7 +49,7 @@ func (h UsersActivitiesHandler) Handle(options *str.Options, client *internal.Cl
 	return writeResult(options, result)
 }
 
-func (h UsersActivitiesHandler) fetchActivities(client *internal.Client, options *str.Options, opts *uri.SocialActivityOptions, page int) ([]*str.SocialActivity, error) {
+func (h UsersActivitiesHandler) fetchActivities(client *trakt.Client, options *str.Options, opts *uri.SocialActivityOptions, page int) ([]*str.SocialActivity, error) {
 	opts.Page = page
 	list, resp, err := client.Users.GetSocialActivity(client.BuildCtxFromOptions(options), &options.UserName, &options.Type, opts)
 	if err != nil {

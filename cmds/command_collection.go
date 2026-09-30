@@ -9,9 +9,9 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -70,7 +70,7 @@ func init() {
 	CollectionCmd.Run = collectionFunc
 }
 
-func fetchCollectionList(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+func fetchCollectionList(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Sync.GetCollection(
 		client.BuildCtxFromOptions(options),

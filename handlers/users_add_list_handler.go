@@ -7,9 +7,9 @@ import (
 	"github.com/mfederowicz/trakt-sync/cli"
 	"net/http"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,7 +17,7 @@ import (
 type UsersAddListHandler struct{ common CommonLogic }
 
 // Handle to handle users: lists action
-func (u UsersAddListHandler) Handle(options *str.Options, client *internal.Client) error {
+func (u UsersAddListHandler) Handle(options *str.Options, client *trakt.Client) error {
 	input, err := u.common.ReadInput(*options)
 	if err != nil {
 		return err

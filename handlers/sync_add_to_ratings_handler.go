@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -15,7 +15,7 @@ import (
 type SyncAddToRatingsHandler struct{ common CommonLogic }
 
 // Handle to handle sync: add_to_ratings action
-func (m SyncAddToRatingsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m SyncAddToRatingsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	items, err := m.common.ReadInput(*options)
 	if err != nil {
 		return err
@@ -33,7 +33,7 @@ func (m SyncAddToRatingsHandler) Handle(options *str.Options, client *internal.C
 	return nil
 }
 
-func (SyncAddToRatingsHandler) syncAddToRatings(client *internal.Client, options *str.Options, items *str.RatingItems) (*str.AddResult, error) {
+func (SyncAddToRatingsHandler) syncAddToRatings(client *trakt.Client, options *str.Options, items *str.RatingItems) (*str.AddResult, error) {
 	result, err := client.Sync.AddItemsToRatings(
 		client.BuildCtxFromOptions(options),
 		items,

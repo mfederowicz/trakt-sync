@@ -6,9 +6,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -16,7 +16,7 @@ import (
 type CountriesTypesHandler struct{}
 
 // Handle to handle countries: shows action
-func (CountriesTypesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (CountriesTypesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("countries handler:" + options.Type)
 
 	countries, _, err := fetchCountries(client, options)
@@ -32,7 +32,7 @@ func (CountriesTypesHandler) Handle(options *str.Options, client *internal.Clien
 	return nil
 }
 
-func fetchCountries(client *internal.Client, options *str.Options) ([]*str.Country, *str.Response, error) {
+func fetchCountries(client *trakt.Client, options *str.Options) ([]*str.Country, *str.Response, error) {
 	results, resp, err := client.Countries.GetCountries(client.BuildCtxFromOptions(options), &options.Type)
 
 	return results, resp, err

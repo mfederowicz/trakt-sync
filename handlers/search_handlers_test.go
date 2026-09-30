@@ -10,9 +10,9 @@ import (
 	"testing"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/test"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 func TestSearchHandlers(t *testing.T) {
@@ -216,8 +216,8 @@ func TestSearchTrendingHandlerPages(t *testing.T) {
 	s.Mux.HandleFunc("/search/recent_by_id/global/shows", func(w http.ResponseWriter, r *http.Request) {
 		page := r.URL.Query().Get("page")
 		pages = append(pages, page)
-		w.Header().Set(internal.HeaderPaginationPage, page)
-		w.Header().Set(internal.HeaderPaginationPageCount, "2")
+		w.Header().Set(trakt.HeaderPaginationPage, page)
+		w.Header().Set(trakt.HeaderPaginationPageCount, "2")
 		test.SafeFprint(w, `[{"id":1,"count":3,"type":"show","show":{"title":"Dark"}}]`)
 	})
 

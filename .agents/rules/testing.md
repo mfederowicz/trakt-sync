@@ -19,14 +19,15 @@ applyTo: '**/*_test.go,test/**,testdata/**'
 ## HTTP
 
 - Never call the real Trakt API.
-- Service tests use `internal.Setup()` (`internal/helpers.go`): an `httptest`
+- Service tests use `Setup()` (`trakt/helpers_test.go`; tests outside the
+  package use `trakttest.Setup()` from `trakt/trakttest`): an `httptest`
   server with a `Mux` to register handlers and a `Client` pointed at it; always
   `defer setup.Teardown()`.
 - Handler tests follow `setup(t)` in `handlers/commons_test.go`.
 - Assert the request with `test.AssertMethod` and check the path and query;
   use `test.AssertType` and `test.Ptr` from `test/helpers.go`.
 - Cover the error paths that matter: non-2xx statuses mapping to the typed
-  errors in `internal/*_error.go`, and pagination headers for `HavePages`.
+  errors in `trakt/*_error.go`, and pagination headers for `HavePages`.
 
 ## Filesystem and config
 

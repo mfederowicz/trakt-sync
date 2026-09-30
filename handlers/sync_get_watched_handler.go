@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -18,7 +18,7 @@ import (
 type SyncGetWatchedHandler struct{ common CommonLogic }
 
 // Handle to handle sync: get_watched action
-func (m SyncGetWatchedHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m SyncGetWatchedHandler) Handle(options *str.Options, client *trakt.Client) error {
 	err := m.common.CheckTypes(options)
 	if err != nil {
 		return err
@@ -37,7 +37,7 @@ func (m SyncGetWatchedHandler) Handle(options *str.Options, client *internal.Cli
 	return nil
 }
 
-func (m SyncGetWatchedHandler) syncGetWatchedItems(client *internal.Client, options *str.Options, page int) ([]*str.UserWatched, error) {
+func (m SyncGetWatchedHandler) syncGetWatchedItems(client *trakt.Client, options *str.Options, page int) ([]*str.UserWatched, error) {
 	opts := uri.ListOptions{Page: page, Limit: consts.PerPage, Extended: options.ExtendedInfo}
 	items, resp, err := client.Sync.GetWatched(
 		client.BuildCtxFromOptions(options),

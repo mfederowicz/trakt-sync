@@ -11,9 +11,9 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/test"
+	"github.com/mfederowicz/trakt-sync/trakt/trakttest"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -31,7 +31,7 @@ func TestValidAccessTokenRefreshesSettingsWithNewToken(t *testing.T) {
 	expired := `{"access_token":"old-token","refresh_token":"refresh","expires_in":1,"created_at":1}`
 	assert.NoError(t, os.WriteFile(config.TokenPath, []byte(expired), consts.X600))
 
-	s := internal.Setup()
+	s := trakttest.Setup()
 	defer s.Teardown()
 
 	s.Mux.HandleFunc("/oauth/token", func(w http.ResponseWriter, r *http.Request) {
@@ -64,7 +64,7 @@ func TestHandleTokenReturnsClientWithToken(t *testing.T) {
 	assert.NoError(t, os.WriteFile(config.TokenPath, []byte(valid), consts.X600))
 	assert.NoError(t, os.WriteFile(config.SettingsPath, []byte(`{"user":{"username":"sean"}}`), consts.X600))
 
-	s := internal.Setup()
+	s := trakttest.Setup()
 	defer s.Teardown()
 
 	client := HandleToken(afero.NewOsFs(), config, s.Client.WithClientID(config.ClientID), str.Options{})

@@ -7,16 +7,16 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // CommentsCommentsSeasonHandler struct for handler
 type CommentsCommentsSeasonHandler struct{ common CommonLogic }
 
 // Handle to handle comments: season type
-func (h CommentsCommentsSeasonHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h CommentsCommentsSeasonHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}

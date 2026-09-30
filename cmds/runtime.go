@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
+	"github.com/mfederowicz/trakt-sync/trakt"
 
 	"github.com/spf13/afero"
 )
@@ -53,7 +53,7 @@ const (
 	NotFound = 0
 )
 
-func runFoundedModule(cmd *Command, fs afero.Fs, client *internal.Client, config *cfg.Config, args []string) error {
+func runFoundedModule(cmd *Command, fs afero.Fs, client *trakt.Client, config *cfg.Config, args []string) error {
 	err := cmd.Exec(fs, client, config, args)
 	if err != nil {
 		printer.Println(err)
@@ -62,7 +62,7 @@ func runFoundedModule(cmd *Command, fs afero.Fs, client *internal.Client, config
 }
 
 // ModulesRuntime core function for process commands; the returned error is already printed
-func ModulesRuntime(args []string, fs afero.Fs, config *cfg.Config, client *internal.Client) error {
+func ModulesRuntime(args []string, fs afero.Fs, config *cfg.Config, client *trakt.Client) error {
 	var found []*Command
 	sub, args := args[NotFound], args[FoundOne:]
 find:

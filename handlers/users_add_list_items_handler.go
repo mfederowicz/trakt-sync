@@ -7,9 +7,9 @@ import (
 	"github.com/mfederowicz/trakt-sync/cli"
 	"net/http"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,7 +17,7 @@ import (
 type UsersAddListItemsHandler struct{ common CommonLogic }
 
 // Handle to handle users: add list items action
-func (u UsersAddListItemsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (u UsersAddListItemsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	input, err := u.common.ReadInput(*options)
 	if err != nil {
 		return err
@@ -42,7 +42,7 @@ func (u UsersAddListItemsHandler) Handle(options *str.Options, client *internal.
 	return nil
 }
 
-func (UsersAddListItemsHandler) usersAddListItems(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, *str.Response, error) {
+func (UsersAddListItemsHandler) usersAddListItems(client *trakt.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, *str.Response, error) {
 	user := options.UserName
 	listID := options.ID
 	result, resp, err := client.Users.AddListItems(

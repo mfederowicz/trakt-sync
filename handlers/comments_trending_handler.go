@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,7 +17,7 @@ import (
 type CommentsTrendingHandler struct{ common CommonLogic }
 
 // Handle to handle comments: trending action
-func (h CommentsTrendingHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h CommentsTrendingHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns all comments with the most likes and replies over the last 7 days.")
 
 	result, err := h.common.FetchTrendingComments(client, options, consts.DefaultPage)

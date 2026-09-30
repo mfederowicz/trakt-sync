@@ -5,16 +5,16 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // CommentsCommentsHandler struct for handler
 type CommentsCommentsHandler struct{}
 
 // Handle to handle checkin: checkin action
-func (CommentsCommentsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (CommentsCommentsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("generate comment:", options.Type)
 
 	var handler CommentsHandler

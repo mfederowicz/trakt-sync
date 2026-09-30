@@ -4,7 +4,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 - Source: [trakt/trakt-api](https://github.com/trakt/trakt-api) contracts, via the generated spec at <https://developer.trakt.tv/openapi.json>.
 - Snapshot date: 2026-09-23. Update rows when the contract changes.
-- ✅ implemented: a service method in `internal/` calls this exact route.
+- ✅ implemented: a service method in `trakt/` calls this exact route.
 - 🟡 needs checking: a service method calls this route only through a generic path parameter (for example `sync/collection/%s`); confirm the CLI accepts this value.
 - ⬜ missing: no service method calls this route.
 - ⚠️ not served: listed in the contract, but the live API does not serve it (404, 401 for every API app, or another route answers; see [Findings](#findings)). The Go method column shows whether trakt-sync implements it anyway.

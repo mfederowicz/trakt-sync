@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -18,7 +18,7 @@ import (
 type SyncGetCollectionHandler struct{ common CommonLogic }
 
 // Handle to handle sync: get_collection action
-func (s SyncGetCollectionHandler) Handle(options *str.Options, client *internal.Client) error {
+func (s SyncGetCollectionHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if err := s.common.CheckTypes(options); err != nil {
 		return err
 	}
@@ -35,7 +35,7 @@ func (s SyncGetCollectionHandler) Handle(options *str.Options, client *internal.
 	return nil
 }
 
-func (s SyncGetCollectionHandler) syncGetCollection(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+func (s SyncGetCollectionHandler) syncGetCollection(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	if options.Type == consts.Seasons {
 		items, err := s.syncGetCollectedSeasons(client, options, page)
 		if err != nil {
@@ -53,7 +53,7 @@ func (s SyncGetCollectionHandler) syncGetCollection(client *internal.Client, opt
 	return items, nil
 }
 
-func (s SyncGetCollectionHandler) syncGetCollected(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+func (s SyncGetCollectionHandler) syncGetCollected(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Sync.GetCollection(
 		client.BuildCtxFromOptions(options),
@@ -83,7 +83,7 @@ func (s SyncGetCollectionHandler) syncGetCollected(client *internal.Client, opti
 	return list, nil
 }
 
-func (s SyncGetCollectionHandler) syncGetCollectedSeasons(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+func (s SyncGetCollectionHandler) syncGetCollectedSeasons(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Sync.GetCollectedSeasons(
 		client.BuildCtxFromOptions(options),

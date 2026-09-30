@@ -6,16 +6,16 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // PeopleReportHandler struct for handler
 type PeopleReportHandler struct{ common CommonLogic }
 
 // Handle to handle people: report action
-func (h PeopleReportHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h PeopleReportHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.ID) == consts.ZeroValue {
 		return errors.New(consts.EmptyPersonIDMsg)
 	}

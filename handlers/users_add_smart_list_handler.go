@@ -3,16 +3,16 @@ package handlers
 
 import (
 	"github.com/mfederowicz/trakt-sync/cli"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // UsersAddSmartListHandler struct for handler
 type UsersAddSmartListHandler struct{ common CommonLogic }
 
 // Handle to handle users: add_smart_list action
-func (h UsersAddSmartListHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h UsersAddSmartListHandler) Handle(options *str.Options, client *trakt.Client) error {
 	list, err := readSmartListWrite(&h.common, options)
 	if err != nil {
 		return err

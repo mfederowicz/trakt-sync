@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -14,7 +14,7 @@ import (
 type UsersRemoveHiddenItemsHandler struct{ common CommonLogic }
 
 // Handle to handle users: remove_hidden_items action
-func (u UsersRemoveHiddenItemsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (u UsersRemoveHiddenItemsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	items, err := u.common.ReadInput(*options)
 	if err != nil {
 		return err

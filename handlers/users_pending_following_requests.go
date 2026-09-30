@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -15,7 +15,7 @@ import (
 type UsersFollowingRequestsHandler struct{ common CommonLogic }
 
 // Handle to handle users: pending_following_requests action
-func (u UsersFollowingRequestsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (u UsersFollowingRequestsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Get pending following request")
 	items, err := u.common.FetchPendingFollowingRequests(client, options)
 	if err != nil {

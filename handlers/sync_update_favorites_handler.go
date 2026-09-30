@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -15,7 +15,7 @@ import (
 type SyncUpdateFavoritesHandler struct{ common CommonLogic }
 
 // Handle to handle sync: update_favorites action
-func (m SyncUpdateFavoritesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m SyncUpdateFavoritesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	err := m.common.CheckTypes(options)
 	if err != nil {
 		return err
@@ -34,7 +34,7 @@ func (m SyncUpdateFavoritesHandler) Handle(options *str.Options, client *interna
 	return nil
 }
 
-func (SyncUpdateFavoritesHandler) syncUpdateFavorites(client *internal.Client, options *str.Options) (*str.PersonalList, error) {
+func (SyncUpdateFavoritesHandler) syncUpdateFavorites(client *trakt.Client, options *str.Options) (*str.PersonalList, error) {
 	update := new(str.PersonalList)
 	update.Description = &options.Description
 	update.SortBy = &options.SortBy

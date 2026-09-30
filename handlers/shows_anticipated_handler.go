@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -19,7 +19,7 @@ import (
 type ShowsAnticipatedHandler struct{}
 
 // Handle to handle shows: anticipated action
-func (h ShowsAnticipatedHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h ShowsAnticipatedHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns the most anticipated shows based on the number of lists a show appears on.")
 	result, err := h.fetchShowsAnticipated(client, options, consts.DefaultPage)
 	if err != nil {
@@ -41,7 +41,7 @@ func (h ShowsAnticipatedHandler) Handle(options *str.Options, client *internal.C
 	return nil
 }
 
-func (h ShowsAnticipatedHandler) fetchShowsAnticipated(client *internal.Client, options *str.Options, page int) ([]*str.ShowsItem, error) {
+func (h ShowsAnticipatedHandler) fetchShowsAnticipated(client *trakt.Client, options *str.Options, page int) ([]*str.ShowsItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetAnticipatedShows(
 		client.BuildCtxFromOptions(options),

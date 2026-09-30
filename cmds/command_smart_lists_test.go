@@ -6,8 +6,8 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -35,7 +35,7 @@ func TestSmartListsFlags(t *testing.T) {
 	}}
 	args := []string{"-a", "items", "-i", "top-sci-fi", "-watchnow", "free", "-genres", "action", "-subgenres", "space", "-years", "2020-2026",
 		"-ratings", "75-100", "-runtimes", "90-150", "-countries", "us", "-certifications", "pg-13", "-ignore_watched", "true", "-ignore_watchlisted", "false"}
-	assert.NoError(t, command.Exec(fs, internal.NewClient(nil), fileConfig, args))
+	assert.NoError(t, command.Exec(fs, trakt.NewClient(nil), fileConfig, args))
 	assert.Equal(t, "items", got.Action)
 	assert.Equal(t, "top-sci-fi", got.InternalID)
 	assert.Equal(t, "free", got.WatchNow)

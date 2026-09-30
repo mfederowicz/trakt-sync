@@ -6,9 +6,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -16,7 +16,7 @@ import (
 type SyncGetRatingsHandler struct{ common CommonLogic }
 
 // Handle to handle sync: get_ratings action
-func (m SyncGetRatingsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m SyncGetRatingsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	err := m.common.CheckTypes(options)
 	if err != nil {
 		return err
@@ -35,7 +35,7 @@ func (m SyncGetRatingsHandler) Handle(options *str.Options, client *internal.Cli
 	return nil
 }
 
-func (m SyncGetRatingsHandler) syncGetRatings(client *internal.Client, options *str.Options, page int) ([]*str.RatingListItem, error) {
+func (m SyncGetRatingsHandler) syncGetRatings(client *trakt.Client, options *str.Options, page int) ([]*str.RatingListItem, error) {
 	items, err := m.common.FetchRatings(client, options, page)
 
 	if err != nil {

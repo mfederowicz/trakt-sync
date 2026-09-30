@@ -6,9 +6,9 @@ import (
 	"errors"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -16,7 +16,7 @@ import (
 type MoviesStudiosHandler struct{}
 
 // Handle to handle movies: studios action
-func (m MoviesStudiosHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m MoviesStudiosHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns all studios for a movie")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyMovieIDMsg)
@@ -36,7 +36,7 @@ func (m MoviesStudiosHandler) Handle(options *str.Options, client *internal.Clie
 	return nil
 }
 
-func (MoviesStudiosHandler) fetchMoviesStudios(client *internal.Client, options *str.Options) ([]*str.Studio, *str.Response, error) {
+func (MoviesStudiosHandler) fetchMoviesStudios(client *trakt.Client, options *str.Options) ([]*str.Studio, *str.Response, error) {
 	result, resp, err := client.Movies.GetMovieStudios(
 		client.BuildCtxFromOptions(options),
 		&options.InternalID,

@@ -6,16 +6,16 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // MoviesReportHandler struct for handler
 type MoviesReportHandler struct{ common CommonLogic }
 
 // Handle to handle movies: report action
-func (h MoviesReportHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h MoviesReportHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyMovieIDMsg)
 	}

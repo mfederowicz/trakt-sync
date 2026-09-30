@@ -10,9 +10,9 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
 
@@ -20,7 +20,7 @@ import (
 type UsersDataSyncsHandler struct{}
 
 // Handle to handle users: data_syncs action
-func (UsersDataSyncsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersDataSyncsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if !cfg.IsValidConfigType(cfg.DataSyncTypes, options.Type) {
 		return fmt.Errorf("set -t to one of %v, or leave it out for all data syncs", cfg.DataSyncTypes)
 	}
@@ -48,7 +48,7 @@ func (UsersDataSyncsHandler) Handle(options *str.Options, client *internal.Clien
 type UsersDataSyncHandler struct{}
 
 // Handle to handle users: data_sync action
-func (UsersDataSyncHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersDataSyncHandler) Handle(options *str.Options, client *trakt.Client) error {
 	id, err := dataSyncID(options)
 	if err != nil {
 		return err
@@ -67,7 +67,7 @@ func (UsersDataSyncHandler) Handle(options *str.Options, client *internal.Client
 type UsersDataSyncItemsHandler struct{}
 
 // Handle to handle users: data_sync_paused and data_sync_skipped actions
-func (UsersDataSyncItemsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersDataSyncItemsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	id, err := dataSyncID(options)
 	if err != nil {
 		return err
@@ -97,7 +97,7 @@ func (UsersDataSyncItemsHandler) Handle(options *str.Options, client *internal.C
 type UsersUndoDataSyncHandler struct{}
 
 // Handle to handle users: undo_data_sync action
-func (UsersUndoDataSyncHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersUndoDataSyncHandler) Handle(options *str.Options, client *trakt.Client) error {
 	id, err := dataSyncID(options)
 	if err != nil {
 		return err

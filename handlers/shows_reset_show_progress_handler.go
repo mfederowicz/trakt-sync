@@ -8,16 +8,16 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // ShowsResetShowProgressHandler struct for handler
 type ShowsResetShowProgressHandler struct{ common CommonLogic }
 
 // Handle to handle shows: reset_show_progress action
-func (m ShowsResetShowProgressHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m ShowsResetShowProgressHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Reset a show's progress when the user started re-watching the show.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyShowIDMsg)
@@ -31,7 +31,7 @@ func (m ShowsResetShowProgressHandler) Handle(options *str.Options, client *inte
 }
 
 // HandleDelete process delete
-func (ShowsResetShowProgressHandler) handleUndoResetShowProgress(options *str.Options, client *internal.Client) error {
+func (ShowsResetShowProgressHandler) handleUndoResetShowProgress(options *str.Options, client *trakt.Client) error {
 	resp, err := client.Shows.UndoResetShowProgress(client.BuildCtxFromOptions(options), &options.InternalID)
 	if err != nil {
 		return fmt.Errorf("%w", err)
@@ -48,7 +48,7 @@ func (ShowsResetShowProgressHandler) handleUndoResetShowProgress(options *str.Op
 }
 
 // HandleModifyNotes handle modify exiting notes
-func (m ShowsResetShowProgressHandler) handleResetShowProgress(options *str.Options, client *internal.Client) error {
+func (m ShowsResetShowProgressHandler) handleResetShowProgress(options *str.Options, client *trakt.Client) error {
 	showProgress := new(str.WatchedProgress)
 
 	if len(options.ResetAt) > consts.ZeroValue {

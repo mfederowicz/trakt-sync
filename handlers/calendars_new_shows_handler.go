@@ -6,9 +6,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -17,7 +17,7 @@ import (
 type CalendarsNewShowsHandler struct{}
 
 // Handle to handle calendars: shows action
-func (CalendarsNewShowsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (CalendarsNewShowsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Get calendar: " + options.Action)
 	result, err := fetchCalendarNewShows(client, options)
 	if err != nil {
@@ -36,7 +36,7 @@ func (CalendarsNewShowsHandler) Handle(options *str.Options, client *internal.Cl
 	return nil
 }
 
-func fetchCalendarNewShows(client *internal.Client, options *str.Options) ([]*str.CalendarList, error) {
+func fetchCalendarNewShows(client *trakt.Client, options *str.Options) ([]*str.CalendarList, error) {
 	if options.Action == "all-new-shows" {
 		actionType = "all"
 	}

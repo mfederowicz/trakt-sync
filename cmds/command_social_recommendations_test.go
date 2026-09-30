@@ -6,8 +6,8 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -34,7 +34,7 @@ func TestSocialRecommendationsFlags(t *testing.T) {
 		return nil
 	}}
 	args := []string{"-a", "shows", "-ignore_collected", "true", "-ignore_watched", "true", "-ignore_watchlisted", "false", "-watch_window", "30"}
-	assert.NoError(t, command.Exec(fs, internal.NewClient(nil), fileConfig, args))
+	assert.NoError(t, command.Exec(fs, trakt.NewClient(nil), fileConfig, args))
 	assert.Equal(t, "shows", got.Action)
 	assert.Equal(t, "true", got.IgnoreCollected)
 	assert.Equal(t, "true", got.IgnoreWatched)

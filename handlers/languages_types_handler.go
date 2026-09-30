@@ -6,9 +6,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -16,7 +16,7 @@ import (
 type LanguagesTypesHandler struct{}
 
 // Handle to handle languages: shows action
-func (LanguagesTypesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (LanguagesTypesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("languages handler:" + options.Type)
 
 	languages, _, err := fetchLanguages(client, options)
@@ -32,7 +32,7 @@ func (LanguagesTypesHandler) Handle(options *str.Options, client *internal.Clien
 	return nil
 }
 
-func fetchLanguages(client *internal.Client, options *str.Options) ([]*str.Language, *str.Response, error) {
+func fetchLanguages(client *trakt.Client, options *str.Options) ([]*str.Language, *str.Response, error) {
 	results, resp, err := client.Languages.GetLanguages(client.BuildCtxFromOptions(options), &options.Type)
 
 	return results, resp, err

@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -19,7 +19,7 @@ import (
 type MoviesFavoritedHandler struct{}
 
 // Handle to handle movies: favorited action
-func (h MoviesFavoritedHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h MoviesFavoritedHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns the most favorited movies in the specified time period")
 	result, err := h.fetchMoviesFavorited(client, options, consts.DefaultPage)
 	if err != nil {
@@ -41,7 +41,7 @@ func (h MoviesFavoritedHandler) Handle(options *str.Options, client *internal.Cl
 	return nil
 }
 
-func (h MoviesFavoritedHandler) fetchMoviesFavorited(client *internal.Client, options *str.Options, page int) ([]*str.MoviesItem, error) {
+func (h MoviesFavoritedHandler) fetchMoviesFavorited(client *trakt.Client, options *str.Options, page int) ([]*str.MoviesItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	period := options.Period
 	list, resp, err := client.Movies.GetFavoritedMovies(

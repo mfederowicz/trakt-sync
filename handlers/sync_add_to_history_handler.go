@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,7 +17,7 @@ import (
 type SyncAddToHistoryHandler struct{ common CommonLogic }
 
 // Handle to handle sync: add_to_history action
-func (m SyncAddToHistoryHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m SyncAddToHistoryHandler) Handle(options *str.Options, client *trakt.Client) error {
 	items, err := m.common.ReadInput(*options)
 	if err != nil {
 		return err
@@ -54,7 +54,7 @@ func (m SyncAddToHistoryHandler) Handle(options *str.Options, client *internal.C
 	return nil
 }
 
-func (SyncAddToHistoryHandler) syncRemoveFromHistory(client *internal.Client, options *str.Options, items *str.ItemsToRemove) (*str.RemoveResult, error) {
+func (SyncAddToHistoryHandler) syncRemoveFromHistory(client *trakt.Client, options *str.Options, items *str.ItemsToRemove) (*str.RemoveResult, error) {
 	result, err := client.Sync.RemoveItemsFromHistory(
 		client.BuildCtxFromOptions(options),
 		items,
@@ -66,7 +66,7 @@ func (SyncAddToHistoryHandler) syncRemoveFromHistory(client *internal.Client, op
 	return result, nil
 }
 
-func (SyncAddToHistoryHandler) syncAddToHistory(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error) {
+func (SyncAddToHistoryHandler) syncAddToHistory(client *trakt.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error) {
 	result, err := client.Sync.AddItemsToHistory(
 		client.BuildCtxFromOptions(options),
 		items,

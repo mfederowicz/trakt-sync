@@ -12,7 +12,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/handlers"
-	"github.com/mfederowicz/trakt-sync/internal"
+	"github.com/mfederowicz/trakt-sync/trakt/trakttest"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -113,7 +113,7 @@ func TestModuleFlagUpdaters(t *testing.T) {
 			resetAllFlags()
 			t.Cleanup(resetAllFlags)
 
-			setup := internal.Setup()
+			setup := trakttest.Setup()
 			defer setup.Teardown()
 			var gotPath, gotStartAt string
 			setup.Mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -157,7 +157,7 @@ func TestOutputFlag(t *testing.T) {
 			resetAllFlags()
 			t.Cleanup(resetAllFlags)
 
-			setup := internal.Setup()
+			setup := trakttest.Setup()
 			defer setup.Teardown()
 			setup.Mux.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
 				_, _ = w.Write([]byte(`[]`))

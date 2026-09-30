@@ -9,9 +9,9 @@ import (
 	"os/exec"
 	"runtime"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // openBrowser is replaced in tests so no real browser is started.
@@ -43,12 +43,12 @@ func HandleVIPResponse(resp *str.Response, err error) error {
 		return HandleUpgrade(resp)
 	}
 	// callers that keep only the error still get the 426 flow
-	var upgrade *internal.UpgradeRequiredError
+	var upgrade *trakt.UpgradeRequiredError
 	if errors.As(err, &upgrade) && upgrade.Response != nil {
 		return HandleUpgrade(&str.Response{Response: upgrade.Response})
 	}
 
-	var limits *internal.UpgradeUserLimitsError
+	var limits *trakt.UpgradeUserLimitsError
 	if errors.As(err, &limits) && limits.Response != nil {
 		return handleAccountLimit(limits.Response.Header)
 	}
@@ -64,11 +64,11 @@ func HandleUpgrade(r *str.Response) error {
 
 func handleAccountLimit(h http.Header) error {
 	msg := "account limit exceeded"
-	if limit := h.Get(internal.HeaderAccountLimit); limit != "" {
+	if limit := h.Get(trakt.HeaderAccountLimit); limit != "" {
 		msg = fmt.Sprintf("%s (limit: %s)", msg, limit)
 	}
 	// a VIP user already has the higher limits, so there is nothing to upgrade
-	if h.Get(internal.HeaderVIPUser) == "true" {
+	if h.Get(trakt.HeaderVIPUser) == "true" {
 		return errors.New(msg)
 	}
 
@@ -76,9 +76,9 @@ func handleAccountLimit(h http.Header) error {
 }
 
 func openUpgradeURL(h http.Header, reason string) error {
-	upgradeURL := h.Get(internal.HeaderUpgradeURL)
+	upgradeURL := h.Get(trakt.HeaderUpgradeURL)
 	if upgradeURL == "" {
-		upgradeURL = internal.DefaultUpgradeURL
+		upgradeURL = trakt.DefaultUpgradeURL
 	}
 	if err := openBrowser(upgradeURL); err != nil {
 		return fmt.Errorf("%s, open %s to upgrade (browser error: %w)", reason, upgradeURL, err)

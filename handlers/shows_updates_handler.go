@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -19,7 +19,7 @@ import (
 type ShowsUpdatesHandler struct{}
 
 // Handle to handle shows: updates action
-func (p ShowsUpdatesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (p ShowsUpdatesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Get recently updated shows for date:" + options.StartDate)
 	date := options.StartDate
 	updates, err := p.fetchShowsUpdates(client, options, date, consts.DefaultPage)
@@ -44,7 +44,7 @@ func (p ShowsUpdatesHandler) Handle(options *str.Options, client *internal.Clien
 	return nil
 }
 
-func (p ShowsUpdatesHandler) fetchShowsUpdates(client *internal.Client, options *str.Options, startDate string, page int) ([]*str.ShowsItem, error) {
+func (p ShowsUpdatesHandler) fetchShowsUpdates(client *trakt.Client, options *str.Options, startDate string, page int) ([]*str.ShowsItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetRecentlyUpdatedShows(
 		client.BuildCtxFromOptions(options),

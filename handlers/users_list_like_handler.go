@@ -5,16 +5,16 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // UsersListLikeHandler struct for handler
 type UsersListLikeHandler struct{ common CommonLogic }
 
 // Handle to handle users: list_like action
-func (u UsersListLikeHandler) Handle(options *str.Options, client *internal.Client) error {
+func (u UsersListLikeHandler) Handle(options *str.Options, client *trakt.Client) error {
 	err := u.common.CheckTypes(options)
 	if err != nil {
 		return err
@@ -27,7 +27,7 @@ func (u UsersListLikeHandler) Handle(options *str.Options, client *internal.Clie
 	return u.sendListLike(client, options)
 }
 
-func (u UsersListLikeHandler) removeListLike(client *internal.Client, options *str.Options) error {
+func (u UsersListLikeHandler) removeListLike(client *trakt.Client, options *str.Options) error {
 	printer.Println("Remove like on a list")
 	resp, err := u.common.UsersRemoveListLike(client, options)
 	if err != nil {
@@ -39,7 +39,7 @@ func (u UsersListLikeHandler) removeListLike(client *internal.Client, options *s
 	return nil
 }
 
-func (u UsersListLikeHandler) sendListLike(client *internal.Client, options *str.Options) error {
+func (u UsersListLikeHandler) sendListLike(client *trakt.Client, options *str.Options) error {
 	printer.Println("Like a list")
 	resp, err := u.common.UsersListLike(client, options)
 	if err != nil {

@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -15,7 +15,7 @@ import (
 type SyncLastActivitiesHandler struct{}
 
 // Handle to handle sync: last_activities action
-func (m SyncLastActivitiesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m SyncLastActivitiesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Get last activities")
 	activities, err := m.syncLastActivities(client, options)
 	if err != nil {
@@ -28,7 +28,7 @@ func (m SyncLastActivitiesHandler) Handle(options *str.Options, client *internal
 	return nil
 }
 
-func (SyncLastActivitiesHandler) syncLastActivities(client *internal.Client, options *str.Options) (*str.UserLastActivities, error) {
+func (SyncLastActivitiesHandler) syncLastActivities(client *trakt.Client, options *str.Options) (*str.UserLastActivities, error) {
 	activities, _, err := client.Sync.GetLastActivity(
 		client.BuildCtxFromOptions(options),
 	)

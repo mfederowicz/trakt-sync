@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,7 +17,7 @@ import (
 type CommentsLikesHandler struct{ common CommonLogic }
 
 // Handle to handle comments: likes action
-func (h CommentsLikesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h CommentsLikesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if options.CommentID == consts.ZeroValue {
 		return errors.New(consts.EmptyCommentIDMsg)
 	}

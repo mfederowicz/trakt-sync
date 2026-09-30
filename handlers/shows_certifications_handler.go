@@ -6,9 +6,9 @@ import (
 	"errors"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -16,7 +16,7 @@ import (
 type ShowsCertificationsHandler struct{}
 
 // Handle to handle shows: certifications action
-func (m ShowsCertificationsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m ShowsCertificationsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns all content certifications for a show, including the country.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyShowIDMsg)
@@ -36,7 +36,7 @@ func (m ShowsCertificationsHandler) Handle(options *str.Options, client *interna
 	return nil
 }
 
-func (ShowsCertificationsHandler) fetchShowsCertifications(client *internal.Client, options *str.Options) ([]*str.Certification, *str.Response, error) {
+func (ShowsCertificationsHandler) fetchShowsCertifications(client *trakt.Client, options *str.Options) ([]*str.Certification, *str.Response, error) {
 	certifications, resp, err := client.Shows.GetAllShowCertifications(
 		client.BuildCtxFromOptions(options),
 		&options.InternalID,

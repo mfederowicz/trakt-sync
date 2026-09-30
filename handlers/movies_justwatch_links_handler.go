@@ -6,9 +6,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -16,7 +16,7 @@ import (
 type MoviesJustwatchLinksHandler struct{}
 
 // Handle to handle movies: justwatch_links action
-func (MoviesJustwatchLinksHandler) Handle(options *str.Options, client *internal.Client) error {
+func (MoviesJustwatchLinksHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if err := validIDCountryOptions(options, consts.EmptyMovieIDMsg); err != nil {
 		return err
 	}

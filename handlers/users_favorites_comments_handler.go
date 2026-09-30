@@ -6,9 +6,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -16,7 +16,7 @@ import (
 type UsersFavoritesCommentsHandler struct{ common CommonLogic }
 
 // Handle to handle users: favorites_comments action
-func (m UsersFavoritesCommentsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m UsersFavoritesCommentsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	err := m.common.CheckSortAndTypes(options)
 	if err != nil {
 		return err
@@ -33,7 +33,7 @@ func (m UsersFavoritesCommentsHandler) Handle(options *str.Options, client *inte
 	return nil
 }
 
-func (m UsersFavoritesCommentsHandler) usersFavoritesComments(client *internal.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+func (m UsersFavoritesCommentsHandler) usersFavoritesComments(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	items, err := m.common.FetchUsersFavoritesComments(client, options, page)
 
 	if err != nil {

@@ -6,9 +6,9 @@ import (
 	"errors"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -17,7 +17,7 @@ import (
 type ShowsVideosHandler struct{}
 
 // Handle to handle shows: videos action
-func (m ShowsVideosHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m ShowsVideosHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns all videos including trailers, teasers, clips, and featurettes.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyShowIDMsg)
@@ -37,7 +37,7 @@ func (m ShowsVideosHandler) Handle(options *str.Options, client *internal.Client
 	return nil
 }
 
-func (ShowsVideosHandler) fetchShowsVideos(client *internal.Client, options *str.Options) ([]*str.Video, *str.Response, error) {
+func (ShowsVideosHandler) fetchShowsVideos(client *trakt.Client, options *str.Options) ([]*str.Video, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Shows.GetShowVideos(
 		client.BuildCtxFromOptions(options),

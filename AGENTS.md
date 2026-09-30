@@ -29,7 +29,7 @@ Read these with the Read tool when the work enters the domain (CLAUDE.md routes
 the mapping; files live in `.agents/rules/`):
 
 - `endpoints.md` - adding or changing an endpoint: contract -> `str/` type ->
-  `uri/` options -> `internal/` service -> `handlers/` -> `cmds/` -> `docs/`.
+  `uri/` options -> `trakt/` service -> `handlers/` -> `cmds/` -> `docs/`.
 - `testing.md` - writing or changing tests, test helpers and fixtures.
 
 Re-read after long gaps if context was compacted.

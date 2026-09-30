@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -15,7 +15,7 @@ import (
 type SyncAddToFavoritesHandler struct{ common CommonLogic }
 
 // Handle to handle sync: add_to_favorites action
-func (m SyncAddToFavoritesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m SyncAddToFavoritesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	items, err := m.common.ReadInput(*options)
 	if err != nil {
 		return err
@@ -33,7 +33,7 @@ func (m SyncAddToFavoritesHandler) Handle(options *str.Options, client *internal
 	return nil
 }
 
-func (SyncAddToFavoritesHandler) syncAddToFavorites(client *internal.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error) {
+func (SyncAddToFavoritesHandler) syncAddToFavorites(client *trakt.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error) {
 	result, err := client.Sync.AddItemsToFavorites(
 		client.BuildCtxFromOptions(options),
 		items,

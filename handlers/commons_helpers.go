@@ -14,9 +14,9 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -116,7 +116,7 @@ func Ptr[T any](v T) *T {
 type pageFetcher[T any] func(opts *uri.ListOptions) ([]T, *str.Response, error)
 
 // fetchAllPages fetches a list starting at page, following pages while client.HavePages allows.
-func fetchAllPages[T any](client *internal.Client, options *str.Options, page int, fetch pageFetcher[T]) ([]T, error) {
+func fetchAllPages[T any](client *trakt.Client, options *str.Options, page int, fetch pageFetcher[T]) ([]T, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := fetch(&opts)
 	if err != nil {
@@ -169,7 +169,7 @@ func watchNowError(action string, kind string, id string, resp *str.Response, er
 		return vipErr
 	}
 
-	var forbidden *internal.ForbiddenError
+	var forbidden *trakt.ForbiddenError
 	if errors.As(err, &forbidden) {
 		return fmt.Errorf(consts.LimitedAccessMsg, action, err)
 	}
@@ -210,7 +210,7 @@ func writeResult(options *str.Options, data any) error {
 
 // notOpenToAPIApps turns a 401 on a route that other OAuth calls pass into a readable error; nil for any other error.
 func notOpenToAPIApps(action string, err error) error {
-	var invalidUser *internal.InvalidUserError
+	var invalidUser *trakt.InvalidUserError
 	if errors.As(err, &invalidUser) {
 		return fmt.Errorf(consts.NotOpenToAPIAppsMsg, action, err)
 	}

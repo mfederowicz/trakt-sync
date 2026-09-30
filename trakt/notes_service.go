@@ -1,0 +1,161 @@
+// Package trakt is a Go client for the Trakt API
+package trakt
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"net/http"
+
+	"github.com/mfederowicz/trakt-sync/consts"
+	"github.com/mfederowicz/trakt-sync/str"
+)
+
+// NotesService  handles communication with the notes related
+// methods of the Trakt API.
+type NotesService Service
+
+// AddNotes Add a new notes to a movie, show, season, episode, or person.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/notes/notes/add-notes
+func (n *NotesService) AddNotes(ctx context.Context, notes *str.Notes) (*str.Notes, *str.Response, error) {
+	var url = "notes"
+	n.client.debug("create new notes")
+	req, err := n.client.NewRequest(http.MethodPost, url, notes)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	note := new(str.Notes)
+	resp, err := n.client.Do(ctx, req, note)
+
+	if resp != nil && resp.StatusCode == http.StatusInternalServerError {
+		return nil, nil, errors.New("internal server error")
+	}
+
+	if resp != nil && resp.StatusCode == http.StatusUnprocessableEntity {
+		return nil, nil, errors.New("validation error")
+	}
+
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
+		return nil, nil, errors.New("item not found or doesn't allow notes")
+	}
+
+	if err != nil {
+		if resp != nil && resp.Errors != nil {
+			return nil, nil, errors.Join(resp.Errors.GetComments())
+		}
+		return nil, resp, err
+	}
+
+	return note, resp, nil
+}
+
+// DeleteNotes Delete a single note.
+//
+// API docs: https://trakt.docs.apiary.io/#reference/notes/note/delete-a-note
+func (n *NotesService) DeleteNotes(ctx context.Context, id *string) (*str.Response, error) {
+	var url = fmt.Sprintf("notes/%s", *id)
+	n.client.debug("delete notes")
+	req, err := n.client.NewRequest(http.MethodDelete, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := n.client.Do(ctx, req, nil)
+
+	if resp != nil && resp.StatusCode == http.StatusUnauthorized {
+		err = fmt.Errorf(consts.InvalidUserForNotes, *id)
+	}
+
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
+		err = fmt.Errorf(consts.NotesNotFoundWithID, *id)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+// UpdateNotes Update a single note (500 maximum characters).
+//
+// API docs:https://trakt.docs.apiary.io/#reference/notes/note/update-a-note
+func (n *NotesService) UpdateNotes(ctx context.Context, id *string, notes *str.Notes) (*str.Notes, *str.Response, error) {
+	var url = fmt.Sprintf("notes/%s", *id)
+	n.client.debug("update notes")
+	req, err := n.client.NewRequest(http.MethodPut, url, notes)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	note := new(str.Notes)
+	resp, err := n.client.Do(ctx, req, note)
+	if err != nil {
+		if resp != nil && resp.Errors != nil {
+			return nil, nil, errors.Join(resp.Errors.GetComments())
+		}
+		return nil, resp, err
+	}
+
+	return note, resp, nil
+}
+
+// GetNotes Return a single note.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/notes/note/get-a-note
+func (n *NotesService) GetNotes(ctx context.Context, id *string) (*str.Notes, *str.Response, error) {
+	var url = fmt.Sprintf("notes/%s", *id)
+	n.client.debug("fetch notes url:" + url)
+	req, err := n.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.Notes)
+	resp, err := n.client.Do(ctx, req, &result)
+
+	if resp != nil && resp.StatusCode == http.StatusUnauthorized {
+		err = fmt.Errorf(consts.InvalidUserForNotes, *id)
+	}
+
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
+		err = fmt.Errorf(consts.NotesNotFoundWithID, *id)
+	}
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// GetNotesItem Returns the item this note is attached_to.
+//
+// API docs:https://trakt.docs.apiary.io/#reference/notes/item/get-the-attached-item
+func (n *NotesService) GetNotesItem(ctx context.Context, id *string) (*str.NotesItem, *str.Response, error) {
+	var url = fmt.Sprintf("notes/%s/item", *id)
+	n.client.debug("fetch notes item url:" + url)
+	req, err := n.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.NotesItem)
+	resp, err := n.client.Do(ctx, req, &result)
+
+	if resp != nil && resp.StatusCode == http.StatusUnauthorized {
+		err = fmt.Errorf(consts.InvalidUserForNotes, *id)
+	}
+
+	if resp != nil && resp.StatusCode == http.StatusNotFound {
+		err = fmt.Errorf(consts.NotesNotFoundWithID, *id)
+	}
+
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}

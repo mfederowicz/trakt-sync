@@ -6,8 +6,8 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -68,7 +68,7 @@ func TestSyncPlaybackTypeFromFlags(t *testing.T) {
 				got = syncPlaybackType(&str.Options{Action: consts.Playback, Type: c.Options.Type}, c.flagIsSet("t"))
 				return nil
 			}}
-			assert.NoError(t, command.Exec(fs, internal.NewClient(nil), fileConfig, tt.args))
+			assert.NoError(t, command.Exec(fs, trakt.NewClient(nil), fileConfig, tt.args))
 			assert.Equal(t, tt.want, got)
 		})
 	}
@@ -135,7 +135,7 @@ func TestSyncProgressSortFromFlags(t *testing.T) {
 				syncProgressSort(got, c.flagIsSet("sort_by"), c.flagIsSet("sort_how"))
 				return nil
 			}}
-			assert.NoError(t, command.Exec(fs, internal.NewClient(nil), fileConfig, tt.args))
+			assert.NoError(t, command.Exec(fs, trakt.NewClient(nil), fileConfig, tt.args))
 			assert.Equal(t, tt.wantBy, got.SortBy)
 			assert.Equal(t, tt.wantHow, got.SortHow)
 		})
@@ -164,7 +164,7 @@ func TestSyncUpNextNitroFlags(t *testing.T) {
 		return nil
 	}}
 	args := []string{"-a", "get_up_next_nitro", "-intent", "continue", "-watchnow", "free", "-genres", "action", "-years", "2020", "-start_date", "2026-01-01"}
-	assert.NoError(t, command.Exec(fs, internal.NewClient(nil), fileConfig, args))
+	assert.NoError(t, command.Exec(fs, trakt.NewClient(nil), fileConfig, args))
 	assert.Equal(t, "continue", got.Intent)
 	assert.Equal(t, "free", got.WatchNow)
 	assert.Equal(t, "action", got.Genres)

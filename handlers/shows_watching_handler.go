@@ -6,9 +6,9 @@ import (
 	"errors"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -17,7 +17,7 @@ import (
 type ShowsWatchingHandler struct{}
 
 // Handle to handle shows: watching action
-func (m ShowsWatchingHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m ShowsWatchingHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns all users watching this show right now.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyShowIDMsg)
@@ -37,7 +37,7 @@ func (m ShowsWatchingHandler) Handle(options *str.Options, client *internal.Clie
 	return nil
 }
 
-func (ShowsWatchingHandler) fetchShowsWatching(client *internal.Client, options *str.Options) ([]*str.UserProfile, *str.Response, error) {
+func (ShowsWatchingHandler) fetchShowsWatching(client *trakt.Client, options *str.Options) ([]*str.UserProfile, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Shows.GetShowWatching(
 		client.BuildCtxFromOptions(options),

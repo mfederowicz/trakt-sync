@@ -10,14 +10,14 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/test"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/stretchr/testify/assert"
 )
 
 type TestSetup struct {
-	Client    *internal.Client
+	Client    *trakt.Client
 	Mux       *http.ServeMux
 	ServerURL string
 	Teardown  func()
@@ -54,7 +54,7 @@ func setup(t *testing.T) *TestSetup {
 
 	// client is the Trakt client being tested and is
 	// configured to use test server.
-	client := internal.NewClient(nil)
+	client := trakt.NewClient(nil)
 	uri, _ := url.Parse(server.URL + consts.BaseURLPath + "/")
 	client.BaseURL = uri
 

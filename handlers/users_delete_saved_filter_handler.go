@@ -9,16 +9,16 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // UsersDeleteSavedFilterHandler struct for handler
 type UsersDeleteSavedFilterHandler struct{}
 
 // Handle to handle users: delete_saved_filter action
-func (UsersDeleteSavedFilterHandler) Handle(options *str.Options, client *internal.Client) error {
+func (UsersDeleteSavedFilterHandler) Handle(options *str.Options, client *trakt.Client) error {
 	id, err := strconv.Atoi(options.ID)
 	if err != nil || id <= consts.ZeroValue {
 		return errors.New("set saved filter id ie: -i 101 (ids from users -a saved_filters)")

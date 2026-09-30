@@ -6,9 +6,9 @@ import (
 	"errors"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -16,7 +16,7 @@ import (
 type MoviesStatsHandler struct{ common CommonLogic }
 
 // Handle to handle movies: ratings action
-func (m MoviesStatsHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m MoviesStatsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns lots of movie stats.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyMovieIDMsg)
@@ -36,7 +36,7 @@ func (m MoviesStatsHandler) Handle(options *str.Options, client *internal.Client
 	return nil
 }
 
-func (MoviesStatsHandler) fetchMoviesStats(client *internal.Client, options *str.Options) (*str.MovieStats, *str.Response, error) {
+func (MoviesStatsHandler) fetchMoviesStats(client *trakt.Client, options *str.Options) (*str.MovieStats, *str.Response, error) {
 	result, resp, err := client.Movies.GetMovieStats(
 		client.BuildCtxFromOptions(options),
 		&options.InternalID,

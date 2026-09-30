@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -19,7 +19,7 @@ import (
 type MoviesAnticipatedHandler struct{}
 
 // Handle to handle movies: anticipated action
-func (h MoviesAnticipatedHandler) Handle(options *str.Options, client *internal.Client) error {
+func (h MoviesAnticipatedHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns the most anticipated movies based on the number of lists a movie appears on.")
 	result, err := h.fetchMoviesAnticipated(client, options, consts.DefaultPage)
 	if err != nil {
@@ -41,7 +41,7 @@ func (h MoviesAnticipatedHandler) Handle(options *str.Options, client *internal.
 	return nil
 }
 
-func (h MoviesAnticipatedHandler) fetchMoviesAnticipated(client *internal.Client, options *str.Options, page int) ([]*str.MoviesItem, error) {
+func (h MoviesAnticipatedHandler) fetchMoviesAnticipated(client *trakt.Client, options *str.Options, page int) ([]*str.MoviesItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Movies.GetAnticipatedMovies(
 		client.BuildCtxFromOptions(options),

@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -18,7 +18,7 @@ import (
 type CalendarsFinalesHandler struct{}
 
 // Handle to handle calendars: finales action
-func (CalendarsFinalesHandler) Handle(options *str.Options, client *internal.Client) error {
+func (CalendarsFinalesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Get calendar: " + options.Action + " finales")
 	result, err := fetchCalendarFinales(client, options)
 	if err != nil {
@@ -36,7 +36,7 @@ func (CalendarsFinalesHandler) Handle(options *str.Options, client *internal.Cli
 	return nil
 }
 
-func fetchCalendarFinales(client *internal.Client, options *str.Options) ([]*str.CalendarList, error) {
+func fetchCalendarFinales(client *trakt.Client, options *str.Options) ([]*str.CalendarList, error) {
 	if options.Action == "all-finales" {
 		actionType = consts.ActionTypeAll
 	}

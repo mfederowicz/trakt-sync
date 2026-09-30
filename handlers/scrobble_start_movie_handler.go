@@ -7,16 +7,16 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 )
 
 // ScrobbleStartMovieHandler struct for handler
 type ScrobbleStartMovieHandler struct{ common CommonLogic }
 
 // Handle to handle scrobble: start movie type
-func (s ScrobbleStartMovieHandler) Handle(options *str.Options, client *internal.Client) error {
+func (s ScrobbleStartMovieHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}

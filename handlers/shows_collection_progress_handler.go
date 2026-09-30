@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
@@ -18,7 +18,7 @@ import (
 type ShowsCollectionProgressHandler struct{ common CommonLogic }
 
 // Handle to handle shows: collection_progress action
-func (m ShowsCollectionProgressHandler) Handle(options *str.Options, client *internal.Client) error {
+func (m ShowsCollectionProgressHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns collection progress for a show including details on all aired seasons and episodes.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyShowIDMsg)
@@ -44,7 +44,7 @@ func (m ShowsCollectionProgressHandler) Handle(options *str.Options, client *int
 	return nil
 }
 
-func (ShowsCollectionProgressHandler) fetchShowsCollectionProgress(client *internal.Client, options *str.Options) (*str.CollectionProgress, error) {
+func (ShowsCollectionProgressHandler) fetchShowsCollectionProgress(client *trakt.Client, options *str.Options) (*str.CollectionProgress, error) {
 	opts := uri.ListOptions{Hidden: options.Hidden, Specials: options.Specials, CountSpecials: options.CountSpecials}
 
 	result, err := client.Shows.GetShowCollectionProgress(
