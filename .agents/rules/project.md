@@ -27,7 +27,8 @@ uri/                # query option structs (`url:` tags), AddQuery, ranges
 
 `trakt/` is the public, importable API client (`github.com/mfederowicz/trakt-sync/trakt`,
 experimental for now); keep CLI concerns (printing, config, `str.Options`) out of it.
-`trakt/trakttest` holds its mock server for tests in other packages.
+`trakt/trakttest` holds its mock server for tests in other packages. `example/` is a separate
+Go module (run `go` commands inside it); keep it building when the `trakt` API changes.
 
 Supporting packages: `cfg/` (TOML config and `str.Options`), `consts/` (named
 constants and usage strings), `printer/` (all console output), `writer/`
