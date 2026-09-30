@@ -18,7 +18,7 @@
 watchlist, ratings, lists, ...). It must not be used to bulk-collect public data such as other
 users' lists, comments or ratings, or to feed that data into other services. Paging options
 (`per_page`, `pages_limit`) exist to fetch your own data efficiently, not to crawl the API.
-Every use has to follow the Trakt API Use Policy.
+Every use has to follow the [Trakt API Use Policy](https://developer.trakt.tv/?section=guides&guide=api-use-policy).
 
 ## Installation
 ```bash
