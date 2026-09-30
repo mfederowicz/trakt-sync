@@ -49,9 +49,9 @@ func (m MoviesListsHandler) fetchMoviesLists(client *trakt.Client, options *str.
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Movies.GetListsContainingMovie(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
-		&options.Type,
-		&options.Sort,
+		options.InternalID,
+		options.Type,
+		options.Sort,
 		&opts,
 	)
 

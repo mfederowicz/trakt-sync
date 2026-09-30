@@ -19,7 +19,7 @@ func TestMoviesServiceGetMovieSentiments(t *testing.T) {
 		test.SafeFprint(w, `{"good":[{"sentiment":"great visuals","comment_ids":[1,2]}],"bad":[{"sentiment":"weak story"}],"comment_count":2}`)
 	})
 
-	got, _, err := setup.Client.Movies.GetMovieSentiments(context.Background(), str.String("tron-legacy-2010"))
+	got, _, err := setup.Client.Movies.GetMovieSentiments(context.Background(), "tron-legacy-2010")
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, &str.Sentiments{
 		Good:         []*str.Sentiment{{Sentiment: str.String("great visuals"), CommentIDs: &[]int{1, 2}}},

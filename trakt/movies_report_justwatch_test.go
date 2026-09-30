@@ -25,7 +25,7 @@ func TestMoviesServiceReportMovie(t *testing.T) {
 		w.WriteHeader(http.StatusCreated)
 	})
 
-	resp, err := setup.Client.Movies.ReportMovie(context.Background(), str.String("tron-legacy-2010"), &str.MovieReport{Reason: str.String("runtime"), Message: str.String("wrong runtime")})
+	resp, err := setup.Client.Movies.ReportMovie(context.Background(), "tron-legacy-2010", &str.MovieReport{Reason: str.String("runtime"), Message: str.String("wrong runtime")})
 	test.AssertNilError(t, err)
 	if got, want := resp.StatusCode, http.StatusCreated; got != want {
 		t.Errorf("status code is %d, want %d", got, want)
@@ -37,7 +37,7 @@ func TestMoviesServiceReportMovieConflict(t *testing.T) {
 	defer setup.Teardown()
 	conflictMux(t, setup.Mux, "/movies/tron-legacy-2010/report", `{}`)
 
-	_, err := setup.Client.Movies.ReportMovie(context.Background(), str.String("tron-legacy-2010"), &str.MovieReport{Reason: str.String("spam")})
+	_, err := setup.Client.Movies.ReportMovie(context.Background(), "tron-legacy-2010", &str.MovieReport{Reason: str.String("spam")})
 	if got, want := fmt.Sprint(err), fmt.Sprintf(consts.MovieReportPending, "tron-legacy-2010"); got != want {
 		t.Errorf("error is %q, want %q", got, want)
 	}
@@ -52,7 +52,7 @@ func TestMoviesServiceRefreshMovieJustwatch(t *testing.T) {
 		w.WriteHeader(http.StatusCreated)
 	})
 
-	resp, err := setup.Client.Movies.RefreshMovieJustwatch(context.Background(), str.String("tron-legacy-2010"))
+	resp, err := setup.Client.Movies.RefreshMovieJustwatch(context.Background(), "tron-legacy-2010")
 	test.AssertNilError(t, err)
 	if got, want := resp.StatusCode, http.StatusCreated; got != want {
 		t.Errorf("status code is %d, want %d", got, want)

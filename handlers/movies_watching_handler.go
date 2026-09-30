@@ -42,7 +42,7 @@ func (MoviesWatchingHandler) fetchMoviesWatching(client *trakt.Client, options *
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Movies.GetMovieWatching(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 		&opts,
 	)
 

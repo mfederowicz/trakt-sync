@@ -40,8 +40,8 @@ func (m MoviesReleasesHandler) Handle(options *str.Options, client *trakt.Client
 func (MoviesReleasesHandler) fetchMoviesReleases(client *trakt.Client, options *str.Options) ([]*str.Release, *str.Response, error) {
 	releases, resp, err := client.Movies.GetAllMovieReleases(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
-		&options.Country,
+		options.InternalID,
+		options.Country,
 	)
 
 	if err != nil {

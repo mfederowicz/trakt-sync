@@ -51,7 +51,7 @@ func (m MoviesUpdatedIDsHandler) fetchMoviesUpdatedIDs(client *trakt.Client, opt
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Movies.GetRecentlyUpdatedMoviesTraktIDs(
 		cli.ContextFromOptions(options),
-		&startDate,
+		startDate,
 		&opts,
 	)
 

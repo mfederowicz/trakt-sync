@@ -48,7 +48,7 @@ func (h MoviesFavoritedHandler) fetchMoviesFavorited(client *trakt.Client, optio
 	list, resp, err := client.Movies.GetFavoritedMovies(
 		cli.ContextFromOptions(options),
 		&opts,
-		&period,
+		period,
 	)
 
 	if err != nil {

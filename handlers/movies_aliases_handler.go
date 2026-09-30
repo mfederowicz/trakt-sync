@@ -40,7 +40,7 @@ func (m MoviesAliasesHandler) Handle(options *str.Options, client *trakt.Client)
 func (MoviesAliasesHandler) fetchMoviesAliases(client *trakt.Client, options *str.Options) ([]*str.Alias, *str.Response, error) {
 	aliases, resp, err := client.Movies.GetAllMovieAliases(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 	)
 
 	if err != nil {

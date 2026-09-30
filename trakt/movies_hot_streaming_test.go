@@ -33,7 +33,7 @@ func TestMoviesServiceHotAndStreaming(t *testing.T) {
 			path: "/movies/streaming/daily",
 			body: `[{"rank":1,"delta":-2,"movie":{"title":"Weapons"}}]`,
 			call: func(s *MoviesService, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
-				return s.GetStreamingMovies(context.Background(), str.String("daily"), opts)
+				return s.GetStreamingMovies(context.Background(), "daily", opts)
 			},
 			want: []*str.MoviesItem{{Rank: test.Ptr(1), Delta: test.Ptr(-2), Movie: &str.Movie{Title: str.String("Weapons")}}},
 		},

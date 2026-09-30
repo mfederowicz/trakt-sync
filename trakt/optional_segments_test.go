@@ -84,6 +84,38 @@ func TestOptionalPathSegments(t *testing.T) {
 			_, _, err := c.Lists.GetListComments(ctx, "55", "newest", opts)
 			return err
 		}},
+		{name: "movie releases all", path: "/movies/tron/releases", call: func(c *Client) error {
+			_, _, err := c.Movies.GetAllMovieReleases(ctx, "tron", "")
+			return err
+		}},
+		{name: "movie releases country", path: "/movies/tron/releases/us", call: func(c *Client) error {
+			_, _, err := c.Movies.GetAllMovieReleases(ctx, "tron", "us")
+			return err
+		}},
+		{name: "movie translations all", path: "/movies/tron/translations", call: func(c *Client) error {
+			_, _, err := c.Movies.GetAllMovieTranslations(ctx, "tron", "")
+			return err
+		}},
+		{name: "movie translations language", path: "/movies/tron/translations/pl", call: func(c *Client) error {
+			_, _, err := c.Movies.GetAllMovieTranslations(ctx, "tron", "pl")
+			return err
+		}},
+		{name: "movie comments default", path: "/movies/tron/comments", call: func(c *Client) error {
+			_, _, err := c.Movies.GetAllMovieComments(ctx, "tron", "", opts)
+			return err
+		}},
+		{name: "movie comments sorted", path: "/movies/tron/comments/likes", call: func(c *Client) error {
+			_, _, err := c.Movies.GetAllMovieComments(ctx, "tron", "likes", opts)
+			return err
+		}},
+		{name: "movie lists default", path: "/movies/tron/lists", call: func(c *Client) error {
+			_, _, err := c.Movies.GetListsContainingMovie(ctx, "tron", "personal", "", opts)
+			return err
+		}},
+		{name: "movie lists typed", path: "/movies/tron/lists/personal/popular", call: func(c *Client) error {
+			_, _, err := c.Movies.GetListsContainingMovie(ctx, "tron", "personal", "popular", opts)
+			return err
+		}},
 	}
 
 	for _, tt := range tests {

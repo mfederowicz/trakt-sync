@@ -40,7 +40,7 @@ func (m MoviesStatsHandler) Handle(options *str.Options, client *trakt.Client) e
 func (MoviesStatsHandler) fetchMoviesStats(client *trakt.Client, options *str.Options) (*str.MovieStats, *str.Response, error) {
 	result, resp, err := client.Movies.GetMovieStats(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 	)
 
 	if err != nil {
