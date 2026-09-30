@@ -21,7 +21,7 @@ schedule.
 
 ### Changed
 
-- Debug lines such as `fetch ... url:` and `create new checkin` now print only with `-v`, which also shows each API request as `METHOD <url>` (with `client_secret` redacted). This covers `calendars`, `checkin`, `comments`, `lists`, `notes`, `people`, `recommendations`, `scrobble`, `search`, `countries`, `certifications`, `genres`, `languages` and `networks`. Errors are still printed as before.
+- Debug lines such as `fetch ... url:` and `create new checkin` now print only with `-v`, which also shows each API request as `METHOD <url>` (with `client_secret` redacted). This covers `calendars`, `checkin`, `comments`, `lists`, `movies`, `notes`, `people`, `recommendations`, `scrobble`, `search`, `sync`, `users`, `countries`, `certifications`, `genres`, `languages` and `networks`. Errors are still printed as before.
 
 ### Fixed
 

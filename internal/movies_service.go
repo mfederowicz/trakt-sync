@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -24,7 +23,7 @@ func (m *MoviesService) GetMovie(ctx context.Context, id *string, opts *uri.List
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch movie url:" + url)
+	m.client.debug("fetch movie url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -38,7 +37,7 @@ func (m *MoviesService) GetMovie(ctx context.Context, id *string, opts *uri.List
 	}
 
 	if err != nil {
-		printer.Println("fetch movie err:" + err.Error())
+		m.client.debug("fetch movie err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -54,7 +53,7 @@ func (m *MoviesService) GetTrendingMovies(ctx context.Context, opts *uri.ListOpt
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch movies url:" + url)
+	m.client.debug("fetch movies url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -64,7 +63,7 @@ func (m *MoviesService) GetTrendingMovies(ctx context.Context, opts *uri.ListOpt
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch movies err:" + err.Error())
+		m.client.debug("fetch movies err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -80,7 +79,7 @@ func (m *MoviesService) GetPopularMovies(ctx context.Context, opts *uri.ListOpti
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch movies url:" + url)
+	m.client.debug("fetch movies url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -90,7 +89,7 @@ func (m *MoviesService) GetPopularMovies(ctx context.Context, opts *uri.ListOpti
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch movies err:" + err.Error())
+		m.client.debug("fetch movies err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -106,7 +105,7 @@ func (m *MoviesService) GetFavoritedMovies(ctx context.Context, opts *uri.ListOp
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch movies url:" + url)
+	m.client.debug("fetch movies url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -116,7 +115,7 @@ func (m *MoviesService) GetFavoritedMovies(ctx context.Context, opts *uri.ListOp
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch movies err:" + err.Error())
+		m.client.debug("fetch movies err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -132,7 +131,7 @@ func (m *MoviesService) GetPlayedMovies(ctx context.Context, opts *uri.ListOptio
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch movies url:" + url)
+	m.client.debug("fetch movies url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -142,7 +141,7 @@ func (m *MoviesService) GetPlayedMovies(ctx context.Context, opts *uri.ListOptio
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch movies err:" + err.Error())
+		m.client.debug("fetch movies err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -158,7 +157,7 @@ func (m *MoviesService) GetWatchedMovies(ctx context.Context, opts *uri.ListOpti
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch movies url:" + url)
+	m.client.debug("fetch movies url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -168,7 +167,7 @@ func (m *MoviesService) GetWatchedMovies(ctx context.Context, opts *uri.ListOpti
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch movies err:" + err.Error())
+		m.client.debug("fetch movies err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -184,7 +183,7 @@ func (m *MoviesService) GetCollectedMovies(ctx context.Context, opts *uri.ListOp
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch movies url:" + url)
+	m.client.debug("fetch movies url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -194,7 +193,7 @@ func (m *MoviesService) GetCollectedMovies(ctx context.Context, opts *uri.ListOp
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch movies err:" + err.Error())
+		m.client.debug("fetch movies err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -209,7 +208,7 @@ func (m *MoviesService) GetAnticipatedMovies(ctx context.Context, opts *uri.List
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch movies url:" + url)
+	m.client.debug("fetch movies url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -219,7 +218,7 @@ func (m *MoviesService) GetAnticipatedMovies(ctx context.Context, opts *uri.List
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch movies err:" + err.Error())
+		m.client.debug("fetch movies err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -234,7 +233,7 @@ func (m *MoviesService) GetBoxoffice(ctx context.Context, opts *uri.ListOptions)
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch movies url:" + url)
+	m.client.debug("fetch movies url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -244,7 +243,7 @@ func (m *MoviesService) GetBoxoffice(ctx context.Context, opts *uri.ListOptions)
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch movies err:" + err.Error())
+		m.client.debug("fetch movies err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -262,7 +261,7 @@ func (m *MoviesService) GetRecentlyUpdatedMovies(ctx context.Context, startDate 
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch updates url:" + url)
+	m.client.debug("fetch updates url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -272,7 +271,7 @@ func (m *MoviesService) GetRecentlyUpdatedMovies(ctx context.Context, startDate 
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch updates err:" + err.Error())
+		m.client.debug("fetch updates err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -291,7 +290,7 @@ func (m *MoviesService) GetRecentlyUpdatedMoviesTraktIDs(ctx context.Context, st
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch updates url:" + url)
+	m.client.debug("fetch updates url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -301,7 +300,7 @@ func (m *MoviesService) GetRecentlyUpdatedMoviesTraktIDs(ctx context.Context, st
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch updates err:" + err.Error())
+		m.client.debug("fetch updates err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -313,7 +312,7 @@ func (m *MoviesService) GetRecentlyUpdatedMoviesTraktIDs(ctx context.Context, st
 // API docs: https://trakt.docs.apiary.io/#reference/movies/aliases/get-all-movie-aliases
 func (m *MoviesService) GetAllMovieAliases(ctx context.Context, id *string) ([]*str.Alias, *str.Response, error) {
 	url := fmt.Sprintf("movies/%s/aliases", *id)
-	printer.Println("fetch aliases url:" + url)
+	m.client.debug("fetch aliases url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -327,7 +326,7 @@ func (m *MoviesService) GetAllMovieAliases(ctx context.Context, id *string) ([]*
 	}
 
 	if err != nil {
-		printer.Println("fetch aliases err:" + err.Error())
+		m.client.debug("fetch aliases err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -345,7 +344,7 @@ func (m *MoviesService) GetAllMovieReleases(ctx context.Context, id *string, cou
 		url = fmt.Sprintf("movies/%s/releases", *id)
 	}
 
-	printer.Println("fetch releases url:" + url)
+	m.client.debug("fetch releases url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -359,7 +358,7 @@ func (m *MoviesService) GetAllMovieReleases(ctx context.Context, id *string, cou
 	}
 
 	if err != nil {
-		printer.Println("fetch releases err:" + err.Error())
+		m.client.debug("fetch releases err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -377,7 +376,7 @@ func (m *MoviesService) GetAllMovieTranslations(ctx context.Context, id *string,
 		url = fmt.Sprintf("movies/%s/translations", *id)
 	}
 
-	printer.Println("fetch translations url:" + url)
+	m.client.debug("fetch translations url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -391,7 +390,7 @@ func (m *MoviesService) GetAllMovieTranslations(ctx context.Context, id *string,
 	}
 
 	if err != nil {
-		printer.Println("fetch translations err:" + err.Error())
+		m.client.debug("fetch translations err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -417,7 +416,7 @@ func (m *MoviesService) GetAllMovieComments(ctx context.Context, id *string, sor
 		return nil, nil, err
 	}
 
-	printer.Println("fetch comments url:" + url)
+	m.client.debug("fetch comments url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -431,7 +430,7 @@ func (m *MoviesService) GetAllMovieComments(ctx context.Context, id *string, sor
 	}
 
 	if err != nil {
-		printer.Println("fetch comments err:" + err.Error())
+		m.client.debug("fetch comments err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -456,7 +455,7 @@ func (m *MoviesService) GetListsContainingMovie(ctx context.Context, id *string,
 		return nil, nil, err
 	}
 
-	printer.Println("fetch lists url:" + url)
+	m.client.debug("fetch lists url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -470,7 +469,7 @@ func (m *MoviesService) GetListsContainingMovie(ctx context.Context, id *string,
 	}
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		m.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -491,7 +490,7 @@ func (m *MoviesService) GetAllPeopleForMovie(ctx context.Context, id *string, op
 		return nil, nil, err
 	}
 
-	printer.Println("fetch people url:" + url)
+	m.client.debug("fetch people url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -504,7 +503,7 @@ func (m *MoviesService) GetAllPeopleForMovie(ctx context.Context, id *string, op
 	}
 
 	if err != nil {
-		printer.Println("fetch people err:" + err.Error())
+		m.client.debug("fetch people err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -516,7 +515,7 @@ func (m *MoviesService) GetAllPeopleForMovie(ctx context.Context, id *string, op
 // API docs: https://trakt.docs.apiary.io/#reference/movies/ratings/get-movie-ratings
 func (m *MoviesService) GetMovieRatings(ctx context.Context, id *string) (*str.MovieRatings, *str.Response, error) {
 	url := fmt.Sprintf("movies/%s/ratings", *id)
-	printer.Println("fetch ratings url:" + url)
+	m.client.debug("fetch ratings url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -529,7 +528,7 @@ func (m *MoviesService) GetMovieRatings(ctx context.Context, id *string) (*str.M
 	}
 
 	if err != nil {
-		printer.Println("fetch ratings err:" + err.Error())
+		m.client.debug("fetch ratings err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -548,7 +547,7 @@ func (m *MoviesService) GetRelatedMovies(ctx context.Context, id *string, opts *
 		return nil, nil, err
 	}
 
-	printer.Println("fetch related url:" + url)
+	m.client.debug("fetch related url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -562,7 +561,7 @@ func (m *MoviesService) GetRelatedMovies(ctx context.Context, id *string, opts *
 	}
 
 	if err != nil {
-		printer.Println("fetch related err:" + err.Error())
+		m.client.debug("fetch related err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -574,7 +573,7 @@ func (m *MoviesService) GetRelatedMovies(ctx context.Context, id *string, opts *
 // API docs: https://trakt.docs.apiary.io/#reference/movies/stats/get-movie-stats
 func (m *MoviesService) GetMovieStats(ctx context.Context, id *string) (*str.MovieStats, *str.Response, error) {
 	url := fmt.Sprintf("movies/%s/stats", *id)
-	printer.Println("fetch stats url:" + url)
+	m.client.debug("fetch stats url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -587,7 +586,7 @@ func (m *MoviesService) GetMovieStats(ctx context.Context, id *string) (*str.Mov
 	}
 
 	if err != nil {
-		printer.Println("fetch stats err:" + err.Error())
+		m.client.debug("fetch stats err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -599,7 +598,7 @@ func (m *MoviesService) GetMovieStats(ctx context.Context, id *string) (*str.Mov
 // API docs: https://trakt.docs.apiary.io/#reference/movies/studios/get-movie-studios
 func (m *MoviesService) GetMovieStudios(ctx context.Context, id *string) ([]*str.Studio, *str.Response, error) {
 	var url = fmt.Sprintf("movies/%s/studios", *id)
-	printer.Println("fetch studios url:" + url)
+	m.client.debug("fetch studios url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -613,7 +612,7 @@ func (m *MoviesService) GetMovieStudios(ctx context.Context, id *string) ([]*str
 	}
 
 	if err != nil {
-		printer.Println("fetch studios err:" + err.Error())
+		m.client.debug("fetch studios err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -631,7 +630,7 @@ func (m *MoviesService) GetMovieWatching(ctx context.Context, id *string, opts *
 		return nil, nil, err
 	}
 
-	printer.Println("fetch watching url:" + url)
+	m.client.debug("fetch watching url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -645,7 +644,7 @@ func (m *MoviesService) GetMovieWatching(ctx context.Context, id *string, opts *
 	}
 
 	if err != nil {
-		printer.Println("fetch watching err:" + err.Error())
+		m.client.debug("fetch watching err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -663,7 +662,7 @@ func (m *MoviesService) GetMovieVideos(ctx context.Context, id *string, opts *ur
 		return nil, nil, err
 	}
 
-	printer.Println("fetch video url:" + url)
+	m.client.debug("fetch video url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -677,7 +676,7 @@ func (m *MoviesService) GetMovieVideos(ctx context.Context, id *string, opts *ur
 	}
 
 	if err != nil {
-		printer.Println("fetch video err:" + err.Error())
+		m.client.debug("fetch video err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -690,7 +689,7 @@ func (m *MoviesService) GetMovieVideos(ctx context.Context, id *string, opts *ur
 // API docs: https://trakt.docs.apiary.io/#reference/movies/refresh/refresh-movie-metadata
 func (m *MoviesService) RefreshMovieMetadata(ctx context.Context, id *string) (*str.Response, error) {
 	var url = fmt.Sprintf("movies/%s/refresh", *id)
-	printer.Println("refresh movie:" + url)
+	m.client.debug("refresh movie:" + url)
 	req, err := m.client.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
 		return nil, err

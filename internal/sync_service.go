@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
@@ -35,7 +34,7 @@ func (s *SyncService) GetCollection(ctx context.Context, types *string, opts *ur
 		return nil, nil, err
 	}
 
-	printer.Println("fetch collection url:" + url)
+	s.client.debug("fetch collection url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -45,7 +44,7 @@ func (s *SyncService) GetCollection(ctx context.Context, types *string, opts *ur
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		s.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -72,7 +71,7 @@ func (s *SyncService) GetWatchedHistory(ctx context.Context, id *int, types *str
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch history url:" + url)
+	s.client.debug("fetch history url:" + url)
 	req, err := s.client.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -82,7 +81,7 @@ func (s *SyncService) GetWatchedHistory(ctx context.Context, id *int, types *str
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		s.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -104,7 +103,7 @@ func (s *SyncService) GetWatchlist(ctx context.Context, types *string, sortBy *s
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch watchlist url:" + url)
+	s.client.debug("fetch watchlist url:" + url)
 	req, err := s.client.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -114,7 +113,7 @@ func (s *SyncService) GetWatchlist(ctx context.Context, types *string, sortBy *s
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		s.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -128,7 +127,7 @@ func (s *SyncService) GetLastActivity(ctx context.Context) (*str.UserLastActivit
 	var url string
 	url = "sync/last_activities"
 
-	printer.Println("fetch last activities url:" + url)
+	s.client.debug("fetch last activities url:" + url)
 	req, err := s.client.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -138,7 +137,7 @@ func (s *SyncService) GetLastActivity(ctx context.Context) (*str.UserLastActivit
 	resp, err := s.client.Do(ctx, req, &result)
 
 	if err != nil {
-		printer.Println("fetch activities err:" + err.Error())
+		s.client.debug("fetch activities err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -159,7 +158,7 @@ func (s *SyncService) GetPlaybackProgress(ctx context.Context, types *string, op
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch playback url:" + url)
+	s.client.debug("fetch playback url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -169,7 +168,7 @@ func (s *SyncService) GetPlaybackProgress(ctx context.Context, types *string, op
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch playback err:" + err.Error())
+		s.client.debug("fetch playback err:" + err.Error())
 		return nil, resp, err
 	}
 	return list, resp, nil
@@ -203,7 +202,7 @@ func (s *SyncService) RemovePlaybackItem(ctx context.Context, id *int) (*str.Res
 // API docs:https://trakt.docs.apiary.io/#reference/sync/add-to-collection/add-items-to-collection
 func (s *SyncService) AddItemsToCollection(ctx context.Context, items *str.ItemsList) (*str.CollectionAddResult, error) {
 	var url = "sync/collection"
-	printer.Println("add items")
+	s.client.debug("add items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
 		return nil, err
@@ -265,7 +264,7 @@ func (s *SyncService) GetCollectedSeasons(ctx context.Context, options *uri.List
 // API docs:https://trakt.docs.apiary.io/#reference/sync/remove-from-collection/remove-items-from-collection
 func (s *SyncService) RemoveItemsFromCollection(ctx context.Context, items *str.ItemsList) (*str.CollectionRemoveResult, error) {
 	var url = "sync/collection/remove"
-	printer.Println("remove items")
+	s.client.debug("remove items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
 		return nil, err
@@ -290,7 +289,7 @@ func (s *SyncService) GetWatched(ctx context.Context, watchType *string, opts *u
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("get watched url:" + url)
+	s.client.debug("get watched url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -329,7 +328,7 @@ func (s *SyncService) AddItemsToHistory(ctx context.Context, items *str.HistoryI
 // API docs:https://trakt.docs.apiary.io/#reference/sync/remove-from-history/remove-items-from-history
 func (s *SyncService) RemoveItemsFromHistory(ctx context.Context, items *str.ItemsToRemove) (*str.RemoveResult, error) {
 	var url = "sync/history/remove"
-	printer.Println("remove items")
+	s.client.debug("remove items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
 		return nil, err
@@ -359,7 +358,7 @@ func (s *SyncService) GetRatings(ctx context.Context, types *string, rating *str
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch ratings url:" + url)
+	s.client.debug("fetch ratings url:" + url)
 	req, err := s.client.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -369,7 +368,7 @@ func (s *SyncService) GetRatings(ctx context.Context, types *string, rating *str
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch lists err:" + err.Error())
+		s.client.debug("fetch lists err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -381,7 +380,7 @@ func (s *SyncService) GetRatings(ctx context.Context, types *string, rating *str
 // API docs:https://trakt.docs.apiary.io/#reference/sync/remove-ratings/remove-ratings
 func (s *SyncService) RemoveItemsFromRatings(ctx context.Context, items *str.ItemsToRemove) (*str.RemoveResult, error) {
 	var url = "sync/ratings/remove"
-	printer.Println("remove items")
+	s.client.debug("remove items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
 		return nil, err
@@ -401,7 +400,7 @@ func (s *SyncService) RemoveItemsFromRatings(ctx context.Context, items *str.Ite
 // API docs:https://trakt.docs.apiary.io/#reference/sync/add-ratings/add-new-ratings
 func (s *SyncService) AddItemsToRatings(ctx context.Context, items *str.RatingItems) (*str.AddResult, error) {
 	var url = "sync/ratings"
-	printer.Println("add items")
+	s.client.debug("add items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
 		return nil, err
@@ -421,7 +420,7 @@ func (s *SyncService) AddItemsToRatings(ctx context.Context, items *str.RatingIt
 // API docs:https://trakt.docs.apiary.io/#reference/sync/update-watchlist/update-watchlist
 func (s *SyncService) UpdateWatchlist(ctx context.Context, update *str.PersonalList) (*str.PersonalList, error) {
 	var url = "sync/watchlist"
-	printer.Println("update watchlist")
+	s.client.debug("update watchlist")
 	req, err := s.client.NewRequest(http.MethodPut, url, update)
 	if err != nil {
 		return nil, err
@@ -441,7 +440,7 @@ func (s *SyncService) UpdateWatchlist(ctx context.Context, update *str.PersonalL
 // API docs:https://trakt.docs.apiary.io/#reference/sync/update-favorites/update-favorites
 func (s *SyncService) UpdateFavorites(context context.Context, update *str.PersonalList) (*str.PersonalList, error) {
 	var url = "sync/favorites"
-	printer.Println("update favorites")
+	s.client.debug("update favorites")
 	req, err := s.client.NewRequest(http.MethodPut, url, update)
 	if err != nil {
 		return nil, err
@@ -463,7 +462,7 @@ func (s *SyncService) UpdateWatchlistItem(context context.Context, itemID int, u
 	var url string
 
 	url = fmt.Sprintf("sync/watchlist/%d", itemID)
-	printer.Println("update notes")
+	s.client.debug("update notes")
 	req, err := s.client.NewRequest(http.MethodPut, url, update)
 	if err != nil {
 		return err
@@ -483,7 +482,7 @@ func (s *SyncService) UpdateWatchlistItem(context context.Context, itemID int, u
 // API docs:https://trakt.docs.apiary.io/#reference/sync/remove-from-watchlist/remove-items-from-watchlist
 func (s *SyncService) RemoveItemsFromWatchlist(context context.Context, items *str.ItemsToRemove) (*str.RemoveResult, error) {
 	var url = "sync/watchlist/remove"
-	printer.Println("remove items")
+	s.client.debug("remove items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
 		return nil, err
@@ -506,7 +505,7 @@ func (s *SyncService) RemoveItemsFromWatchlist(context context.Context, items *s
 // API docs:https://trakt.docs.apiary.io/#reference/sync/update-watchlist/add-items-to-watchlist
 func (s *SyncService) AddItemsToWatchlist(ctx context.Context, items *str.HistoryItems) (*str.AddResult, error) {
 	var url = "sync/watchlist"
-	printer.Println("add items")
+	s.client.debug("add items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
 		return nil, err
@@ -527,7 +526,7 @@ func (s *SyncService) AddItemsToWatchlist(ctx context.Context, items *str.Histor
 // API docs:https://trakt.docs.apiary.io/#reference/sync/reorder-watchlist/reorder-watchlist-items
 func (s *SyncService) ReorderWatchlistItems(ctx context.Context, reorder *str.ItemsToReorder) (*str.ReorderResults, error) {
 	var url = "sync/watchlist/reorder"
-	printer.Println("reorder watchlist")
+	s.client.debug("reorder watchlist")
 	req, err := s.client.NewRequest(http.MethodPost, url, reorder)
 	if err != nil {
 		return nil, err
@@ -557,7 +556,7 @@ func (s *SyncService) GetFavorites(ctx context.Context, types *string, sortBy *s
 	if err != nil {
 		return nil, nil, err
 	}
-	printer.Println("fetch favorites url:" + url)
+	s.client.debug("fetch favorites url:" + url)
 	req, err := s.client.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -567,7 +566,7 @@ func (s *SyncService) GetFavorites(ctx context.Context, types *string, sortBy *s
 	resp, err := s.client.Do(ctx, req, &list)
 
 	if err != nil {
-		printer.Println("fetch favorites err:" + err.Error())
+		s.client.debug("fetch favorites err:" + err.Error())
 		return nil, resp, err
 	}
 
@@ -579,7 +578,7 @@ func (s *SyncService) GetFavorites(ctx context.Context, types *string, sortBy *s
 // API docs:https://trakt.docs.apiary.io/#reference/sync/update-favorites/add-items-to-favorites
 func (s *SyncService) AddItemsToFavorites(ctx context.Context, items *str.HistoryItems) (*str.AddResult, error) {
 	var url = "sync/favorites"
-	printer.Println("add items")
+	s.client.debug("add items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
 		return nil, err
@@ -599,7 +598,7 @@ func (s *SyncService) AddItemsToFavorites(ctx context.Context, items *str.Histor
 // API docs: https://trakt.docs.apiary.io/#reference/sync/remove-from-favorites/remove-items-from-favorites
 func (s *SyncService) RemoveItemsFromFavorites(context context.Context, items *str.ItemsToRemove) (*str.RemoveResult, error) {
 	var url = "sync/favorites/remove"
-	printer.Println("remove items")
+	s.client.debug("remove items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
 		return nil, err
@@ -620,7 +619,7 @@ func (s *SyncService) RemoveItemsFromFavorites(context context.Context, items *s
 // API docs:https://trakt.docs.apiary.io/#reference/sync/reorder-favorites/reorder-favorited-items
 func (s *SyncService) ReorderFavoritesItems(ctx context.Context, reorder *str.ItemsToReorder) (*str.ReorderResults, error) {
 	var url = "sync/favorites/reorder"
-	printer.Println("reorder favorites")
+	s.client.debug("reorder favorites")
 	req, err := s.client.NewRequest(http.MethodPost, url, reorder)
 	if err != nil {
 		return nil, err
@@ -642,7 +641,7 @@ func (s *SyncService) UpdateFavoriteItem(context context.Context, itemID int, up
 	var url string
 
 	url = fmt.Sprintf("sync/favorites/%d", itemID)
-	printer.Println("update notes")
+	s.client.debug("update notes")
 	req, err := s.client.NewRequest(http.MethodPut, url, update)
 	if err != nil {
 		return err
