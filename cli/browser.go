@@ -42,6 +42,11 @@ func HandleVIPResponse(resp *str.Response, err error) error {
 	if resp != nil && resp.StatusCode == http.StatusUpgradeRequired {
 		return HandleUpgrade(resp)
 	}
+	// callers that keep only the error still get the 426 flow
+	var upgrade *internal.UpgradeRequiredError
+	if errors.As(err, &upgrade) && upgrade.Response != nil {
+		return HandleUpgrade(&str.Response{Response: upgrade.Response})
+	}
 
 	var limits *internal.UpgradeUserLimitsError
 	if errors.As(err, &limits) && limits.Response != nil {

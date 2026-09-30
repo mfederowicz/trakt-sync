@@ -58,6 +58,15 @@ func TestHandleVIPResponse(t *testing.T) {
 			wantErr:    "account limit exceeded (limit: 2), browser opened: https://trakt.tv/vip",
 		},
 		{
+			name: "wrapped 426 error without a response opens X-Upgrade-URL",
+			err: fmt.Errorf("fetch list error: %w", &internal.UpgradeRequiredError{Response: &http.Response{
+				StatusCode: http.StatusUpgradeRequired,
+				Header:     headers(internal.HeaderUpgradeURL, "https://trakt.tv/vip"),
+			}}),
+			wantOpened: "https://trakt.tv/vip",
+			wantErr:    "trakt vip required, browser opened: https://trakt.tv/vip",
+		},
+		{
 			name:    "420 for a VIP user only reports the limit",
 			err:     limitsError(headers(internal.HeaderVIPUser, "true", internal.HeaderAccountLimit, "100")),
 			wantErr: "account limit exceeded (limit: 100)",
