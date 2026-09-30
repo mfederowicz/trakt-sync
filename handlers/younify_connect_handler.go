@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -29,7 +30,7 @@ func (YounifyConnectHandler) Handle(options *str.Options, client *trakt.Client) 
 
 	printer.Println("Create a streaming connection for: " + options.ServiceID)
 	connect := &str.YounifyConnect{ServiceID: &options.ServiceID, ReturnURL: &returnURL}
-	result, resp, err := client.Younify.Connect(client.BuildCtxFromOptions(options), connect)
+	result, resp, err := client.Younify.Connect(cli.ContextFromOptions(options), connect)
 	if err = younifyError(options.Action, options.ServiceID, resp, err); err != nil {
 		return err
 	}

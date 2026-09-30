@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -46,7 +47,7 @@ func (m UsersDeleteListHandler) Handle(options *str.Options, client *trakt.Clien
 }
 
 func (UsersDeleteListHandler) usersDeleteList(client *trakt.Client, options *str.Options) (*str.Response, error) {
-	resp, err := client.Users.DeleteList(client.BuildCtxFromOptions(options), &options.UserName, &options.ID)
+	resp, err := client.Users.DeleteList(cli.ContextFromOptions(options), &options.UserName, &options.ID)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return resp, nil

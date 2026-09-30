@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -33,7 +34,7 @@ func (GenresTypesHandler) Handle(options *str.Options, client *trakt.Client) err
 }
 
 func fetchGenres(client *trakt.Client, options *str.Options) ([]*str.Genre, *str.Response, error) {
-	results, resp, err := client.Genres.GetGenres(client.BuildCtxFromOptions(options), &options.Type)
+	results, resp, err := client.Genres.GetGenres(cli.ContextFromOptions(options), &options.Type)
 
 	return results, resp, err
 }

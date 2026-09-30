@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -56,7 +57,7 @@ func (s SyncGetCollectionHandler) syncGetCollection(client *trakt.Client, option
 func (s SyncGetCollectionHandler) syncGetCollected(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Sync.GetCollection(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.Type,
 		&opts,
 	)
@@ -86,7 +87,7 @@ func (s SyncGetCollectionHandler) syncGetCollected(client *trakt.Client, options
 func (s SyncGetCollectionHandler) syncGetCollectedSeasons(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Sync.GetCollectedSeasons(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&opts,
 	)
 	if err != nil {

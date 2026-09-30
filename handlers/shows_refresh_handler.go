@@ -54,7 +54,7 @@ func (h ShowsRefreshHandler) Handle(options *str.Options, client *trakt.Client) 
 func (ShowsRefreshHandler) refreshShow(client *trakt.Client, options *str.Options) (*str.Response, error) {
 	showID := options.InternalID
 	resp, err := client.Shows.RefreshShowMetadata(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&showID,
 	)
 	return resp, err

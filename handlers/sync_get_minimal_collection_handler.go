@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -44,7 +45,7 @@ func (s SyncGetMinimalCollectionHandler) Handle(options *str.Options, client *tr
 }
 
 func (SyncGetMinimalCollectionHandler) fetchMinimalCollection(client *trakt.Client, options *str.Options) (any, error) {
-	ctx := client.BuildCtxFromOptions(options)
+	ctx := cli.ContextFromOptions(options)
 	opts := uri.ListOptions{AvailableOn: options.AvailableOn}
 	if options.Type == consts.Shows {
 		result, _, err := client.Sync.GetMinimalShowCollection(ctx, &opts)

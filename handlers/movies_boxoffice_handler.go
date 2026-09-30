@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -43,7 +44,7 @@ func (h MoviesBoxofficeHandler) Handle(options *str.Options, client *trakt.Clien
 func (MoviesBoxofficeHandler) fetchMoviesBoxoffice(client *trakt.Client, options *str.Options) ([]*str.MoviesItem, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Movies.GetBoxoffice(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&opts,
 	)
 

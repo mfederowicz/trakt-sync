@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -18,7 +19,7 @@ func (UsersDeleteSmartListHandler) Handle(options *str.Options, client *trakt.Cl
 	}
 
 	printer.Println("Delete smart list: " + options.ID)
-	resp, err := client.Users.DeleteSmartList(client.BuildCtxFromOptions(options), &options.UserName, &options.ID)
+	resp, err := client.Users.DeleteSmartList(cli.ContextFromOptions(options), &options.UserName, &options.ID)
 	if err = smartListError(options.Action, options.ID, resp, err); err != nil {
 		return err
 	}

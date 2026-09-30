@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -28,7 +29,7 @@ func (UsersMonthInReviewHandler) Handle(options *str.Options, client *trakt.Clie
 	period := fmt.Sprintf(consts.YearMonthFormat, options.Year, options.Month)
 	printer.Println("Returns month in review " + period + " for: " + options.UserName)
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	result, resp, err := client.Users.GetMonthInReview(client.BuildCtxFromOptions(options), &options.UserName, options.Year, options.Month, &opts)
+	result, resp, err := client.Users.GetMonthInReview(cli.ContextFromOptions(options), &options.UserName, options.Year, options.Month, &opts)
 	return writeReview(options, period, result, resp, err)
 }
 
@@ -44,7 +45,7 @@ func (UsersYearInReviewHandler) Handle(options *str.Options, client *trakt.Clien
 	period := fmt.Sprint(options.Year)
 	printer.Println("Returns year in review " + period + " for: " + options.UserName)
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	result, resp, err := client.Users.GetYearInReview(client.BuildCtxFromOptions(options), &options.UserName, options.Year, &opts)
+	result, resp, err := client.Users.GetYearInReview(cli.ContextFromOptions(options), &options.UserName, options.Year, &opts)
 	return writeReview(options, period, result, resp, err)
 }
 

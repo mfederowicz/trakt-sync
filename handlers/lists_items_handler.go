@@ -55,7 +55,7 @@ func (h ListsItemsHandler) fetchListItems(client *trakt.Client, options *str.Opt
 		itemTypes = consts.ListItemsAll
 	}
 	list, resp, err := client.Lists.GetListItems(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.InternalID,
 		&itemTypes,
 		&opts,

@@ -4,6 +4,7 @@ package handlers
 import (
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -19,7 +20,7 @@ func (SearchRemoveRecentHandler) Handle(options *str.Options, client *trakt.Clie
 		return err
 	}
 
-	if _, err := client.Search.RemoveRecentSearch(client.BuildCtxFromOptions(options), search); err != nil {
+	if _, err := client.Search.RemoveRecentSearch(cli.ContextFromOptions(options), search); err != nil {
 		return fmt.Errorf("remove recent search error: %w", err)
 	}
 

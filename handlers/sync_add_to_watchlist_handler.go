@@ -39,7 +39,7 @@ func (m SyncAddToWatchlistHandler) Handle(options *str.Options, client *trakt.Cl
 
 func (SyncAddToWatchlistHandler) syncAddToWatchlist(client *trakt.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error) {
 	result, err := client.Sync.AddItemsToWatchlist(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		items,
 	)
 	if err != nil {

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -34,7 +35,7 @@ func (m SyncReorderFavoritesHandler) Handle(options *str.Options, client *trakt.
 
 func (SyncReorderFavoritesHandler) syncReorderFavorites(client *trakt.Client, options *str.Options, items *str.ItemsToReorder) (*str.ReorderResults, error) {
 	result, err := client.Sync.ReorderFavoritesItems(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		items,
 	)
 	if err != nil {

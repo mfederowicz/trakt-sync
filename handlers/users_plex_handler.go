@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -18,7 +19,7 @@ type UsersPlexSettingsHandler struct{}
 // Handle to handle users: plex_settings action
 func (UsersPlexSettingsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns your Plex connection, webhook, sync selection and toggles.")
-	result, resp, err := client.Users.GetPlexSettings(client.BuildCtxFromOptions(options))
+	result, resp, err := client.Users.GetPlexSettings(cli.ContextFromOptions(options))
 	if err = plexError(options.Action, resp, err); err != nil {
 		return err
 	}
@@ -40,7 +41,7 @@ func (h UsersUpdatePlexSettingsHandler) Handle(options *str.Options, client *tra
 	}
 
 	printer.Println("Update your Plex settings.")
-	resp, err := client.Users.UpdatePlexSettings(client.BuildCtxFromOptions(options), settings)
+	resp, err := client.Users.UpdatePlexSettings(cli.ContextFromOptions(options), settings)
 	if err = plexError(options.Action, resp, err); err != nil {
 		return err
 	}
@@ -60,7 +61,7 @@ func (UsersPlexConnectHandler) Handle(options *str.Options, client *trakt.Client
 	}
 
 	printer.Println("Create a Plex web auth URL.")
-	result, resp, err := client.Users.ConnectPlex(client.BuildCtxFromOptions(options), &str.PlexConnect{ReturnURL: &returnURL})
+	result, resp, err := client.Users.ConnectPlex(cli.ContextFromOptions(options), &str.PlexConnect{ReturnURL: &returnURL})
 	if resp != nil && resp.StatusCode == http.StatusBadRequest {
 		return fmt.Errorf("plex_connect rejected return_url %s (allowed: trakt://..., http(s)://localhost, https://*.trakt.tv)", returnURL)
 	}
@@ -81,7 +82,7 @@ type UsersPlexDisconnectHandler struct{}
 // Handle to handle users: plex_disconnect action
 func (UsersPlexDisconnectHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Disconnect Plex: clears the authorization, selection and sync state.")
-	resp, err := client.Users.DisconnectPlex(client.BuildCtxFromOptions(options))
+	resp, err := client.Users.DisconnectPlex(cli.ContextFromOptions(options))
 	if err = plexError(options.Action, resp, err); err != nil {
 		return err
 	}
@@ -96,7 +97,7 @@ type UsersPlexServersHandler struct{}
 // Handle to handle users: plex_servers action
 func (UsersPlexServersHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns your Plex servers.")
-	result, resp, err := client.Users.GetPlexServers(client.BuildCtxFromOptions(options))
+	result, resp, err := client.Users.GetPlexServers(cli.ContextFromOptions(options))
 	if err = plexError(options.Action, resp, err); err != nil {
 		return err
 	}
@@ -118,7 +119,7 @@ func (UsersPlexServerHandler) Handle(options *str.Options, client *trakt.Client)
 	}
 
 	printer.Println("Returns home accounts and libraries of Plex server: " + options.ID)
-	result, resp, err := client.Users.GetPlexServerAccounts(client.BuildCtxFromOptions(options), &options.ID)
+	result, resp, err := client.Users.GetPlexServerAccounts(cli.ContextFromOptions(options), &options.ID)
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found Plex server:%s", options.ID)
 	}
@@ -145,7 +146,7 @@ func (UsersPlexSyncHandler) Handle(options *str.Options, client *trakt.Client) e
 	}
 
 	printer.Println("Queue a Plex sync of " + target)
-	resp, err := client.Users.SyncPlex(client.BuildCtxFromOptions(options), request)
+	resp, err := client.Users.SyncPlex(cli.ContextFromOptions(options), request)
 	if resp != nil && resp.StatusCode == http.StatusUnprocessableEntity {
 		return errors.New("plex_sync: no Plex server to sync (select one with users -a update_plex_settings)")
 	}

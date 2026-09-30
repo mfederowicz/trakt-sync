@@ -53,7 +53,7 @@ func (h PeopleRefreshHandler) Handle(options *str.Options, client *trakt.Client)
 func (PeopleRefreshHandler) refreshPerson(client *trakt.Client, options *str.Options) (*str.Response, error) {
 	personID := options.ID
 	resp, err := client.People.RefreshPersonMetadata(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&personID,
 	)
 	return resp, err

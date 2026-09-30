@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -84,7 +85,7 @@ func getAvlistsFromPersonals(personalLists []*str.PersonalList) []int {
 func fetchUsersPersonalLists(client *trakt.Client, options *str.Options) ([]*str.PersonalList, *str.Response, error) {
 	username := options.UserName
 	lists, resp, err := client.Users.GetUsersPersonalLists(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&username,
 	)
 
@@ -95,7 +96,7 @@ func fetchUsersPersonalList(client *trakt.Client, options *str.Options) ([]*str.
 	listIDString := options.ID
 	username := options.UserName
 	lists, resp, err := client.Users.GetItemstOnAPersonalList(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&username,
 		&listIDString,
 		&options.Type,

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -21,7 +22,7 @@ type TeamMembersHandler struct{}
 func (TeamMembersHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns Trakt team members.")
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	result, _, err := client.Team.GetTeamMembers(client.BuildCtxFromOptions(options), &opts)
+	result, _, err := client.Team.GetTeamMembers(cli.ContextFromOptions(options), &opts)
 	if err != nil {
 		return fmt.Errorf("fetch team %s error: %w", options.Action, err)
 	}

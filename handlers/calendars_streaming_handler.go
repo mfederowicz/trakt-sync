@@ -4,6 +4,7 @@ package handlers
 import (
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -18,7 +19,7 @@ func (CalendarsStreamingHandler) Handle(options *str.Options, client *trakt.Clie
 	printer.Println("Get calendar: " + options.Action)
 	target := calendarTarget(options.Action)
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	result, _, err := client.Calendars.GetStreamingReleases(client.BuildCtxFromOptions(options), &target, &options.StartDate, &options.Days, &opts)
+	result, _, err := client.Calendars.GetStreamingReleases(cli.ContextFromOptions(options), &target, &options.StartDate, &options.Days, &opts)
 	if err != nil {
 		return fmt.Errorf("fetch calendar %s error: %w", options.Action, err)
 	}

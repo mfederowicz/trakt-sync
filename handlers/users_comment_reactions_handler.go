@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -19,7 +20,7 @@ type UsersCommentReactionsHandler struct{}
 func (UsersCommentReactionsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns comments you have reacted to.")
 	result, err := fetchAllPages(client, options, consts.DefaultPage, func(opts *uri.ListOptions) ([]*str.CommentReaction, *str.Response, error) {
-		return client.Users.GetCommentReactions(client.BuildCtxFromOptions(options), opts)
+		return client.Users.GetCommentReactions(cli.ContextFromOptions(options), opts)
 	})
 	if err != nil {
 		return fmt.Errorf("fetch comment reactions error: %w", err)

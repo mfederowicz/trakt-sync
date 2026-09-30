@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -43,7 +44,7 @@ func (h ListsPopularHandler) Handle(options *str.Options, client *trakt.Client) 
 
 func (h ListsPopularHandler) fetchListsPopular(client *trakt.Client, options *str.Options, page int) ([]*str.List, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
-	ctx := client.BuildCtxFromOptions(options)
+	ctx := cli.ContextFromOptions(options)
 	var list []*str.List
 	var resp *str.Response
 	var err error

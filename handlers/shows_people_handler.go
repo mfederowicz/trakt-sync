@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -41,7 +42,7 @@ func (m ShowsPeopleHandler) Handle(options *str.Options, client *trakt.Client) e
 func (ShowsPeopleHandler) fetchShowPeople(client *trakt.Client, options *str.Options) (*str.ShowPeople, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.People.GetAllPeopleForShow(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.InternalID,
 		&opts,
 	)

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -31,7 +32,7 @@ func (h ShowsReportHandler) Handle(options *str.Options, client *trakt.Client) e
 		report.Message = &options.Msg
 	}
 
-	if _, err := client.Shows.ReportShow(client.BuildCtxFromOptions(options), &options.InternalID, report); err != nil {
+	if _, err := client.Shows.ReportShow(cli.ContextFromOptions(options), &options.InternalID, report); err != nil {
 		return fmt.Errorf("report error: %w", err)
 	}
 

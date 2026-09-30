@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -39,7 +40,7 @@ func (UsersStatsHandler) Handle(options *str.Options, client *trakt.Client) erro
 func fetchUsersStats(client *trakt.Client, options *str.Options) (*str.UserStats, *str.Response, error) {
 	username := options.UserName
 	stats, resp, err := client.Users.GetStats(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&username,
 	)
 

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -24,7 +25,7 @@ func (CommentsReactionsSummaryHandler) Handle(options *str.Options, client *trak
 
 	printer.Println("Get reaction totals for a comment.")
 	commentID := options.CommentID
-	result, _, err := client.Comments.GetCommentReactionsSummary(client.BuildCtxFromOptions(options), &commentID)
+	result, _, err := client.Comments.GetCommentReactionsSummary(cli.ContextFromOptions(options), &commentID)
 	if err != nil {
 		return fmt.Errorf("fetch reactions summary error: %w", err)
 	}

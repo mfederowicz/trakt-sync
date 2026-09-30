@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -30,7 +31,7 @@ func (EpisodesWatchNowHandler) Handle(options *str.Options, client *trakt.Client
 	}
 
 	printer.Println("Returns streaming and watch now sources for an episode in the requested country (limited access).")
-	ctx := client.BuildCtxFromOptions(options)
+	ctx := cli.ContextFromOptions(options)
 	opts := uri.ListOptions{Extended: options.ExtendedInfo, Links: options.Links}
 	var result map[string]*str.WatchNowSources
 	var resp *str.Response

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -48,7 +49,7 @@ func (ShowsWatchedProgressHandler) fetchShowsWatchedProgress(client *trakt.Clien
 	opts := uri.ListOptions{Hidden: options.Hidden, Specials: options.Specials, CountSpecials: options.CountSpecials}
 
 	result, err := client.Shows.GetShowWatchedProgress(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.InternalID,
 		&opts,
 	)

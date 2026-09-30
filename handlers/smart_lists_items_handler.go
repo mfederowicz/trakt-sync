@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -56,7 +57,7 @@ func (h SmartListsItemsHandler) Handle(options *str.Options, client *trakt.Clien
 
 func (h SmartListsItemsHandler) fetchItems(client *trakt.Client, options *str.Options, opts *uri.SmartListItemsOptions, page int) ([]*str.UserListItem, error) {
 	opts.Page = page
-	list, resp, err := client.SmartLists.GetSmartListItems(client.BuildCtxFromOptions(options), &options.InternalID, opts)
+	list, resp, err := client.SmartLists.GetSmartListItems(cli.ContextFromOptions(options), &options.InternalID, opts)
 	if err = smartListError(options.Action, options.InternalID, resp, err); err != nil {
 		return nil, err
 	}

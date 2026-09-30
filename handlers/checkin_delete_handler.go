@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -32,7 +33,7 @@ func (h CheckinDeleteHandler) Handle(options *str.Options, client *trakt.Client)
 }
 func (CheckinDeleteHandler) deleteActiveCheckins(client *trakt.Client, options *str.Options) (*str.Response, error) {
 	resp, err := client.Checkin.DeleteAnyActiveCheckins(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 	)
 
 	return resp, err

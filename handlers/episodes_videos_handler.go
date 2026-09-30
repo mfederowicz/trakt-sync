@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -40,7 +41,7 @@ func (m EpisodesVideosHandler) Handle(options *str.Options, client *trakt.Client
 func (EpisodesVideosHandler) fetchEpisodesVideos(client *trakt.Client, options *str.Options) ([]*str.Video, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Shows.GetEpisodeVideos(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.InternalID,
 		&options.Season,
 		&options.Episode,

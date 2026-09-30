@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -38,7 +39,7 @@ func (m UsersFollowHandler) Handle(options *str.Options, client *trakt.Client) e
 }
 
 func (UsersFollowHandler) usersFollow(client *trakt.Client, options *str.Options) (*str.FollowResult, *str.Response, error) {
-	result, resp, err := client.Users.Follow(client.BuildCtxFromOptions(options), &options.UserName)
+	result, resp, err := client.Users.Follow(cli.ContextFromOptions(options), &options.UserName)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, resp, fmt.Errorf("user not found:%s", options.UserName)

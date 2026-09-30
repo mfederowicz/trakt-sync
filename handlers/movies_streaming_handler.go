@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -24,7 +25,7 @@ func (MoviesStreamingHandler) Handle(options *str.Options, client *trakt.Client)
 
 	printer.Println("Returns the most streamed movies in the specified time period.")
 	result, err := fetchAllPages(client, options, consts.DefaultPage, func(opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
-		return client.Movies.GetStreamingMovies(client.BuildCtxFromOptions(options), &options.Period, opts)
+		return client.Movies.GetStreamingMovies(cli.ContextFromOptions(options), &options.Period, opts)
 	})
 	if err != nil {
 		return endpointNotLiveError(err)

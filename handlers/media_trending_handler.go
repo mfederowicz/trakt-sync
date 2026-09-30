@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -15,6 +16,6 @@ type MediaTrendingHandler struct{}
 func (MediaTrendingHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns trending movies and shows.")
 	return exportMedia(client, options, func(opts *uri.ListOptions) ([]*str.MediaItem, *str.Response, error) {
-		return client.Media.GetTrendingMedia(client.BuildCtxFromOptions(options), opts)
+		return client.Media.GetTrendingMedia(cli.ContextFromOptions(options), opts)
 	})
 }

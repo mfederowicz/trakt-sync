@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -40,7 +41,7 @@ func (m MoviesSummaryHandler) Handle(options *str.Options, client *trakt.Client)
 func (MoviesSummaryHandler) fetchMoviesSummary(client *trakt.Client, options *str.Options) (*str.Movie, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	movie, resp, err := client.Movies.GetMovie(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.InternalID,
 		&opts,
 	)

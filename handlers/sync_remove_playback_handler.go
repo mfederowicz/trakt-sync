@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -33,7 +34,7 @@ func (m SyncRemovePlaybackHandler) Handle(options *str.Options, client *trakt.Cl
 
 func (SyncRemovePlaybackHandler) syncRemovePlaybackItem(client *trakt.Client, options *str.Options) (*str.Response, error) {
 	resp, err := client.Sync.RemovePlaybackItem(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.PlaybackID,
 	)
 

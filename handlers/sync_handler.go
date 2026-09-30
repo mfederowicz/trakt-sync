@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -24,7 +25,7 @@ type syncProgressFetch func(ctx context.Context, page int) ([]*str.ShowProgress,
 
 // fetchSyncProgress fetches every page of up next or watched progress
 func fetchSyncProgress(client *trakt.Client, options *str.Options, page int, fetch syncProgressFetch) ([]*str.ShowProgress, error) {
-	list, resp, err := fetch(client.BuildCtxFromOptions(options), page)
+	list, resp, err := fetch(cli.ContextFromOptions(options), page)
 	if err != nil {
 		return nil, err
 	}

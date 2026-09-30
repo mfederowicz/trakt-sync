@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -32,7 +33,7 @@ func (m UsersBlockHandler) Handle(options *str.Options, client *trakt.Client) er
 }
 
 func (UsersBlockHandler) usersBlock(client *trakt.Client, options *str.Options) (*str.Response, error) {
-	resp, err := client.Users.Block(client.BuildCtxFromOptions(options), &options.UserName)
+	resp, err := client.Users.Block(cli.ContextFromOptions(options), &options.UserName)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return resp, fmt.Errorf("user not found:%s", options.UserName)

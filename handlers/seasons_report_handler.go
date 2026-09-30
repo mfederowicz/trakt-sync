@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -33,14 +34,14 @@ func (h SeasonsReportHandler) Handle(options *str.Options, client *trakt.Client)
 	}
 
 	if byID {
-		if _, err := client.Seasons.ReportSeason(client.BuildCtxFromOptions(options), &options.ID, report); err != nil {
+		if _, err := client.Seasons.ReportSeason(cli.ContextFromOptions(options), &options.ID, report); err != nil {
 			return fmt.Errorf("report error: %w", err)
 		}
 		printer.Printf("reported season %s\n", options.ID)
 		return nil
 	}
 
-	if _, err := client.Shows.ReportSeason(client.BuildCtxFromOptions(options), &options.InternalID, &options.Season, report); err != nil {
+	if _, err := client.Shows.ReportSeason(cli.ContextFromOptions(options), &options.InternalID, &options.Season, report); err != nil {
 		return fmt.Errorf("report error: %w", err)
 	}
 

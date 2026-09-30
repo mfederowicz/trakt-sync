@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -40,7 +41,7 @@ func (m ShowsSummaryHandler) Handle(options *str.Options, client *trakt.Client) 
 func (ShowsSummaryHandler) fetchShowsSummary(client *trakt.Client, options *str.Options) (*str.Show, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	show, resp, err := client.Shows.GetShow(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.InternalID,
 		&opts,
 	)

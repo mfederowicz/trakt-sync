@@ -91,17 +91,9 @@ type Client struct {
 	rateMu      sync.Mutex
 }
 
-// BuildCtxFromOptions create ctx with custom options
-func (*Client) BuildCtxFromOptions(options *str.Options) context.Context {
-	ctx := context.Background()
-
-	if len(options.Timezone) > consts.ZeroValue {
-		loc, err := time.LoadLocation(options.Timezone)
-		if err == nil {
-			ctx = context.WithValue(ctx, TimezoneKey, loc)
-		}
-	}
-	return ctx
+// WithTimezone returns a copy of ctx that makes the client convert response timestamps to loc.
+func WithTimezone(ctx context.Context, loc *time.Location) context.Context {
+	return context.WithValue(ctx, TimezoneKey, loc)
 }
 
 // GetTimezone to get timezone from ctx object

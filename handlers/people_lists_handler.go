@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -47,7 +48,7 @@ func (p PeopleListsHandler) Handle(options *str.Options, client *trakt.Client) e
 func (p PeopleListsHandler) fetchListsContainingThisPerson(client *trakt.Client, options *str.Options, page int) ([]*str.PersonalList, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.People.GetListsContainingThisPerson(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.ID,
 		&options.Type,
 		&options.Sort,

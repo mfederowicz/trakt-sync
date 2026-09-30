@@ -46,7 +46,7 @@ func (UsersAddListItemsHandler) usersAddListItems(client *trakt.Client, options 
 	user := options.UserName
 	listID := options.ID
 	result, resp, err := client.Users.AddListItems(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&user,
 		&listID,
 		items,

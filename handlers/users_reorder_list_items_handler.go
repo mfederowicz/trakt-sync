@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -35,7 +36,7 @@ func (UsersReorderListItemsHandler) usersReorderListItems(client *trakt.Client, 
 	user := options.UserName
 	listID := options.ID
 	result, _, err := client.Users.ReorderListItems(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&user,
 		&listID,
 		items,

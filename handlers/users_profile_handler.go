@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -39,7 +40,7 @@ func (UsersProfileHandler) Handle(options *str.Options, client *trakt.Client) er
 func fetchUserProfile(client *trakt.Client, options *str.Options) (*str.UserProfile, *str.Response, error) {
 	username := options.UserName
 	profile, resp, err := client.Users.GetProfile(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&username,
 	)
 

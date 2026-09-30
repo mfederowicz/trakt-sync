@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
@@ -213,6 +214,15 @@ func TestBareDo_returnsOpenBody(t *testing.T) {
 	if err := resp.Body.Close(); err != nil {
 		t.Fatalf("resp.Body.Close() returned error: %v", err)
 	}
+}
+
+// TestWithTimezone checks GetTimezone returns the location set by WithTimezone, and UTC without one.
+func TestWithTimezone(t *testing.T) {
+	client := NewClient(nil)
+	loc := time.FixedZone("UTC+2", 2*60*60)
+
+	assert.Equal(t, loc, client.GetTimezone(WithTimezone(context.Background(), loc)))
+	assert.Equal(t, time.UTC, client.GetTimezone(context.Background()))
 }
 
 // TestDebugLogger checks DebugLogger gets the service note and the request line, with client_secret redacted.

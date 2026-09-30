@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -36,7 +37,7 @@ func (m SyncRemoveFromHistoryHandler) Handle(options *str.Options, client *trakt
 
 func (SyncRemoveFromHistoryHandler) syncRemoveFromHistory(client *trakt.Client, options *str.Options, items *str.ItemsToRemove) (*str.RemoveResult, error) {
 	result, err := client.Sync.RemoveItemsFromHistory(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		items,
 	)
 	if err != nil {

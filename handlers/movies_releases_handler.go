@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -38,7 +39,7 @@ func (m MoviesReleasesHandler) Handle(options *str.Options, client *trakt.Client
 
 func (MoviesReleasesHandler) fetchMoviesReleases(client *trakt.Client, options *str.Options) ([]*str.Release, *str.Response, error) {
 	releases, resp, err := client.Movies.GetAllMovieReleases(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.InternalID,
 		&options.Country,
 	)

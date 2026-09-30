@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -46,7 +47,7 @@ func (h ListsListHandler) Handle(options *str.Options, client *trakt.Client) err
 func (ListsListHandler) fetchSingleList(client *trakt.Client, options *str.Options) (*str.PersonalList, *str.Response, error) {
 	listID := options.InternalID
 	result, resp, err := client.Lists.GetList(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&listID,
 	)
 
