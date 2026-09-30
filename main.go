@@ -37,7 +37,6 @@ func main() {
 		printer.Printf("Error: %v\n", err)
 		os.Exit(consts.ErrorExitCode)
 	}
-	client := internal.NewClient(nil)
 	options, err := cfg.OptionsFromConfig(fs, config)
 	if err != nil {
 		printer.Printf("Error: %v\n", err)
@@ -49,9 +48,11 @@ func main() {
 		return
 	}
 
-	options.Headers["User-Agent"] = cli.UserAgent()
-	client.UpdateHeaders(options.Headers)
-	cli.HandleToken(fs, config, client, options)
+	client := internal.NewClient(nil).WithClientID(config.ClientID).WithUserAgent(cli.UserAgent())
+	if len(options.Token.AccessToken) > consts.ZeroValue {
+		client = client.WithAuthToken(options.Token.AccessToken)
+	}
+	client = cli.HandleToken(fs, config, client, options)
 	err = cmds.ModulesRuntime(args, fs, config, client)
 	if err != nil {
 		os.Exit(consts.ErrorExitCode)

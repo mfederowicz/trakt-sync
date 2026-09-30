@@ -528,13 +528,7 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 	if err != nil {
 		return str.Options{}, fmt.Errorf("error reading user settings:%w", err)
 	}
-	if len(token.AccessToken) > consts.ZeroValue {
-		str.Headers["Authorization"] = "Bearer " + token.AccessToken
-	}
-
-	str.Headers["trakt-api-key"] = config.ClientID
-
-	if len(str.Headers["Authorization"].(string)) == consts.ZeroValue && len(str.Headers["trakt-api-key"].(string)) == consts.ZeroValue {
+	if len(token.AccessToken) == consts.ZeroValue && len(config.ClientID) == consts.ZeroValue {
 		return str.Options{}, errors.New("no valid Authorization header")
 	}
 
@@ -550,7 +544,6 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 		return str.Options{}, fmt.Errorf("type '%s' is not valid for module '%s'", options.Type, options.Module)
 	}
 	options = optionsFromModuleConfig(moduleConfig, options)
-	options.Headers = str.Headers
 	options.Token = *token
 	options.UserSettings = *settings
 	options.Timezone = timezoneFromConfig(options, config)

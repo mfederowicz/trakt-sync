@@ -40,17 +40,17 @@ func TestNewRequest(t *testing.T) {
 // TestNewRequestHeaders checks every request carries the headers Trakt requires.
 func TestNewRequestHeaders(t *testing.T) {
 	tests := []struct {
-		name    string
-		headers map[string]any
-		want    map[string]string
+		name      string
+		authToken string
+		clientID  string
+		userAgent string
+		want      map[string]string
 	}{
 		{
-			name: "all set",
-			headers: map[string]any{
-				"User-Agent":    "trakt-sync/1.19.1",
-				"trakt-api-key": "client-id",
-				"Authorization": "Bearer token",
-			},
+			name:      "all set",
+			authToken: "token",
+			clientID:  "client-id",
+			userAgent: "trakt-sync/1.19.1",
 			want: map[string]string{
 				"Content-Type":      "application/json",
 				"trakt-api-version": "2",
@@ -60,8 +60,7 @@ func TestNewRequestHeaders(t *testing.T) {
 			},
 		},
 		{
-			name:    "no headers",
-			headers: nil,
+			name: "no headers",
 			want: map[string]string{
 				"Content-Type":      "application/json",
 				"trakt-api-version": "2",
@@ -71,8 +70,8 @@ func TestNewRequestHeaders(t *testing.T) {
 			},
 		},
 		{
-			name:    "empty authorization",
-			headers: map[string]any{"Authorization": "", "trakt-api-key": "client-id"},
+			name:     "empty authorization",
+			clientID: "client-id",
 			want: map[string]string{
 				"User-Agent":    "trakt-sync",
 				"trakt-api-key": "client-id",
@@ -83,8 +82,7 @@ func TestNewRequestHeaders(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			c := NewClient(nil)
-			c.UpdateHeaders(tt.headers)
+			c := NewClient(nil).WithAuthToken(tt.authToken).WithClientID(tt.clientID).WithUserAgent(tt.userAgent)
 			req, err := c.NewRequest(http.MethodGet, "/foo", nil)
 			assert.NoError(t, err)
 			for name, want := range tt.want {
@@ -94,8 +92,39 @@ func TestNewRequestHeaders(t *testing.T) {
 				_, present := req.Header["Authorization"]
 				assert.False(t, present, "Authorization must not be sent empty")
 			}
+			if tt.want["trakt-api-key"] == "" {
+				_, present := req.Header["Trakt-Api-Key"]
+				assert.False(t, present, "trakt-api-key must not be sent empty")
+			}
 		})
 	}
+}
+
+// TestWithMethodsReturnCopies checks With* leave the original client alone and the copy's services use the copy.
+func TestWithMethodsReturnCopies(t *testing.T) {
+	testSetup := Setup()
+	defer testSetup.Teardown()
+
+	testSetup.Mux.HandleFunc("/countries/movies", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "Bearer new-token", r.Header.Get("Authorization"))
+		assert.Equal(t, "client-id", r.Header.Get("trakt-api-key"))
+		test.SafeFprint(w, "[]")
+	})
+
+	original := testSetup.Client.WithClientID("client-id")
+	original.DebugLogger = func(...any) {}
+	authed := original.WithAuthToken("new-token")
+
+	assert.NotSame(t, original, authed)
+	assert.Equal(t, original.BaseURL, authed.BaseURL)
+	assert.NotNil(t, authed.DebugLogger)
+
+	req, err := original.NewRequest(http.MethodGet, "/foo", nil)
+	assert.NoError(t, err)
+	assert.Empty(t, req.Header.Get("Authorization"), "the original client must keep no token")
+
+	_, _, err = authed.Countries.GetCountries(context.Background(), test.Ptr("movies"))
+	assert.NoError(t, err)
 }
 
 func TestHavePages(t *testing.T) {

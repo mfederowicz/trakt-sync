@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/handlers"
 	"github.com/mfederowicz/trakt-sync/internal"
@@ -322,7 +323,7 @@ func (c *Command) Exec(fs afero.Fs, client *internal.Client, config *cfg.Config,
 		return errors.New("invalid flags")
 	}
 
-	processVerbose(&options)
+	processVerbose(&options, config.ClientID)
 	client.DebugLogger = debugLogger(options.Verbose)
 
 	// err is the named result, so a recovered panic is returned instead of nil
@@ -349,14 +350,11 @@ func debugLogger(verbose bool) func(v ...any) {
 	return printer.Println
 }
 
-func processVerbose(options *str.Options) {
+func processVerbose(options *str.Options, clientID string) {
 	if options.Verbose {
-		auth, _ := options.Headers["Authorization"].(string)
-		apiKey, _ := options.Headers["trakt-api-key"].(string)
-		printer.Println("Authorization header:" + maskSecret(strings.TrimPrefix(auth, consts.BearerPrefix)))
-		printer.Println("trakt-api-key header:" + maskSecret(apiKey))
-		userAgent, _ := options.Headers["User-Agent"].(string)
-		printer.Println("User-Agent header:" + userAgent)
+		printer.Println("Authorization header:" + maskSecret(options.Token.AccessToken))
+		printer.Println("trakt-api-key header:" + maskSecret(clientID))
+		printer.Println("User-Agent header:" + cli.UserAgent())
 		printer.Println("token expiration in seconds:" + strconv.Itoa(options.Token.ExpiritySeconds()))
 		printer.Println("Extended info:" + *_extendedInfo)
 		if len(options.Module) > consts.ZeroValue {

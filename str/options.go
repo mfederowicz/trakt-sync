@@ -46,7 +46,6 @@ type Options struct {
 	FullHour          bool
 	FollowerRequest   int
 	Format            string
-	Headers           map[string]any
 	Hidden            string
 	Hide              bool
 	ID                string
