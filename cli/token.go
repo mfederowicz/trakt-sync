@@ -40,7 +40,8 @@ func ValidAccessToken(config *cfg.Config, client *internal.Client, options *str.
 			return false
 		}
 
-		if refreshedSettings := RefreshUserSettings(config, client, options); refreshedSettings {
+		// the client still holds the expired token, so send the refreshed one
+		if refreshedSettings := RefreshUserSettings(config, client.WithAuthToken(token.AccessToken), options); refreshedSettings {
 			printer.Println("User settings refreshed!")
 		}
 	}
@@ -144,15 +145,20 @@ func RefreshUserSettings(config *cfg.Config, client *internal.Client, options *s
 	return false
 }
 
-// HandleToken process token check and refresh
-func HandleToken(fs afero.Fs, config *cfg.Config, client *internal.Client, options str.Options) {
+// HandleToken process token check and refresh, and returns the client with the current access token
+func HandleToken(fs afero.Fs, config *cfg.Config, client *internal.Client, options str.Options) *internal.Client {
 	if !ValidAccessToken(config, client, &options) {
 		PoolNewDeviceCode(config, client, &options)
 	}
 
 	options, _ = cfg.OptionsFromConfig(fs, config)
+	if len(options.Token.AccessToken) > consts.ZeroValue {
+		client = client.WithAuthToken(options.Token.AccessToken)
+	}
 	if len(options.Token.AccessToken) > consts.ZeroValue && options.UserSettings.User == nil {
 		RefreshUserSettings(config, client, &options)
 		printer.Println("User settings refreshed!")
 	}
+
+	return client
 }

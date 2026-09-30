@@ -55,7 +55,9 @@ type Client struct {
 	client                *http.Client
 	BaseURL               *url.URL
 	UpgradeURL            *url.URL
-	headers               map[string]any
+	authToken             string
+	clientID              string
+	userAgent             string
 	common                Service
 	Oauth                 *OauthService
 	Users                 *UsersService
@@ -118,14 +120,45 @@ func (c *Client) debug(v ...any) {
 	}
 }
 
-// UpdateHeaders is for update client headers map
-func (c *Client) UpdateHeaders(headers map[string]any) {
-	c.headers = headers
+// WithAuthToken returns a copy of the client that sends the OAuth access token as "Authorization: Bearer <token>".
+func (c *Client) WithAuthToken(token string) *Client {
+	c2 := c.clone()
+	c2.authToken = token
+	return c2
 }
 
-// GetHeaders is for get headers map
-func (c *Client) GetHeaders() map[string]any {
-	return c.headers
+// WithClientID returns a copy of the client that sends the API app client id as trakt-api-key.
+func (c *Client) WithClientID(id string) *Client {
+	c2 := c.clone()
+	c2.clientID = id
+	return c2
+}
+
+// WithUserAgent returns a copy of the client that sends ua as User-Agent.
+func (c *Client) WithUserAgent(ua string) *Client {
+	c2 := c.clone()
+	c2.userAgent = ua
+	return c2
+}
+
+// clone returns a new client with the same settings and its own services, so changing it never changes c.
+func (c *Client) clone() *Client {
+	c.rateMu.Lock()
+	reset := c.RateLimitReset
+	c.rateMu.Unlock()
+
+	c2 := &Client{
+		RateLimitReset: reset,
+		client:         c.client,
+		BaseURL:        c.BaseURL,
+		UpgradeURL:     c.UpgradeURL,
+		authToken:      c.authToken,
+		clientID:       c.clientID,
+		userAgent:      c.userAgent,
+		DebugLogger:    c.DebugLogger,
+	}
+	c2.initialize()
+	return c2
 }
 
 // HavePages checks if we have available pages to fetch
@@ -216,26 +249,21 @@ func (c *Client) NewRequest(method, urlStr string, body any, opts ...RequestOpti
 func (c *Client) requestSetHeaders(r *http.Request, _ any) *http.Request {
 	r.Header.Set("Content-Type", "application/json")
 	r.Header.Set("trakt-api-version", Version)
-	r.Header.Set("User-Agent", c.headerValue("User-Agent", consts.AppName))
+	userAgent := c.userAgent
+	if len(userAgent) == consts.ZeroValue {
+		userAgent = consts.AppName
+	}
+	r.Header.Set("User-Agent", userAgent)
 
-	if key := c.headerValue("trakt-api-key", consts.EmptyString); len(key) > consts.ZeroValue {
-		r.Header.Set("trakt-api-key", key)
+	if len(c.clientID) > consts.ZeroValue {
+		r.Header.Set("trakt-api-key", c.clientID)
 	}
 
-	if auth := c.headerValue("Authorization", consts.EmptyString); len(auth) > consts.ZeroValue {
-		r.Header.Set("Authorization", auth)
+	if len(c.authToken) > consts.ZeroValue {
+		r.Header.Set("Authorization", consts.BearerPrefix+c.authToken)
 	}
 
 	return r
-}
-
-// headerValue returns a string header from the client map, or fallback when missing or empty
-func (c *Client) headerValue(name string, fallback string) string {
-	if value, ok := c.headers[name].(string); ok && len(value) > consts.ZeroValue {
-		return value
-	}
-
-	return fallback
 }
 
 // Do sends an API request and returns the API response. The API response is

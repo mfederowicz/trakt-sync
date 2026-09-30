@@ -9,7 +9,6 @@ import (
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/cmds"
 	"github.com/mfederowicz/trakt-sync/consts"
-	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 
@@ -37,7 +36,6 @@ func main() {
 		printer.Printf("Error: %v\n", err)
 		os.Exit(consts.ErrorExitCode)
 	}
-	client := internal.NewClient(nil)
 	options, err := cfg.OptionsFromConfig(fs, config)
 	if err != nil {
 		printer.Printf("Error: %v\n", err)
@@ -49,9 +47,7 @@ func main() {
 		return
 	}
 
-	options.Headers["User-Agent"] = cli.UserAgent()
-	client.UpdateHeaders(options.Headers)
-	cli.HandleToken(fs, config, client, options)
+	client := cli.HandleToken(fs, config, cli.NewClient(config, options.Token), options)
 	err = cmds.ModulesRuntime(args, fs, config, client)
 	if err != nil {
 		os.Exit(consts.ErrorExitCode)

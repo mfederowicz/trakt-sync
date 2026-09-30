@@ -46,11 +46,9 @@ func deviceCodeVerification(deviceToken *str.NewDeviceToken, client *internal.Cl
 		}
 
 		options.Token = *token.ToToken()
-		headers := client.GetHeaders()
 		if len(options.Token.AccessToken) > consts.ZeroValue {
-			headers["Authorization"] = "Bearer " + options.Token.AccessToken
+			client = client.WithAuthToken(options.Token.AccessToken)
 		}
-		client.UpdateHeaders(headers)
 		RefreshUserSettings(config, client, options)
 		printer.Println("User settings refreshed!")
 	}

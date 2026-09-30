@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/internal"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -37,20 +38,16 @@ func TestProcessVerboseMasksCredentials(t *testing.T) {
 	const clientID = "secret-client-id-5678"
 	options := &str.Options{
 		Verbose: true,
-		Headers: map[string]any{
-			"Authorization": "Bearer " + token,
-			"trakt-api-key": clientID,
-			"User-Agent":    "trakt-sync/1.19.1",
-		},
+		Token:   str.Token{AccessToken: token},
 	}
 
-	out := captureStdout(t, func() { processVerbose(options) })
+	out := captureStdout(t, func() { processVerbose(options, clientID) })
 
 	assert.NotContains(t, out, token)
 	assert.NotContains(t, out, clientID)
 	assert.Contains(t, out, "Authorization header:****1234")
 	assert.Contains(t, out, "trakt-api-key header:****5678")
-	assert.Contains(t, out, "User-Agent header:trakt-sync/1.19.1")
+	assert.Contains(t, out, "User-Agent header:"+cli.UserAgent())
 }
 
 // TestDebugLoggerOnlyWithVerbose checks the client debug output is printer.Println with -v and off without it.
