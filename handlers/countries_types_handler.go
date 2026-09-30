@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -33,7 +34,7 @@ func (CountriesTypesHandler) Handle(options *str.Options, client *trakt.Client) 
 }
 
 func fetchCountries(client *trakt.Client, options *str.Options) ([]*str.Country, *str.Response, error) {
-	results, resp, err := client.Countries.GetCountries(client.BuildCtxFromOptions(options), &options.Type)
+	results, resp, err := client.Countries.GetCountries(cli.ContextFromOptions(options), &options.Type)
 
 	return results, resp, err
 }

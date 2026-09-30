@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -56,7 +57,7 @@ func (m SyncAddToHistoryHandler) Handle(options *str.Options, client *trakt.Clie
 
 func (SyncAddToHistoryHandler) syncRemoveFromHistory(client *trakt.Client, options *str.Options, items *str.ItemsToRemove) (*str.RemoveResult, error) {
 	result, err := client.Sync.RemoveItemsFromHistory(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		items,
 	)
 	if err != nil {
@@ -68,7 +69,7 @@ func (SyncAddToHistoryHandler) syncRemoveFromHistory(client *trakt.Client, optio
 
 func (SyncAddToHistoryHandler) syncAddToHistory(client *trakt.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error) {
 	result, err := client.Sync.AddItemsToHistory(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		items,
 	)
 	if err != nil {

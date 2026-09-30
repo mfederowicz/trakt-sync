@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -44,7 +45,7 @@ func fetchCalendarSeasonPremieres(client *trakt.Client, options *str.Options) ([
 
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Calendars.GetSeasonPremieres(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&actionType,
 		&options.StartDate,
 		&options.Days,

@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -46,7 +47,7 @@ func (s SearchTrendingHandler) fetchSearchTrending(client *trakt.Client, options
 	searchType := options.SearchType[consts.ZeroValue]
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Query: options.Query}
 	list, resp, err := client.Search.GetTrendingSearches(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&searchType,
 		&opts,
 	)

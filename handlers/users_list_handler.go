@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -51,7 +52,7 @@ func (UsersListHandler) fetchSingleList(client *trakt.Client, options *str.Optio
 	listID := options.ID
 
 	result, resp, err := client.Users.GetList(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&username,
 		&listID,
 		&opts,

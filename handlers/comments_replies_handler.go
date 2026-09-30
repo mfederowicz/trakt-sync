@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -56,7 +57,7 @@ func (h CommentsRepliesHandler) allCommentReplies(client *trakt.Client, options 
 func (h CommentsRepliesHandler) fetchCommentReplies(client *trakt.Client, options *str.Options, page int) ([]*str.Comment, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Comments.GetRepliesForComment(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&opts,
 		&options.CommentID,
 	)

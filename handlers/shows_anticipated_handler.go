@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -44,7 +45,7 @@ func (h ShowsAnticipatedHandler) Handle(options *str.Options, client *trakt.Clie
 func (h ShowsAnticipatedHandler) fetchShowsAnticipated(client *trakt.Client, options *str.Options, page int) ([]*str.ShowsItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetAnticipatedShows(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&opts,
 	)
 

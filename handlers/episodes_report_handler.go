@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -36,14 +37,14 @@ func (h EpisodesReportHandler) Handle(options *str.Options, client *trakt.Client
 	}
 
 	if byID {
-		if _, err := client.Episodes.ReportEpisode(client.BuildCtxFromOptions(options), &options.ID, report); err != nil {
+		if _, err := client.Episodes.ReportEpisode(cli.ContextFromOptions(options), &options.ID, report); err != nil {
 			return fmt.Errorf("report error: %w", err)
 		}
 		printer.Printf("reported episode %s\n", options.ID)
 		return nil
 	}
 
-	if _, err := client.Shows.ReportEpisode(client.BuildCtxFromOptions(options), &options.InternalID, &options.Season, &options.Episode, report); err != nil {
+	if _, err := client.Shows.ReportEpisode(cli.ContextFromOptions(options), &options.InternalID, &options.Season, &options.Episode, report); err != nil {
 		return fmt.Errorf("report error: %w", err)
 	}
 

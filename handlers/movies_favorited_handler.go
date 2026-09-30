@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -45,7 +46,7 @@ func (h MoviesFavoritedHandler) fetchMoviesFavorited(client *trakt.Client, optio
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	period := options.Period
 	list, resp, err := client.Movies.GetFavoritedMovies(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&opts,
 		&period,
 	)

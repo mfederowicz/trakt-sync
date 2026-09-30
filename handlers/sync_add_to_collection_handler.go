@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -35,7 +36,7 @@ func (m SyncAddToCollectionHandler) Handle(options *str.Options, client *trakt.C
 
 func (SyncAddToCollectionHandler) syncAddToCollection(client *trakt.Client, options *str.Options, items *str.ItemsList) (*str.CollectionAddResult, error) {
 	result, err := client.Sync.AddItemsToCollection(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		items,
 	)
 	if err != nil {

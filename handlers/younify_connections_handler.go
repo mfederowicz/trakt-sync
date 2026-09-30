@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -19,7 +20,7 @@ type YounifyConnectionsHandler struct{}
 // Handle to handle younify: connections action
 func (YounifyConnectionsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns streaming services with your connection status.")
-	result, resp, err := client.Younify.GetConnections(client.BuildCtxFromOptions(options))
+	result, resp, err := client.Younify.GetConnections(cli.ContextFromOptions(options))
 	if err = younifyError(options.Action, consts.EmptyString, resp, err); err != nil {
 		return err
 	}

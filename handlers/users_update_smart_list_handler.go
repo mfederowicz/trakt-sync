@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -25,7 +26,7 @@ func (h UsersUpdateSmartListHandler) Handle(options *str.Options, client *trakt.
 	}
 
 	printer.Println("Update smart list: " + options.ID)
-	result, resp, err := client.Users.UpdateSmartList(client.BuildCtxFromOptions(options), &options.UserName, &options.ID, list)
+	result, resp, err := client.Users.UpdateSmartList(cli.ContextFromOptions(options), &options.UserName, &options.ID, list)
 	if err = smartListError(options.Action, options.ID, resp, err); err != nil {
 		return err
 	}

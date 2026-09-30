@@ -99,7 +99,7 @@ func refreshToken(config *cfg.Config, client *trakt.Client, options *str.Options
 	}
 
 	newToken, resp, err := client.Oauth.ExchangeRefreshTokenForAccessToken(
-		client.BuildCtxFromOptions(options),
+		ContextFromOptions(options),
 		currentToken,
 	)
 
@@ -124,7 +124,7 @@ func refreshToken(config *cfg.Config, client *trakt.Client, options *str.Options
 // RefreshUserSettings user settings
 func RefreshUserSettings(config *cfg.Config, client *trakt.Client, options *str.Options) bool {
 	newSettings, resp, err := client.Users.RetrieveSettings(
-		client.BuildCtxFromOptions(options),
+		ContextFromOptions(options),
 	)
 
 	if err != nil {

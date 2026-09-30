@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -44,7 +45,7 @@ func fetchUsersWatched(client *trakt.Client, options *str.Options, page int) ([]
 	watchType := options.Type
 	opts := uri.ListOptions{Page: page, Limit: consts.PerPage, Extended: options.ExtendedInfo}
 	watched, resp, err := client.Users.GetWatched(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&username,
 		&watchType,
 		&opts,

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -44,7 +45,7 @@ func (UsersUpdateListItemHandler) usersUpdateListItem(client *trakt.Client, opti
 	}
 
 	resp, err := client.Users.UpdateListItem(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.UserName,
 		&options.ID,
 		&options.ListItemID,

@@ -4,6 +4,7 @@ package handlers
 import (
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -29,7 +30,7 @@ func (SyncUpdateFavoriteItemHandler) syncUpdateFavoriteItem(client *trakt.Client
 	update := new(str.FavoriteItem)
 	update.Notes = &options.Notes
 
-	err := client.Sync.UpdateFavoriteItem(client.BuildCtxFromOptions(options), options.ListItemID, update)
+	err := client.Sync.UpdateFavoriteItem(cli.ContextFromOptions(options), options.ListItemID, update)
 	if err != nil {
 		return fmt.Errorf("update favorite item error:%w", err)
 	}

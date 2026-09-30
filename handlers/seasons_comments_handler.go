@@ -6,6 +6,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -41,7 +42,7 @@ func (m SeasonsCommentsHandler) Handle(options *str.Options, client *trakt.Clien
 func (m SeasonsCommentsHandler) fetchSeasonsComments(client *trakt.Client, options *str.Options, page int) ([]*str.Comment, *str.Response, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetAllSeasonComments(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.InternalID,
 		&options.Season,
 		&options.Sort,

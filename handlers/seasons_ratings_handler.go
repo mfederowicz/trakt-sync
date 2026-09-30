@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -38,7 +39,7 @@ func (m SeasonsRatingsHandler) Handle(options *str.Options, client *trakt.Client
 
 func (SeasonsRatingsHandler) fetchSeasonsRatings(client *trakt.Client, options *str.Options) (*str.SeasonRatings, *str.Response, error) {
 	result, resp, err := client.Shows.GetSeasonRatings(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.InternalID,
 		&options.Season,
 	)

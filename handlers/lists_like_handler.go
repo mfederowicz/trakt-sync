@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -46,14 +47,14 @@ func (ListsLikeHandler) likeSingleList(client *trakt.Client, options *str.Option
 
 	if !options.Remove {
 		resp, err := client.Lists.LikeList(
-			client.BuildCtxFromOptions(options),
+			cli.ContextFromOptions(options),
 			&listID,
 		)
 		return resp, err
 	}
 
 	resp, err := client.Lists.RemoveLikeList(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&listID,
 	)
 

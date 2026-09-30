@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -512,7 +513,7 @@ func (*CommonLogic) FetchMovie(client *trakt.Client, options *str.Options) (*str
 	movieID := options.InternalID
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Movies.GetMovie(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&movieID,
 		&opts,
 	)
@@ -526,7 +527,7 @@ func (*CommonLogic) FetchShow(client *trakt.Client, options *str.Options) (*str.
 	showID := options.InternalID
 
 	result, _, err := client.Shows.GetShow(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&showID,
 		&opts,
 	)
@@ -559,7 +560,7 @@ func (*CommonLogic) FetchPerson(client *trakt.Client, options *str.Options) (*st
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	personID := options.InternalID
 	result, _, err := client.People.GetSinglePerson(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&personID,
 		&opts,
 	)
@@ -571,7 +572,7 @@ func (*CommonLogic) FetchPerson(client *trakt.Client, options *str.Options) (*st
 func (*CommonLogic) FetchList(client *trakt.Client, options *str.Options) (*str.PersonalList, error) {
 	listID := options.InternalID
 	result, _, err := client.Lists.GetList(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&listID,
 	)
 
@@ -582,7 +583,7 @@ func (*CommonLogic) FetchList(client *trakt.Client, options *str.Options) (*str.
 func (*CommonLogic) FetchComment(client *trakt.Client, options *str.Options) (*str.Comment, error) {
 	commentID := options.CommentID
 	result, _, err := client.Comments.GetComment(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&commentID,
 	)
 
@@ -593,7 +594,7 @@ func (*CommonLogic) FetchComment(client *trakt.Client, options *str.Options) (*s
 func (*CommonLogic) FetchNotes(client *trakt.Client, options *str.Options) (*str.Notes, error) {
 	notesID := options.InternalID
 	result, _, err := client.Notes.GetNotes(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&notesID,
 	)
 
@@ -604,7 +605,7 @@ func (*CommonLogic) FetchNotes(client *trakt.Client, options *str.Options) (*str
 func (*CommonLogic) FetchNotesItem(client *trakt.Client, options *str.Options) (*str.NotesItem, error) {
 	notesID := options.InternalID
 	result, _, err := client.Notes.GetNotesItem(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&notesID,
 	)
 
@@ -616,7 +617,7 @@ func (*CommonLogic) FetchCommentItem(client *trakt.Client, options *str.Options)
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	commentID := options.CommentID
 	result, _, err := client.Comments.GetCommentItem(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&commentID,
 		&opts,
 	)
@@ -629,7 +630,7 @@ func (c *CommonLogic) FetchCommentUserLikes(client *trakt.Client, options *str.O
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	commentID := options.CommentID
 	list, resp, err := client.Comments.GetCommentUserLikes(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&commentID,
 		&opts,
 	)
@@ -659,7 +660,7 @@ func (c *CommonLogic) FetchTrendingComments(client *trakt.Client, options *str.O
 	commentType := options.CommentType
 	strType := options.Type
 	list, resp, err := client.Comments.GetTrendingComments(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&commentType,
 		&strType,
 		&opts,
@@ -690,7 +691,7 @@ func (c *CommonLogic) FetchRecentComments(client *trakt.Client, options *str.Opt
 	commentType := options.CommentType
 	strType := options.Type
 	list, resp, err := client.Comments.GetRecentComments(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&commentType,
 		&strType,
 		&opts,
@@ -721,7 +722,7 @@ func (c *CommonLogic) FetchUpdatedComments(client *trakt.Client, options *str.Op
 	commentType := options.CommentType
 	strType := options.Type
 	list, resp, err := client.Comments.GetUpdatedComments(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&commentType,
 		&strType,
 		&opts,
@@ -751,7 +752,7 @@ func (c *CommonLogic) FetchMovieRecommendations(client *trakt.Client, options *s
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, IgnoreCollected: options.IgnoreCollected, IgnoreWatchlisted: options.IgnoreWatchlisted,
 		IgnoreWatched: options.IgnoreWatched, WatchWindow: options.WatchWindow}
 	list, resp, err := client.Recommendations.GetMovieRecommendations(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&opts,
 	)
 
@@ -779,7 +780,7 @@ func (c *CommonLogic) FetchShowRecommendations(client *trakt.Client, options *st
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, IgnoreCollected: options.IgnoreCollected, IgnoreWatchlisted: options.IgnoreWatchlisted,
 		IgnoreWatched: options.IgnoreWatched, WatchWindow: options.WatchWindow}
 	list, resp, err := client.Recommendations.GetShowRecommendations(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&opts,
 	)
 
@@ -806,7 +807,7 @@ func (c *CommonLogic) FetchShowRecommendations(client *trakt.Client, options *st
 func (*CommonLogic) UpdateComment(client *trakt.Client, options *str.Options, comment *str.Comment) (*str.Comment, *str.Response, error) {
 	commentID := options.CommentID
 	result, resp, err := client.Comments.UpdateComment(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&commentID,
 		comment,
 	)
@@ -818,7 +819,7 @@ func (*CommonLogic) UpdateComment(client *trakt.Client, options *str.Options, co
 func (*CommonLogic) DeleteComment(client *trakt.Client, options *str.Options) (*str.Response, error) {
 	commentID := options.CommentID
 	resp, err := client.Comments.DeleteComment(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&commentID,
 	)
 
@@ -829,7 +830,7 @@ func (*CommonLogic) DeleteComment(client *trakt.Client, options *str.Options) (*
 func (*CommonLogic) DeleteNotes(client *trakt.Client, options *str.Options) (*str.Response, error) {
 	notesID := options.InternalID
 	resp, err := client.Notes.DeleteNotes(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&notesID,
 	)
 
@@ -840,7 +841,7 @@ func (*CommonLogic) DeleteNotes(client *trakt.Client, options *str.Options) (*st
 func (*CommonLogic) HideMovieRecommendation(client *trakt.Client, options *str.Options) (*str.Response, error) {
 	movieID := options.InternalID
 	resp, err := client.Recommendations.HideMovieRecommendation(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&movieID,
 	)
 
@@ -851,7 +852,7 @@ func (*CommonLogic) HideMovieRecommendation(client *trakt.Client, options *str.O
 func (*CommonLogic) HideShowRecommendation(client *trakt.Client, options *str.Options) (*str.Response, error) {
 	showID := options.InternalID
 	resp, err := client.Recommendations.HideShowRecommendation(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&showID,
 	)
 
@@ -861,7 +862,7 @@ func (*CommonLogic) HideShowRecommendation(client *trakt.Client, options *str.Op
 // FetchUserConnections helper function to fetch connections object
 func (*CommonLogic) FetchUserConnections(client *trakt.Client, options *str.Options) (*str.Connections, error) {
 	result, _, err := client.Users.RetrieveSettings(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 	)
 	if err != nil {
 		return nil, fmt.Errorf(consts.UserSettingsError, err)
@@ -873,7 +874,7 @@ func (*CommonLogic) FetchUserConnections(client *trakt.Client, options *str.Opti
 // StartScrobble helper function to start scrobble
 func (*CommonLogic) StartScrobble(client *trakt.Client, scrobble *str.Scrobble, options *str.Options) (*str.Scrobble, *str.Response, error) {
 	result, resp, err := client.Scrobble.StartScrobble(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		scrobble,
 	)
 
@@ -883,7 +884,7 @@ func (*CommonLogic) StartScrobble(client *trakt.Client, scrobble *str.Scrobble, 
 // StopScrobble helper function to stop scrobble
 func (*CommonLogic) StopScrobble(client *trakt.Client, scrobble *str.Scrobble, options *str.Options) (*str.Scrobble, *str.Response, error) {
 	result, resp, err := client.Scrobble.StopScrobble(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		scrobble,
 	)
 
@@ -893,7 +894,7 @@ func (*CommonLogic) StopScrobble(client *trakt.Client, scrobble *str.Scrobble, o
 // PauseScrobble helper function to pause scrobble
 func (*CommonLogic) PauseScrobble(client *trakt.Client, scrobble *str.Scrobble, options *str.Options) (*str.Scrobble, *str.Response, error) {
 	result, resp, err := client.Scrobble.PauseScrobble(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		scrobble,
 	)
 
@@ -903,7 +904,7 @@ func (*CommonLogic) PauseScrobble(client *trakt.Client, scrobble *str.Scrobble, 
 // Checkin helper function to post checkin object
 func (*CommonLogic) Checkin(client *trakt.Client, checkin *str.Checkin, options *str.Options) (*str.Checkin, *str.Response, error) {
 	result, resp, err := client.Checkin.CheckintoAnItem(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		checkin,
 	)
 
@@ -913,7 +914,7 @@ func (*CommonLogic) Checkin(client *trakt.Client, checkin *str.Checkin, options 
 // Comment helper function to post comment object
 func (*CommonLogic) Comment(client *trakt.Client, comment *str.Comment, options *str.Options) (*str.Comment, *str.Response, error) {
 	result, resp, err := client.Comments.PostAComment(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		comment,
 	)
 	return result, resp, err
@@ -922,7 +923,7 @@ func (*CommonLogic) Comment(client *trakt.Client, comment *str.Comment, options 
 // Notes helper function to post notes object
 func (*CommonLogic) Notes(client *trakt.Client, notes *str.Notes, options *str.Options) (*str.Notes, *str.Response, error) {
 	result, resp, err := client.Notes.AddNotes(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		notes,
 	)
 	return result, resp, err
@@ -931,7 +932,7 @@ func (*CommonLogic) Notes(client *trakt.Client, notes *str.Notes, options *str.O
 // Reply helper function to post reply object
 func (*CommonLogic) Reply(client *trakt.Client, id *int, reply *str.Comment, options *str.Options) (*str.Comment, *str.Response, error) {
 	result, resp, err := client.Comments.ReplyAComment(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		id,
 		reply,
 	)
@@ -1590,7 +1591,7 @@ func (*CommonLogic) ReadInputBytes(options str.Options) ([]byte, error) {
 func (c CommonLogic) FetchHistoryList(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, StartAt: options.StartDate, EndAt: options.EndDate, Extended: options.ExtendedInfo}
 	list, resp, err := client.Sync.GetWatchedHistory(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.TraktID,
 		&options.Type,
 		&opts,
@@ -1623,7 +1624,7 @@ func (c CommonLogic) FetchRatings(client *trakt.Client, options *str.Options, pa
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	r := options.Rating.String()
 	list, resp, err := client.Sync.GetRatings(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.Type,
 		&r,
 		&opts,
@@ -1656,7 +1657,7 @@ func (c CommonLogic) FetchUsersRatings(client *trakt.Client, options *str.Option
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	r := options.Rating.String()
 	list, resp, err := client.Users.GetRatings(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.UserName,
 		&options.Type,
 		&r,
@@ -1742,7 +1743,7 @@ func SeasonsWithEpisodeNumbersOnly(src *[]str.Season) *[]str.Season {
 func (*CommonLogic) UpdateNotes(client *trakt.Client, options *str.Options, notes *str.Notes) (*str.Notes, *str.Response, error) {
 	notesID := options.InternalID
 	result, resp, err := client.Notes.UpdateNotes(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&notesID,
 		notes,
 	)
@@ -1754,7 +1755,7 @@ func (*CommonLogic) UpdateNotes(client *trakt.Client, options *str.Options, note
 func (c *CommonLogic) FetchWatchlist(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Sync.GetWatchlist(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.Type,
 		&options.SortBy,
 		&options.SortHow,
@@ -1785,7 +1786,7 @@ func (c *CommonLogic) FetchWatchlist(client *trakt.Client, options *str.Options,
 func (c CommonLogic) FetchFavorites(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Sync.GetFavorites(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.Type,
 		&options.SortBy,
 		&options.SortHow,
@@ -1816,7 +1817,7 @@ func (c CommonLogic) FetchFavorites(client *trakt.Client, options *str.Options, 
 func (CommonLogic) FetchPendingFollowingRequests(client *trakt.Client, options *str.Options) ([]*str.FollowRequest, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Users.GetPendingFollowingRequests(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&opts,
 	)
 
@@ -1831,7 +1832,7 @@ func (CommonLogic) FetchPendingFollowingRequests(client *trakt.Client, options *
 func (CommonLogic) FetchFollowRequests(client *trakt.Client, options *str.Options) ([]*str.FollowRequest, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Users.GetFollowRequests(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&opts,
 	)
 
@@ -1845,7 +1846,7 @@ func (CommonLogic) FetchFollowRequests(client *trakt.Client, options *str.Option
 // ApproveFollowRequest helper function to approve follow request
 func (CommonLogic) ApproveFollowRequest(client *trakt.Client, options *str.Options) (*str.FollowRequest, *str.Response, error) {
 	result, resp, err := client.Users.ApproveFollowRequest(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		options.FollowerRequest,
 	)
 
@@ -1859,7 +1860,7 @@ func (CommonLogic) ApproveFollowRequest(client *trakt.Client, options *str.Optio
 // DenyFollowRequest helper function to deny follow request
 func (CommonLogic) DenyFollowRequest(client *trakt.Client, options *str.Options) (*str.FollowRequest, *str.Response, error) {
 	result, resp, err := client.Users.DenyFollowRequest(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		options.FollowerRequest,
 	)
 
@@ -1874,7 +1875,7 @@ func (CommonLogic) DenyFollowRequest(client *trakt.Client, options *str.Options)
 func (c *CommonLogic) FetchUsersHiddenItems(client *trakt.Client, options *str.Options, page int) ([]*str.HiddenItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Type: options.Type}
 	list, resp, err := client.Users.GetHiddenItems(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.Section,
 		&opts,
 	)
@@ -1921,7 +1922,7 @@ func (c CommonLogic) CreateItemsToHidden(section string, items *str.ItemsList) s
 // UsersAddToHiddenItems helper function to users: add hidden items
 func (CommonLogic) UsersAddToHiddenItems(client *trakt.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error) {
 	result, err := client.Users.AddHiddenItems(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		items,
 		options.Section,
 	)
@@ -1935,7 +1936,7 @@ func (CommonLogic) UsersAddToHiddenItems(client *trakt.Client, options *str.Opti
 // UsersRemoveHiddenItems helper function to users: remove hidden items
 func (CommonLogic) UsersRemoveHiddenItems(client *trakt.Client, options *str.Options, items *str.HistoryItems) (*str.RemoveResult, error) {
 	result, err := client.Users.RemoveHiddenItems(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		items,
 		options.Section,
 	)
@@ -1950,7 +1951,7 @@ func (CommonLogic) UsersRemoveHiddenItems(client *trakt.Client, options *str.Opt
 func (c CommonLogic) FetchUsersLikes(client *trakt.Client, options *str.Options, page int) ([]*str.UserLike, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetLikes(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.UserName,
 		&options.Type,
 		&opts,
@@ -1980,7 +1981,7 @@ func (c CommonLogic) FetchUsersLikes(client *trakt.Client, options *str.Options,
 func (c CommonLogic) FetchUsersListLikes(client *trakt.Client, options *str.Options, page int) ([]*str.UserLike, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetListLikes(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.UserName,
 		&options.ID,
 		&opts,
@@ -2010,7 +2011,7 @@ func (c CommonLogic) FetchUsersListLikes(client *trakt.Client, options *str.Opti
 func (c CommonLogic) FetchUsersCollection(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetCollection(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.UserName,
 		&options.Type,
 		&opts,
@@ -2043,7 +2044,7 @@ func (c *CommonLogic) FetchUsersComments(client *trakt.Client, options *str.Opti
 	commentType := options.CommentType
 	strType := options.Type
 	list, resp, err := client.Users.GetComments(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&user,
 		&commentType,
 		&strType,
@@ -2075,7 +2076,7 @@ func (c CommonLogic) FetchUsersNotes(client *trakt.Client, options *str.Options,
 	user := options.UserName
 	strType := options.Type
 	list, resp, err := client.Users.GetNotes(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&user,
 		&strType,
 		&opts,
@@ -2103,7 +2104,7 @@ func (c CommonLogic) FetchUsersNotes(client *trakt.Client, options *str.Options,
 // UsersAddPersonalList helper function to users:add_list.
 func (*CommonLogic) UsersAddPersonalList(client *trakt.Client, options *str.Options, list *str.PersonalList) (*str.PersonalList, *str.Response, error) {
 	result, resp, err := client.Users.AddPersonalList(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.UserName,
 		list,
 	)
@@ -2119,7 +2120,7 @@ func (c CommonLogic) FetchUsersCollaborations(client *trakt.Client, options *str
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	user := options.UserName
 	list, resp, err := client.Users.GetCollaborations(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&user,
 		&opts,
 	)
@@ -2149,7 +2150,7 @@ func (*CommonLogic) FetchUsersList(client *trakt.Client, options *str.Options) (
 	user := options.UserName
 	listID := options.ID
 	result, resp, err := client.Users.GetList(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&user,
 		&listID,
 		&opts,
@@ -2163,7 +2164,7 @@ func (*CommonLogic) UsersRemoveListLike(client *trakt.Client, options *str.Optio
 	user := options.UserName
 	listID := options.ID
 	resp, err := client.Users.RemoveListLike(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&user,
 		&listID,
 	)
@@ -2176,7 +2177,7 @@ func (*CommonLogic) UsersListLike(client *trakt.Client, options *str.Options) (*
 	user := options.UserName
 	listID := options.ID
 	resp, err := client.Users.ListLike(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&user,
 		&listID,
 	)
@@ -2193,7 +2194,7 @@ func (c CommonLogic) FetchUsersListItems(client *trakt.Client, options *str.Opti
 	sortBy := options.SortBy
 	sortHow := options.SortHow
 	list, resp, err := client.Users.GetListItems(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&user,
 		&listID,
 		&strType,
@@ -2228,7 +2229,7 @@ func (c CommonLogic) FetchUsersListComments(client *trakt.Client, options *str.O
 	listID := options.ID
 	sort := options.Sort
 	list, resp, err := client.Users.GetListComments(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&user,
 		&listID,
 		&sort,
@@ -2261,7 +2262,7 @@ func (c CommonLogic) FetchUsersListComments(client *trakt.Client, options *str.O
 func (c CommonLogic) FetchBlockedUsers(client *trakt.Client, options *str.Options, page int) ([]*str.UserBlocked, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetBlockedUsers(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&opts,
 	)
 	if err != nil {
@@ -2287,7 +2288,7 @@ func (c CommonLogic) FetchBlockedUsers(client *trakt.Client, options *str.Option
 func (c CommonLogic) FetchFollowers(client *trakt.Client, options *str.Options, page int) ([]*str.Follower, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetFollowers(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.UserName,
 		&opts,
 	)
@@ -2314,7 +2315,7 @@ func (c CommonLogic) FetchFollowers(client *trakt.Client, options *str.Options, 
 func (c CommonLogic) FetchFollowing(client *trakt.Client, options *str.Options, page int) ([]*str.Follower, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetFollowing(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.UserName,
 		&opts,
 	)
@@ -2341,7 +2342,7 @@ func (c CommonLogic) FetchFollowing(client *trakt.Client, options *str.Options, 
 func (c CommonLogic) FetchFriends(client *trakt.Client, options *str.Options, page int) ([]*str.Friend, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetFriends(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.UserName,
 		&opts,
 	)
@@ -2368,7 +2369,7 @@ func (c CommonLogic) FetchFriends(client *trakt.Client, options *str.Options, pa
 func (c CommonLogic) FetchUsersHistory(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{StartAt: options.StartDate, EndAt: options.EndDate, Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetHistory(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.UserName,
 		&options.Type,
 		&options.ItemID,
@@ -2406,10 +2407,10 @@ func (c CommonLogic) FetchUsersWatchlist(client *trakt.Client, options *str.Opti
 		if typeErr != nil {
 			return nil, typeErr
 		}
-		list, resp, err = client.Users.GetWatchlistBySort(client.BuildCtxFromOptions(options), &options.UserName, &routeType, &options.SortPath, &opts)
+		list, resp, err = client.Users.GetWatchlistBySort(cli.ContextFromOptions(options), &options.UserName, &routeType, &options.SortPath, &opts)
 	} else {
 		list, resp, err = client.Users.GetWatchlist(
-			client.BuildCtxFromOptions(options),
+			cli.ContextFromOptions(options),
 			&options.UserName,
 			&options.Type,
 			&options.SortBy,
@@ -2442,7 +2443,7 @@ func (c CommonLogic) FetchUsersWatchlist(client *trakt.Client, options *str.Opti
 func (c CommonLogic) FetchUsersWatchlistComments(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetWatchlistComments(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.UserName,
 		&options.Sort,
 		&opts,
@@ -2481,10 +2482,10 @@ func (c CommonLogic) FetchUsersFavorites(client *trakt.Client, options *str.Opti
 		if typeErr != nil {
 			return nil, typeErr
 		}
-		list, resp, err = client.Users.GetFavoritesBySort(client.BuildCtxFromOptions(options), &options.UserName, &routeType, &options.SortPath, &opts)
+		list, resp, err = client.Users.GetFavoritesBySort(cli.ContextFromOptions(options), &options.UserName, &routeType, &options.SortPath, &opts)
 	} else {
 		list, resp, err = client.Users.GetFavorites(
-			client.BuildCtxFromOptions(options),
+			cli.ContextFromOptions(options),
 			&options.UserName,
 			&options.Type,
 			&options.SortBy,
@@ -2517,7 +2518,7 @@ func (c CommonLogic) FetchUsersFavorites(client *trakt.Client, options *str.Opti
 func (c CommonLogic) FetchUsersFavoritesComments(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetFavoritesComments(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.UserName,
 		&options.Sort,
 		&opts,

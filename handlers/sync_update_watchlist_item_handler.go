@@ -4,6 +4,7 @@ package handlers
 import (
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -29,7 +30,7 @@ func (SyncUpdateWatchlistItemHandler) syncUpdateWatchlistItem(client *trakt.Clie
 	update := new(str.WatchlistItem)
 	update.Notes = &options.Notes
 
-	err := client.Sync.UpdateWatchlistItem(client.BuildCtxFromOptions(options), options.ListItemID, update)
+	err := client.Sync.UpdateWatchlistItem(cli.ContextFromOptions(options), options.ListItemID, update)
 	if err != nil {
 		return fmt.Errorf("update watchlist item error:%w", err)
 	}

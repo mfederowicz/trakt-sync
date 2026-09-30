@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -38,7 +39,7 @@ func (m ShowsCertificationsHandler) Handle(options *str.Options, client *trakt.C
 
 func (ShowsCertificationsHandler) fetchShowsCertifications(client *trakt.Client, options *str.Options) ([]*str.Certification, *str.Response, error) {
 	certifications, resp, err := client.Shows.GetAllShowCertifications(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.InternalID,
 	)
 

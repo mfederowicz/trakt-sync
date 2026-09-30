@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -61,7 +62,7 @@ func (s SearchTextQueryHandler) fetchSearchTextQuery(client *trakt.Client, optio
 		Query:    options.Query,
 		Field:    searchField}
 	list, resp, err := client.Search.GetTextQueryResults(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&searchType,
 		&opts,
 	)

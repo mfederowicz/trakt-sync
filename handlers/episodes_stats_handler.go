@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -38,7 +39,7 @@ func (m EpisodesStatsHandler) Handle(options *str.Options, client *trakt.Client)
 
 func (EpisodesStatsHandler) fetchEpisodesStats(client *trakt.Client, options *str.Options) (*str.EpisodeStats, *str.Response, error) {
 	result, resp, err := client.Shows.GetEpisodeStats(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.InternalID,
 		&options.Season,
 		&options.Episode,

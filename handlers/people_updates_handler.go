@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -47,7 +48,7 @@ func (p PeopleUpdatesHandler) Handle(options *str.Options, client *trakt.Client)
 func (p PeopleUpdatesHandler) fetchPeoplesUpdates(client *trakt.Client, options *str.Options, startDate string, page int) ([]*str.PersonItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.People.GetRecentlyUpdatedPeople(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&startDate,
 		&opts,
 	)

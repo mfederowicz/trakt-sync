@@ -6,6 +6,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -45,7 +46,7 @@ func (m ShowsNextEpisodeHandler) Handle(options *str.Options, client *trakt.Clie
 func (ShowsNextEpisodeHandler) fetchShowsNextEpisode(client *trakt.Client, options *str.Options) (*str.Episode, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	show, resp, err := client.Shows.GetNextEpisode(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.InternalID,
 		&opts,
 	)

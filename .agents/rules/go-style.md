@@ -86,7 +86,7 @@ Keep each `const` block sorted as it is.
 
 - `context.Context` is the first parameter of every service method
   (`context-as-argument`); never store it in a struct.
-- Handlers build it with `client.BuildCtxFromOptions(options)` so the user's
+- Handlers build it with `cli.ContextFromOptions(options)` so the user's
   timezone is carried along.
 - Context keys use the typed `contextKey`, never plain strings
   (`context-keys-type`).

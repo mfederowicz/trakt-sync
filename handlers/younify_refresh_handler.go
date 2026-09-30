@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -21,7 +22,7 @@ func (YounifyRefreshHandler) Handle(options *str.Options, client *trakt.Client) 
 		kind = "full"
 	}
 	printer.Println("Queue a " + kind + " re-sync of: " + options.ServiceID)
-	resp, err := client.Younify.RefreshService(client.BuildCtxFromOptions(options), &options.ServiceID, options.AllData)
+	resp, err := client.Younify.RefreshService(cli.ContextFromOptions(options), &options.ServiceID, options.AllData)
 	if err = younifyError(options.Action, options.ServiceID, resp, err); err != nil {
 		return err
 	}

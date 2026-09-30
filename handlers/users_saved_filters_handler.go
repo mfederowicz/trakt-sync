@@ -44,7 +44,7 @@ func (UsersSavedFiltersHandler) Handle(options *str.Options, client *trakt.Clien
 
 func fetchUsersSavedFilters(client *trakt.Client, options *str.Options) ([]*str.SavedFilter, *str.Response, error) {
 	lists, resp, err := client.Users.GetSavedFilters(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.Type,
 	)
 

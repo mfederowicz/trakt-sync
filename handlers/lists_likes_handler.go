@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -47,7 +48,7 @@ func (h ListsLikesHandler) Handle(options *str.Options, client *trakt.Client) er
 func (h ListsLikesHandler) fetchListsLikes(client *trakt.Client, options *str.Options, page int) ([]*str.UserLike, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Lists.GetAllUsersWhoLikedList(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&opts,
 		&options.InternalID,
 	)

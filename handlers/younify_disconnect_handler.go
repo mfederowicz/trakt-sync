@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -17,7 +18,7 @@ func (YounifyDisconnectHandler) Handle(options *str.Options, client *trakt.Clien
 	}
 
 	printer.Println("Unlink streaming service: " + options.ServiceID)
-	resp, err := client.Younify.DisconnectService(client.BuildCtxFromOptions(options), &options.ServiceID)
+	resp, err := client.Younify.DisconnectService(cli.ContextFromOptions(options), &options.ServiceID)
 	if err = younifyError(options.Action, options.ServiceID, resp, err); err != nil {
 		return err
 	}

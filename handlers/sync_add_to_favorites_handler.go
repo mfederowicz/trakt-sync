@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -35,7 +36,7 @@ func (m SyncAddToFavoritesHandler) Handle(options *str.Options, client *trakt.Cl
 
 func (SyncAddToFavoritesHandler) syncAddToFavorites(client *trakt.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error) {
 	result, err := client.Sync.AddItemsToFavorites(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		items,
 	)
 	if err != nil {

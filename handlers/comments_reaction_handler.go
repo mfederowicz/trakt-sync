@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -27,7 +28,7 @@ func (h CommentsReactionHandler) Handle(options *str.Options, client *trakt.Clie
 	}
 
 	commentID := options.CommentID
-	ctx := client.BuildCtxFromOptions(options)
+	ctx := cli.ContextFromOptions(options)
 	if options.Remove {
 		if _, err := client.Comments.RemoveCommentReaction(ctx, &commentID, &options.Reaction); err != nil {
 			return fmt.Errorf("remove reaction error: %w", err)

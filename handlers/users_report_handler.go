@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -48,7 +49,7 @@ func (UsersReportHandler) usersReport(client *trakt.Client, options *str.Options
 	report.Message = &options.Msg
 
 	result, resp, err := client.Users.Report(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.UserName,
 		report)
 

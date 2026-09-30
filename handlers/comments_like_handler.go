@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -46,14 +47,14 @@ func (CommentsLikeHandler) likeSingleComment(client *trakt.Client, options *str.
 
 	if !options.Remove {
 		resp, err := client.Comments.LikeComment(
-			client.BuildCtxFromOptions(options),
+			cli.ContextFromOptions(options),
 			&commentID,
 		)
 		return resp, err
 	}
 
 	resp, err := client.Comments.RemoveLikeComment(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&commentID,
 	)
 

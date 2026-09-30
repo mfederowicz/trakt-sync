@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -43,7 +44,7 @@ func (p PeopleMoviesHandler) Handle(options *str.Options, client *trakt.Client) 
 func (PeopleMoviesHandler) fetchMovieCredits(client *trakt.Client, options *str.Options) (*str.PersonMovies, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetMovieCredits(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.ID,
 		&opts,
 	)

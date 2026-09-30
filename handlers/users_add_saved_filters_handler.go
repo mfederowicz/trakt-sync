@@ -31,7 +31,7 @@ func (h UsersAddSavedFiltersHandler) Handle(options *str.Options, client *trakt.
 	}
 
 	printer.Printf("Add %d saved filters (VIP only)\n", len(filters))
-	result, resp, err := client.Users.AddSavedFilters(client.BuildCtxFromOptions(options), filters)
+	result, resp, err := client.Users.AddSavedFilters(cli.ContextFromOptions(options), filters)
 	if vipErr := cli.HandleVIPResponse(resp, err); vipErr != nil {
 		return vipErr
 	}

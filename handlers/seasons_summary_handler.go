@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -40,7 +41,7 @@ func (m SeasonsSummaryHandler) Handle(options *str.Options, client *trakt.Client
 func (SeasonsSummaryHandler) fetchSeasonsSummary(client *trakt.Client, options *str.Options) ([]*str.Season, *str.Response, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Shows.GetAllSeasonsForShow(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.InternalID,
 		&opts,
 	)

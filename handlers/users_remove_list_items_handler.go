@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -42,7 +43,7 @@ func (UsersRemoveListItemsHandler) usersRemoveListItems(client *trakt.Client, op
 	user := options.UserName
 	listID := options.ID
 	result, resp, err := client.Users.RemoveListItems(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&user,
 		&listID,
 		items,

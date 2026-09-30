@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -67,7 +68,7 @@ func (UsersUpdateListHandler) usersUpdateList(client *trakt.Client, list *str.Pe
 	list.SortBy = &options.SortBy
 	list.SortHow = &options.SortHow
 	result, resp, err := client.Users.UpdateList(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.UserName,
 		&options.ID,
 		list)

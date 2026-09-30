@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -47,7 +48,7 @@ func (p MoviesUpdatesHandler) Handle(options *str.Options, client *trakt.Client)
 func (p MoviesUpdatesHandler) fetchMoviesUpdates(client *trakt.Client, options *str.Options, startDate string, page int) ([]*str.MoviesItem, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Movies.GetRecentlyUpdatedMovies(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&startDate,
 		&opts,
 	)

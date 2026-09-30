@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -56,7 +57,7 @@ func (SearchIDLookupHandler) fetchSearchIDLookup(client *trakt.Client, options *
 
 	opts := uri.ListOptions{Extended: options.ExtendedInfo, Type: searchType}
 	list, _, err := client.Search.GetIDLookupResults(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.SearchIDType,
 		&options.ID,
 		&opts,

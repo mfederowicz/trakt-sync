@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -27,7 +28,7 @@ func (UsersDataSyncsHandler) Handle(options *str.Options, client *trakt.Client) 
 
 	printer.Println("Returns your data syncs " + options.Type)
 	result, err := fetchAllPages(client, options, consts.DefaultPage, func(opts *uri.ListOptions) ([]*str.DataSync, *str.Response, error) {
-		return client.Users.GetDataSyncs(client.BuildCtxFromOptions(options), &options.Type, opts)
+		return client.Users.GetDataSyncs(cli.ContextFromOptions(options), &options.Type, opts)
 	})
 	if apiErr := notOpenToAPIApps(options.Action, err); apiErr != nil {
 		return apiErr
@@ -55,7 +56,7 @@ func (UsersDataSyncHandler) Handle(options *str.Options, client *trakt.Client) e
 	}
 
 	printer.Printf("Returns data sync %d\n", id)
-	result, resp, err := client.Users.GetDataSync(client.BuildCtxFromOptions(options), id)
+	result, resp, err := client.Users.GetDataSync(cli.ContextFromOptions(options), id)
 	if err = dataSyncError(options.Action, id, resp, err); err != nil {
 		return err
 	}
@@ -77,7 +78,7 @@ func (UsersDataSyncItemsHandler) Handle(options *str.Options, client *trakt.Clie
 	printer.Printf("Returns %s items of data sync %d\n", section, id)
 	var lastResp *str.Response
 	result, err := fetchAllPages(client, options, consts.DefaultPage, func(opts *uri.ListOptions) ([]*str.SyncItem, *str.Response, error) {
-		list, resp, fetchErr := client.Users.GetDataSyncItems(client.BuildCtxFromOptions(options), id, &section, opts)
+		list, resp, fetchErr := client.Users.GetDataSyncItems(cli.ContextFromOptions(options), id, &section, opts)
 		lastResp = resp
 		return list, resp, fetchErr
 	})
@@ -104,7 +105,7 @@ func (UsersUndoDataSyncHandler) Handle(options *str.Options, client *trakt.Clien
 	}
 
 	printer.Printf("Undo data sync %d: reverses every item it imported\n", id)
-	resp, err := client.Users.UndoDataSync(client.BuildCtxFromOptions(options), id)
+	resp, err := client.Users.UndoDataSync(cli.ContextFromOptions(options), id)
 	if err = dataSyncError(options.Action, id, resp, err); err != nil {
 		return err
 	}

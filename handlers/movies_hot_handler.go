@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -16,7 +17,7 @@ type MoviesHotHandler struct{}
 func (MoviesHotHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns hot movies, based on current list activity.")
 	result, err := fetchAllPages(client, options, consts.DefaultPage, func(opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
-		return client.Movies.GetHotMovies(client.BuildCtxFromOptions(options), opts)
+		return client.Movies.GetHotMovies(cli.ContextFromOptions(options), opts)
 	})
 	if err != nil {
 		return endpointNotLiveError(err)

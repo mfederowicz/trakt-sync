@@ -4,6 +4,7 @@ package handlers
 import (
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -17,7 +18,7 @@ type CalendarsHotPremieresHandler struct{}
 func (CalendarsHotPremieresHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Get calendar: " + options.Action)
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
-	result, _, err := client.Calendars.GetHotPremieres(client.BuildCtxFromOptions(options), &options.StartDate, &options.Days, &opts)
+	result, _, err := client.Calendars.GetHotPremieres(cli.ContextFromOptions(options), &options.StartDate, &options.Days, &opts)
 	if err != nil {
 		return fmt.Errorf("fetch calendar %s error: %w", options.Action, err)
 	}

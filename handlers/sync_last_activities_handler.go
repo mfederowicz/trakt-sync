@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -30,7 +31,7 @@ func (m SyncLastActivitiesHandler) Handle(options *str.Options, client *trakt.Cl
 
 func (SyncLastActivitiesHandler) syncLastActivities(client *trakt.Client, options *str.Options) (*str.UserLastActivities, error) {
 	activities, _, err := client.Sync.GetLastActivity(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 	)
 
 	if err != nil {

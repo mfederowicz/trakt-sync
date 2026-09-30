@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -44,7 +45,7 @@ func (p PeopleShowsHandler) Handle(options *str.Options, client *trakt.Client) e
 func (PeopleShowsHandler) fetchShowCredits(client *trakt.Client, options *str.Options) (*str.PersonShows, error) {
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, _, err := client.People.GetShowCredits(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.ID,
 		&opts,
 	)

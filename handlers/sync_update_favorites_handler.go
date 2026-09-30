@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -40,7 +41,7 @@ func (SyncUpdateFavoritesHandler) syncUpdateFavorites(client *trakt.Client, opti
 	update.SortBy = &options.SortBy
 	update.SortHow = &options.SortHow
 
-	result, err := client.Sync.UpdateFavorites(client.BuildCtxFromOptions(options), update)
+	result, err := client.Sync.UpdateFavorites(cli.ContextFromOptions(options), update)
 	if err != nil {
 		return nil, fmt.Errorf("update favorites error:%w", err)
 	}

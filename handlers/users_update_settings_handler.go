@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -25,7 +26,7 @@ func (h UsersUpdateSettingsHandler) Handle(options *str.Options, client *trakt.C
 	}
 
 	printer.Println("Update settings of the authenticated user.")
-	if _, err := client.Users.UpdateSettings(client.BuildCtxFromOptions(options), settings); err != nil {
+	if _, err := client.Users.UpdateSettings(cli.ContextFromOptions(options), settings); err != nil {
 		return fmt.Errorf("update settings error: %w", err)
 	}
 

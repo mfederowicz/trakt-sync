@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -40,7 +41,7 @@ func (m SyncGetWatchedHandler) Handle(options *str.Options, client *trakt.Client
 func (m SyncGetWatchedHandler) syncGetWatchedItems(client *trakt.Client, options *str.Options, page int) ([]*str.UserWatched, error) {
 	opts := uri.ListOptions{Page: page, Limit: consts.PerPage, Extended: options.ExtendedInfo}
 	items, resp, err := client.Sync.GetWatched(
-		client.BuildCtxFromOptions(options),
+		cli.ContextFromOptions(options),
 		&options.Type,
 		&opts,
 	)
