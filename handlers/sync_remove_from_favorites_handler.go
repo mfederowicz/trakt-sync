@@ -35,7 +35,7 @@ func (m SyncRemoveFromFavoritesHandler) Handle(options *str.Options, client *tra
 }
 
 func (SyncRemoveFromFavoritesHandler) syncRemoveFromFavorites(client *trakt.Client, options *str.Options, items *str.ItemsToRemove) (*str.RemoveResult, error) {
-	result, err := client.Sync.RemoveItemsFromFavorites(
+	result, _, err := client.Sync.RemoveItemsFromFavorites(
 		cli.ContextFromOptions(options),
 		items,
 	)

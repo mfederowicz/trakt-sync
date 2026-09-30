@@ -35,7 +35,7 @@ func (m SyncRemoveFromRatingsHandler) Handle(options *str.Options, client *trakt
 }
 
 func (SyncRemoveFromRatingsHandler) syncRemoveFromRatings(client *trakt.Client, options *str.Options, items *str.ItemsToRemove) (*str.RemoveResult, error) {
-	result, err := client.Sync.RemoveItemsFromRatings(
+	result, _, err := client.Sync.RemoveItemsFromRatings(
 		cli.ContextFromOptions(options),
 		items,
 	)

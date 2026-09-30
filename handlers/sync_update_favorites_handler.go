@@ -41,7 +41,7 @@ func (SyncUpdateFavoritesHandler) syncUpdateFavorites(client *trakt.Client, opti
 	update.SortBy = &options.SortBy
 	update.SortHow = &options.SortHow
 
-	result, err := client.Sync.UpdateFavorites(cli.ContextFromOptions(options), update)
+	result, _, err := client.Sync.UpdateFavorites(cli.ContextFromOptions(options), update)
 	if err != nil {
 		return nil, fmt.Errorf("update favorites error:%w", err)
 	}

@@ -48,7 +48,7 @@ func (m ShowsWatchedProgressHandler) Handle(options *str.Options, client *trakt.
 func (ShowsWatchedProgressHandler) fetchShowsWatchedProgress(client *trakt.Client, options *str.Options) (*str.WatchedProgress, error) {
 	opts := uri.ListOptions{Hidden: options.Hidden, Specials: options.Specials, CountSpecials: options.CountSpecials}
 
-	result, err := client.Shows.GetShowWatchedProgress(
+	result, _, err := client.Shows.GetShowWatchedProgress(
 		cli.ContextFromOptions(options),
 		&options.InternalID,
 		&opts,

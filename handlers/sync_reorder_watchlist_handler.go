@@ -34,7 +34,7 @@ func (m SyncReorderWatchlistHandler) Handle(options *str.Options, client *trakt.
 }
 
 func (SyncReorderWatchlistHandler) syncReorderWatchlist(client *trakt.Client, options *str.Options, items *str.ItemsToReorder) (*str.ReorderResults, error) {
-	result, err := client.Sync.ReorderWatchlistItems(
+	result, _, err := client.Sync.ReorderWatchlistItems(
 		cli.ContextFromOptions(options),
 		items,
 	)

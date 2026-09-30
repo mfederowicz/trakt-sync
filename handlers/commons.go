@@ -1921,7 +1921,7 @@ func (c CommonLogic) CreateItemsToHidden(section string, items *str.ItemsList) s
 
 // UsersAddToHiddenItems helper function to users: add hidden items
 func (CommonLogic) UsersAddToHiddenItems(client *trakt.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error) {
-	result, err := client.Users.AddHiddenItems(
+	result, _, err := client.Users.AddHiddenItems(
 		cli.ContextFromOptions(options),
 		items,
 		options.Section,
@@ -1935,7 +1935,7 @@ func (CommonLogic) UsersAddToHiddenItems(client *trakt.Client, options *str.Opti
 
 // UsersRemoveHiddenItems helper function to users: remove hidden items
 func (CommonLogic) UsersRemoveHiddenItems(client *trakt.Client, options *str.Options, items *str.HistoryItems) (*str.RemoveResult, error) {
-	result, err := client.Users.RemoveHiddenItems(
+	result, _, err := client.Users.RemoveHiddenItems(
 		cli.ContextFromOptions(options),
 		items,
 		options.Section,

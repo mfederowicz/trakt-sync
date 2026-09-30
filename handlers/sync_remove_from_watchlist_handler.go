@@ -35,7 +35,7 @@ func (m SyncRemoveFromWatchlistHandler) Handle(options *str.Options, client *tra
 }
 
 func (SyncRemoveFromWatchlistHandler) syncRemoveFromWatchlist(client *trakt.Client, options *str.Options, items *str.ItemsToRemove) (*str.RemoveResult, error) {
-	result, err := client.Sync.RemoveItemsFromWatchlist(
+	result, _, err := client.Sync.RemoveItemsFromWatchlist(
 		cli.ContextFromOptions(options),
 		items,
 	)

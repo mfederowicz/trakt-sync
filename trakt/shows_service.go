@@ -535,60 +535,60 @@ func (s *ShowsService) GetListsContainingShow(ctx context.Context, id *string, t
 
 // GetShowCollectionProgress Returns collection progress for a show including details on all aired seasons and episodes.
 // API docs: https://trakt.docs.apiary.io/#reference/shows/collection-progress/get-show-collection-progress
-func (s *ShowsService) GetShowCollectionProgress(ctx context.Context, id *string, opts *uri.ListOptions) (*str.CollectionProgress, error) {
+func (s *ShowsService) GetShowCollectionProgress(ctx context.Context, id *string, opts *uri.ListOptions) (*str.CollectionProgress, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("shows/%s/progress/collection", *id)
 
 	url, err := uri.AddQuery(url, opts)
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	s.client.debug("fetch collection progress url:" + url)
 
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	collection := new(str.CollectionProgress)
-	_, err = s.client.Do(ctx, req, &collection)
+	resp, err := s.client.Do(ctx, req, &collection)
 
 	if err != nil {
-		return nil, err
+		return nil, resp, err
 	}
 
-	return collection, nil
+	return collection, resp, nil
 }
 
 // GetShowWatchedProgress Returns watched progress for a show including details on all aired seasons and episodes.
 // API docs: https://trakt.docs.apiary.io/#reference/shows/watched-progress/get-show-watched-progress
-func (s *ShowsService) GetShowWatchedProgress(ctx context.Context, id *string, opts *uri.ListOptions) (*str.WatchedProgress, error) {
+func (s *ShowsService) GetShowWatchedProgress(ctx context.Context, id *string, opts *uri.ListOptions) (*str.WatchedProgress, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("shows/%s/progress/watched", *id)
 
 	url, err := uri.AddQuery(url, opts)
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	s.client.debug("fetch watched progress url:" + url)
 
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	watched := new(str.WatchedProgress)
-	_, err = s.client.Do(ctx, req, &watched)
+	resp, err := s.client.Do(ctx, req, &watched)
 
 	if err != nil {
-		return nil, err
+		return nil, resp, err
 	}
 
-	return watched, nil
+	return watched, resp, nil
 }
 
 // ResetShowProgress Reset a show's progress when the user started re-watching the show.

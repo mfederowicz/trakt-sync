@@ -56,7 +56,7 @@ func (m SyncAddToHistoryHandler) Handle(options *str.Options, client *trakt.Clie
 }
 
 func (SyncAddToHistoryHandler) syncRemoveFromHistory(client *trakt.Client, options *str.Options, items *str.ItemsToRemove) (*str.RemoveResult, error) {
-	result, err := client.Sync.RemoveItemsFromHistory(
+	result, _, err := client.Sync.RemoveItemsFromHistory(
 		cli.ContextFromOptions(options),
 		items,
 	)
@@ -68,7 +68,7 @@ func (SyncAddToHistoryHandler) syncRemoveFromHistory(client *trakt.Client, optio
 }
 
 func (SyncAddToHistoryHandler) syncAddToHistory(client *trakt.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error) {
-	result, err := client.Sync.AddItemsToHistory(
+	result, _, err := client.Sync.AddItemsToHistory(
 		cli.ContextFromOptions(options),
 		items,
 	)

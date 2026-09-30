@@ -325,42 +325,42 @@ func (u *UsersService) GetHiddenItems(ctx context.Context, section *string, opts
 // can hidden for each section. You can optionally specify the
 // hidden_at date for each item.
 // API docs:https://trakt.docs.apiary.io/#reference/users/add-hidden-items/add-hidden-items
-func (u *UsersService) AddHiddenItems(ctx context.Context, items *str.HistoryItems, section string) (*str.AddResult, error) {
+func (u *UsersService) AddHiddenItems(ctx context.Context, items *str.HistoryItems, section string) (*str.AddResult, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/hidden/%s", section)
 	u.client.debug("add hidden items")
 	req, err := u.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	result := new(str.AddResult)
-	_, err = u.client.Do(ctx, req, result)
+	resp, err := u.client.Do(ctx, req, result)
 	if err != nil {
-		return result, err
+		return result, resp, err
 	}
 
-	return result, nil
+	return result, resp, nil
 }
 
 // RemoveHiddenItems Unhide items for a specific section. Here's what type of items can unhidden for each section.
 // API docs:https://trakt.docs.apiary.io/#reference/users/remove-hidden-items/remove-hidden-items
-func (u *UsersService) RemoveHiddenItems(ctx context.Context, items *str.HistoryItems, section string) (*str.RemoveResult, error) {
+func (u *UsersService) RemoveHiddenItems(ctx context.Context, items *str.HistoryItems, section string) (*str.RemoveResult, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/hidden/%s/remove", section)
 	u.client.debug("remove hidden items")
 	req, err := u.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	result := new(str.RemoveResult)
-	_, err = u.client.Do(ctx, req, result)
+	resp, err := u.client.Do(ctx, req, result)
 	if err != nil {
-		return result, err
+		return result, resp, err
 	}
 
-	return result, nil
+	return result, resp, nil
 }
 
 // GetProfile Get a user's profile information. If the user is private,
