@@ -30,7 +30,7 @@ func (SyncUpdateWatchlistItemHandler) syncUpdateWatchlistItem(client *trakt.Clie
 	update := new(str.WatchlistItem)
 	update.Notes = &options.Notes
 
-	err := client.Sync.UpdateWatchlistItem(cli.ContextFromOptions(options), options.ListItemID, update)
+	_, err := client.Sync.UpdateWatchlistItem(cli.ContextFromOptions(options), options.ListItemID, update)
 	if err != nil {
 		return fmt.Errorf("update watchlist item error:%w", err)
 	}

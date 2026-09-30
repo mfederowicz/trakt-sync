@@ -35,7 +35,7 @@ func (m SyncAddToFavoritesHandler) Handle(options *str.Options, client *trakt.Cl
 }
 
 func (SyncAddToFavoritesHandler) syncAddToFavorites(client *trakt.Client, options *str.Options, items *str.HistoryItems) (*str.AddResult, error) {
-	result, err := client.Sync.AddItemsToFavorites(
+	result, _, err := client.Sync.AddItemsToFavorites(
 		cli.ContextFromOptions(options),
 		items,
 	)

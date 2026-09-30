@@ -35,7 +35,7 @@ func (m SyncRemoveFromCollectionHandler) Handle(options *str.Options, client *tr
 }
 
 func (SyncRemoveFromCollectionHandler) syncRemoveFromCollection(client *trakt.Client, options *str.Options, items *str.ItemsList) (*str.CollectionRemoveResult, error) {
-	result, err := client.Sync.RemoveItemsFromCollection(
+	result, _, err := client.Sync.RemoveItemsFromCollection(
 		cli.ContextFromOptions(options),
 		items,
 	)

@@ -36,7 +36,7 @@ func (m SyncRemoveFromHistoryHandler) Handle(options *str.Options, client *trakt
 }
 
 func (SyncRemoveFromHistoryHandler) syncRemoveFromHistory(client *trakt.Client, options *str.Options, items *str.ItemsToRemove) (*str.RemoveResult, error) {
-	result, err := client.Sync.RemoveItemsFromHistory(
+	result, _, err := client.Sync.RemoveItemsFromHistory(
 		cli.ContextFromOptions(options),
 		items,
 	)

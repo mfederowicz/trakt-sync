@@ -35,7 +35,7 @@ func (m SyncAddToCollectionHandler) Handle(options *str.Options, client *trakt.C
 }
 
 func (SyncAddToCollectionHandler) syncAddToCollection(client *trakt.Client, options *str.Options, items *str.ItemsList) (*str.CollectionAddResult, error) {
-	result, err := client.Sync.AddItemsToCollection(
+	result, _, err := client.Sync.AddItemsToCollection(
 		cli.ContextFromOptions(options),
 		items,
 	)

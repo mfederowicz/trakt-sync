@@ -34,7 +34,7 @@ func (m SyncReorderFavoritesHandler) Handle(options *str.Options, client *trakt.
 }
 
 func (SyncReorderFavoritesHandler) syncReorderFavorites(client *trakt.Client, options *str.Options, items *str.ItemsToReorder) (*str.ReorderResults, error) {
-	result, err := client.Sync.ReorderFavoritesItems(
+	result, _, err := client.Sync.ReorderFavoritesItems(
 		cli.ContextFromOptions(options),
 		items,
 	)

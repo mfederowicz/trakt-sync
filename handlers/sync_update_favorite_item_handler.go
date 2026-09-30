@@ -30,7 +30,7 @@ func (SyncUpdateFavoriteItemHandler) syncUpdateFavoriteItem(client *trakt.Client
 	update := new(str.FavoriteItem)
 	update.Notes = &options.Notes
 
-	err := client.Sync.UpdateFavoriteItem(cli.ContextFromOptions(options), options.ListItemID, update)
+	_, err := client.Sync.UpdateFavoriteItem(cli.ContextFromOptions(options), options.ListItemID, update)
 	if err != nil {
 		return fmt.Errorf("update favorite item error:%w", err)
 	}

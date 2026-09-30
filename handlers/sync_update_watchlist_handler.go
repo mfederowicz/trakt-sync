@@ -41,7 +41,7 @@ func (SyncUpdateWatchlistHandler) syncUpdateWatchlist(client *trakt.Client, opti
 	update.SortBy = &options.SortBy
 	update.SortHow = &options.SortHow
 
-	result, err := client.Sync.UpdateWatchlist(cli.ContextFromOptions(options), update)
+	result, _, err := client.Sync.UpdateWatchlist(cli.ContextFromOptions(options), update)
 	if err != nil {
 		return nil, fmt.Errorf("update watchlist error:%w", err)
 	}

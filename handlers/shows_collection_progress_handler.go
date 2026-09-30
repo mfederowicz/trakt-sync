@@ -48,7 +48,7 @@ func (m ShowsCollectionProgressHandler) Handle(options *str.Options, client *tra
 func (ShowsCollectionProgressHandler) fetchShowsCollectionProgress(client *trakt.Client, options *str.Options) (*str.CollectionProgress, error) {
 	opts := uri.ListOptions{Hidden: options.Hidden, Specials: options.Specials, CountSpecials: options.CountSpecials}
 
-	result, err := client.Shows.GetShowCollectionProgress(
+	result, _, err := client.Shows.GetShowCollectionProgress(
 		cli.ContextFromOptions(options),
 		&options.InternalID,
 		&opts,

@@ -199,21 +199,21 @@ func (s *SyncService) RemovePlaybackItem(ctx context.Context, id *int) (*str.Res
 // AddItemsToCollection add items to user's collection
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/add-to-collection/add-items-to-collection
-func (s *SyncService) AddItemsToCollection(ctx context.Context, items *str.ItemsList) (*str.CollectionAddResult, error) {
+func (s *SyncService) AddItemsToCollection(ctx context.Context, items *str.ItemsList) (*str.CollectionAddResult, *str.Response, error) {
 	var url = "sync/collection"
 	s.client.debug("add items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	result := new(str.CollectionAddResult)
-	_, err = s.client.Do(ctx, req, result)
+	resp, err := s.client.Do(ctx, req, result)
 	if err != nil {
-		return result, err
+		return result, resp, err
 	}
 
-	return result, nil
+	return result, resp, nil
 }
 
 // GetCollectedSeasons dedicated function do prepare collection: seasons format
@@ -261,21 +261,21 @@ func (s *SyncService) GetCollectedSeasons(ctx context.Context, options *uri.List
 // RemoveItemsFromCollection remove items from user's collection
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/remove-from-collection/remove-items-from-collection
-func (s *SyncService) RemoveItemsFromCollection(ctx context.Context, items *str.ItemsList) (*str.CollectionRemoveResult, error) {
+func (s *SyncService) RemoveItemsFromCollection(ctx context.Context, items *str.ItemsList) (*str.CollectionRemoveResult, *str.Response, error) {
 	var url = "sync/collection/remove"
 	s.client.debug("remove items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	result := new(str.CollectionRemoveResult)
-	_, err = s.client.Do(ctx, req, result)
+	resp, err := s.client.Do(ctx, req, result)
 	if err != nil {
-		return result, err
+		return result, resp, err
 	}
 
-	return result, nil
+	return result, resp, nil
 }
 
 // GetWatched Returns all movies or shows a user has watched sorted by most plays.
@@ -306,40 +306,40 @@ func (s *SyncService) GetWatched(ctx context.Context, watchType *string, opts *u
 // AddItemsToHistory add items to user's history
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/add-to-history/add-items-to-watched-history
-func (s *SyncService) AddItemsToHistory(ctx context.Context, items *str.HistoryItems) (*str.AddResult, error) {
+func (s *SyncService) AddItemsToHistory(ctx context.Context, items *str.HistoryItems) (*str.AddResult, *str.Response, error) {
 	var url = "sync/history"
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	result := new(str.AddResult)
-	_, err = s.client.Do(ctx, req, result)
+	resp, err := s.client.Do(ctx, req, result)
 	if err != nil {
-		return result, err
+		return result, resp, err
 	}
 
-	return result, nil
+	return result, resp, nil
 }
 
 // RemoveItemsFromHistory remove items from user's history
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/remove-from-history/remove-items-from-history
-func (s *SyncService) RemoveItemsFromHistory(ctx context.Context, items *str.ItemsToRemove) (*str.RemoveResult, error) {
+func (s *SyncService) RemoveItemsFromHistory(ctx context.Context, items *str.ItemsToRemove) (*str.RemoveResult, *str.Response, error) {
 	var url = "sync/history/remove"
 	s.client.debug("remove items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	result := new(str.RemoveResult)
-	_, err = s.client.Do(ctx, req, result)
+	resp, err := s.client.Do(ctx, req, result)
 	if err != nil {
-		return result, err
+		return result, resp, err
 	}
 
-	return result, nil
+	return result, resp, nil
 }
 
 // GetRatings Returns users ratings.
@@ -377,123 +377,122 @@ func (s *SyncService) GetRatings(ctx context.Context, types *string, rating *str
 // RemoveItemsFromRatings Remove ratings for one or more items.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/remove-ratings/remove-ratings
-func (s *SyncService) RemoveItemsFromRatings(ctx context.Context, items *str.ItemsToRemove) (*str.RemoveResult, error) {
+func (s *SyncService) RemoveItemsFromRatings(ctx context.Context, items *str.ItemsToRemove) (*str.RemoveResult, *str.Response, error) {
 	var url = "sync/ratings/remove"
 	s.client.debug("remove items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	result := new(str.RemoveResult)
-	_, err = s.client.Do(ctx, req, result)
+	resp, err := s.client.Do(ctx, req, result)
 	if err != nil {
-		return result, err
+		return result, resp, err
 	}
 
-	return result, nil
+	return result, resp, nil
 }
 
 // AddItemsToRatings Rate one or more items. Accepts shows, seasons, episodes and movies.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/add-ratings/add-new-ratings
-func (s *SyncService) AddItemsToRatings(ctx context.Context, items *str.RatingItems) (*str.AddResult, error) {
+func (s *SyncService) AddItemsToRatings(ctx context.Context, items *str.RatingItems) (*str.AddResult, *str.Response, error) {
 	var url = "sync/ratings"
 	s.client.debug("add items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	result := new(str.AddResult)
-	_, err = s.client.Do(ctx, req, result)
+	resp, err := s.client.Do(ctx, req, result)
 	if err != nil {
-		return result, err
+		return result, resp, err
 	}
 
-	return result, nil
+	return result, resp, nil
 }
 
 // UpdateWatchlist Update the watchlist by sending 1 or more parameters.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/update-watchlist/update-watchlist
-func (s *SyncService) UpdateWatchlist(ctx context.Context, update *str.PersonalList) (*str.PersonalList, error) {
+func (s *SyncService) UpdateWatchlist(ctx context.Context, update *str.PersonalList) (*str.PersonalList, *str.Response, error) {
 	var url = "sync/watchlist"
 	s.client.debug("update watchlist")
 	req, err := s.client.NewRequest(http.MethodPut, url, update)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	result := new(str.PersonalList)
-	_, err = s.client.Do(ctx, req, result)
+	resp, err := s.client.Do(ctx, req, result)
 	if err != nil {
-		return result, err
+		return result, resp, err
 	}
 
-	return result, nil
+	return result, resp, nil
 }
 
 // UpdateFavorites Update the favorites list by sending 1 or more parameters.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/update-favorites/update-favorites
-func (s *SyncService) UpdateFavorites(context context.Context, update *str.PersonalList) (*str.PersonalList, error) {
+func (s *SyncService) UpdateFavorites(ctx context.Context, update *str.PersonalList) (*str.PersonalList, *str.Response, error) {
 	var url = "sync/favorites"
 	s.client.debug("update favorites")
 	req, err := s.client.NewRequest(http.MethodPut, url, update)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	result := new(str.PersonalList)
-	_, err = s.client.Do(context, req, result)
+	resp, err := s.client.Do(ctx, req, result)
 	if err != nil {
-		return result, err
+		return result, resp, err
 	}
 
-	return result, nil
+	return result, resp, nil
 }
 
 // UpdateWatchlistItem Update the notes on a single watchlist item.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/update-watchlist-item/update-a-watchlist-item
-func (s *SyncService) UpdateWatchlistItem(context context.Context, itemID int, update *str.WatchlistItem) error {
+func (s *SyncService) UpdateWatchlistItem(ctx context.Context, itemID int, update *str.WatchlistItem) (*str.Response, error) {
 	var url string
 
 	url = fmt.Sprintf("sync/watchlist/%d", itemID)
 	s.client.debug("update notes")
 	req, err := s.client.NewRequest(http.MethodPut, url, update)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	result := new(str.Response)
-	_, err = s.client.Do(context, req, result)
+	resp, err := s.client.Do(ctx, req, nil)
 	if err != nil {
-		return err
+		return resp, err
 	}
 
-	return nil
+	return resp, nil
 }
 
 // RemoveItemsFromWatchlist Remove one or more items from a user's watchlist.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/remove-from-watchlist/remove-items-from-watchlist
-func (s *SyncService) RemoveItemsFromWatchlist(context context.Context, items *str.ItemsToRemove) (*str.RemoveResult, error) {
+func (s *SyncService) RemoveItemsFromWatchlist(ctx context.Context, items *str.ItemsToRemove) (*str.RemoveResult, *str.Response, error) {
 	var url = "sync/watchlist/remove"
 	s.client.debug("remove items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	result := new(str.RemoveResult)
-	_, err = s.client.Do(context, req, result)
+	resp, err := s.client.Do(ctx, req, result)
 	if err != nil {
-		return result, err
+		return result, resp, err
 	}
 
-	return result, nil
+	return result, resp, nil
 }
 
 // AddItemsToWatchlist Add one of more items to a user's watchlist.
@@ -502,42 +501,42 @@ func (s *SyncService) RemoveItemsFromWatchlist(context context.Context, items *s
 // those seasons will be added.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/update-watchlist/add-items-to-watchlist
-func (s *SyncService) AddItemsToWatchlist(ctx context.Context, items *str.HistoryItems) (*str.AddResult, error) {
+func (s *SyncService) AddItemsToWatchlist(ctx context.Context, items *str.HistoryItems) (*str.AddResult, *str.Response, error) {
 	var url = "sync/watchlist"
 	s.client.debug("add items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	result := new(str.AddResult)
-	_, err = s.client.Do(ctx, req, result)
+	resp, err := s.client.Do(ctx, req, result)
 	if err != nil {
-		return result, err
+		return result, resp, err
 	}
 
-	return result, nil
+	return result, resp, nil
 }
 
 // ReorderWatchlistItems Reorder all items on a user's watchlist by sending the updated rank of list item ids.
 // Use the /sync/watchlist method to get all list item ids.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/reorder-watchlist/reorder-watchlist-items
-func (s *SyncService) ReorderWatchlistItems(ctx context.Context, reorder *str.ItemsToReorder) (*str.ReorderResults, error) {
+func (s *SyncService) ReorderWatchlistItems(ctx context.Context, reorder *str.ItemsToReorder) (*str.ReorderResults, *str.Response, error) {
 	var url = "sync/watchlist/reorder"
 	s.client.debug("reorder watchlist")
 	req, err := s.client.NewRequest(http.MethodPost, url, reorder)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	result := new(str.ReorderResults)
-	_, err = s.client.Do(ctx, req, result)
+	resp, err := s.client.Do(ctx, req, result)
 	if err != nil {
-		return result, err
+		return result, resp, err
 	}
 
-	return result, nil
+	return result, resp, nil
 }
 
 // GetFavorites Returns all items in a user's favorites filtered by type.
@@ -575,84 +574,83 @@ func (s *SyncService) GetFavorites(ctx context.Context, types *string, sortBy *s
 // AddItemsToFavorites add items to favorites.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/update-favorites/add-items-to-favorites
-func (s *SyncService) AddItemsToFavorites(ctx context.Context, items *str.HistoryItems) (*str.AddResult, error) {
+func (s *SyncService) AddItemsToFavorites(ctx context.Context, items *str.HistoryItems) (*str.AddResult, *str.Response, error) {
 	var url = "sync/favorites"
 	s.client.debug("add items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	result := new(str.AddResult)
-	_, err = s.client.Do(ctx, req, result)
+	resp, err := s.client.Do(ctx, req, result)
 	if err != nil {
-		return result, err
+		return result, resp, err
 	}
 
-	return result, nil
+	return result, resp, nil
 }
 
 // RemoveItemsFromFavorites remove items from favorites.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/sync/remove-from-favorites/remove-items-from-favorites
-func (s *SyncService) RemoveItemsFromFavorites(context context.Context, items *str.ItemsToRemove) (*str.RemoveResult, error) {
+func (s *SyncService) RemoveItemsFromFavorites(ctx context.Context, items *str.ItemsToRemove) (*str.RemoveResult, *str.Response, error) {
 	var url = "sync/favorites/remove"
 	s.client.debug("remove items")
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	result := new(str.RemoveResult)
-	_, err = s.client.Do(context, req, result)
+	resp, err := s.client.Do(ctx, req, result)
 	if err != nil {
-		return result, err
+		return result, resp, err
 	}
 
-	return result, nil
+	return result, resp, nil
 }
 
 // ReorderFavoritesItems Reorder all items on a user's favorites by sending the updated rank of list item ids.
 // Use the /sync/favorites method to get all list item ids.
 //
 // API docs:https://trakt.docs.apiary.io/#reference/sync/reorder-favorites/reorder-favorited-items
-func (s *SyncService) ReorderFavoritesItems(ctx context.Context, reorder *str.ItemsToReorder) (*str.ReorderResults, error) {
+func (s *SyncService) ReorderFavoritesItems(ctx context.Context, reorder *str.ItemsToReorder) (*str.ReorderResults, *str.Response, error) {
 	var url = "sync/favorites/reorder"
 	s.client.debug("reorder favorites")
 	req, err := s.client.NewRequest(http.MethodPost, url, reorder)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	result := new(str.ReorderResults)
-	_, err = s.client.Do(ctx, req, result)
+	resp, err := s.client.Do(ctx, req, result)
 	if err != nil {
-		return result, err
+		return result, resp, err
 	}
 
-	return result, nil
+	return result, resp, nil
 }
 
 // UpdateFavoriteItem Update the notes on a single favorite item.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/sync/update-favorite-item/update-a-favorite-item
-func (s *SyncService) UpdateFavoriteItem(context context.Context, itemID int, update *str.FavoriteItem) error {
+func (s *SyncService) UpdateFavoriteItem(ctx context.Context, itemID int, update *str.FavoriteItem) (*str.Response, error) {
 	var url string
 
 	url = fmt.Sprintf("sync/favorites/%d", itemID)
 	s.client.debug("update notes")
 	req, err := s.client.NewRequest(http.MethodPut, url, update)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	result := new(str.Response)
-	_, err = s.client.Do(context, req, result)
+	resp, err := s.client.Do(ctx, req, nil)
 	if err != nil {
-		return err
+		return resp, err
 	}
 
-	return nil
+	return resp, nil
 }
 
 // GetMinimalCollection Returns the movie or episode collection in a minimal format: Trakt ID -> collected_at.

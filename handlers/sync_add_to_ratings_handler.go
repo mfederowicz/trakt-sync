@@ -35,7 +35,7 @@ func (m SyncAddToRatingsHandler) Handle(options *str.Options, client *trakt.Clie
 }
 
 func (SyncAddToRatingsHandler) syncAddToRatings(client *trakt.Client, options *str.Options, items *str.RatingItems) (*str.AddResult, error) {
-	result, err := client.Sync.AddItemsToRatings(
+	result, _, err := client.Sync.AddItemsToRatings(
 		cli.ContextFromOptions(options),
 		items,
 	)
