@@ -36,8 +36,11 @@ func (p PeopleUpdatedIDsHandler) Handle(options *str.Options, client *trakt.Clie
 		printer.Printf("Found %d items \n", len(updates))
 		exportJSON := []*int{}
 		exportJSON = append(exportJSON, updates...)
-		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
+		jsonData, err := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
+		if err != nil {
+			return fmt.Errorf("encode %s result: %w", options.Action, err)
+		}
+		printer.Println("write data to:" + options.Output)
 
 		writer.WriteJSON(options, jsonData)
 	} else {
