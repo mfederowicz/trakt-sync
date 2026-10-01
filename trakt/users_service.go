@@ -158,7 +158,7 @@ func (u *UsersService) GetWatched(ctx context.Context, id string, watchType stri
 		return nil, nil, err
 	}
 
-	fmt.Println("url:", url)
+	u.client.debug("url:" + url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -385,7 +385,7 @@ func (u *UsersService) GetLikes(ctx context.Context, user string, stype string, 
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println(url)
+	u.client.debug("url:" + url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -410,7 +410,7 @@ func (u *UsersService) GetListLikes(ctx context.Context, user string, listID str
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println(url)
+	u.client.debug("url:" + url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -437,7 +437,7 @@ func (u *UsersService) GetCollection(ctx context.Context, user string, stype str
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println(url)
+	u.client.debug("url:" + url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -467,7 +467,7 @@ func (u *UsersService) GetComments(ctx context.Context, user string, commentType
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println(url)
+	u.client.debug("url:" + url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -499,7 +499,7 @@ func (u *UsersService) GetNotes(ctx context.Context, user string, strType string
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println(url)
+	u.client.debug("url:" + url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -570,7 +570,7 @@ func (u *UsersService) GetCollaborations(ctx context.Context, user string, opts 
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println(url)
+	u.client.debug("url:" + url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -595,7 +595,6 @@ func (u *UsersService) GetList(ctx context.Context, user string, listID string, 
 	if err != nil {
 		return nil, nil, err
 	}
-	// fmt.Println(url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -697,7 +696,7 @@ func (u *UsersService) GetListItems(ctx context.Context, user string, listID str
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println(url)
+	u.client.debug("url:" + url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -808,7 +807,7 @@ func (u *UsersService) GetListComments(ctx context.Context, user string, listID 
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println(url)
+	u.client.debug("url:" + url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -900,7 +899,7 @@ func (u *UsersService) GetBlockedUsers(ctx context.Context, options *uri.ListOpt
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println(url)
+	u.client.debug("url:" + url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -969,7 +968,7 @@ func (u *UsersService) GetFollowers(ctx context.Context, user string, options *u
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println(url)
+	u.client.debug("url:" + url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -994,7 +993,7 @@ func (u *UsersService) GetFollowing(ctx context.Context, user string, options *u
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println(url)
+	u.client.debug("url:" + url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1020,7 +1019,7 @@ func (u *UsersService) GetFriends(ctx context.Context, user string, options *uri
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println(url)
+	u.client.debug("url:" + url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1057,7 +1056,7 @@ func (u *UsersService) GetHistory(ctx context.Context, user string, strType stri
 	if err != nil {
 		return nil, nil, err
 	}
-	fmt.Println(url)
+	u.client.debug("url:" + url)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
