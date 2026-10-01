@@ -17,6 +17,11 @@ $ ./trakt-sync people -a shows -i john-wayne
 ```console
 $ ./trakt-sync people -a lists -i john-wayne
 ```
+```console
+$ ./trakt-sync people -a lists -i john-wayne -t official -s likes
+```
+`-t` is one of: `all`, `personal` (default), `official`, `watchlist`, `favorites`.
+`-s` is one of: `popular` (default), `likes`, `comments`, `items`, `added`, `updated`.
 ##### Report a person
 ```console
 $ ./trakt-sync people -a report -i john-wayne -r metadata -message "birthday is wrong"

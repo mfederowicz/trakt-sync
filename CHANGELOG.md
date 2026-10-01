@@ -47,6 +47,7 @@ schedule.
 
 ### Fixed
 
+- `people -a lists` asked for `/people/{id}/lists/lists/rank`: the action name was sent as the list type and `rank` as the sort, neither of which the Trakt API accepts. It now asks for `personal` lists sorted by `popular`, the API defaults, and the new `-t` (`all`, `personal`, `official`, `watchlist`, `favorites`) and `-s` (`popular`, `likes`, `comments`, `items`, `added`, `updated`) flags choose another list type or sort.
 - `scrobble -progress` was ignored, so scrobbles were sent without a progress value; a `scrobble -a stop` could therefore not mark an item as watched. The given progress is now sent.
 - `comments -spoiler` was ignored: comments and replies were always posted without the spoiler flag. `-spoiler` now marks them as spoilers.
 - If the new token (after login or a token refresh) or the refreshed user settings could not be encoded, `token.json` / `user_settings.json` was overwritten with an empty file. The encoding error is now reported and the stored file is kept.

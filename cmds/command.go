@@ -468,7 +468,16 @@ func setOptionsDependsOnModuleCalendars(options str.Options) str.Options {
 func setOptionsDependsOnModulePeople(options str.Options) str.Options {
 	options.Action = *_action
 	options.ID = *_personID
-	options.Type = *_action
+	options.Sort = *_peopleSort
+	options.Type = *_peopleType
+	if options.Action == consts.Lists {
+		if len(options.Sort) == consts.ZeroValue {
+			options.Sort = consts.Popular
+		}
+		if len(options.Type) == consts.ZeroValue {
+			options.Type = consts.Personal
+		}
+	}
 	options.Reason = *_peopleReason
 	options.Msg = *_peopleMessage
 	return options

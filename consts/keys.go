@@ -136,6 +136,7 @@ const (
 	Pause                 = "pause"
 	People                = "people"
 	Person                = "person"
+	Personal              = "personal"
 	FollowingRequests     = "following_requests"
 	Playback              = "playback"
 	PlexConnect           = "plex_connect"
