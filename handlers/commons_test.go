@@ -352,7 +352,7 @@ func TestListToHistoryItems(t *testing.T) {
 	items.IDs = &[]int64{}
 	list := []*str.ExportlistItem{{
 		ID:        Ptr(int64(11041459005)),
-		WatchedAt: &str.Timestamp{referenceTime},
+		WatchedAt: &str.Timestamp{Time: referenceTime},
 		Type:      Ptr(consts.Episode),
 		Show: &str.Show{
 			Title: Ptr("Californication"),
@@ -379,7 +379,7 @@ func TestListToHistoryItems(t *testing.T) {
 	},
 		{
 			ID:        Ptr(int64(110414590056)),
-			WatchedAt: &str.Timestamp{referenceTime},
+			WatchedAt: &str.Timestamp{Time: referenceTime},
 			Type:      Ptr(consts.Episode),
 			Show: &str.Show{
 				Title: Ptr("Californication"),
