@@ -16,7 +16,7 @@ var (
 	_scrobbleProgress    = ScrobbleCmd.Flag.Float64("progress", cfg.DefaultConfig().Progress, consts.ProgressUsage)
 	_scrobbleEpisodeAbs  = ScrobbleCmd.Flag.Int("episode_abs", cfg.DefaultConfig().EpisodeAbs, consts.EpisodeAbsUsage)
 	_scrobbleEpisodeCode = ScrobbleCmd.Flag.String("episode_code", cfg.DefaultConfig().EpisodeCode, consts.EpisodeCodeUsage)
-	_scrobbleDelete      = ScrobbleCmd.Flag.Bool("delete", cfg.DefaultConfig().Delete, consts.DeleteUsage)
+	_scrobbleDelete      = ScrobbleCmd.Flag.Bool("delete", cfg.DefaultConfig().Delete, consts.DeprecatedIgnoredUsage)
 )
 
 // ScrobbleCmd start/pause/stop what is user watching.
