@@ -34,6 +34,7 @@ schedule.
 
 ### Fixed
 
+- `history`, `watchlist` and `collection` with `-t episodes` stopped with `panic error:runtime error: invalid memory address or nil pointer dereference` when an exported episode had no title, which Trakt allows. Such an episode is now exported with the title `no episode title`, as an episode with an empty title already was.
 - `shows -a last_episode` and `shows -a next_episode` stopped with `panic error:runtime error: invalid memory address or nil pointer dereference` when the episode had no title, which Trakt allows (typical for an upcoming episode). The episode is now exported and the message shows `no episode title`.
 - `comments -a comments` without `-t`, or with a `-t` other than `movie`, `show`, `season`, `episode` or `list` (for example the plural `movies`), stopped with `panic error:runtime error: invalid memory address or nil pointer dereference`. It now prints the possible types and stops with `unknown type "movies"`.
 - `checkin -a movie|episode|show_episode` and `comments -a comments` stopped with `panic error:runtime error: invalid memory address or nil pointer dereference` when the user settings returned by Trakt had no `connections` object (the API allows it to be missing). The checkin or comment is now sent without sharing overrides, so Trakt applies the account's own sharing settings.

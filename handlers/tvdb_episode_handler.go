@@ -14,12 +14,12 @@ func (TvdbEpisodeHandler) Handle(options *str.Options, data *str.ExportlistItem,
 	// episode export by format tvdb
 	findDuplicates = append(findDuplicates, *data.Episode.IDs.Tvdb)
 
-	if len(*data.Episode.Title) == consts.ZeroValue {
+	if data.Episode.Title == nil || len(*data.Episode.Title) == consts.ZeroValue {
 		notitle := consts.NoEpisodeTitle
 		data.Episode.Title = &notitle
 	}
 
-	if len(*data.Show.Title) == consts.ZeroValue {
+	if data.Show.Title == nil || len(*data.Show.Title) == consts.ZeroValue {
 		notitle := consts.NoShowTitle
 		data.Show.Title = &notitle
 	}
