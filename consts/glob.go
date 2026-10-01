@@ -38,6 +38,12 @@ const (
 	DefaultStartDateFormat       = time.RFC3339
 	DefaultStartAtDays           = 60
 	DeleteUsage                  = "allow delete item"
+	DeprecatedFlagIgnored        = "flag -%s is deprecated and is ignored\n"
+	DeprecatedFlagNoAPI          = "flag -%s is no longer supported by the Trakt API and is ignored\n"
+	DeprecatedFlagUse            = "flag -%s is deprecated, use -%s\n"
+	DeprecatedIgnoredUsage       = "deprecated, ignored"
+	DeprecatedNoAPIUsage         = "deprecated: no longer supported by the Trakt API, ignored"
+	DeprecatedSearchQueryUsage   = "deprecated: use -q with search"
 	DenyUsage                    = "allow deny item"
 	DisplayNumbersUsage          = "set display_numbers ie: -display_numbers true or false"
 	AllowCommentsUsage           = "set allow_comments ie: -allow_comments true or false"
@@ -139,7 +145,7 @@ const (
 	NoShowTitle                  = "no show title"
 	NotFoundConfigForModule      = "not found config for module '%s'"
 	NotSetValue                  = "<not set>"
-	NotesIDUsage                 = "allow to overwrite notes_id"
+	NotesIDUsage                 = "deprecated: use -i"
 	NotesNotFoundWithID          = "notes not found with Id:%s"
 	PlaybackNotFoundWithID       = "playback not found with Id:%d"
 	MonthUsage                   = "review month 1-12 ie: -month 8"

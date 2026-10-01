@@ -39,6 +39,10 @@ schedule.
 - Library: a `trakt` client without `WithUserAgent` now sends `User-Agent: trakt-sync-go` (`trakt.DefaultUserAgent`), so apps built on the library no longer show up as the trakt-sync CLI. The CLI still sends `trakt-sync/<version>`. The package docs now tell apps to set their own User-Agent with `WithUserAgent`.
 - CI also builds and tests the `trakt`, `str` and `uri` packages and `example/` with the Go version in `go.mod` (1.21), so the library keeps working for that minimum.
 
+### Deprecated
+
+- Flags that no longer do anything now print a note when used, and will be removed in the next major version: `-studio_ids` and `-languages` (no longer supported by the Trakt API), `-query` (use `-q` with `search`), `notes -notes_id` (use `-i`) and `scrobble -delete` (never had an effect). Commands still run as before.
+
 ### Fixed
 
 - `scrobble -progress` was ignored, so scrobbles were sent without a progress value; a `scrobble -a stop` could therefore not mark an item as watched. The given progress is now sent.
