@@ -33,22 +33,23 @@ func notesFunc(cmd *Command, _ ...string) error {
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
 
-	err := cmd.common.ValidPrivacy(options)
-	if err != nil {
-		return fmt.Errorf("%s/%s: %w", cmd.Name, options.Action, err)
-	}
-
 	var handler handlers.NotesHandler
 	var notesHandlers = map[string]handlers.Handler{
 		consts.Notes: handlers.NotesNotesHandler{},
 		consts.Note:  handlers.NotesNoteHandler{},
 		consts.Item:  handlers.NotesItemHandler{},
 	}
-	handler, err = cmd.common.GetHandlerForMap(options.Action, notesHandlers)
+	handler, err := cmd.common.GetHandlerForMap(options.Action, notesHandlers)
 
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, []string{consts.Notes, consts.Note, consts.Item})
-		return nil
+		return unknownActionError(cmd.Name, options.Action)
+	}
+
+	// privacy is checked per action, so only after the action is known
+	err = cmd.common.ValidPrivacy(options)
+	if err != nil {
+		return fmt.Errorf("%s/%s: %w", cmd.Name, options.Action, err)
 	}
 
 	err = handler.Handle(options, client)

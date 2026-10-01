@@ -39,7 +39,7 @@ func younifyFunc(cmd *Command, _ ...string) error {
 
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, []string{consts.Connections, consts.Connect, consts.Refresh, consts.Disconnect})
-		return nil
+		return unknownActionError(cmd.Name, options.Action)
 	}
 
 	err = handler.Handle(options, client)

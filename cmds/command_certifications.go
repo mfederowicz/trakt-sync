@@ -31,7 +31,7 @@ func certificationsFunc(cmd *Command, _ ...string) error {
 	validTypes := []string{consts.Movies, consts.Shows}
 	if err != nil {
 		cmd.common.GenTypeUsage(cmd.Name, validTypes)
-		return nil
+		return unknownTypeError(cmd.Name, options.Type)
 	}
 
 	err = handler.Handle(options, client)

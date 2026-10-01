@@ -34,7 +34,7 @@ func (n NotesNotesHandler) Handle(options *str.Options, client *trakt.Client) er
 	validTypes := []string{consts.Movie, consts.Show, consts.Season, consts.Episode, consts.Person, consts.History, consts.Collection, consts.Rating}
 	if err != nil {
 		n.common.GenActionTypeUsage(options, validTypes)
-		return nil
+		return unknownValueError("type", options.Type)
 	}
 
 	err = handler.Handle(options, client)

@@ -46,7 +46,7 @@ func peopleFunc(cmd *Command, _ ...string) error {
 
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, []string{consts.Updates, consts.UpdatedIDs, consts.Summary, consts.Movies, consts.Shows, consts.Lists, consts.Refresh, consts.Report})
-		return nil
+		return unknownActionError(cmd.Name, options.Action)
 	}
 
 	err = handler.Handle(options, client)

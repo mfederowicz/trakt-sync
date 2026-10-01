@@ -38,7 +38,7 @@ func (h NotesNotesCollectionHandler) Handle(options *str.Options, client *trakt.
 		n.Episode = episode
 	default:
 		h.common.GenActionTypeItemUsage(options, []string{consts.Movie, consts.Episode})
-		return nil
+		return unknownValueError("item", options.Item)
 	}
 	p := "private"
 	n.Privacy = &p

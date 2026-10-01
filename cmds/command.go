@@ -761,6 +761,22 @@ func (*Command) ValidFlags() bool {
 	return true
 }
 
+// unknownActionError is returned after the actions usage, so a wrong or missing -a exits with status 1.
+func unknownActionError(module string, action string) error {
+	if action == consts.EmptyString {
+		return fmt.Errorf("%s: no action given, use -a", module)
+	}
+	return fmt.Errorf("%s: unknown action %q", module, action)
+}
+
+// unknownTypeError is returned after the types usage, so a wrong or missing -t exits with status 1.
+func unknownTypeError(module string, strType string) error {
+	if strType == consts.EmptyString {
+		return fmt.Errorf("%s: no type given, use -t", module)
+	}
+	return fmt.Errorf("%s: unknown type %q", module, strType)
+}
+
 // flagIsSet reports whether the flag was given on the command line of this command.
 func (c *Command) flagIsSet(name string) bool {
 	set := false

@@ -50,7 +50,7 @@ func listsFunc(cmd *Command, _ ...string) error {
 	validActions := []string{consts.Trending, consts.Popular, consts.List, consts.Likes, consts.Like, consts.Items, consts.Comments, consts.Report}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
-		return nil
+		return unknownActionError(cmd.Name, options.Action)
 	}
 
 	err = handler.Handle(options, client)

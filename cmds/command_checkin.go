@@ -44,7 +44,7 @@ func checkinFunc(cmd *Command, _ ...string) error {
 	validActions := []string{consts.Movie, consts.Episode, consts.ShowEpisode, consts.Delete}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
-		return nil
+		return unknownActionError(cmd.Name, options.Action)
 	}
 
 	err = handler.Handle(options, client)
