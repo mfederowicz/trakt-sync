@@ -24,16 +24,21 @@ func postHandlers() []postHandler {
 	const (
 		episodeID   = `"episode":{"ids":{"trakt":55}}`
 		fetched     = `{"title":"Tron","ids":{"trakt":1}}`
+		getList     = "GET /lists/55"
 		getMovie    = "GET /movies/55"
 		getPerson   = "GET /people/55"
 		getSettings = "GET /users/settings"
 		getShow     = "GET /shows/55"
+		postComment = "POST /comments"
 		postCheckin = "POST /checkin"
 		postNotes   = "POST /notes"
 		postPause   = "POST /scrobble/pause"
 		postStart   = "POST /scrobble/start"
 		postStop    = "POST /scrobble/stop"
 	)
+	comment := func(itemType string) str.Options {
+		return str.Options{InternalID: "55", Comment: "great movie, worth a rewatch", Spoiler: true, Type: itemType}
+	}
 	note := func(itemType string) str.Options {
 		return str.Options{InternalID: "55", Notes: "rewatch", Type: itemType}
 	}
@@ -50,6 +55,11 @@ func postHandlers() []postHandler {
 		{name: "checkin episode", handler: CheckinEpisodeHandler{}, options: str.Options{Action: "episode", TraktID: 55}, requests: []string{getSettings, postCheckin}, sends: episodeID},
 		{name: "checkin show episode abs", handler: CheckinShowEpisodeHandler{}, options: checkinAbs, requests: []string{getSettings, getShow, postCheckin}, sends: `"episode":{"number_abs":15}`},
 		{name: "checkin show episode code", handler: CheckinShowEpisodeHandler{}, options: checkinCode, requests: []string{getSettings, getShow, postCheckin}, sends: `"episode":{"season":2,"number":5}`},
+		{name: "comments episode", handler: CommentsCommentsHandler{}, options: comment("episode"), requests: []string{getSettings, postComment}, sends: episodeID},
+		{name: "comments list", handler: CommentsCommentsHandler{}, options: comment("list"), requests: []string{getSettings, getList, postComment}, sends: `"list":`},
+		{name: "comments movie", handler: CommentsCommentsHandler{}, options: comment("movie"), requests: []string{getSettings, getMovie, postComment}, sends: `"movie":` + fetched},
+		{name: "comments season", handler: CommentsCommentsHandler{}, options: comment("season"), requests: []string{getSettings, postComment}, sends: `"season":{"ids":{"trakt":55}}`},
+		{name: "comments show", handler: CommentsCommentsHandler{}, options: comment("show"), requests: []string{getSettings, getShow, postComment}, sends: `"spoiler":true`},
 		{name: "notes episode", handler: NotesNotesEpisodeHandler{}, options: note("episode"), requests: []string{postNotes}, sends: episodeID},
 		{name: "notes history", handler: NotesNotesHistoryHandler{}, options: note("history"), requests: []string{postNotes}, sends: `"attached_to":{"id":55,"type":"history"}`},
 		{name: "notes movie", handler: NotesNotesMovieHandler{}, options: note("movie"), requests: []string{getMovie, postNotes}, sends: `"movie":` + fetched},

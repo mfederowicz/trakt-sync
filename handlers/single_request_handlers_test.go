@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/mfederowicz/trakt-sync/str"
@@ -26,6 +27,7 @@ func singleRequestHandlers() []singleRequestHandler {
 	const (
 		object = `{}`
 		list   = `[{}]`
+		titled = `{"title":"Tron"}`
 	)
 	byID := str.Options{InternalID: "55"}
 	calendar := str.Options{StartDate: "2026-10-01", Days: 7}
@@ -76,6 +78,7 @@ func singleRequestHandlers() []singleRequestHandler {
 		{name: "movies releases", handler: MoviesReleasesHandler{}, options: str.Options{InternalID: "55", Country: "us"}, path: "/movies/55/releases/us", body: list},
 		{name: "movies stats", handler: MoviesStatsHandler{}, options: byID, path: "/movies/55/stats", body: object},
 		{name: "movies studios", handler: MoviesStudiosHandler{}, options: byID, path: "/movies/55/studios", body: list},
+		{name: "movies summary", handler: MoviesSummaryHandler{}, options: byID, path: "/movies/55", body: titled},
 		{name: "movies translations", handler: MoviesTranslationsHandler{}, options: str.Options{InternalID: "55", Language: "en"}, path: "/movies/55/translations/en", body: list},
 		{name: "movies videos", handler: MoviesVideosHandler{}, options: byID, path: "/movies/55/videos", body: list},
 		{name: "movies watching", handler: MoviesWatchingHandler{}, options: byID, path: "/movies/55/watching", body: list},
@@ -96,10 +99,13 @@ func singleRequestHandlers() []singleRequestHandler {
 		{name: "shows aliases", handler: ShowsAliasesHandler{}, options: byID, path: "/shows/55/aliases", body: list},
 		{name: "shows certifications", handler: ShowsCertificationsHandler{}, options: byID, path: "/shows/55/certifications", body: list},
 		{name: "shows collection progress", handler: ShowsCollectionProgressHandler{}, options: str.Options{Module: "shows", Action: "collection_progress", InternalID: "55"}, path: "/shows/55/progress/collection", body: object},
+		{name: "shows last episode", handler: ShowsLastEpisodeHandler{}, options: byID, path: "/shows/55/last_episode", body: titled},
+		{name: "shows next episode", handler: ShowsNextEpisodeHandler{}, options: byID, path: "/shows/55/next_episode", body: titled},
 		{name: "shows people", handler: ShowsPeopleHandler{}, options: byID, path: "/shows/55/people", body: object},
 		{name: "shows ratings", handler: ShowsRatingsHandler{}, options: byID, path: "/shows/55/ratings", body: object},
 		{name: "shows stats", handler: ShowsStatsHandler{}, options: byID, path: "/shows/55/stats", body: object},
 		{name: "shows studios", handler: ShowsStudiosHandler{}, options: byID, path: "/shows/55/studios", body: list},
+		{name: "shows summary", handler: ShowsSummaryHandler{}, options: byID, path: "/shows/55", body: titled},
 		{name: "shows translations", handler: ShowsTranslationsHandler{}, options: str.Options{InternalID: "55", Language: "en"}, path: "/shows/55/translations/en", body: list},
 		{name: "shows videos", handler: ShowsVideosHandler{}, options: byID, path: "/shows/55/videos", body: list},
 		{name: "shows watched progress", handler: ShowsWatchedProgressHandler{}, options: str.Options{Module: "shows", Action: "watched_progress", InternalID: "55"}, path: "/shows/55/progress/watched", body: object},
@@ -142,7 +148,7 @@ func TestSingleRequestHandlersWriteResult(t *testing.T) {
 			test.AssertNilError(t, err)
 			var written any
 			test.AssertNilError(t, json.Unmarshal(data, &written))
-			if tc.body == `{}` {
+			if strings.HasPrefix(tc.body, "{") {
 				assert.IsType(t, map[string]any{}, written)
 				return
 			}
