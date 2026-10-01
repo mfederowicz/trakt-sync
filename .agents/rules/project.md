@@ -105,6 +105,9 @@ and SemVer. The versioning rules are at the top of the file.
   `users -a list_like`), say what now happens, and for a fix, what went wrong
   before. Internal names only when there is no user-visible surface.
 - Check action and flag names against `cmds/` before writing them.
+- Changes to the Go API of `trakt`, `str` or `uri` start with **Library:**; a
+  breaking one goes under `### Changed` or `### Removed` (see the library rules
+  at the top of `CHANGELOG.md`).
 - Changes nobody outside the repo notices (tests only, refactors, rule files) may
   be skipped or grouped into one line.
 - Never edit a released section; a correction goes into `[Unreleased]`.
