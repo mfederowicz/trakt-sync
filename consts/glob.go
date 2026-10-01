@@ -121,6 +121,8 @@ const (
 	LimitedAccessMsg             = "%s is limited access on Trakt and not available for this API app: %w"
 	SeasonReportPending          = "season %d of show %s already has a pending report from this user"
 	EpisodeReportPending         = "episode %dx%d of show %s already has a pending report from this user"
+	PeopleSortUsage              = "lists sort: popular, likes, comments, items, added, updated"
+	PeopleTypeUsage              = "lists type: all, personal, official, watchlist, favorites"
 	PersonReportPending          = "person %s already has a pending report from this user"
 	SeasonIDReportPending        = "season %s already has a pending report from this user"
 	EpisodeIDReportPending       = "episode %s already has a pending report from this user"

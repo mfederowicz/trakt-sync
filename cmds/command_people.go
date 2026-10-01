@@ -16,6 +16,8 @@ var (
 
 	_peopleReason  = PeopleCmd.Flag.String("r", cfg.DefaultConfig().Reason, consts.ReasonUsage)
 	_peopleMessage = PeopleCmd.Flag.String("message", cfg.DefaultConfig().Msg, consts.ReportMsgUsage)
+	_peopleSort    = PeopleCmd.Flag.String("s", consts.EmptyString, consts.PeopleSortUsage)
+	_peopleType    = PeopleCmd.Flag.String("t", consts.EmptyString, consts.PeopleTypeUsage)
 )
 
 // PeopleCmd returns all data for selected person.

@@ -55,7 +55,7 @@ func TestExecTypeFromConfigFileAndFlag(t *testing.T) {
 }
 
 // TestConfigTypePerModule pins which modules read the config file's type (README "Usage"):
-// modules with their own -t (or, for people, the action) ignore it.
+// modules with their own -t ignore it.
 func TestConfigTypePerModule(t *testing.T) {
 	ignoring := map[string]bool{
 		"episodes": true, "lists": true, "movies": true, "people": true,

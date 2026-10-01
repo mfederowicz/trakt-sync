@@ -101,6 +101,8 @@ func TestModuleFlagUpdaters(t *testing.T) {
 		{name: "people report", cmd: PeopleCmd, args: []string{"-a", "report", "-i", "john-wayne", "-r", "metadata", "-message", "wrong birthday"}, path: func(string) string { return "/people/john-wayne/report" }},
 		{name: "people report default reason is rejected", cmd: PeopleCmd, args: []string{"-a", "report", "-i", "john-wayne"}, path: func(string) string { return "" }},
 		{name: "people -start_date", cmd: PeopleCmd, args: []string{"-a", "updates", "-start_date", "2026-01-15"}, path: func(tz string) string { return "/people/updates/" + startDate(tz) }},
+		{name: "people lists", cmd: PeopleCmd, args: []string{"-a", "lists", "-i", "john-wayne"}, path: func(string) string { return "/people/john-wayne/lists/personal/popular" }},
+		{name: "people lists -t -s", cmd: PeopleCmd, args: []string{"-a", "lists", "-i", "john-wayne", "-t", "official", "-s", "likes"}, path: func(string) string { return "/people/john-wayne/lists/official/likes" }},
 		{name: "people default start", cmd: PeopleCmd, args: []string{"-a", "updates"}, path: func(tz string) string { return "/people/updates/" + window(tz) }},
 		{name: "calendars -start_date", cmd: CalendarsCmd, args: []string{"-a", "all_shows", "-start_date", "2026-01-15", "-days", "3"}, path: func(string) string { return "/calendars/all/shows/2026-01-15/3" }},
 		{name: "calendars default", cmd: CalendarsCmd, args: []string{"-a", "all_shows"}, path: func(string) string { return "/calendars/all/shows/" + time.Now().Format("2006-01-02") + "/7" }},
