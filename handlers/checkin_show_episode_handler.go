@@ -32,7 +32,7 @@ func (h CheckinShowEpisodeHandler) Handle(options *str.Options, client *trakt.Cl
 		return h.CreateCheckinForEpisodeAbs(options, client)
 	}
 
-	return nil
+	return errors.New(consts.EmptyShowEpisodeMsg)
 }
 
 // CreateCheckinForEpisodeCode to handle checkin: episode code

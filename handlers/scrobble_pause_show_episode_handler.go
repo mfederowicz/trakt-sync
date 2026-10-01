@@ -32,7 +32,7 @@ func (s ScrobblePauseShowEpisodeHandler) Handle(options *str.Options, client *tr
 		return s.CreatePauseScrobbleForEpisodeAbs(options, client)
 	}
 
-	return nil
+	return errors.New(consts.EmptyShowEpisodeMsg)
 }
 
 // CreatePauseScrobbleForEpisodeCode to handle pasue scrobble: episode code
