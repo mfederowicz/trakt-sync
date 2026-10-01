@@ -45,7 +45,7 @@ func (m *MoviesService) GetMovie(ctx context.Context, id string, opts *uri.ListO
 
 // GetTrendingMovies Returns the most watched movies over the last 24 hours.
 // Movies with the most watchers are returned first.
-// API docs: https://trakt.docs.apiary.io/#reference/movies/trending/get-trending-movies
+// API docs: https://docs.trakt.tv/reference/getmoviestrending
 func (m *MoviesService) GetTrendingMovies(ctx context.Context, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
 	var url = "movies/trending"
 	url, err := uri.AddQuery(url, opts)
@@ -71,7 +71,7 @@ func (m *MoviesService) GetTrendingMovies(ctx context.Context, opts *uri.ListOpt
 
 // GetPopularMovies Returns the most popular movies.
 // Popularity is calculated using the rating percentage and the number of ratings.
-// API docs: https://trakt.docs.apiary.io/#reference/movies/popular/get-popular-movies
+// API docs: https://docs.trakt.tv/reference/getmoviespopular
 func (m *MoviesService) GetPopularMovies(ctx context.Context, opts *uri.ListOptions) ([]*str.Movie, *str.Response, error) {
 	var url = "movies/popular"
 	url, err := uri.AddQuery(url, opts)
@@ -97,7 +97,7 @@ func (m *MoviesService) GetPopularMovies(ctx context.Context, opts *uri.ListOpti
 
 // GetFavoritedMovies Returns the most favorited movies in the specified time period, defaulting to weekly.
 // All stats are relative to the specific time period.
-// API docs: https://trakt.docs.apiary.io/#reference/movies/favorited/get-favorited-movies
+// API docs: https://docs.trakt.tv/reference/getmoviesfavorited
 func (m *MoviesService) GetFavoritedMovies(ctx context.Context, opts *uri.ListOptions, period string) ([]*str.MoviesItem, *str.Response, error) {
 	var url = fmt.Sprintf("movies/favorited/%s", period)
 	url, err := uri.AddQuery(url, opts)
@@ -123,7 +123,7 @@ func (m *MoviesService) GetFavoritedMovies(ctx context.Context, opts *uri.ListOp
 
 // GetPlayedMovies Returns the most played (a single user can watch multiple times) movies in the specified time period, defaulting to weekly.
 // All stats are relative to the specific time period.
-// API docs: https://trakt.docs.apiary.io/#reference/movies/played/get-the-most-played-movies
+// API docs: https://docs.trakt.tv/reference/getmoviesplayed
 func (m *MoviesService) GetPlayedMovies(ctx context.Context, opts *uri.ListOptions, period string) ([]*str.MoviesItem, *str.Response, error) {
 	var url = fmt.Sprintf("movies/played/%s", period)
 	url, err := uri.AddQuery(url, opts)
@@ -149,7 +149,7 @@ func (m *MoviesService) GetPlayedMovies(ctx context.Context, opts *uri.ListOptio
 
 // GetWatchedMovies  Returns the most watched (unique users) movies in the specified time period, defaulting to weekly.
 // All stats are relative to the specific time period.
-// API docs: https://trakt.docs.apiary.io/#reference/movies/watched/get-the-most-watched-movies
+// API docs: https://docs.trakt.tv/reference/getmovieswatched
 func (m *MoviesService) GetWatchedMovies(ctx context.Context, opts *uri.ListOptions, period string) ([]*str.MoviesItem, *str.Response, error) {
 	var url = fmt.Sprintf("movies/watched/%s", period)
 	url, err := uri.AddQuery(url, opts)
@@ -175,7 +175,7 @@ func (m *MoviesService) GetWatchedMovies(ctx context.Context, opts *uri.ListOpti
 
 // GetCollectedMovies Returns the most collected (unique users) movies in the specified time period, defaulting to weekly.
 // All stats are relative to the specific time period.
-// API docs: https://trakt.docs.apiary.io/#reference/movies/collected/get-the-most-collected-movies
+// API docs: https://docs.trakt.tv/reference/getmoviescollected
 func (m *MoviesService) GetCollectedMovies(ctx context.Context, opts *uri.ListOptions, period string) ([]*str.MoviesItem, *str.Response, error) {
 	var url = fmt.Sprintf("movies/collected/%s", period)
 	url, err := uri.AddQuery(url, opts)
@@ -200,7 +200,7 @@ func (m *MoviesService) GetCollectedMovies(ctx context.Context, opts *uri.ListOp
 }
 
 // GetAnticipatedMovies Returns the most anticipated movies based on the number of lists a movie appears on.
-// API docs: https://trakt.docs.apiary.io/#reference/movies/anticipated/get-the-most-anticipated-movies
+// API docs: https://docs.trakt.tv/reference/getmoviesanticipated
 func (m *MoviesService) GetAnticipatedMovies(ctx context.Context, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
 	var url = "movies/anticipated"
 	url, err := uri.AddQuery(url, opts)
@@ -225,7 +225,7 @@ func (m *MoviesService) GetAnticipatedMovies(ctx context.Context, opts *uri.List
 }
 
 // GetBoxoffice Returns the top 10 grossing movies in the U.S. box office last weekend. Updated every Monday morning.
-// API docs: https://trakt.docs.apiary.io/#reference/movies/box-office/get-the-weekend-box-office
+// API docs: https://docs.trakt.tv/reference/getmoviesboxoffice
 func (m *MoviesService) GetBoxoffice(ctx context.Context, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
 	var url = "movies/boxoffice"
 	url, err := uri.AddQuery(url, opts)
@@ -251,7 +251,7 @@ func (m *MoviesService) GetBoxoffice(ctx context.Context, opts *uri.ListOptions)
 
 // GetRecentlyUpdatedMovies Returns all movies updated since the specified UTC date and time.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/movies/updates/get-recently-updated-movies
+// API docs: https://docs.trakt.tv/reference/getmoviesupdates
 func (m *MoviesService) GetRecentlyUpdatedMovies(ctx context.Context, startDate string, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
 	var url string
 
@@ -279,7 +279,7 @@ func (m *MoviesService) GetRecentlyUpdatedMovies(ctx context.Context, startDate 
 
 // GetRecentlyUpdatedMoviesTraktIDs Returns all movie Trakt IDs updated since the specified UTC date and time.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/movies/updated-ids/get-recently-updated-movie-trakt-ids
+// API docs: https://docs.trakt.tv/reference/getmoviesupdatedids
 func (m *MoviesService) GetRecentlyUpdatedMoviesTraktIDs(ctx context.Context, startDate string, opts *uri.ListOptions) ([]*int, *str.Response, error) {
 	var url string
 
@@ -308,7 +308,7 @@ func (m *MoviesService) GetRecentlyUpdatedMoviesTraktIDs(ctx context.Context, st
 
 // GetAllMovieAliases Returns all title aliases for a movie. Includes country where name is different.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/movies/aliases/get-all-movie-aliases
+// API docs: https://docs.trakt.tv/reference/getmoviesaliases
 func (m *MoviesService) GetAllMovieAliases(ctx context.Context, id string) ([]*str.Alias, *str.Response, error) {
 	url := fmt.Sprintf("movies/%s/aliases", id)
 	m.client.debug("fetch aliases url:" + url)
@@ -335,7 +335,7 @@ func (m *MoviesService) GetAllMovieAliases(ctx context.Context, id string) ([]*s
 // GetAllMovieReleases Returns all releases for a movie including country, certification, release date, release type, and note.
 // An empty country returns the releases of all countries.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/movies/releases/get-all-movie-releases
+// API docs: https://docs.trakt.tv/reference/getmoviesreleases
 func (m *MoviesService) GetAllMovieReleases(ctx context.Context, id string, country string) ([]*str.Release, *str.Response, error) {
 	var url string
 	if country != consts.EmptyString {
@@ -368,7 +368,7 @@ func (m *MoviesService) GetAllMovieReleases(ctx context.Context, id string, coun
 // GetAllMovieTranslations Returns all translations for a movie, including language and translated values for title, tagline and overview.
 // An empty language returns all languages.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/movies/translations/get-all-movie-translations
+// API docs: https://docs.trakt.tv/reference/getmoviestranslations
 func (m *MoviesService) GetAllMovieTranslations(ctx context.Context, id string, language string) ([]*str.Translation, *str.Response, error) {
 	var url string
 	if language != consts.EmptyString {
@@ -403,7 +403,7 @@ func (m *MoviesService) GetAllMovieTranslations(ctx context.Context, id string, 
 // Other sorting options include oldest, most likes, most replies, highest rated, lowest rated, and most plays..
 // An empty sort uses the API default.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/movies/comments/get-all-movie-comments
+// API docs: https://docs.trakt.tv/reference/getmoviescomments
 func (m *MoviesService) GetAllMovieComments(ctx context.Context, id string, sort string, opts *uri.ListOptions) ([]*str.Comment, *str.Response, error) {
 	var url string
 	if sort != consts.EmptyString {
@@ -443,7 +443,7 @@ func (m *MoviesService) GetAllMovieComments(ctx context.Context, id string, sort
 // By default, personal lists are returned sorted by the most popular.
 // The type and sort segments are sent only when t and sort are both set.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/movies/lists/get-lists-containing-this-movie
+// API docs: https://docs.trakt.tv/reference/getmovieslists
 func (m *MoviesService) GetListsContainingMovie(ctx context.Context, id string, t string, sort string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
 	var url string
 	if t != consts.EmptyString && sort != consts.EmptyString {
@@ -482,7 +482,7 @@ func (m *MoviesService) GetListsContainingMovie(ctx context.Context, id string, 
 // GetAllPeopleForMovie Returns all cast and crew for a movie.
 // Each cast member will have a characters array and a standard person object.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/movies/people/get-all-people-for-a-movie
+// API docs: https://docs.trakt.tv/reference/getmoviespeople
 func (m *MoviesService) GetAllPeopleForMovie(ctx context.Context, id string, opts *uri.ListOptions) (*str.MoviePeople, *str.Response, error) {
 	var url string
 
@@ -515,7 +515,7 @@ func (m *MoviesService) GetAllPeopleForMovie(ctx context.Context, id string, opt
 
 // GetMovieRatings Returns rating (between 0 and 10) and distribution for a movie.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/movies/ratings/get-movie-ratings
+// API docs: https://docs.trakt.tv/reference/getmoviesratings
 func (m *MoviesService) GetMovieRatings(ctx context.Context, id string) (*str.MovieRatings, *str.Response, error) {
 	url := fmt.Sprintf("movies/%s/ratings", id)
 	m.client.debug("fetch ratings url:" + url)
@@ -540,7 +540,7 @@ func (m *MoviesService) GetMovieRatings(ctx context.Context, id string) (*str.Mo
 
 // GetRelatedMovies Returns related and similar movies.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/movies/related/get-related-movies
+// API docs: https://docs.trakt.tv/reference/getmoviesrelated
 func (m *MoviesService) GetRelatedMovies(ctx context.Context, id string, opts *uri.ListOptions) ([]*str.Movie, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("movies/%s/related", id)
@@ -573,7 +573,7 @@ func (m *MoviesService) GetRelatedMovies(ctx context.Context, id string, opts *u
 
 // GetMovieStats Returns lots of movie stats.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/movies/stats/get-movie-stats
+// API docs: https://docs.trakt.tv/reference/getmoviesstats
 func (m *MoviesService) GetMovieStats(ctx context.Context, id string) (*str.MovieStats, *str.Response, error) {
 	url := fmt.Sprintf("movies/%s/stats", id)
 	m.client.debug("fetch stats url:" + url)
@@ -598,7 +598,7 @@ func (m *MoviesService) GetMovieStats(ctx context.Context, id string) (*str.Movi
 
 // GetMovieStudios Returns all studios for movie.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/movies/studios/get-movie-studios
+// API docs: https://docs.trakt.tv/reference/getmoviesstudios
 func (m *MoviesService) GetMovieStudios(ctx context.Context, id string) ([]*str.Studio, *str.Response, error) {
 	var url = fmt.Sprintf("movies/%s/studios", id)
 	m.client.debug("fetch studios url:" + url)
@@ -624,7 +624,7 @@ func (m *MoviesService) GetMovieStudios(ctx context.Context, id string) ([]*str.
 
 // GetMovieWatching Returns all users watching this movie right now.
 //
-// API docs:  https://trakt.docs.apiary.io/#reference/movies/studios/get-users-watching-right-now
+// API docs: https://docs.trakt.tv/reference/getmovieswatching
 func (m *MoviesService) GetMovieWatching(ctx context.Context, id string, opts *uri.ListOptions) ([]*str.UserProfile, *str.Response, error) {
 	var url = fmt.Sprintf("movies/%s/watching", id)
 	url, err := uri.AddQuery(url, opts)
@@ -656,7 +656,7 @@ func (m *MoviesService) GetMovieWatching(ctx context.Context, id string, opts *u
 
 // GetMovieVideos Returns all videos including trailers, teasers, clips, and featurettes.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/movies/videos/get-all-videos
+// API docs: https://docs.trakt.tv/reference/getmoviesvideos
 func (m *MoviesService) GetMovieVideos(ctx context.Context, id string, opts *uri.ListOptions) ([]*str.Video, *str.Response, error) {
 	var url = fmt.Sprintf("movies/%s/videos", id)
 	url, err := uri.AddQuery(url, opts)
@@ -689,7 +689,7 @@ func (m *MoviesService) GetMovieVideos(ctx context.Context, id string, opts *uri
 // RefreshMovieMetadata Queue this movie for a full metadata and image refresh.
 // It might take up to 8 hours for the updated metadata to be availabe through the API.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/movies/refresh/refresh-movie-metadata
+// API docs: https://docs.trakt.tv/reference/postmoviesrefresh
 func (m *MoviesService) RefreshMovieMetadata(ctx context.Context, id string) (*str.Response, error) {
 	var url = fmt.Sprintf("movies/%s/refresh", id)
 	m.client.debug("refresh movie:" + url)
