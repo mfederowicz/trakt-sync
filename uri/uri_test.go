@@ -40,10 +40,10 @@ func TestBuildQueryBasic(t *testing.T) {
 	}
 }
 
-func testBuildQueryCommonFilters(t *testing.T) {
+func TestBuildQueryCommonFilters(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseURL + "?years=2016&genres=action,adventure,comedy&studio_ids=1,2,3"
+	expectedURL := BaseURL + "?genres=" + url.QueryEscape("action,adventure,comedy") + "&studio_ids=" + url.QueryEscape("1,2,3") + "&years=2016"
 	got, _ := AddQuery(BaseURL, ListOptionsCommon)
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
