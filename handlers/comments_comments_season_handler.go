@@ -20,7 +20,10 @@ func (h CommentsCommentsSeasonHandler) Handle(options *str.Options, client *trak
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
-	connections, _ := h.common.FetchUserConnections(client, options)
+	connections, err := h.common.FetchUserConnections(client, options)
+	if err != nil {
+		return fmt.Errorf(consts.UserConnectionsError, err)
+	}
 	season, err := h.common.SeasonFromTraktID(options)
 	if err != nil {
 		return err

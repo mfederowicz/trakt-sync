@@ -20,7 +20,10 @@ func (h NotesNotesShowHandler) Handle(options *str.Options, client *trakt.Client
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
-	show, _ := h.common.FetchShow(client, options)
+	show, err := h.common.FetchShow(client, options)
+	if err != nil {
+		return fmt.Errorf("fetch show error:%w", err)
+	}
 	n := new(str.Notes)
 	n.Show = show
 	n.Notes = &options.Notes

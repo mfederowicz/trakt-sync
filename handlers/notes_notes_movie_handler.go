@@ -20,7 +20,10 @@ func (h NotesNotesMovieHandler) Handle(options *str.Options, client *trakt.Clien
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
-	movie, _, _ := h.common.FetchMovie(client, options)
+	movie, _, err := h.common.FetchMovie(client, options)
+	if err != nil {
+		return fmt.Errorf("fetch movie error:%w", err)
+	}
 	n := new(str.Notes)
 	n.Movie = movie
 	n.Notes = &options.Notes

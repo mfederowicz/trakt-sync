@@ -136,6 +136,7 @@ const (
 	ListUsage                    = "allow to overwrite list"
 	MaskedValue                  = "****"
 	ModuleUsage                  = "allow use selected module"
+	MovieErr                     = "movie error:%w"
 	MovieIDUsage                 = "allow to overwrite movieID"
 	MoviesCountryUsage           = "allow to overwrite country"
 	MoviesLinksUsage             = "provider links to include, comma separated: tvos,direct,android,webos"

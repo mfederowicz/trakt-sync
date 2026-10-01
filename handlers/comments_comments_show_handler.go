@@ -21,7 +21,10 @@ func (h CommentsCommentsShowHandler) Handle(options *str.Options, client *trakt.
 		return errors.New(consts.EmptyMovieIDMsg)
 	}
 
-	connections, _ := h.common.FetchUserConnections(client, options)
+	connections, err := h.common.FetchUserConnections(client, options)
+	if err != nil {
+		return fmt.Errorf(consts.UserConnectionsError, err)
+	}
 	show, err := h.common.FetchShow(client, options)
 	if err != nil {
 		return fmt.Errorf("fetch show error:%w", err)
