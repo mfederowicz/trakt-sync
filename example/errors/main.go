@@ -24,7 +24,7 @@ func main() {
 	client.DebugLogger = func(v ...any) { log.Println(v...) }
 
 	slug := "no-such-movie-slug-12345"
-	_, _, err := client.Movies.GetMovie(context.Background(), &slug, &uri.ListOptions{})
+	_, _, err := client.Movies.GetMovie(context.Background(), slug, &uri.ListOptions{})
 	fmt.Println("result:", explain(err))
 }
 

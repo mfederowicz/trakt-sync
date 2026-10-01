@@ -40,7 +40,7 @@ func (m MoviesRatingsHandler) Handle(options *str.Options, client *trakt.Client)
 func (MoviesRatingsHandler) fetchMoviesRatings(client *trakt.Client, options *str.Options) (*str.MovieRatings, *str.Response, error) {
 	result, resp, err := client.Movies.GetMovieRatings(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 	)
 
 	if err != nil {

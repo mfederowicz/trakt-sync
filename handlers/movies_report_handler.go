@@ -32,7 +32,7 @@ func (h MoviesReportHandler) Handle(options *str.Options, client *trakt.Client) 
 		report.Message = &options.Msg
 	}
 
-	if _, err := client.Movies.ReportMovie(cli.ContextFromOptions(options), &options.InternalID, report); err != nil {
+	if _, err := client.Movies.ReportMovie(cli.ContextFromOptions(options), options.InternalID, report); err != nil {
 		return fmt.Errorf("report error: %w", err)
 	}
 

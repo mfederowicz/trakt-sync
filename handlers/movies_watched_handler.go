@@ -48,7 +48,7 @@ func (h MoviesWatchedHandler) fetchMoviesWatched(client *trakt.Client, options *
 	list, resp, err := client.Movies.GetWatchedMovies(
 		cli.ContextFromOptions(options),
 		&opts,
-		&period,
+		period,
 	)
 
 	if err != nil {

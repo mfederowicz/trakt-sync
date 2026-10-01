@@ -16,8 +16,8 @@ import (
 type MoviesService Service
 
 // GetMovie Returns movie object.
-func (m *MoviesService) GetMovie(ctx context.Context, id *string, opts *uri.ListOptions) (*str.Movie, *str.Response, error) {
-	var url = fmt.Sprintf("movies/%s", *id)
+func (m *MoviesService) GetMovie(ctx context.Context, id string, opts *uri.ListOptions) (*str.Movie, *str.Response, error) {
+	var url = fmt.Sprintf("movies/%s", id)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -32,7 +32,7 @@ func (m *MoviesService) GetMovie(ctx context.Context, id *string, opts *uri.List
 	resp, err := m.client.Do(ctx, req, &movie)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		return nil, nil, fmt.Errorf("not found movie for id/slug:%s", *id)
+		return nil, nil, fmt.Errorf("not found movie for id/slug:%s", id)
 	}
 
 	if err != nil {
@@ -98,8 +98,8 @@ func (m *MoviesService) GetPopularMovies(ctx context.Context, opts *uri.ListOpti
 // GetFavoritedMovies Returns the most favorited movies in the specified time period, defaulting to weekly.
 // All stats are relative to the specific time period.
 // API docs: https://trakt.docs.apiary.io/#reference/movies/favorited/get-favorited-movies
-func (m *MoviesService) GetFavoritedMovies(ctx context.Context, opts *uri.ListOptions, period *string) ([]*str.MoviesItem, *str.Response, error) {
-	var url = fmt.Sprintf("movies/favorited/%s", *period)
+func (m *MoviesService) GetFavoritedMovies(ctx context.Context, opts *uri.ListOptions, period string) ([]*str.MoviesItem, *str.Response, error) {
+	var url = fmt.Sprintf("movies/favorited/%s", period)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -124,8 +124,8 @@ func (m *MoviesService) GetFavoritedMovies(ctx context.Context, opts *uri.ListOp
 // GetPlayedMovies Returns the most played (a single user can watch multiple times) movies in the specified time period, defaulting to weekly.
 // All stats are relative to the specific time period.
 // API docs: https://trakt.docs.apiary.io/#reference/movies/played/get-the-most-played-movies
-func (m *MoviesService) GetPlayedMovies(ctx context.Context, opts *uri.ListOptions, period *string) ([]*str.MoviesItem, *str.Response, error) {
-	var url = fmt.Sprintf("movies/played/%s", *period)
+func (m *MoviesService) GetPlayedMovies(ctx context.Context, opts *uri.ListOptions, period string) ([]*str.MoviesItem, *str.Response, error) {
+	var url = fmt.Sprintf("movies/played/%s", period)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -150,8 +150,8 @@ func (m *MoviesService) GetPlayedMovies(ctx context.Context, opts *uri.ListOptio
 // GetWatchedMovies  Returns the most watched (unique users) movies in the specified time period, defaulting to weekly.
 // All stats are relative to the specific time period.
 // API docs: https://trakt.docs.apiary.io/#reference/movies/watched/get-the-most-watched-movies
-func (m *MoviesService) GetWatchedMovies(ctx context.Context, opts *uri.ListOptions, period *string) ([]*str.MoviesItem, *str.Response, error) {
-	var url = fmt.Sprintf("movies/watched/%s", *period)
+func (m *MoviesService) GetWatchedMovies(ctx context.Context, opts *uri.ListOptions, period string) ([]*str.MoviesItem, *str.Response, error) {
+	var url = fmt.Sprintf("movies/watched/%s", period)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -176,8 +176,8 @@ func (m *MoviesService) GetWatchedMovies(ctx context.Context, opts *uri.ListOpti
 // GetCollectedMovies Returns the most collected (unique users) movies in the specified time period, defaulting to weekly.
 // All stats are relative to the specific time period.
 // API docs: https://trakt.docs.apiary.io/#reference/movies/collected/get-the-most-collected-movies
-func (m *MoviesService) GetCollectedMovies(ctx context.Context, opts *uri.ListOptions, period *string) ([]*str.MoviesItem, *str.Response, error) {
-	var url = fmt.Sprintf("movies/collected/%s", *period)
+func (m *MoviesService) GetCollectedMovies(ctx context.Context, opts *uri.ListOptions, period string) ([]*str.MoviesItem, *str.Response, error) {
+	var url = fmt.Sprintf("movies/collected/%s", period)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -252,10 +252,10 @@ func (m *MoviesService) GetBoxoffice(ctx context.Context, opts *uri.ListOptions)
 // GetRecentlyUpdatedMovies Returns all movies updated since the specified UTC date and time.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/updates/get-recently-updated-movies
-func (m *MoviesService) GetRecentlyUpdatedMovies(ctx context.Context, startDate *string, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
+func (m *MoviesService) GetRecentlyUpdatedMovies(ctx context.Context, startDate string, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
 	var url string
 
-	url = fmt.Sprintf("movies/updates/%s", *startDate)
+	url = fmt.Sprintf("movies/updates/%s", startDate)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -280,10 +280,10 @@ func (m *MoviesService) GetRecentlyUpdatedMovies(ctx context.Context, startDate 
 // GetRecentlyUpdatedMoviesTraktIDs Returns all movie Trakt IDs updated since the specified UTC date and time.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/updated-ids/get-recently-updated-movie-trakt-ids
-func (m *MoviesService) GetRecentlyUpdatedMoviesTraktIDs(ctx context.Context, startDate *string, opts *uri.ListOptions) ([]*int, *str.Response, error) {
+func (m *MoviesService) GetRecentlyUpdatedMoviesTraktIDs(ctx context.Context, startDate string, opts *uri.ListOptions) ([]*int, *str.Response, error) {
 	var url string
 
-	url = fmt.Sprintf("movies/updates/id/%s", *startDate)
+	url = fmt.Sprintf("movies/updates/id/%s", startDate)
 	url, err := uri.AddQuery(url, opts)
 
 	if err != nil {
@@ -309,8 +309,8 @@ func (m *MoviesService) GetRecentlyUpdatedMoviesTraktIDs(ctx context.Context, st
 // GetAllMovieAliases Returns all title aliases for a movie. Includes country where name is different.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/aliases/get-all-movie-aliases
-func (m *MoviesService) GetAllMovieAliases(ctx context.Context, id *string) ([]*str.Alias, *str.Response, error) {
-	url := fmt.Sprintf("movies/%s/aliases", *id)
+func (m *MoviesService) GetAllMovieAliases(ctx context.Context, id string) ([]*str.Alias, *str.Response, error) {
+	url := fmt.Sprintf("movies/%s/aliases", id)
 	m.client.debug("fetch aliases url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -321,7 +321,7 @@ func (m *MoviesService) GetAllMovieAliases(ctx context.Context, id *string) ([]*
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		return nil, nil, fmt.Errorf("not found aliases for id/slug:%s", *id)
+		return nil, nil, fmt.Errorf("not found aliases for id/slug:%s", id)
 	}
 
 	if err != nil {
@@ -333,14 +333,15 @@ func (m *MoviesService) GetAllMovieAliases(ctx context.Context, id *string) ([]*
 }
 
 // GetAllMovieReleases Returns all releases for a movie including country, certification, release date, release type, and note.
+// An empty country returns the releases of all countries.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/releases/get-all-movie-releases
-func (m *MoviesService) GetAllMovieReleases(ctx context.Context, id *string, country *string) ([]*str.Release, *str.Response, error) {
+func (m *MoviesService) GetAllMovieReleases(ctx context.Context, id string, country string) ([]*str.Release, *str.Response, error) {
 	var url string
-	if country != nil {
-		url = fmt.Sprintf("movies/%s/releases/%s", *id, *country)
+	if country != consts.EmptyString {
+		url = fmt.Sprintf("movies/%s/releases/%s", id, country)
 	} else {
-		url = fmt.Sprintf("movies/%s/releases", *id)
+		url = fmt.Sprintf("movies/%s/releases", id)
 	}
 
 	m.client.debug("fetch releases url:" + url)
@@ -353,7 +354,7 @@ func (m *MoviesService) GetAllMovieReleases(ctx context.Context, id *string, cou
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		return nil, nil, fmt.Errorf("not found releases for id/slug:%s", *id)
+		return nil, nil, fmt.Errorf("not found releases for id/slug:%s", id)
 	}
 
 	if err != nil {
@@ -365,14 +366,15 @@ func (m *MoviesService) GetAllMovieReleases(ctx context.Context, id *string, cou
 }
 
 // GetAllMovieTranslations Returns all translations for a movie, including language and translated values for title, tagline and overview.
+// An empty language returns all languages.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/translations/get-all-movie-translations
-func (m *MoviesService) GetAllMovieTranslations(ctx context.Context, id *string, language *string) ([]*str.Translation, *str.Response, error) {
+func (m *MoviesService) GetAllMovieTranslations(ctx context.Context, id string, language string) ([]*str.Translation, *str.Response, error) {
 	var url string
-	if *language != consts.EmptyString {
-		url = fmt.Sprintf("movies/%s/translations/%s", *id, *language)
+	if language != consts.EmptyString {
+		url = fmt.Sprintf("movies/%s/translations/%s", id, language)
 	} else {
-		url = fmt.Sprintf("movies/%s/translations", *id)
+		url = fmt.Sprintf("movies/%s/translations", id)
 	}
 
 	m.client.debug("fetch translations url:" + url)
@@ -385,7 +387,7 @@ func (m *MoviesService) GetAllMovieTranslations(ctx context.Context, id *string,
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		return nil, nil, fmt.Errorf("not found translations for id/slug:%s", *id)
+		return nil, nil, fmt.Errorf("not found translations for id/slug:%s", id)
 	}
 
 	if err != nil {
@@ -399,14 +401,15 @@ func (m *MoviesService) GetAllMovieTranslations(ctx context.Context, id *string,
 // GetAllMovieComments Returns all top level comments for a movie.
 // By default, the newest comments are returned first.
 // Other sorting options include oldest, most likes, most replies, highest rated, lowest rated, and most plays..
+// An empty sort uses the API default.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/comments/get-all-movie-comments
-func (m *MoviesService) GetAllMovieComments(ctx context.Context, id *string, sort *string, opts *uri.ListOptions) ([]*str.Comment, *str.Response, error) {
+func (m *MoviesService) GetAllMovieComments(ctx context.Context, id string, sort string, opts *uri.ListOptions) ([]*str.Comment, *str.Response, error) {
 	var url string
-	if *sort != consts.EmptyString {
-		url = fmt.Sprintf("movies/%s/comments/%s", *id, *sort)
+	if sort != consts.EmptyString {
+		url = fmt.Sprintf("movies/%s/comments/%s", id, sort)
 	} else {
-		url = fmt.Sprintf("movies/%s/comments", *id)
+		url = fmt.Sprintf("movies/%s/comments", id)
 	}
 
 	url, err := uri.AddQuery(url, opts)
@@ -425,7 +428,7 @@ func (m *MoviesService) GetAllMovieComments(ctx context.Context, id *string, sor
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		return nil, nil, fmt.Errorf("not found comments for id/slug:%s", *id)
+		return nil, nil, fmt.Errorf("not found comments for id/slug:%s", id)
 	}
 
 	if err != nil {
@@ -438,14 +441,15 @@ func (m *MoviesService) GetAllMovieComments(ctx context.Context, id *string, sor
 
 // GetListsContainingMovie Returns all lists that contain this movie.
 // By default, personal lists are returned sorted by the most popular.
+// The type and sort segments are sent only when t and sort are both set.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/lists/get-lists-containing-this-movie
-func (m *MoviesService) GetListsContainingMovie(ctx context.Context, id *string, t *string, sort *string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
+func (m *MoviesService) GetListsContainingMovie(ctx context.Context, id string, t string, sort string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
 	var url string
-	if *t != consts.EmptyString && *sort != consts.EmptyString {
-		url = fmt.Sprintf("movies/%s/lists/%s/%s", *id, *t, *sort)
+	if t != consts.EmptyString && sort != consts.EmptyString {
+		url = fmt.Sprintf("movies/%s/lists/%s/%s", id, t, sort)
 	} else {
-		url = fmt.Sprintf("movies/%s/lists", *id)
+		url = fmt.Sprintf("movies/%s/lists", id)
 	}
 
 	url, err := uri.AddQuery(url, opts)
@@ -464,7 +468,7 @@ func (m *MoviesService) GetListsContainingMovie(ctx context.Context, id *string,
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		return nil, nil, fmt.Errorf("not found lists for id/slug:%s", *id)
+		return nil, nil, fmt.Errorf("not found lists for id/slug:%s", id)
 	}
 
 	if err != nil {
@@ -479,10 +483,10 @@ func (m *MoviesService) GetListsContainingMovie(ctx context.Context, id *string,
 // Each cast member will have a characters array and a standard person object.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/people/get-all-people-for-a-movie
-func (m *MoviesService) GetAllPeopleForMovie(ctx context.Context, id *string, opts *uri.ListOptions) (*str.MoviePeople, *str.Response, error) {
+func (m *MoviesService) GetAllPeopleForMovie(ctx context.Context, id string, opts *uri.ListOptions) (*str.MoviePeople, *str.Response, error) {
 	var url string
 
-	url = fmt.Sprintf("movies/%s/people", *id)
+	url = fmt.Sprintf("movies/%s/people", id)
 	url, err := uri.AddQuery(url, opts)
 
 	if err != nil {
@@ -498,7 +502,7 @@ func (m *MoviesService) GetAllPeopleForMovie(ctx context.Context, id *string, op
 	resp, err := m.client.Do(ctx, req, &result)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		return nil, nil, fmt.Errorf("not found people for id/slug:%s", *id)
+		return nil, nil, fmt.Errorf("not found people for id/slug:%s", id)
 	}
 
 	if err != nil {
@@ -512,8 +516,8 @@ func (m *MoviesService) GetAllPeopleForMovie(ctx context.Context, id *string, op
 // GetMovieRatings Returns rating (between 0 and 10) and distribution for a movie.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/ratings/get-movie-ratings
-func (m *MoviesService) GetMovieRatings(ctx context.Context, id *string) (*str.MovieRatings, *str.Response, error) {
-	url := fmt.Sprintf("movies/%s/ratings", *id)
+func (m *MoviesService) GetMovieRatings(ctx context.Context, id string) (*str.MovieRatings, *str.Response, error) {
+	url := fmt.Sprintf("movies/%s/ratings", id)
 	m.client.debug("fetch ratings url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -523,7 +527,7 @@ func (m *MoviesService) GetMovieRatings(ctx context.Context, id *string) (*str.M
 	resp, err := m.client.Do(ctx, req, &result)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		return nil, nil, fmt.Errorf("not found ratings for id/slug:%s", *id)
+		return nil, nil, fmt.Errorf("not found ratings for id/slug:%s", id)
 	}
 
 	if err != nil {
@@ -537,9 +541,9 @@ func (m *MoviesService) GetMovieRatings(ctx context.Context, id *string) (*str.M
 // GetRelatedMovies Returns related and similar movies.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/related/get-related-movies
-func (m *MoviesService) GetRelatedMovies(ctx context.Context, id *string, opts *uri.ListOptions) ([]*str.Movie, *str.Response, error) {
+func (m *MoviesService) GetRelatedMovies(ctx context.Context, id string, opts *uri.ListOptions) ([]*str.Movie, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("movies/%s/related", *id)
+	url = fmt.Sprintf("movies/%s/related", id)
 	url, err := uri.AddQuery(url, opts)
 
 	if err != nil {
@@ -556,7 +560,7 @@ func (m *MoviesService) GetRelatedMovies(ctx context.Context, id *string, opts *
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		return nil, nil, fmt.Errorf("not found related for id/slug:%s", *id)
+		return nil, nil, fmt.Errorf("not found related for id/slug:%s", id)
 	}
 
 	if err != nil {
@@ -570,8 +574,8 @@ func (m *MoviesService) GetRelatedMovies(ctx context.Context, id *string, opts *
 // GetMovieStats Returns lots of movie stats.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/stats/get-movie-stats
-func (m *MoviesService) GetMovieStats(ctx context.Context, id *string) (*str.MovieStats, *str.Response, error) {
-	url := fmt.Sprintf("movies/%s/stats", *id)
+func (m *MoviesService) GetMovieStats(ctx context.Context, id string) (*str.MovieStats, *str.Response, error) {
+	url := fmt.Sprintf("movies/%s/stats", id)
 	m.client.debug("fetch stats url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -581,7 +585,7 @@ func (m *MoviesService) GetMovieStats(ctx context.Context, id *string) (*str.Mov
 	resp, err := m.client.Do(ctx, req, &result)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		return nil, nil, fmt.Errorf("not found stats for id/slug:%s", *id)
+		return nil, nil, fmt.Errorf("not found stats for id/slug:%s", id)
 	}
 
 	if err != nil {
@@ -595,8 +599,8 @@ func (m *MoviesService) GetMovieStats(ctx context.Context, id *string) (*str.Mov
 // GetMovieStudios Returns all studios for movie.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/studios/get-movie-studios
-func (m *MoviesService) GetMovieStudios(ctx context.Context, id *string) ([]*str.Studio, *str.Response, error) {
-	var url = fmt.Sprintf("movies/%s/studios", *id)
+func (m *MoviesService) GetMovieStudios(ctx context.Context, id string) ([]*str.Studio, *str.Response, error) {
+	var url = fmt.Sprintf("movies/%s/studios", id)
 	m.client.debug("fetch studios url:" + url)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -607,7 +611,7 @@ func (m *MoviesService) GetMovieStudios(ctx context.Context, id *string) ([]*str
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		return nil, nil, fmt.Errorf("not found studios for id/slug:%s", *id)
+		return nil, nil, fmt.Errorf("not found studios for id/slug:%s", id)
 	}
 
 	if err != nil {
@@ -621,8 +625,8 @@ func (m *MoviesService) GetMovieStudios(ctx context.Context, id *string) ([]*str
 // GetMovieWatching Returns all users watching this movie right now.
 //
 // API docs:  https://trakt.docs.apiary.io/#reference/movies/studios/get-users-watching-right-now
-func (m *MoviesService) GetMovieWatching(ctx context.Context, id *string, opts *uri.ListOptions) ([]*str.UserProfile, *str.Response, error) {
-	var url = fmt.Sprintf("movies/%s/watching", *id)
+func (m *MoviesService) GetMovieWatching(ctx context.Context, id string, opts *uri.ListOptions) ([]*str.UserProfile, *str.Response, error) {
+	var url = fmt.Sprintf("movies/%s/watching", id)
 	url, err := uri.AddQuery(url, opts)
 
 	if err != nil {
@@ -639,7 +643,7 @@ func (m *MoviesService) GetMovieWatching(ctx context.Context, id *string, opts *
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		return nil, nil, fmt.Errorf("not found watching for id/slug:%s", *id)
+		return nil, nil, fmt.Errorf("not found watching for id/slug:%s", id)
 	}
 
 	if err != nil {
@@ -653,8 +657,8 @@ func (m *MoviesService) GetMovieWatching(ctx context.Context, id *string, opts *
 // GetMovieVideos Returns all videos including trailers, teasers, clips, and featurettes.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/videos/get-all-videos
-func (m *MoviesService) GetMovieVideos(ctx context.Context, id *string, opts *uri.ListOptions) ([]*str.Video, *str.Response, error) {
-	var url = fmt.Sprintf("movies/%s/videos", *id)
+func (m *MoviesService) GetMovieVideos(ctx context.Context, id string, opts *uri.ListOptions) ([]*str.Video, *str.Response, error) {
+	var url = fmt.Sprintf("movies/%s/videos", id)
 	url, err := uri.AddQuery(url, opts)
 
 	if err != nil {
@@ -671,7 +675,7 @@ func (m *MoviesService) GetMovieVideos(ctx context.Context, id *string, opts *ur
 	resp, err := m.client.Do(ctx, req, &list)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
-		return nil, nil, fmt.Errorf("not found video for id/slug:%s", *id)
+		return nil, nil, fmt.Errorf("not found video for id/slug:%s", id)
 	}
 
 	if err != nil {
@@ -686,8 +690,8 @@ func (m *MoviesService) GetMovieVideos(ctx context.Context, id *string, opts *ur
 // It might take up to 8 hours for the updated metadata to be availabe through the API.
 //
 // API docs: https://trakt.docs.apiary.io/#reference/movies/refresh/refresh-movie-metadata
-func (m *MoviesService) RefreshMovieMetadata(ctx context.Context, id *string) (*str.Response, error) {
-	var url = fmt.Sprintf("movies/%s/refresh", *id)
+func (m *MoviesService) RefreshMovieMetadata(ctx context.Context, id string) (*str.Response, error) {
+	var url = fmt.Sprintf("movies/%s/refresh", id)
 	m.client.debug("refresh movie:" + url)
 	req, err := m.client.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
@@ -712,8 +716,8 @@ func (m *MoviesService) GetHotMovies(ctx context.Context, opts *uri.ListOptions)
 // GetStreamingMovies Returns the most streamed movies in the specified time period.
 //
 // API docs: https://docs.trakt.tv/reference/getmoviesstreaming
-func (m *MoviesService) GetStreamingMovies(ctx context.Context, period *string, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
-	return m.fetchMoviesItems(ctx, fmt.Sprintf("movies/streaming/%s", *period), opts)
+func (m *MoviesService) GetStreamingMovies(ctx context.Context, period string, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
+	return m.fetchMoviesItems(ctx, fmt.Sprintf("movies/streaming/%s", period), opts)
 }
 
 func (m *MoviesService) fetchMoviesItems(ctx context.Context, url string, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
@@ -739,8 +743,8 @@ func (m *MoviesService) fetchMoviesItems(ctx context.Context, url string, opts *
 // ReportMovie Report a movie for moderator review.
 //
 // API docs: https://docs.trakt.tv/reference/postmoviesreport
-func (m *MoviesService) ReportMovie(ctx context.Context, id *string, report *str.MovieReport) (*str.Response, error) {
-	var url = fmt.Sprintf("movies/%s/report", *id)
+func (m *MoviesService) ReportMovie(ctx context.Context, id string, report *str.MovieReport) (*str.Response, error) {
+	var url = fmt.Sprintf("movies/%s/report", id)
 	req, err := m.client.NewRequest(http.MethodPost, url, report)
 	if err != nil {
 		return nil, err
@@ -749,7 +753,7 @@ func (m *MoviesService) ReportMovie(ctx context.Context, id *string, report *str
 	resp, err := m.client.Do(ctx, req, nil)
 	var conflict *ConflictError
 	if errors.As(err, &conflict) {
-		return resp, fmt.Errorf(consts.MovieReportPending, *id)
+		return resp, fmt.Errorf(consts.MovieReportPending, id)
 	}
 	if err != nil {
 		return resp, err
@@ -761,8 +765,8 @@ func (m *MoviesService) ReportMovie(ctx context.Context, id *string, report *str
 // RefreshMovieJustwatch Queue a refresh of the movie's JustWatch links (VIP only).
 //
 // API docs: https://docs.trakt.tv/reference/postmoviesjustwatchrefresh
-func (m *MoviesService) RefreshMovieJustwatch(ctx context.Context, id *string) (*str.Response, error) {
-	var url = fmt.Sprintf("movies/%s/refresh/justwatch", *id)
+func (m *MoviesService) RefreshMovieJustwatch(ctx context.Context, id string) (*str.Response, error) {
+	var url = fmt.Sprintf("movies/%s/refresh/justwatch", id)
 	req, err := m.client.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
 		return nil, err
@@ -774,8 +778,8 @@ func (m *MoviesService) RefreshMovieJustwatch(ctx context.Context, id *string) (
 // GetMovieSentiments Returns sentiment counts for comments and reactions attached to a movie.
 //
 // API docs: https://docs.trakt.tv/reference/getmoviessentiments
-func (m *MoviesService) GetMovieSentiments(ctx context.Context, id *string) (*str.Sentiments, *str.Response, error) {
-	var url = fmt.Sprintf("movies/%s/sentiments", *id)
+func (m *MoviesService) GetMovieSentiments(ctx context.Context, id string) (*str.Sentiments, *str.Response, error) {
+	var url = fmt.Sprintf("movies/%s/sentiments", id)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -793,8 +797,8 @@ func (m *MoviesService) GetMovieSentiments(ctx context.Context, id *string) (*st
 // GetMovieWatchNow Returns streaming and watch now sources for a movie in the requested country.
 //
 // API docs: https://docs.trakt.tv/reference/getmovieswatchnow
-func (m *MoviesService) GetMovieWatchNow(ctx context.Context, id *string, country *string, opts *uri.ListOptions) (map[string]*str.WatchNowSources, *str.Response, error) {
-	var url = fmt.Sprintf("movies/%s/watchnow/%s", *id, *country)
+func (m *MoviesService) GetMovieWatchNow(ctx context.Context, id string, country string, opts *uri.ListOptions) (map[string]*str.WatchNowSources, *str.Response, error) {
+	var url = fmt.Sprintf("movies/%s/watchnow/%s", id, country)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -816,8 +820,8 @@ func (m *MoviesService) GetMovieWatchNow(ctx context.Context, id *string, countr
 // GetMovieJustwatchLinks Returns JustWatch links for a movie in the requested country.
 //
 // API docs: https://docs.trakt.tv/reference/getmoviesjustwatchlink
-func (m *MoviesService) GetMovieJustwatchLinks(ctx context.Context, id *string, country *string) (map[string]string, *str.Response, error) {
-	var url = fmt.Sprintf("movies/%s/watchnow/justwatch_links/%s", *id, *country)
+func (m *MoviesService) GetMovieJustwatchLinks(ctx context.Context, id string, country string) (map[string]string, *str.Response, error) {
+	var url = fmt.Sprintf("movies/%s/watchnow/justwatch_links/%s", id, country)
 	req, err := m.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err

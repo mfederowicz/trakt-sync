@@ -40,7 +40,7 @@ func (m MoviesStudiosHandler) Handle(options *str.Options, client *trakt.Client)
 func (MoviesStudiosHandler) fetchMoviesStudios(client *trakt.Client, options *str.Options) ([]*str.Studio, *str.Response, error) {
 	result, resp, err := client.Movies.GetMovieStudios(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 	)
 
 	if err != nil {

@@ -43,7 +43,7 @@ func (m MoviesRelatedHandler) fetchMoviesRelated(client *trakt.Client, options *
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Movies.GetRelatedMovies(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 		&opts,
 	)
 

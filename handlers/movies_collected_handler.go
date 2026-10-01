@@ -48,7 +48,7 @@ func (h MoviesCollectedHandler) fetchMoviesCollected(client *trakt.Client, optio
 	list, resp, err := client.Movies.GetCollectedMovies(
 		cli.ContextFromOptions(options),
 		&opts,
-		&period,
+		period,
 	)
 
 	if err != nil {

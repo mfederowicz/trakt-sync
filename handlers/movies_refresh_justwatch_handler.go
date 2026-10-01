@@ -23,7 +23,7 @@ func (MoviesRefreshJustwatchHandler) Handle(options *str.Options, client *trakt.
 	}
 
 	printer.Println("Queue this movie for a JustWatch links refresh (VIP only).")
-	resp, err := client.Movies.RefreshMovieJustwatch(cli.ContextFromOptions(options), &options.InternalID)
+	resp, err := client.Movies.RefreshMovieJustwatch(cli.ContextFromOptions(options), options.InternalID)
 	if resp == nil {
 		return fmt.Errorf("refresh justwatch error: %w", err)
 	}

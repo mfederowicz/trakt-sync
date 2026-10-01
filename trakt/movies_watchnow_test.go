@@ -27,7 +27,7 @@ func TestMoviesServiceGetMovieWatchNow(t *testing.T) {
 			"streaming_ranks":{"rank":5787,"delta":-586,"link":"https://www.justwatch.com/us/movie/tron-2-0"}}}`)
 	})
 
-	got, _, err := setup.Client.Movies.GetMovieWatchNow(context.Background(), str.String("tron-legacy-2010"), str.String("us"), &uri.ListOptions{Extended: "streaming_ranks", Links: "tvos,webos"})
+	got, _, err := setup.Client.Movies.GetMovieWatchNow(context.Background(), "tron-legacy-2010", "us", &uri.ListOptions{Extended: "streaming_ranks", Links: "tvos,webos"})
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, map[string]*str.WatchNowSources{"us": {
 		Cable:    []*str.WatchNowService{},
@@ -56,7 +56,7 @@ func TestMoviesServiceGetMovieJustwatchLinks(t *testing.T) {
 		test.SafeFprint(w, `{"pl":"justwatch.com/pl/film/tron-dziedzictwo"}`)
 	})
 
-	got, _, err := setup.Client.Movies.GetMovieJustwatchLinks(context.Background(), str.String("tron-legacy-2010"), str.String("pl"))
+	got, _, err := setup.Client.Movies.GetMovieJustwatchLinks(context.Background(), "tron-legacy-2010", "pl")
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, map[string]string{"pl": "justwatch.com/pl/film/tron-dziedzictwo"}, got)
 }
@@ -69,7 +69,7 @@ func TestMoviesServiceGetMovieWatchNowForbidden(t *testing.T) {
 		w.WriteHeader(http.StatusForbidden)
 	})
 
-	_, resp, err := setup.Client.Movies.GetMovieJustwatchLinks(context.Background(), str.String("tron-legacy-2010"), str.String("us"))
+	_, resp, err := setup.Client.Movies.GetMovieJustwatchLinks(context.Background(), "tron-legacy-2010", "us")
 	var forbidden *ForbiddenError
 	if !errors.As(err, &forbidden) {
 		t.Fatalf("error is %v, want *ForbiddenError", err)

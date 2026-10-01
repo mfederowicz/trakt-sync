@@ -514,7 +514,7 @@ func (*CommonLogic) FetchMovie(client *trakt.Client, options *str.Options) (*str
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Movies.GetMovie(
 		cli.ContextFromOptions(options),
-		&movieID,
+		movieID,
 		&opts,
 	)
 
