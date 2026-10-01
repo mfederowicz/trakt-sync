@@ -1,3 +1,5 @@
+[![Go Reference](https://pkg.go.dev/badge/github.com/mfederowicz/trakt-sync/trakt.svg)](https://pkg.go.dev/github.com/mfederowicz/trakt-sync/trakt)
+
 <!-- TOC -->
 
 - [trakt-sync](#trakt-sync)
