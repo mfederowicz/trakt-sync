@@ -13,7 +13,7 @@ type CheckinService Service
 
 // DeleteAnyActiveCheckins Removes any active checkins, no need to provide a specific item.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/checkin/checkin/delete-any-active-checkins
+// API docs: https://docs.trakt.tv/reference/deletecheckindelete
 func (c *CheckinService) DeleteAnyActiveCheckins(ctx context.Context) (*str.Response, error) {
 	var url = "checkin"
 	c.client.debug("delete any active checkins")
@@ -32,7 +32,7 @@ func (c *CheckinService) DeleteAnyActiveCheckins(ctx context.Context) (*str.Resp
 
 // CheckIn Check into a movie or episode.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/checkin/checkin/check-into-an-item
+// API docs: https://docs.trakt.tv/reference/postcheckinstart
 func (c *CheckinService) CheckIn(ctx context.Context, checkin *str.Checkin) (*str.Checkin, *str.Response, error) {
 	var url = "checkin"
 	c.client.debug("create new checkin")
