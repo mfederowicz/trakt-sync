@@ -19,7 +19,7 @@ func (UsersDeleteSmartListHandler) Handle(options *str.Options, client *trakt.Cl
 	}
 
 	printer.Println("Delete smart list: " + options.ID)
-	resp, err := client.Users.DeleteSmartList(cli.ContextFromOptions(options), &options.UserName, &options.ID)
+	resp, err := client.Users.DeleteSmartList(cli.ContextFromOptions(options), options.UserName, options.ID)
 	if err = smartListError(options.Action, options.ID, resp, err); err != nil {
 		return err
 	}

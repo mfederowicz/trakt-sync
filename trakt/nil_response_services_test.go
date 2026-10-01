@@ -36,10 +36,10 @@ func TestServicesWithoutResponse(t *testing.T) {
 		{name: "shows", call: func(c *Client) error { _, _, err := c.Shows.GetShow(ctx, "bb", opts); return err }},
 		{name: "sync", call: func(c *Client) error { _, err := c.Sync.RemovePlaybackItem(ctx, 0); return err }},
 		{name: "users", call: func(c *Client) error {
-			_, _, err := c.Users.AddPersonalList(ctx, str.String("sean"), &str.PersonalList{})
+			_, _, err := c.Users.AddPersonalList(ctx, "sean", &str.PersonalList{})
 			return err
 		}},
-		{name: "users unfollow", call: func(c *Client) error { _, err := c.Users.Unfollow(ctx, str.String("sean")); return err }},
+		{name: "users unfollow", call: func(c *Client) error { _, err := c.Users.Unfollow(ctx, "sean"); return err }},
 	}
 
 	for _, tt := range tests {

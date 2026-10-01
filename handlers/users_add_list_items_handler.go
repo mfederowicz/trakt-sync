@@ -47,8 +47,8 @@ func (UsersAddListItemsHandler) usersAddListItems(client *trakt.Client, options 
 	listID := options.ID
 	result, resp, err := client.Users.AddListItems(
 		cli.ContextFromOptions(options),
-		&user,
-		&listID,
+		user,
+		listID,
 		items,
 	)
 	if err != nil {

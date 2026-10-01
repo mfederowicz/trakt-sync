@@ -22,7 +22,7 @@ func (UsersSmartListHandler) Handle(options *str.Options, client *trakt.Client) 
 	}
 
 	printer.Println("Returns the smart list definition: " + options.ID)
-	result, resp, err := client.Users.GetSmartList(cli.ContextFromOptions(options), &options.UserName, &options.ID)
+	result, resp, err := client.Users.GetSmartList(cli.ContextFromOptions(options), options.UserName, options.ID)
 	if err = smartListError(options.Action, options.ID, resp, err); err != nil {
 		return err
 	}

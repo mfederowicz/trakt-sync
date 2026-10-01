@@ -28,7 +28,7 @@ func (UsersDataSyncsHandler) Handle(options *str.Options, client *trakt.Client) 
 
 	printer.Println("Returns your data syncs " + options.Type)
 	result, err := fetchAllPages(client, options, consts.DefaultPage, func(opts *uri.ListOptions) ([]*str.DataSync, *str.Response, error) {
-		return client.Users.GetDataSyncs(cli.ContextFromOptions(options), &options.Type, opts)
+		return client.Users.GetDataSyncs(cli.ContextFromOptions(options), options.Type, opts)
 	})
 	if apiErr := notOpenToAPIApps(options.Action, err); apiErr != nil {
 		return apiErr
@@ -78,7 +78,7 @@ func (UsersDataSyncItemsHandler) Handle(options *str.Options, client *trakt.Clie
 	printer.Printf("Returns %s items of data sync %d\n", section, id)
 	var lastResp *str.Response
 	result, err := fetchAllPages(client, options, consts.DefaultPage, func(opts *uri.ListOptions) ([]*str.SyncItem, *str.Response, error) {
-		list, resp, fetchErr := client.Users.GetDataSyncItems(cli.ContextFromOptions(options), id, &section, opts)
+		list, resp, fetchErr := client.Users.GetDataSyncItems(cli.ContextFromOptions(options), id, section, opts)
 		lastResp = resp
 		return list, resp, fetchErr
 	})

@@ -22,7 +22,7 @@ func (h UsersAddSmartListHandler) Handle(options *str.Options, client *trakt.Cli
 	}
 
 	printer.Println("Create smart list: " + *list.Name)
-	result, resp, err := client.Users.AddSmartList(cli.ContextFromOptions(options), &options.UserName, list)
+	result, resp, err := client.Users.AddSmartList(cli.ContextFromOptions(options), options.UserName, list)
 	// smart lists are VIP Enhanced: a non-VIP account over its limit gets 420
 	if vipErr := cli.HandleVIPResponse(resp, err); vipErr != nil {
 		return vipErr

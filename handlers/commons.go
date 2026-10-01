@@ -1658,9 +1658,9 @@ func (c CommonLogic) FetchUsersRatings(client *trakt.Client, options *str.Option
 	r := options.Rating.String()
 	list, resp, err := client.Users.GetRatings(
 		cli.ContextFromOptions(options),
-		&options.UserName,
-		&options.Type,
-		&r,
+		options.UserName,
+		options.Type,
+		r,
 		&opts,
 	)
 
@@ -1876,7 +1876,7 @@ func (c *CommonLogic) FetchUsersHiddenItems(client *trakt.Client, options *str.O
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Type: options.Type}
 	list, resp, err := client.Users.GetHiddenItems(
 		cli.ContextFromOptions(options),
-		&options.Section,
+		options.Section,
 		&opts,
 	)
 
@@ -1952,8 +1952,8 @@ func (c CommonLogic) FetchUsersLikes(client *trakt.Client, options *str.Options,
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetLikes(
 		cli.ContextFromOptions(options),
-		&options.UserName,
-		&options.Type,
+		options.UserName,
+		options.Type,
 		&opts,
 	)
 
@@ -1982,8 +1982,8 @@ func (c CommonLogic) FetchUsersListLikes(client *trakt.Client, options *str.Opti
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetListLikes(
 		cli.ContextFromOptions(options),
-		&options.UserName,
-		&options.ID,
+		options.UserName,
+		options.ID,
 		&opts,
 	)
 
@@ -2012,8 +2012,8 @@ func (c CommonLogic) FetchUsersCollection(client *trakt.Client, options *str.Opt
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetCollection(
 		cli.ContextFromOptions(options),
-		&options.UserName,
-		&options.Type,
+		options.UserName,
+		options.Type,
 		&opts,
 	)
 
@@ -2045,9 +2045,9 @@ func (c *CommonLogic) FetchUsersComments(client *trakt.Client, options *str.Opti
 	strType := options.Type
 	list, resp, err := client.Users.GetComments(
 		cli.ContextFromOptions(options),
-		&user,
-		&commentType,
-		&strType,
+		user,
+		commentType,
+		strType,
 		&opts,
 	)
 
@@ -2077,8 +2077,8 @@ func (c CommonLogic) FetchUsersNotes(client *trakt.Client, options *str.Options,
 	strType := options.Type
 	list, resp, err := client.Users.GetNotes(
 		cli.ContextFromOptions(options),
-		&user,
-		&strType,
+		user,
+		strType,
 		&opts,
 	)
 
@@ -2105,7 +2105,7 @@ func (c CommonLogic) FetchUsersNotes(client *trakt.Client, options *str.Options,
 func (*CommonLogic) UsersAddPersonalList(client *trakt.Client, options *str.Options, list *str.PersonalList) (*str.PersonalList, *str.Response, error) {
 	result, resp, err := client.Users.AddPersonalList(
 		cli.ContextFromOptions(options),
-		&options.UserName,
+		options.UserName,
 		list,
 	)
 	if err != nil {
@@ -2121,7 +2121,7 @@ func (c CommonLogic) FetchUsersCollaborations(client *trakt.Client, options *str
 	user := options.UserName
 	list, resp, err := client.Users.GetCollaborations(
 		cli.ContextFromOptions(options),
-		&user,
+		user,
 		&opts,
 	)
 
@@ -2151,8 +2151,8 @@ func (*CommonLogic) FetchUsersList(client *trakt.Client, options *str.Options) (
 	listID := options.ID
 	result, resp, err := client.Users.GetList(
 		cli.ContextFromOptions(options),
-		&user,
-		&listID,
+		user,
+		listID,
 		&opts,
 	)
 
@@ -2165,8 +2165,8 @@ func (*CommonLogic) UsersRemoveListLike(client *trakt.Client, options *str.Optio
 	listID := options.ID
 	resp, err := client.Users.RemoveListLike(
 		cli.ContextFromOptions(options),
-		&user,
-		&listID,
+		user,
+		listID,
 	)
 
 	return resp, err
@@ -2178,8 +2178,8 @@ func (*CommonLogic) UsersListLike(client *trakt.Client, options *str.Options) (*
 	listID := options.ID
 	resp, err := client.Users.LikeList(
 		cli.ContextFromOptions(options),
-		&user,
-		&listID,
+		user,
+		listID,
 	)
 
 	return resp, err
@@ -2195,11 +2195,11 @@ func (c CommonLogic) FetchUsersListItems(client *trakt.Client, options *str.Opti
 	sortHow := options.SortHow
 	list, resp, err := client.Users.GetListItems(
 		cli.ContextFromOptions(options),
-		&user,
-		&listID,
-		&strType,
-		&sortBy,
-		&sortHow,
+		user,
+		listID,
+		strType,
+		sortBy,
+		sortHow,
 		&opts,
 	)
 
@@ -2230,9 +2230,9 @@ func (c CommonLogic) FetchUsersListComments(client *trakt.Client, options *str.O
 	sort := options.Sort
 	list, resp, err := client.Users.GetListComments(
 		cli.ContextFromOptions(options),
-		&user,
-		&listID,
-		&sort,
+		user,
+		listID,
+		sort,
 		&opts,
 	)
 
@@ -2289,7 +2289,7 @@ func (c CommonLogic) FetchFollowers(client *trakt.Client, options *str.Options, 
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetFollowers(
 		cli.ContextFromOptions(options),
-		&options.UserName,
+		options.UserName,
 		&opts,
 	)
 	if err != nil {
@@ -2316,7 +2316,7 @@ func (c CommonLogic) FetchFollowing(client *trakt.Client, options *str.Options, 
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetFollowing(
 		cli.ContextFromOptions(options),
-		&options.UserName,
+		options.UserName,
 		&opts,
 	)
 	if err != nil {
@@ -2343,7 +2343,7 @@ func (c CommonLogic) FetchFriends(client *trakt.Client, options *str.Options, pa
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetFriends(
 		cli.ContextFromOptions(options),
-		&options.UserName,
+		options.UserName,
 		&opts,
 	)
 	if err != nil {
@@ -2370,9 +2370,9 @@ func (c CommonLogic) FetchUsersHistory(client *trakt.Client, options *str.Option
 	opts := uri.ListOptions{StartAt: options.StartDate, EndAt: options.EndDate, Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetHistory(
 		cli.ContextFromOptions(options),
-		&options.UserName,
-		&options.Type,
-		&options.ItemID,
+		options.UserName,
+		options.Type,
+		options.ItemID,
 		&opts,
 	)
 	if err != nil {
@@ -2407,14 +2407,14 @@ func (c CommonLogic) FetchUsersWatchlist(client *trakt.Client, options *str.Opti
 		if typeErr != nil {
 			return nil, typeErr
 		}
-		list, resp, err = client.Users.GetWatchlistBySort(cli.ContextFromOptions(options), &options.UserName, &routeType, &options.SortPath, &opts)
+		list, resp, err = client.Users.GetWatchlistBySort(cli.ContextFromOptions(options), options.UserName, routeType, options.SortPath, &opts)
 	} else {
 		list, resp, err = client.Users.GetWatchlist(
 			cli.ContextFromOptions(options),
-			&options.UserName,
-			&options.Type,
-			&options.SortBy,
-			&options.SortHow,
+			options.UserName,
+			options.Type,
+			options.SortBy,
+			options.SortHow,
 			&opts,
 		)
 	}
@@ -2444,8 +2444,8 @@ func (c CommonLogic) FetchUsersWatchlistComments(client *trakt.Client, options *
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetWatchlistComments(
 		cli.ContextFromOptions(options),
-		&options.UserName,
-		&options.Sort,
+		options.UserName,
+		options.Sort,
 		&opts,
 	)
 
@@ -2482,14 +2482,14 @@ func (c CommonLogic) FetchUsersFavorites(client *trakt.Client, options *str.Opti
 		if typeErr != nil {
 			return nil, typeErr
 		}
-		list, resp, err = client.Users.GetFavoritesBySort(cli.ContextFromOptions(options), &options.UserName, &routeType, &options.SortPath, &opts)
+		list, resp, err = client.Users.GetFavoritesBySort(cli.ContextFromOptions(options), options.UserName, routeType, options.SortPath, &opts)
 	} else {
 		list, resp, err = client.Users.GetFavorites(
 			cli.ContextFromOptions(options),
-			&options.UserName,
-			&options.Type,
-			&options.SortBy,
-			&options.SortHow,
+			options.UserName,
+			options.Type,
+			options.SortBy,
+			options.SortHow,
 			&opts,
 		)
 	}
@@ -2519,8 +2519,8 @@ func (c CommonLogic) FetchUsersFavoritesComments(client *trakt.Client, options *
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetFavoritesComments(
 		cli.ContextFromOptions(options),
-		&options.UserName,
-		&options.Sort,
+		options.UserName,
+		options.Sort,
 		&opts,
 	)
 

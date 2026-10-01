@@ -45,7 +45,7 @@ func (UsersWatchingHandler) usersWatching(client *trakt.Client, options *str.Opt
 	user := options.UserName
 	result, resp, err := client.Users.GetWatching(
 		cli.ContextFromOptions(options),
-		&user,
+		user,
 		&opts,
 	)
 

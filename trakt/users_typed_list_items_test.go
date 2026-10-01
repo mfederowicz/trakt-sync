@@ -29,7 +29,7 @@ func TestUsersServiceTypedListItems(t *testing.T) {
 				test.SafeFprint(w, `[{"rank":1,"type":"movie","movie":{"title":"Arrival"}}]`)
 			})
 
-			got, _, err := setup.Client.Users.GetListItemsByType(context.Background(), str.String("sean"), str.String("55"), &typ)
+			got, _, err := setup.Client.Users.GetListItemsByType(context.Background(), "sean", "55", typ)
 			test.AssertNilError(t, err)
 			test.AssertNoDiff(t, []*str.UserListItem{{Rank: test.Ptr(1), Type: str.String("movie"), Movie: &str.Movie{Title: str.String("Arrival")}}}, got)
 			if calls != 1 {

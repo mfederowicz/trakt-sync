@@ -52,7 +52,7 @@ func (h UsersActivitiesHandler) Handle(options *str.Options, client *trakt.Clien
 
 func (h UsersActivitiesHandler) fetchActivities(client *trakt.Client, options *str.Options, opts *uri.SocialActivityOptions, page int) ([]*str.SocialActivity, error) {
 	opts.Page = page
-	list, resp, err := client.Users.GetSocialActivity(cli.ContextFromOptions(options), &options.UserName, &options.Type, opts)
+	list, resp, err := client.Users.GetSocialActivity(cli.ContextFromOptions(options), options.UserName, options.Type, opts)
 	if err != nil {
 		return nil, err
 	}

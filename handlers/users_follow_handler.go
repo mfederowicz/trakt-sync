@@ -39,7 +39,7 @@ func (m UsersFollowHandler) Handle(options *str.Options, client *trakt.Client) e
 }
 
 func (UsersFollowHandler) usersFollow(client *trakt.Client, options *str.Options) (*str.FollowResult, *str.Response, error) {
-	result, resp, err := client.Users.Follow(cli.ContextFromOptions(options), &options.UserName)
+	result, resp, err := client.Users.Follow(cli.ContextFromOptions(options), options.UserName)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, resp, fmt.Errorf("user not found:%s", options.UserName)

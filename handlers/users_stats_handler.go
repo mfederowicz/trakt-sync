@@ -41,7 +41,7 @@ func fetchUsersStats(client *trakt.Client, options *str.Options) (*str.UserStats
 	username := options.UserName
 	stats, resp, err := client.Users.GetStats(
 		cli.ContextFromOptions(options),
-		&username,
+		username,
 	)
 
 	return stats, resp, err

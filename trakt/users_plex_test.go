@@ -83,7 +83,7 @@ func TestUsersServicePlexRequests(t *testing.T) {
 		{name: "server accounts", method: http.MethodGet, path: "/users/settings/plex/servers/abc", status: http.StatusOK,
 			body: `{"accounts":[{"id":1,"name":"sean"}],"libraries":[{"id":3,"uuid":"u1","type":"movie","title":"Movies","agent":"a","scanner":"s","selected":true,"url":"/lib/3"}]}`,
 			call: func(u *UsersService) (any, *str.Response, error) {
-				return u.GetPlexServerAccounts(context.Background(), str.String("abc"))
+				return u.GetPlexServerAccounts(context.Background(), "abc")
 			},
 			want: &str.PlexServerAccounts{Accounts: []*str.PlexAccount{{ID: test.Ptr(1), Name: str.String("sean")}},
 				Libraries: []*str.PlexLibrary{{ID: test.Ptr(3), UUID: str.String("u1"), Type: str.String("movie"), Title: str.String("Movies"),

@@ -119,7 +119,7 @@ func (UsersPlexServerHandler) Handle(options *str.Options, client *trakt.Client)
 	}
 
 	printer.Println("Returns home accounts and libraries of Plex server: " + options.ID)
-	result, resp, err := client.Users.GetPlexServerAccounts(cli.ContextFromOptions(options), &options.ID)
+	result, resp, err := client.Users.GetPlexServerAccounts(cli.ContextFromOptions(options), options.ID)
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found Plex server:%s", options.ID)
 	}

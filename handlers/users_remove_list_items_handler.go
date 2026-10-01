@@ -44,8 +44,8 @@ func (UsersRemoveListItemsHandler) usersRemoveListItems(client *trakt.Client, op
 	listID := options.ID
 	result, resp, err := client.Users.RemoveListItems(
 		cli.ContextFromOptions(options),
-		&user,
-		&listID,
+		user,
+		listID,
 		items,
 	)
 	if err != nil {

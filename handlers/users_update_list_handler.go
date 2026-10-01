@@ -69,8 +69,8 @@ func (UsersUpdateListHandler) usersUpdateList(client *trakt.Client, list *str.Pe
 	list.SortHow = &options.SortHow
 	result, resp, err := client.Users.UpdateList(
 		cli.ContextFromOptions(options),
-		&options.UserName,
-		&options.ID,
+		options.UserName,
+		options.ID,
 		list)
 	if err != nil {
 		return nil, nil, fmt.Errorf("update personal list error:%w", err)

@@ -28,7 +28,7 @@ func TestUsersServiceSmartLists(t *testing.T) {
 			name: "list", method: http.MethodGet, path: "/users/sean/smart-lists", status: http.StatusOK,
 			body: `[{"name":"Sci-Fi","ids":{"trakt":1,"slug":"sci-fi"}}]`,
 			call: func(u *UsersService) (any, *str.Response, error) {
-				return u.GetSmartLists(context.Background(), str.String("sean"))
+				return u.GetSmartLists(context.Background(), "sean")
 			},
 			want: []*str.SmartList{{Name: str.String("Sci-Fi"), IDs: &str.IDs{Trakt: test.Ptr(int64(1)), Slug: str.String("sci-fi")}}},
 		},
@@ -36,7 +36,7 @@ func TestUsersServiceSmartLists(t *testing.T) {
 			name: "get", method: http.MethodGet, path: "/users/sean/smart-lists/sci-fi", status: http.StatusOK,
 			body: `{"name":"Sci-Fi","source":"popular","media_type":"movies","filters":{"genres":["science-fiction"]}}`,
 			call: func(u *UsersService) (any, *str.Response, error) {
-				return u.GetSmartList(context.Background(), str.String("sean"), str.String("sci-fi"))
+				return u.GetSmartList(context.Background(), "sean", "sci-fi")
 			},
 			want: &str.SmartList{Name: str.String("Sci-Fi"), Source: str.String("popular"), MediaType: str.String("movies"),
 				Filters: &str.SmartListFilters{Genres: []string{"science-fiction"}}},
@@ -45,7 +45,7 @@ func TestUsersServiceSmartLists(t *testing.T) {
 			name: "create", method: http.MethodPost, path: "/users/me/smart-lists", status: http.StatusCreated,
 			body: `{"ids":{"trakt":7,"slug":"sci-fi"}}`, wantBody: write,
 			call: func(u *UsersService) (any, *str.Response, error) {
-				return u.AddSmartList(context.Background(), str.String("me"), write)
+				return u.AddSmartList(context.Background(), "me", write)
 			},
 			want: &str.SmartList{IDs: &str.IDs{Trakt: test.Ptr(int64(7)), Slug: str.String("sci-fi")}},
 		},
@@ -53,7 +53,7 @@ func TestUsersServiceSmartLists(t *testing.T) {
 			name: "update", method: http.MethodPut, path: "/users/me/smart-lists/sci-fi", status: http.StatusOK,
 			body: `{"name":"Sci-Fi","privacy":"private"}`, wantBody: &str.SmartListWrite{Privacy: str.String("private")},
 			call: func(u *UsersService) (any, *str.Response, error) {
-				return u.UpdateSmartList(context.Background(), str.String("me"), str.String("sci-fi"), &str.SmartListWrite{Privacy: str.String("private")})
+				return u.UpdateSmartList(context.Background(), "me", "sci-fi", &str.SmartListWrite{Privacy: str.String("private")})
 			},
 			want: &str.SmartList{Name: str.String("Sci-Fi"), Privacy: str.String("private")},
 		},
@@ -92,7 +92,7 @@ func TestUsersServiceDeleteSmartList(t *testing.T) {
 		w.WriteHeader(http.StatusNoContent)
 	})
 
-	resp, err := setup.Client.Users.DeleteSmartList(context.Background(), str.String("me"), str.String("sci-fi"))
+	resp, err := setup.Client.Users.DeleteSmartList(context.Background(), "me", "sci-fi")
 	test.AssertNilError(t, err)
 	if resp == nil || resp.StatusCode != http.StatusNoContent {
 		t.Errorf("response is %v, want status %d", resp, http.StatusNoContent)

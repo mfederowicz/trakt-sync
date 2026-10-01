@@ -50,7 +50,7 @@ func (UsersReportHandler) usersReport(client *trakt.Client, options *str.Options
 
 	result, resp, err := client.Users.Report(
 		cli.ContextFromOptions(options),
-		&options.UserName,
+		options.UserName,
 		report)
 
 	if resp == nil {
