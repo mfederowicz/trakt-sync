@@ -29,8 +29,11 @@ func (s SyncGetCollectionHandler) Handle(options *str.Options, client *trakt.Cli
 		return fmt.Errorf("get collection error:%w", err)
 	}
 
-	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(items, "", "  ")
+	jsonData, err := json.MarshalIndent(items, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
+	printer.Println("write data to:" + options.Output)
 	writer.WriteJSON(options, jsonData)
 
 	return nil

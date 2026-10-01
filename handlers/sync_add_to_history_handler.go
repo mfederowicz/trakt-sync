@@ -36,7 +36,10 @@ func (m SyncAddToHistoryHandler) Handle(options *str.Options, client *trakt.Clie
 	cleanup.Output = fmt.Sprintf(consts.DefaultResultsFormat, options.Module, consts.RemoveFromHistory)
 
 	printer.Println("write cleanup result to:" + cleanup.Output)
-	jsonData, _ := json.MarshalIndent(result, "", "  ")
+	jsonData, err := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
 	writer.WriteJSON(&cleanup, jsonData)
 	time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
 
@@ -49,8 +52,11 @@ func (m SyncAddToHistoryHandler) Handle(options *str.Options, client *trakt.Clie
 		return fmt.Errorf("add to history error:%w", err)
 	}
 
-	print("write cleanup result to:" + options.Output)
-	jsonDataResult, _ := json.MarshalIndent(addResult, "", "  ")
+	jsonDataResult, err := json.MarshalIndent(addResult, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
+	printer.Println("write cleanup result to:" + options.Output)
 	writer.WriteJSON(options, jsonDataResult)
 	return nil
 }

@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cli"
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -28,8 +29,11 @@ func (m SyncAddToFavoritesHandler) Handle(options *str.Options, client *trakt.Cl
 		return fmt.Errorf("add to favorites error:%w", err)
 	}
 
-	print("write result to:" + options.Output)
-	jsonDataResult, _ := json.MarshalIndent(addResult, "", "  ")
+	jsonDataResult, err := json.MarshalIndent(addResult, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
+	printer.Println("write result to:" + options.Output)
 	writer.WriteJSON(options, jsonDataResult)
 	return nil
 }

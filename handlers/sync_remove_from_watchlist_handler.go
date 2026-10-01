@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cli"
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -29,7 +30,10 @@ func (m SyncRemoveFromWatchlistHandler) Handle(options *str.Options, client *tra
 	}
 
 	printer.Println("write cleanup result to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(result, "", "  ")
+	jsonData, err := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
 	writer.WriteJSON(options, jsonData)
 	return nil
 }
