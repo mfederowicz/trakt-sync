@@ -1194,6 +1194,9 @@ func (*CommonLogic) DateLastDays(days int, tz string, full bool) string {
 	return past.Format(time.RFC3339)
 }
 
+// itemsListTypes are the types ListToItemsAgregate can build history and ratings items for
+var itemsListTypes = []string{consts.ActionTypeAll, consts.Movies, consts.Shows, consts.Seasons, consts.Episodes}
+
 // ConvertBytesToItemsList convert bytes to struct
 func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype string) (*str.ItemsList, error) {
 	var list []*str.ExportlistItem
@@ -1204,6 +1207,9 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 	items := c.InitItemsList()
 	switch action {
 	case consts.AddToHistory, consts.RemoveFromHistory, consts.AddToRatings, consts.RemoveFromRatings:
+		if !str.ContainString(stype, itemsListTypes) {
+			return nil, fmt.Errorf("type '%s' is not valid for action '%s', available types:%s", stype, action, itemsListTypes)
+		}
 		items = c.ListToItemsAgregate(items, list, stype)
 		return items.Uniq(), nil
 	case consts.AddToCollection, consts.RemoveFromCollection, consts.RemoveFromWatchlist, consts.AddToWatchlist,

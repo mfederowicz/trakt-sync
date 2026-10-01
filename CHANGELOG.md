@@ -48,6 +48,7 @@ schedule.
 
 ### Fixed
 
+- `sync -a add_to_history|remove_from_history|add_to_ratings|remove_from_ratings` with a `-t` other than `all`, `movies`, `shows`, `seasons` or `episodes` (for example `-t movie`) stopped with `panic error:runtime error: invalid memory address or nil pointer dereference` while reading the items. It now stops with an error that lists the valid types.
 - An unknown `module` in the config file made every command stop with `type 'movies' is not valid for module 'history'`, right after the note `Forcing module to history`. The fallback to `history` now works, so commands run.
 - `verbose = true` in the config file had no effect: verbose output only appeared with `-v`. The config file value is now used, and `-v=false` before the module name turns it off for one run.
 - `scrobble -progress` was ignored, so scrobbles were sent without a progress value; a `scrobble -a stop` could therefore not mark an item as watched. The given progress is now sent.

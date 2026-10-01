@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/test"
 	"github.com/stretchr/testify/assert"
@@ -87,4 +88,34 @@ func TestSyncAddToHistoryFailedCleanup(t *testing.T) {
 	entries, err := os.ReadDir(dir)
 	test.AssertNilError(t, err)
 	assert.Len(t, entries, 1, "only the items file is in the directory")
+}
+
+// an unknown -t stops before any request, it used to panic while the items were read.
+func TestSyncItemsHandlersUnknownType(t *testing.T) {
+	const items = `[{"type":"movie","watched_at":"2026-10-01T10:00:00.000Z","rated_at":"2026-10-01T10:00:00.000Z","rating":8,"movie":{"title":"Tron","ids":{"trakt":1}}}]`
+	cases := map[string]Handler{
+		consts.AddToHistory:      SyncAddToHistoryHandler{},
+		consts.RemoveFromHistory: SyncRemoveFromHistoryHandler{},
+		consts.AddToRatings:      SyncAddToRatingsHandler{},
+		consts.RemoveFromRatings: SyncRemoveFromRatingsHandler{},
+	}
+	for action, handler := range cases {
+		action, handler := action, handler
+		t.Run(action, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+			requests := []string{}
+			s.Mux.HandleFunc("/", func(_ http.ResponseWriter, r *http.Request) {
+				requests = append(requests, r.Method+" "+r.URL.Path)
+			})
+
+			dir := t.TempDir()
+			options := str.Options{Module: "sync", Action: action, Type: "movie", Output: filepath.Join(dir, "out.json"), Items: filepath.Join(dir, "items.json")}
+			test.AssertNilError(t, os.WriteFile(options.Items, []byte(items), 0o600))
+
+			err := handler.Handle(&options, s.Client)
+			assert.EqualError(t, err, "type 'movie' is not valid for action '"+action+"', available types:[all movies shows seasons episodes]")
+			assert.Empty(t, requests)
+		})
+	}
 }

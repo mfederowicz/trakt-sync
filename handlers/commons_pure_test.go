@@ -536,6 +536,16 @@ func TestConvertBytesToItemsList(t *testing.T) {
 		assert.Equal(t, []int64{4}, traktIDs(got.Episodes))
 	})
 
+	t.Run("history and ratings with an unknown type", func(t *testing.T) {
+		for _, action := range []string{consts.AddToHistory, consts.RemoveFromHistory, consts.AddToRatings, consts.RemoveFromRatings} {
+			for _, stype := range []string{"dance", "movie", consts.EmptyString} {
+				got, err := c.ConvertBytesToItemsList([]byte(mixedList), action, stype)
+				assert.Nil(t, got, "%s -t %q", action, stype)
+				assert.EqualError(t, err, "type '"+stype+"' is not valid for action '"+action+"', available types:[all movies shows seasons episodes]")
+			}
+		}
+	})
+
 	t.Run("unknown action", func(t *testing.T) {
 		got, err := c.ConvertBytesToItemsList([]byte(mixedList), "dance", consts.Movies)
 		assert.Nil(t, got)
