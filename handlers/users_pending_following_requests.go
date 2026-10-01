@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -22,8 +23,11 @@ func (u UsersFollowingRequestsHandler) Handle(options *str.Options, client *trak
 		return fmt.Errorf("get penging following request error:%w", err)
 	}
 
-	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(items, "", "  ")
+	jsonData, err := json.MarshalIndent(items, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
+	printer.Println("write data to:" + options.Output)
 	writer.WriteJSON(options, jsonData)
 
 	return nil

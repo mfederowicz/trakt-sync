@@ -35,8 +35,11 @@ func (n NotesNoteHandler) Handle(options *str.Options, client *trakt.Client) err
 	if err != nil {
 		return fmt.Errorf("%w", err)
 	}
-	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(result, "", "  ")
+	jsonData, err := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
+	printer.Println("write data to:" + options.Output)
 	writer.WriteJSON(options, jsonData)
 	return nil
 }

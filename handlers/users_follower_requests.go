@@ -38,8 +38,11 @@ func (u UsersFollowerRequestsHandler) HandleApprove(options *str.Options, client
 
 	if resp.StatusCode == http.StatusOK {
 		printer.Printf("result: success, approve follower:%d \n", options.FollowerRequest)
-		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, "", "  ")
+		jsonData, err := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
+		if err != nil {
+			return fmt.Errorf("encode %s result: %w", options.Action, err)
+		}
+		printer.Println("write data to:" + options.Output)
 		writer.WriteJSON(options, jsonData)
 	}
 
@@ -55,8 +58,11 @@ func (u UsersFollowerRequestsHandler) HandleFollowerRequestsDeny(options *str.Op
 
 	if resp.StatusCode == http.StatusNoContent {
 		printer.Printf("result: success, deny follower:%d \n", options.FollowerRequest)
-		print("write data to:" + options.Output)
-		jsonData, _ := json.MarshalIndent(result, "", "  ")
+		jsonData, err := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
+		if err != nil {
+			return fmt.Errorf("encode %s result: %w", options.Action, err)
+		}
+		printer.Println("write data to:" + options.Output)
 		writer.WriteJSON(options, jsonData)
 	}
 
@@ -71,8 +77,11 @@ func (u UsersFollowerRequestsHandler) HandleFollowerRequests(options *str.Option
 		return fmt.Errorf("get follow requests error:%w", err)
 	}
 
-	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(items, "", "  ")
+	jsonData, err := json.MarshalIndent(items, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
+	printer.Println("write data to:" + options.Output)
 	writer.WriteJSON(options, jsonData)
 
 	return nil
