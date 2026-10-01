@@ -70,6 +70,23 @@ func pagedHandlers() []pagedHandler {
 		{name: "shows updates", handler: ShowsUpdatesHandler{}, options: since},
 		{name: "shows watched", handler: ShowsWatchedHandler{}, options: period},
 		{name: "smart lists items", handler: SmartListsItemsHandler{}, options: byID},
+		{name: "sync get favorites", handler: SyncGetFavoritesHandler{}, options: str.Options{Module: "sync", Action: "get_favorites", Type: "movies"}},
+		{name: "sync get history", handler: SyncGetHistoryHandler{}, options: str.Options{Module: "sync", Action: "get_history", Type: "movies"}},
+		{name: "sync get ratings", handler: SyncGetRatingsHandler{}, options: str.Options{Module: "sync", Action: "get_ratings", Type: "movies"}},
+		{name: "sync get watched", handler: SyncGetWatchedHandler{}, options: str.Options{Module: "sync", Action: "get_watched", Type: "movies"}},
+		{name: "sync get watchlist", handler: SyncGetWatchlistHandler{}, options: str.Options{Module: "sync", Action: "get_watchlist", Type: "movies"}},
+		{name: "users collection", handler: UsersCollectionHandler{}, options: str.Options{Module: "users", Action: "collection", UserName: "me", Type: "movies"}},
+		{name: "users comments", handler: UsersCommentsHandler{}, options: str.Options{Module: "users", Action: "comments", UserName: "me", Type: "movies"}},
+		{name: "users favorites", handler: UsersFavoritesHandler{}, options: str.Options{Module: "users", Action: "favorites", UserName: "me", Type: "movies"}},
+		{name: "users favorites comments", handler: UsersFavoritesCommentsHandler{}, options: str.Options{Module: "users", Action: "favorites_comments", UserName: "me"}},
+		{name: "users likes", handler: UsersLikesHandler{}, options: str.Options{Module: "users", Action: "likes", UserName: "me", Type: "lists"}},
+		{name: "users list comments", handler: UsersListCommentsHandler{}, options: str.Options{Module: "users", Action: "list_comments", UserName: "me", InternalID: "55", Type: "movies"}},
+		{name: "users list items", handler: UsersListItemsHandler{}, options: str.Options{Module: "users", Action: "list_items", UserName: "me", InternalID: "55", Type: "movies"}},
+		{name: "users list likes", handler: UsersListLikesHandler{}, options: str.Options{Module: "users", Action: "list_likes", UserName: "me", InternalID: "55"}},
+		{name: "users notes", handler: UsersNotesHandler{}, options: str.Options{Module: "users", Action: "notes", UserName: "me", Type: "movies"}},
+		{name: "users ratings", handler: UsersRatingsHandler{}, options: str.Options{Module: "users", Action: "ratings", UserName: "me", Type: "movies"}},
+		{name: "users watchlist", handler: UsersWatchlistHandler{}, options: str.Options{Module: "users", Action: "watchlist", UserName: "me", Type: "movies"}},
+		{name: "users watchlist comments", handler: UsersWatchlistCommentsHandler{}, options: str.Options{Module: "users", Action: "watchlist_comments", UserName: "me"}},
 	}
 }
 
