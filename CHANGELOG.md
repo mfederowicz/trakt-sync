@@ -34,7 +34,7 @@ schedule.
 
 ### Changed
 
-- The `write data to:` / `write result to:` line went to stderr without a line break, so it ran into the next output. It now goes to stdout on its own line, like the newer modules, and a JSON encoding error stops the command instead of writing an empty file. This covers `users`, `shows`, `movies` and `sync` so far.
+- The `write data to:` / `write result to:` line went to stderr without a line break, so it ran into the next output. It now goes to stdout on its own line, like the newer modules, and a JSON encoding error stops the command instead of writing an empty file. This covers `users`, `shows`, `movies`, `sync`, `seasons` and `episodes` so far.
 - `calendars` actions use underscores like the other modules: `my_shows`, `all_new_shows`, `hot_releases` and so on. The old hyphenated names (`my-shows`, `all-new-shows`, `hot-releases`, ...) still work, but print a deprecation note. Export file names are unchanged.
 - Library: a `trakt` client without `WithUserAgent` now sends `User-Agent: trakt-sync-go` (`trakt.DefaultUserAgent`), so apps built on the library no longer show up as the trakt-sync CLI. The CLI still sends `trakt-sync/<version>`. The package docs now tell apps to set their own User-Agent with `WithUserAgent`.
 - CI also builds and tests the `trakt`, `str` and `uri` packages and `example/` with the Go version in `go.mod` (1.21), so the library keeps working for that minimum.
