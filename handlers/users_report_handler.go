@@ -8,6 +8,7 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
 )
@@ -37,7 +38,7 @@ func (m UsersReportHandler) Handle(options *str.Options, client *trakt.Client) e
 		return fmt.Errorf("report error:%w", err)
 	}
 	if resp.StatusCode == http.StatusNoContent {
-		fmt.Println("report success for user:", options.UserName)
+		printer.Println("report success for user:", options.UserName)
 	}
 
 	return nil

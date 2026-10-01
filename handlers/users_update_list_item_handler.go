@@ -8,6 +8,7 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
 )
@@ -32,7 +33,7 @@ func (m UsersUpdateListItemHandler) Handle(options *str.Options, client *trakt.C
 		return fmt.Errorf("update personal list item error:%w", err)
 	}
 	if resp.StatusCode == http.StatusNoContent {
-		fmt.Println("update personal list item success for list item:", options.ListItemID)
+		printer.Println("update personal list item success for list item:", options.ListItemID)
 	}
 
 	return nil
