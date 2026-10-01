@@ -32,7 +32,7 @@ const (
 	HeaderVIPUser                            = "X-VIP-User"
 	HeaderAccountLimit                       = "X-Account-Limit"
 	DefaultUpgradeURL                        = upgradeURL
-	DefaultUserAgent                         = "trakt-sync-go" // sent when WithUserAgent was not called
+	DefaultUserAgent                         = "trakt-sync-go" // fallback only: apps should set their own with WithUserAgent
 	TimezoneKey               contextKey     = "timezone"
 	Version                                  = "2"
 	defaultBaseURL                           = "https://api.trakt.tv/"
@@ -126,7 +126,8 @@ func (c *Client) WithClientID(id string) *Client {
 	return c2
 }
 
-// WithUserAgent returns a copy of the client that sends ua as User-Agent. An empty ua sends DefaultUserAgent.
+// WithUserAgent returns a copy of the client that sends ua as User-Agent. Apps should set one that names the app
+// and its version, e.g. "my-app/1.0"; an empty ua sends DefaultUserAgent.
 func (c *Client) WithUserAgent(ua string) *Client {
 	c2 := c.clone()
 	c2.userAgent = ua
