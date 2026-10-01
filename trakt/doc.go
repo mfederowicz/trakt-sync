@@ -12,7 +12,8 @@ Request and response types live in the str package, and query options in the uri
 
 # Creating a client
 
-Every request needs the client id of your Trakt API app. Set a User-Agent that names your app:
+Every request needs the client id of your Trakt API app. Set a User-Agent that names your app (without it,
+requests send DefaultUserAgent, "trakt-sync-go"):
 
 	client := trakt.NewClient(nil).
 		WithClientID("your-client-id").

@@ -65,7 +65,7 @@ func TestNewRequestHeaders(t *testing.T) {
 			want: map[string]string{
 				"Content-Type":      "application/json",
 				"trakt-api-version": "2",
-				"User-Agent":        "trakt-sync",
+				"User-Agent":        DefaultUserAgent,
 				"trakt-api-key":     "",
 				"Authorization":     "",
 			},
@@ -74,7 +74,7 @@ func TestNewRequestHeaders(t *testing.T) {
 			name:     "empty authorization",
 			clientID: "client-id",
 			want: map[string]string{
-				"User-Agent":    "trakt-sync",
+				"User-Agent":    DefaultUserAgent,
 				"trakt-api-key": "client-id",
 				"Authorization": "",
 			},
