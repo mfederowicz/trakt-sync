@@ -45,7 +45,7 @@ func (s *ShowsService) GetShow(ctx context.Context, id string, opts *uri.ListOpt
 
 // GetSingleEpisodeForShow Returns a single episode's details.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/episodes/summary/get-a-single-episode-for-a-show
+// API docs: https://docs.trakt.tv/reference/getshowsepisodesummary
 func (s *ShowsService) GetSingleEpisodeForShow(ctx context.Context, id string, season int, episode int, opts *uri.ListOptions) (*str.Episode, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d", id, season, episode)
 	url, err := uri.AddQuery(url, opts)
@@ -71,7 +71,7 @@ func (s *ShowsService) GetSingleEpisodeForShow(ctx context.Context, id string, s
 
 // GetTrendingShows Returns the most watched shows over the last 24 hours.
 // Shows with the most watchers are returned first.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/trending/get-trending-shows
+// API docs: https://docs.trakt.tv/reference/getshowstrending
 func (s *ShowsService) GetTrendingShows(ctx context.Context, opts *uri.ListOptions) ([]*str.ShowsItem, *str.Response, error) {
 	var url = "shows/trending"
 	url, err := uri.AddQuery(url, opts)
@@ -97,7 +97,7 @@ func (s *ShowsService) GetTrendingShows(ctx context.Context, opts *uri.ListOptio
 
 // GetPopularShows Returns the most popular shows.
 // Popularity is calculated using the rating percentage and the number of ratings.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/popular/get-popular-shows
+// API docs: https://docs.trakt.tv/reference/getshowspopular
 func (s *ShowsService) GetPopularShows(ctx context.Context, opts *uri.ListOptions) ([]*str.Show, *str.Response, error) {
 	var url = "shows/popular"
 	url, err := uri.AddQuery(url, opts)
@@ -123,7 +123,7 @@ func (s *ShowsService) GetPopularShows(ctx context.Context, opts *uri.ListOption
 
 // GetFavoritedShows Returns the most favorited shows in the specified time period, defaulting to weekly.
 // All stats are relative to the specific time period.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/favorited/get-favorited-shows
+// API docs: https://docs.trakt.tv/reference/getshowsfavorited
 func (s *ShowsService) GetFavoritedShows(ctx context.Context, opts *uri.ListOptions, period string) ([]*str.ShowsItem, *str.Response, error) {
 	var url = fmt.Sprintf("shows/favorited/%s", period)
 	url, err := uri.AddQuery(url, opts)
@@ -149,7 +149,7 @@ func (s *ShowsService) GetFavoritedShows(ctx context.Context, opts *uri.ListOpti
 
 // GetPlayedShows Returns the most played (a single user can watch multiple episode multiple times) shows in the specified time period, defaulting to weekly.
 // All stats are relative to the specific time period.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/played/get-the-most-played-shows
+// API docs: https://docs.trakt.tv/reference/getshowsplayed
 func (s *ShowsService) GetPlayedShows(ctx context.Context, opts *uri.ListOptions, period string) ([]*str.ShowsItem, *str.Response, error) {
 	var url = fmt.Sprintf("shows/played/%s", period)
 	url, err := uri.AddQuery(url, opts)
@@ -172,7 +172,7 @@ func (s *ShowsService) GetPlayedShows(ctx context.Context, opts *uri.ListOptions
 
 // GetWatchedShows  Returns the most watched (unique users) shows in the specified time period, defaulting to weekly.
 // All stats are relative to the specific time period.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/watched/get-the-most-watched-shows
+// API docs: https://docs.trakt.tv/reference/getshowswatched
 func (s *ShowsService) GetWatchedShows(ctx context.Context, opts *uri.ListOptions, period string) ([]*str.ShowsItem, *str.Response, error) {
 	var url = fmt.Sprintf("shows/watched/%s", period)
 	url, err := uri.AddQuery(url, opts)
@@ -197,7 +197,7 @@ func (s *ShowsService) GetWatchedShows(ctx context.Context, opts *uri.ListOption
 
 // GetCollectedShows Returns the most collected (unique users) shows in the specified time period, defaulting to weekly.
 // All stats are relative to the specific time period.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/collected/get-the-most-collected-shows
+// API docs: https://docs.trakt.tv/reference/getshowscollected
 func (s *ShowsService) GetCollectedShows(ctx context.Context, opts *uri.ListOptions, period string) ([]*str.ShowsItem, *str.Response, error) {
 	var url = fmt.Sprintf("shows/collected/%s", period)
 	url, err := uri.AddQuery(url, opts)
@@ -222,7 +222,7 @@ func (s *ShowsService) GetCollectedShows(ctx context.Context, opts *uri.ListOpti
 }
 
 // GetAnticipatedShows Returns the most anticipated shows based on the number of lists a show appears on.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/anticipated/get-the-most-anticipated-shows
+// API docs: https://docs.trakt.tv/reference/getshowsanticipated
 func (s *ShowsService) GetAnticipatedShows(ctx context.Context, opts *uri.ListOptions) ([]*str.ShowsItem, *str.Response, error) {
 	var url = "shows/anticipated"
 	url, err := uri.AddQuery(url, opts)
@@ -247,7 +247,7 @@ func (s *ShowsService) GetAnticipatedShows(ctx context.Context, opts *uri.ListOp
 }
 
 // GetRecentlyUpdatedShows Returns all shows updated since the specified UTC date and time.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/updates/get-recently-updated-shows
+// API docs: https://docs.trakt.tv/reference/getshowsupdates
 func (s *ShowsService) GetRecentlyUpdatedShows(ctx context.Context, startDate string, opts *uri.ListOptions) ([]*str.ShowsItem, *str.Response, error) {
 	var url string
 
@@ -274,7 +274,7 @@ func (s *ShowsService) GetRecentlyUpdatedShows(ctx context.Context, startDate st
 }
 
 // GetRecentlyUpdatedShowsTraktIDs Returns all show Trakt IDs updated since the specified UTC date and time.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/updated-ids/get-recently-updated-show-trakt-ids
+// API docs: https://docs.trakt.tv/reference/getshowsupdatedids
 func (s *ShowsService) GetRecentlyUpdatedShowsTraktIDs(ctx context.Context, startDate string, opts *uri.ListOptions) ([]*int, *str.Response, error) {
 	var url string
 
@@ -302,7 +302,7 @@ func (s *ShowsService) GetRecentlyUpdatedShowsTraktIDs(ctx context.Context, star
 }
 
 // GetAllShowAliases Returns all title aliases for a show. Includes country where name is different.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/aliases/get-all-show-aliases
+// API docs: https://docs.trakt.tv/reference/getshowsaliases
 func (s *ShowsService) GetAllShowAliases(ctx context.Context, id string) ([]*str.Alias, *str.Response, error) {
 	url := fmt.Sprintf("shows/%s/aliases", id)
 	s.client.debug("fetch aliases url:" + url)
@@ -327,7 +327,7 @@ func (s *ShowsService) GetAllShowAliases(ctx context.Context, id string) ([]*str
 }
 
 // GetAllShowCertifications Returns all content certifications for a show, including the country.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/certifications/get-all-show-certifications
+// API docs: https://docs.trakt.tv/reference/getshowscertifications
 func (s *ShowsService) GetAllShowCertifications(ctx context.Context, id string) ([]*str.Certification, *str.Response, error) {
 	url := fmt.Sprintf("shows/%s/certifications", id)
 	s.client.debug("fetch certifications url:" + url)
@@ -357,7 +357,7 @@ func (s *ShowsService) GetAllShowCertifications(ctx context.Context, id string) 
 
 // GetAllShowTranslations Returns all translations for a show, including language and translated values for title, tagline and overview.
 // An empty language returns all languages.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/translations/get-all-show-translations
+// API docs: https://docs.trakt.tv/reference/getshowstranslations
 func (s *ShowsService) GetAllShowTranslations(ctx context.Context, id string, language string) ([]*str.Translation, *str.Response, error) {
 	var url string
 	if language != consts.EmptyString {
@@ -389,7 +389,7 @@ func (s *ShowsService) GetAllShowTranslations(ctx context.Context, id string, la
 
 // GetAllEpisodeTranslations Returns all translations for an episode, including language and translated values for title, tagline and overview.
 // An empty language returns all languages.
-// API docs: https://trakt.docs.apiary.io/#reference/episodes/translations/get-all-episode-translations
+// API docs: https://docs.trakt.tv/reference/getshowsepisodetranslations
 func (s *ShowsService) GetAllEpisodeTranslations(ctx context.Context, id string, season int, episode int, language string) ([]*str.Translation, *str.Response, error) {
 	var url string
 	if language != consts.EmptyString {
@@ -423,7 +423,7 @@ func (s *ShowsService) GetAllEpisodeTranslations(ctx context.Context, id string,
 // By default, the newest comments are returned first.
 // Other sorting options include oldest, most likes, most replies, highest rated, lowest rated, and most plays..
 // An empty sort uses the API default.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/comments/get-all-show-comments
+// API docs: https://docs.trakt.tv/reference/getshowscomments
 func (s *ShowsService) GetAllShowComments(ctx context.Context, id string, sort string, opts *uri.ListOptions) ([]*str.Comment, *str.Response, error) {
 	var url string
 	if sort != consts.EmptyString {
@@ -463,7 +463,7 @@ func (s *ShowsService) GetAllShowComments(ctx context.Context, id string, sort s
 // By default, the newest comments are returned first.
 // Other sorting options include oldest, most likes, most replies, highest rated, lowest rated, and most plays..
 // An empty sort uses the API default.
-// API docs: https://trakt.docs.apiary.io/#reference/episodes/comments/get-all-episode-comments
+// API docs: https://docs.trakt.tv/reference/getshowsepisodecomments
 func (s *ShowsService) GetAllEpisodeComments(ctx context.Context, id string, season int, episode int, sort string, opts *uri.ListOptions) ([]*str.Comment, *str.Response, error) {
 	var url string
 	if sort != consts.EmptyString {
@@ -502,7 +502,7 @@ func (s *ShowsService) GetAllEpisodeComments(ctx context.Context, id string, sea
 // GetListsContainingShow Returns all lists that contain this show.
 // By default, personal lists are returned sorted by the most popular.
 // The type and sort segments are sent only when t and sort are both set.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/lists/get-lists-containing-this-show
+// API docs: https://docs.trakt.tv/reference/getshowslists
 func (s *ShowsService) GetListsContainingShow(ctx context.Context, id string, t string, sort string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
 	var url string
 	if t != consts.EmptyString && sort != consts.EmptyString {
@@ -539,7 +539,7 @@ func (s *ShowsService) GetListsContainingShow(ctx context.Context, id string, t 
 }
 
 // GetShowCollectionProgress Returns collection progress for a show including details on all aired seasons and episodes.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/collection-progress/get-show-collection-progress
+// API docs: https://docs.trakt.tv/reference/getshowsprogresscollection
 func (s *ShowsService) GetShowCollectionProgress(ctx context.Context, id string, opts *uri.ListOptions) (*str.CollectionProgress, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("shows/%s/progress/collection", id)
@@ -568,7 +568,7 @@ func (s *ShowsService) GetShowCollectionProgress(ctx context.Context, id string,
 }
 
 // GetShowWatchedProgress Returns watched progress for a show including details on all aired seasons and episodes.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/watched-progress/get-show-watched-progress
+// API docs: https://docs.trakt.tv/reference/getshowsprogresswatched
 func (s *ShowsService) GetShowWatchedProgress(ctx context.Context, id string, opts *uri.ListOptions) (*str.WatchedProgress, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("shows/%s/progress/watched", id)
@@ -597,7 +597,7 @@ func (s *ShowsService) GetShowWatchedProgress(ctx context.Context, id string, op
 }
 
 // ResetShowProgress Reset a show's progress when the user started re-watching the show.
-// API docs:https://trakt.docs.apiary.io/#reference/shows/reset-watched-progress/reset-show-progress
+// API docs: https://docs.trakt.tv/reference/postshowsprogressreset
 func (s *ShowsService) ResetShowProgress(ctx context.Context, id string, progress *str.WatchedProgress) (*str.WatchedProgress, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/progress/watched/reset", id)
 	req, err := s.client.NewRequest(http.MethodPost, url, progress)
@@ -615,7 +615,7 @@ func (s *ShowsService) ResetShowProgress(ctx context.Context, id string, progres
 }
 
 // UndoResetShowProgress Undo the reset and have watched progress use all watched history for the show.
-// API docs:https://trakt.docs.apiary.io/#reference/shows/reset-watched-progress/undo-reset-show-progress
+// API docs: https://docs.trakt.tv/reference/deleteshowsprogressundoreset
 func (s *ShowsService) UndoResetShowProgress(ctx context.Context, id string) (*str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/progress/watched/reset", id)
 	s.client.debug("undo reset watched progress")
@@ -633,7 +633,7 @@ func (s *ShowsService) UndoResetShowProgress(ctx context.Context, id string) (*s
 }
 
 // GetShowRatings Returns rating (between 0 and 10) and distribution for a show.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/ratings/get-show-ratings
+// API docs: https://docs.trakt.tv/reference/getshowsratings
 func (s *ShowsService) GetShowRatings(ctx context.Context, id string) (*str.ShowRatings, *str.Response, error) {
 	url := fmt.Sprintf("shows/%s/ratings", id)
 	s.client.debug("fetch ratings url:" + url)
@@ -657,7 +657,7 @@ func (s *ShowsService) GetShowRatings(ctx context.Context, id string) (*str.Show
 }
 
 // GetRelatedShows Returns related and similar shows.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/related/get-related-shows
+// API docs: https://docs.trakt.tv/reference/getshowsrelated
 func (s *ShowsService) GetRelatedShows(ctx context.Context, id string, opts *uri.ListOptions) ([]*str.Show, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("shows/%s/related", id)
@@ -689,7 +689,7 @@ func (s *ShowsService) GetRelatedShows(ctx context.Context, id string, opts *uri
 }
 
 // GetShowStats Returns lots of show stats.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/stats/get-show-stats
+// API docs: https://docs.trakt.tv/reference/getshowsstats
 func (s *ShowsService) GetShowStats(ctx context.Context, id string) (*str.ShowStats, *str.Response, error) {
 	url := fmt.Sprintf("shows/%s/stats", id)
 	s.client.debug("fetch stats url:" + url)
@@ -713,7 +713,7 @@ func (s *ShowsService) GetShowStats(ctx context.Context, id string) (*str.ShowSt
 }
 
 // GetShowStudios Returns all studios for show.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/studios/get-show-studios
+// API docs: https://docs.trakt.tv/reference/getshowsstudios
 func (s *ShowsService) GetShowStudios(ctx context.Context, id string) ([]*str.Studio, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/studios", id)
 	s.client.debug("fetch studios url:" + url)
@@ -738,7 +738,7 @@ func (s *ShowsService) GetShowStudios(ctx context.Context, id string) ([]*str.St
 }
 
 // GetShowWatching Returns all users watching this show right now.
-// API docs:  https://trakt.docs.apiary.io/#reference/shows/studios/get-users-watching-right-now
+// API docs: https://docs.trakt.tv/reference/getshowswatching
 func (s *ShowsService) GetShowWatching(ctx context.Context, id string, opts *uri.ListOptions) ([]*str.UserProfile, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/watching", id)
 	url, err := uri.AddQuery(url, opts)
@@ -769,7 +769,7 @@ func (s *ShowsService) GetShowWatching(ctx context.Context, id string, opts *uri
 }
 
 // GetShowVideos Returns all videos including trailers, teasers, clips, and featurettes.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/videos/get-all-videos
+// API docs: https://docs.trakt.tv/reference/getshowsvideos
 func (s *ShowsService) GetShowVideos(ctx context.Context, id string, opts *uri.ListOptions) ([]*str.Video, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/videos", id)
 	url, err := uri.AddQuery(url, opts)
@@ -801,7 +801,7 @@ func (s *ShowsService) GetShowVideos(ctx context.Context, id string, opts *uri.L
 
 // RefreshShowMetadata Queue this show for a full metadata and image refresh.
 // It might take up to 8 hours for the updated metadata to be availabe through the API.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/refresh/refresh-show-metadata
+// API docs: https://docs.trakt.tv/reference/postshowsrefresh
 func (s *ShowsService) RefreshShowMetadata(ctx context.Context, id string) (*str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/refresh", id)
 	s.client.debug("refresh show:" + url)
@@ -819,7 +819,7 @@ func (s *ShowsService) RefreshShowMetadata(ctx context.Context, id string) (*str
 }
 
 // GetNextEpisode Returns the next scheduled to air episode.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/next-episode/get-next-episode
+// API docs: https://docs.trakt.tv/reference/getshowsnextepisode
 func (s *ShowsService) GetNextEpisode(ctx context.Context, id string, opts *uri.ListOptions) (*str.Episode, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/next_episode", id)
 	url, err := uri.AddQuery(url, opts)
@@ -840,7 +840,7 @@ func (s *ShowsService) GetNextEpisode(ctx context.Context, id string, opts *uri.
 }
 
 // GetLastEpisode Returns the most recently aired episode.
-// API docs: https://trakt.docs.apiary.io/#reference/shows/last-episode/get-last-episode
+// API docs: https://docs.trakt.tv/reference/getshowslastepisode
 func (s *ShowsService) GetLastEpisode(ctx context.Context, id string, opts *uri.ListOptions) (*str.Episode, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/last_episode", id)
 	url, err := uri.AddQuery(url, opts)
@@ -861,7 +861,7 @@ func (s *ShowsService) GetLastEpisode(ctx context.Context, id string, opts *uri.
 }
 
 // GetAllSeasonsForShow Returns all seasons for a show including the number of episodes in each season.
-// API docs: https://trakt.docs.apiary.io/#reference/seasons/summary/get-all-seasons-for-a-show
+// API docs: https://docs.trakt.tv/reference/getshowsseasons
 func (s *ShowsService) GetAllSeasonsForShow(ctx context.Context, id string, opts *uri.ListOptions) ([]*str.Season, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/seasons", id)
 	url, err := uri.AddQuery(url, opts)
@@ -883,7 +883,7 @@ func (s *ShowsService) GetAllSeasonsForShow(ctx context.Context, id string, opts
 }
 
 // GetSingleSeasonsForShow Returns a single seasons for a show.
-// API docs: https://trakt.docs.apiary.io/#reference/seasons/season/get-single-seasons-for-a-show
+// API docs: https://docs.trakt.tv/reference/getshowsseasoninfo
 func (s *ShowsService) GetSingleSeasonsForShow(ctx context.Context, id string, season int, opts *uri.ListOptions) (*str.Season, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/seasons/%d/info", id, season)
 	url, err := uri.AddQuery(url, opts)
@@ -905,7 +905,7 @@ func (s *ShowsService) GetSingleSeasonsForShow(ctx context.Context, id string, s
 }
 
 // GetAllEpisodesForSingleSeason Returns a single seasons for a show.
-// API docs: https://trakt.docs.apiary.io/#reference/seasons/episodes/get-all-episodes-for-a-single-season
+// API docs: https://docs.trakt.tv/reference/getshowsseasonepisodes
 func (s *ShowsService) GetAllEpisodesForSingleSeason(ctx context.Context, id string, season int, opts *uri.ListOptions) ([]*str.Episode, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/seasons/%d", id, season)
 	url, err := uri.AddQuery(url, opts)
@@ -928,7 +928,7 @@ func (s *ShowsService) GetAllEpisodesForSingleSeason(ctx context.Context, id str
 
 // GetAllSeasonTranslations Returns all translations for an season, including language and translated values for title and overview.
 // An empty language returns all languages.
-// API docs: https://trakt.docs.apiary.io/#reference/seasons/episodes/get-all-season-translations
+// API docs: https://docs.trakt.tv/reference/getshowsseasontranslations
 func (s *ShowsService) GetAllSeasonTranslations(ctx context.Context, id string, season int, language string, opts *uri.ListOptions) ([]*str.Translation, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/seasons/%d/translations", id, season)
 
@@ -959,7 +959,7 @@ func (s *ShowsService) GetAllSeasonTranslations(ctx context.Context, id string, 
 // Other sorting options include oldest, most likes, most replies, highest rated, lowest rated, and most plays..
 // An empty sort uses the API default.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/seasons/comments/get-all-season-comments
+// API docs: https://docs.trakt.tv/reference/getshowsseasoncomments
 func (s *ShowsService) GetAllSeasonComments(ctx context.Context, id string, season int, sort string, opts *uri.ListOptions) ([]*str.Comment, *str.Response, error) {
 	var url string
 	if sort != consts.EmptyString {
@@ -999,7 +999,7 @@ func (s *ShowsService) GetAllSeasonComments(ctx context.Context, id string, seas
 // By default, personal lists are returned sorted by the most popular.
 // The type and sort segments are sent only when t and sort are both set.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/seasons/lists/get-lists-containing-this-season
+// API docs: https://docs.trakt.tv/reference/getshowsseasonlists
 func (s *ShowsService) GetListsContainingSeason(ctx context.Context, id string, season int, t string, sort string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
 	var url string
 	if t != consts.EmptyString && sort != consts.EmptyString {
@@ -1039,7 +1039,7 @@ func (s *ShowsService) GetListsContainingSeason(ctx context.Context, id string, 
 // By default, personal lists are returned sorted by the most popular.
 // The type and sort segments are sent only when t and sort are both set.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/episodes/lists/get-lists-containing-this-episode
+// API docs: https://docs.trakt.tv/reference/getshowsepisodelists
 func (s *ShowsService) GetListsContainingEpisode(ctx context.Context, id string, season int, episode int, t string, sort string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
 	var url string
 	if t != consts.EmptyString && sort != consts.EmptyString {
@@ -1078,7 +1078,7 @@ func (s *ShowsService) GetListsContainingEpisode(ctx context.Context, id string,
 // GetAllPeopleForSeason Returns all cast and crew for a season.
 // Each cast member will have a characters array and a standard person object.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/seasons/people/get-all-people-for-a-season
+// API docs: https://docs.trakt.tv/reference/getshowsseasonpeople
 func (s *ShowsService) GetAllPeopleForSeason(ctx context.Context, id string, season int, opts *uri.ListOptions) (*str.SeasonPeople, *str.Response, error) {
 	var url string
 
@@ -1112,7 +1112,7 @@ func (s *ShowsService) GetAllPeopleForSeason(ctx context.Context, id string, sea
 // GetAllPeopleForEpisode Returns all cast and crew for an episode.
 // Each cast member will have a characters array and a standard person object.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/episodes/people/get-all-people-for-an-episode
+// API docs: https://docs.trakt.tv/reference/getshowsepisodepeople
 func (s *ShowsService) GetAllPeopleForEpisode(ctx context.Context, id string, season int, episode int, opts *uri.ListOptions) (*str.EpisodePeople, *str.Response, error) {
 	var url string
 
@@ -1145,7 +1145,7 @@ func (s *ShowsService) GetAllPeopleForEpisode(ctx context.Context, id string, se
 
 // GetSeasonRatings Returns rating (between 0 and 10) and distribution for a season.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/seasons/ratings/get-season-ratings
+// API docs: https://docs.trakt.tv/reference/getshowsseasonratings
 func (s *ShowsService) GetSeasonRatings(ctx context.Context, id string, season int) (*str.SeasonRatings, *str.Response, error) {
 	url := fmt.Sprintf("shows/%s/seasons/%d/ratings", id, season)
 	s.client.debug("fetch season ratings url:" + url)
@@ -1170,7 +1170,7 @@ func (s *ShowsService) GetSeasonRatings(ctx context.Context, id string, season i
 
 // GetEpisodeRatings Returns rating (between 0 and 10) and distribution for an episode.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/episodes/ratings/get-episode-ratings
+// API docs: https://docs.trakt.tv/reference/getshowsepisoderatings
 func (s *ShowsService) GetEpisodeRatings(ctx context.Context, id string, season int, episode int) (*str.EpisodeRatings, *str.Response, error) {
 	url := fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/ratings", id, season, episode)
 	s.client.debug("fetch episode ratings url:" + url)
@@ -1195,7 +1195,7 @@ func (s *ShowsService) GetEpisodeRatings(ctx context.Context, id string, season 
 
 // GetSeasonStats Returns lots of season stats.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/seasons/stats/get-season-stats
+// API docs: https://docs.trakt.tv/reference/getshowsseasonstats
 func (s *ShowsService) GetSeasonStats(ctx context.Context, id string, season int) (*str.SeasonStats, *str.Response, error) {
 	url := fmt.Sprintf("shows/%s/seasons/%d/stats", id, season)
 	s.client.debug("fetch season stats url:" + url)
@@ -1220,7 +1220,7 @@ func (s *ShowsService) GetSeasonStats(ctx context.Context, id string, season int
 
 // GetEpisodeStats Returns lots of episode stats.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/episodes/stats/get-episode-stats
+// API docs: https://docs.trakt.tv/reference/getshowsepisodestats
 func (s *ShowsService) GetEpisodeStats(ctx context.Context, id string, season int, episode int) (*str.EpisodeStats, *str.Response, error) {
 	url := fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/stats", id, season, episode)
 	s.client.debug("fetch episode stats url:" + url)
@@ -1245,7 +1245,7 @@ func (s *ShowsService) GetEpisodeStats(ctx context.Context, id string, season in
 
 // GetSeasonsWatching Returns all users watching this season right now.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/seasons/watching/get-users-watching-right-now
+// API docs: https://docs.trakt.tv/reference/getshowsseasonwatching
 func (s *ShowsService) GetSeasonsWatching(ctx context.Context, id string, season int, opts *uri.ListOptions) ([]*str.UserProfile, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/seasons/%d/watching", id, season)
 	url, err := uri.AddQuery(url, opts)
@@ -1277,7 +1277,7 @@ func (s *ShowsService) GetSeasonsWatching(ctx context.Context, id string, season
 
 // GetEpisodesWatching Returns all users watching this episode right now.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/episodes/watching/get-users-watching-right-now
+// API docs: https://docs.trakt.tv/reference/getshowsepisodewatching
 func (s *ShowsService) GetEpisodesWatching(ctx context.Context, id string, season int, episode int, opts *uri.ListOptions) ([]*str.UserProfile, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/watching", id, season, episode)
 	url, err := uri.AddQuery(url, opts)
@@ -1309,7 +1309,7 @@ func (s *ShowsService) GetEpisodesWatching(ctx context.Context, id string, seaso
 
 // GetSeasonsVideos Returns all videos including trailers, teasers, clips, and featurettes.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/seasons/videos/get-all-videos
+// API docs: https://docs.trakt.tv/reference/getshowsseasonvideos
 func (s *ShowsService) GetSeasonsVideos(ctx context.Context, id string, season int, opts *uri.ListOptions) ([]*str.Video, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/seasons/%d/videos", id, season)
 	url, err := uri.AddQuery(url, opts)
@@ -1341,7 +1341,7 @@ func (s *ShowsService) GetSeasonsVideos(ctx context.Context, id string, season i
 
 // GetEpisodeVideos Returns all videos including trailers, teasers, clips, and featurettes.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/episodes/videos/get-all-videos
+// API docs: https://docs.trakt.tv/reference/getshowsepisodevideos
 func (s *ShowsService) GetEpisodeVideos(ctx context.Context, id string, season int, episode int, opts *uri.ListOptions) ([]*str.Video, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/seasons/%d/episodes/%d/videos", id, season, episode)
 	url, err := uri.AddQuery(url, opts)
