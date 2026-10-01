@@ -32,7 +32,7 @@ func (s ScrobbleStartShowEpisodeHandler) Handle(options *str.Options, client *tr
 		return s.CreateScrobbleForEpisodeAbs(options, client)
 	}
 
-	return nil
+	return errors.New(consts.EmptyShowEpisodeMsg)
 }
 
 // CreateScrobbleForEpisodeCode to handle scrobble: episode code

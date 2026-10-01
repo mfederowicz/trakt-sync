@@ -76,6 +76,7 @@ const (
 	EmptySentimentsMsg           = "no sentiments for:%s (unknown id, or nothing analyzed yet)"
 	EpisodeTargetMsg             = "use -i <show> with both -season and -episode, or -i <episode trakt id> alone"
 	EmptyEpisodeMsg              = "set episode number ie: -episode 1"
+	EmptyShowEpisodeMsg          = "set episode ie: -episode_code 1x5 or -episode_abs 6"
 	EmptyShowIDMsg               = "set Trakt ID, Trakt slug, or IMDB ID Example:  ie: -i 12345 or -i tron-legacy-2010"
 	UnknownItemsListType         = "unknown items list type"
 	EmptyString                  = ""

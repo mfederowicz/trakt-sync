@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/test"
 	"github.com/stretchr/testify/assert"
@@ -131,6 +132,28 @@ func TestPostHandlersFailedPost(t *testing.T) {
 			options := tc.options
 			assert.Error(t, tc.handler.Handle(&options, s.Client))
 			assert.Equal(t, tc.requests, *requests)
+		})
+	}
+}
+
+// show_episode without -episode_code and -episode_abs is an error, it used to end without a request and without an error.
+func TestShowEpisodeHandlersWithoutEpisode(t *testing.T) {
+	cases := map[string]Handler{
+		"checkin":        CheckinShowEpisodeHandler{},
+		"scrobble pause": ScrobblePauseShowEpisodeHandler{},
+		"scrobble start": ScrobbleStartShowEpisodeHandler{},
+		"scrobble stop":  ScrobbleStopShowEpisodeHandler{},
+	}
+	for name, handler := range cases {
+		name, handler := name, handler
+		t.Run(name, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+			requests, _ := servePostHandler(t, s.Mux, http.StatusCreated)
+
+			options := str.Options{InternalID: "55", TraktID: 55, Type: "show_episode"}
+			assert.EqualError(t, handler.Handle(&options, s.Client), consts.EmptyShowEpisodeMsg)
+			assert.Empty(t, *requests)
 		})
 	}
 }
