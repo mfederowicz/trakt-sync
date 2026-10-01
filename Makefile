@@ -20,6 +20,9 @@ test:
 cover:
 	@go test -cover -coverprofile coverage.out ./...
 
+cover-check:
+	@go test -cover ./... | awk -f .github/coverage-floors.awk .github/coverage-floors.txt -
+
 linter:
 	@revive --config ./revive.toml --formatter friendly ./...
 

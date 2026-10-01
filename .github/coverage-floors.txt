@@ -1,0 +1,13 @@
+# Lowest test coverage (percent of statements) CI accepts per package; checked by .github/coverage-floors.awk.
+# A floor sits a few points under the measured value, because coverage moves between runs (-shuffle, time-dependent tests).
+# Floors only go up: raise one when a package gains coverage, never lower one to make a PR pass.
+buffer 60
+cfg 88
+cli 78
+cmds 70
+handlers 46
+printer 78
+str 48
+trakt 70
+uri 78
+writer 55

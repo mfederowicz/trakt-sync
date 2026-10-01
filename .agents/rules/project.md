@@ -50,6 +50,9 @@ Run all of these before opening a PR; CI enforces them.
 - `make build` - builds with version ldflags.
 - `make cover` - coverage per package; CI writes the same per-package table to the
   job summary of the `stable` test run, so a PR shows whether coverage moved.
+- `make cover-check` - compares coverage per package with the floors in
+  `.github/coverage-floors.txt`; the `stable` test run fails below a floor. Floors
+  only go up: raise one when a package gains coverage, never lower one to pass.
 
 ## Restrictions
 

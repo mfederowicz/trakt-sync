@@ -36,7 +36,10 @@ jobs:
             echo
             echo "**Total:** $(go tool cover -func=coverage.out | tail -1 | awk '{print $NF}')"
           } >> "$GITHUB_STEP_SUMMARY"
-  
+      - name: Coverage floors
+        if: matrix.go-version == 'stable'
+        run: awk -f .github/coverage-floors.awk .github/coverage-floors.txt test-output.txt
+
       - name: Build examples
         working-directory: example
         run: |
