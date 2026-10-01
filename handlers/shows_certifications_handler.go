@@ -40,7 +40,7 @@ func (m ShowsCertificationsHandler) Handle(options *str.Options, client *trakt.C
 func (ShowsCertificationsHandler) fetchShowsCertifications(client *trakt.Client, options *str.Options) ([]*str.Certification, *str.Response, error) {
 	certifications, resp, err := client.Shows.GetAllShowCertifications(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 	)
 
 	if err != nil {

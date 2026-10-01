@@ -42,8 +42,8 @@ func (SeasonsSeasonHandler) fetchSeasonsSeason(client *trakt.Client, options *st
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Shows.GetSingleSeasonsForShow(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
-		&options.Season,
+		options.InternalID,
+		options.Season,
 		&opts,
 	)
 

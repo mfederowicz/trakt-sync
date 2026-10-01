@@ -42,9 +42,9 @@ func (EpisodesWatchingHandler) fetchEpisodesWatching(client *trakt.Client, optio
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Shows.GetEpisodesWatching(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
-		&options.Season,
-		&options.Episode,
+		options.InternalID,
+		options.Season,
+		options.Episode,
 		&opts,
 	)
 

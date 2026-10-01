@@ -40,7 +40,7 @@ func (m ShowsStudiosHandler) Handle(options *str.Options, client *trakt.Client) 
 func (ShowsStudiosHandler) fetchShowsStudios(client *trakt.Client, options *str.Options) ([]*str.Studio, *str.Response, error) {
 	result, resp, err := client.Shows.GetShowStudios(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 	)
 
 	if err != nil {

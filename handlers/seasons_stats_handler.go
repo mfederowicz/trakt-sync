@@ -40,8 +40,8 @@ func (m SeasonsStatsHandler) Handle(options *str.Options, client *trakt.Client) 
 func (SeasonsStatsHandler) fetchSeasonsStats(client *trakt.Client, options *str.Options) (*str.SeasonStats, *str.Response, error) {
 	result, resp, err := client.Shows.GetSeasonStats(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
-		&options.Season,
+		options.InternalID,
+		options.Season,
 	)
 
 	if err != nil {

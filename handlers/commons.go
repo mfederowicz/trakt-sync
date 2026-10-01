@@ -528,7 +528,7 @@ func (*CommonLogic) FetchShow(client *trakt.Client, options *str.Options) (*str.
 
 	result, _, err := client.Shows.GetShow(
 		cli.ContextFromOptions(options),
-		&showID,
+		showID,
 		&opts,
 	)
 

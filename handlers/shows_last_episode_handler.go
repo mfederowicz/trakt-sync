@@ -47,7 +47,7 @@ func (ShowsLastEpisodeHandler) fetchShowsLastEpisode(client *trakt.Client, optio
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	show, resp, err := client.Shows.GetLastEpisode(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 		&opts,
 	)
 

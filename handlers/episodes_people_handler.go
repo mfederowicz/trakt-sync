@@ -42,9 +42,9 @@ func (EpisodesPeopleHandler) fetchEpisodesPeople(client *trakt.Client, options *
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Shows.GetAllPeopleForEpisode(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
-		&options.Season,
-		&options.Episode,
+		options.InternalID,
+		options.Season,
+		options.Episode,
 		&opts,
 	)
 

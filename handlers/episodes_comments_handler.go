@@ -43,10 +43,10 @@ func (m EpisodesCommentsHandler) fetchEpisodesComments(client *trakt.Client, opt
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetAllEpisodeComments(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
-		&options.Season,
-		&options.Episode,
-		&options.Sort,
+		options.InternalID,
+		options.Season,
+		options.Episode,
+		options.Sort,
 		&opts,
 	)
 

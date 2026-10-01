@@ -40,10 +40,10 @@ func (m EpisodesTranslationsHandler) Handle(options *str.Options, client *trakt.
 func (EpisodesTranslationsHandler) fetchEpisodesTranslations(client *trakt.Client, options *str.Options) ([]*str.Translation, *str.Response, error) {
 	result, resp, err := client.Shows.GetAllEpisodeTranslations(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
-		&options.Season,
-		&options.Episode,
-		&options.Language,
+		options.InternalID,
+		options.Season,
+		options.Episode,
+		options.Language,
 	)
 
 	if err != nil {

@@ -43,7 +43,7 @@ func (m ShowsRelatedHandler) fetchShowsRelated(client *trakt.Client, options *st
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetRelatedShows(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 		&opts,
 	)
 

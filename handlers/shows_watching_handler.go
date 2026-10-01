@@ -42,7 +42,7 @@ func (ShowsWatchingHandler) fetchShowsWatching(client *trakt.Client, options *st
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Shows.GetShowWatching(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 		&opts,
 	)
 

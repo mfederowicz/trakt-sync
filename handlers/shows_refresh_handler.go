@@ -55,7 +55,7 @@ func (ShowsRefreshHandler) refreshShow(client *trakt.Client, options *str.Option
 	showID := options.InternalID
 	resp, err := client.Shows.RefreshShowMetadata(
 		cli.ContextFromOptions(options),
-		&showID,
+		showID,
 	)
 	return resp, err
 }

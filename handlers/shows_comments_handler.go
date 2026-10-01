@@ -43,8 +43,8 @@ func (m ShowsCommentsHandler) fetchShowsComments(client *trakt.Client, options *
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetAllShowComments(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
-		&options.Sort,
+		options.InternalID,
+		options.Sort,
 		&opts,
 	)
 

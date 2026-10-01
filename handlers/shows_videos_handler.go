@@ -42,7 +42,7 @@ func (ShowsVideosHandler) fetchShowsVideos(client *trakt.Client, options *str.Op
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Shows.GetShowVideos(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 		&opts,
 	)
 

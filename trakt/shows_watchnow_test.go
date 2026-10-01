@@ -27,7 +27,7 @@ func TestShowsServiceGetShowWatchNow(t *testing.T) {
 			"streaming_ranks":{"rank":5787,"delta":-586,"link":"https://www.justwatch.com/us/tv-show/the-sopranos"}}}`)
 	})
 
-	got, _, err := setup.Client.Shows.GetShowWatchNow(context.Background(), str.String("the-sopranos"), str.String("us"), &uri.ListOptions{Extended: "streaming_ranks", Links: "tvos,webos"})
+	got, _, err := setup.Client.Shows.GetShowWatchNow(context.Background(), "the-sopranos", "us", &uri.ListOptions{Extended: "streaming_ranks", Links: "tvos,webos"})
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, map[string]*str.WatchNowSources{"us": {
 		Cable:    []*str.WatchNowService{},
@@ -56,7 +56,7 @@ func TestShowsServiceGetShowJustwatchLinks(t *testing.T) {
 		test.SafeFprint(w, `{"pl":"justwatch.com/pl/serial/rodzina-soprano"}`)
 	})
 
-	got, _, err := setup.Client.Shows.GetShowJustwatchLinks(context.Background(), str.String("the-sopranos"), str.String("pl"))
+	got, _, err := setup.Client.Shows.GetShowJustwatchLinks(context.Background(), "the-sopranos", "pl")
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, map[string]string{"pl": "justwatch.com/pl/serial/rodzina-soprano"}, got)
 }
@@ -69,7 +69,7 @@ func TestShowsServiceGetShowWatchNowForbidden(t *testing.T) {
 		w.WriteHeader(http.StatusForbidden)
 	})
 
-	_, resp, err := setup.Client.Shows.GetShowJustwatchLinks(context.Background(), str.String("the-sopranos"), str.String("us"))
+	_, resp, err := setup.Client.Shows.GetShowJustwatchLinks(context.Background(), "the-sopranos", "us")
 	var forbidden *ForbiddenError
 	if !errors.As(err, &forbidden) {
 		t.Fatalf("error is %v, want *ForbiddenError", err)

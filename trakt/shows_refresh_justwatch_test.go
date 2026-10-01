@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/test"
 )
 
@@ -19,7 +18,7 @@ func TestShowsServiceRefreshShowJustwatch(t *testing.T) {
 		w.WriteHeader(http.StatusCreated)
 	})
 
-	resp, err := setup.Client.Shows.RefreshShowJustwatch(context.Background(), str.String("the-sopranos"))
+	resp, err := setup.Client.Shows.RefreshShowJustwatch(context.Background(), "the-sopranos")
 	test.AssertNilError(t, err)
 	if got, want := resp.StatusCode, http.StatusCreated; got != want {
 		t.Errorf("status code is %d, want %d", got, want)

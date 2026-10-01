@@ -40,7 +40,7 @@ func (m ShowsRatingsHandler) Handle(options *str.Options, client *trakt.Client) 
 func (ShowsRatingsHandler) fetchShowsRatings(client *trakt.Client, options *str.Options) (*str.ShowRatings, *str.Response, error) {
 	result, resp, err := client.Shows.GetShowRatings(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 	)
 
 	if err != nil {

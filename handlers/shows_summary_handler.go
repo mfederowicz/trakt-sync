@@ -42,7 +42,7 @@ func (ShowsSummaryHandler) fetchShowsSummary(client *trakt.Client, options *str.
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	show, resp, err := client.Shows.GetShow(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 		&opts,
 	)
 
