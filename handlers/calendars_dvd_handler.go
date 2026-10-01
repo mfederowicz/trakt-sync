@@ -39,7 +39,7 @@ func (CalendarsDvdHandler) Handle(options *str.Options, client *trakt.Client) er
 }
 
 func fetchCalendarDvdReleases(client *trakt.Client, options *str.Options) ([]*str.CalendarList, error) {
-	if options.Action == "all-dvd" {
+	if options.Action == consts.AllDvd {
 		actionType = consts.ActionTypeAll
 	}
 

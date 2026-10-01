@@ -38,7 +38,7 @@ func (CalendarsFinalesHandler) Handle(options *str.Options, client *trakt.Client
 }
 
 func fetchCalendarFinales(client *trakt.Client, options *str.Options) ([]*str.CalendarList, error) {
-	if options.Action == "all-finales" {
+	if options.Action == consts.AllFinales {
 		actionType = consts.ActionTypeAll
 	}
 

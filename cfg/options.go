@@ -1097,37 +1097,37 @@ func getOutputForModuleSearch(options *str.Options) string {
 
 func getOutputForModuleCalendars(options *str.Options) string {
 	switch options.Action {
-	case "my-shows", "all-shows":
+	case consts.MyShows, consts.AllShows:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
 			"shows",
 			strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
-	case "my-new-shows", "all-new-shows":
+	case consts.MyNewShows, consts.AllNewShows:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
 			"new_shows",
 			strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
-	case "my-season-premieres", "all-season-premieres":
+	case consts.MySeasonPremieres, consts.AllSeasonPremieres:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
 			"season_premieres",
 			strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
-	case "my-finales", "all-finales":
+	case consts.MyFinales, consts.AllFinales:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
 			"finales",
 			strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
-	case "my-movies", "all-movies":
+	case consts.MyMovies, consts.AllMovies:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,
 			"movies",
 			strings.ReplaceAll(options.StartDate, "-", "")+"_"+strconv.Itoa(options.Days))
-	case "my-dvd", "all-dvd":
+	case consts.MyDvd, consts.AllDvd:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat3,
 			options.Module,

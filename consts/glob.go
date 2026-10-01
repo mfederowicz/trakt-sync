@@ -5,6 +5,7 @@ import "time"
 
 // usage strings
 const (
+	ActionSeparator              = "_"
 	ActionUsage                  = "allow use selected action"
 	AllPages                     = 10
 	AppName                      = "trakt-sync"
@@ -104,6 +105,7 @@ const (
 	ItemUsage                    = "item type used in collection/rating ie:movie,show,season,episode,person"
 	JSONDataFormat               = "  "
 	LanguageUsage                = "allow to overwrite language"
+	LegacyActionSeparator        = "-"
 	LifetimeStatsUsage           = "count completed episodes and stats across all rewatches ie: -lifetime_stats"
 	LinksUsage                   = "provider links to include, comma separated: tvos,direct,android,webos"
 	ListCommentSortUsage         = "allow to overwrite comments sort"

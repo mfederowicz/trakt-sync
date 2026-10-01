@@ -39,7 +39,7 @@ func (CalendarsSeasonPremieresHandler) Handle(options *str.Options, client *trak
 }
 
 func fetchCalendarSeasonPremieres(client *trakt.Client, options *str.Options) ([]*str.CalendarList, error) {
-	if options.Action == "all-season-premieres" {
+	if options.Action == consts.AllSeasonPremieres {
 		actionType = consts.ActionTypeAll
 	}
 
