@@ -85,7 +85,8 @@ func TestExecSetsDebugLogger(t *testing.T) {
 			client.DebugLogger = func(...any) {}
 
 			captureStdout(t, func() {
-				assert.NoError(t, MoviesCmd.Exec(fs, client, config, []string{"-a", "no_such_action"}))
+				// an unknown action runs Exec without any request; it now fails with exit status 1
+				assert.EqualError(t, MoviesCmd.Exec(fs, client, config, []string{"-a", "no_such_action"}), `movies: unknown action "no_such_action"`)
 			})
 
 			assert.Equal(t, tt.verbose, client.DebugLogger != nil)

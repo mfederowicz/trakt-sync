@@ -21,6 +21,14 @@ import (
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
+// unknownValueError is returned after a types or items usage, so a wrong or missing -t / -item exits with status 1.
+func unknownValueError(flagName string, value string) error {
+	if value == consts.EmptyString {
+		return fmt.Errorf("no %s given", flagName)
+	}
+	return fmt.Errorf("unknown %s %q", flagName, value)
+}
+
 func isMovieType(stype string) bool {
 	switch stype {
 	case consts.Movie, consts.Movies:

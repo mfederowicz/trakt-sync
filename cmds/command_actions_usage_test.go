@@ -59,7 +59,8 @@ func TestActionsUsageListsRegisteredActions(t *testing.T) {
 			resetAllFlags()
 			t.Cleanup(resetAllFlags)
 			out := captureStdout(t, func() {
-				assert.NoError(t, tt.cmd.Exec(fs, trakt.NewClient(nil), config, []string{"-a", "no_such_action"}))
+				assert.EqualError(t, tt.cmd.Exec(fs, trakt.NewClient(nil), config, []string{"-a", "no_such_action"}),
+					tt.cmd.Name+`: unknown action "no_such_action"`)
 			})
 			assert.Contains(t, out, "Available actions:")
 			for _, a := range tt.want {
@@ -70,4 +71,45 @@ func TestActionsUsageListsRegisteredActions(t *testing.T) {
 			}
 		})
 	}
+}
+
+// TestUnknownActionOrTypeFails checks every module returns an error (exit status 1) after the usage
+// for a wrong or missing -a, and the type modules for a wrong -t.
+func TestUnknownActionOrTypeFails(t *testing.T) {
+	fs := afero.NewMemMapFs()
+	assert.NoError(t, fs.MkdirAll("/unknown/", consts.X755))
+	assert.NoError(t, afero.WriteFile(fs, "/unknown/token.json", []byte("{}"), consts.X644))
+	assert.NoError(t, afero.WriteFile(fs, "/unknown/user_settings.json", []byte(`{"user":{"username":"sean"}}`), consts.X644))
+	config := cfg.DefaultConfig()
+	config.ClientID, config.ClientSecret = "a", "b"
+	config.TokenPath, config.SettingsPath = "/unknown/token.json", "/unknown/user_settings.json"
+
+	typeModules := map[string]bool{consts.Certifications: true, consts.Countries: true, consts.Genres: true, consts.Languages: true}
+	for _, c := range Commands {
+		c := c
+		// help has no actions; collection, history and watchlist have no -a flag (a given -a already fails to parse)
+		if c.Name == "help" || c.Name == consts.Collection || c.Name == consts.History || c.Name == consts.Watchlist {
+			continue
+		}
+		t.Run(c.Name, func(t *testing.T) {
+			resetAllFlags()
+			t.Cleanup(resetAllFlags)
+			args, want := []string{"-a", "no_such_action"}, c.Name+`: unknown action "no_such_action"`
+			if typeModules[c.Name] {
+				args, want = []string{"-t", "no_such_type"}, c.Name+`: unknown type "no_such_type"`
+			}
+			out := captureStdout(t, func() {
+				assert.EqualError(t, c.Exec(fs, trakt.NewClient(nil), config, args), want)
+			})
+			assert.Contains(t, out, "Usage: ./trakt-sync "+c.Name)
+		})
+	}
+
+	t.Run("missing action", func(t *testing.T) {
+		resetAllFlags()
+		t.Cleanup(resetAllFlags)
+		captureStdout(t, func() {
+			assert.EqualError(t, TeamCmd.Exec(fs, trakt.NewClient(nil), config, []string{"-a", ""}), "team: no action given, use -a")
+		})
+	})
 }

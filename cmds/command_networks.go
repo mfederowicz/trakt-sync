@@ -33,7 +33,7 @@ func networksFunc(cmd *Command, _ ...string) error {
 
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, []string{consts.List})
-		return nil
+		return unknownActionError(cmd.Name, options.Action)
 	}
 
 	err = handler.Handle(options, client)

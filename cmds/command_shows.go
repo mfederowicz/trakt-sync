@@ -102,7 +102,7 @@ func showsFunc(cmd *Command, _ ...string) error {
 
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validShowsActions)
-		return nil
+		return unknownActionError(cmd.Name, options.Action)
 	}
 
 	err = handler.Handle(options, client)

@@ -60,7 +60,7 @@ func searchFunc(cmd *Command, _ ...string) error {
 
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, []string{consts.TextQuery, consts.IDLookup, consts.ExactQuery, consts.Trending, consts.AddRecent, consts.RemoveRecent})
-		return nil
+		return unknownActionError(cmd.Name, options.Action)
 	}
 
 	return handler.Handle(options, client)

@@ -26,7 +26,7 @@ func (s ScrobblePauseHandler) Handle(options *str.Options, client *trakt.Client)
 	validTypes := []string{consts.Movie, consts.Episode, consts.ShowEpisode}
 	if err != nil {
 		s.common.GenActionTypeUsage(options, validTypes)
-		return nil
+		return unknownValueError("type", options.Type)
 	}
 
 	err = handler.Handle(options, client)

@@ -40,6 +40,7 @@ schedule.
 
 ### Fixed
 
+- An unknown or missing `-a` (and an unknown `-t` for `certifications`, `countries`, `genres`, `languages`, and for `notes`/`scrobble` actions, or `-item` for `notes`) printed the list of valid values but ended with exit status 0, so scripts could not notice a typo. It now prints the list followed by an error such as `calendars: unknown action "typo"` and exits with status 1. `notes` with an unknown action used to report a misleading privacy error; it now shows the actions list like the other modules.
 - README: the config file's `type` was described as applying to every module. It is ignored by `episodes`, `lists`, `movies`, `people`, `scrobble`, `seasons`, `shows` and `users`, which take `-t` only from the command line; the README now says so.
 ## [1.21.0] - 2026-10-01
 

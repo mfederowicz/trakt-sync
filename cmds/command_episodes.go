@@ -81,7 +81,7 @@ func episodesFunc(cmd *Command, _ ...string) error {
 
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, _episodesActions)
-		return nil
+		return unknownActionError(cmd.Name, options.Action)
 	}
 
 	err = handler.Handle(options, client)

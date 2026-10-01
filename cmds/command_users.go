@@ -161,7 +161,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 		consts.UpdatePlexSettings, consts.PlexConnect, consts.PlexDisconnect, consts.PlexServers, consts.PlexServer, consts.PlexSync}
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, validActions)
-		return nil
+		return unknownActionError(cmd.Name, options.Action)
 	}
 
 	err = handler.Handle(options, client)

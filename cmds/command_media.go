@@ -35,7 +35,7 @@ func mediaFunc(cmd *Command, _ ...string) error {
 
 	if err != nil {
 		cmd.common.GenActionsUsage(cmd.Name, []string{consts.Trending, consts.Popular, consts.Anticipated})
-		return nil
+		return unknownActionError(cmd.Name, options.Action)
 	}
 
 	err = handler.Handle(options, client)
