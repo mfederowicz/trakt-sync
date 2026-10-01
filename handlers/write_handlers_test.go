@@ -42,6 +42,14 @@ func writeHandlers() []writeHandler {
 	users := func(action string) str.Options {
 		return str.Options{Module: "users", Action: action, Type: "movies", UserName: "me", ID: "55", Section: "calendar"}
 	}
+	editComment := str.Options{CommentID: 417, Comment: "great movie, worth a rewatch"}
+	reply := str.Options{CommentID: 417, Reply: "agreed, the sequel is good too"}
+	removeComment := str.Options{CommentID: 417, Delete: true}
+	editNote := str.Options{InternalID: "55", Notes: "rewatch"}
+	removeNote := str.Options{InternalID: "55", Delete: true}
+	hide := str.Options{InternalID: "55", Hide: true}
+	approve := str.Options{FollowerRequest: 7}
+	deny := str.Options{FollowerRequest: 7, Deny: true}
 	undoReset := str.Options{InternalID: "55", Delete: true}
 	unlike := users("list_like")
 	unlike.Type = consts.EmptyString
@@ -53,6 +61,13 @@ func writeHandlers() []writeHandler {
 	updateItem.ListItemID = 7
 	updateItem.Notes = "rewatch"
 	return []writeHandler{
+		{name: "comments delete comment", handler: CommentsCommentHandler{}, options: removeComment, method: http.MethodDelete, path: "/comments/417", status: http.StatusNoContent},
+		{name: "comments reply", handler: CommentsRepliesHandler{}, options: reply, sends: `"comment":"agreed, the sequel is good too"`, method: http.MethodPost, path: "/comments/417/replies", status: http.StatusCreated},
+		{name: "comments update comment", handler: CommentsCommentHandler{}, options: editComment, sends: `"comment":"great movie, worth a rewatch"`, method: http.MethodPut, path: "/comments/417"},
+		{name: "notes delete note", handler: NotesNoteHandler{}, options: removeNote, method: http.MethodDelete, path: "/notes/55", status: http.StatusNoContent},
+		{name: "notes update note", handler: NotesNoteHandler{}, options: editNote, sends: `"notes":"rewatch"`, method: http.MethodPut, path: "/notes/55"},
+		{name: "recommendations hide movie", handler: RecommendationsMoviesHandler{}, options: hide, method: http.MethodDelete, path: "/recommendations/movies/55", status: http.StatusNoContent},
+		{name: "recommendations hide show", handler: RecommendationsShowsHandler{}, options: hide, method: http.MethodDelete, path: "/recommendations/shows/55", status: http.StatusNoContent},
 		{name: "shows reset show progress", handler: ShowsResetShowProgressHandler{}, options: str.Options{InternalID: "55"}, method: http.MethodPost, path: "/shows/55/progress/watched/reset"},
 		{name: "shows undo reset show progress", handler: ShowsResetShowProgressHandler{}, options: undoReset, method: http.MethodDelete, path: "/shows/55/progress/watched/reset", status: http.StatusNoContent},
 		{name: "sync add to collection", handler: SyncAddToCollectionHandler{}, options: sync("add_to_collection"), items: movies, sends: movie, method: http.MethodPost, path: "/sync/collection", status: http.StatusCreated, writes: true},
@@ -72,6 +87,9 @@ func writeHandlers() []writeHandler {
 		{name: "sync update watchlist item", handler: SyncUpdateWatchlistItemHandler{}, options: str.Options{ListItemID: 7, Notes: "rewatch"}, sends: note, method: http.MethodPut, path: "/sync/watchlist/7", status: http.StatusNoContent},
 		{name: "users add hidden items", handler: UsersAddHiddenItemsHandler{}, options: users("add_hidden_items"), items: movies, sends: movie, method: http.MethodPost, path: "/users/hidden/calendar", status: http.StatusCreated, writes: true},
 		{name: "users add list items", handler: UsersAddListItemsHandler{}, options: users("add_list_items"), items: movies, sends: movie, method: http.MethodPost, path: "/users/me/lists/55/items", status: http.StatusCreated, writes: true},
+		{name: "users approve follower request", handler: UsersFollowerRequestsHandler{}, options: approve, method: http.MethodPost, path: "/users/requests/7", writes: true},
+		{name: "users delete list", handler: UsersDeleteListHandler{}, options: like, method: http.MethodDelete, path: "/users/me/lists/55", status: http.StatusNoContent},
+		{name: "users deny follower request", handler: UsersFollowerRequestsHandler{}, options: deny, method: http.MethodDelete, path: "/users/requests/7", status: http.StatusNoContent, writes: true},
 		{name: "users list like", handler: UsersListLikeHandler{}, options: like, method: http.MethodPost, path: "/users/me/lists/55/like", status: http.StatusNoContent},
 		{name: "users remove hidden items", handler: UsersRemoveHiddenItemsHandler{}, options: users("remove_hidden_items"), items: movies, sends: movie, method: http.MethodPost, path: "/users/hidden/calendar/remove", writes: true},
 		{name: "users remove list items", handler: UsersRemoveListItemsHandler{}, options: users("remove_list_items"), items: movies, sends: movie, method: http.MethodPost, path: "/users/me/lists/55/items/remove", writes: true},
