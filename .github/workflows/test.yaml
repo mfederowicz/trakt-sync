@@ -26,3 +26,26 @@ jobs:
         run: |
           go vet ./...
           go build ./...
+
+  library-on-go-minimum:
+    name: Library on the go.mod Go version
+    runs-on: ubuntu-26.04
+    env:
+      GOTOOLCHAIN: local
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - name: Test library packages
+        run: |
+          go version
+          go vet ./trakt/... ./str ./uri
+          go test -race ./trakt/... ./str ./uri
+      - name: Build examples
+        working-directory: example
+        run: |
+          go vet ./...
+          go build ./...
