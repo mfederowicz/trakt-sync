@@ -14,6 +14,9 @@ var (
 	commit  = "none"
 	date    = "unknown"
 	builtBy = "unknown"
+
+	// readBuildInfo is replaced in tests
+	readBuildInfo = debug.ReadBuildInfo
 )
 
 // GenAppVersion gen app verrsion string
@@ -50,8 +53,9 @@ func genBuildInfo() string {
 
 func genDev(info string) string {
 	ver := version
-	bi, ok := debug.ReadBuildInfo()
-	if ok {
+	bi, ok := readBuildInfo()
+	// test binaries built with older Go versions have no main module version
+	if ok && bi.Main.Version != consts.EmptyString {
 		var version = bi.Main.Version
 		var versionNoPrefix = bi.Main.Version[1:]
 
