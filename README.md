@@ -89,7 +89,8 @@ A value given on the command line (for example `-t shows`) wins over the same op
 ## Library usage
 
 The API client behind the CLI is also a Go package, `github.com/mfederowicz/trakt-sync/trakt`.
-It is **experimental**: its API may still change in minor releases.
+It is **experimental**: its API may still change in minor releases, listed in the changelog with a
+**Library:** prefix. See the versioning rules at the top of [CHANGELOG.md](./CHANGELOG.md).
 
 ```bash
 go get github.com/mfederowicz/trakt-sync/trakt

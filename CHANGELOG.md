@@ -12,6 +12,17 @@ Versioning follows [SemVer](https://semver.org/):
 - **Patch** (`1.15.X`) - bug fixes, CI/tooling changes, docs-only changes, refactors with no
   behavior change.
 
+The Go library (`trakt`, `str`, `uri`) follows the same version numbers:
+
+- **While it is experimental** (now) - breaking changes to its Go API (a removed or renamed
+  exported identifier, a changed signature, or a behavior callers rely on) may land in a minor
+  release. They are listed under `### Changed` or `### Removed` with a **Library:** prefix.
+  New exported identifiers are minor, fixes are patch, as for the CLI.
+- **Once it is declared stable** (the maintainer's call; the README and the `trakt` package docs
+  will say so) - a breaking change to its Go API needs a major version.
+- Any major version, CLI or library, also changes the module path to
+  `github.com/mfederowicz/trakt-sync/v2` (Go modules ignore `v2+` tags without it).
+
 A version is tagged once a module (or a meaningful fix) is done - there's no fixed release
 schedule.
 
@@ -23,7 +34,7 @@ schedule.
 
 ### Changed
 
-- The Trakt API client is now an importable Go package, `github.com/mfederowicz/trakt-sync/trakt` (it was `internal/`, which other modules cannot import). It is experimental: its API may still change in minor releases. Nothing changes for CLI users.
+- The Trakt API client is now an importable Go package, `github.com/mfederowicz/trakt-sync/trakt` (it was `internal/`, which other modules cannot import). It is experimental: its API may still change in minor releases, as the library versioning rules at the top of this file describe. Nothing changes for CLI users.
 - Library: `trakt` API cleanup before its first release. Methods get consistent names: `Oauth.PollForAccessToken`, `Checkin.CheckIn`, `Comments.AddComment`, `Users.GetSettings`, `Users.LikeList`, `Users.ReportList`, `Users.GetWatching` and `Users.GetListItemsByType`. Every service method now returns the `*str.Response` as well (the `Sync` add/remove/update/reorder methods, `Shows.GetShowCollectionProgress`/`GetShowWatchedProgress` and `Users.AddHiddenItems`/`RemoveHiddenItems` did not), so callers can read rate limit and pagination headers. Path parameters are plain values instead of pointers (`id string`, `days int`), so a nil can no longer panic; an optional segment is left out when it is empty (`""` or `0`). In `Users`, an empty user means the authenticated user (`me`), and type or section segments are always sent. `str` and `uri` get package docs for pkg.go.dev, and `str.Format`/`str.Formatc` are removed along with the `github.com/wissance/stringFormatter` dependency. Nothing changes for CLI users.
 - Debug lines such as `fetch ... url:` and `create new checkin` now print only with `-v`, which also shows each API request as `METHOD <url>` (with `client_secret` redacted). This covers `calendars`, `checkin`, `comments`, `lists`, `movies`, `notes`, `people`, `recommendations`, `scrobble`, `search`, `shows`, `sync`, `users`, `countries`, `certifications`, `genres`, `languages` and `networks`. Errors are still printed as before.
 

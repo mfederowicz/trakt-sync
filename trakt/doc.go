@@ -2,7 +2,9 @@
 Package trakt is a Go client for the Trakt API (https://trakt.tv).
 
 It is the API layer of the trakt-sync CLI, published as a library. The package is experimental: its API may
-still change in minor releases until it is declared stable.
+still change in minor releases until it is declared stable. Such changes are listed in CHANGELOG.md with a
+"Library:" prefix; the versioning rules at the top of that file say what may change in which release:
+https://github.com/mfederowicz/trakt-sync/blob/main/CHANGELOG.md
 
 	import "github.com/mfederowicz/trakt-sync/trakt"
 
