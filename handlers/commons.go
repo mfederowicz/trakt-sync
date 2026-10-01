@@ -1418,6 +1418,13 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			e.ID = val.ID
 			*items.People = append(*items.People, e)
 		}
+		if val.User != nil && isUserType(stype) {
+			e := str.ExportlistItem{}
+			e.IDs = val.User.IDs
+			e.UpdateCollectedData(val)
+			e.ID = val.ID
+			*items.Users = append(*items.Users, e)
+		}
 	}
 	return items
 }

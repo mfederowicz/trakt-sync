@@ -34,6 +34,7 @@ schedule.
 
 ### Fixed
 
+- `users -a add_hidden_items|remove_hidden_items -section comments` sent an empty `users` list, so no user was hidden or unhidden although the command ended without an error. The `user` items of the input file are now sent (without `-t`, or with `-t user`).
 - `history`, `watchlist` and `collection` with `-t episodes` stopped with `panic error:runtime error: invalid memory address or nil pointer dereference` when an exported episode had no title, which Trakt allows. Such an episode is now exported with the title `no episode title`, as an episode with an empty title already was.
 - `shows -a last_episode` and `shows -a next_episode` stopped with `panic error:runtime error: invalid memory address or nil pointer dereference` when the episode had no title, which Trakt allows (typical for an upcoming episode). The episode is now exported and the message shows `no episode title`.
 - `comments -a comments` without `-t`, or with a `-t` other than `movie`, `show`, `season`, `episode` or `list` (for example the plural `movies`), stopped with `panic error:runtime error: invalid memory address or nil pointer dereference`. It now prints the possible types and stops with `unknown type "movies"`.
