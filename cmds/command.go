@@ -672,6 +672,7 @@ func setOptionsDependsOnModuleComments(options str.Options) str.Options {
 	options.InternalID = selectFirstNonEmpty(*_commentsTraktID, *_commentsInternalID)
 	options.CommentID = *_commentsCommentID
 	options.CommentType = *_commentsCommentType
+	options.Spoiler = *_commentsSpoiler
 	return options
 }
 
