@@ -318,15 +318,6 @@ func convertKeysToString(keys []string, values url.Values) string {
 	return buf.String()
 }
 
-func hasStruct(v reflect.Value) bool {
-	for i := consts.ZeroValue; i < v.NumField(); i++ {
-		if v.Field(i).Kind() == reflect.Struct {
-			return true
-		}
-	}
-	return false
-}
-
 // SanitizeURL redacts the client_secret parameter from the URL which may be
 // exposed to the user.
 func SanitizeURL(uri *url.URL) *url.URL {
