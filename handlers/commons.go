@@ -1218,9 +1218,15 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 	case consts.AddToCollection, consts.RemoveFromCollection, consts.RemoveFromWatchlist, consts.AddToWatchlist,
 		consts.ReorderWatchlist, consts.AddListItems, consts.RemoveListItems, consts.ReorderLists, consts.ReorderListItems,
 		consts.AddToFavorites, consts.RemoveFromFavorites, consts.ReorderFavorites:
+		if err := checkItemsCollectionInput(list, action); err != nil {
+			return nil, err
+		}
 		items = c.ListToItemsCollection(items, list, stype)
 		return items, nil
 	case consts.AddHiddenItems, consts.RemoveHiddenItems:
+		if err := checkItemsCollectionInput(list, action); err != nil {
+			return nil, err
+		}
 		items = c.ListToItemsCollectionAgregate(items, list, stype)
 		return items, nil
 	default:
@@ -1252,6 +1258,24 @@ func checkItemsListInput(list []*str.ExportlistItem, stype string) error {
 		}
 		if (all || stype == consts.Episodes) && item.Episode != nil && !hasTraktID(item.Episode.IDs) {
 			return fmt.Errorf("item at index %d: episode has no trakt id", i)
+		}
+	}
+	return nil
+}
+
+// reorderItemsActions are the actions CreateItemsToReorder sends the list item ids for
+var reorderItemsActions = []string{consts.ReorderWatchlist, consts.ReorderFavorites, consts.ReorderListItems}
+
+// checkItemsCollectionInput reports the first item ListToItemsCollection cannot read for action:
+// the reorder actions send the id of every item as its new rank
+func checkItemsCollectionInput(list []*str.ExportlistItem, action string) error {
+	reorder := str.ContainString(action, reorderItemsActions)
+	for i, item := range list {
+		if item == nil {
+			return fmt.Errorf("item at index %d: is empty", i)
+		}
+		if reorder && item.ID == nil {
+			return fmt.Errorf("item at index %d: has no id", i)
 		}
 	}
 	return nil
@@ -1570,6 +1594,14 @@ func (c *CommonLogic) ConvertBytesFromPersonalLists(data []byte) (*str.ItemsList
 	var list *[]str.PersonalList
 	if err := json.Unmarshal(data, &list); err != nil {
 		return nil, err
+	}
+	if list == nil {
+		return nil, errors.New("lists are empty")
+	}
+	for i, item := range *list {
+		if !hasTraktID(item.IDs) {
+			return nil, fmt.Errorf("list at index %d: has no trakt id", i)
+		}
 	}
 	items := c.InitItemsList()
 	items.Lists = list

@@ -182,3 +182,42 @@ func TestSyncItemsHandlersItemWithoutTraktID(t *testing.T) {
 		})
 	}
 }
+
+// a reorder item without its id stops before any request, it used to panic while the request was built.
+func TestReorderHandlersItemWithoutID(t *testing.T) {
+	const (
+		items = `[{"id":7,"type":"movie","movie":{"title":"Tron","ids":{"trakt":1}}},{"type":"movie","movie":{"title":"Heat","ids":{"trakt":2}}}]`
+		lists = `[{"name":"Favorites","ids":{"trakt":1}},{"name":"Rewatch"}]`
+	)
+	cases := []struct {
+		handler            Handler
+		module, action, in string
+		want               string
+	}{
+		{SyncReorderWatchlistHandler{}, "sync", consts.ReorderWatchlist, items, "item at index 1: has no id"},
+		{SyncReorderFavoritesHandler{}, "sync", consts.ReorderFavorites, items, "item at index 1: has no id"},
+		{UsersReorderListItemsHandler{}, "users", consts.ReorderListItems, items, "item at index 1: has no id"},
+		{UsersReorderListsHandler{}, "users", consts.ReorderLists, lists, "list at index 1: has no trakt id"},
+		{SyncReorderWatchlistHandler{}, "sync", consts.ReorderWatchlist, `[null]`, "item at index 0: is empty"},
+		{UsersReorderListsHandler{}, "users", consts.ReorderLists, `null`, "lists are empty"},
+	}
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.action+" "+tc.want, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+			requests := []string{}
+			s.Mux.HandleFunc("/", func(_ http.ResponseWriter, r *http.Request) {
+				requests = append(requests, r.Method+" "+r.URL.Path)
+			})
+
+			dir := t.TempDir()
+			options := str.Options{Module: tc.module, Action: tc.action, Type: consts.Movies, UserName: "me", ID: "55", Output: filepath.Join(dir, "out.json"), Items: filepath.Join(dir, "items.json")}
+			test.AssertNilError(t, os.WriteFile(options.Items, []byte(tc.in), 0o600))
+
+			err := tc.handler.Handle(&options, s.Client)
+			assert.EqualError(t, err, tc.want)
+			assert.Empty(t, requests)
+		})
+	}
+}
