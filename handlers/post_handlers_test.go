@@ -173,6 +173,32 @@ func TestPostHandlersFailedLookup(t *testing.T) {
 	}
 }
 
+// connections is nullish in the settings response: without it the item is still posted, it used to panic.
+func TestPostHandlersSettingsWithoutConnections(t *testing.T) {
+	const settings = "/users/settings"
+	for _, tc := range postHandlers() {
+		if tc.requests[0] != http.MethodGet+" "+settings {
+			continue
+		}
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+			requests, posted := servePostHandler(t, s.Mux, http.StatusCreated)
+			s.Mux.HandleFunc(settings, func(w http.ResponseWriter, r *http.Request) {
+				*requests = append(*requests, r.Method+" "+r.URL.Path)
+				test.SafeFprint(w, `{"user":{"username":"sean"}}`)
+			})
+
+			options := tc.options
+			test.AssertNilError(t, tc.handler.Handle(&options, s.Client))
+			assert.Equal(t, tc.requests, *requests)
+			assert.Contains(t, *posted, tc.sends)
+			assert.Contains(t, *posted, `"sharing":{}`)
+		})
+	}
+}
+
 // show_episode without -episode_code and -episode_abs is an error, it used to end without a request and without an error.
 func TestShowEpisodeHandlersWithoutEpisode(t *testing.T) {
 	cases := map[string]Handler{
