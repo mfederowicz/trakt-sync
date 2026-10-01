@@ -21,7 +21,7 @@ func (m SyncUpdateFavoriteItemHandler) Handle(options *str.Options, client *trak
 	if err != nil {
 		return fmt.Errorf("update favorite item error:%w", err)
 	}
-	fmt.Println("update notes success for favorite item:", options.ListItemID)
+	printer.Println("update notes success for favorite item:", options.ListItemID)
 
 	return nil
 }

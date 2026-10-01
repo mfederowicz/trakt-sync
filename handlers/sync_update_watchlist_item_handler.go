@@ -21,7 +21,7 @@ func (m SyncUpdateWatchlistItemHandler) Handle(options *str.Options, client *tra
 	if err != nil {
 		return fmt.Errorf("update watchlist item error:%w", err)
 	}
-	fmt.Println("update notes success for watchlist item:", options.ListItemID)
+	printer.Println("update notes success for watchlist item:", options.ListItemID)
 
 	return nil
 }

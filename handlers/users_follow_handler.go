@@ -30,7 +30,7 @@ func (m UsersFollowHandler) Handle(options *str.Options, client *trakt.Client) e
 		return fmt.Errorf("follow error:%w", err)
 	}
 	if resp.StatusCode == http.StatusCreated {
-		fmt.Println("follow success for:", options.UserName)
+		printer.Println("follow success for:", options.UserName)
 	}
 	jsonData, err := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
 	if err != nil {

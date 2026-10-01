@@ -8,6 +8,7 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
+	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
 )
@@ -27,7 +28,7 @@ func (m UsersUnblockHandler) Handle(options *str.Options, client *trakt.Client) 
 		return fmt.Errorf("unblock error:%w", err)
 	}
 	if resp.StatusCode == http.StatusNoContent {
-		fmt.Println("unblock success for:", options.UserName)
+		printer.Println("unblock success for:", options.UserName)
 	}
 
 	return nil

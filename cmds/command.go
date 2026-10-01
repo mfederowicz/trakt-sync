@@ -650,7 +650,7 @@ func toIntSlice(s string) str.SliceInt {
 	for i, v := range strings.Split(s, consts.SeparatorString) {
 		n, err := strconv.Atoi(v)
 		if err != nil {
-			fmt.Printf("invalid number at index %d: %v\n", i, err)
+			printer.Printf("invalid number at index %d: %v\n", i, err)
 			return str.SliceInt{}
 		}
 		out.Set(n)
