@@ -34,6 +34,8 @@ schedule.
 
 ### Fixed
 
+- Library: `str.ItemsList.GetUniqueOldest` kept the entry with the latest `watched_at` / `rated_at` per Trakt ID, although its name and docs say the oldest. It now keeps the oldest. It also no longer panics on a nil list, on an item without a Trakt ID (such items are skipped), or when a watched and a rated item share an ID, and `Uniq` / `GetUniqIDs` leave nil lists nil instead of panicking. Nothing changes for CLI users: `sync` builds these lists with one entry per ID already.
+
 ## [1.22.0] - 2026-10-01
 
 ### Added
