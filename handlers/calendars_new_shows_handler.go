@@ -42,9 +42,7 @@ func (CalendarsNewShowsHandler) Handle(options *str.Options, client *trakt.Clien
 }
 
 func fetchCalendarNewShows(client *trakt.Client, options *str.Options) ([]*str.CalendarList, error) {
-	if options.Action == consts.AllNewShows {
-		actionType = "all"
-	}
+	actionType := calendarTarget(options.Action)
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Calendars.GetNewShows(
 		cli.ContextFromOptions(options),

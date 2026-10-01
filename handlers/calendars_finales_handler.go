@@ -41,9 +41,7 @@ func (CalendarsFinalesHandler) Handle(options *str.Options, client *trakt.Client
 }
 
 func fetchCalendarFinales(client *trakt.Client, options *str.Options) ([]*str.CalendarList, error) {
-	if options.Action == consts.AllFinales {
-		actionType = consts.ActionTypeAll
-	}
+	actionType := calendarTarget(options.Action)
 
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Calendars.GetFinales(

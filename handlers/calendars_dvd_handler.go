@@ -42,9 +42,7 @@ func (CalendarsDvdHandler) Handle(options *str.Options, client *trakt.Client) er
 }
 
 func fetchCalendarDvdReleases(client *trakt.Client, options *str.Options) ([]*str.CalendarList, error) {
-	if options.Action == consts.AllDvd {
-		actionType = consts.ActionTypeAll
-	}
+	actionType := calendarTarget(options.Action)
 
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Calendars.GetDVDReleases(

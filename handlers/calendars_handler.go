@@ -14,10 +14,6 @@ import (
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
-var (
-	actionType = "my"
-)
-
 // CalendarsHandler interface to handle calendars module action
 type CalendarsHandler interface {
 	Handle(options *str.Options, client *trakt.Client) error

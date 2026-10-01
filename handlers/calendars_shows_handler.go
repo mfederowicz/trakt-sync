@@ -43,9 +43,7 @@ func (CalendarsShowsHandler) Handle(options *str.Options, client *trakt.Client) 
 }
 
 func fetchCalendarShows(client *trakt.Client, options *str.Options) ([]*str.CalendarList, error) {
-	if options.Action == consts.AllShows {
-		actionType = "all"
-	}
+	actionType := calendarTarget(options.Action)
 
 	printer.Println("action type:" + actionType)
 

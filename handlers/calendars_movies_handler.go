@@ -42,9 +42,7 @@ func (CalendarsMoviesHandler) Handle(options *str.Options, client *trakt.Client)
 }
 
 func fetchCalendarMovies(client *trakt.Client, options *str.Options) ([]*str.CalendarList, error) {
-	if options.Action == consts.AllMovies {
-		actionType = consts.ActionTypeAll
-	}
+	actionType := calendarTarget(options.Action)
 
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Calendars.GetMovies(
