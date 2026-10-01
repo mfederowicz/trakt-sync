@@ -42,11 +42,29 @@ func TestItemsListGetUniqueOldest(t *testing.T) {
 		}
 	})
 
-	t.Run("items without watched_at and rated_at are dropped", func(t *testing.T) {
-		items := &[]ExportlistItem{{IDs: &IDs{Trakt: Int64(1)}}, watchedItem(2, 5)}
-		got := ItemsList{}.GetUniqueOldest(items)
-		if want := (map[int64]int{2: 5}); !reflect.DeepEqual(daysByID(got, watched), want) {
-			t.Errorf("days by id are %v, want %v", daysByID(got, watched), want)
+	t.Run("items without watched_at and rated_at are kept", func(t *testing.T) {
+		undated := ExportlistItem{IDs: &IDs{Trakt: Int64(1)}}
+		got := ItemsList{}.GetUniqueOldest(&[]ExportlistItem{undated, undated, watchedItem(2, 5)})
+		if len(*got) != 2 {
+			t.Fatalf("result is %v, want two items", *got)
+		}
+		for _, item := range *got {
+			if *item.IDs.Trakt == 1 && item.WatchedAt != nil {
+				t.Errorf("item 1 is %v, want it without watched_at", item)
+			}
+		}
+	})
+
+	t.Run("an item with a date wins over one without", func(t *testing.T) {
+		undated := ExportlistItem{IDs: &IDs{Trakt: Int64(1)}}
+		for _, items := range []*[]ExportlistItem{
+			{undated, watchedItem(1, 6)},
+			{watchedItem(1, 6), undated},
+		} {
+			got := ItemsList{}.GetUniqueOldest(items)
+			if want := (map[int64]int{1: 6}); len(*got) != 1 || (*got)[0].WatchedAt == nil || !reflect.DeepEqual(daysByID(got, watched), want) {
+				t.Errorf("result is %v, want the item watched on day 6", *got)
+			}
 		}
 	})
 

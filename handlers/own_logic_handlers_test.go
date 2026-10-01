@@ -90,6 +90,39 @@ func TestSyncAddToHistoryFailedCleanup(t *testing.T) {
 	assert.Len(t, entries, 1, "only the items file is in the directory")
 }
 
+// items without watched_at / rated_at are sent too, they used to be dropped while the items were read.
+func TestSyncItemsHandlersItemWithoutDates(t *testing.T) {
+	const items = `[{"type":"movie","rating":8,"movie":{"title":"Tron","ids":{"trakt":1}}}]`
+	cases := map[string]Handler{
+		consts.AddToHistory:      SyncAddToHistoryHandler{},
+		consts.RemoveFromHistory: SyncRemoveFromHistoryHandler{},
+		consts.AddToRatings:      SyncAddToRatingsHandler{},
+		consts.RemoveFromRatings: SyncRemoveFromRatingsHandler{},
+	}
+	for action, handler := range cases {
+		action, handler := action, handler
+		t.Run(action, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+			requests := consts.ZeroValue
+			s.Mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+				requests++
+				body, err := io.ReadAll(r.Body)
+				test.AssertNilError(t, err)
+				assert.Contains(t, string(body), `"ids":{"trakt":1}`, r.URL.Path)
+				test.SafeFprint(w, `{}`)
+			})
+
+			dir := inTempDir(t)
+			options := str.Options{Module: "sync", Action: action, Type: consts.Movies, Output: filepath.Join(dir, "out.json"), Items: filepath.Join(dir, "items.json")}
+			test.AssertNilError(t, os.WriteFile(options.Items, []byte(items), 0o600))
+
+			test.AssertNilError(t, handler.Handle(&options, s.Client))
+			assert.NotZero(t, requests)
+		})
+	}
+}
+
 // an unknown -t stops before any request, it used to panic while the items were read.
 func TestSyncItemsHandlersUnknownType(t *testing.T) {
 	const items = `[{"type":"movie","watched_at":"2026-10-01T10:00:00.000Z","rated_at":"2026-10-01T10:00:00.000Z","rating":8,"movie":{"title":"Tron","ids":{"trakt":1}}}]`

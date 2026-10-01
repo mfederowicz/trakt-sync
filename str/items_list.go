@@ -32,20 +32,20 @@ func (i ItemsList) Uniq() *ItemsList {
 }
 
 // GetUniqueOldest returns a unique slice of Items, keeping the one with the oldest WatchedAt (or RatedAt) per ID.
+// An item without both dates is kept unless another item with the same ID has one.
 func (i ItemsList) GetUniqueOldest(items *[]ExportlistItem) *[]ExportlistItem {
 	if items == nil {
 		return nil
 	}
 	unique := map[int64]ExportlistItem{}
 	for _, item := range *items {
-		date := i.itemDate(item)
-		if date == nil || item.IDs == nil || item.IDs.Trakt == nil {
-			continue // skip items with nil ID or WatchedAt
+		if item.IDs == nil || item.IDs.Trakt == nil {
+			continue // skip items with nil ID
 		}
 
 		id := *item.IDs.Trakt
 		existing, found := unique[id]
-		if !found || date.Before(i.itemDate(existing).Time) {
+		if !found || i.isOlder(i.itemDate(item), i.itemDate(existing)) {
 			unique[id] = item
 		}
 	}
@@ -62,6 +62,14 @@ func (ItemsList) itemDate(item ExportlistItem) *Timestamp {
 		return item.WatchedAt
 	}
 	return item.RatedAt
+}
+
+// isOlder tells if date should replace existing: any date replaces a missing one.
+func (ItemsList) isOlder(date, existing *Timestamp) bool {
+	if date == nil {
+		return false
+	}
+	return existing == nil || date.Before(existing.Time)
 }
 
 // GetUniqIDs returns a unique slice of ints.
