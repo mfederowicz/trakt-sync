@@ -4,6 +4,7 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/cli"
@@ -37,8 +38,11 @@ func (m ShowsNextEpisodeHandler) Handle(options *str.Options, client *trakt.Clie
 
 	printer.Printf("Found next episode for id:%s and name:%s \n", options.InternalID, *result.Title)
 
-	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(result, "", "  ")
+	jsonData, err := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
+	printer.Println("write data to:" + options.Output)
 	writer.WriteJSON(options, jsonData)
 	return nil
 }
