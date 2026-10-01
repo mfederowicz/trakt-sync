@@ -56,8 +56,11 @@ func collectionFunc(cmd *Command, _ ...string) error {
 		return errors.New("warning no data to export, probably a bug")
 	}
 
-	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
+	jsonData, err := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Module, err)
+	}
+	printer.Println("write data to:" + options.Output)
 	writer.WriteJSON(options, jsonData)
 
 	return nil
