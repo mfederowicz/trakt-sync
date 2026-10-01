@@ -34,8 +34,11 @@ func (h MoviesWatchedHandler) Handle(options *str.Options, client *trakt.Client)
 	printer.Printf("Found %d result \n", len(result))
 	exportJSON := []*str.MoviesItem{}
 	exportJSON = append(exportJSON, result...)
-	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
+	jsonData, err := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
+	printer.Println("write data to:" + options.Output)
 
 	writer.WriteJSON(options, jsonData)
 
