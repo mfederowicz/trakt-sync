@@ -31,6 +31,7 @@ func (CommentsCommentsHandler) Handle(options *str.Options, client *trakt.Client
 		handler = CommentsCommentsListHandler{}
 	default:
 		printer.Println("possible types: movie,show,season,episode,list")
+		return unknownValueError("type", options.Type)
 	}
 	err := handler.Handle(options, client)
 	if err != nil {

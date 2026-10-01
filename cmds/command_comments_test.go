@@ -66,3 +66,43 @@ func TestCommentsSpoilerFlag(t *testing.T) {
 		})
 	}
 }
+
+// TestCommentsUnknownType checks comments -a comments with a missing or unknown -t ends with an error (it panicked before).
+func TestCommentsUnknownType(t *testing.T) {
+	fs := afero.NewMemMapFs()
+	assert.NoError(t, fs.MkdirAll("/unknown/", consts.X755))
+	assert.NoError(t, afero.WriteFile(fs, "/unknown/token.json", []byte("{}"), consts.X644))
+	assert.NoError(t, afero.WriteFile(fs, "/unknown/user_settings.json", []byte(`{"user":{"username":"sean"}}`), consts.X644))
+	config := cfg.DefaultConfig()
+	config.ClientID, config.ClientSecret = "a", "b"
+	config.TokenPath, config.SettingsPath = "/unknown/token.json", "/unknown/user_settings.json"
+
+	cases := map[string]struct {
+		args []string
+		want string
+	}{
+		"without -t":       {want: `comments/comments: unknown type "movies"`},
+		"plural -t movies": {args: []string{"-t", "movies"}, want: `comments/comments: unknown type "movies"`},
+		"unknown -t":       {args: []string{"-t", "bogus"}, want: `comments/comments: unknown type "bogus"`},
+	}
+	for name, tc := range cases {
+		name, tc := name, tc
+		t.Run(name, func(t *testing.T) {
+			resetAllFlags()
+			t.Cleanup(resetAllFlags)
+
+			setup := trakttest.Setup()
+			defer setup.Teardown()
+			calls := 0
+			setup.Mux.HandleFunc("/", func(http.ResponseWriter, *http.Request) {
+				calls++
+			})
+
+			args := append([]string{"-a", "comments", "-i", "55", "-comment", "this comment has more than five words"}, tc.args...)
+			captureStdout(t, func() {
+				assert.EqualError(t, CommentsCmd.Exec(fs, setup.Client, config, args), tc.want)
+			})
+			assert.Zero(t, calls)
+		})
+	}
+}

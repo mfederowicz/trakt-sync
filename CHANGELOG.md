@@ -34,6 +34,7 @@ schedule.
 
 ### Fixed
 
+- `comments -a comments` without `-t`, or with a `-t` other than `movie`, `show`, `season`, `episode` or `list` (for example the plural `movies`), stopped with `panic error:runtime error: invalid memory address or nil pointer dereference`. It now prints the possible types and stops with `unknown type "movies"`.
 - `checkin -a movie|episode|show_episode` and `comments -a comments` stopped with `panic error:runtime error: invalid memory address or nil pointer dereference` when the user settings returned by Trakt had no `connections` object (the API allows it to be missing). The checkin or comment is now sent without sharing overrides, so Trakt applies the account's own sharing settings.
 - `scrobble -a start|pause|stop -t movie`, `checkin -a movie`, `notes -a notes -t movie|show|person|rating|collection` and `comments -a comments -t movie` ignored a failed lookup of the movie, show or person (for example an unknown ID) and sent the request to Trakt without the item. They now stop with the lookup error, such as `fetch movie error:...`, and send nothing. `comments -a comments` also stopped with `panic error:runtime error: invalid memory address or nil pointer dereference` when the user settings could not be read; it now reports `user connections error:...`.
 - `checkin -a show_episode` and `scrobble -a start|pause|stop -t show_episode` without `-episode_code` and `-episode_abs` ended with exit status 0 although nothing was sent to Trakt. They now stop with `set episode ie: -episode_code 1x5 or -episode_abs 6` and exit status 1.
