@@ -874,6 +874,11 @@ func (*CommonLogic) FetchUserConnections(client *trakt.Client, options *str.Opti
 		return nil, fmt.Errorf(consts.UserSettingsError, err)
 	}
 
+	// connections is nullish in the settings response; callers copy single networks from it
+	if result.Connections == nil {
+		return new(str.Connections), nil
+	}
+
 	return result.Connections, err
 }
 
