@@ -33,8 +33,11 @@ func (UsersWatchedHandler) Handle(options *str.Options, client *trakt.Client) er
 
 	printer.Printf("Found %s user watched type:%s\n", options.UserName, options.Type)
 
-	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(watched, "", "  ")
+	jsonData, err := json.MarshalIndent(watched, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
+	printer.Println("write data to:" + options.Output)
 	writer.WriteJSON(options, jsonData)
 
 	return nil

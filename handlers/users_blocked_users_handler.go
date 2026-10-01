@@ -24,8 +24,11 @@ func (u UsersBlockedUsersHandler) Handle(options *str.Options, client *trakt.Cli
 	if err != nil {
 		return fmt.Errorf("get blocked users error:%w", err)
 	}
-	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(items, "", "  ")
+	jsonData, err := json.MarshalIndent(items, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
+	printer.Println("write data to:" + options.Output)
 	writer.WriteJSON(options, jsonData)
 
 	return nil
