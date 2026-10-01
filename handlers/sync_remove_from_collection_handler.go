@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cli"
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -27,8 +28,11 @@ func (m SyncRemoveFromCollectionHandler) Handle(options *str.Options, client *tr
 		return fmt.Errorf("remove from collection error:%w", err)
 	}
 
-	print("write result to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(result, "", "  ")
+	jsonData, err := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
+	printer.Println("write result to:" + options.Output)
 	writer.WriteJSON(options, jsonData)
 
 	return nil
