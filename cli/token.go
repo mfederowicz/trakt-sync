@@ -109,8 +109,7 @@ func refreshToken(config *cfg.Config, client *trakt.Client, options *str.Options
 	}
 
 	if resp.StatusCode == http.StatusOK {
-		tokenjson, _ := json.Marshal(newToken)
-		if err := writer.WritePrivateFile(config.TokenPath, tokenjson); err != nil {
+		if err := writer.WritePrivateJSON(config.TokenPath, newToken); err != nil {
 			printer.Println(err.Error())
 			return false
 		}
@@ -133,8 +132,7 @@ func RefreshUserSettings(config *cfg.Config, client *trakt.Client, options *str.
 	}
 
 	if resp.StatusCode == http.StatusOK {
-		settingsjson, _ := json.Marshal(newSettings)
-		if err := writer.WritePrivateFile(config.SettingsPath, settingsjson); err != nil {
+		if err := writer.WritePrivateJSON(config.SettingsPath, newSettings); err != nil {
 			printer.Println(err.Error())
 			return false
 		}

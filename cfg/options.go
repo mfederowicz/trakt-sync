@@ -657,9 +657,8 @@ func readTokenFromFile(fs afero.Fs, filePath string) (*str.Token, error) {
 func genDefaultToken(filePath string) {
 	var token str.Token
 	token.CreatedAt = time.Now().Add(-24 * time.Hour).Unix()
-	tokenjson, _ := json.Marshal(token)
-	// a failed write surfaces as a read error in readTokenFromFile
-	_ = writer.WritePrivateFile(filePath, tokenjson)
+	// a failed encode or write surfaces as a read error in readTokenFromFile
+	_ = writer.WritePrivateJSON(filePath, token)
 }
 
 // readUserSettingsFromFile reads the user settings from the specified file
@@ -690,9 +689,8 @@ func genDefaultSettings(filePath string) {
 	tz := "UTC"
 	a.Timezone = &tz
 	settings.Account = a
-	settingsjson, _ := json.Marshal(settings)
-	// a failed write surfaces as a read error in readUserSettingsFromFile
-	_ = writer.WritePrivateFile(filePath, settingsjson)
+	// a failed encode or write surfaces as a read error in readUserSettingsFromFile
+	_ = writer.WritePrivateJSON(filePath, settings)
 }
 
 // GetOptionTime config Time depends on Module name

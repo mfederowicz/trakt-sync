@@ -2,9 +2,11 @@
 package writer
 
 import (
+	"math"
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"testing"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -63,4 +65,28 @@ func TestWriteJSONPrivate(t *testing.T) {
 	options := &str.Options{Output: filepath.Join(t.TempDir(), "export.json")}
 	WriteJSON(options, []byte("[]"))
 	assertPrivateFile(t, options.Output, "[]")
+}
+
+// TestWritePrivateJSON checks the value is written as JSON (0600), and an encoding error
+// leaves an existing file as it was instead of replacing it with an empty one.
+func TestWritePrivateJSON(t *testing.T) {
+	t.Run("encodes and writes", func(t *testing.T) {
+		path := filepath.Join(t.TempDir(), "token.json")
+		if err := WritePrivateJSON(path, map[string]string{"access_token": "abc"}); err != nil {
+			t.Fatal(err)
+		}
+		assertPrivateFile(t, path, `{"access_token":"abc"}`)
+	})
+
+	t.Run("encoding error keeps the old file", func(t *testing.T) {
+		path := filepath.Join(t.TempDir(), "token.json")
+		if err := os.WriteFile(path, []byte(`{"access_token":"old"}`), consts.X600); err != nil {
+			t.Fatal(err)
+		}
+		err := WritePrivateJSON(path, math.Inf(1)) // json cannot encode +Inf
+		if err == nil || !strings.Contains(err.Error(), "encode token.json") {
+			t.Fatalf("err = %v, want an encode token.json error", err)
+		}
+		assertPrivateFile(t, path, `{"access_token":"old"}`)
+	})
 }
