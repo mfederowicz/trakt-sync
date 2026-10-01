@@ -18,7 +18,7 @@ import (
 // CalendarsNewShowsHandler struct for handler
 type CalendarsNewShowsHandler struct{}
 
-// Handle to handle calendars: shows action
+// Handle to handle calendars: {my,all}_new_shows action
 func (CalendarsNewShowsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Get calendar: " + options.Action)
 	result, err := fetchCalendarNewShows(client, options)

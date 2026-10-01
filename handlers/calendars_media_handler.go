@@ -14,7 +14,7 @@ import (
 // CalendarsMediaHandler struct for handler
 type CalendarsMediaHandler struct{}
 
-// Handle to handle calendars: {my,all}-media action
+// Handle to handle calendars: {my,all}_media action
 func (CalendarsMediaHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Get calendar: " + options.Action)
 	target := calendarTarget(options.Action)
