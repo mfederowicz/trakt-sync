@@ -2,7 +2,6 @@
 package cli
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 	"os"
@@ -40,8 +39,7 @@ func deviceCodeVerification(deviceToken *str.NewDeviceToken, client *trakt.Clien
 	}
 
 	if resp.StatusCode == http.StatusOK {
-		tokenjson, _ := json.Marshal(token)
-		if err := writer.WritePrivateFile(config.TokenPath, tokenjson); err != nil {
+		if err := writer.WritePrivateJSON(config.TokenPath, token); err != nil {
 			printer.Println(err.Error())
 		}
 
