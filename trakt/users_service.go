@@ -242,7 +242,7 @@ func (u *UsersService) GetFollowRequests(ctx context.Context, options *uri.ListO
 func (u *UsersService) ApproveFollowRequest(ctx context.Context, request int) (*str.FollowRequest, *str.Response, error) {
 	var url string
 
-	url = fmt.Sprintf("users/requests/%d", *&request)
+	url = fmt.Sprintf("users/requests/%d", request)
 
 	u.client.debug("approve follower")
 	req, err := u.client.NewRequest(http.MethodPost, url, nil)
@@ -264,7 +264,7 @@ func (u *UsersService) ApproveFollowRequest(ctx context.Context, request int) (*
 func (u *UsersService) DenyFollowRequest(ctx context.Context, request int) (*str.FollowRequest, *str.Response, error) {
 	var url string
 
-	url = fmt.Sprintf("users/requests/%d", *&request)
+	url = fmt.Sprintf("users/requests/%d", request)
 
 	u.client.debug("deny follower")
 	req, err := u.client.NewRequest(http.MethodDelete, url, nil)
