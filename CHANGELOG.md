@@ -38,6 +38,7 @@ schedule.
 - `calendars` actions use underscores like the other modules: `my_shows`, `all_new_shows`, `hot_releases` and so on. The old hyphenated names (`my-shows`, `all-new-shows`, `hot-releases`, ...) still work, but print a deprecation note. Export file names are unchanged.
 - Library: a `trakt` client without `WithUserAgent` now sends `User-Agent: trakt-sync-go` (`trakt.DefaultUserAgent`), so apps built on the library no longer show up as the trakt-sync CLI. The CLI still sends `trakt-sync/<version>`. The package docs now tell apps to set their own User-Agent with `WithUserAgent`.
 - CI also builds and tests the `trakt`, `str` and `uri` packages and `example/` with the Go version in `go.mod` (1.21), so the library keeps working for that minimum.
+- `people -a lists` has new `-t` (`all`, `personal`, `official`, `watchlist`, `favorites`) and `-s` (`popular`, `likes`, `comments`, `items`, `added`, `updated`) flags and asks for `personal` lists sorted by `popular` by default. Before, it sent the action name as the list type and `rank` as the sort, which are not valid values. The Trakt API currently returns no lists for any person on this route, so the command still ends with `empty lists`.
 - CI fails when the test coverage of a package drops below its floor in `.github/coverage-floors.txt`; `make cover-check` runs the same check locally.
 
 ### Deprecated
@@ -47,7 +48,6 @@ schedule.
 
 ### Fixed
 
-- `people -a lists` asked for `/people/{id}/lists/lists/rank`: the action name was sent as the list type and `rank` as the sort, neither of which the Trakt API accepts. It now asks for `personal` lists sorted by `popular`, the API defaults, and the new `-t` (`all`, `personal`, `official`, `watchlist`, `favorites`) and `-s` (`popular`, `likes`, `comments`, `items`, `added`, `updated`) flags choose another list type or sort.
 - `scrobble -progress` was ignored, so scrobbles were sent without a progress value; a `scrobble -a stop` could therefore not mark an item as watched. The given progress is now sent.
 - `comments -spoiler` was ignored: comments and replies were always posted without the spoiler flag. `-spoiler` now marks them as spoilers.
 - If the new token (after login or a token refresh) or the refreshed user settings could not be encoded, `token.json` / `user_settings.json` was overwritten with an empty file. The encoding error is now reported and the stored file is kept.

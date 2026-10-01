@@ -7,7 +7,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 - ✅ implemented: a service method in `trakt/` calls this exact route.
 - 🟡 needs checking: a service method calls this route only through a generic path parameter (for example `sync/collection/%s`); confirm the CLI accepts this value.
 - ⬜ missing: no service method calls this route.
-- ⚠️ not served: listed in the contract, but the live API does not serve it (404, 401 for every API app, or another route answers; see [Findings](#findings)). The Go method column shows whether trakt-sync implements it anyway.
+- ⚠️ not served: listed in the contract, but the live API does not serve it (404, 401 for every API app, always empty, or another route answers; see [Findings](#findings)). The Go method column shows whether trakt-sync implements it anyway.
 - ➖ not used: the CLI has no use for this route; the Go method column says why. Not work to pick.
 - Update this file in the same PR that adds or removes an endpoint.
 
@@ -29,7 +29,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`networks`](#networks) | 1 | 0 | 0 | 0 | 0 | 1 |
 | [`notes`](#notes) | 5 | 0 | 0 | 0 | 0 | 5 |
 | [`oauth`](#oauth) | 3 | 0 | 0 | 0 | 2 | 5 |
-| [`people`](#people) | 8 | 0 | 0 | 0 | 0 | 8 |
+| [`people`](#people) | 7 | 0 | 0 | 1 | 0 | 8 |
 | [`recommendations`](#recommendations) | 4 | 0 | 0 | 0 | 0 | 4 |
 | [`scrobble`](#scrobble) | 3 | 0 | 0 | 0 | 0 | 3 |
 | [`search`](#search) | 6 | 0 | 0 | 0 | 0 | 6 |
@@ -42,7 +42,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 85 | 0 | 0 | 18 | 1 | 104 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **305** | **0** | **0** | **27** | **3** | **335** |
+| **Total** | **304** | **0** | **0** | **28** | **3** | **335** |
 
 ## calendars
 
@@ -221,7 +221,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/people/updates/id/{start_date}` | Get recently updated people Trakt IDs | `PeopleService.GetRecentlyUpdatedPeopleTraktIDs` |
 | ✅ | GET | `/people/updates/{start_date}` | Get recently updated people | `PeopleService.GetRecentlyUpdatedPeople` |
 | ✅ | GET | `/people/{id}/` | Get a single person | `PeopleService.GetSinglePerson` |
-| ✅ | GET | `/people/{id}/lists/{type}/{sort}` | Get lists containing this person | `PeopleService.GetListsContainingThisPerson` |
+| ⚠️ | GET | `/people/{id}/lists/{type}/{sort}` | Get lists containing this person | `PeopleService.GetListsContainingThisPerson` |
 | ✅ | GET | `/people/{id}/movies` | Get movie credits | `PeopleService.GetMovieCredits` |
 | ✅ | POST | `/people/{id}/refresh` | Refresh person metadata | `PeopleService.RefreshPersonMetadata` |
 | ✅ | POST | `/people/{id}/report` | Report a person | `PeopleService.ReportPerson` |
@@ -526,6 +526,7 @@ Differences between the service code and the contract, found while building this
 | - | `GET /shows/streaming/{period}` | live API returns 404 `{"error":"endpoint removed"}` (checked 2026-09-24). Upstream issue: TBD |
 | `YounifyService.*` | `/younify/*` (all 5 routes) | `GET /younify/connections` returns 401 for the maintainer's OAuth token, and the developer portal's own "try it" gets 401 too (checked 2026-09-25); younify looks limited to Trakt's own apps. The other 4 routes change the account and were not tried; assumed the same. The CLI explains a 401. Upstream issue: TBD |
 | `UsersService.GetMonthInReview`, `GetYearInReview`, `GetSocialActivity` | `GET /users/{id}/mir/{year}/{month}`, `/users/{id}/yir/{year}`, `/users/{id}/{type}/activities` | live API returns 401 while `GET /users/reactions/comments` (OAuth required) works with the same token (checked 2026-09-25); looks not open to API apps. The CLI explains the 401. Upstream issue: TBD |
+| `PeopleService.GetListsContainingThisPerson` | `GET /people/{id}/lists/{type}/{sort}` | live API returns 200 with an empty array and `X-Pagination-Item-Count: 0` for every person, type and sort tried, while `GET /movies/{id}/lists/{type}/{sort}` returns lists (checked 2026-10-01). Upstream issue: TBD |
 | - | `PUT /users/avatar`, `PUT /users/set_cover` | the contract marks both Limited Access: "available only to first-party Trakt applications. Third-party applications receive a `401` response even with a valid OAuth token." Not implemented. |
 | `UsersService.GetDataSyncs`, `GetDataSync`, `GetDataSyncItems`, `UndoDataSync` | `/users/syncs/*` (all 6 routes) | `GET /users/syncs/` returns 401 with the maintainer's token (checked 2026-09-25), which works on other OAuth routes such as `/users/reactions/comments`; looks not open to API apps. The other routes were not tried; assumed the same. The CLI explains a 401. Upstream issue: TBD |
 | `UsersService.GetPlexSettings`, `UpdatePlexSettings`, `ConnectPlex`, `DisconnectPlex`, `GetPlexServers`, `GetPlexServerAccounts`, `SyncPlex` | `/users/settings/plex/*` (all 7 routes) | `GET /users/settings/plex/` and `GET /users/settings/plex/servers` return 401 with the maintainer's token (checked 2026-09-25), which works on other OAuth routes; looks not open to API apps. The write routes were not tried; assumed the same. The CLI explains a 401 (a Plex `error_code` 401 is reported as a Plex error instead). Upstream issue: TBD |

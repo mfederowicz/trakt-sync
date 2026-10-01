@@ -22,6 +22,8 @@ $ ./trakt-sync people -a lists -i john-wayne -t official -s likes
 ```
 `-t` is one of: `all`, `personal` (default), `official`, `watchlist`, `favorites`.
 `-s` is one of: `popular` (default), `likes`, `comments`, `items`, `added`, `updated`.
+
+The Trakt API currently returns no lists for any person on this route (checked 2026-10-01), so the command ends with `empty lists`.
 ##### Report a person
 ```console
 $ ./trakt-sync people -a report -i john-wayne -r metadata -message "birthday is wrong"
