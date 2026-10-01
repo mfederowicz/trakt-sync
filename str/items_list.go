@@ -31,25 +31,22 @@ func (i ItemsList) Uniq() *ItemsList {
 	return &i
 }
 
-// GetUniqueOldest returns a unique slice of Items, keeping the one with the oldest WatchedAt per ID.
-func (ItemsList) GetUniqueOldest(items *[]ExportlistItem) *[]ExportlistItem {
+// GetUniqueOldest returns a unique slice of Items, keeping the one with the oldest WatchedAt (or RatedAt) per ID.
+func (i ItemsList) GetUniqueOldest(items *[]ExportlistItem) *[]ExportlistItem {
+	if items == nil {
+		return nil
+	}
 	unique := map[int64]ExportlistItem{}
 	for _, item := range *items {
-		id := *item.IDs.Trakt
-		if item.WatchedAt == nil && item.RatedAt == nil {
+		date := i.itemDate(item)
+		if date == nil || item.IDs == nil || item.IDs.Trakt == nil {
 			continue // skip items with nil ID or WatchedAt
 		}
 
+		id := *item.IDs.Trakt
 		existing, found := unique[id]
-		if item.WatchedAt != nil {
-			if !found || item.WatchedAt.After(existing.WatchedAt.Time) {
-				unique[id] = item
-			}
-		}
-		if item.RatedAt != nil {
-			if !found || item.RatedAt.After(existing.RatedAt.Time) {
-				unique[id] = item
-			}
+		if !found || date.Before(i.itemDate(existing).Time) {
+			unique[id] = item
 		}
 	}
 	result := make([]ExportlistItem, consts.ZeroValue, len(unique))
@@ -59,8 +56,19 @@ func (ItemsList) GetUniqueOldest(items *[]ExportlistItem) *[]ExportlistItem {
 	return &result
 }
 
+// itemDate returns the date an item is compared by: WatchedAt, or RatedAt when it was not watched.
+func (ItemsList) itemDate(item ExportlistItem) *Timestamp {
+	if item.WatchedAt != nil {
+		return item.WatchedAt
+	}
+	return item.RatedAt
+}
+
 // GetUniqIDs returns a unique slice of ints.
 func (ItemsList) GetUniqIDs(input *[]int64) *[]int64 {
+	if input == nil {
+		return nil
+	}
 	seen := make(map[int64]struct{}, len(*input))
 	uniq := make([]int64, consts.ZeroValue, len(*input))
 
