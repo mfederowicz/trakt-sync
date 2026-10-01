@@ -982,6 +982,9 @@ func UpdateOptionsWithCommandScrobbleFlags(options *str.Options) *str.Options {
 	if len(*_scrobbleEpisodeCode) > consts.ZeroValue {
 		options.EpisodeCode = *_scrobbleEpisodeCode
 	}
+	if *_scrobbleProgress > consts.ZeroValue {
+		options.Progress = *_scrobbleProgress
+	}
 
 	return options
 }
