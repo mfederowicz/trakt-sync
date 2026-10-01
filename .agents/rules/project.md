@@ -129,9 +129,12 @@ meaningful fix is done. There is no fixed schedule.
    / `Fixed` subsections above it.
 3. Update the compare links at the bottom: `[Unreleased]` compares `vX.Y.Z...HEAD`,
    and a new `[X.Y.Z]` compares the previous tag with `vX.Y.Z`.
-4. Commit the bump as `changelog: vX.Y.Z` on the current branch, usually the
+4. Update the static badges at the top of `README.md`: `version` to `vX.Y.Z`,
+   and `coverage` to the total from `go tool cover -func=coverage.out` after
+   `make cover`, rounded down to a whole percent.
+5. Commit the bump as `changelog: vX.Y.Z` on the current branch, usually the
    last PR before the release. There is no dedicated release branch or PR.
-5. The maintainer tags `vX.Y.Z` on `main` and pushes the tag. That runs
+6. The maintainer tags `vX.Y.Z` on `main` and pushes the tag. That runs
    `.github/workflows/release.yaml`, where GoReleaser builds the binaries, sets
    the version ldflags and publishes the GitHub release. Agents never create
    tags, push tags or publish releases.
