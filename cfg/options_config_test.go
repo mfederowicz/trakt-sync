@@ -477,3 +477,49 @@ func TestGetOutputForModuleByAction(t *testing.T) {
 		})
 	}
 }
+
+func TestMergeConfigsVerbose(t *testing.T) {
+	cases := []struct {
+		name    string
+		args    []string
+		file    bool
+		flagMap string
+		want    bool
+	}{
+		{name: "off by default", want: false},
+		{name: "config file turns it on", file: true, want: true},
+		{name: "-v turns it on", args: []string{"-v"}, want: true},
+		{name: "-v=false wins over the config file", args: []string{"-v=false"}, file: true, want: false},
+		{name: "-v given after the module name turns it on", flagMap: "true", want: true},
+	}
+
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			flagMap := useFlags(t, tc.args...)
+			if tc.flagMap != consts.EmptyString {
+				// a flag parsed by the module flag set is in the map, but not among the used process flags
+				flagMap["v"] = tc.flagMap
+			}
+			file := &Config{ClientID: "client-id", ClientSecret: "client-secret", TokenPath: testTokenPath, SettingsPath: testSettingsPath, Verbose: tc.file}
+
+			got, err := MergeConfigs(DefaultConfig(), file, flagMap)
+			if !assert.NoError(t, err) {
+				return
+			}
+			assert.Equal(t, tc.want, got.Verbose)
+		})
+	}
+}
+
+func TestSyncOptionsFromFlagsKeepsConfigVerbose(t *testing.T) {
+	flagMap := useFlags(t)
+	config := validConfig()
+	config.Verbose = true
+
+	options, err := SyncOptionsFromFlags(credentialsFs(t), config, flagMap)
+	if !assert.NoError(t, err) {
+		return
+	}
+	assert.True(t, options.Verbose, "verbose from the config file survives the merge with the module flags")
+}

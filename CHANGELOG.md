@@ -48,6 +48,7 @@ schedule.
 
 ### Fixed
 
+- `verbose = true` in the config file had no effect: verbose output only appeared with `-v`. The config file value is now used, and `-v=false` before the module name turns it off for one run.
 - `scrobble -progress` was ignored, so scrobbles were sent without a progress value; a `scrobble -a stop` could therefore not mark an item as watched. The given progress is now sent.
 - `comments -spoiler` was ignored: comments and replies were always posted without the spoiler flag. `-spoiler` now marks them as spoilers.
 - If the new token (after login or a token refresh) or the refreshed user settings could not be encoded, `token.json` / `user_settings.json` was overwritten with an empty file. The encoding error is now reported and the stored file is kept.

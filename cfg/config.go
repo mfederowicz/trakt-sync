@@ -269,15 +269,15 @@ func processOptionTokenPath(defaultConfig *Config, fileConfig *Config, _ map[str
 	return tokenPath, nil
 }
 
-func processOptionVerbose(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string, _ map[string]bool) bool {
+func processOptionVerbose(defaultConfig *Config, fileConfig *Config, flagConfig map[string]string, flagset map[string]bool) bool {
 	// process if field is set in config file
 	if fileConfig.Verbose {
 		defaultConfig.Verbose = fileConfig.Verbose
 	}
-	// process if flag is set
+	// process if flag is set; the map always holds the flag default, so false only counts when -v was given
 	f := "v"
 	boolValue, err := strconv.ParseBool(flagConfig[f])
-	if err == nil {
+	if err == nil && (boolValue || flagset[f]) {
 		defaultConfig.Verbose = boolValue
 	}
 	return defaultConfig.Verbose
