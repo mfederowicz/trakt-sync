@@ -30,7 +30,9 @@ jobs:
             echo
             echo "| Package | Coverage |"
             echo "|---|---|"
-            awk '/coverage:/ { p = ""; c = ""; for (i = 1; i <= NF; i++) { if ($i ~ /^github\.com\//) p = $i; if ($i == "coverage:") c = $(i+1) } sub("^github.com/mfederowicz/trakt-sync/?", "", p); if (p == "") p = "(root)"; print "| `" p "` | " c " |" }' test-output.txt
+            # skipped rows can never be meaningful: (root) is main.go wiring, consts has only constants,
+            # test and trakt/trakttest are test helpers; the total still covers every package
+            awk -v skip=" (root) consts test trakt/trakttest " '/coverage:/ { p = ""; c = ""; for (i = 1; i <= NF; i++) { if ($i ~ /^github\.com\//) p = $i; if ($i == "coverage:") c = $(i+1) } sub("^github.com/mfederowicz/trakt-sync/?", "", p); if (p == "") p = "(root)"; if (index(skip, " " p " ")) next; print "| `" p "` | " c " |" }' test-output.txt
             echo
             echo "**Total:** $(go tool cover -func=coverage.out | tail -1 | awk '{print $NF}')"
           } >> "$GITHUB_STEP_SUMMARY"
