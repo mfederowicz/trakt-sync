@@ -39,7 +39,7 @@ func (CalendarsMoviesHandler) Handle(options *str.Options, client *trakt.Client)
 }
 
 func fetchCalendarMovies(client *trakt.Client, options *str.Options) ([]*str.CalendarList, error) {
-	if options.Action == "all-movies" {
+	if options.Action == consts.AllMovies {
 		actionType = consts.ActionTypeAll
 	}
 

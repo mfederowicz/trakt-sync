@@ -8,10 +8,10 @@ func TestCalendarTarget(t *testing.T) {
 		action string
 		want   string
 	}{
-		{action: "my-media", want: "my"},
-		{action: "all-media", want: "all"},
-		{action: "my-streaming", want: "my"},
-		{action: "all-streaming", want: "all"},
+		{action: "my_media", want: "my"},
+		{action: "all_media", want: "all"},
+		{action: "my_streaming", want: "my"},
+		{action: "all_streaming", want: "all"},
 	}
 
 	for _, tt := range tests {

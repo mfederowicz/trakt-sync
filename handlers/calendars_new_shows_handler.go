@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cli"
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -38,7 +39,7 @@ func (CalendarsNewShowsHandler) Handle(options *str.Options, client *trakt.Clien
 }
 
 func fetchCalendarNewShows(client *trakt.Client, options *str.Options) ([]*str.CalendarList, error) {
-	if options.Action == "all-new-shows" {
+	if options.Action == consts.AllNewShows {
 		actionType = "all"
 	}
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}

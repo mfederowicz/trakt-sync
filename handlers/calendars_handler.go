@@ -25,7 +25,7 @@ type CalendarsHandler interface {
 
 // calendarTarget returns the calendar target (my or all) encoded in a {my,all}-* action.
 func calendarTarget(action string) string {
-	if strings.HasPrefix(action, consts.ActionTypeAll+"-") {
+	if strings.HasPrefix(action, consts.ActionTypeAll+consts.ActionSeparator) {
 		return consts.ActionTypeAll
 	}
 	return consts.ActionTypeMy
