@@ -43,6 +43,9 @@ func historyFunc(cmd *Command, _ ...string) error {
 	findDuplicates := []any{}
 	for _, data := range historyLists {
 		findDuplicates, exportJSON, err = cmd.ExportListProcess(data, options, findDuplicates, exportJSON)
+		if err != nil {
+			return fmt.Errorf("export %s item: %w", options.Module, err)
+		}
 	}
 
 	if len(exportJSON) == consts.ZeroValue {
