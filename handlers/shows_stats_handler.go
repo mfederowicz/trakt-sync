@@ -15,7 +15,7 @@ import (
 )
 
 // ShowsStatsHandler struct for handler
-type ShowsStatsHandler struct{ common CommonLogic }
+type ShowsStatsHandler struct{}
 
 // Handle to handle shows: stats action
 func (m ShowsStatsHandler) Handle(options *str.Options, client *trakt.Client) error {

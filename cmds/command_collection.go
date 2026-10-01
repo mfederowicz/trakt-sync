@@ -66,10 +66,6 @@ func collectionFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	collectionDumpTemplate = `{{.Head}} {{.Pattern}}{{end}}`
-)
-
 func init() {
 	CollectionCmd.Run = collectionFunc
 }

@@ -42,10 +42,6 @@ func countriesFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	countriesDumpTemplate = ``
-)
-
 func init() {
 	CountriesCmd.Run = countriesFunc
 }

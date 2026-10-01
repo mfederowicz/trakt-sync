@@ -11,7 +11,7 @@ import (
 )
 
 // SyncUpdateWatchlistItemHandler struct for handler
-type SyncUpdateWatchlistItemHandler struct{ common CommonLogic }
+type SyncUpdateWatchlistItemHandler struct{}
 
 // Handle to handle sync: update_watchlist_item action
 func (m SyncUpdateWatchlistItemHandler) Handle(options *str.Options, client *trakt.Client) error {

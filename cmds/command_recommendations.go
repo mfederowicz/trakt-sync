@@ -51,10 +51,6 @@ func recommendationsFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	recommendationsDumpTemplate = ``
-)
-
 func init() {
 	RecommendationsCmd.Run = recommendationsFunc
 }

@@ -13,7 +13,7 @@ import (
 )
 
 // UsersBlockHandler struct for handler
-type UsersBlockHandler struct{ common CommonLogic }
+type UsersBlockHandler struct{}
 
 // Handle to handle users: block action
 func (m UsersBlockHandler) Handle(options *str.Options, client *trakt.Client) error {

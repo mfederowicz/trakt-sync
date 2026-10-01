@@ -14,7 +14,7 @@ import (
 )
 
 // SyncRemovePlaybackHandler struct for handler
-type SyncRemovePlaybackHandler struct{ common CommonLogic }
+type SyncRemovePlaybackHandler struct{}
 
 // Handle to handle sync: remove_playback action
 func (m SyncRemovePlaybackHandler) Handle(options *str.Options, client *trakt.Client) error {

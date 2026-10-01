@@ -8,13 +8,9 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/handlers"
-	"github.com/mfederowicz/trakt-sync/str"
 )
 
 var (
-	username   = "me"
-	exportData []*str.PersonalList
-
 	_usersSort                   = flag.String("s", cfg.DefaultConfig().UsersSort, consts.SortUsage)
 	_usersListID                 = flag.String("i", cfg.DefaultConfig().ID, consts.UserlistUsage)
 	_usersListItemID             = UsersCmd.Flag.Int("list_item_id", cfg.DefaultConfig().ListItemID, consts.ListItemIDUsage)
@@ -171,10 +167,6 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 
 	return nil
 }
-
-var (
-	usersListItemsDumpTemplate = `{{.Head}} {{.Pattern}}{{end}}`
-)
 
 func init() {
 	UsersCmd.Run = usersListsFunc

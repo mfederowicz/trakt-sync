@@ -10,13 +10,11 @@ import (
 	"github.com/mfederowicz/trakt-sync/cmds"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
-	"github.com/mfederowicz/trakt-sync/str"
 
 	"github.com/spf13/afero"
 )
 
 var (
-	options     = &str.Options{}
 	_verbose    = flag.Bool("v", false, consts.VerboseUsage)
 	_version    = flag.Bool("version", false, consts.VersionUsage)
 	_configPath = flag.String("c", cfg.DefaultConfig().ConfigPath, consts.ConfigUsage)

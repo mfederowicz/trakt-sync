@@ -11,7 +11,7 @@ import (
 )
 
 // SyncUpdateFavoriteItemHandler struct for handler
-type SyncUpdateFavoriteItemHandler struct{ common CommonLogic }
+type SyncUpdateFavoriteItemHandler struct{}
 
 // Handle to handle sync: update_favorite_item action
 func (m SyncUpdateFavoriteItemHandler) Handle(options *str.Options, client *trakt.Client) error {

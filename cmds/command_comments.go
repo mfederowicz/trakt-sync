@@ -82,10 +82,6 @@ func commentsFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	commentsDumpTemplate = ``
-)
-
 func init() {
 	CommentsCmd.Run = commentsFunc
 }

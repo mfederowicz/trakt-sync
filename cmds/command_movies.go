@@ -107,10 +107,6 @@ func moviesFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	moviesDumpTemplate = ``
-)
-
 func init() {
 	MoviesCmd.Run = moviesFunc
 }

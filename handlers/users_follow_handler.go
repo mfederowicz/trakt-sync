@@ -16,7 +16,7 @@ import (
 )
 
 // UsersFollowHandler struct for handler
-type UsersFollowHandler struct{ common CommonLogic }
+type UsersFollowHandler struct{}
 
 // Handle to handle users: follow action
 func (m UsersFollowHandler) Handle(options *str.Options, client *trakt.Client) error {

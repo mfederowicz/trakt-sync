@@ -42,10 +42,6 @@ func languagesFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	languagesDumpTemplate = ``
-)
-
 func init() {
 	LanguagesCmd.Run = languagesFunc
 }

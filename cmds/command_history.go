@@ -61,10 +61,6 @@ func historyFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	historyDumpTemplate = ``
-)
-
 func init() {
 	HistoryCmd.Run = historyFunc
 }

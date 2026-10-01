@@ -114,10 +114,6 @@ type Config struct {
 	WatchWindow       int       `toml:"watch_window"`
 }
 
-var (
-	versionFlag bool
-)
-
 // InitConfig of app
 func InitConfig(fs afero.Fs) (*Config, error) {
 	flagMap := map[string]string{}

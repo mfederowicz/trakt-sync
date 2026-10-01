@@ -57,10 +57,6 @@ func peopleFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	peopleDumpTemplate = `{{.Head}} {{.Pattern}}{{end}}`
-)
-
 func init() {
 	PeopleCmd.Run = peopleFunc
 }

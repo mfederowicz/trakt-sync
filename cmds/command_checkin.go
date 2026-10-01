@@ -55,10 +55,6 @@ func checkinFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	checkinDumpTemplate = ``
-)
-
 func init() {
 	CheckinCmd.Run = checkinFunc
 }

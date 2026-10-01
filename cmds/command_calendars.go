@@ -16,7 +16,6 @@ var (
 	_calAction    = CalendarsCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
 	_calStartDate = CalendarsCmd.Flag.String("start_date", time.Now().Format("2006-01-02"), consts.StartDateUsage)
 	_calDays      = CalendarsCmd.Flag.Int("days", 7, consts.DaysUsage)
-	actionType    = "my"
 )
 
 // CalendarsCmd process selected user calendars
@@ -77,10 +76,6 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 
 	return nil
 }
-
-var (
-	calendarsDumpTemplate = `{{.Head}} {{.Pattern}}{{end}}`
-)
 
 // calendarsActions lists the calendars actions; each one also accepts its old hyphenated name (my-shows)
 var calendarsActions = []string{

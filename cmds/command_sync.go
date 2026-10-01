@@ -113,10 +113,6 @@ func syncFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	syncDumpTemplate = ``
-)
-
 func init() {
 	SyncCmd.Run = syncFunc
 }

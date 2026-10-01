@@ -113,10 +113,6 @@ func showsFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	showsDumpTemplate = ``
-)
-
 func init() {
 	ShowsCmd.Run = showsFunc
 }

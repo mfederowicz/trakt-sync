@@ -60,10 +60,6 @@ func notesFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	notesDumpTemplate = ``
-)
-
 func init() {
 	NotesCmd.Run = notesFunc
 }

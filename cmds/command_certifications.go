@@ -42,10 +42,6 @@ func certificationsFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	certificationsDumpTemplate = ``
-)
-
 func init() {
 	CertificationsCmd.Run = certificationsFunc
 }
