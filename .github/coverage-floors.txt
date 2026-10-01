@@ -5,7 +5,7 @@ buffer 60
 cfg 88
 cli 78
 cmds 70
-handlers 67
+handlers 73
 printer 78
 str 48
 trakt 70
