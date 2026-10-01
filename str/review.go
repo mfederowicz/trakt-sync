@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Review represents JSON month / year in review object; streaming_services is sent for a month only

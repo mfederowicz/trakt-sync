@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // UserLastActivities represents JSON user activities object

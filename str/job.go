@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Job represents JSON crew member positions

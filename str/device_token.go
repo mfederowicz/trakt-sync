@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // DeviceToken represents JSON response for /device/token

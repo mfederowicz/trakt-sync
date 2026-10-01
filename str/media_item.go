@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // MediaItem represents JSON media item object: a movie or a show with its stats

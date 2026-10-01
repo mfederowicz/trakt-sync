@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Lists represents JSON lists object

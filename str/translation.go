@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Translation represents JSON Translation object

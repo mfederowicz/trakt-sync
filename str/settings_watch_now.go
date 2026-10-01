@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // SettingsWatchNow represents JSON watch now settings

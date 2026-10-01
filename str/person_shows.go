@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PersonShows represents JSON cast and crew object for person

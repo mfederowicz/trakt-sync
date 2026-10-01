@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PlexWebhook represents JSON Plex real-time scrobbler webhook; url is null unless the user is VIP

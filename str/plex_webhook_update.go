@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PlexWebhookUpdate represents JSON Plex webhook values to change

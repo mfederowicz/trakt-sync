@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // SmartListImages represents JSON smart list images object

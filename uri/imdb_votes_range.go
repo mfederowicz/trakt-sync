@@ -1,4 +1,3 @@
-// Package uri used for url operations
 package uri
 
 import (

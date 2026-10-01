@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // NewDeviceToken represents JSON when request for new token with code

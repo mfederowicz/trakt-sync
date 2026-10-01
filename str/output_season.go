@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // OutputSeason represents JSON season object used in deduplication

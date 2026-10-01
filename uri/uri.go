@@ -1,4 +1,3 @@
-// Package uri used for url operations
 package uri
 
 import (
@@ -64,7 +63,7 @@ type ListOptions struct {
 	SortHow           string           `url:"sort_how,omitempty"`
 }
 
-// AddQuery adds query parameters to s.
+// AddQuery adds query parameters to s. Nil options add no query.
 func AddQuery(s string, opts any) (string, error) {
 	u, err := url.Parse(s)
 	if err != nil {
@@ -73,6 +72,9 @@ func AddQuery(s string, opts any) (string, error) {
 
 	// Use reflection to flatten ListOptions fields
 	v := reflect.ValueOf(opts)
+	if !v.IsValid() || (v.Kind() == reflect.Pointer && v.IsNil()) {
+		return u.String(), nil
+	}
 	qs := url.Values{}
 
 	if err := flatOptsStruct(v, &qs); err != nil {

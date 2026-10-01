@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ListReport represents JSON list report object

@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // WatchNowSources represents JSON watch now sources for one country

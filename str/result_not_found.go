@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ResultNotFound represents JSON not found object

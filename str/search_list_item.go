@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // SearchListItem represents JSON search response object

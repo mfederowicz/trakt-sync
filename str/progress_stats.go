@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ProgressStats represents JSON watch stats in show progress

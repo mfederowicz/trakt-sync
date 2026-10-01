@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Friend represents JSON friend object

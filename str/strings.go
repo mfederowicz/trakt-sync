@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 import (
@@ -8,7 +7,6 @@ import (
 	"github.com/mfederowicz/trakt-sync/buffer"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
-	"github.com/wissance/stringFormatter"
 )
 
 var timestampType = reflect.TypeOf(Timestamp{})
@@ -130,14 +128,4 @@ func ContainInt(key int, s []int) bool {
 	}
 
 	return false
-}
-
-// Formatc helper function for FormatComplex in stringFormatter
-func Formatc(pattern string, data map[string]any) string {
-	return stringFormatter.FormatComplex(pattern, data)
-}
-
-// Format helper function for Fomat in stringFormatter
-func Format(pattern string, args ...any) string {
-	return stringFormatter.Format(pattern, args...)
 }

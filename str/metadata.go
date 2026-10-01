@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Metadata represents JSON media metadata object

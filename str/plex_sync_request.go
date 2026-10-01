@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PlexSyncRequest represents JSON Plex sync now request; no server_id syncs every selected server

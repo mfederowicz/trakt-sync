@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // YounifyConnectResult represents JSON streaming connection response with the web auth URL

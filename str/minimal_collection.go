@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // MinimalCollection represents JSON minimal movie or episode collection: Trakt ID -> collected_at

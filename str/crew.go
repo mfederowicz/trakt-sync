@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Crew represents JSON crew object

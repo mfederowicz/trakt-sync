@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ReviewStatsCategories represents JSON review stats per category; lists_counts is sent for all media only

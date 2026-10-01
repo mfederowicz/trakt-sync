@@ -1,4 +1,3 @@
-// Package uri used for url operations
 package uri
 
 // SyncProgressOptions query options for sync/progress/up_next and sync/progress/watched

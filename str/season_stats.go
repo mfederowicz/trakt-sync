@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // SeasonStats represents JSON season stats object

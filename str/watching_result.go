@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // WatchingResult represents JSON watching result object

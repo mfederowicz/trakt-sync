@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // UserBlocked represents JSON user blocked object

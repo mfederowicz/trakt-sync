@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Release represents JSON release object

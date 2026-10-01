@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PlexServers represents JSON list of the user's Plex servers

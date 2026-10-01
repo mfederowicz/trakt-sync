@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PlexLibrary represents JSON Plex library; selected tells if it is in the sync selection

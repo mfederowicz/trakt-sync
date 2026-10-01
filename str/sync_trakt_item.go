@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // SyncTraktItem represents JSON resolved Trakt movie, show or episode of a sync item; show is set for an episode

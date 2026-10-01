@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // UserProfile represents JSON user profile object

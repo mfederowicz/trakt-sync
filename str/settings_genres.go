@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // SettingsGenres represents JSON favorite and disliked genre slugs

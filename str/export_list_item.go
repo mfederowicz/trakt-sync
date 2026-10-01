@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ExportlistItemJSON represents JSON for list item

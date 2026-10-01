@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PlexScrobbler represents JSON Plex real-time scrobbler toggles

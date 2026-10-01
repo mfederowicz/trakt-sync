@@ -1,4 +1,3 @@
-// Package uri used for url operations
 package uri
 
 // SmartListItemsOptions query options for smart-lists/{list_id}/items

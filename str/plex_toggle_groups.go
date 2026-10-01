@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PlexToggleGroups represents JSON Plex toggles per media type

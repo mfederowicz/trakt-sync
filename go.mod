@@ -7,7 +7,6 @@ require (
 	github.com/google/go-cmp v0.7.0
 	github.com/spf13/afero v1.11.0
 	github.com/stretchr/testify v1.9.0
-	github.com/wissance/stringFormatter v1.2.0
 	golang.org/x/text v0.17.0
 )
 

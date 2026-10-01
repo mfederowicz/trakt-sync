@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // SavedFiltersResult represents JSON add saved filters response

@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Media represents JSON media object: a movie or a show with no wrapper key

@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ItemsToReorder represents JSON items object

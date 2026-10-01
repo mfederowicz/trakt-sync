@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // RemoveResult represents JSON history remove result object

@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ReviewImages represents JSON review images object

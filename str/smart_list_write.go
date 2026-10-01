@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // SmartListWrite represents JSON smart list create / update request object; on update every field is optional

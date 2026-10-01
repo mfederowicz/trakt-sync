@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ListComment represents JSON list comment object

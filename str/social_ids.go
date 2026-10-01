@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // SocialIDs represents JSON object with social media handlers

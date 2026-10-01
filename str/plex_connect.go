@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PlexConnect represents JSON Plex connect request

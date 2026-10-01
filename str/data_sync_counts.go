@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // DataSyncCounts represents JSON added counts per media type

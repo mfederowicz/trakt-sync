@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // UserWatched represents JSON user watched object

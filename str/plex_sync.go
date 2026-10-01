@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PlexSync represents JSON Plex batch sync state, selection and toggles

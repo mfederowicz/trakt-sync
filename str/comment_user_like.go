@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // CommentUserLike represents JSON user comment like object

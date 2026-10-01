@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PersonalList represents JSON personal list object

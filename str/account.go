@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Account represents JSON account object

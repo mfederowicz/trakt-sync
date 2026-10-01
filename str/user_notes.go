@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // UserNotes represents JSON user notes object

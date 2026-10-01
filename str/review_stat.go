@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ReviewStat represents JSON review stat object with its total and averages

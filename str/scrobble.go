@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Scrobble represents JSON scrobble object

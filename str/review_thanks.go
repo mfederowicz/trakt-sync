@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ReviewThanks represents JSON popular shows and movies the user hasn't watched yet

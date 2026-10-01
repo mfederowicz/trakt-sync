@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // SocialActivity represents JSON social activity object: a movie or an episode someone in the user's social graph watched

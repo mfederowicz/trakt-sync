@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // CommentReport represents JSON comment report object

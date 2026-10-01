@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // CommentReaction represents JSON comment reaction object; users/reactions/comments sends type and comment instead of user
