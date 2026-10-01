@@ -20,7 +20,10 @@ func (h CommentsCommentsListHandler) Handle(options *str.Options, client *trakt.
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
-	connections, _ := h.common.FetchUserConnections(client, options)
+	connections, err := h.common.FetchUserConnections(client, options)
+	if err != nil {
+		return fmt.Errorf(consts.UserConnectionsError, err)
+	}
 	list, err := h.common.FetchList(client, options)
 	if err != nil {
 		return fmt.Errorf("fetch list error:%w", err)

@@ -28,7 +28,10 @@ func (h NotesNotesCollectionHandler) Handle(options *str.Options, client *trakt.
 	n.AttachedTo = a
 	switch options.Item {
 	case consts.Movie:
-		movie, _, _ := h.common.FetchMovie(client, options)
+		movie, _, err := h.common.FetchMovie(client, options)
+		if err != nil {
+			return fmt.Errorf("fetch movie error:%w", err)
+		}
 		n.Movie = movie
 	case consts.Episode:
 		episode, err := h.common.EpisodeFromTraktID(options)

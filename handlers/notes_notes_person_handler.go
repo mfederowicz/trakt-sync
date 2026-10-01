@@ -20,7 +20,10 @@ func (h NotesNotesPersonHandler) Handle(options *str.Options, client *trakt.Clie
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyMovieIDMsg)
 	}
-	person, _ := h.common.FetchPerson(client, options)
+	person, err := h.common.FetchPerson(client, options)
+	if err != nil {
+		return fmt.Errorf("fetch person error:%w", err)
+	}
 	n := new(str.Notes)
 	n.Person = person
 	n.Notes = &options.Notes

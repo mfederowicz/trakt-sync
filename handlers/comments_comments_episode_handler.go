@@ -20,7 +20,10 @@ func (h CommentsCommentsEpisodeHandler) Handle(options *str.Options, client *tra
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
-	connections, _ := h.common.FetchUserConnections(client, options)
+	connections, err := h.common.FetchUserConnections(client, options)
+	if err != nil {
+		return fmt.Errorf(consts.UserConnectionsError, err)
+	}
 	episode, err := h.common.EpisodeFromTraktID(options)
 	if err != nil {
 		return err

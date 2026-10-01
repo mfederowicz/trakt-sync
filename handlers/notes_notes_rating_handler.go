@@ -28,10 +28,16 @@ func (h NotesNotesRatingHandler) Handle(options *str.Options, client *trakt.Clie
 	n.AttachedTo = a
 	switch options.Item {
 	case consts.Movie:
-		movie, _, _ := h.common.FetchMovie(client, options)
+		movie, _, err := h.common.FetchMovie(client, options)
+		if err != nil {
+			return fmt.Errorf("fetch movie error:%w", err)
+		}
 		n.Movie = movie
 	case consts.Show:
-		show, _ := h.common.FetchShow(client, options)
+		show, err := h.common.FetchShow(client, options)
+		if err != nil {
+			return fmt.Errorf("fetch show error:%w", err)
+		}
 		n.Show = show
 	case consts.Season:
 		season, err := h.common.SeasonFromTraktID(options)

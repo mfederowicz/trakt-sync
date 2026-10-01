@@ -20,8 +20,14 @@ func (h CommentsCommentsMovieHandler) Handle(options *str.Options, client *trakt
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyTraktIDMsg)
 	}
-	connections, _ := h.common.FetchUserConnections(client, options)
-	movie, _, _ := h.common.FetchMovie(client, options)
+	connections, err := h.common.FetchUserConnections(client, options)
+	if err != nil {
+		return fmt.Errorf(consts.UserConnectionsError, err)
+	}
+	movie, _, err := h.common.FetchMovie(client, options)
+	if err != nil {
+		return fmt.Errorf("fetch movie error:%w", err)
+	}
 	c := new(str.Comment)
 	c.Movie = movie
 	if len(options.Comment) > consts.ZeroValue {

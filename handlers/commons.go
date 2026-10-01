@@ -404,7 +404,10 @@ func (c *CommonLogic) CreateCheckin(client *trakt.Client, options *str.Options) 
 
 	switch options.Action {
 	case consts.Movie:
-		movie, _, _ := c.FetchMovie(client, options)
+		movie, _, err := c.FetchMovie(client, options)
+		if err != nil {
+			return nil, fmt.Errorf(consts.MovieErr, err)
+		}
 		checkin.Movie = movie
 	case consts.Episode:
 		// checkin keeps the episode id in -trakt_id (options.TraktID), not in -i
@@ -458,7 +461,10 @@ func (c *CommonLogic) CreateScrobble(client *trakt.Client, options *str.Options)
 	scrobble := new(str.Scrobble)
 	switch options.Type {
 	case consts.Movie:
-		movie, _, _ := c.FetchMovie(client, options)
+		movie, _, err := c.FetchMovie(client, options)
+		if err != nil {
+			return nil, fmt.Errorf(consts.MovieErr, err)
+		}
 		scrobble.Movie = movie
 	case consts.Episode:
 		episode, err := c.EpisodeFromTraktID(options)
