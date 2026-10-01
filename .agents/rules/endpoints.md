@@ -89,9 +89,10 @@ func (m *NetworksService) GetNetworksList(ctx context.Context, opts *uri.ListOpt
   `<operationid>` is the route's `operationId` from
   <https://developer.trakt.tv/openapi.json> in lowercase (e.g.
   `getUsersRequestsFollow` -> `getusersrequestsfollow`). Check that the page
-  opens; unknown IDs return 404. When
-  you touch a method that still links to `trakt.docs.apiary.io`, replace that
-  link. Change only the methods the PR already touches, one at a time, never in bulk.
+  opens; unknown IDs return 404. A method that serves several routes links the
+  generic one (`{type}`, `{section}`). The old `trakt.docs.apiary.io` links are
+  migrated; three remain where no single operation fits (`OauthService` type,
+  `ListsService.GetListItems`, `UsersService.GetListItemsByType`).
 - A new service: declare `type XService Service` in its own file, add the field
   to `Client` and the `c.X = (*XService)(&c.common)` line in `client.go`.
 

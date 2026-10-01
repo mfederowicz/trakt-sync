@@ -466,11 +466,11 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/users/{id}/lists/{list_id}/items/show` | Get show list items | `UsersService.GetListItemsByType` |
 | ✅ | PUT | `/users/{id}/lists/{list_id}/items/{list_item_id}` | Update a list item | `UsersService.UpdateListItem` |
 | ✅ | GET | `/users/{id}/lists/{list_id}/items/{type}/{sort_by}/{sort_how}` | Get items on a personal list | `UsersService.GetListItems` |
-| ✅ | POST | `/users/{id}/lists/{list_id}/like` | Like a list | `UsersService.ListLike` |
+| ✅ | POST | `/users/{id}/lists/{list_id}/like` | Like a list | `UsersService.LikeList` |
 | ✅ | DELETE | `/users/{id}/lists/{list_id}/like` | Remove like on a list | `UsersService.RemoveListLike` |
 | ✅ | GET | `/users/{id}/lists/{list_id}/likes` | Get all users who liked a list | `UsersService.GetListLikes` |
 | ➖ | POST | `/users/{id}/lists/{list_id}/reorder` | Reorder items on a list | not used: same request as `/users/{id}/lists/{list_id}/items/reorder`, which `users -a reorder_list_items` calls |
-| ✅ | POST | `/users/{id}/lists/{list_id}/report` | Report a user's list | `UsersService.ListReport` |
+| ✅ | POST | `/users/{id}/lists/{list_id}/report` | Report a user's list | `UsersService.ReportList` |
 | ⚠️ | GET | `/users/{id}/mir/{year}/{month}` | Get month in review | `UsersService.GetMonthInReview` |
 | ✅ | GET | `/users/{id}/notes/{type}` | Get notes | `UsersService.GetNotes` |
 | ✅ | GET | `/users/{id}/ratings/` | Get all ratings | `UsersService.GetRatings` |
@@ -488,7 +488,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/users/{id}/watched/movies` | Get watched movies | `UsersService.GetWatched` |
 | ✅ | GET | `/users/{id}/watched/shows` | Get watched shows | `UsersService.GetWatched` |
 | ✅ | GET | `/users/{id}/watched/{type}` | Get watched | `UsersService.GetWatched` |
-| ✅ | GET | `/users/{id}/watching` | Get watching | `UsersService.Watching` |
+| ✅ | GET | `/users/{id}/watching` | Get watching | `UsersService.GetWatching` |
 | ✅ | GET | `/users/{id}/watchlist/comments/{sort}` | Get all watchlist comments | `UsersService.GetWatchlistComments` |
 | ✅ | GET | `/users/{id}/watchlist/movie,show/{sort}` | Get media watchlist | `UsersService.GetWatchlistBySort` |
 | ✅ | GET | `/users/{id}/watchlist/movies/{sort}` | Get movie watchlist | `UsersService.GetWatchlistBySort` |

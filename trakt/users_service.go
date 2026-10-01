@@ -51,7 +51,7 @@ func (u *UsersService) GetListItemsByType(ctx context.Context, id string, listID
 
 // GetUsersPersonalLists Returns all personal lists for a user.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/users/lists/get-a-user's-personal-lists
+// API docs: https://docs.trakt.tv/reference/getuserslistspersonal
 func (u *UsersService) GetUsersPersonalLists(ctx context.Context, id string) ([]*str.PersonalList, *str.Response, error) {
 	var url string
 
@@ -98,7 +98,7 @@ func (u *UsersService) GetUserProfile(ctx context.Context, id string) (*str.User
 
 // GetSavedFilters Get all saved filters a users has created.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/users/saved-filters/get-saved-filters
+// API docs: https://docs.trakt.tv/reference/getusersfilterssaved
 func (u *UsersService) GetSavedFilters(ctx context.Context, section string) ([]*str.SavedFilter, *str.Response, error) {
 	var url string
 
@@ -122,7 +122,7 @@ func (u *UsersService) GetSavedFilters(ctx context.Context, section string) ([]*
 
 // GetStats Returns stats about the movies, shows, and episodes a user has watched, collected, and rated.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/users/stats/get-stats
+// API docs: https://docs.trakt.tv/reference/getusersstats
 func (u *UsersService) GetStats(ctx context.Context, id string) (*str.UserStats, *str.Response, error) {
 	var url string
 
@@ -145,7 +145,7 @@ func (u *UsersService) GetStats(ctx context.Context, id string) (*str.UserStats,
 
 // GetWatched Returns all movies or shows a user has watched sorted by most plays.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/users/watched/get-watched
+// API docs: https://docs.trakt.tv/reference/getuserswatchedtyped
 func (u *UsersService) GetWatched(ctx context.Context, id string, watchType string, opts *uri.ListOptions) ([]*str.UserWatched, *str.Response, error) {
 	var url string
 
@@ -172,7 +172,7 @@ func (u *UsersService) GetWatched(ctx context.Context, id string, watchType stri
 }
 
 // GetSettings Get the user's settings so you can align your app's experience with what they're used to on the trakt website.
-// API docs: https://trakt.docs.apiary.io/#reference/users/settings/retrieve-settings
+// API docs: https://docs.trakt.tv/reference/getuserssettings
 func (u *UsersService) GetSettings(ctx context.Context) (*str.UserSettings, *str.Response, error) {
 	url := "users/settings"
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
@@ -238,7 +238,7 @@ func (u *UsersService) GetFollowRequests(ctx context.Context, options *uri.ListO
 
 // ApproveFollowRequest Approve a follower using the id of the request.
 // If the id is not found, was already approved, or was already denied, a 404 error will be returned.
-// API docs:https://trakt.docs.apiary.io/#reference/users/approve-or-deny-follower-requests/approve-follow-request
+// API docs: https://docs.trakt.tv/reference/postusersrequestsapprove
 func (u *UsersService) ApproveFollowRequest(ctx context.Context, request int) (*str.FollowRequest, *str.Response, error) {
 	var url string
 
@@ -283,7 +283,7 @@ func (u *UsersService) DenyFollowRequest(ctx context.Context, request int) (*str
 
 // GetHiddenItems Get hidden items for a section. This will return an array of
 // standard media objects. You can optionally limit the type of results to return..
-// API docs:https:https://trakt.docs.apiary.io/#reference/users/hidden-items/get-hidden-items
+// API docs: https://docs.trakt.tv/reference/getusershiddengetbysection
 func (u *UsersService) GetHiddenItems(ctx context.Context, section string, opts *uri.ListOptions) ([]*str.HiddenItem, *str.Response, error) {
 	var url string
 
@@ -311,7 +311,7 @@ func (u *UsersService) GetHiddenItems(ctx context.Context, section string, opts 
 // AddHiddenItems Hide items for a specific section. Here's what type of items
 // can hidden for each section. You can optionally specify the
 // hidden_at date for each item.
-// API docs:https://trakt.docs.apiary.io/#reference/users/add-hidden-items/add-hidden-items
+// API docs: https://docs.trakt.tv/reference/postusershiddenadd
 func (u *UsersService) AddHiddenItems(ctx context.Context, items *str.HistoryItems, section string) (*str.AddResult, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/hidden/%s", section)
@@ -331,7 +331,7 @@ func (u *UsersService) AddHiddenItems(ctx context.Context, items *str.HistoryIte
 }
 
 // RemoveHiddenItems Unhide items for a specific section. Here's what type of items can unhidden for each section.
-// API docs:https://trakt.docs.apiary.io/#reference/users/remove-hidden-items/remove-hidden-items
+// API docs: https://docs.trakt.tv/reference/postusershiddenremovesection
 func (u *UsersService) RemoveHiddenItems(ctx context.Context, items *str.HistoryItems, section string) (*str.RemoveResult, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/hidden/%s/remove", section)
@@ -354,7 +354,7 @@ func (u *UsersService) RemoveHiddenItems(ctx context.Context, items *str.History
 // info will only be returned if you send OAuth and are either that user
 // or an approved follower. Adding ?extended=vip will return some additional VIP related fields
 // so you can display the user's Trakt VIP status and year count.
-// API docs:https://trakt.docs.apiary.io/#reference/users/profile/get-user-profile
+// API docs: https://docs.trakt.tv/reference/getusersprofile
 func (u *UsersService) GetProfile(ctx context.Context, s string) (*str.UserProfile, *str.Response, error) {
 	url := fmt.Sprintf("users/%s", s)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
@@ -374,7 +374,7 @@ func (u *UsersService) GetProfile(ctx context.Context, s string) (*str.UserProfi
 
 // GetLikes Get items a user likes. This will return an array of standard media objects.
 // You can optionally limit the type of results to return.
-// API docs:https://trakt.docs.apiary.io/#reference/users/likes/get-likes
+// API docs: https://docs.trakt.tv/reference/getuserslikes
 func (u *UsersService) GetLikes(ctx context.Context, user string, stype string, opts *uri.ListOptions) ([]*str.UserLike, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/likes/%s", userOrMe(user), stype)
@@ -399,7 +399,7 @@ func (u *UsersService) GetLikes(ctx context.Context, user string, stype string, 
 }
 
 // GetListLikes Returns all users who liked a list.
-// API docs:https://trakt.docs.apiary.io/#reference/users/list-likes/get-all-users-who-liked-a-list
+// API docs: https://docs.trakt.tv/reference/getuserslistslistlikes
 func (u *UsersService) GetListLikes(ctx context.Context, user string, listID string, opts *uri.ListOptions) ([]*str.UserLike, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s/likes", userOrMe(user), listID)
@@ -425,7 +425,7 @@ func (u *UsersService) GetListLikes(ctx context.Context, user string, listID str
 
 // GetCollection Get all collected items in a user's collection.
 // A collected item indicates availability to watch digitally or on physical media.
-// API docs:https://trakt.docs.apiary.io/#reference/users/collection/get-collection
+// API docs: https://docs.trakt.tv/reference/getuserscollection
 func (u *UsersService) GetCollection(ctx context.Context, user string, stype string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/collection/%s", userOrMe(user), stype)
@@ -454,7 +454,7 @@ func (u *UsersService) GetCollection(ctx context.Context, user string, stype str
 // By default, only top level comments are returned. Set ?include_replies=true to return
 // replies in addition to top level comments. Set ?include_replies=only to return only
 // replies and no top level comments.
-// API docs:https://trakt.docs.apiary.io/#reference/users/comments/get-comments
+// API docs: https://docs.trakt.tv/reference/getuserscomments
 func (u *UsersService) GetComments(ctx context.Context, user string, commentType string, strType string, opts *uri.ListOptions) ([]*str.CommentItem, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/comments/%s/%s", userOrMe(user), commentType, strType)
@@ -485,7 +485,7 @@ func (u *UsersService) GetComments(ctx context.Context, user string, commentType
 // but history will need to be mapped to that specific play in their watched history
 // since they might have multiple plays. Since collection and rating is a 1:1 association,
 // you can assume the note is attached to the media item in the type field that has been collected or rated.
-// API docs:https://trakt.docs.apiary.io/#reference/users/notes/get-notes
+// API docs: https://docs.trakt.tv/reference/getusersnotes
 func (u *UsersService) GetNotes(ctx context.Context, user string, strType string, opts *uri.ListOptions) ([]*str.NotesItem, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/notes/%s", userOrMe(user), strType)
@@ -510,7 +510,7 @@ func (u *UsersService) GetNotes(ctx context.Context, user string, strType string
 }
 
 // AddPersonalList Create a new personal list. The name is the only required field, but the other info is recommended to ask for.
-// API docs:https://trakt.docs.apiary.io/#reference/users/lists/create-personal-list
+// API docs: https://docs.trakt.tv/reference/postuserslistscreate
 func (u *UsersService) AddPersonalList(ctx context.Context, user string, list *str.PersonalList) (*str.PersonalList, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists", userOrMe(user))
@@ -531,7 +531,7 @@ func (u *UsersService) AddPersonalList(ctx context.Context, user string, list *s
 }
 
 // ReorderLists Reorder all lists by sending the updated rank of list ids. Use the /users/:id/lists method to get all list ids.
-// API docs:https://trakt.docs.apiary.io/#reference/users/reorder-lists/reorder-a-user's-lists
+// API docs: https://docs.trakt.tv/reference/postuserslistsreorder
 func (u *UsersService) ReorderLists(ctx context.Context, user string, items *str.ItemsToReorder) (*str.ReorderResults, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/reorder", userOrMe(user))
@@ -555,7 +555,7 @@ func (u *UsersService) ReorderLists(ctx context.Context, user string, items *str
 // This gives full access to add, remove, and re-order list items.
 // It essentially works just like a list owned by the user, just make sure to
 // use the correct list owner user when building the API URLs.
-// API docs:https://trakt.docs.apiary.io/#reference/users/collaborations/get-all-lists-a-user-can-collaborate-on
+// API docs: https://docs.trakt.tv/reference/getuserslistscollaborations
 func (u *UsersService) GetCollaborations(ctx context.Context, user string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/collaborations", userOrMe(user))
@@ -580,7 +580,7 @@ func (u *UsersService) GetCollaborations(ctx context.Context, user string, opts 
 }
 
 // GetList Returns a single personal list. Use the /users/:id/lists/:list_id/items method to get the actual items this list contains.
-// API docs:https://trakt.docs.apiary.io/#reference/users/list/get-personal-list
+// API docs: https://docs.trakt.tv/reference/getuserslistslistsummary
 func (u *UsersService) GetList(ctx context.Context, user string, listID string, opts *uri.ListOptions) (*str.PersonalList, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s", userOrMe(user), listID)
@@ -606,7 +606,7 @@ func (u *UsersService) GetList(ctx context.Context, user string, listID string, 
 // UpdateList Update a personal list by sending 1 or more parameters.
 // If you update the list name, the original slug will still be retained
 // so existing references to this list won't break.
-// API docs:https://trakt.docs.apiary.io/#reference/users/list/update-personal-list
+// API docs: https://docs.trakt.tv/reference/putuserslistslistupdate
 func (u *UsersService) UpdateList(ctx context.Context, user string, listID string, update *str.PersonalList) (*str.PersonalList, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s", userOrMe(user), listID)
@@ -626,7 +626,7 @@ func (u *UsersService) UpdateList(ctx context.Context, user string, listID strin
 }
 
 // DeleteList Remove a personal list and all items it contains.
-// API docs:https://trakt.docs.apiary.io/#reference/users/list/delete-a-user's-personal-list
+// API docs: https://docs.trakt.tv/reference/deleteuserslistslistdelete
 func (u *UsersService) DeleteList(ctx context.Context, user string, listID string) (*str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s", userOrMe(user), listID)
@@ -644,7 +644,7 @@ func (u *UsersService) DeleteList(ctx context.Context, user string, listID strin
 }
 
 // RemoveListLike Remove a like on a list.
-// API docs:https://trakt.docs.apiary.io/#reference/users/list-like/remove-like-on-a-list
+// API docs: https://docs.trakt.tv/reference/deleteuserslistslistunlike
 func (u *UsersService) RemoveListLike(ctx context.Context, user string, listID string) (*str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s/like", userOrMe(user), listID)
@@ -662,7 +662,7 @@ func (u *UsersService) RemoveListLike(ctx context.Context, user string, listID s
 }
 
 // LikeList Votes help determine popular lists. Only one like is allowed per list per user.
-// API docs:https://trakt.docs.apiary.io/#reference/users/list-like/like-a-list
+// API docs: https://docs.trakt.tv/reference/postuserslistslistlike
 func (u *UsersService) LikeList(ctx context.Context, user string, listID string) (*str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s/like", userOrMe(user), listID)
@@ -681,7 +681,7 @@ func (u *UsersService) LikeList(ctx context.Context, user string, listID string)
 
 // GetListItems Get all items on a personal list. Items can be a movie, show, season, episode, or person.
 // You can optionally specify the type parameter with a single value or comma delimited string for multiple item types.
-// API docs:https://trakt.docs.apiary.io/#reference/users/list-items/get-items-on-a-personal-list
+// API docs: https://docs.trakt.tv/reference/getuserslistslistitemstypedsorted
 func (u *UsersService) GetListItems(ctx context.Context, user string, listID string, strType string, sortBy string, sortHow string, options *uri.ListOptions) ([]*str.UserListItem, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s/items/%s/%s/%s", userOrMe(user), listID, strType, sortBy, sortHow)
@@ -706,7 +706,7 @@ func (u *UsersService) GetListItems(ctx context.Context, user string, listID str
 }
 
 // AddListItems Add one or more items to a personal list. Items can be movies, shows, seasons, episodes, or people.
-// API docs:https://trakt.docs.apiary.io/#reference/users/add-list-items/add-items-to-personal-list
+// API docs: https://docs.trakt.tv/reference/postuserslistslistadd
 func (u *UsersService) AddListItems(ctx context.Context, user string, listID string, items *str.HistoryItems) (*str.AddResult, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s/items", userOrMe(user), listID)
@@ -726,7 +726,7 @@ func (u *UsersService) AddListItems(ctx context.Context, user string, listID str
 }
 
 // RemoveListItems Remove one or more items from a personal list.
-// API docs:https://trakt.docs.apiary.io/#reference/users/remove-list-items/remove-items-from-personal-list
+// API docs: https://docs.trakt.tv/reference/postuserslistslistremove
 func (u *UsersService) RemoveListItems(ctx context.Context, user string, listID string, items *str.HistoryItems) (*str.RemoveResult, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s/items/remove", userOrMe(user), listID)
@@ -747,7 +747,7 @@ func (u *UsersService) RemoveListItems(ctx context.Context, user string, listID 
 
 // ReorderListItems Reorder all items on a list by sending the updated rank of list item ids.
 // Use the /users/:id/lists/:list_id/items method to get all list item ids.
-// API docs:https://trakt.docs.apiary.io/#reference/users/reorder-list-items/reorder-items-on-a-list
+// API docs: https://docs.trakt.tv/reference/postuserslistslistreorderitems
 func (u *UsersService) ReorderListItems(ctx context.Context, user string, listID string, items *str.ItemsToReorder) (*str.ReorderResults, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s/items/reorder", userOrMe(user), listID)
@@ -768,7 +768,7 @@ func (u *UsersService) ReorderListItems(ctx context.Context, user string, listID
 }
 
 // UpdateListItem Update the notes on a single list item.
-// API docs:https://trakt.docs.apiary.io/#reference/users/update-list-item/update-a-list-item
+// API docs: https://docs.trakt.tv/reference/putuserslistslistupdateitem
 func (u *UsersService) UpdateListItem(ctx context.Context, user string, listID string, listItemID int, item *str.PersonalListItem) (*str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s/items/%d", userOrMe(user), listID, listItemID)
@@ -792,7 +792,7 @@ func (u *UsersService) UpdateListItem(ctx context.Context, user string, listID s
 // By default, the comments are sorted by most likes.
 // Other sorting options include likes_30, most replies, replies_30,
 // most plays, highest rating, and added date.
-// API docs:https://trakt.docs.apiary.io/#reference/users/list-comments/get-all-list-comments
+// API docs: https://docs.trakt.tv/reference/getuserslistslistcomments
 func (u *UsersService) GetListComments(ctx context.Context, user string, listID string, sort string, options *uri.ListOptions) ([]*str.ListComment, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s/comments/%s", userOrMe(user), listID, sort)
@@ -819,7 +819,7 @@ func (u *UsersService) GetListComments(ctx context.Context, user string, listID 
 // ReportList Report a user's list for moderator review.
 // Send a reason and optional message with additional context.
 // A user can only have one pending report per list.
-// API docs:https://trakt.docs.apiary.io/#reference/users/list-report/report-a-user's-list
+// API docs: https://docs.trakt.tv/reference/postuserslistslistreport
 func (u *UsersService) ReportList(ctx context.Context, user string, listID string, report *str.ListReport) (*str.ListReportResult, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/lists/%s/report", userOrMe(user), listID)
@@ -841,7 +841,7 @@ func (u *UsersService) ReportList(ctx context.Context, user string, listID strin
 
 // Follow If the user has a private profile, the follow request will require approval (approved_at will be null).
 // If a user is public, they will be followed immediately (approved_at will have a date).
-// API docs:https://trakt.docs.apiary.io/#reference/users/follow/follow-this-user
+// API docs: https://docs.trakt.tv/reference/postusersfollow
 func (u *UsersService) Follow(ctx context.Context, user string) (*str.FollowResult, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/follow", user)
@@ -862,7 +862,7 @@ func (u *UsersService) Follow(ctx context.Context, user string) (*str.FollowResu
 }
 
 // Unfollow Unfollow someone you already follow..
-// API docs:https://trakt.docs.apiary.io/#reference/users/follow/unfollow-this-user
+// API docs: https://docs.trakt.tv/reference/deleteusersunfollow
 func (u *UsersService) Unfollow(ctx context.Context, user string) (*str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/follow", user)
@@ -884,7 +884,7 @@ func (u *UsersService) Unfollow(ctx context.Context, user string) (*str.Response
 }
 
 // GetBlockedUsers Returns all users you have blocked, including when each user was blocked.
-// API docs:https://trakt.docs.apiary.io/#reference/users/blocked-users/get-blocked-users
+// API docs: https://docs.trakt.tv/reference/getusersblocked
 func (u *UsersService) GetBlockedUsers(ctx context.Context, options *uri.ListOptions) ([]*str.UserBlocked, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/blocked")
@@ -911,7 +911,7 @@ func (u *UsersService) GetBlockedUsers(ctx context.Context, options *uri.ListOpt
 // Block Block a user. If they are already following you, they will be removed from your followers.
 // Any pending follow request from this user will be blocked, preventing them
 // from following you in the future until you unblock them.
-// API docs:https://trakt.docs.apiary.io/#reference/users/block/block-this-user
+// API docs: https://docs.trakt.tv/reference/postusersblock
 func (u *UsersService) Block(ctx context.Context, user string) (*str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/block", user)
@@ -931,7 +931,7 @@ func (u *UsersService) Block(ctx context.Context, user string) (*str.Response, e
 }
 
 // Unblock Unblock a user you previously blocked.
-// API docs:https://trakt.docs.apiary.io/#reference/users/block/unblock-this-user
+// API docs: https://docs.trakt.tv/reference/deleteusersunblock
 func (u *UsersService) Unblock(ctx context.Context, user string) (*str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/block", user)
@@ -953,7 +953,7 @@ func (u *UsersService) Unblock(ctx context.Context, user string) (*str.Response,
 }
 
 // GetFollowers Returns all followers including when the relationship began.
-// API docs:https://trakt.docs.apiary.io/#reference/users/followers/get-followers
+// API docs: https://docs.trakt.tv/reference/getusersfollowers
 func (u *UsersService) GetFollowers(ctx context.Context, user string, options *uri.ListOptions) ([]*str.Follower, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/followers", userOrMe(user))
@@ -978,7 +978,7 @@ func (u *UsersService) GetFollowers(ctx context.Context, user string, options *u
 }
 
 // GetFollowing Returns all user's they follow including when the relationship began.
-// API docs:https://trakt.docs.apiary.io/#reference/users/following/get-following
+// API docs: https://docs.trakt.tv/reference/getusersfollowing
 func (u *UsersService) GetFollowing(ctx context.Context, user string, options *uri.ListOptions) ([]*str.Follower, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/following", userOrMe(user))
@@ -1004,7 +1004,7 @@ func (u *UsersService) GetFollowing(ctx context.Context, user string, options *u
 
 // GetFriends Returns all friends for a user including when the relationship began.
 // Friendship is a 2 way relationship where each user follows the other.
-// API docs:https://trakt.docs.apiary.io/#reference/users/friends/get-friends
+// API docs: https://docs.trakt.tv/reference/getusersfriends
 func (u *UsersService) GetFriends(ctx context.Context, user string, options *uri.ListOptions) ([]*str.Friend, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/friends", userOrMe(user))
@@ -1035,7 +1035,7 @@ func (u *UsersService) GetFriends(ctx context.Context, user string, options *uri
 // or watch.Specify a type and trakt item_id to limit the history for just that item.
 // If the item_id is valid, but there is no history, an empty array will be returned.
 // An id of 0 returns all entries instead of one history item.
-// API docs:https://trakt.docs.apiary.io/#reference/users/history/get-watched-history
+// API docs: https://docs.trakt.tv/reference/getusershistoryall
 func (u *UsersService) GetHistory(ctx context.Context, user string, strType string, id int, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 
@@ -1069,7 +1069,7 @@ func (u *UsersService) GetHistory(ctx context.Context, user string, strType stri
 // for a specific rating between 1 and 10. Send a comma separated string for
 // rating if you need multiple ratings.
 // An empty rating returns all ratings.
-// API docs:https://trakt.docs.apiary.io/#reference/users/ratings/get-ratings
+// API docs: https://docs.trakt.tv/reference/getusersratingstypedrating
 func (u *UsersService) GetRatings(ctx context.Context, user string, strType string, rating string, options *uri.ListOptions) ([]*str.RatingListItem, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/ratings/%s", userOrMe(user), strType)
@@ -1099,7 +1099,7 @@ func (u *UsersService) GetRatings(ctx context.Context, user string, strType stri
 }
 
 // GetWatchlist Returns all items in a user's watchlist filtered by type.
-// API docs:https://trakt.docs.apiary.io/#reference/users/watchlist/get-watchlist
+// API docs: https://docs.trakt.tv/reference/getuserswatchlisttypedsorted
 func (u *UsersService) GetWatchlist(ctx context.Context, user string, types string, sortBy string, sortHow string, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 
@@ -1128,7 +1128,7 @@ func (u *UsersService) GetWatchlist(ctx context.Context, user string, types stri
 // GetWatchlistComments Returns all top level comments for the watchlist.
 // By default, the comments are sorted by most likes.
 // Other sorting options include likes_30, most replies, replies_30, most plays, highest rating, and added date.
-// API docs:https://trakt.docs.apiary.io/#reference/users/watchlist-comments/get-all-favorites-comments
+// API docs: https://docs.trakt.tv/reference/getuserswatchlistcomments
 func (u *UsersService) GetWatchlistComments(ctx context.Context, user string, sort string, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 
@@ -1156,7 +1156,7 @@ func (u *UsersService) GetWatchlistComments(ctx context.Context, user string, so
 
 // GetFavorites Returns the top 100 shows and movies a user has favorited.
 // Apps should encourage user's to add favorites so the algorithm keeps getting better.
-// API docs:https://trakt.docs.apiary.io/#reference/users/favorites/get-favorites
+// API docs: https://docs.trakt.tv/reference/getusersfavoritestypedsorted
 func (u *UsersService) GetFavorites(ctx context.Context, user string, strType string, sortBy string, sortHow string, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/favorites/%s/%s/%s", userOrMe(user), strType, sortBy, sortHow)
@@ -1185,7 +1185,7 @@ func (u *UsersService) GetFavorites(ctx context.Context, user string, strType st
 // GetFavoritesComments Returns all top level comments for the favorites.
 // By default, the comments are sorted by most likes. Other sorting options include
 // likes_30, most replies, replies_30, most plays, highest rating, and added date.
-// API docs:https://trakt.docs.apiary.io/#reference/users/favorites-comments/get-all-favorites-comments
+// API docs: https://docs.trakt.tv/reference/getusersfavoritescomments
 func (u *UsersService) GetFavoritesComments(ctx context.Context, user string, sort string, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/favorites/comments/%s", userOrMe(user), sort)
@@ -1212,7 +1212,7 @@ func (u *UsersService) GetFavoritesComments(ctx context.Context, user string, so
 
 // GetWatching Returns a movie or episode if the user is currently watching something.
 // If they are not, it returns no data and a 204 HTTP status code.
-// API docs:https://trakt.docs.apiary.io/#reference/users/watching/get-watching
+// API docs: https://docs.trakt.tv/reference/getuserswatching
 func (u *UsersService) GetWatching(ctx context.Context, user string, options *uri.ListOptions) (*str.WatchingResult, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/watching", userOrMe(user))
@@ -1240,7 +1240,7 @@ func (u *UsersService) GetWatching(ctx context.Context, user string, options *ur
 // Report Report a user for moderator review.
 // Send a reason and optional message with additional context.
 // A user can only have one pending report per reported user.
-// API docs:https://trakt.docs.apiary.io/#reference/users/report/report-a-user
+// API docs: https://docs.trakt.tv/reference/postusersreport
 func (u *UsersService) Report(ctx context.Context, user string, report *str.UserReport) (*str.UserReportResult, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/report", user)
