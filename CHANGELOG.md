@@ -30,6 +30,8 @@ schedule.
 
 ### Added
 
+- Library: examples on pkg.go.dev for the `trakt` package (client setup, OAuth token, pagination, typed errors, timezones) and for `uri.AddQuery`. `go test` compiles them, so they stay in step with the API.
+
 ### Changed
 
 - Library: a `trakt` client without `WithUserAgent` now sends `User-Agent: trakt-sync-go` (`trakt.DefaultUserAgent`), so apps built on the library no longer show up as the trakt-sync CLI. The CLI still sends `trakt-sync/<version>`.
