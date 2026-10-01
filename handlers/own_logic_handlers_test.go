@@ -119,3 +119,33 @@ func TestSyncItemsHandlersUnknownType(t *testing.T) {
 		})
 	}
 }
+
+// an item without a trakt id stops before any request, it used to panic while the items were read.
+func TestSyncItemsHandlersItemWithoutTraktID(t *testing.T) {
+	const items = `[{"type":"movie","watched_at":"2026-10-01T10:00:00.000Z","rated_at":"2026-10-01T10:00:00.000Z","rating":8,"movie":{"title":"Tron","ids":{"imdb":"tt0084827"}}}]`
+	cases := map[string]Handler{
+		consts.AddToHistory:      SyncAddToHistoryHandler{},
+		consts.RemoveFromHistory: SyncRemoveFromHistoryHandler{},
+		consts.AddToRatings:      SyncAddToRatingsHandler{},
+		consts.RemoveFromRatings: SyncRemoveFromRatingsHandler{},
+	}
+	for action, handler := range cases {
+		action, handler := action, handler
+		t.Run(action, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+			requests := []string{}
+			s.Mux.HandleFunc("/", func(_ http.ResponseWriter, r *http.Request) {
+				requests = append(requests, r.Method+" "+r.URL.Path)
+			})
+
+			dir := t.TempDir()
+			options := str.Options{Module: "sync", Action: action, Type: consts.Movies, Output: filepath.Join(dir, "out.json"), Items: filepath.Join(dir, "items.json")}
+			test.AssertNilError(t, os.WriteFile(options.Items, []byte(items), 0o600))
+
+			err := handler.Handle(&options, s.Client)
+			assert.EqualError(t, err, "item at index 0: movie has no trakt id")
+			assert.Empty(t, requests)
+		})
+	}
+}

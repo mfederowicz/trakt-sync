@@ -34,6 +34,7 @@ schedule.
 
 ### Fixed
 
+- `sync -a add_to_history|remove_from_history|add_to_ratings|remove_from_ratings` stopped with `panic error:runtime error: invalid memory address or nil pointer dereference` when an item in the input had no Trakt ID (for example a movie with only an `imdb` ID), when a show's episode had no `season` number, or when the list held a `null` item. It now stops before any request with an error that names the item, such as `item at index 1: movie has no trakt id`. A show item without an `episode` that follows one with an episode no longer panics either.
 - Library: `str.ItemsList.GetUniqueOldest` kept the entry with the latest `watched_at` / `rated_at` per Trakt ID, although its name and docs say the oldest. It now keeps the oldest. It also no longer panics on a nil list, on an item without a Trakt ID (such items are skipped), or when a watched and a rated item share an ID, and `Uniq` / `GetUniqIDs` leave nil lists nil instead of panicking. Nothing changes for CLI users: `sync` builds these lists with one entry per ID already.
 
 ## [1.22.0] - 2026-10-01
