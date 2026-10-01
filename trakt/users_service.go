@@ -12,6 +12,9 @@ import (
 
 // UsersService  handles communication with the users related
 // methods of the Trakt API.
+//
+// Methods that take a user (or id) path segment accept an empty string for the authenticated
+// user (the API's "me"), except Follow, Unfollow, Block, Unblock and Report, which act on another user.
 type UsersService Service
 
 // userOrMe returns user, or the API's "me" alias for the authenticated user when user is empty.
@@ -23,7 +26,6 @@ func userOrMe(user string) string {
 }
 
 // GetListItemsByType Get the items of one type on a personal list, unsorted (see GetListItems for sorting).
-// An empty id means the authenticated user (me).
 //
 // API docs: https://trakt.docs.apiary.io/#reference/users/list-items/get-items-on-a-personal-list
 func (u *UsersService) GetListItemsByType(ctx context.Context, id string, listID string, t string) ([]*str.UserListItem, *str.Response, error) {
@@ -48,7 +50,6 @@ func (u *UsersService) GetListItemsByType(ctx context.Context, id string, listID
 }
 
 // GetUsersPersonalLists Returns all personal lists for a user.
-// An empty id means the authenticated user (me).
 //
 // API docs: https://trakt.docs.apiary.io/#reference/users/lists/get-a-user's-personal-lists
 func (u *UsersService) GetUsersPersonalLists(ctx context.Context, id string) ([]*str.PersonalList, *str.Response, error) {
@@ -73,7 +74,6 @@ func (u *UsersService) GetUsersPersonalLists(ctx context.Context, id string) ([]
 }
 
 // GetUserProfile Get a user's profile information.
-// An empty id means the authenticated user (me).
 //
 // API docs: https://docs.trakt.tv/reference/getusersprofile
 func (u *UsersService) GetUserProfile(ctx context.Context, id string) (*str.UserProfile, *str.Response, error) {
@@ -121,7 +121,6 @@ func (u *UsersService) GetSavedFilters(ctx context.Context, section string) ([]*
 }
 
 // GetStats Returns stats about the movies, shows, and episodes a user has watched, collected, and rated.
-// An empty id means the authenticated user (me).
 //
 // API docs:https://trakt.docs.apiary.io/#reference/users/stats/get-stats
 func (u *UsersService) GetStats(ctx context.Context, id string) (*str.UserStats, *str.Response, error) {
@@ -145,7 +144,6 @@ func (u *UsersService) GetStats(ctx context.Context, id string) (*str.UserStats,
 }
 
 // GetWatched Returns all movies or shows a user has watched sorted by most plays.
-// An empty id means the authenticated user (me).
 //
 // API docs:https://trakt.docs.apiary.io/#reference/users/watched/get-watched
 func (u *UsersService) GetWatched(ctx context.Context, id string, watchType string, opts *uri.ListOptions) ([]*str.UserWatched, *str.Response, error) {
@@ -376,7 +374,6 @@ func (u *UsersService) GetProfile(ctx context.Context, s string) (*str.UserProfi
 
 // GetLikes Get items a user likes. This will return an array of standard media objects.
 // You can optionally limit the type of results to return.
-// An empty user means the authenticated user (me).
 // API docs:https://trakt.docs.apiary.io/#reference/users/likes/get-likes
 func (u *UsersService) GetLikes(ctx context.Context, user string, stype string, opts *uri.ListOptions) ([]*str.UserLike, *str.Response, error) {
 	var url string
@@ -405,7 +402,7 @@ func (u *UsersService) GetLikes(ctx context.Context, user string, stype string, 
 // API docs:https://trakt.docs.apiary.io/#reference/users/list-likes/get-all-users-who-liked-a-list
 func (u *UsersService) GetListLikes(ctx context.Context, user string, listID string, opts *uri.ListOptions) ([]*str.UserLike, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/lists/%s/likes", user, listID)
+	url = fmt.Sprintf("users/%s/lists/%s/likes", userOrMe(user), listID)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -428,7 +425,6 @@ func (u *UsersService) GetListLikes(ctx context.Context, user string, listID str
 
 // GetCollection Get all collected items in a user's collection.
 // A collected item indicates availability to watch digitally or on physical media.
-// An empty user means the authenticated user (me).
 // API docs:https://trakt.docs.apiary.io/#reference/users/collection/get-collection
 func (u *UsersService) GetCollection(ctx context.Context, user string, stype string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
@@ -458,7 +454,6 @@ func (u *UsersService) GetCollection(ctx context.Context, user string, stype str
 // By default, only top level comments are returned. Set ?include_replies=true to return
 // replies in addition to top level comments. Set ?include_replies=only to return only
 // replies and no top level comments.
-// An empty user means the authenticated user (me).
 // API docs:https://trakt.docs.apiary.io/#reference/users/comments/get-comments
 func (u *UsersService) GetComments(ctx context.Context, user string, commentType string, strType string, opts *uri.ListOptions) ([]*str.CommentItem, *str.Response, error) {
 	var url string
@@ -490,7 +485,6 @@ func (u *UsersService) GetComments(ctx context.Context, user string, commentType
 // but history will need to be mapped to that specific play in their watched history
 // since they might have multiple plays. Since collection and rating is a 1:1 association,
 // you can assume the note is attached to the media item in the type field that has been collected or rated.
-// An empty user means the authenticated user (me).
 // API docs:https://trakt.docs.apiary.io/#reference/users/notes/get-notes
 func (u *UsersService) GetNotes(ctx context.Context, user string, strType string, opts *uri.ListOptions) ([]*str.NotesItem, *str.Response, error) {
 	var url string
@@ -519,7 +513,7 @@ func (u *UsersService) GetNotes(ctx context.Context, user string, strType string
 // API docs:https://trakt.docs.apiary.io/#reference/users/lists/create-personal-list
 func (u *UsersService) AddPersonalList(ctx context.Context, user string, list *str.PersonalList) (*str.PersonalList, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/lists", user)
+	url = fmt.Sprintf("users/%s/lists", userOrMe(user))
 	u.client.debug("create new personal list")
 	req, err := u.client.NewRequest(http.MethodPost, url, list)
 	if err != nil {
@@ -540,7 +534,7 @@ func (u *UsersService) AddPersonalList(ctx context.Context, user string, list *s
 // API docs:https://trakt.docs.apiary.io/#reference/users/reorder-lists/reorder-a-user's-lists
 func (u *UsersService) ReorderLists(ctx context.Context, user string, items *str.ItemsToReorder) (*str.ReorderResults, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/lists/reorder", user)
+	url = fmt.Sprintf("users/%s/lists/reorder", userOrMe(user))
 	u.client.debug("reorder user lists")
 	req, err := u.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
@@ -561,7 +555,6 @@ func (u *UsersService) ReorderLists(ctx context.Context, user string, items *str
 // This gives full access to add, remove, and re-order list items.
 // It essentially works just like a list owned by the user, just make sure to
 // use the correct list owner user when building the API URLs.
-// An empty user means the authenticated user (me).
 // API docs:https://trakt.docs.apiary.io/#reference/users/collaborations/get-all-lists-a-user-can-collaborate-on
 func (u *UsersService) GetCollaborations(ctx context.Context, user string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
 	var url string
@@ -590,7 +583,7 @@ func (u *UsersService) GetCollaborations(ctx context.Context, user string, opts 
 // API docs:https://trakt.docs.apiary.io/#reference/users/list/get-personal-list
 func (u *UsersService) GetList(ctx context.Context, user string, listID string, opts *uri.ListOptions) (*str.PersonalList, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/lists/%s", user, listID)
+	url = fmt.Sprintf("users/%s/lists/%s", userOrMe(user), listID)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -616,7 +609,7 @@ func (u *UsersService) GetList(ctx context.Context, user string, listID string, 
 // API docs:https://trakt.docs.apiary.io/#reference/users/list/update-personal-list
 func (u *UsersService) UpdateList(ctx context.Context, user string, listID string, update *str.PersonalList) (*str.PersonalList, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/lists/%s", user, listID)
+	url = fmt.Sprintf("users/%s/lists/%s", userOrMe(user), listID)
 	req, err := u.client.NewRequest(http.MethodPut, url, update)
 	if err != nil {
 		return nil, nil, err
@@ -636,7 +629,7 @@ func (u *UsersService) UpdateList(ctx context.Context, user string, listID strin
 // API docs:https://trakt.docs.apiary.io/#reference/users/list/delete-a-user's-personal-list
 func (u *UsersService) DeleteList(ctx context.Context, user string, listID string) (*str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/lists/%s", user, listID)
+	url = fmt.Sprintf("users/%s/lists/%s", userOrMe(user), listID)
 	req, err := u.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
@@ -654,7 +647,7 @@ func (u *UsersService) DeleteList(ctx context.Context, user string, listID strin
 // API docs:https://trakt.docs.apiary.io/#reference/users/list-like/remove-like-on-a-list
 func (u *UsersService) RemoveListLike(ctx context.Context, user string, listID string) (*str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/lists/%s/like", user, listID)
+	url = fmt.Sprintf("users/%s/lists/%s/like", userOrMe(user), listID)
 	req, err := u.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
@@ -672,7 +665,7 @@ func (u *UsersService) RemoveListLike(ctx context.Context, user string, listID s
 // API docs:https://trakt.docs.apiary.io/#reference/users/list-like/like-a-list
 func (u *UsersService) LikeList(ctx context.Context, user string, listID string) (*str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/lists/%s/like", user, listID)
+	url = fmt.Sprintf("users/%s/lists/%s/like", userOrMe(user), listID)
 	req, err := u.client.NewRequest(http.MethodPost, url, nil)
 	if err != nil {
 		return nil, err
@@ -691,7 +684,7 @@ func (u *UsersService) LikeList(ctx context.Context, user string, listID string)
 // API docs:https://trakt.docs.apiary.io/#reference/users/list-items/get-items-on-a-personal-list
 func (u *UsersService) GetListItems(ctx context.Context, user string, listID string, strType string, sortBy string, sortHow string, options *uri.ListOptions) ([]*str.UserListItem, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/lists/%s/items/%s/%s/%s", user, listID, strType, sortBy, sortHow)
+	url = fmt.Sprintf("users/%s/lists/%s/items/%s/%s/%s", userOrMe(user), listID, strType, sortBy, sortHow)
 	url, err := uri.AddQuery(url, options)
 	if err != nil {
 		return nil, nil, err
@@ -716,7 +709,7 @@ func (u *UsersService) GetListItems(ctx context.Context, user string, listID str
 // API docs:https://trakt.docs.apiary.io/#reference/users/add-list-items/add-items-to-personal-list
 func (u *UsersService) AddListItems(ctx context.Context, user string, listID string, items *str.HistoryItems) (*str.AddResult, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/lists/%s/items", user, listID)
+	url = fmt.Sprintf("users/%s/lists/%s/items", userOrMe(user), listID)
 	req, err := u.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
 		return nil, nil, err
@@ -736,7 +729,7 @@ func (u *UsersService) AddListItems(ctx context.Context, user string, listID str
 // API docs:https://trakt.docs.apiary.io/#reference/users/remove-list-items/remove-items-from-personal-list
 func (u *UsersService) RemoveListItems(ctx context.Context, user string, listID string, items *str.HistoryItems) (*str.RemoveResult, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/lists/%s/items/remove", user, listID)
+	url = fmt.Sprintf("users/%s/lists/%s/items/remove", userOrMe(user), listID)
 	req, err := u.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
 		return nil, nil, err
@@ -757,7 +750,7 @@ func (u *UsersService) RemoveListItems(ctx context.Context, user string, listID 
 // API docs:https://trakt.docs.apiary.io/#reference/users/reorder-list-items/reorder-items-on-a-list
 func (u *UsersService) ReorderListItems(ctx context.Context, user string, listID string, items *str.ItemsToReorder) (*str.ReorderResults, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/lists/%s/items/reorder", user, listID)
+	url = fmt.Sprintf("users/%s/lists/%s/items/reorder", userOrMe(user), listID)
 	u.client.debug("reorder list items")
 	req, err := u.client.NewRequest(http.MethodPost, url, items)
 	if err != nil {
@@ -778,7 +771,7 @@ func (u *UsersService) ReorderListItems(ctx context.Context, user string, listID
 // API docs:https://trakt.docs.apiary.io/#reference/users/update-list-item/update-a-list-item
 func (u *UsersService) UpdateListItem(ctx context.Context, user string, listID string, listItemID int, item *str.PersonalListItem) (*str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/lists/%s/items/%d", user, listID, listItemID)
+	url = fmt.Sprintf("users/%s/lists/%s/items/%d", userOrMe(user), listID, listItemID)
 	u.client.debug("update list item")
 	req, err := u.client.NewRequest(http.MethodPut, url, item)
 	if err != nil {
@@ -802,7 +795,7 @@ func (u *UsersService) UpdateListItem(ctx context.Context, user string, listID s
 // API docs:https://trakt.docs.apiary.io/#reference/users/list-comments/get-all-list-comments
 func (u *UsersService) GetListComments(ctx context.Context, user string, listID string, sort string, options *uri.ListOptions) ([]*str.ListComment, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/lists/%s/comments/%s", user, listID, sort)
+	url = fmt.Sprintf("users/%s/lists/%s/comments/%s", userOrMe(user), listID, sort)
 	url, err := uri.AddQuery(url, options)
 	if err != nil {
 		return nil, nil, err
@@ -829,7 +822,7 @@ func (u *UsersService) GetListComments(ctx context.Context, user string, listID 
 // API docs:https://trakt.docs.apiary.io/#reference/users/list-report/report-a-user's-list
 func (u *UsersService) ReportList(ctx context.Context, user string, listID string, report *str.ListReport) (*str.ListReportResult, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/lists/%s/report", user, listID)
+	url = fmt.Sprintf("users/%s/lists/%s/report", userOrMe(user), listID)
 	u.client.debug("list report")
 	req, err := u.client.NewRequest(http.MethodPost, url, report)
 	if err != nil {
@@ -963,7 +956,7 @@ func (u *UsersService) Unblock(ctx context.Context, user string) (*str.Response,
 // API docs:https://trakt.docs.apiary.io/#reference/users/followers/get-followers
 func (u *UsersService) GetFollowers(ctx context.Context, user string, options *uri.ListOptions) ([]*str.Follower, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/followers", user)
+	url = fmt.Sprintf("users/%s/followers", userOrMe(user))
 	url, err := uri.AddQuery(url, options)
 	if err != nil {
 		return nil, nil, err
@@ -988,7 +981,7 @@ func (u *UsersService) GetFollowers(ctx context.Context, user string, options *u
 // API docs:https://trakt.docs.apiary.io/#reference/users/following/get-following
 func (u *UsersService) GetFollowing(ctx context.Context, user string, options *uri.ListOptions) ([]*str.Follower, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/following", user)
+	url = fmt.Sprintf("users/%s/following", userOrMe(user))
 	url, err := uri.AddQuery(url, options)
 	if err != nil {
 		return nil, nil, err
@@ -1014,7 +1007,7 @@ func (u *UsersService) GetFollowing(ctx context.Context, user string, options *u
 // API docs:https://trakt.docs.apiary.io/#reference/users/friends/get-friends
 func (u *UsersService) GetFriends(ctx context.Context, user string, options *uri.ListOptions) ([]*str.Friend, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/friends", user)
+	url = fmt.Sprintf("users/%s/friends", userOrMe(user))
 	url, err := uri.AddQuery(url, options)
 	if err != nil {
 		return nil, nil, err
@@ -1047,9 +1040,9 @@ func (u *UsersService) GetHistory(ctx context.Context, user string, strType stri
 	var url string
 
 	if id > consts.ZeroValue {
-		url = fmt.Sprintf("users/%s/history/%s/%d", user, strType, id)
+		url = fmt.Sprintf("users/%s/history/%s/%d", userOrMe(user), strType, id)
 	} else {
-		url = fmt.Sprintf("users/%s/history/%s", user, strType)
+		url = fmt.Sprintf("users/%s/history/%s", userOrMe(user), strType)
 	}
 
 	url, err := uri.AddQuery(url, options)
@@ -1079,9 +1072,9 @@ func (u *UsersService) GetHistory(ctx context.Context, user string, strType stri
 // API docs:https://trakt.docs.apiary.io/#reference/users/ratings/get-ratings
 func (u *UsersService) GetRatings(ctx context.Context, user string, strType string, rating string, options *uri.ListOptions) ([]*str.RatingListItem, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/ratings/%s", user, strType)
+	url = fmt.Sprintf("users/%s/ratings/%s", userOrMe(user), strType)
 	if len(rating) > consts.ZeroValue {
-		url = fmt.Sprintf("users/%s/ratings/%s/%s", user, strType, rating)
+		url = fmt.Sprintf("users/%s/ratings/%s/%s", userOrMe(user), strType, rating)
 	}
 
 	url, err := uri.AddQuery(url, options)
@@ -1110,7 +1103,7 @@ func (u *UsersService) GetRatings(ctx context.Context, user string, strType stri
 func (u *UsersService) GetWatchlist(ctx context.Context, user string, types string, sortBy string, sortHow string, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 
-	url = fmt.Sprintf("users/%s/watchlist/%s/%s/%s", user, types, sortBy, sortHow)
+	url = fmt.Sprintf("users/%s/watchlist/%s/%s/%s", userOrMe(user), types, sortBy, sortHow)
 	url, err := uri.AddQuery(url, options)
 	if err != nil {
 		return nil, nil, err
@@ -1139,7 +1132,7 @@ func (u *UsersService) GetWatchlist(ctx context.Context, user string, types stri
 func (u *UsersService) GetWatchlistComments(ctx context.Context, user string, sort string, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 
-	url = fmt.Sprintf("users/%s/watchlist/comments/%s", user, sort)
+	url = fmt.Sprintf("users/%s/watchlist/comments/%s", userOrMe(user), sort)
 	url, err := uri.AddQuery(url, options)
 	if err != nil {
 		return nil, nil, err
@@ -1166,7 +1159,7 @@ func (u *UsersService) GetWatchlistComments(ctx context.Context, user string, so
 // API docs:https://trakt.docs.apiary.io/#reference/users/favorites/get-favorites
 func (u *UsersService) GetFavorites(ctx context.Context, user string, strType string, sortBy string, sortHow string, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/favorites/%s/%s/%s", user, strType, sortBy, sortHow)
+	url = fmt.Sprintf("users/%s/favorites/%s/%s/%s", userOrMe(user), strType, sortBy, sortHow)
 
 	url, err := uri.AddQuery(url, options)
 	if err != nil {
@@ -1195,7 +1188,7 @@ func (u *UsersService) GetFavorites(ctx context.Context, user string, strType st
 // API docs:https://trakt.docs.apiary.io/#reference/users/favorites-comments/get-all-favorites-comments
 func (u *UsersService) GetFavoritesComments(ctx context.Context, user string, sort string, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/favorites/comments/%s", user, sort)
+	url = fmt.Sprintf("users/%s/favorites/comments/%s", userOrMe(user), sort)
 	url, err := uri.AddQuery(url, options)
 	if err != nil {
 		return nil, nil, err
@@ -1222,7 +1215,7 @@ func (u *UsersService) GetFavoritesComments(ctx context.Context, user string, so
 // API docs:https://trakt.docs.apiary.io/#reference/users/watching/get-watching
 func (u *UsersService) GetWatching(ctx context.Context, user string, options *uri.ListOptions) (*str.WatchingResult, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/watching", user)
+	url = fmt.Sprintf("users/%s/watching", userOrMe(user))
 	url, err := uri.AddQuery(url, options)
 	if err != nil {
 		return nil, nil, err
@@ -1270,7 +1263,7 @@ func (u *UsersService) Report(ctx context.Context, user string, report *str.User
 //
 // API docs: https://docs.trakt.tv/reference/getuserssmartlistspersonal
 func (u *UsersService) GetSmartLists(ctx context.Context, user string) ([]*str.SmartList, *str.Response, error) {
-	var url = fmt.Sprintf("users/%s/smart-lists", user)
+	var url = fmt.Sprintf("users/%s/smart-lists", userOrMe(user))
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1289,7 +1282,7 @@ func (u *UsersService) GetSmartLists(ctx context.Context, user string) ([]*str.S
 //
 // API docs: https://docs.trakt.tv/reference/getuserssmartlistssmartlistsummary
 func (u *UsersService) GetSmartList(ctx context.Context, user string, listID string) (*str.SmartList, *str.Response, error) {
-	var url = fmt.Sprintf("users/%s/smart-lists/%s", user, listID)
+	var url = fmt.Sprintf("users/%s/smart-lists/%s", userOrMe(user), listID)
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -1308,7 +1301,7 @@ func (u *UsersService) GetSmartList(ctx context.Context, user string, listID str
 //
 // API docs: https://docs.trakt.tv/reference/postuserssmartlistscreate
 func (u *UsersService) AddSmartList(ctx context.Context, user string, list *str.SmartListWrite) (*str.SmartList, *str.Response, error) {
-	var url = fmt.Sprintf("users/%s/smart-lists", user)
+	var url = fmt.Sprintf("users/%s/smart-lists", userOrMe(user))
 	req, err := u.client.NewRequest(http.MethodPost, url, list)
 	if err != nil {
 		return nil, nil, err
@@ -1327,7 +1320,7 @@ func (u *UsersService) AddSmartList(ctx context.Context, user string, list *str.
 //
 // API docs: https://docs.trakt.tv/reference/putuserssmartlistssmartlistupdate
 func (u *UsersService) UpdateSmartList(ctx context.Context, user string, listID string, update *str.SmartListWrite) (*str.SmartList, *str.Response, error) {
-	var url = fmt.Sprintf("users/%s/smart-lists/%s", user, listID)
+	var url = fmt.Sprintf("users/%s/smart-lists/%s", userOrMe(user), listID)
 	req, err := u.client.NewRequest(http.MethodPut, url, update)
 	if err != nil {
 		return nil, nil, err
@@ -1346,7 +1339,7 @@ func (u *UsersService) UpdateSmartList(ctx context.Context, user string, listID 
 //
 // API docs: https://docs.trakt.tv/reference/deleteuserssmartlistssmartlistdelete
 func (u *UsersService) DeleteSmartList(ctx context.Context, user string, listID string) (*str.Response, error) {
-	var url = fmt.Sprintf("users/%s/smart-lists/%s", user, listID)
+	var url = fmt.Sprintf("users/%s/smart-lists/%s", userOrMe(user), listID)
 	req, err := u.client.NewRequest(http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
@@ -1381,7 +1374,7 @@ func (u *UsersService) GetCommentReactions(ctx context.Context, opts *uri.ListOp
 //
 // API docs: https://docs.trakt.tv/reference/getusersactivities
 func (u *UsersService) GetSocialActivity(ctx context.Context, user string, activityType string, opts *uri.SocialActivityOptions) ([]*str.SocialActivity, *str.Response, error) {
-	var url = fmt.Sprintf("users/%s/%s/activities", user, activityType)
+	var url = fmt.Sprintf("users/%s/%s/activities", userOrMe(user), activityType)
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {
 		return nil, nil, err
@@ -1404,14 +1397,14 @@ func (u *UsersService) GetSocialActivity(ctx context.Context, user string, activ
 //
 // API docs: https://docs.trakt.tv/reference/getusersmonth_in_review
 func (u *UsersService) GetMonthInReview(ctx context.Context, user string, year int, month int, opts *uri.ListOptions) (*str.Review, *str.Response, error) {
-	return u.fetchReview(ctx, fmt.Sprintf("users/%s/mir/%d/%d", user, year, month), opts)
+	return u.fetchReview(ctx, fmt.Sprintf("users/%s/mir/%d/%d", userOrMe(user), year, month), opts)
 }
 
 // GetYearInReview Returns a year-in-review summary for a user.
 //
 // API docs: https://docs.trakt.tv/reference/getusersyear_in_review
 func (u *UsersService) GetYearInReview(ctx context.Context, user string, year int, opts *uri.ListOptions) (*str.Review, *str.Response, error) {
-	return u.fetchReview(ctx, fmt.Sprintf("users/%s/yir/%d", user, year), opts)
+	return u.fetchReview(ctx, fmt.Sprintf("users/%s/yir/%d", userOrMe(user), year), opts)
 }
 
 func (u *UsersService) fetchReview(ctx context.Context, url string, opts *uri.ListOptions) (*str.Review, *str.Response, error) {
@@ -1439,7 +1432,7 @@ func (u *UsersService) fetchReview(ctx context.Context, url string, opts *uri.Li
 // API docs: https://docs.trakt.tv/reference/getuserswatchlistshows
 // API docs: https://docs.trakt.tv/reference/getuserswatchlistall
 func (u *UsersService) GetWatchlistBySort(ctx context.Context, user string, routeType string, sort string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
-	return u.fetchSortedItems(ctx, fmt.Sprintf("users/%s/watchlist/%s/%s", user, routeType, sort), opts)
+	return u.fetchSortedItems(ctx, fmt.Sprintf("users/%s/watchlist/%s/%s", userOrMe(user), routeType, sort), opts)
 }
 
 // GetFavoritesBySort Returns favorites of one type sorted by the {sort} path value; routeType is movies, shows or media.
@@ -1448,7 +1441,7 @@ func (u *UsersService) GetWatchlistBySort(ctx context.Context, user string, rout
 // API docs: https://docs.trakt.tv/reference/getusersfavoritesmovies
 // API docs: https://docs.trakt.tv/reference/getusersfavoritesshows
 func (u *UsersService) GetFavoritesBySort(ctx context.Context, user string, routeType string, sort string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
-	return u.fetchSortedItems(ctx, fmt.Sprintf("users/%s/favorites/%s/%s", user, routeType, sort), opts)
+	return u.fetchSortedItems(ctx, fmt.Sprintf("users/%s/favorites/%s/%s", userOrMe(user), routeType, sort), opts)
 }
 
 func (u *UsersService) fetchSortedItems(ctx context.Context, url string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
