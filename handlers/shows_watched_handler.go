@@ -48,7 +48,7 @@ func (h ShowsWatchedHandler) fetchShowsWatched(client *trakt.Client, options *st
 	list, resp, err := client.Shows.GetWatchedShows(
 		cli.ContextFromOptions(options),
 		&opts,
-		&period,
+		period,
 	)
 
 	if err != nil {

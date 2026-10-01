@@ -50,7 +50,7 @@ func (ShowsWatchedProgressHandler) fetchShowsWatchedProgress(client *trakt.Clien
 
 	result, _, err := client.Shows.GetShowWatchedProgress(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 		&opts,
 	)
 	if err != nil {

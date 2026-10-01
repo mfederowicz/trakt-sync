@@ -15,7 +15,7 @@ import (
 // and hidden items return the *str.Response, so callers can read its headers.
 func TestServicesReturnResponse(t *testing.T) {
 	ctx := context.Background()
-	show := str.String("bb")
+	show := "bb"
 	opts := &uri.ListOptions{}
 	tests := []struct {
 		name   string

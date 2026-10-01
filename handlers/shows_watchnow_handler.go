@@ -25,7 +25,7 @@ func (ShowsWatchNowHandler) Handle(options *str.Options, client *trakt.Client) e
 
 	printer.Println("Returns streaming and watch now sources for a show in the requested country (limited access).")
 	opts := uri.ListOptions{Extended: options.ExtendedInfo, Links: options.Links}
-	result, resp, err := client.Shows.GetShowWatchNow(cli.ContextFromOptions(options), &options.InternalID, &options.Country, &opts)
+	result, resp, err := client.Shows.GetShowWatchNow(cli.ContextFromOptions(options), options.InternalID, options.Country, &opts)
 	if err = watchNowError(consts.WatchNow, consts.Show, options.InternalID, resp, err); err != nil {
 		return err
 	}

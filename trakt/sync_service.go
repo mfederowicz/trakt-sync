@@ -235,7 +235,7 @@ func (s *SyncService) GetCollectedSeasons(ctx context.Context, options *uri.List
 			seasonsNumbers = append(seasonsNumbers, *sitem.Number)
 		}
 
-		seasons, _, err := s.client.Shows.GetAllSeasonsForShow(ctx, val.Show.IDs.Slug, options)
+		seasons, _, err := s.client.Shows.GetAllSeasonsForShow(ctx, *val.Show.IDs.Slug, options)
 		if err != nil {
 			return nil, resp, err
 		}

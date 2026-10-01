@@ -43,9 +43,9 @@ func (m SeasonsCommentsHandler) fetchSeasonsComments(client *trakt.Client, optio
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetAllSeasonComments(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
-		&options.Season,
-		&options.Sort,
+		options.InternalID,
+		options.Season,
+		options.Sort,
 		&opts,
 	)
 

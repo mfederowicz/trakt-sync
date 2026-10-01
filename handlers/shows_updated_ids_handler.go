@@ -51,7 +51,7 @@ func (m ShowsUpdatedIDsHandler) fetchShowsUpdatedIDs(client *trakt.Client, optio
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetRecentlyUpdatedShowsTraktIDs(
 		cli.ContextFromOptions(options),
-		&startDate,
+		startDate,
 		&opts,
 	)
 

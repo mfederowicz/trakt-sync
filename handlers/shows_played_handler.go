@@ -48,7 +48,7 @@ func (h ShowsPlayedHandler) fetchShowsPlayed(client *trakt.Client, options *str.
 	list, resp, err := client.Shows.GetPlayedShows(
 		cli.ContextFromOptions(options),
 		&opts,
-		&period,
+		period,
 	)
 
 	if err != nil {

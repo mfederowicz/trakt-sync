@@ -48,7 +48,7 @@ func (h ShowsFavoritedHandler) fetchShowsFavorited(client *trakt.Client, options
 	list, resp, err := client.Shows.GetFavoritedShows(
 		cli.ContextFromOptions(options),
 		&opts,
-		&period,
+		period,
 	)
 
 	if err != nil {

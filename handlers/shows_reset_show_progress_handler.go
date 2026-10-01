@@ -32,7 +32,7 @@ func (m ShowsResetShowProgressHandler) Handle(options *str.Options, client *trak
 
 // HandleDelete process delete
 func (ShowsResetShowProgressHandler) handleUndoResetShowProgress(options *str.Options, client *trakt.Client) error {
-	resp, err := client.Shows.UndoResetShowProgress(cli.ContextFromOptions(options), &options.InternalID)
+	resp, err := client.Shows.UndoResetShowProgress(cli.ContextFromOptions(options), options.InternalID)
 	if err != nil {
 		return fmt.Errorf("%w", err)
 	}
@@ -55,7 +55,7 @@ func (m ShowsResetShowProgressHandler) handleResetShowProgress(options *str.Opti
 		showProgress.ResetAt = m.common.ToTimestamp(options.ResetAt)
 	}
 
-	result, resp, err := client.Shows.ResetShowProgress(cli.ContextFromOptions(options), &options.InternalID, showProgress)
+	result, resp, err := client.Shows.ResetShowProgress(cli.ContextFromOptions(options), options.InternalID, showProgress)
 	if err != nil {
 		return fmt.Errorf("reset progress error:%w", err)
 	}

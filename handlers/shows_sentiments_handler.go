@@ -25,7 +25,7 @@ func (ShowsSentimentsHandler) Handle(options *str.Options, client *trakt.Client)
 	}
 
 	printer.Println("Returns sentiment counts for comments and reactions attached to a show.")
-	result, resp, err := client.Shows.GetShowSentiments(cli.ContextFromOptions(options), &options.InternalID)
+	result, resp, err := client.Shows.GetShowSentiments(cli.ContextFromOptions(options), options.InternalID)
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found show for:%s", options.InternalID)
 	}

@@ -40,8 +40,8 @@ func (m ShowsTranslationsHandler) Handle(options *str.Options, client *trakt.Cli
 func (ShowsTranslationsHandler) fetchShowsTranslations(client *trakt.Client, options *str.Options) ([]*str.Translation, *str.Response, error) {
 	translations, resp, err := client.Shows.GetAllShowTranslations(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
-		&options.Language,
+		options.InternalID,
+		options.Language,
 	)
 
 	if err != nil {

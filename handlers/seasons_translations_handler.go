@@ -42,9 +42,9 @@ func (SeasonsTranslationsHandler) fetchSeasonsTranslations(client *trakt.Client,
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Shows.GetAllSeasonTranslations(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
-		&options.Season,
-		&options.Language,
+		options.InternalID,
+		options.Season,
+		options.Language,
 		&opts,
 	)
 

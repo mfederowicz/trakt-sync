@@ -49,9 +49,9 @@ func (m ShowsListsHandler) fetchShowsLists(client *trakt.Client, options *str.Op
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetListsContainingShow(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
-		&options.Type,
-		&options.Sort,
+		options.InternalID,
+		options.Type,
+		options.Sort,
 		&opts,
 	)
 

@@ -49,11 +49,11 @@ func (m EpisodesListsHandler) fetchEpisodesLists(client *trakt.Client, options *
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Shows.GetListsContainingEpisode(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
-		&options.Season,
-		&options.Episode,
-		&options.Type,
-		&options.Sort,
+		options.InternalID,
+		options.Season,
+		options.Episode,
+		options.Type,
+		options.Sort,
 		&opts,
 	)
 

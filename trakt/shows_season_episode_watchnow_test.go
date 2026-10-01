@@ -23,7 +23,7 @@ func TestShowsServiceGetEpisodeWatchNow(t *testing.T) {
 		test.SafeFprint(w, `{"us":{"subscription":[{"source":"max","link":"watchnow.trakt.tv/watchnow/1","uhd":false,"prices":{},"link_direct":"https://play.example/2"}]}}`)
 	})
 
-	got, _, err := setup.Client.Shows.GetEpisodeWatchNow(context.Background(), str.String("the-sopranos"), test.Ptr(1), test.Ptr(2), str.String("us"), &uri.ListOptions{Extended: "streaming_ranks", Links: "direct"})
+	got, _, err := setup.Client.Shows.GetEpisodeWatchNow(context.Background(), "the-sopranos", 1, 2, "us", &uri.ListOptions{Extended: "streaming_ranks", Links: "direct"})
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, map[string]*str.WatchNowSources{"us": {
 		Subscription: []*str.WatchNowService{{
@@ -45,7 +45,7 @@ func TestShowsServiceGetSeasonJustwatchLinks(t *testing.T) {
 		test.SafeFprint(w, `{"pl":"justwatch.com/pl/serial/rodzina-soprano/sezon-0"}`)
 	})
 
-	got, _, err := setup.Client.Shows.GetSeasonJustwatchLinks(context.Background(), str.String("the-sopranos"), test.Ptr(0), str.String("pl"))
+	got, _, err := setup.Client.Shows.GetSeasonJustwatchLinks(context.Background(), "the-sopranos", 0, "pl")
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, map[string]string{"pl": "justwatch.com/pl/serial/rodzina-soprano/sezon-0"}, got)
 }

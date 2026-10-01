@@ -116,6 +116,78 @@ func TestOptionalPathSegments(t *testing.T) {
 			_, _, err := c.Movies.GetListsContainingMovie(ctx, "tron", "personal", "popular", opts)
 			return err
 		}},
+		{name: "show translations all", path: "/shows/bb/translations", call: func(c *Client) error {
+			_, _, err := c.Shows.GetAllShowTranslations(ctx, "bb", "")
+			return err
+		}},
+		{name: "show translations language", path: "/shows/bb/translations/pl", call: func(c *Client) error {
+			_, _, err := c.Shows.GetAllShowTranslations(ctx, "bb", "pl")
+			return err
+		}},
+		{name: "season translations all", path: "/shows/bb/seasons/0/translations", call: func(c *Client) error {
+			_, _, err := c.Shows.GetAllSeasonTranslations(ctx, "bb", 0, "", opts)
+			return err
+		}},
+		{name: "season translations language", path: "/shows/bb/seasons/1/translations/pl", call: func(c *Client) error {
+			_, _, err := c.Shows.GetAllSeasonTranslations(ctx, "bb", 1, "pl", opts)
+			return err
+		}},
+		{name: "episode translations all", path: "/shows/bb/seasons/1/episodes/2/translations", call: func(c *Client) error {
+			_, _, err := c.Shows.GetAllEpisodeTranslations(ctx, "bb", 1, 2, "")
+			return err
+		}},
+		{name: "episode translations language", path: "/shows/bb/seasons/1/episodes/2/translations/pl", call: func(c *Client) error {
+			_, _, err := c.Shows.GetAllEpisodeTranslations(ctx, "bb", 1, 2, "pl")
+			return err
+		}},
+		{name: "show comments default", path: "/shows/bb/comments", call: func(c *Client) error {
+			_, _, err := c.Shows.GetAllShowComments(ctx, "bb", "", opts)
+			return err
+		}},
+		{name: "show comments sorted", path: "/shows/bb/comments/likes", call: func(c *Client) error {
+			_, _, err := c.Shows.GetAllShowComments(ctx, "bb", "likes", opts)
+			return err
+		}},
+		{name: "season comments default", path: "/shows/bb/seasons/1/comments", call: func(c *Client) error {
+			_, _, err := c.Shows.GetAllSeasonComments(ctx, "bb", 1, "", opts)
+			return err
+		}},
+		{name: "season comments sorted", path: "/shows/bb/seasons/1/comments/likes", call: func(c *Client) error {
+			_, _, err := c.Shows.GetAllSeasonComments(ctx, "bb", 1, "likes", opts)
+			return err
+		}},
+		{name: "episode comments default", path: "/shows/bb/seasons/1/episodes/2/comments", call: func(c *Client) error {
+			_, _, err := c.Shows.GetAllEpisodeComments(ctx, "bb", 1, 2, "", opts)
+			return err
+		}},
+		{name: "episode comments sorted", path: "/shows/bb/seasons/1/episodes/2/comments/likes", call: func(c *Client) error {
+			_, _, err := c.Shows.GetAllEpisodeComments(ctx, "bb", 1, 2, "likes", opts)
+			return err
+		}},
+		{name: "show lists default", path: "/shows/bb/lists", call: func(c *Client) error {
+			_, _, err := c.Shows.GetListsContainingShow(ctx, "bb", "", "popular", opts)
+			return err
+		}},
+		{name: "show lists typed", path: "/shows/bb/lists/personal/popular", call: func(c *Client) error {
+			_, _, err := c.Shows.GetListsContainingShow(ctx, "bb", "personal", "popular", opts)
+			return err
+		}},
+		{name: "season lists default", path: "/shows/bb/seasons/1/lists", call: func(c *Client) error {
+			_, _, err := c.Shows.GetListsContainingSeason(ctx, "bb", 1, "personal", "", opts)
+			return err
+		}},
+		{name: "season lists typed", path: "/shows/bb/seasons/1/lists/personal/popular", call: func(c *Client) error {
+			_, _, err := c.Shows.GetListsContainingSeason(ctx, "bb", 1, "personal", "popular", opts)
+			return err
+		}},
+		{name: "episode lists default", path: "/shows/bb/seasons/1/episodes/2/lists", call: func(c *Client) error {
+			_, _, err := c.Shows.GetListsContainingEpisode(ctx, "bb", 1, 2, "", "", opts)
+			return err
+		}},
+		{name: "episode lists typed", path: "/shows/bb/seasons/1/episodes/2/lists/personal/popular", call: func(c *Client) error {
+			_, _, err := c.Shows.GetListsContainingEpisode(ctx, "bb", 1, 2, "personal", "popular", opts)
+			return err
+		}},
 	}
 
 	for _, tt := range tests {

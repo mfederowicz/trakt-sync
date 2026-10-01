@@ -40,7 +40,7 @@ func (m ShowsAliasesHandler) Handle(options *str.Options, client *trakt.Client) 
 func (ShowsAliasesHandler) fetchShowsAliases(client *trakt.Client, options *str.Options) ([]*str.Alias, *str.Response, error) {
 	aliases, resp, err := client.Shows.GetAllShowAliases(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 	)
 
 	if err != nil {

@@ -48,7 +48,7 @@ func (h ShowsCollectedHandler) fetchShowsCollected(client *trakt.Client, options
 	list, resp, err := client.Shows.GetCollectedShows(
 		cli.ContextFromOptions(options),
 		&opts,
-		&period,
+		period,
 	)
 
 	if err != nil {

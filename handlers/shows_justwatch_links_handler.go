@@ -23,7 +23,7 @@ func (ShowsJustwatchLinksHandler) Handle(options *str.Options, client *trakt.Cli
 	}
 
 	printer.Println("Returns JustWatch links for a show in the requested country (limited access).")
-	result, resp, err := client.Shows.GetShowJustwatchLinks(cli.ContextFromOptions(options), &options.InternalID, &options.Country)
+	result, resp, err := client.Shows.GetShowJustwatchLinks(cli.ContextFromOptions(options), options.InternalID, options.Country)
 	if err = watchNowError(consts.JustwatchLinks, consts.Show, options.InternalID, resp, err); err != nil {
 		return err
 	}

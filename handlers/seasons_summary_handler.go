@@ -42,7 +42,7 @@ func (SeasonsSummaryHandler) fetchSeasonsSummary(client *trakt.Client, options *
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Shows.GetAllSeasonsForShow(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 		&opts,
 	)
 

@@ -40,9 +40,9 @@ func (m EpisodesStatsHandler) Handle(options *str.Options, client *trakt.Client)
 func (EpisodesStatsHandler) fetchEpisodesStats(client *trakt.Client, options *str.Options) (*str.EpisodeStats, *str.Response, error) {
 	result, resp, err := client.Shows.GetEpisodeStats(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
-		&options.Season,
-		&options.Episode,
+		options.InternalID,
+		options.Season,
+		options.Episode,
 	)
 
 	if err != nil {

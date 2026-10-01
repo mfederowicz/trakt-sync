@@ -40,7 +40,7 @@ func (m ShowsStatsHandler) Handle(options *str.Options, client *trakt.Client) er
 func (ShowsStatsHandler) fetchShowsStats(client *trakt.Client, options *str.Options) (*str.ShowStats, *str.Response, error) {
 	result, resp, err := client.Shows.GetShowStats(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 	)
 
 	if err != nil {

@@ -42,8 +42,8 @@ func (SeasonsEpisodesHandler) fetchSeasonsEpisodes(client *trakt.Client, options
 	opts := uri.ListOptions{Extended: options.ExtendedInfo, Translations: options.Translations}
 	result, resp, err := client.Shows.GetAllEpisodesForSingleSeason(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
-		&options.Season,
+		options.InternalID,
+		options.Season,
 		&opts,
 	)
 

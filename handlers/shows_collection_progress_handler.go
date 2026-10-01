@@ -50,7 +50,7 @@ func (ShowsCollectionProgressHandler) fetchShowsCollectionProgress(client *trakt
 
 	result, _, err := client.Shows.GetShowCollectionProgress(
 		cli.ContextFromOptions(options),
-		&options.InternalID,
+		options.InternalID,
 		&opts,
 	)
 	if err != nil {

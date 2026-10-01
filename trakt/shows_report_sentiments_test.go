@@ -25,7 +25,7 @@ func TestShowsServiceReportShow(t *testing.T) {
 		w.WriteHeader(http.StatusCreated)
 	})
 
-	resp, err := setup.Client.Shows.ReportShow(context.Background(), str.String("the-sopranos"), &str.ShowReport{Reason: str.String("metadata"), Message: str.String("wrong overview")})
+	resp, err := setup.Client.Shows.ReportShow(context.Background(), "the-sopranos", &str.ShowReport{Reason: str.String("metadata"), Message: str.String("wrong overview")})
 	test.AssertNilError(t, err)
 	if got, want := resp.StatusCode, http.StatusCreated; got != want {
 		t.Errorf("status code is %d, want %d", got, want)
@@ -37,7 +37,7 @@ func TestShowsServiceReportShowConflict(t *testing.T) {
 	defer setup.Teardown()
 	conflictMux(t, setup.Mux, "/shows/the-sopranos/report", `{}`)
 
-	_, err := setup.Client.Shows.ReportShow(context.Background(), str.String("the-sopranos"), &str.ShowReport{Reason: str.String("spam")})
+	_, err := setup.Client.Shows.ReportShow(context.Background(), "the-sopranos", &str.ShowReport{Reason: str.String("spam")})
 	if got, want := fmt.Sprint(err), fmt.Sprintf(consts.ShowReportPending, "the-sopranos"); got != want {
 		t.Errorf("error is %q, want %q", got, want)
 	}
@@ -52,7 +52,7 @@ func TestShowsServiceGetShowSentiments(t *testing.T) {
 		test.SafeFprint(w, `{"good":[{"sentiment":"great acting","comment_ids":[1,2]}],"bad":[{"sentiment":"slow start"}],"comment_count":2}`)
 	})
 
-	got, _, err := setup.Client.Shows.GetShowSentiments(context.Background(), str.String("the-sopranos"))
+	got, _, err := setup.Client.Shows.GetShowSentiments(context.Background(), "the-sopranos")
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, &str.Sentiments{
 		Good:         []*str.Sentiment{{Sentiment: str.String("great acting"), CommentIDs: &[]int{1, 2}}},
