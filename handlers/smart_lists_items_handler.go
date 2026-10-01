@@ -4,7 +4,6 @@ package handlers
 import (
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/cli"
@@ -64,7 +63,7 @@ func (h SmartListsItemsHandler) fetchItems(client *trakt.Client, options *str.Op
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		nextPageItems, err := h.fetchItems(client, options, opts, page+consts.NextPageStep)
 		if err != nil {
 			return nil, err

@@ -4,7 +4,6 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -71,7 +70,7 @@ func (s SyncGetCollectionHandler) syncGetCollected(client *trakt.Client, options
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
@@ -99,7 +98,7 @@ func (s SyncGetCollectionHandler) syncGetCollectedSeasons(client *trakt.Client, 
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep

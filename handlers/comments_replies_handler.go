@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -71,7 +70,7 @@ func (h CommentsRepliesHandler) fetchCommentReplies(client *trakt.Client, option
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep

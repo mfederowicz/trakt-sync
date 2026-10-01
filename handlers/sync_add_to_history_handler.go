@@ -4,7 +4,6 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -41,7 +40,7 @@ func (m SyncAddToHistoryHandler) Handle(options *str.Options, client *trakt.Clie
 		return fmt.Errorf("encode %s result: %w", options.Action, err)
 	}
 	writer.WriteJSON(&cleanup, jsonData)
-	time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+	waitPageDelay()
 
 	printer.Println("add to history")
 

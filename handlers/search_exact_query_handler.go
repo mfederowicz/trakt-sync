@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/cli"
@@ -61,7 +60,7 @@ func (s SearchExactQueryHandler) fetchSearchExactQuery(client *trakt.Client, opt
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := s.fetchSearchExactQuery(client, options, nextPage)
