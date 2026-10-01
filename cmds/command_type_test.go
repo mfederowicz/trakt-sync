@@ -53,3 +53,46 @@ func TestExecTypeFromConfigFileAndFlag(t *testing.T) {
 		})
 	}
 }
+
+// TestConfigTypePerModule pins which modules read the config file's type (README "Usage"):
+// modules with their own -t (or, for people, the action) ignore it.
+func TestConfigTypePerModule(t *testing.T) {
+	ignoring := map[string]bool{
+		"episodes": true, "lists": true, "movies": true, "people": true,
+		"scrobble": true, "seasons": true, "shows": true, "users": true,
+	}
+	const fileType = "shows"
+
+	for _, c := range Commands {
+		c := c
+		t.Run(c.Name, func(t *testing.T) {
+			resetAllFlags()
+			t.Cleanup(resetAllFlags)
+
+			fs := afero.NewMemMapFs()
+			tmpPath := "/tmp-type-module/"
+			assert.NoError(t, fs.MkdirAll(tmpPath, consts.X755))
+			assert.NoError(t, afero.WriteFile(fs, tmpPath+"token.json", []byte("{}"), consts.X644))
+			assert.NoError(t, afero.WriteFile(fs, tmpPath+"user_settings.json", []byte("{}"), consts.X644))
+
+			fileConfig := cfg.DefaultConfig()
+			fileConfig.ClientID = "a"
+			fileConfig.ClientSecret = "b"
+			fileConfig.TokenPath = tmpPath + "token.json"
+			fileConfig.SettingsPath = tmpPath + "user_settings.json"
+			fileConfig.Type = fileType
+
+			var got string
+			command := &Command{Name: c.Name, Flag: c.Flag, Run: func(cc *Command, _ ...string) error {
+				got = cc.UpdateOptionsWithCommandFlags(cc.Options).Type
+				return nil
+			}}
+			assert.NoError(t, command.Exec(fs, trakt.NewClient(nil), fileConfig, nil))
+			if ignoring[c.Name] {
+				assert.NotEqual(t, fileType, got, "%s should ignore the config type", c.Name)
+			} else {
+				assert.Equal(t, fileType, got, "%s should use the config type", c.Name)
+			}
+		})
+	}
+}

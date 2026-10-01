@@ -39,6 +39,7 @@ schedule.
 
 ### Fixed
 
+- README: the config file's `type` was described as applying to every module. It is ignored by `episodes`, `lists`, `movies`, `people`, `scrobble`, `seasons`, `shows` and `users`, which take `-t` only from the command line; the README now says so.
 ## [1.21.0] - 2026-10-01
 
 ### Added

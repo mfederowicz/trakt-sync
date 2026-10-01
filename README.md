@@ -43,6 +43,7 @@ pages_limit = 10
 If not provided, `trakt-sync` will try to use a global config file (assumed to be located at `$HOME/trakt-sync.toml`).
 Otherwise, if no configuration TOML file is found then `trakt-sync` uses a built-in parameters depends on selected module.
 A value given on the command line (for example `-t shows`) wins over the same option in the config file (`type = "shows"`), which wins over the built-in default.
+One exception: `type` in the config file is ignored by `episodes`, `lists`, `movies`, `people`, `scrobble`, `seasons`, `shows` and `users`. There `-t` has a module-specific meaning (for example a list type), so give it on the command line.
 
 ### Command Line Flags
 
