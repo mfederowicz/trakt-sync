@@ -46,8 +46,8 @@ func fetchUsersWatched(client *trakt.Client, options *str.Options, page int) ([]
 	opts := uri.ListOptions{Page: page, Limit: consts.PerPage, Extended: options.ExtendedInfo}
 	watched, resp, err := client.Users.GetWatched(
 		cli.ContextFromOptions(options),
-		&username,
-		&watchType,
+		username,
+		watchType,
 		&opts,
 	)
 	if err != nil {

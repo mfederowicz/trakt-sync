@@ -16,19 +16,19 @@ func TestUsersServiceListLike(t *testing.T) {
 	tests := []struct {
 		name   string
 		method string
-		call   func(s *UsersService, user *string, listID *string) (*str.Response, error)
+		call   func(s *UsersService, user string, listID string) (*str.Response, error)
 	}{
 		{
 			name:   "like a list",
 			method: http.MethodPost,
-			call: func(s *UsersService, user *string, listID *string) (*str.Response, error) {
+			call: func(s *UsersService, user string, listID string) (*str.Response, error) {
 				return s.LikeList(context.Background(), user, listID)
 			},
 		},
 		{
 			name:   "remove like on a list",
 			method: http.MethodDelete,
-			call: func(s *UsersService, user *string, listID *string) (*str.Response, error) {
+			call: func(s *UsersService, user string, listID string) (*str.Response, error) {
 				return s.RemoveListLike(context.Background(), user, listID)
 			},
 		},
@@ -44,7 +44,7 @@ func TestUsersServiceListLike(t *testing.T) {
 				w.WriteHeader(http.StatusNoContent)
 			})
 
-			resp, err := tt.call(setup.Client.Users, str.String("sean"), str.String("star-wars"))
+			resp, err := tt.call(setup.Client.Users, "sean", "star-wars")
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
@@ -102,11 +102,11 @@ func TestUsersServiceFollowRequests(t *testing.T) {
 func TestUsersServiceGetUserProfile(t *testing.T) {
 	tests := []struct {
 		name string
-		id   *string
+		id   string
 		path string
 	}{
-		{name: "given user", id: str.String("sean"), path: "/users/sean"},
-		{name: "authenticated user", id: nil, path: "/users/me"},
+		{name: "given user", id: "sean", path: "/users/sean"},
+		{name: "authenticated user", id: "", path: "/users/me"},
 	}
 
 	for _, tt := range tests {

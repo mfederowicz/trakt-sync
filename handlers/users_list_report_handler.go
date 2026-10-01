@@ -50,8 +50,8 @@ func (UsersListReportHandler) usersListReport(client *trakt.Client, options *str
 
 	result, resp, err := client.Users.ReportList(
 		cli.ContextFromOptions(options),
-		&options.UserName,
-		&options.ID,
+		options.UserName,
+		options.ID,
 		report)
 
 	if resp == nil {

@@ -11,13 +11,14 @@ import (
 )
 
 // TestOptionalPathSegments checks that an empty value leaves an optional path
-// segment out and a set value adds it.
+// segment out (or, for users, becomes "me") and a set value adds it.
 func TestOptionalPathSegments(t *testing.T) {
 	ctx := context.Background()
 	opts := &uri.ListOptions{}
 	tests := []struct {
 		name string
 		path string
+		body string
 		call func(c *Client) error
 	}{
 		{name: "collection all", path: "/sync/collection", call: func(c *Client) error {
@@ -188,6 +189,94 @@ func TestOptionalPathSegments(t *testing.T) {
 			_, _, err := c.Shows.GetListsContainingEpisode(ctx, "bb", 1, 2, "personal", "popular", opts)
 			return err
 		}},
+		{name: "user profile me", path: "/users/me", body: `{}`, call: func(c *Client) error {
+			_, _, err := c.Users.GetUserProfile(ctx, "")
+			return err
+		}},
+		{name: "user profile given", path: "/users/sean", body: `{}`, call: func(c *Client) error {
+			_, _, err := c.Users.GetUserProfile(ctx, "sean")
+			return err
+		}},
+		{name: "user stats me", path: "/users/me/stats", body: `{}`, call: func(c *Client) error {
+			_, _, err := c.Users.GetStats(ctx, "")
+			return err
+		}},
+		{name: "user stats given", path: "/users/sean/stats", body: `{}`, call: func(c *Client) error {
+			_, _, err := c.Users.GetStats(ctx, "sean")
+			return err
+		}},
+		{name: "user lists me", path: "/users/me/lists", call: func(c *Client) error {
+			_, _, err := c.Users.GetUsersPersonalLists(ctx, "")
+			return err
+		}},
+		{name: "user list items me", path: "/users/me/lists/55/items/movie", call: func(c *Client) error {
+			_, _, err := c.Users.GetListItemsByType(ctx, "", "55", "movie")
+			return err
+		}},
+		{name: "user list items given", path: "/users/sean/lists/55/items/show", call: func(c *Client) error {
+			_, _, err := c.Users.GetListItemsByType(ctx, "sean", "55", "show")
+			return err
+		}},
+		{name: "user watched me", path: "/users/me/watched/movies", call: func(c *Client) error {
+			_, _, err := c.Users.GetWatched(ctx, "", "movies", opts)
+			return err
+		}},
+		{name: "user collaborations me", path: "/users/me/lists/collaborations", call: func(c *Client) error {
+			_, _, err := c.Users.GetCollaborations(ctx, "", opts)
+			return err
+		}},
+		{name: "user collaborations given", path: "/users/sean/lists/collaborations", call: func(c *Client) error {
+			_, _, err := c.Users.GetCollaborations(ctx, "sean", opts)
+			return err
+		}},
+		{name: "user likes me", path: "/users/me/likes/lists", call: func(c *Client) error {
+			_, _, err := c.Users.GetLikes(ctx, "", "lists", opts)
+			return err
+		}},
+		{name: "user likes given", path: "/users/sean/likes/comments", call: func(c *Client) error {
+			_, _, err := c.Users.GetLikes(ctx, "sean", "comments", opts)
+			return err
+		}},
+		{name: "user collection given", path: "/users/sean/collection/shows", call: func(c *Client) error {
+			_, _, err := c.Users.GetCollection(ctx, "sean", "shows", opts)
+			return err
+		}},
+		{name: "user comments given", path: "/users/sean/comments/reviews/movies", call: func(c *Client) error {
+			_, _, err := c.Users.GetComments(ctx, "sean", "reviews", "movies", opts)
+			return err
+		}},
+		{name: "user notes given", path: "/users/sean/notes/movies", call: func(c *Client) error {
+			_, _, err := c.Users.GetNotes(ctx, "sean", "movies", opts)
+			return err
+		}},
+		{name: "hidden section", path: "/users/hidden/calendar", call: func(c *Client) error {
+			_, _, err := c.Users.GetHiddenItems(ctx, "calendar", opts)
+			return err
+		}},
+		{name: "user history all", path: "/users/sean/history/movies", call: func(c *Client) error {
+			_, _, err := c.Users.GetHistory(ctx, "sean", "movies", 0, opts)
+			return err
+		}},
+		{name: "user history id", path: "/users/sean/history/movies/12", call: func(c *Client) error {
+			_, _, err := c.Users.GetHistory(ctx, "sean", "movies", 12, opts)
+			return err
+		}},
+		{name: "user ratings all", path: "/users/sean/ratings/movies", call: func(c *Client) error {
+			_, _, err := c.Users.GetRatings(ctx, "sean", "movies", "", opts)
+			return err
+		}},
+		{name: "user ratings value", path: "/users/sean/ratings/movies/10", call: func(c *Client) error {
+			_, _, err := c.Users.GetRatings(ctx, "sean", "movies", "10", opts)
+			return err
+		}},
+		{name: "data syncs all", path: "/users/syncs", call: func(c *Client) error {
+			_, _, err := c.Users.GetDataSyncs(ctx, "", opts)
+			return err
+		}},
+		{name: "data syncs type", path: "/users/syncs/plex", call: func(c *Client) error {
+			_, _, err := c.Users.GetDataSyncs(ctx, "plex", opts)
+			return err
+		}},
 	}
 
 	for _, tt := range tests {
@@ -203,7 +292,11 @@ func TestOptionalPathSegments(t *testing.T) {
 				if r.URL.Path != tt.path {
 					t.Errorf("path is %q, want %q", r.URL.Path, tt.path)
 				}
-				test.SafeFprint(w, `[]`)
+				body := tt.body
+				if body == "" {
+					body = `[]`
+				}
+				test.SafeFprint(w, body)
 			})
 
 			test.AssertNilError(t, tt.call(setup.Client))

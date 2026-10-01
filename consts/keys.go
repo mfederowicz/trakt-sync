@@ -112,6 +112,7 @@ const (
 	ListItemsAll          = "movie,show,episode,season"
 	Lists                 = "lists"
 	Lookup                = "lookup"
+	Me                    = "me"
 	Media                 = "media"
 	Members               = "members"
 	MinimalCollection     = "minimal_collection"

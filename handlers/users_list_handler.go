@@ -53,8 +53,8 @@ func (UsersListHandler) fetchSingleList(client *trakt.Client, options *str.Optio
 
 	result, resp, err := client.Users.GetList(
 		cli.ContextFromOptions(options),
-		&username,
-		&listID,
+		username,
+		listID,
 		&opts,
 	)
 

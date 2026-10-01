@@ -86,7 +86,7 @@ func fetchUsersPersonalLists(client *trakt.Client, options *str.Options) ([]*str
 	username := options.UserName
 	lists, resp, err := client.Users.GetUsersPersonalLists(
 		cli.ContextFromOptions(options),
-		&username,
+		username,
 	)
 
 	return lists, resp, err
@@ -97,9 +97,9 @@ func fetchUsersPersonalList(client *trakt.Client, options *str.Options) ([]*str.
 	username := options.UserName
 	lists, resp, err := client.Users.GetListItemsByType(
 		cli.ContextFromOptions(options),
-		&username,
-		&listIDString,
-		&options.Type,
+		username,
+		listIDString,
+		options.Type,
 	)
 
 	return lists, resp, err

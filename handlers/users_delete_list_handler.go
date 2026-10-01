@@ -47,7 +47,7 @@ func (m UsersDeleteListHandler) Handle(options *str.Options, client *trakt.Clien
 }
 
 func (UsersDeleteListHandler) usersDeleteList(client *trakt.Client, options *str.Options) (*str.Response, error) {
-	resp, err := client.Users.DeleteList(cli.ContextFromOptions(options), &options.UserName, &options.ID)
+	resp, err := client.Users.DeleteList(cli.ContextFromOptions(options), options.UserName, options.ID)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return resp, nil

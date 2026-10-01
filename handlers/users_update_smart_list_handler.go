@@ -26,7 +26,7 @@ func (h UsersUpdateSmartListHandler) Handle(options *str.Options, client *trakt.
 	}
 
 	printer.Println("Update smart list: " + options.ID)
-	result, resp, err := client.Users.UpdateSmartList(cli.ContextFromOptions(options), &options.UserName, &options.ID, list)
+	result, resp, err := client.Users.UpdateSmartList(cli.ContextFromOptions(options), options.UserName, options.ID, list)
 	if err = smartListError(options.Action, options.ID, resp, err); err != nil {
 		return err
 	}

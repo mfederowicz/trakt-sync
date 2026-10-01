@@ -37,8 +37,8 @@ func (UsersReorderListItemsHandler) usersReorderListItems(client *trakt.Client, 
 	listID := options.ID
 	result, _, err := client.Users.ReorderListItems(
 		cli.ContextFromOptions(options),
-		&user,
-		&listID,
+		user,
+		listID,
 		items,
 	)
 	if err != nil {

@@ -41,7 +41,7 @@ func fetchUserProfile(client *trakt.Client, options *str.Options) (*str.UserProf
 	username := options.UserName
 	profile, resp, err := client.Users.GetProfile(
 		cli.ContextFromOptions(options),
-		&username,
+		username,
 	)
 
 	return profile, resp, err

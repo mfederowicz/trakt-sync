@@ -49,7 +49,7 @@ func TestUsersServiceGetSocialActivity(t *testing.T) {
 	})
 
 	opts := &uri.SocialActivityOptions{Page: 2, Limit: 10, Extended: "full", Genres: "drama", Years: "2020-2026"}
-	got, _, err := setup.Client.Users.GetSocialActivity(context.Background(), str.String("sean"), str.String("following"), opts)
+	got, _, err := setup.Client.Users.GetSocialActivity(context.Background(), "sean", "following", opts)
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, []*str.SocialActivity{
 		{ID: test.Ptr(int64(9001)), ActivityAt: &str.Timestamp{Time: time.Date(2026, 9, 2, 20, 0, 0, 0, time.UTC)}, Action: str.String("watch"),
@@ -100,10 +100,10 @@ func TestUsersServiceGetReviews(t *testing.T) {
 		call func(u *UsersService) (*str.Review, *str.Response, error)
 	}{
 		{name: "month", path: "/users/sean/mir/2026/8", call: func(u *UsersService) (*str.Review, *str.Response, error) {
-			return u.GetMonthInReview(context.Background(), str.String("sean"), 2026, 8, &uri.ListOptions{Extended: "images"})
+			return u.GetMonthInReview(context.Background(), "sean", 2026, 8, &uri.ListOptions{Extended: "images"})
 		}},
 		{name: "year", path: "/users/sean/yir/2026", call: func(u *UsersService) (*str.Review, *str.Response, error) {
-			return u.GetYearInReview(context.Background(), str.String("sean"), 2026, &uri.ListOptions{Extended: "images"})
+			return u.GetYearInReview(context.Background(), "sean", 2026, &uri.ListOptions{Extended: "images"})
 		}},
 	}
 	for _, tt := range tests {

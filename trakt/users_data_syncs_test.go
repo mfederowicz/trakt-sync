@@ -38,7 +38,7 @@ func TestUsersServiceGetDataSyncs(t *testing.T) {
 				test.SafeFprint(w, "["+row+"]")
 			})
 
-			got, _, err := setup.Client.Users.GetDataSyncs(context.Background(), &tt.syncType, &uri.ListOptions{Page: 1, Limit: 10})
+			got, _, err := setup.Client.Users.GetDataSyncs(context.Background(), tt.syncType, &uri.ListOptions{Page: 1, Limit: 10})
 			test.AssertNilError(t, err)
 			test.AssertNoDiff(t, want, got)
 		})
@@ -60,12 +60,12 @@ func TestUsersServiceDataSyncByID(t *testing.T) {
 			want: &str.DataSync{ID: test.Ptr(int64(157)), Kind: str.String("plex"), PausedCount: test.Ptr(0)}},
 		{name: "paused", method: http.MethodGet, path: "/users/syncs/157/paused", status: http.StatusOK, body: `[{"kind":"history","type":"episode","progress":42.5}]`,
 			call: func(u *UsersService) (any, *str.Response, error) {
-				return u.GetDataSyncItems(context.Background(), 157, str.String("paused"), &uri.ListOptions{})
+				return u.GetDataSyncItems(context.Background(), 157, "paused", &uri.ListOptions{})
 			},
 			want: []*str.SyncItem{{Kind: str.String("history"), Type: str.String("episode"), Progress: test.Ptr(42.5)}}},
 		{name: "skipped", method: http.MethodGet, path: "/users/syncs/157/skipped", status: http.StatusOK, body: `[{"kind":"rating","type":null,"trakt_item":null,"rating_value":7}]`,
 			call: func(u *UsersService) (any, *str.Response, error) {
-				return u.GetDataSyncItems(context.Background(), 157, str.String("skipped"), &uri.ListOptions{})
+				return u.GetDataSyncItems(context.Background(), 157, "skipped", &uri.ListOptions{})
 			},
 			want: []*str.SyncItem{{Kind: str.String("rating"), RatingValue: test.Ptr(7)}}},
 	}

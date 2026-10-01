@@ -46,9 +46,9 @@ func (UsersUpdateListItemHandler) usersUpdateListItem(client *trakt.Client, opti
 
 	resp, err := client.Users.UpdateListItem(
 		cli.ContextFromOptions(options),
-		&options.UserName,
-		&options.ID,
-		&options.ListItemID,
+		options.UserName,
+		options.ID,
+		options.ListItemID,
 		item)
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return nil, fmt.Errorf("list item not found:%d", options.ListItemID)

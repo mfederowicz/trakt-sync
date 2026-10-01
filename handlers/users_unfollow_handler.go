@@ -34,7 +34,7 @@ func (m UsersUnfollowHandler) Handle(options *str.Options, client *trakt.Client)
 }
 
 func (UsersUnfollowHandler) usersUnfollow(client *trakt.Client, options *str.Options) (*str.Response, error) {
-	resp, err := client.Users.Unfollow(cli.ContextFromOptions(options), &options.UserName)
+	resp, err := client.Users.Unfollow(cli.ContextFromOptions(options), options.UserName)
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return resp, fmt.Errorf("user not found:%s", options.UserName)
