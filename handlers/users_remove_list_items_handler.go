@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/cli"
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -33,8 +34,11 @@ func (u UsersRemoveListItemsHandler) Handle(options *str.Options, client *trakt.
 	if err != nil {
 		return fmt.Errorf("remove list items error:%w", err)
 	}
-	print("write result to:" + options.Output)
-	jsonDataResult, _ := json.MarshalIndent(removeResult, "", "  ")
+	jsonDataResult, err := json.MarshalIndent(removeResult, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
+	printer.Println("write result to:" + options.Output)
 	writer.WriteJSON(options, jsonDataResult)
 	return nil
 }

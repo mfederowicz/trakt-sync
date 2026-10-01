@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/mfederowicz/trakt-sync/cli"
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -30,8 +31,11 @@ func (UsersStatsHandler) Handle(options *str.Options, client *trakt.Client) erro
 
 	printer.Printf("Found %s user stats\n", options.UserName)
 
-	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(stats, "", "  ")
+	jsonData, err := json.MarshalIndent(stats, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
+	printer.Println("write data to:" + options.Output)
 	writer.WriteJSON(options, jsonData)
 
 	return nil

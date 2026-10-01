@@ -33,8 +33,11 @@ func (UsersListsHandler) Handle(options *str.Options, client *trakt.Client) erro
 	overview := *options
 	overview.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, consts.Lists)
 	printer.Printf("Found %d user list\n", len(personalLists))
-	print("write data to:" + overview.Output + "\n")
-	jsonData, _ := json.MarshalIndent(personalLists, "", "  ")
+	jsonData, err := json.MarshalIndent(personalLists, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
+	printer.Println("write data to:" + overview.Output + "\n")
 	writer.WriteJSON(&overview, jsonData)
 
 	avLists := getAvlistsFromPersonals(personalLists)
@@ -63,9 +66,12 @@ func (UsersListsHandler) Handle(options *str.Options, client *trakt.Client) erro
 	printer.Printf("Found %d items \n", len(itemsExportData))
 	exportJSON := []*str.UserListItem{}
 	exportJSON = append(exportJSON, itemsExportData...)
-	print("write data to:" + options.Output)
+	printer.Println("write data to:" + options.Output)
 	if len(exportJSON) > 0 {
-		jsonData, _ := json.MarshalIndent(exportJSON, "", "  ")
+		jsonData, err := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
+		if err != nil {
+			return fmt.Errorf("encode %s result: %w", options.Action, err)
+		}
 		writer.WriteJSON(options, jsonData)
 	}
 
