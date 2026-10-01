@@ -41,6 +41,7 @@ schedule.
 
 ### Deprecated
 
+- Library: the `uri.ListOptions` fields `EpisodeTypes`, `Languages`, `Metascores`, `NetworkIDs`, `StudioIDs` and `TmdbRatings` are marked deprecated, because their query parameters are no longer part of the Trakt API. They still exist and will be removed in the next major version.
 - Flags that no longer do anything now print a note when used, and will be removed in the next major version: `-studio_ids` and `-languages` (no longer supported by the Trakt API), `-query` (use `-q` with `search`), `notes -notes_id` (use `-i`) and `scrobble -delete` (never had an effect). Commands still run as before.
 
 ### Fixed

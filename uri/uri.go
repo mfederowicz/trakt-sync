@@ -20,47 +20,53 @@ var (
 // ListOptions specifies the optional parameters to various List methods that
 // support offset pagination.
 type ListOptions struct {
-	AvailableOn       string           `url:"available_on,omitempty"`
-	Certifications    []string         `url:"certifications,omitempty"`
-	Countries         []string         `url:"countries,omitempty"`
-	EpisodeTypes      []string         `url:"episode_types,omitempty"`
-	Extended          string           `url:"extended,omitempty"`
-	Field             string           `url:"fields,omitempty"`
-	Genres            []string         `url:"genres,omitempty"`
-	IgnoreCollected   string           `url:"ignore_collected,omitempty"`
-	IgnoreWatched     string           `url:"ignore_watched,omitempty"`
-	IgnoreWatchlisted string           `url:"ignore_watchlisted,omitempty"`
-	ImdbRatings       RatingRange      `url:"imdb_ratings,omitempty"`
-	ImdbVotes         ImdbVotesRange   `url:"imdb_votes,omitempty"`
-	IncludeReplies    string           `url:"include_replies,omitempty"`
-	Languages         []string         `url:"languages,omitempty"`
-	Translations      []string         `url:"translations,omitempty"`
-	Limit             int              `url:"limit,omitempty"`
-	Links             string           `url:"links,omitempty"`
-	Metascores        RatingRangeFloat `url:"metascores,omitempty"`
-	NetworkIDs        []int            `url:"network_ids,omitempty"`
-	Page              int              `url:"page,omitempty"`
-	Query             string           `url:"query,omitempty"`
-	Ratings           RatingRange      `url:"ratings,omitempty"`
-	RtMeters          RatingRange      `url:"rt_meters,omitempty"`
-	RtUserMeters      RatingRange      `url:"rt_user_meters,omitempty"`
-	Runtimes          string           `url:"runtimes,omitempty"`
-	Status            []string         `url:"status,omitempty"`
-	StudioIDs         []int            `url:"studio_ids,omitempty"`
-	TmdbRatings       TmdbRatingRange  `url:"tmdb_ratings,omitempty"`
-	TmdbVotes         VotesRange       `url:"tmdb_votes,omitempty"`
-	Type              string           `url:"type,omitempty"`
-	Votes             VotesRange       `url:"votes,omitempty"`
-	WatchWindow       int              `url:"watch_window,omitempty"`
-	Years             string           `url:"years,omitempty"`
-	Hidden            string           `url:"hidden,omitempty"`
-	Specials          string           `url:"specials,omitempty"`
-	CountSpecials     string           `url:"count_specials,omitempty"`
-	StartAt           string           `url:"start_at,omitempty"`
-	EndAt             string           `url:"end_at,omitempty"`
-	Rating            []string         `url:"rating,omitempty"`
-	SortBy            string           `url:"sort_by,omitempty"`
-	SortHow           string           `url:"sort_how,omitempty"`
+	AvailableOn    string   `url:"available_on,omitempty"`
+	Certifications []string `url:"certifications,omitempty"`
+	Countries      []string `url:"countries,omitempty"`
+	// Deprecated: episode_types is no longer part of the Trakt API (not in its OpenAPI spec or contract).
+	EpisodeTypes      []string       `url:"episode_types,omitempty"`
+	Extended          string         `url:"extended,omitempty"`
+	Field             string         `url:"fields,omitempty"`
+	Genres            []string       `url:"genres,omitempty"`
+	IgnoreCollected   string         `url:"ignore_collected,omitempty"`
+	IgnoreWatched     string         `url:"ignore_watched,omitempty"`
+	IgnoreWatchlisted string         `url:"ignore_watchlisted,omitempty"`
+	ImdbRatings       RatingRange    `url:"imdb_ratings,omitempty"`
+	ImdbVotes         ImdbVotesRange `url:"imdb_votes,omitempty"`
+	IncludeReplies    string         `url:"include_replies,omitempty"`
+	// Deprecated: languages is no longer part of the Trakt API (not in its OpenAPI spec or contract).
+	Languages    []string `url:"languages,omitempty"`
+	Translations []string `url:"translations,omitempty"`
+	Limit        int      `url:"limit,omitempty"`
+	Links        string   `url:"links,omitempty"`
+	// Deprecated: metascores is no longer part of the Trakt API (not in its OpenAPI spec or contract).
+	Metascores RatingRangeFloat `url:"metascores,omitempty"`
+	// Deprecated: network_ids is no longer part of the Trakt API (not in its OpenAPI spec or contract).
+	NetworkIDs   []int       `url:"network_ids,omitempty"`
+	Page         int         `url:"page,omitempty"`
+	Query        string      `url:"query,omitempty"`
+	Ratings      RatingRange `url:"ratings,omitempty"`
+	RtMeters     RatingRange `url:"rt_meters,omitempty"`
+	RtUserMeters RatingRange `url:"rt_user_meters,omitempty"`
+	Runtimes     string      `url:"runtimes,omitempty"`
+	Status       []string    `url:"status,omitempty"`
+	// Deprecated: studio_ids is no longer part of the Trakt API (not in its OpenAPI spec or contract).
+	StudioIDs []int `url:"studio_ids,omitempty"`
+	// Deprecated: tmdb_ratings is no longer part of the Trakt API (not in its OpenAPI spec or contract).
+	TmdbRatings   TmdbRatingRange `url:"tmdb_ratings,omitempty"`
+	TmdbVotes     VotesRange      `url:"tmdb_votes,omitempty"`
+	Type          string          `url:"type,omitempty"`
+	Votes         VotesRange      `url:"votes,omitempty"`
+	WatchWindow   int             `url:"watch_window,omitempty"`
+	Years         string          `url:"years,omitempty"`
+	Hidden        string          `url:"hidden,omitempty"`
+	Specials      string          `url:"specials,omitempty"`
+	CountSpecials string          `url:"count_specials,omitempty"`
+	StartAt       string          `url:"start_at,omitempty"`
+	EndAt         string          `url:"end_at,omitempty"`
+	Rating        []string        `url:"rating,omitempty"`
+	SortBy        string          `url:"sort_by,omitempty"`
+	SortHow       string          `url:"sort_how,omitempty"`
 }
 
 // AddQuery adds query parameters to s. Nil options add no query.
