@@ -15,7 +15,7 @@ type OauthService Service
 
 // GenerateNewDeviceCodes Generate new codes to start the device authentication process.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/authentication-devices/device-code/generate-new-device-codes
+// API docs: https://docs.trakt.tv/reference/postoauthdevicecode
 func (o *OauthService) GenerateNewDeviceCodes(ctx context.Context, code *str.NewDeviceCode) (*str.DeviceCode, *str.Response, error) {
 	u := "oauth/device/code"
 	req, err := o.client.NewRequest("POST", u, code)
@@ -34,7 +34,7 @@ func (o *OauthService) GenerateNewDeviceCodes(ctx context.Context, code *str.New
 
 // PollForAccessToken Use the device_code and poll at the interval (in seconds) to check if the user has authorized you app.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/authentication-devices/get-token/poll-for-the-access_token
+// API docs: https://docs.trakt.tv/reference/postoauthdevicetoken
 func (o *OauthService) PollForAccessToken(ctx context.Context, deviceToken *str.NewDeviceToken) (*str.DeviceToken, *str.Response, error) {
 	u := "oauth/device/token"
 	req, err := o.client.NewRequest("POST", u, deviceToken)
@@ -55,7 +55,7 @@ func (o *OauthService) PollForAccessToken(ctx context.Context, deviceToken *str.
 // without asking the user to re-authenticate. The access_token is valid for 3 months
 // before it needs to be refreshed again.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/authentication-oauth/get-token/exchange-refresh_token-for-access_token
+// API docs: https://docs.trakt.tv/reference/postoauthtoken
 func (o *OauthService) ExchangeRefreshTokenForAccessToken(ctx context.Context, deviceToken *str.CurrentDeviceToken) (*str.DeviceToken, *str.Response, error) {
 	u := "oauth/token"
 	req, err := o.client.NewRequest(http.MethodPost, u, deviceToken)

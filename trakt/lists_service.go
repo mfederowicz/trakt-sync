@@ -17,7 +17,7 @@ type ListsService Service
 
 // GetTrendingLists Returns all lists with the most likes and comments over the last 7 days.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/lists/trending/get-trending-lists
+// API docs: https://docs.trakt.tv/reference/getliststrending
 func (l *ListsService) GetTrendingLists(ctx context.Context, opts *uri.ListOptions) ([]*str.List, *str.Response, error) {
 	var url string
 
@@ -45,7 +45,7 @@ func (l *ListsService) GetTrendingLists(ctx context.Context, opts *uri.ListOptio
 
 // GetPopularLists Returns the most popular lists. Popularity is calculated using total number of likes and comments..
 //
-// API docs: https://trakt.docs.apiary.io/#reference/lists/popular/get-popular-lists
+// API docs: https://docs.trakt.tv/reference/getlistspopular
 func (l *ListsService) GetPopularLists(ctx context.Context, opts *uri.ListOptions) ([]*str.List, *str.Response, error) {
 	var url string
 
@@ -73,7 +73,7 @@ func (l *ListsService) GetPopularLists(ctx context.Context, opts *uri.ListOption
 
 // GetList Returns a single list. Use the /lists/:id/items method to get the actual items this list contains.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/lists/list/get-list
+// API docs: https://docs.trakt.tv/reference/getlistssummary
 func (l *ListsService) GetList(ctx context.Context, id string) (*str.PersonalList, *str.Response, error) {
 	var url = fmt.Sprintf("lists/%s", id)
 	l.client.debug("fetch single list:" + url)
@@ -98,7 +98,7 @@ func (l *ListsService) GetList(ctx context.Context, id string) (*str.PersonalLis
 
 // GetAllUsersWhoLikedList Returns all users who liked a list.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/lists/list-likes/get-all-users-who-liked-a-list
+// API docs: https://docs.trakt.tv/reference/getlistslikes
 func (l *ListsService) GetAllUsersWhoLikedList(ctx context.Context, opts *uri.ListOptions, id string) ([]*str.UserLike, *str.Response, error) {
 	var url = fmt.Sprintf("lists/%s/likes", id)
 	url, err := uri.AddQuery(url, opts)
@@ -124,7 +124,7 @@ func (l *ListsService) GetAllUsersWhoLikedList(ctx context.Context, opts *uri.Li
 
 // LikeList Votes help determine popular lists. Only one like is allowed per list per user.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/lists/list-like/like-a-list
+// API docs: https://docs.trakt.tv/reference/postlistslike
 func (l *ListsService) LikeList(ctx context.Context, id string) (*str.Response, error) {
 	var url = fmt.Sprintf("lists/%s/like", id)
 	l.client.debug("send like for single list:" + url)
@@ -143,7 +143,7 @@ func (l *ListsService) LikeList(ctx context.Context, id string) (*str.Response, 
 
 // RemoveLikeList Remove a like on a list.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/lists/list-like/remove-like-on-a-list
+// API docs: https://docs.trakt.tv/reference/deletelistsunlike
 func (l *ListsService) RemoveLikeList(ctx context.Context, id string) (*str.Response, error) {
 	var url = fmt.Sprintf("lists/%s/like", id)
 	l.client.debug("remove like for single list:" + url)
@@ -195,7 +195,7 @@ func (l *ListsService) GetListItems(ctx context.Context, id string, t string, op
 
 // GetListComments Returns comments from single list. An empty sort uses the API default.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/lists/list-comments/get-all-list-comments
+// API docs: https://docs.trakt.tv/reference/getlistscomments
 func (l *ListsService) GetListComments(ctx context.Context, id string, sort string, opts *uri.ListOptions) ([]*str.ListComment, *str.Response, error) {
 	var url string
 

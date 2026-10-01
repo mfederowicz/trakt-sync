@@ -16,7 +16,7 @@ type NotesService Service
 
 // AddNotes Add a new notes to a movie, show, season, episode, or person.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/notes/notes/add-notes
+// API docs: https://docs.trakt.tv/reference/postnotescreate
 func (n *NotesService) AddNotes(ctx context.Context, notes *str.Notes) (*str.Notes, *str.Response, error) {
 	var url = "notes"
 	n.client.debug("create new notes")
@@ -52,7 +52,7 @@ func (n *NotesService) AddNotes(ctx context.Context, notes *str.Notes) (*str.Not
 
 // DeleteNotes Delete a single note.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/notes/note/delete-a-note
+// API docs: https://docs.trakt.tv/reference/deletenotesdelete
 func (n *NotesService) DeleteNotes(ctx context.Context, id string) (*str.Response, error) {
 	var url = fmt.Sprintf("notes/%s", id)
 	n.client.debug("delete notes")
@@ -80,7 +80,7 @@ func (n *NotesService) DeleteNotes(ctx context.Context, id string) (*str.Respons
 
 // UpdateNotes Update a single note (500 maximum characters).
 //
-// API docs:https://trakt.docs.apiary.io/#reference/notes/note/update-a-note
+// API docs: https://docs.trakt.tv/reference/putnotesupdate
 func (n *NotesService) UpdateNotes(ctx context.Context, id string, notes *str.Notes) (*str.Notes, *str.Response, error) {
 	var url = fmt.Sprintf("notes/%s", id)
 	n.client.debug("update notes")
@@ -103,7 +103,7 @@ func (n *NotesService) UpdateNotes(ctx context.Context, id string, notes *str.No
 
 // GetNotes Return a single note.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/notes/note/get-a-note
+// API docs: https://docs.trakt.tv/reference/getnotessummary
 func (n *NotesService) GetNotes(ctx context.Context, id string) (*str.Notes, *str.Response, error) {
 	var url = fmt.Sprintf("notes/%s", id)
 	n.client.debug("fetch notes url:" + url)
@@ -132,7 +132,7 @@ func (n *NotesService) GetNotes(ctx context.Context, id string) (*str.Notes, *st
 
 // GetNotesItem Returns the item this note is attached_to.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/notes/item/get-the-attached-item
+// API docs: https://docs.trakt.tv/reference/getnotesitem
 func (n *NotesService) GetNotesItem(ctx context.Context, id string) (*str.NotesItem, *str.Response, error) {
 	var url = fmt.Sprintf("notes/%s/item", id)
 	n.client.debug("fetch notes item url:" + url)

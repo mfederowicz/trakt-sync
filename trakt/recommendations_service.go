@@ -15,7 +15,7 @@ import (
 type RecommendationsService Service
 
 // HideMovieRecommendation to hide a movie from getting recommended anymore..
-// API docs:https://trakt.docs.apiary.io/#reference/recommendations/hide-movie/hide-a-movie-recommendation
+// API docs: https://docs.trakt.tv/reference/deleterecommendationsmovieshide
 func (m *RecommendationsService) HideMovieRecommendation(ctx context.Context, id string) (*str.Response, error) {
 	var url = fmt.Sprintf("recommendations/movies/%s", id)
 	m.client.debug("hide recommendations")
@@ -37,7 +37,7 @@ func (m *RecommendationsService) HideMovieRecommendation(ctx context.Context, id
 }
 
 // HideShowRecommendation to hide a show from getting recommended anymore.
-// API docs:https://trakt.docs.apiary.io/#reference/recommendations/hide-show/hide-a-show-recommendation
+// API docs: https://docs.trakt.tv/reference/deleterecommendationsshowshide
 func (m *RecommendationsService) HideShowRecommendation(ctx context.Context, id string) (*str.Response, error) {
 	var url = fmt.Sprintf("recommendations/shows/%s", id)
 	m.client.debug("hide recommendations")
@@ -59,7 +59,7 @@ func (m *RecommendationsService) HideShowRecommendation(ctx context.Context, id 
 }
 
 // GetMovieRecommendations Movie recommendations for a user.
-// API docs:https://trakt.docs.apiary.io/#reference/recommendations/movies/get-movie-recommendations
+// API docs: https://docs.trakt.tv/reference/getrecommendationsmoviesrecommend
 func (m *RecommendationsService) GetMovieRecommendations(ctx context.Context, opts *uri.ListOptions) ([]*str.Recommendation, *str.Response, error) {
 	var url = "recommendations/movies"
 	url, err := uri.AddQuery(url, opts)
@@ -84,7 +84,7 @@ func (m *RecommendationsService) GetMovieRecommendations(ctx context.Context, op
 }
 
 // GetShowRecommendations Show recommendations for a user.
-// API docs:https://trakt.docs.apiary.io/#reference/recommendations/shows/get-show-recommendations
+// API docs: https://docs.trakt.tv/reference/getrecommendationsshowsrecommend
 func (m *RecommendationsService) GetShowRecommendations(ctx context.Context, opts *uri.ListOptions) ([]*str.Recommendation, *str.Response, error) {
 	var url = "recommendations/shows"
 	url, err := uri.AddQuery(url, opts)

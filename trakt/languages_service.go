@@ -14,7 +14,7 @@ type LanguagesService Service
 
 // GetLanguages Get a list of all languages, including names and codes.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/languages/list/get-languages
+// API docs: https://docs.trakt.tv/reference/getlanguageslist
 func (g *LanguagesService) GetLanguages(ctx context.Context, strType string) ([]*str.Language, *str.Response, error) {
 	var url = fmt.Sprintf("languages/%s", strType)
 	g.client.debug("fetch languages url:" + url)

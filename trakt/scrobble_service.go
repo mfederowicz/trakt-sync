@@ -12,7 +12,7 @@ import (
 type ScrobbleService Service
 
 // StartScrobble Start watching in a media server.
-// API docs:https://trakt.docs.apiary.io/#reference/scrobble/start/start-watching-in-a-media-center
+// API docs: https://docs.trakt.tv/reference/postscrobblestart
 func (s *ScrobbleService) StartScrobble(ctx context.Context, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error) {
 	var url = "scrobble/start"
 	s.client.debug("start scrobble")
@@ -31,7 +31,7 @@ func (s *ScrobbleService) StartScrobble(ctx context.Context, scrobble *str.Scrob
 }
 
 // PauseScrobble Pause watching in a media server.
-// API docs: https://trakt.docs.apiary.io/#reference/scrobble/pause/pause-watching-in-a-media-center
+// API docs: https://docs.trakt.tv/reference/postscrobblepause
 func (s *ScrobbleService) PauseScrobble(ctx context.Context, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error) {
 	var url = "scrobble/pause"
 	s.client.debug("pause scrobble")
@@ -50,7 +50,7 @@ func (s *ScrobbleService) PauseScrobble(ctx context.Context, scrobble *str.Scrob
 }
 
 // StopScrobble Stop watching in a media server.
-// API docs: https://trakt.docs.apiary.io/#reference/scrobble/stop/stop-or-finish-watching-in-a-media-center
+// API docs: https://docs.trakt.tv/reference/postscrobblestop
 func (s *ScrobbleService) StopScrobble(ctx context.Context, scrobble *str.Scrobble) (*str.Scrobble, *str.Response, error) {
 	var url = "scrobble/stop"
 	s.client.debug("stop scrobble")

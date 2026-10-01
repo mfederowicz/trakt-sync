@@ -17,7 +17,7 @@ type PeopleService Service
 
 // GetListsContainingThisPerson Returns all lists that contain this person.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/people/lists/get-lists-containing-this-person
+// API docs: https://docs.trakt.tv/reference/getpeoplelists
 func (p *PeopleService) GetListsContainingThisPerson(ctx context.Context, id string, typeString string, sort string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
 	var url string
 
@@ -47,7 +47,7 @@ func (p *PeopleService) GetListsContainingThisPerson(ctx context.Context, id str
 // GetAllPeopleForShow Returns all cast and crew for a show.
 // Each cast member will have a characters array and a standard person object.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/shows/people/get-all-people-for-a-show
+// API docs: https://docs.trakt.tv/reference/getshowspeople
 func (p *PeopleService) GetAllPeopleForShow(ctx context.Context, id string, opts *uri.ListOptions) (*str.ShowPeople, *str.Response, error) {
 	var url string
 
@@ -80,7 +80,7 @@ func (p *PeopleService) GetAllPeopleForShow(ctx context.Context, id string, opts
 
 // GetMovieCredits Returns all movies where this person is in the cast or crew.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/people/movies/get-movie-credits
+// API docs: https://docs.trakt.tv/reference/getpeoplemovies
 func (p *PeopleService) GetMovieCredits(ctx context.Context, id string, opts *uri.ListOptions) (*str.PersonMovies, *str.Response, error) {
 	var url = fmt.Sprintf("people/%s/movies", id)
 	url, err := uri.AddQuery(url, opts)
@@ -108,7 +108,7 @@ func (p *PeopleService) GetMovieCredits(ctx context.Context, id string, opts *ur
 
 // GetShowCredits Returns all shows where this person is in the cast or crew, including the episode_count for which they appear.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/people/shows/get-show-credits
+// API docs: https://docs.trakt.tv/reference/getpeopleshows
 func (p *PeopleService) GetShowCredits(ctx context.Context, id string, opts *uri.ListOptions) (*str.PersonShows, *str.Response, error) {
 	var url = fmt.Sprintf("people/%s/shows", id)
 	url, err := uri.AddQuery(url, opts)
@@ -136,7 +136,7 @@ func (p *PeopleService) GetShowCredits(ctx context.Context, id string, opts *uri
 
 // GetSinglePerson Returns a single person's details.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/people/summary/get-a-single-person
+// API docs: https://docs.trakt.tv/reference/getpeoplesummary
 func (p *PeopleService) GetSinglePerson(ctx context.Context, id string, opts *uri.ListOptions) (*str.Person, *str.Response, error) {
 	var url string
 
@@ -164,7 +164,7 @@ func (p *PeopleService) GetSinglePerson(ctx context.Context, id string, opts *ur
 
 // GetRecentlyUpdatedPeople Returns all people updated since the specified UTC date and time.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/people/updates/get-recently-updated-people
+// API docs: https://docs.trakt.tv/reference/getpeopleupdates
 func (p *PeopleService) GetRecentlyUpdatedPeople(ctx context.Context, startDate string, opts *uri.ListOptions) ([]*str.PersonItem, *str.Response, error) {
 	var url string
 
@@ -192,7 +192,7 @@ func (p *PeopleService) GetRecentlyUpdatedPeople(ctx context.Context, startDate 
 
 // GetRecentlyUpdatedPeopleTraktIDs Returns all people Trakt IDs updated since the specified UTC date and time.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/people/updated-ids
+// API docs: https://docs.trakt.tv/reference/getpeopleupdatedids
 func (p *PeopleService) GetRecentlyUpdatedPeopleTraktIDs(ctx context.Context, startDate string, opts *uri.ListOptions) ([]*int, *str.Response, error) {
 	var url string
 
@@ -222,7 +222,7 @@ func (p *PeopleService) GetRecentlyUpdatedPeopleTraktIDs(ctx context.Context, st
 // RefreshPersonMetadata Queue this person for a full metadata and image refresh.
 // It might take up to 8 hours for the updated metadata to be availabe through the API.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/people/refresh/refresh-person-metadata
+// API docs: https://docs.trakt.tv/reference/postpeoplerefresh
 func (p *PeopleService) RefreshPersonMetadata(ctx context.Context, id string) (*str.Response, error) {
 	var url = fmt.Sprintf("people/%s/refresh", id)
 	p.client.debug("refresh people:" + url)

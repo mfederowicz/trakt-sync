@@ -17,7 +17,7 @@ type CommentsService Service
 
 // AddComment Add a new comment to a movie, show, season, episode, or list.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/comments/comments/post-a-comment
+// API docs: https://docs.trakt.tv/reference/postcommentspost
 func (c *CommentsService) AddComment(ctx context.Context, comment *str.Comment) (*str.Comment, *str.Response, error) {
 	var url = "comments"
 	c.client.debug("create new comment")
@@ -44,7 +44,7 @@ func (c *CommentsService) AddComment(ctx context.Context, comment *str.Comment) 
 }
 
 // UpdateComment to update a single comment.
-// API docs: https://trakt.docs.apiary.io/#reference/comments/comment/update-a-comment-or-reply
+// API docs: https://docs.trakt.tv/reference/putcommentsedit
 func (c *CommentsService) UpdateComment(ctx context.Context, id int, comment *str.Comment) (*str.Comment, *str.Response, error) {
 	var url = fmt.Sprintf("comments/%d", id)
 	c.client.debug("update comment")
@@ -89,7 +89,7 @@ func (c *CommentsService) GetComment(ctx context.Context, id int) (*str.Comment,
 }
 
 // GetCommentItem Returns comment media item object.
-// API docs: https://trakt.docs.apiary.io/#reference/comments/item/get-the-attached-media-item
+// API docs: https://docs.trakt.tv/reference/getcommentsitem
 func (c *CommentsService) GetCommentItem(ctx context.Context, id int, opts *uri.ListOptions) (*str.CommentMediaItem, *str.Response, error) {
 	var url = fmt.Sprintf("comments/%d/item", id)
 	url, err := uri.AddQuery(url, opts)
@@ -118,7 +118,7 @@ func (c *CommentsService) GetCommentItem(ctx context.Context, id int, opts *uri.
 }
 
 // DeleteComment to delete a single comment.
-// API docs: https://trakt.docs.apiary.io/#reference/comments/comment/delete-a-comment-or-reply
+// API docs: https://docs.trakt.tv/reference/deletecommentsdelete
 func (c *CommentsService) DeleteComment(ctx context.Context, id int) (*str.Response, error) {
 	var url = fmt.Sprintf("comments/%d", id)
 	c.client.debug("delete comment")
@@ -140,7 +140,7 @@ func (c *CommentsService) DeleteComment(ctx context.Context, id int) (*str.Respo
 }
 
 // GetRepliesForComment Returns all replies for a comment.
-// API docs: https://trakt.docs.apiary.io/#reference/comments/replies/get-replies-for-a-comment
+// API docs: https://docs.trakt.tv/reference/getcommentsreplies
 func (c *CommentsService) GetRepliesForComment(ctx context.Context, opts *uri.ListOptions, id int) ([]*str.Comment, *str.Response, error) {
 	var url = fmt.Sprintf("comments/%d/replies", id)
 	url, err := uri.AddQuery(url, opts)
@@ -165,7 +165,7 @@ func (c *CommentsService) GetRepliesForComment(ctx context.Context, opts *uri.Li
 }
 
 // GetCommentUserLikes Returns all users who liked a comment.
-// API docs: https://trakt.docs.apiary.io/#reference/comments/item/get-all-users-who-liked-a-comment
+// API docs: https://docs.trakt.tv/reference/getcommentslikes
 func (c *CommentsService) GetCommentUserLikes(ctx context.Context, id int, opts *uri.ListOptions) ([]*str.CommentUserLike, *str.Response, error) {
 	var url = fmt.Sprintf("comments/%d/likes", id)
 	url, err := uri.AddQuery(url, opts)
@@ -191,7 +191,7 @@ func (c *CommentsService) GetCommentUserLikes(ctx context.Context, id int, opts 
 
 // LikeComment Votes help determine popular comments. Only one like is allowed per comment per user.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/comments/like/like-a-comment
+// API docs: https://docs.trakt.tv/reference/postcommentslike
 func (c *CommentsService) LikeComment(ctx context.Context, id int) (*str.Response, error) {
 	var url = fmt.Sprintf("comments/%d/like", id)
 	c.client.debug("send like for single comment:" + url)
@@ -210,7 +210,7 @@ func (c *CommentsService) LikeComment(ctx context.Context, id int) (*str.Respons
 
 // RemoveLikeComment Remove a like on a comment.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/comments/like/remove-like-on-a-comment
+// API docs: https://docs.trakt.tv/reference/deletecommentsunlike
 func (c *CommentsService) RemoveLikeComment(ctx context.Context, id int) (*str.Response, error) {
 	var url = fmt.Sprintf("comments/%d/like", id)
 	c.client.debug("remove like for single comment:" + url)
@@ -228,7 +228,7 @@ func (c *CommentsService) RemoveLikeComment(ctx context.Context, id int) (*str.R
 }
 
 // ReplyAComment Add a new reply to an existing comment.
-// API docs:https://trakt.docs.apiary.io/#reference/comments/replies/post-a-reply-for-a-comment
+// API docs: https://docs.trakt.tv/reference/postcommentsreply
 func (c *CommentsService) ReplyAComment(ctx context.Context, id int, reply *str.Comment) (*str.Comment, *str.Response, error) {
 	var url = fmt.Sprintf("comments/%d/replies", id)
 	c.client.debug("reply comment")
@@ -252,7 +252,7 @@ func (c *CommentsService) ReplyAComment(ctx context.Context, id int, reply *str.
 }
 
 // GetTrendingComments Returns all comments with the most likes and replies over the last 7 days.
-// API docs: https://trakt.docs.apiary.io/#reference/comments/trending/get-trending-comments
+// API docs: https://docs.trakt.tv/reference/getcommentstrending
 func (c *CommentsService) GetTrendingComments(ctx context.Context, contentType string, strType string, opts *uri.ListOptions) ([]*str.CommentItem, *str.Response, error) {
 	var url = fmt.Sprintf("comments/trending/%s/%s", contentType, strType)
 	url, err := uri.AddQuery(url, opts)
@@ -277,7 +277,7 @@ func (c *CommentsService) GetTrendingComments(ctx context.Context, contentType s
 }
 
 // GetRecentComments Returns the most recently written comments across all of Trakt.
-// API docs: https://trakt.docs.apiary.io/#reference/comments/recent/get-recently-created-comments
+// API docs: https://docs.trakt.tv/reference/getcommentsrecent
 func (c *CommentsService) GetRecentComments(ctx context.Context, contentType string, strType string, opts *uri.ListOptions) ([]*str.CommentItem, *str.Response, error) {
 	var url = fmt.Sprintf("comments/recent/%s/%s", contentType, strType)
 	url, err := uri.AddQuery(url, opts)
@@ -302,7 +302,7 @@ func (c *CommentsService) GetRecentComments(ctx context.Context, contentType str
 }
 
 // GetUpdatedComments Returns the most recently updated comments across all of Trakt.
-// API docs: https://trakt.docs.apiary.io/#reference/comments/updates/get-recently-updated-comments
+// API docs: https://docs.trakt.tv/reference/getcommentsupdates
 func (c *CommentsService) GetUpdatedComments(ctx context.Context, contentType string, strType string, opts *uri.ListOptions) ([]*str.CommentItem, *str.Response, error) {
 	var url = fmt.Sprintf("comments/updates/%s/%s", contentType, strType)
 	url, err := uri.AddQuery(url, opts)
