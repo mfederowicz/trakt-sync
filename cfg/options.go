@@ -536,6 +536,7 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 	moduleConfig, ok := ModuleConfig[options.Module]
 	if !ok {
 		options.Module = "history"
+		moduleConfig = ModuleConfig[options.Module]
 		printer.Println("Forcing module to history")
 	}
 

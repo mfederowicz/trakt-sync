@@ -48,6 +48,7 @@ schedule.
 
 ### Fixed
 
+- An unknown `module` in the config file made every command stop with `type 'movies' is not valid for module 'history'`, right after the note `Forcing module to history`. The fallback to `history` now works, so commands run.
 - `scrobble -progress` was ignored, so scrobbles were sent without a progress value; a `scrobble -a stop` could therefore not mark an item as watched. The given progress is now sent.
 - `comments -spoiler` was ignored: comments and replies were always posted without the spoiler flag. `-spoiler` now marks them as spoilers.
 - If the new token (after login or a token refresh) or the refreshed user settings could not be encoded, `token.json` / `user_settings.json` was overwritten with an empty file. The encoding error is now reported and the stored file is kept.

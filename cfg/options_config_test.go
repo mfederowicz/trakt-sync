@@ -143,8 +143,11 @@ func TestOptionsFromConfigAdjustments(t *testing.T) {
 		check  func(t *testing.T, o str.Options)
 	}{
 		{name: "unknown module becomes history",
-			change: func(c *Config) { c.Module = "podcasts"; c.Type = "" },
-			check:  func(t *testing.T, o str.Options) { assert.Equal(t, "history", o.Module) }},
+			change: func(c *Config) { c.Module = "podcasts"; c.Type = "movies" },
+			check: func(t *testing.T, o str.Options) {
+				assert.Equal(t, "history", o.Module)
+				assert.Equal(t, "export_movies_history.json", o.Output)
+			}},
 		{name: "unknown format becomes imdb",
 			change: func(c *Config) { c.Module = "watchlist"; c.Format = "isbn" },
 			check:  func(t *testing.T, o str.Options) { assert.Equal(t, "imdb", o.Format) }},
