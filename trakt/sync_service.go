@@ -18,7 +18,7 @@ type SyncService Service
 
 // GetCollection Get all collected items in a user's collection. An empty types returns all types.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/sync/get-collection/get-collection
+// API docs: https://docs.trakt.tv/reference/getsynccollectionall
 func (s *SyncService) GetCollection(ctx context.Context, types string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 
@@ -53,7 +53,7 @@ func (s *SyncService) GetCollection(ctx context.Context, types string, opts *uri
 // GetWatchedHistory Returns movies and episodes that a user has watched, sorted by most recent.
 // An empty types returns all types; an id of 0 returns all entries instead of one history item.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/sync/get-watched/get-watched-history
+// API docs: https://docs.trakt.tv/reference/getsynchistoryget
 func (s *SyncService) GetWatchedHistory(ctx context.Context, id int, types string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 
@@ -91,7 +91,7 @@ func (s *SyncService) GetWatchedHistory(ctx context.Context, id int, types strin
 // GetWatchlist Returns all items in a user's watchlist filtered by type.
 // The type and sort segments are sent only when types, sortBy and sortHow are all set.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/sync/get-watchlist/get-watchlist
+// API docs: https://docs.trakt.tv/reference/getsyncwatchlistget
 func (s *SyncService) GetWatchlist(ctx context.Context, types string, sortBy string, sortHow string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 
@@ -123,7 +123,7 @@ func (s *SyncService) GetWatchlist(ctx context.Context, types string, sortBy str
 
 // GetLastActivity Returns trakt user activity.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/sync/last-activities/get-last-activity
+// API docs: https://docs.trakt.tv/reference/getsynclastactivities
 func (s *SyncService) GetLastActivity(ctx context.Context) (*str.UserLastActivities, *str.Response, error) {
 	var url string
 	url = "sync/last_activities"
@@ -177,7 +177,7 @@ func (s *SyncService) GetPlaybackProgress(ctx context.Context, types string, opt
 
 // RemovePlaybackItem removes playback item with selected id
 //
-// API docs:https://trakt.docs.apiary.io/#reference/sync/remove-playback/remove-a-playback-item
+// API docs: https://docs.trakt.tv/reference/deletesyncprogressdropmovie
 func (s *SyncService) RemovePlaybackItem(ctx context.Context, id int) (*str.Response, error) {
 	var url = fmt.Sprintf("sync/playback/%d", id)
 	req, err := s.client.NewRequest(http.MethodDelete, url, nil)
@@ -200,7 +200,7 @@ func (s *SyncService) RemovePlaybackItem(ctx context.Context, id int) (*str.Resp
 
 // AddItemsToCollection add items to user's collection
 //
-// API docs:https://trakt.docs.apiary.io/#reference/sync/add-to-collection/add-items-to-collection
+// API docs: https://docs.trakt.tv/reference/postsynccollectionadd
 func (s *SyncService) AddItemsToCollection(ctx context.Context, items *str.ItemsList) (*str.CollectionAddResult, *str.Response, error) {
 	var url = "sync/collection"
 	s.client.debug("add items")
@@ -262,7 +262,7 @@ func (s *SyncService) GetCollectedSeasons(ctx context.Context, options *uri.List
 
 // RemoveItemsFromCollection remove items from user's collection
 //
-// API docs:https://trakt.docs.apiary.io/#reference/sync/remove-from-collection/remove-items-from-collection
+// API docs: https://docs.trakt.tv/reference/postsynccollectionremove
 func (s *SyncService) RemoveItemsFromCollection(ctx context.Context, items *str.ItemsList) (*str.CollectionRemoveResult, *str.Response, error) {
 	var url = "sync/collection/remove"
 	s.client.debug("remove items")
@@ -282,7 +282,7 @@ func (s *SyncService) RemoveItemsFromCollection(ctx context.Context, items *str.
 
 // GetWatched Returns all movies or shows a user has watched sorted by most plays.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/sync/get-watched/get-watched
+// API docs: https://docs.trakt.tv/reference/getsyncwatched
 func (s *SyncService) GetWatched(ctx context.Context, watchType string, opts *uri.ListOptions) ([]*str.UserWatched, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("sync/watched/%s", watchType)
@@ -307,7 +307,7 @@ func (s *SyncService) GetWatched(ctx context.Context, watchType string, opts *ur
 
 // AddItemsToHistory add items to user's history
 //
-// API docs:https://trakt.docs.apiary.io/#reference/sync/add-to-history/add-items-to-watched-history
+// API docs: https://docs.trakt.tv/reference/postsynchistoryadd
 func (s *SyncService) AddItemsToHistory(ctx context.Context, items *str.HistoryItems) (*str.AddResult, *str.Response, error) {
 	var url = "sync/history"
 	req, err := s.client.NewRequest(http.MethodPost, url, items)
@@ -326,7 +326,7 @@ func (s *SyncService) AddItemsToHistory(ctx context.Context, items *str.HistoryI
 
 // RemoveItemsFromHistory remove items from user's history
 //
-// API docs:https://trakt.docs.apiary.io/#reference/sync/remove-from-history/remove-items-from-history
+// API docs: https://docs.trakt.tv/reference/postsynchistoryremove
 func (s *SyncService) RemoveItemsFromHistory(ctx context.Context, items *str.ItemsToRemove) (*str.RemoveResult, *str.Response, error) {
 	var url = "sync/history/remove"
 	s.client.debug("remove items")
@@ -346,7 +346,7 @@ func (s *SyncService) RemoveItemsFromHistory(ctx context.Context, items *str.Ite
 
 // GetRatings Returns users ratings. An empty rating returns all ratings.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/sync/get-ratings/get-ratings
+// API docs: https://docs.trakt.tv/reference/getsyncratingsget
 func (s *SyncService) GetRatings(ctx context.Context, types string, rating string, opts *uri.ListOptions) ([]*str.RatingListItem, *str.Response, error) {
 	var url string
 
@@ -378,7 +378,7 @@ func (s *SyncService) GetRatings(ctx context.Context, types string, rating strin
 
 // RemoveItemsFromRatings Remove ratings for one or more items.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/sync/remove-ratings/remove-ratings
+// API docs: https://docs.trakt.tv/reference/postsyncratingsremove
 func (s *SyncService) RemoveItemsFromRatings(ctx context.Context, items *str.ItemsToRemove) (*str.RemoveResult, *str.Response, error) {
 	var url = "sync/ratings/remove"
 	s.client.debug("remove items")
@@ -398,7 +398,7 @@ func (s *SyncService) RemoveItemsFromRatings(ctx context.Context, items *str.Ite
 
 // AddItemsToRatings Rate one or more items. Accepts shows, seasons, episodes and movies.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/sync/add-ratings/add-new-ratings
+// API docs: https://docs.trakt.tv/reference/postsyncratingsadd
 func (s *SyncService) AddItemsToRatings(ctx context.Context, items *str.RatingItems) (*str.AddResult, *str.Response, error) {
 	var url = "sync/ratings"
 	s.client.debug("add items")
@@ -418,7 +418,7 @@ func (s *SyncService) AddItemsToRatings(ctx context.Context, items *str.RatingIt
 
 // UpdateWatchlist Update the watchlist by sending 1 or more parameters.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/sync/update-watchlist/update-watchlist
+// API docs: https://docs.trakt.tv/reference/putsyncwatchlistupdate
 func (s *SyncService) UpdateWatchlist(ctx context.Context, update *str.PersonalList) (*str.PersonalList, *str.Response, error) {
 	var url = "sync/watchlist"
 	s.client.debug("update watchlist")
@@ -438,7 +438,7 @@ func (s *SyncService) UpdateWatchlist(ctx context.Context, update *str.PersonalL
 
 // UpdateFavorites Update the favorites list by sending 1 or more parameters.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/sync/update-favorites/update-favorites
+// API docs: https://docs.trakt.tv/reference/putsyncfavoritesupdate
 func (s *SyncService) UpdateFavorites(ctx context.Context, update *str.PersonalList) (*str.PersonalList, *str.Response, error) {
 	var url = "sync/favorites"
 	s.client.debug("update favorites")
@@ -458,7 +458,7 @@ func (s *SyncService) UpdateFavorites(ctx context.Context, update *str.PersonalL
 
 // UpdateWatchlistItem Update the notes on a single watchlist item.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/sync/update-watchlist-item/update-a-watchlist-item
+// API docs: https://docs.trakt.tv/reference/putsyncwatchlistupdateitem
 func (s *SyncService) UpdateWatchlistItem(ctx context.Context, itemID int, update *str.WatchlistItem) (*str.Response, error) {
 	var url string
 
@@ -479,7 +479,7 @@ func (s *SyncService) UpdateWatchlistItem(ctx context.Context, itemID int, updat
 
 // RemoveItemsFromWatchlist Remove one or more items from a user's watchlist.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/sync/remove-from-watchlist/remove-items-from-watchlist
+// API docs: https://docs.trakt.tv/reference/postsyncwatchlistremove
 func (s *SyncService) RemoveItemsFromWatchlist(ctx context.Context, items *str.ItemsToRemove) (*str.RemoveResult, *str.Response, error) {
 	var url = "sync/watchlist/remove"
 	s.client.debug("remove items")
@@ -502,7 +502,7 @@ func (s *SyncService) RemoveItemsFromWatchlist(ctx context.Context, items *str.I
 // only the show itself will be added. If seasons are specified, all of
 // those seasons will be added.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/sync/update-watchlist/add-items-to-watchlist
+// API docs: https://docs.trakt.tv/reference/postsyncwatchlistadd
 func (s *SyncService) AddItemsToWatchlist(ctx context.Context, items *str.HistoryItems) (*str.AddResult, *str.Response, error) {
 	var url = "sync/watchlist"
 	s.client.debug("add items")
@@ -523,7 +523,7 @@ func (s *SyncService) AddItemsToWatchlist(ctx context.Context, items *str.Histor
 // ReorderWatchlistItems Reorder all items on a user's watchlist by sending the updated rank of list item ids.
 // Use the /sync/watchlist method to get all list item ids.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/sync/reorder-watchlist/reorder-watchlist-items
+// API docs: https://docs.trakt.tv/reference/postsyncwatchlistreorder
 func (s *SyncService) ReorderWatchlistItems(ctx context.Context, reorder *str.ItemsToReorder) (*str.ReorderResults, *str.Response, error) {
 	var url = "sync/watchlist/reorder"
 	s.client.debug("reorder watchlist")
@@ -544,7 +544,7 @@ func (s *SyncService) ReorderWatchlistItems(ctx context.Context, reorder *str.It
 // GetFavorites Returns all items in a user's favorites filtered by type.
 // The type and sort segments are sent only when types, sortBy and sortHow are all set.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/sync/get-favorites/get-favorites
+// API docs: https://docs.trakt.tv/reference/getsyncfavoritesget
 func (s *SyncService) GetFavorites(ctx context.Context, types string, sortBy string, sortHow string, opts *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	var url string
 
@@ -576,7 +576,7 @@ func (s *SyncService) GetFavorites(ctx context.Context, types string, sortBy str
 
 // AddItemsToFavorites add items to favorites.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/sync/update-favorites/add-items-to-favorites
+// API docs: https://docs.trakt.tv/reference/postsyncfavoritesadd
 func (s *SyncService) AddItemsToFavorites(ctx context.Context, items *str.HistoryItems) (*str.AddResult, *str.Response, error) {
 	var url = "sync/favorites"
 	s.client.debug("add items")
@@ -596,7 +596,7 @@ func (s *SyncService) AddItemsToFavorites(ctx context.Context, items *str.Histor
 
 // RemoveItemsFromFavorites remove items from favorites.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/sync/remove-from-favorites/remove-items-from-favorites
+// API docs: https://docs.trakt.tv/reference/postsyncfavoritesremove
 func (s *SyncService) RemoveItemsFromFavorites(ctx context.Context, items *str.ItemsToRemove) (*str.RemoveResult, *str.Response, error) {
 	var url = "sync/favorites/remove"
 	s.client.debug("remove items")
@@ -617,7 +617,7 @@ func (s *SyncService) RemoveItemsFromFavorites(ctx context.Context, items *str.I
 // ReorderFavoritesItems Reorder all items on a user's favorites by sending the updated rank of list item ids.
 // Use the /sync/favorites method to get all list item ids.
 //
-// API docs:https://trakt.docs.apiary.io/#reference/sync/reorder-favorites/reorder-favorited-items
+// API docs: https://docs.trakt.tv/reference/postsyncfavoritesreorder
 func (s *SyncService) ReorderFavoritesItems(ctx context.Context, reorder *str.ItemsToReorder) (*str.ReorderResults, *str.Response, error) {
 	var url = "sync/favorites/reorder"
 	s.client.debug("reorder favorites")
@@ -637,7 +637,7 @@ func (s *SyncService) ReorderFavoritesItems(ctx context.Context, reorder *str.It
 
 // UpdateFavoriteItem Update the notes on a single favorite item.
 //
-// API docs: https://trakt.docs.apiary.io/#reference/sync/update-favorite-item/update-a-favorite-item
+// API docs: https://docs.trakt.tv/reference/putsyncfavoritesupdateitem
 func (s *SyncService) UpdateFavoriteItem(ctx context.Context, itemID int, update *str.FavoriteItem) (*str.Response, error) {
 	var url string
 
