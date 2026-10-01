@@ -35,7 +35,13 @@ func writeHandlers() []writeHandler {
 		movie  = `"ids":{"trakt":1}`
 		note   = `{"notes":"rewatch"}`
 		lists  = `[{"name":"Favorites","ids":{"trakt":1}}]`
+		// the comments section hides users, not media
+		commenters = `[{"type":"user","user":{"username":"sean","ids":{"slug":"sean"}}}]`
+		commenter  = `"users":[{"ids":{"slug":"sean"}`
 	)
+	hiddenUsers := func(action string, itemType string) str.Options {
+		return str.Options{Module: "users", Action: action, Type: itemType, UserName: "me", Section: "comments"}
+	}
 	sync := func(action string) str.Options {
 		return str.Options{Module: "sync", Action: action, Type: "movies"}
 	}
@@ -91,6 +97,12 @@ func writeHandlers() []writeHandler {
 		{name: "users delete list", handler: UsersDeleteListHandler{}, options: like, method: http.MethodDelete, path: "/users/me/lists/55", status: http.StatusNoContent},
 		{name: "users deny follower request", handler: UsersFollowerRequestsHandler{}, options: deny, method: http.MethodDelete, path: "/users/requests/7", status: http.StatusNoContent, writes: true},
 		{name: "users list like", handler: UsersListLikeHandler{}, options: like, method: http.MethodPost, path: "/users/me/lists/55/like", status: http.StatusNoContent},
+		{name: "users add hidden users", handler: UsersAddHiddenItemsHandler{}, options: hiddenUsers("add_hidden_items", consts.EmptyString),
+			items: commenters, sends: commenter, method: http.MethodPost, path: "/users/hidden/comments", status: http.StatusCreated, writes: true},
+		{name: "users add hidden users by type", handler: UsersAddHiddenItemsHandler{}, options: hiddenUsers("add_hidden_items", "user"),
+			items: commenters, sends: commenter, method: http.MethodPost, path: "/users/hidden/comments", status: http.StatusCreated, writes: true},
+		{name: "users remove hidden users", handler: UsersRemoveHiddenItemsHandler{}, options: hiddenUsers("remove_hidden_items", consts.EmptyString),
+			items: commenters, sends: commenter, method: http.MethodPost, path: "/users/hidden/comments/remove", writes: true},
 		{name: "users remove hidden items", handler: UsersRemoveHiddenItemsHandler{}, options: users("remove_hidden_items"), items: movies, sends: movie, method: http.MethodPost, path: "/users/hidden/calendar/remove", writes: true},
 		{name: "users remove list items", handler: UsersRemoveListItemsHandler{}, options: users("remove_list_items"), items: movies, sends: movie, method: http.MethodPost, path: "/users/me/lists/55/items/remove", writes: true},
 		{name: "users remove list like", handler: UsersListLikeHandler{}, options: unlike, method: http.MethodDelete, path: "/users/me/lists/55/like", status: http.StatusNoContent},

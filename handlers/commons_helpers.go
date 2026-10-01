@@ -82,6 +82,15 @@ func isPeopleType(stype string) bool {
 	}
 }
 
+func isUserType(stype string) bool {
+	switch stype {
+	case consts.User:
+		return true
+	default:
+		return false
+	}
+}
+
 // Media interface for helpers
 type Media interface {
 	str.Movie | str.Show | str.Episode | str.Season
