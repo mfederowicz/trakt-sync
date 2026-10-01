@@ -32,6 +32,8 @@ schedule.
 
 ### Changed
 
+- Library: a `trakt` client without `WithUserAgent` now sends `User-Agent: trakt-sync-go` (`trakt.DefaultUserAgent`), so apps built on the library no longer show up as the trakt-sync CLI. The CLI still sends `trakt-sync/<version>`.
+
 ### Fixed
 
 ## [1.21.0] - 2026-10-01
