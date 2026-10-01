@@ -14,7 +14,7 @@ import (
 // CalendarsHotFinalesHandler struct for handler
 type CalendarsHotFinalesHandler struct{}
 
-// Handle to handle calendars: hot-finales action
+// Handle to handle calendars: hot_finales action
 func (CalendarsHotFinalesHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Get calendar: " + options.Action)
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}

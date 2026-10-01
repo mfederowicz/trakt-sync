@@ -14,7 +14,7 @@ import (
 // CalendarsStreamingHandler struct for handler
 type CalendarsStreamingHandler struct{}
 
-// Handle to handle calendars: {my,all}-streaming action
+// Handle to handle calendars: {my,all}_streaming action
 func (CalendarsStreamingHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Get calendar: " + options.Action)
 	target := calendarTarget(options.Action)
