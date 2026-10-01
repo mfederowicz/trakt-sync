@@ -66,10 +66,6 @@ func searchFunc(cmd *Command, _ ...string) error {
 	return handler.Handle(options, client)
 }
 
-var (
-	searchDumpTemplate = `{{.Head}} {{.Pattern}}{{end}}`
-)
-
 func init() {
 	SearchCmd.Flag.Var(&_searchType, "t", consts.TypeUsage)
 	SearchCmd.Flag.Var(&_searchField, "field", consts.FieldUsage)

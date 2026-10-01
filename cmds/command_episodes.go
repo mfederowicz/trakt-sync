@@ -92,10 +92,6 @@ func episodesFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	episodesDumpTemplate = ``
-)
-
 func init() {
 	EpisodesCmd.Run = episodesFunc
 }

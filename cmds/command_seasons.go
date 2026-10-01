@@ -86,10 +86,6 @@ func seasonsFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	seasonsDumpTemplate = ``
-)
-
 func init() {
 	SeasonsCmd.Run = seasonsFunc
 }

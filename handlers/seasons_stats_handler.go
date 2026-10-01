@@ -15,7 +15,7 @@ import (
 )
 
 // SeasonsStatsHandler struct for handler
-type SeasonsStatsHandler struct{ common CommonLogic }
+type SeasonsStatsHandler struct{}
 
 // Handle to handle seasons: stats action
 func (m SeasonsStatsHandler) Handle(options *str.Options, client *trakt.Client) error {

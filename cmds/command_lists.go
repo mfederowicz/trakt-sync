@@ -61,10 +61,6 @@ func listsFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	listsDumpTemplate = ``
-)
-
 func init() {
 	ListsCmd.Run = listsFunc
 }

@@ -17,7 +17,7 @@ import (
 )
 
 // ShowsRelatedHandler struct for handler
-type ShowsRelatedHandler struct{ common CommonLogic }
+type ShowsRelatedHandler struct{}
 
 // Handle to handle shows: related action
 func (m ShowsRelatedHandler) Handle(options *str.Options, client *trakt.Client) error {

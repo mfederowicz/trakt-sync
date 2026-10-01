@@ -13,7 +13,7 @@ import (
 )
 
 // UsersUnblockHandler struct for handler
-type UsersUnblockHandler struct{ common CommonLogic }
+type UsersUnblockHandler struct{}
 
 // Handle to handle users: unblock action
 func (m UsersUnblockHandler) Handle(options *str.Options, client *trakt.Client) error {

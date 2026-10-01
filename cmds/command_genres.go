@@ -42,10 +42,6 @@ func genresFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	genresDumpTemplate = ``
-)
-
 func init() {
 	GenresCmd.Run = genresFunc
 }

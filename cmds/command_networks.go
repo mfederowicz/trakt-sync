@@ -44,10 +44,6 @@ func networksFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	networksDumpTemplate = ``
-)
-
 func init() {
 	NetworksCmd.Run = networksFunc
 }

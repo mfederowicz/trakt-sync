@@ -13,7 +13,7 @@ import (
 )
 
 // UsersUnfollowHandler struct for handler
-type UsersUnfollowHandler struct{ common CommonLogic }
+type UsersUnfollowHandler struct{}
 
 // Handle to handle users: unfollow action
 func (m UsersUnfollowHandler) Handle(options *str.Options, client *trakt.Client) error {

@@ -61,10 +61,6 @@ func watchlistFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	watchlistDumpTemplate = `{{.Head}} {{.Pattern}}{{end}}`
-)
-
 func init() {
 	WatchlistCmd.Run = watchlistFunc
 }

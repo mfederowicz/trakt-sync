@@ -17,7 +17,7 @@ import (
 )
 
 // UsersListHandler struct for handler
-type UsersListHandler struct{ common CommonLogic }
+type UsersListHandler struct{}
 
 // Handle to handle users: list action
 func (u UsersListHandler) Handle(options *str.Options, client *trakt.Client) error {

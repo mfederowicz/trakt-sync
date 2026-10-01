@@ -55,10 +55,6 @@ func scrobbleFunc(cmd *Command, _ ...string) error {
 	return nil
 }
 
-var (
-	scrobbleDumpTemplate = ``
-)
-
 func init() {
 	ScrobbleCmd.Run = scrobbleFunc
 }

@@ -15,7 +15,7 @@ import (
 )
 
 // MoviesRatingsHandler struct for handler
-type MoviesRatingsHandler struct{ common CommonLogic }
+type MoviesRatingsHandler struct{}
 
 // Handle to handle movies: ratings action
 func (m MoviesRatingsHandler) Handle(options *str.Options, client *trakt.Client) error {
