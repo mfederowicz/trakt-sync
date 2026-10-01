@@ -546,6 +546,48 @@ func TestConvertBytesToItemsList(t *testing.T) {
 		}
 	})
 
+	t.Run("history and ratings items that cannot be grouped", func(t *testing.T) {
+		tests := []struct {
+			name, data, stype, want string
+		}{
+			{"movie with imdb id only", `[{"movie":{"ids":{"trakt":1}}},{"movie":{"ids":{"imdb":"tt1104001"}}}]`, consts.Movies, "item at index 1: movie has no trakt id"},
+			{"movie without ids", `[{"movie":{"title":"TRON: Legacy"}}]`, consts.Movies, "item at index 0: movie has no trakt id"},
+			{"show without trakt id", `[{"show":{"ids":{"slug":"breaking-bad"}}}]`, consts.Shows, "item at index 0: show has no trakt id"},
+			{"season without trakt id", `[{"season":{"number":1}}]`, consts.Seasons, "item at index 0: season has no trakt id"},
+			{"episode without trakt id", `[{"episode":{"season":1,"number":1}}]`, consts.Episodes, "item at index 0: episode has no trakt id"},
+			{"all types", `[{"movie":{"ids":{"trakt":1}}},{"episode":{"season":1,"number":1}}]`, consts.ActionTypeAll, "item at index 1: episode has no trakt id"},
+			{"show episode without season number", `[{"show":{"ids":{"trakt":2}},"episode":{"number":1}}]`, consts.Shows, "item at index 0: episode has no season number"},
+			{"null item", `[null]`, consts.Movies, "item at index 0: is empty"},
+		}
+		for _, tt := range tests {
+			tt := tt
+			t.Run(tt.name, func(t *testing.T) {
+				for _, action := range []string{consts.AddToHistory, consts.RemoveFromHistory, consts.AddToRatings, consts.RemoveFromRatings} {
+					got, err := c.ConvertBytesToItemsList([]byte(tt.data), action, tt.stype)
+					assert.Nil(t, got, action)
+					assert.EqualError(t, err, tt.want, action)
+				}
+			})
+		}
+	})
+
+	t.Run("items of another type need no trakt id", func(t *testing.T) {
+		got, err := c.ConvertBytesToItemsList([]byte(`[{"watched_at":"2024-05-02T10:00:00.000Z","movie":{"ids":{"trakt":1}}},{"episode":{"season":1,"number":1}}]`), consts.AddToHistory, consts.Movies)
+		if !assert.NoError(t, err) {
+			return
+		}
+		assert.Equal(t, []int64{1}, traktIDs(got.Movies))
+	})
+
+	t.Run("show item without an episode after one with an episode", func(t *testing.T) {
+		data := `[{"watched_at":"2024-05-02T10:00:00.000Z","show":{"ids":{"trakt":2}},"episode":{"season":1,"number":1}},{"watched_at":"2024-05-03T10:00:00.000Z","show":{"ids":{"trakt":2}}}]`
+		got, err := c.ConvertBytesToItemsList([]byte(data), consts.AddToHistory, consts.Shows)
+		if !assert.NoError(t, err) {
+			return
+		}
+		assert.Equal(t, []int64{2}, traktIDs(got.Shows))
+	})
+
 	t.Run("unknown action", func(t *testing.T) {
 		got, err := c.ConvertBytesToItemsList([]byte(mixedList), "dance", consts.Movies)
 		assert.Nil(t, got)

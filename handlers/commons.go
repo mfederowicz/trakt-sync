@@ -1210,6 +1210,9 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 		if !str.ContainString(stype, itemsListTypes) {
 			return nil, fmt.Errorf("type '%s' is not valid for action '%s', available types:%s", stype, action, itemsListTypes)
 		}
+		if err := checkItemsListInput(list, stype); err != nil {
+			return nil, err
+		}
 		items = c.ListToItemsAgregate(items, list, stype)
 		return items.Uniq(), nil
 	case consts.AddToCollection, consts.RemoveFromCollection, consts.RemoveFromWatchlist, consts.AddToWatchlist,
@@ -1223,6 +1226,40 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 	default:
 		return nil, errors.New(consts.UnknownItemsListType)
 	}
+}
+
+// checkItemsListInput reports the first item ListToItems cannot group for stype:
+// it groups movies, shows, seasons and episodes by their trakt id, and the episodes of a show by season number
+func checkItemsListInput(list []*str.ExportlistItem, stype string) error {
+	all := stype == consts.ActionTypeAll
+	for i, item := range list {
+		if item == nil {
+			return fmt.Errorf("item at index %d: is empty", i)
+		}
+		if (all || stype == consts.Movies) && item.Movie != nil && !hasTraktID(item.Movie.IDs) {
+			return fmt.Errorf("item at index %d: movie has no trakt id", i)
+		}
+		if (all || stype == consts.Shows) && item.Show != nil {
+			if !hasTraktID(item.Show.IDs) {
+				return fmt.Errorf("item at index %d: show has no trakt id", i)
+			}
+			if item.Episode != nil && item.Episode.Season == nil {
+				return fmt.Errorf("item at index %d: episode has no season number", i)
+			}
+		}
+		if (all || stype == consts.Seasons) && item.Season != nil && !hasTraktID(item.Season.IDs) {
+			return fmt.Errorf("item at index %d: season has no trakt id", i)
+		}
+		if (all || stype == consts.Episodes) && item.Episode != nil && !hasTraktID(item.Episode.IDs) {
+			return fmt.Errorf("item at index %d: episode has no trakt id", i)
+		}
+	}
+	return nil
+}
+
+// hasTraktID tells if ids carry a trakt id
+func hasTraktID(ids *str.IDs) bool {
+	return ids != nil && ids.Trakt != nil
 }
 
 // ListToItemsCollectionAgregate helper function to handle all types at once
@@ -1413,7 +1450,7 @@ func (*CommonLogic) ListToItems(items *str.ItemsList, list []*str.ExportlistItem
 				var season *str.Season
 
 				for i := range *show.Seasons {
-					if *(*show.Seasons)[i].Number == *item.Episode.Season {
+					if item.Episode != nil && *(*show.Seasons)[i].Number == *item.Episode.Season {
 						season = &(*show.Seasons)[i]
 						break
 					}
