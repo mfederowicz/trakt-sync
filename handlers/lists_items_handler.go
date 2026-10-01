@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/mfederowicz/trakt-sync/cli"
 	"time"
 
+	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -40,8 +40,11 @@ func (h ListsItemsHandler) Handle(options *str.Options, client *trakt.Client) er
 	printer.Printf("Found %d result \n", len(result))
 	exportJSON := []*str.UserListItem{}
 	exportJSON = append(exportJSON, result...)
-	print("write data to:" + options.Output)
-	jsonData, _ := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
+	jsonData, err := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
+	}
+	printer.Println("write data to:" + options.Output)
 
 	writer.WriteJSON(options, jsonData)
 
