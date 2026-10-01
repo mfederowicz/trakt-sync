@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Genre represents JSON slug object

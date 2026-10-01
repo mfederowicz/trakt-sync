@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // OutputShow represents JSON show object used in deduplication

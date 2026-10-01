@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // OutputMovie represents JSON movie object used in deduplication

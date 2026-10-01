@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // NewDeviceCode represents request new device code payload.

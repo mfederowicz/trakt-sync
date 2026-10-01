@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // OutputEpisode represents JSON episode object used in deduplication

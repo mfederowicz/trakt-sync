@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // SeasonPeople represents JSON people connected with season object

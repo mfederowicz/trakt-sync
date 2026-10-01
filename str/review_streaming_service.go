@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ReviewStreamingService represents JSON streaming service with per-type watched counts

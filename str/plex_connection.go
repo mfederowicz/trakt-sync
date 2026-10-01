@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PlexConnection represents JSON Plex connection status

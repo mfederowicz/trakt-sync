@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ReviewTrends represents JSON most-watched shows and movies premiering each month

@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PlexSettingsUpdate represents JSON Plex settings update; omitted keys are left unchanged, trigger_sync enqueues a sync

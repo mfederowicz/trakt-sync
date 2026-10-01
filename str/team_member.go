@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // TeamMember represents JSON Trakt team member object

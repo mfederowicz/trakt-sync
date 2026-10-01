@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // DataSync represents JSON data sync object (younify, plex or import) with its added counts

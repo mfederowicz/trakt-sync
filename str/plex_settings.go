@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PlexSettings represents JSON Plex settings: connection, scrobbler webhook, sync selection and toggles

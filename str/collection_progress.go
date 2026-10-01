@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // CollectionProgress represents JSON show_collection_progress object

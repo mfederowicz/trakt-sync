@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ReviewTrend represents JSON trend object; watchers is the global play count, watched tells if this user watched it

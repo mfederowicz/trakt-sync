@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ReviewCountryCount represents JSON country counts object, sorted by count

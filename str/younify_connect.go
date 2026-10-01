@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // YounifyConnect represents JSON streaming connection request object

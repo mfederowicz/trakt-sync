@@ -1,4 +1,3 @@
-// Package uri used for url operations
 package uri
 
 // UpNextNitroOptions query options for sync/progress/up_next_nitro

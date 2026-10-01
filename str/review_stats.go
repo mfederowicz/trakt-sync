@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ReviewStats represents JSON review stats object for all media, shows and movies

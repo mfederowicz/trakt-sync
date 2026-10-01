@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Sharing represents JSON sharing object

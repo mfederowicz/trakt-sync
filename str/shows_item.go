@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ShowsItem represents JSON movies item object

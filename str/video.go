@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Video represents JSON video object

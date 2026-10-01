@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Watchlist represents JSON watchlist object

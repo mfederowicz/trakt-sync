@@ -13,8 +13,9 @@ Comments](https://go.dev/wiki/CodeReviewComments) and the rules enabled in
 
 - Every file starts with the package comment already used by its package, e.g.
   `// Package handlers used to handle module actions` (`package-comments`).
-  Exception: `trakt/` keeps its package comment only in `trakt/doc.go`, because
-  go doc joins the comments of all files and pkg.go.dev shows them.
+  Exception: the public packages `trakt/`, `str/` and `uri/` keep their package
+  comment only in `doc.go`, because go doc joins the comments of all files and
+  pkg.go.dev shows them.
 - Every exported identifier has a doc comment starting with its name
   (`exported`):
 

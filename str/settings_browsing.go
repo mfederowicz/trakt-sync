@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // SettingsBrowsing represents JSON browsing values of a settings update

@@ -361,7 +361,7 @@ func processVerbose(options *str.Options, clientID string) {
 			printer.Println("selected module:" + options.Module)
 		}
 		printer.Println(
-			str.Format("selected user: {0}, module: {1}, type: {2}, per_page: {3}, format: {4}, action: {5}, sort: {6}",
+			fmt.Sprintf("selected user: %s, module: %s, type: %s, per_page: %d, format: %s, action: %s, sort: %s",
 				options.UserName, options.Module, options.Type, options.PerPage, options.Format, options.Action, options.Sort),
 		)
 	}

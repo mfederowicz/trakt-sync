@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // SettingsSpoilers represents JSON spoiler settings; each value is show or hide

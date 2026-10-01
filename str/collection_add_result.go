@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // CollectionAddResult represents JSON collection add result object

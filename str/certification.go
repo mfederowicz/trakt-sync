@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Certification represents JSON certification object

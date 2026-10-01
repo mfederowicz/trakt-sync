@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // FollowRequest represents JSON follow request object

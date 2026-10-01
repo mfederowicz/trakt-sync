@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Episode represents JSON response for media object

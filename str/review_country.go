@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ReviewCountry represents JSON country with its watched count

@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // DeviceCode represents JSON response for /device/code

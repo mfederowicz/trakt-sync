@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // UserSettings represents JSON user stats object

@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // MovieReport represents JSON movie report object

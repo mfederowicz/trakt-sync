@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Shows represents JSON shows object

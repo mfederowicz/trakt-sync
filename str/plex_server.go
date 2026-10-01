@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PlexServer represents JSON Plex server; url is null when the server is unreachable

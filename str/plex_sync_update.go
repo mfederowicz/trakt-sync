@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PlexSyncUpdate represents JSON Plex sync selection and toggles to change

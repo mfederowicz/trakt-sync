@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PlexAccount represents JSON Plex home account

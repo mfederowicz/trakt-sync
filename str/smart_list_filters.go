@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // SmartListFilters represents JSON smart list filters object; ranges are [min, max]

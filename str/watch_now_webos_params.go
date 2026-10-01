@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // WatchNowWebosParams represents JSON webOS link params object

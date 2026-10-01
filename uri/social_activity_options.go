@@ -1,4 +1,3 @@
-// Package uri used for url operations
 package uri
 
 // SocialActivityOptions query options for users/{id}/{type}/activities

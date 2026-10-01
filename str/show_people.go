@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ShowPeople represents JSON people connected with show object

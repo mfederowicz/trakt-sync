@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // WatchNowRank represents JSON watch now streaming rank object

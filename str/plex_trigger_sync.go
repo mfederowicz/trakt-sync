@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PlexTriggerSync represents JSON Plex sync to start with a settings update; *_all_data re-pulls full data

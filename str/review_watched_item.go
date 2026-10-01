@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // ReviewWatchedItem represents JSON first / last watched object: a movie or an episode with its show

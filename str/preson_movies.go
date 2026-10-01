@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PersonMovies represents JSON person movies object

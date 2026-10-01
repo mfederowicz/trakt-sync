@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // CalendarList represents JSON calendar list item

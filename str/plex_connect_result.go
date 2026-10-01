@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // PlexConnectResult represents JSON Plex connect response with the web auth URL

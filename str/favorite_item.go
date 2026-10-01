@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // FavoriteItem represents JSON favorite item object

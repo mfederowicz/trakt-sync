@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Collection represents JSON collection object

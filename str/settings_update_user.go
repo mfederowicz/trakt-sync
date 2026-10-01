@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // SettingsUpdateUser represents JSON profile values of a settings update

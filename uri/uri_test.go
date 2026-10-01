@@ -183,3 +183,27 @@ func TestBuildQuerySyncProgressBools(t *testing.T) {
 		t.Fatalf(Expected, expectedURL, got)
 	}
 }
+
+func TestAddQueryNilOptions(t *testing.T) {
+	tests := []struct {
+		name string
+		opts any
+	}{
+		{name: "untyped nil", opts: nil},
+		{name: "nil list options", opts: (*ListOptions)(nil)},
+		{name: "nil sync progress options", opts: (*SyncProgressOptions)(nil)},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := AddQuery("movies/trending", tt.opts)
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			if got != "movies/trending" {
+				t.Fatalf(Expected, "movies/trending", got)
+			}
+		})
+	}
+}

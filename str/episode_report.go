@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // EpisodeReport represents JSON episode report object

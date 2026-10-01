@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // Sentiments represents JSON sentiments object: sentiment counts for comments and reactions

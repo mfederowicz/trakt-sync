@@ -1,4 +1,3 @@
-// Package str used for structs
 package str
 
 // SearchTrendingItem represents JSON trending search response object
