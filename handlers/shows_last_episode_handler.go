@@ -36,7 +36,7 @@ func (m ShowsLastEpisodeHandler) Handle(options *str.Options, client *trakt.Clie
 		return nil
 	}
 
-	printer.Printf("Found last episode for id:%s and name:%s \n", options.InternalID, *result.Title)
+	printer.Printf("Found last episode for id:%s and name:%s \n", options.InternalID, episodeTitle(result))
 
 	jsonData, err := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
 	if err != nil {

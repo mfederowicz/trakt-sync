@@ -29,6 +29,14 @@ func unknownValueError(flagName string, value string) error {
 	return fmt.Errorf("unknown %s %q", flagName, value)
 }
 
+// episodeTitle returns the title of an episode for messages; the API sends none for many upcoming episodes.
+func episodeTitle(episode *str.Episode) string {
+	if episode.Title == nil {
+		return consts.NoEpisodeTitle
+	}
+	return *episode.Title
+}
+
 func isMovieType(stype string) bool {
 	switch stype {
 	case consts.Movie, consts.Movies:

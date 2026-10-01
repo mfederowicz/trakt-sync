@@ -221,3 +221,31 @@ func TestReorderHandlersItemWithoutID(t *testing.T) {
 		})
 	}
 }
+
+// An episode title is nullish in the API (upcoming episodes often have none): the episode is still written, it used to panic.
+func TestShowsEpisodeHandlersWithoutTitle(t *testing.T) {
+	cases := map[string]struct {
+		handler Handler
+		path    string
+	}{
+		"last episode": {handler: ShowsLastEpisodeHandler{}, path: "/shows/55/last_episode"},
+		"next episode": {handler: ShowsNextEpisodeHandler{}, path: "/shows/55/next_episode"},
+	}
+	for name, tc := range cases {
+		name, tc := name, tc
+		t.Run(name, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+			s.Mux.HandleFunc(tc.path, func(w http.ResponseWriter, r *http.Request) {
+				test.AssertMethod(t, r, http.MethodGet)
+				test.SafeFprint(w, `{"season":2,"number":5,"title":null,"ids":{"trakt":9}}`)
+			})
+
+			options := str.Options{InternalID: "55", Output: filepath.Join(t.TempDir(), "out.json")}
+			test.AssertNilError(t, tc.handler.Handle(&options, s.Client))
+			written, err := os.ReadFile(options.Output)
+			test.AssertNilError(t, err)
+			assert.JSONEq(t, `{"season":2,"number":5,"ids":{"trakt":9}}`, string(written))
+		})
+	}
+}
