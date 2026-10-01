@@ -823,6 +823,9 @@ func (s *ShowsService) RefreshShowMetadata(ctx context.Context, id string) (*str
 func (s *ShowsService) GetNextEpisode(ctx context.Context, id string, opts *uri.ListOptions) (*str.Episode, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/next_episode", id)
 	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
 	s.client.debug("fetch next episode url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -844,6 +847,9 @@ func (s *ShowsService) GetNextEpisode(ctx context.Context, id string, opts *uri.
 func (s *ShowsService) GetLastEpisode(ctx context.Context, id string, opts *uri.ListOptions) (*str.Episode, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/last_episode", id)
 	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
 	s.client.debug("fetch last episode url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -865,6 +871,9 @@ func (s *ShowsService) GetLastEpisode(ctx context.Context, id string, opts *uri.
 func (s *ShowsService) GetAllSeasonsForShow(ctx context.Context, id string, opts *uri.ListOptions) ([]*str.Season, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/seasons", id)
 	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
 	s.client.debug("fetch all seasons url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -887,6 +896,9 @@ func (s *ShowsService) GetAllSeasonsForShow(ctx context.Context, id string, opts
 func (s *ShowsService) GetSingleSeasonsForShow(ctx context.Context, id string, season int, opts *uri.ListOptions) (*str.Season, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/seasons/%d/info", id, season)
 	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
 	s.client.debug("fetch single seasons url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -909,6 +921,9 @@ func (s *ShowsService) GetSingleSeasonsForShow(ctx context.Context, id string, s
 func (s *ShowsService) GetAllEpisodesForSingleSeason(ctx context.Context, id string, season int, opts *uri.ListOptions) ([]*str.Episode, *str.Response, error) {
 	var url = fmt.Sprintf("shows/%s/seasons/%d", id, season)
 	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
 	s.client.debug("fetch season episodes url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -937,6 +952,9 @@ func (s *ShowsService) GetAllSeasonTranslations(ctx context.Context, id string, 
 	}
 
 	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
 	s.client.debug("fetch season translations url:" + url)
 	req, err := s.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
