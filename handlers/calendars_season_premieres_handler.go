@@ -42,9 +42,7 @@ func (CalendarsSeasonPremieresHandler) Handle(options *str.Options, client *trak
 }
 
 func fetchCalendarSeasonPremieres(client *trakt.Client, options *str.Options) ([]*str.CalendarList, error) {
-	if options.Action == consts.AllSeasonPremieres {
-		actionType = consts.ActionTypeAll
-	}
+	actionType := calendarTarget(options.Action)
 
 	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	list, _, err := client.Calendars.GetSeasonPremieres(
