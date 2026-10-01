@@ -1,8 +1,10 @@
 # Third Party Licenses
 This file lists all of the licenses for third-party libraries that are used to make trakt-sync.
 
-## trakt.tv - Api full documentaion 
-https://trakt.docs.apiary.io/#introduction
+## trakt.tv - API documentation
+API reference: https://docs.trakt.tv
+
+Developer portal (guides, OpenAPI spec): https://developer.trakt.tv
 
 
 ## go-github - Go client library for accessing the GitHub 
