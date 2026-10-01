@@ -30,7 +30,15 @@ schedule.
 
 ### Added
 
-- Library docs for the `trakt` package: a package overview for pkg.go.dev, a "Library usage" section in the README, and runnable programs in `example/` (device login, trending movies, paginated history, error handling).
+### Changed
+
+### Fixed
+
+## [1.21.0] - 2026-10-01
+
+### Added
+
+- Library docs for the `trakt` package: a package overview for pkg.go.dev, a "Library usage" section in the README, and runnable programs in `example/` (device login, trending movies, paginated history, error handling). Method docs link to the new API reference at docs.trakt.tv, and the versioning rules at the top of this file now cover the library.
 
 ### Changed
 
@@ -605,7 +613,8 @@ schedule.
 - First release, with the `calendars`, `collection`, `help`, `history`, `lists`, `people`, `search` and `watchlist`
   commands exporting Trakt data to JSON.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.20.0...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.21.0...HEAD
+[1.21.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.20.0...v1.21.0
 [1.20.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.19.1...v1.20.0
 [1.19.1]: https://github.com/mfederowicz/trakt-sync/compare/v1.19.0...v1.19.1
 [1.19.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.18.0...v1.19.0
