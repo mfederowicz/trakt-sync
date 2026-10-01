@@ -641,7 +641,7 @@ func (c *CommonLogic) FetchCommentUserLikes(client *trakt.Client, options *str.O
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchCommentUserLikes(client, options, nextPage)
@@ -672,7 +672,7 @@ func (c *CommonLogic) FetchTrendingComments(client *trakt.Client, options *str.O
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchTrendingComments(client, options, nextPage)
@@ -703,7 +703,7 @@ func (c *CommonLogic) FetchRecentComments(client *trakt.Client, options *str.Opt
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchRecentComments(client, options, nextPage)
@@ -734,7 +734,7 @@ func (c *CommonLogic) FetchUpdatedComments(client *trakt.Client, options *str.Op
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUpdatedComments(client, options, nextPage)
@@ -762,7 +762,7 @@ func (c *CommonLogic) FetchMovieRecommendations(client *trakt.Client, options *s
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchMovieRecommendations(client, options, nextPage)
@@ -790,7 +790,7 @@ func (c *CommonLogic) FetchShowRecommendations(client *trakt.Client, options *st
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchShowRecommendations(client, options, nextPage)
@@ -1603,7 +1603,7 @@ func (c CommonLogic) FetchHistoryList(client *trakt.Client, options *str.Options
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
@@ -1636,7 +1636,7 @@ func (c CommonLogic) FetchRatings(client *trakt.Client, options *str.Options, pa
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
@@ -1670,7 +1670,7 @@ func (c CommonLogic) FetchUsersRatings(client *trakt.Client, options *str.Option
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
@@ -1768,7 +1768,7 @@ func (c *CommonLogic) FetchWatchlist(client *trakt.Client, options *str.Options,
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchWatchlist(client, options, nextPage)
@@ -1799,7 +1799,7 @@ func (c CommonLogic) FetchFavorites(client *trakt.Client, options *str.Options, 
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchFavorites(client, options, nextPage)
@@ -1886,7 +1886,7 @@ func (c *CommonLogic) FetchUsersHiddenItems(client *trakt.Client, options *str.O
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersHiddenItems(client, options, nextPage)
@@ -1963,7 +1963,7 @@ func (c CommonLogic) FetchUsersLikes(client *trakt.Client, options *str.Options,
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersLikes(client, options, nextPage)
@@ -1993,7 +1993,7 @@ func (c CommonLogic) FetchUsersListLikes(client *trakt.Client, options *str.Opti
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersListLikes(client, options, nextPage)
@@ -2023,7 +2023,7 @@ func (c CommonLogic) FetchUsersCollection(client *trakt.Client, options *str.Opt
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersCollection(client, options, nextPage)
@@ -2057,7 +2057,7 @@ func (c *CommonLogic) FetchUsersComments(client *trakt.Client, options *str.Opti
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersComments(client, options, nextPage)
@@ -2088,7 +2088,7 @@ func (c CommonLogic) FetchUsersNotes(client *trakt.Client, options *str.Options,
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersNotes(client, options, nextPage)
@@ -2131,7 +2131,7 @@ func (c CommonLogic) FetchUsersCollaborations(client *trakt.Client, options *str
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersCollaborations(client, options, nextPage)
@@ -2209,7 +2209,7 @@ func (c CommonLogic) FetchUsersListItems(client *trakt.Client, options *str.Opti
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersListItems(client, options, nextPage)
@@ -2245,7 +2245,7 @@ func (c CommonLogic) FetchUsersListComments(client *trakt.Client, options *str.O
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersListComments(client, options, nextPage)
@@ -2271,7 +2271,7 @@ func (c CommonLogic) FetchBlockedUsers(client *trakt.Client, options *str.Option
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchBlockedUsers(client, options, nextPage)
@@ -2298,7 +2298,7 @@ func (c CommonLogic) FetchFollowers(client *trakt.Client, options *str.Options, 
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchFollowers(client, options, nextPage)
@@ -2325,7 +2325,7 @@ func (c CommonLogic) FetchFollowing(client *trakt.Client, options *str.Options, 
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchFollowing(client, options, nextPage)
@@ -2352,7 +2352,7 @@ func (c CommonLogic) FetchFriends(client *trakt.Client, options *str.Options, pa
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchFriends(client, options, nextPage)
@@ -2381,7 +2381,7 @@ func (c CommonLogic) FetchUsersHistory(client *trakt.Client, options *str.Option
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersHistory(client, options, nextPage)
@@ -2425,7 +2425,7 @@ func (c CommonLogic) FetchUsersWatchlist(client *trakt.Client, options *str.Opti
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersWatchlist(client, options, nextPage)
@@ -2455,7 +2455,7 @@ func (c CommonLogic) FetchUsersWatchlistComments(client *trakt.Client, options *
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersWatchlistComments(client, options, nextPage)
@@ -2500,7 +2500,7 @@ func (c CommonLogic) FetchUsersFavorites(client *trakt.Client, options *str.Opti
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersFavorites(client, options, nextPage)
@@ -2530,7 +2530,7 @@ func (c CommonLogic) FetchUsersFavoritesComments(client *trakt.Client, options *
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
 		nextPageItems, err := c.FetchUsersFavoritesComments(client, options, nextPage)

@@ -120,6 +120,14 @@ func Ptr[T any](v T) *T {
 	return &v
 }
 
+// pageDelay is the pause between two API calls of one action, such as the next page of a list; tests set it to zero.
+var pageDelay = time.Duration(consts.SleepNumberOfSeconds) * time.Second
+
+// waitPageDelay pauses before the next API call of the same action.
+func waitPageDelay() {
+	time.Sleep(pageDelay)
+}
+
 // pageFetcher fetches one page of a paginated list.
 type pageFetcher[T any] func(opts *uri.ListOptions) ([]T, *str.Response, error)
 
@@ -132,7 +140,7 @@ func fetchAllPages[T any](client *trakt.Client, options *str.Options, page int, 
 	}
 
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 		nextPageItems, err := fetchAllPages(client, options, page+consts.NextPageStep, fetch)
 		if err != nil {
 			return nil, err

@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -57,7 +56,7 @@ func (m ShowsRelatedHandler) fetchShowsRelated(client *trakt.Client, options *st
 
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		waitPageDelay()
 
 		// Fetch items from the next page
 		nextPage := page + consts.NextPageStep
