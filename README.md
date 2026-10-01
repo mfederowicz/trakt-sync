@@ -1,3 +1,4 @@
+[![Test](https://github.com/mfederowicz/trakt-sync/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/mfederowicz/trakt-sync/actions/workflows/test.yaml?query=branch%3Amain)
 [![Go Reference](https://pkg.go.dev/badge/github.com/mfederowicz/trakt-sync/trakt.svg)](https://pkg.go.dev/github.com/mfederowicz/trakt-sync/trakt)
 
 <!-- TOC -->
