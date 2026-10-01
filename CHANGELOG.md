@@ -33,6 +33,7 @@ schedule.
 ### Changed
 
 - Library: a `trakt` client without `WithUserAgent` now sends `User-Agent: trakt-sync-go` (`trakt.DefaultUserAgent`), so apps built on the library no longer show up as the trakt-sync CLI. The CLI still sends `trakt-sync/<version>`.
+- CI also builds and tests the `trakt`, `str` and `uri` packages and `example/` with the Go version in `go.mod` (1.21), so the library keeps working for that minimum.
 
 ### Fixed
 

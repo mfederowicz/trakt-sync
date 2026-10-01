@@ -7,7 +7,8 @@ applyTo: '**'
 
 ## Tech Stack
 
-Go (`go 1.21` in `go.mod`; CI tests on `oldstable` and `stable`). Dependencies
+Go (`go 1.21` in `go.mod`; CI tests on `oldstable` and `stable`, and the library
+packages `trakt`/`str`/`uri` plus `example/` on the `go.mod` version). Dependencies
 are vendored (`vendor/`). Linting with [revive](https://github.com/mgechev/revive)
 (`revive.toml`), formatting with `gofmt`, releases with GoReleaser.
 
