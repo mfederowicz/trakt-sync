@@ -19,7 +19,21 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
       - name: Run tests
-        run: go test -race -shuffle=on ./...
+        run: |
+          set -o pipefail  # tee must not hide a test failure
+          go test -race -shuffle=on -coverprofile=coverage.out ./... | tee test-output.txt
+      - name: Coverage summary
+        if: matrix.go-version == 'stable'
+        run: |
+          {
+            echo "### Coverage"
+            echo
+            echo "| Package | Coverage |"
+            echo "|---|---|"
+            awk '/coverage:/ { p = ""; c = ""; for (i = 1; i <= NF; i++) { if ($i ~ /^github\.com\//) p = $i; if ($i == "coverage:") c = $(i+1) } sub("^github.com/mfederowicz/trakt-sync/?", "", p); if (p == "") p = "(root)"; print "| `" p "` | " c " |" }' test-output.txt
+            echo
+            echo "**Total:** $(go tool cover -func=coverage.out | tail -1 | awk '{print $NF}')"
+          } >> "$GITHUB_STEP_SUMMARY"
   
       - name: Build examples
         working-directory: example

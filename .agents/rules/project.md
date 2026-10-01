@@ -48,6 +48,8 @@ Run all of these before opening a PR; CI enforces them.
 - `go mod tidy` must leave `go.mod` and `go.sum` unchanged.
 - `make install` (`go mod vendor`) after any dependency change.
 - `make build` - builds with version ldflags.
+- `make cover` - coverage per package; CI writes the same per-package table to the
+  job summary of the `stable` test run, so a PR shows whether coverage moved.
 
 ## Restrictions
 
