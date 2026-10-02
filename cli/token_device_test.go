@@ -352,6 +352,21 @@ func TestDeviceCodeVerification(t *testing.T) {
 	}
 }
 
+// A request that gets no response (network down) counts as a failed attempt, it used to panic on the nil response.
+func TestDeviceCodeVerificationWithoutResponse(t *testing.T) {
+	config := credentialsConfig(t)
+	s := trakttest.Setup()
+	s.Teardown()
+
+	code := "d9c126a7"
+	token := &str.NewDeviceToken{Code: &code, ClientID: &config.ClientID, ClientSecret: &config.ClientSecret}
+	options := &str.Options{}
+	assert.NotPanics(t, func() {
+		assert.False(t, deviceCodeVerification(token, s.Client, config, options))
+	})
+	assert.Empty(t, options.Token.AccessToken)
+}
+
 func TestVerifyCode(t *testing.T) {
 	// interval 0 keeps the loop from sleeping; expires_in 0 ends it after one attempt
 	device := &str.DeviceCode{DeviceCode: "d9c126a7"}
@@ -390,6 +405,72 @@ func TestVerifyCode(t *testing.T) {
 		assert.Equal(t, 1, attempts)
 		assert.Empty(t, options.Token.AccessToken)
 	})
+}
+
+// An interval that does not divide expires_in still ends the polling, it used to skip zero and poll forever.
+func TestVerifyCodeStopsPastExpiry(t *testing.T) {
+	config := credentialsConfig(t)
+	s := trakttest.Setup()
+	defer s.Teardown()
+	attempts := 0
+	s.Mux.HandleFunc("/oauth/device/token", func(w http.ResponseWriter, _ *http.Request) {
+		attempts++
+		w.WriteHeader(http.StatusBadRequest)
+	})
+
+	done := make(chan struct{})
+	go func() {
+		defer close(done)
+		verifyCode(&str.DeviceCode{DeviceCode: "d9c126a7", ExpiresIn: 1, Interval: 2}, config, s.Client, &str.Options{})
+	}()
+	select {
+	case <-done:
+	case <-time.After(time.Second):
+		t.Fatal("verifyCode keeps polling after the code expired")
+	}
+	assert.Equal(t, 1, attempts)
+}
+
+// A device code answer without a code is an error, it used to be returned as nil without an error.
+func TestFetchNewDeviceCodeForClientWithoutCode(t *testing.T) {
+	config := credentialsConfig(t)
+	s := trakttest.Setup()
+	defer s.Teardown()
+	s.Mux.HandleFunc("/oauth/device/code", func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+	})
+
+	code, err := fetchNewDeviceCodeForClient(config, s.Client, &str.Options{})
+	assert.Error(t, err)
+	assert.Nil(t, code)
+}
+
+// The verification page is opened through the openBrowser hook, so the whole flow can run without a real browser.
+func TestPoolNewDeviceCode(t *testing.T) {
+	opened := ""
+	openBrowser = func(url string) error {
+		opened = url
+		return nil
+	}
+	t.Cleanup(func() { openBrowser = OpenBrowser })
+
+	config := credentialsConfig(t)
+	s := trakttest.Setup()
+	defer s.Teardown()
+	s.Mux.HandleFunc("/oauth/device/code", func(w http.ResponseWriter, _ *http.Request) {
+		test.SafeFprint(w, `{"device_code":"d9c126a7","user_code":"5055CC52","verification_url":"https://trakt.tv/activate","expires_in":0,"interval":0}`)
+	})
+	s.Mux.HandleFunc("/oauth/device/token", func(w http.ResponseWriter, _ *http.Request) {
+		test.SafeFprint(w, tokenJSON("device-token", 7776000))
+	})
+	s.Mux.HandleFunc("/users/settings", func(w http.ResponseWriter, _ *http.Request) {
+		test.SafeFprint(w, testSettings)
+	})
+
+	options := &str.Options{}
+	assert.NoError(t, PoolNewDeviceCode(config, s.Client, options))
+	assert.Equal(t, "https://trakt.tv/activate", opened)
+	assert.Equal(t, "device-token", options.Token.AccessToken)
 }
 
 func TestGenAppVersion(t *testing.T) {
