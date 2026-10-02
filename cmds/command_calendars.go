@@ -16,6 +16,7 @@ var (
 	_calAction    = CalendarsCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
 	_calStartDate = CalendarsCmd.Flag.String("start_date", time.Now().Format("2006-01-02"), consts.StartDateUsage)
 	_calDays      = CalendarsCmd.Flag.Int("days", 7, consts.DaysUsage)
+	_calFilters   = newMediaFilterFlagsWithoutDates(&CalendarsCmd.Flag)
 )
 
 // CalendarsCmd process selected user calendars

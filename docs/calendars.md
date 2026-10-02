@@ -36,3 +36,14 @@ $ ./trakt-sync calendars -a hot_new_shows -> export_calendars_hot_new_shows_2024
 ```console
 $ ./trakt-sync calendars -a hot_finales -> export_calendars_hot_finales_20240707_7.json
 ```
+##### Filter a calendar
+Every calendar action takes the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`,
+`-certifications` (comma separated where a filter takes several values) and
+`-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all`.
+The dates of a calendar are set with `-start_date` and `-days`.
+```console
+$ ./trakt-sync calendars -a all_movies -genres horror -countries us
+```
+```console
+$ ./trakt-sync calendars -a my_shows -start_date 2026-10-01 -days 14 -watchnow subscriptions
+```

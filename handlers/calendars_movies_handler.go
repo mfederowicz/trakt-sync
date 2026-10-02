@@ -11,7 +11,6 @@ import (
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
-	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -44,7 +43,10 @@ func (CalendarsMoviesHandler) Handle(options *str.Options, client *trakt.Client)
 func fetchCalendarMovies(client *trakt.Client, options *str.Options) ([]*str.CalendarList, error) {
 	actionType := calendarTarget(options.Action)
 
-	opts := uri.ListOptions{Extended: options.ExtendedInfo}
+	opts, err := calendarOptions(options)
+	if err != nil {
+		return nil, err
+	}
 	list, _, err := client.Calendars.GetMovies(
 		cli.ContextFromOptions(options),
 		actionType,
