@@ -143,6 +143,7 @@ var Avflags = map[string]bool{
 	"start":                  true,
 	"start_at":               true,
 	"start_date":             true,
+	"status":                 true,
 	"stop":                   true,
 	"sync":                   true,
 	"t":                      true,

@@ -49,3 +49,18 @@ func TestShowsMediaFilterFlags(t *testing.T) {
 	assert.Equal(t, "2026-01-01", got.MediaStartDate)
 	assert.Equal(t, "2026-12-31", got.MediaEndDate)
 }
+
+// main rejects a flag that is not in Avflags with "invalid flags", before the module runs.
+func TestMediaFilterFlagsAreAvailable(t *testing.T) {
+	filters := []string{"watchnow", "subgenres", "ratings", "certifications", "start_date", "end_date", "genres", "years", "countries", "runtimes"}
+	modules := map[*Command][]string{MoviesCmd: filters, ShowsCmd: append([]string{"status"}, filters...)}
+	global := []string{"genres", "years", "countries", "runtimes"}
+	for command, names := range modules {
+		for _, name := range names {
+			assert.True(t, Avflags[name], "%s -%s is missing in Avflags", command.Name, name)
+			if !str.ContainString(name, global) {
+				assert.NotNil(t, command.Flag.Lookup(name), "%s has no -%s flag", command.Name, name)
+			}
+		}
+	}
+}
