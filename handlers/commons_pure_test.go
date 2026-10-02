@@ -457,6 +457,98 @@ func traktIDs(items *[]str.ExportlistItem) []int64 {
 	return out
 }
 
+// repeatList has every item twice: a movie, a show episode with its own ids and a season, each watched on two days.
+const repeatList = `[
+	{"id":201,"watched_at":"2026-10-02T12:00:00Z","movie":{"title":"TRON: Legacy","year":2010,"ids":{"trakt":1}}},
+	{"id":202,"watched_at":"2026-10-01T12:00:00Z","movie":{"title":"TRON: Legacy","year":2010,"ids":{"trakt":1}}},
+	{"id":203,"watched_at":"2026-10-02T12:00:00Z","show":{"title":"Dark","year":2017,"ids":{"trakt":2}},"episode":{"season":1,"number":3,"ids":{"trakt":4}}},
+	{"id":204,"watched_at":"2026-10-01T12:00:00Z","show":{"title":"Dark","year":2017,"ids":{"trakt":2}},"episode":{"season":1,"number":3,"ids":{"trakt":4}}},
+	{"id":205,"watched_at":"2026-10-02T12:00:00Z","season":{"number":1,"ids":{"trakt":3}}},
+	{"id":206,"watched_at":"2026-10-01T12:00:00Z","season":{"number":1,"ids":{"trakt":3}}}
+]`
+
+func watchedDays(items []str.ExportlistItem) []int {
+	out := []int{}
+	for _, item := range items {
+		out = append(out, item.WatchedAt.Day())
+	}
+	return out
+}
+
+// add_to_history keeps every play of an item in the order of the input, the other actions need an item only once.
+func TestConvertBytesToItemsListRepeatPlays(t *testing.T) {
+	c := &CommonLogic{}
+	lists := map[string]func(*str.ItemsList) []str.ExportlistItem{
+		consts.Movies:   func(l *str.ItemsList) []str.ExportlistItem { return *l.Movies },
+		consts.Seasons:  func(l *str.ItemsList) []str.ExportlistItem { return *l.Seasons },
+		consts.Episodes: func(l *str.ItemsList) []str.ExportlistItem { return *l.Episodes },
+	}
+	for _, stype := range []string{consts.Movies, consts.Seasons, consts.Episodes, consts.ActionTypeAll} {
+		stype := stype
+		t.Run("add_to_history "+stype, func(t *testing.T) {
+			got, err := c.ConvertBytesToItemsList([]byte(repeatList), consts.AddToHistory, stype)
+			if !assert.NoError(t, err) {
+				return
+			}
+			for name, list := range lists {
+				// with all, the episodes of repeatList are sent in the seasons of their show only
+				if stype != consts.ActionTypeAll && stype != name || stype == consts.ActionTypeAll && name == consts.Episodes {
+					assert.Empty(t, list(got), name)
+					continue
+				}
+				assert.Equal(t, []int{2, 1}, watchedDays(list(got)), name)
+			}
+		})
+	}
+
+	for _, stype := range []string{consts.Shows, consts.ActionTypeAll} {
+		stype := stype
+		t.Run("add_to_history show episodes "+stype, func(t *testing.T) {
+			got, err := c.ConvertBytesToItemsList([]byte(repeatList), consts.AddToHistory, stype)
+			if !assert.NoError(t, err) {
+				return
+			}
+			if !assert.Equal(t, []int64{2}, traktIDs(got.Shows)) {
+				return
+			}
+			seasons := *(*got.Shows)[0].Seasons
+			if !assert.Len(t, seasons, 1) {
+				return
+			}
+			days := []int{}
+			for _, episode := range *seasons[0].Episodes {
+				assert.Equal(t, 3, *episode.Number)
+				days = append(days, episode.WatchedAt.Day())
+			}
+			assert.Equal(t, []int{2, 1}, days)
+		})
+	}
+
+	t.Run("add_to_history all episode without show", func(t *testing.T) {
+		const data = `[{"watched_at":"2026-10-02T12:00:00Z","episode":{"ids":{"trakt":4}}},{"watched_at":"2026-10-01T12:00:00Z","episode":{"ids":{"trakt":4}}}]`
+		got, err := c.ConvertBytesToItemsList([]byte(data), consts.AddToHistory, consts.ActionTypeAll)
+		if !assert.NoError(t, err) {
+			return
+		}
+		assert.Empty(t, *got.Shows)
+		assert.Equal(t, []int{2, 1}, watchedDays(*got.Episodes))
+	})
+
+	for _, action := range []string{consts.RemoveFromHistory, consts.AddToRatings, consts.RemoveFromRatings} {
+		action := action
+		t.Run(action, func(t *testing.T) {
+			got, err := c.ConvertBytesToItemsList([]byte(repeatList), action, consts.ActionTypeAll)
+			if !assert.NoError(t, err) {
+				return
+			}
+			assert.Equal(t, []int64{1}, traktIDs(got.Movies))
+			assert.Equal(t, []int64{2}, traktIDs(got.Shows))
+			assert.Equal(t, []int64{3}, traktIDs(got.Seasons))
+			assert.Equal(t, []int64{4}, traktIDs(got.Episodes))
+		})
+	}
+}
+
 func TestConvertBytesToItemsList(t *testing.T) {
 	c := &CommonLogic{}
 

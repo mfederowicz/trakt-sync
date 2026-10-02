@@ -32,6 +32,8 @@ schedule.
 
 ### Changed
 
+- `sync -a add_to_history` with `-t movies`, `-t seasons`, `-t episodes` or `-t all` now adds every play of the input back. An item watched several times came back with one play before (the first one in the input file), so its other plays were lost from the Trakt history. `-t shows` already kept every episode play. With `-t all`, an episode entry that also names its show was sent twice, with the show and as an episode; it is now sent once, with the show. To keep one play per item, leave only that entry in the input file.
+
 ### Fixed
 
 - Library: `str.HiddenItem` has a new `User` field for hidden users. The live API does not return them yet: `GET /users/hidden/comments` answers with an empty list even when a user is hidden (see the Findings in `API_COVERAGE.md`), so `users -a hidden_items -section comments` still exports `[]`.

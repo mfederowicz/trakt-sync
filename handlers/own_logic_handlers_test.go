@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -67,6 +68,36 @@ func TestSyncAddToHistoryCleansThenAdds(t *testing.T) {
 		data, err := os.ReadFile(filepath.Join(dir, name))
 		test.AssertNilError(t, err)
 		assert.True(t, json.Valid(data), "%s is JSON", name)
+	}
+}
+
+// a movie watched three times is removed once and added back with its three plays.
+func TestSyncAddToHistoryKeepsEveryPlay(t *testing.T) {
+	const items = `[
+		{"type":"movie","watched_at":"2026-10-03T10:00:00.000Z","movie":{"title":"Tron","ids":{"trakt":1}}},
+		{"type":"movie","watched_at":"2026-10-02T10:00:00.000Z","movie":{"title":"Tron","ids":{"trakt":1}}},
+		{"type":"movie","watched_at":"2026-10-01T10:00:00.000Z","movie":{"title":"Tron","ids":{"trakt":1}}}
+	]`
+	s := setup(t)
+	defer s.Teardown()
+	bodies := map[string]string{}
+	s.Mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		body, err := io.ReadAll(r.Body)
+		test.AssertNilError(t, err)
+		bodies[r.URL.Path] = string(body)
+		test.SafeFprint(w, `{}`)
+	})
+
+	dir := inTempDir(t)
+	options := str.Options{Module: "sync", Action: consts.AddToHistory, Type: consts.Movies, Output: filepath.Join(dir, "out.json"), Items: filepath.Join(dir, "items.json")}
+	test.AssertNilError(t, os.WriteFile(options.Items, []byte(items), 0o600))
+
+	test.AssertNilError(t, SyncAddToHistoryHandler{}.Handle(&options, s.Client))
+	assert.Equal(t, 1, strings.Count(bodies["/sync/history/remove"], `"trakt":1`), "removed once")
+	added := bodies["/sync/history"]
+	assert.Equal(t, 3, strings.Count(added, `"trakt":1`), "added three times")
+	for _, day := range []string{"2026-10-03", "2026-10-02", "2026-10-01"} {
+		assert.Equal(t, 1, strings.Count(added, day), day)
 	}
 }
 

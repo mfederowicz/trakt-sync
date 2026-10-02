@@ -1224,6 +1224,9 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 		if err := checkItemsListInput(list, stype); err != nil {
 			return nil, err
 		}
+		if action == consts.AddToHistory {
+			return c.ListToPlays(items, list, stype), nil
+		}
 		items = c.ListToItemsAgregate(items, list, stype)
 		return items.Uniq(), nil
 	case consts.AddToCollection, consts.RemoveFromCollection, consts.RemoveFromWatchlist, consts.AddToWatchlist,
@@ -1355,6 +1358,44 @@ func (c *CommonLogic) ListToItemsAgregate(items *str.ItemsList, list []*str.Expo
 	}
 
 	return out
+}
+
+// ListToPlays converts a history list to the items add_to_history sends: one item per play of a movie,
+// season or episode, in the order of the list. Shows are grouped by ListToItems, which keeps every
+// episode play in the seasons of its show; with the type all such a play is sent with its show only.
+func (c *CommonLogic) ListToPlays(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
+	all := stype == consts.ActionTypeAll
+	if all || stype == consts.Shows {
+		items = c.ListToItems(items, list, consts.Shows)
+	}
+	for _, item := range list {
+		if (all || stype == consts.Movies) && item.Movie != nil {
+			if item.ID != nil {
+				*items.IDs = append(*items.IDs, *item.ID)
+			}
+			*items.Movies = append(*items.Movies, str.ExportlistItem{
+				Movie:     &str.Movie{Title: item.Movie.Title, Year: item.Movie.Year, IDs: item.Movie.IDs},
+				WatchedAt: item.WatchedAt,
+				IDs:       item.Movie.IDs,
+			})
+		}
+		if (all || stype == consts.Seasons) && item.Season != nil {
+			*items.Seasons = append(*items.Seasons, str.ExportlistItem{
+				Season:    &str.Season{Title: item.Season.Title, IDs: item.Season.IDs},
+				WatchedAt: item.WatchedAt,
+				IDs:       item.Season.IDs,
+			})
+		}
+		// with all, the episode of a show is already in the seasons of that show
+		if (stype == consts.Episodes || all && item.Show == nil) && item.Episode != nil {
+			*items.Episodes = append(*items.Episodes, str.ExportlistItem{
+				Episode:   &str.Episode{Title: item.Episode.Title, IDs: item.Episode.IDs},
+				WatchedAt: item.WatchedAt,
+				IDs:       item.Episode.IDs,
+			})
+		}
+	}
+	return items
 }
 
 // InitItemsList helper function to create InitItemsList with empty elements
