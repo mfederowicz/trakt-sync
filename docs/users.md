@@ -54,7 +54,7 @@ $ ./trakt-sync users -a hidden_items -t show -section progress_collected
 $ ./trakt-sync users -a hidden_items -t show -section recommendations
 ```
 ```console
-$ ./trakt-sync users -a hidden_items -t show -section comments
+$ ./trakt-sync users -a hidden_items -t user -section comments
 ```
 ```console
 $ ./trakt-sync users -a hidden_items -t show -section dropped

@@ -30,6 +30,11 @@ func TestUsersServiceRequests(t *testing.T) {
 			call: func(c *Client) (any, error) { r, _, err := c.Users.ApproveFollowRequest(ctx, 3); return r, err }},
 		{name: "DenyFollowRequest", method: http.MethodDelete, path: "/users/requests/3", body: followRequest,
 			call: func(c *Client) (any, error) { r, _, err := c.Users.DenyFollowRequest(ctx, 3); return r, err }},
+		{name: "GetHiddenItems users", method: http.MethodGet, path: "/users/hidden/comments", query: "limit=10&type=user", body: `[{"type":"user","user":{"username":"sean","private":false,"ids":{"slug":"sean"}}}]`,
+			call: func(c *Client) (any, error) {
+				r, _, err := c.Users.GetHiddenItems(ctx, "comments", &uri.ListOptions{Limit: 10, Type: "user"})
+				return r, err
+			}},
 		{name: "GetProfile", method: http.MethodGet, path: "/users/sean", body: `{"username":"sean","private":false,"name":"Sean Rudford","vip":true}`,
 			call: func(c *Client) (any, error) { r, _, err := c.Users.GetProfile(ctx, user); return r, err }},
 		{name: "ReorderLists", method: http.MethodPost, path: "/users/sean/lists/reorder", body: reordered,
