@@ -20,6 +20,9 @@ type ShowsCollectedHandler struct{}
 
 // Handle to handle shows: collected action
 func (h ShowsCollectedHandler) Handle(options *str.Options, client *trakt.Client) error {
+	if err := checkShowFilters(options); err != nil {
+		return err
+	}
 	printer.Println("Returns the most collected (unique users) shows in the specified time period, defaulting to weekly.")
 	result, err := h.fetchShowsCollected(client, options, consts.DefaultPage)
 	if err != nil {
@@ -45,7 +48,7 @@ func (h ShowsCollectedHandler) Handle(options *str.Options, client *trakt.Client
 }
 
 func (h ShowsCollectedHandler) fetchShowsCollected(client *trakt.Client, options *str.Options, page int) ([]*str.ShowsItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options), Status: showStatus(options)}
 	period := options.Period
 	list, resp, err := client.Shows.GetCollectedShows(
 		cli.ContextFromOptions(options),

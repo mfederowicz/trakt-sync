@@ -61,6 +61,22 @@ $ ./trakt-sync shows -a collected -period all
 ```console
 $ ./trakt-sync shows -a anticipated
 ```
+##### Filter the show lists
+`trending`, `popular`, `anticipated`, `watched`, `played`, `collected` and `favorited` take the Trakt media filters:
+`-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications` (comma separated where a
+filter takes several values), `-start_date`, `-end_date`,
+`-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all` and
+`-status` (`returning series`, `continuing`, `in production`, `planned`, `upcoming`, `pilot`, `canceled`, `ended`; comma separated).
+On these actions `-start_date` is a filter; on `updates` and `updated_ids` it stays the date to list changes from.
+```console
+$ ./trakt-sync shows -a trending -genres drama -years 2020-2026 -ratings 75-100
+```
+```console
+$ ./trakt-sync shows -a popular -status ended -countries us
+```
+```console
+$ ./trakt-sync shows -a watched -period monthly -status "returning series,continuing" -watchnow subscriptions
+```
 ##### Get recenty updated shows
 ```console
 $ ./trakt-sync shows -a updates -start_date YYYY-MM-DD

@@ -191,6 +191,7 @@ const (
 	ShowsTypeUsage               = "allow to overwrite type"
 	SortUsage                    = "allow to overwrite sort"
 	SortByUsage                  = "allow to overwrite sort_by"
+	ShowStatusUsage              = "show status, comma separated: returning series, continuing, in production, planned, upcoming, pilot, canceled, ended"
 	SortHowUsage                 = "allow to overwrite sort_how"
 	ServiceIDUsage               = "streaming service id ie: netflix (see younify -a connections)"
 	SmartListNotFoundMsg         = "not found smart list for:%s (private lists are visible only to their owner)"

@@ -20,6 +20,9 @@ type ShowsTrendingHandler struct{}
 
 // Handle to handle shows: trending action
 func (h ShowsTrendingHandler) Handle(options *str.Options, client *trakt.Client) error {
+	if err := checkShowFilters(options); err != nil {
+		return err
+	}
 	printer.Println("Returns the most watched shows over the last 24 hours.")
 	result, err := h.fetchShowsTrending(client, options, consts.DefaultPage)
 	if err != nil {
@@ -45,7 +48,7 @@ func (h ShowsTrendingHandler) Handle(options *str.Options, client *trakt.Client)
 }
 
 func (h ShowsTrendingHandler) fetchShowsTrending(client *trakt.Client, options *str.Options, page int) ([]*str.ShowsItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options), Status: showStatus(options)}
 	list, resp, err := client.Shows.GetTrendingShows(
 		cli.ContextFromOptions(options),
 		&opts,

@@ -20,6 +20,9 @@ type ShowsPlayedHandler struct{}
 
 // Handle to handle shows: played action
 func (h ShowsPlayedHandler) Handle(options *str.Options, client *trakt.Client) error {
+	if err := checkShowFilters(options); err != nil {
+		return err
+	}
 	printer.Println("Returns the most played (a single user can watch multiple episodes multiple times) shows in the specified time period")
 	result, err := h.fetchShowsPlayed(client, options, consts.DefaultPage)
 	if err != nil {
@@ -45,7 +48,7 @@ func (h ShowsPlayedHandler) Handle(options *str.Options, client *trakt.Client) e
 }
 
 func (h ShowsPlayedHandler) fetchShowsPlayed(client *trakt.Client, options *str.Options, page int) ([]*str.ShowsItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options), Status: showStatus(options)}
 	period := options.Period
 	list, resp, err := client.Shows.GetPlayedShows(
 		cli.ContextFromOptions(options),

@@ -12,6 +12,7 @@ type Options struct {
 	MediaStartDate    string
 	Ratings           string
 	Runtimes          string
+	ShowStatus        string
 	Subgenres         string
 	WatchNow          string
 	WatchWindow       int
