@@ -30,6 +30,21 @@ func TestUsersServiceRequests(t *testing.T) {
 			call: func(c *Client) (any, error) { r, _, err := c.Users.ApproveFollowRequest(ctx, 3); return r, err }},
 		{name: "DenyFollowRequest", method: http.MethodDelete, path: "/users/requests/3", body: followRequest,
 			call: func(c *Client) (any, error) { r, _, err := c.Users.DenyFollowRequest(ctx, 3); return r, err }},
+		{name: "GetHiddenItems users", method: http.MethodGet, path: "/users/hidden/comments", query: "limit=10&type=user", body: `[{"type":"user","user":{"username":"sean","private":false,"ids":{"slug":"sean"}}}]`,
+			call: func(c *Client) (any, error) {
+				r, _, err := c.Users.GetHiddenItems(ctx, "comments", &uri.ListOptions{Limit: 10, Type: "user"})
+				return r, err
+			}},
+		{name: "AddHiddenItems users", method: http.MethodPost, path: "/users/hidden/comments", status: http.StatusCreated, body: `{"added":{"seasons":0,"users":1},"not_found":{"episodes":[],"people":[],"users":[{"ids":{"slug":"nobody"}}]}}`,
+			call: func(c *Client) (any, error) {
+				r, _, err := c.Users.AddHiddenItems(ctx, new(str.HistoryItems), "comments")
+				return r, err
+			}},
+		{name: "RemoveHiddenItems users", method: http.MethodPost, path: "/users/hidden/comments/remove", body: `{"deleted":{"users":1},"not_found":{"people":[],"users":[]}}`,
+			call: func(c *Client) (any, error) {
+				r, _, err := c.Users.RemoveHiddenItems(ctx, new(str.HistoryItems), "comments")
+				return r, err
+			}},
 		{name: "GetProfile", method: http.MethodGet, path: "/users/sean", body: `{"username":"sean","private":false,"name":"Sean Rudford","vip":true}`,
 			call: func(c *Client) (any, error) { r, _, err := c.Users.GetProfile(ctx, user); return r, err }},
 		{name: "ReorderLists", method: http.MethodPost, path: "/users/sean/lists/reorder", body: reordered,

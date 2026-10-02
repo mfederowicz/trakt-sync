@@ -6,6 +6,8 @@ type ResultNotFound struct {
 	Shows    *[]Show           `json:"shows,omitempty"`
 	Seasons  *[]Season         `json:"seasons,omitempty"`
 	Episodes *[]Episodes       `json:"episodes,omitempty"`
+	People   *[]Person         `json:"people,omitempty"`
+	Users    *[]UserProfile    `json:"users,omitempty"`
 }
 
 func (c ResultNotFound) String() string {

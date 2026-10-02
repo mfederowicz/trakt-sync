@@ -34,6 +34,9 @@ schedule.
 
 ### Fixed
 
+- Library: `str.HiddenItem` has a new `User` field for hidden users. The live API does not return them yet: `GET /users/hidden/comments` answers with an empty list even when a user is hidden (see the Findings in `API_COVERAGE.md`), so `users -a hidden_items -section comments` still exports `[]`.
+- `users -a add_hidden_items|remove_hidden_items -section comments` wrote a result file without the users: the `users` counter under `added` / `deleted` and the `users` and `people` lists under `not_found` were dropped, so the file did not show whether a user was hidden. They are now written.
+- Library: `str.ResultCounters` has a new `Users` field and `str.ResultNotFound` new `People` and `Users` fields; they were dropped from add and remove results before.
 - A device login that failed (no code, code denied, expired, already used or unknown, or not approved in time) went on to run the module without a token. The run now stops with `Error: device login failed: ...` and exit status 1. A code that is not approved in time is reported as `Error: device login failed: time out, the device code was not approved` instead of `Time out!`.
 
 - The device login kept polling until the code's lifetime ran out after Trakt had already given a final answer: code denied, expired, already used or unknown. It now stops at once with `Error: device login failed: device code denied, your device is not connected` (or `device code expired`, `device code already used`, `invalid device code`). A device login that could not get a code at all is now reported as `Error: ...`; it ended without any message before.
