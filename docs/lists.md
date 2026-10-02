@@ -41,3 +41,13 @@ $ ./trakt-sync lists -a comments -trakt_id 2142753
 ```console
 $ ./trakt-sync lists -a report -trakt_id 2142753 -r spam -message "only ads"
 ```
+##### Filter lists and list items
+`trending`, `popular` and `items` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`,
+`-certifications` (comma separated where a filter takes several values), `-start_date`, `-end_date` and
+`-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all`.
+```console
+$ ./trakt-sync lists -a items -trakt_id 2142753 -genres horror -years 2020-2026
+```
+```console
+$ ./trakt-sync lists -a trending -genres action -watchnow subscriptions
+```

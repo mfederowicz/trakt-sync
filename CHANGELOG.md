@@ -35,6 +35,7 @@ schedule.
 - `shows -a trending|popular|anticipated|watched|played|collected|favorited` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`, `-start_date`, `-end_date` and `-watchnow`, plus `-status` (for example `-status ended`). No filter was sent before, so the lists were never filtered.
 - `media -a trending|popular|anticipated` and `recommendations -a movies|shows` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`, `-start_date`, `-end_date` and `-watchnow`.
 - Every `calendars` action takes the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications` and `-watchnow`. The dates of a calendar stay `-start_date` and `-days`.
+- `lists -a trending|popular|items` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`, `-start_date`, `-end_date` and `-watchnow`.
 
 ### Changed
 

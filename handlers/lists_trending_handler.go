@@ -20,6 +20,9 @@ type ListsTrendingHandler struct{}
 
 // Handle to handle lists: trending action
 func (h ListsTrendingHandler) Handle(options *str.Options, client *trakt.Client) error {
+	if err := checkMediaFilters(options); err != nil {
+		return err
+	}
 	printer.Println("Returns all lists with the most likes and comments over the last 7 days.")
 	result, err := h.fetchListsTrending(client, options, consts.DefaultPage)
 	if err != nil {
@@ -45,7 +48,7 @@ func (h ListsTrendingHandler) Handle(options *str.Options, client *trakt.Client)
 }
 
 func (h ListsTrendingHandler) fetchListsTrending(client *trakt.Client, options *str.Options, page int) ([]*str.List, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options)}
 	ctx := cli.ContextFromOptions(options)
 	var list []*str.List
 	var resp *str.Response
