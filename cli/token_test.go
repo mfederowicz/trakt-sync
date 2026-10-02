@@ -67,7 +67,8 @@ func TestHandleTokenReturnsClientWithToken(t *testing.T) {
 	s := trakttest.Setup()
 	defer s.Teardown()
 
-	client := HandleToken(afero.NewOsFs(), config, s.Client.WithClientID(config.ClientID), str.Options{})
+	client, err := HandleToken(afero.NewOsFs(), config, s.Client.WithClientID(config.ClientID), str.Options{})
+	assert.NoError(t, err)
 
 	req, err := client.NewRequest(http.MethodGet, "users/settings", nil)
 	assert.NoError(t, err)
