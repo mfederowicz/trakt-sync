@@ -23,7 +23,8 @@ func (m SyncAddToHistoryHandler) Handle(options *str.Options, client *trakt.Clie
 		return err
 	}
 	printer.Println("clean history")
-	toRemove := m.common.CreateItemsToRemove(items)
+	// items hold one entry per play; the cleanup needs every item only once
+	toRemove := m.common.CreateItemsToRemove(items.Uniq())
 
 	result, err := m.syncRemoveFromHistory(client, options, &toRemove)
 	if err != nil {

@@ -168,6 +168,8 @@ $ ./trakt-sync sync -a get_history -t shows
 $ ./trakt-sync sync -a get_history -t episodes
 ```
 ##### Remove and Add to history - via -items flag
+Every item of the input is first removed from the history, then every entry is added back: an item
+that is in the input three times, with three `watched_at` dates, gets its three plays again.
 ```console
 $ ./trakt-sync sync -t movies -a add_to_history -items export_sync_history_movies.json
 ```
