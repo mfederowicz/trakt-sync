@@ -34,6 +34,8 @@ schedule.
 
 ### Fixed
 
+- `sync -a get_collection -t seasons` stopped with `panic error:runtime error: invalid memory address or nil pointer dereference` on every run. It now exports the collected seasons, each with its own IDs, and follows the pages of the collection.
+- Library: `SyncService.GetCollectedSeasons` returned a nil `*str.Response` on success and a list in which every item pointed at the last collected season. It now returns the response of the collection request and one item per season.
 - `users -a add_hidden_items|remove_hidden_items -section comments` sent an empty `users` list, so no user was hidden or unhidden although the command ended without an error. The `user` items of the input file are now sent (without `-t`, or with `-t user`).
 - `history`, `watchlist` and `collection` with `-t episodes` stopped with `panic error:runtime error: invalid memory address or nil pointer dereference` when an exported episode had no title, which Trakt allows. Such an episode is now exported with the title `no episode title`, as an episode with an empty title already was.
 - `shows -a last_episode` and `shows -a next_episode` stopped with `panic error:runtime error: invalid memory address or nil pointer dereference` when the episode had no title, which Trakt allows (typical for an upcoming episode). The episode is now exported and the message shows `no episode title`.
