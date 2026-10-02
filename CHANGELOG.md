@@ -36,6 +36,8 @@ schedule.
 
 ### Fixed
 
+- `sync -a add_to_history` with `-t shows` or `-t all` sent a show that has no episode in the input file (a whole show) with an empty `seasons` list and without its `watched_at`. Such a show is now sent without `seasons`, the form Trakt documents for adding all episodes of a show, and with its `watched_at` when the entry has one.
+- Library: `str.Show` has a new `WatchedAt` field, used when a whole show is added to the history.
 - Library: `str.HiddenItem` has a new `User` field for hidden users. The live API does not return them yet: `GET /users/hidden/comments` answers with an empty list even when a user is hidden (see the Findings in `API_COVERAGE.md`), so `users -a hidden_items -section comments` still exports `[]`.
 - `users -a add_hidden_items|remove_hidden_items -section comments` wrote a result file without the users: the `users` counter under `added` / `deleted` and the `users` and `people` lists under `not_found` were dropped, so the file did not show whether a user was hidden. They are now written.
 - Library: `str.ResultCounters` has a new `Users` field and `str.ResultNotFound` new `People` and `Users` fields; they were dropped from add and remove results before.

@@ -101,6 +101,50 @@ func TestSyncAddToHistoryKeepsEveryPlay(t *testing.T) {
 	}
 }
 
+// a show without an episode stands for the whole show: it is added without a seasons list and with its date.
+func TestSyncAddToHistoryShowWithoutEpisodes(t *testing.T) {
+	cases := []struct {
+		name  string
+		stype string
+		items string
+		want  string
+	}{
+		{name: "dated show", stype: consts.Shows, items: `[{"watched_at":"2026-10-01T10:00:00.000Z","show":{"title":"Dark","ids":{"trakt":2}}}]`, want: `"shows":[{"ids":{"trakt":2},"watched_at":"2026-10-01T10:00:00Z"}]`},
+		{name: "undated show", stype: consts.Shows, items: `[{"show":{"title":"Dark","ids":{"trakt":2}}}]`, want: `"shows":[{"ids":{"trakt":2}}]`},
+		{name: "all types", stype: consts.ActionTypeAll, items: `[{"show":{"title":"Dark","ids":{"trakt":2}}}]`, want: `"shows":[{"ids":{"trakt":2}}]`},
+		{
+			name:  "show with an episode keeps its seasons",
+			stype: consts.Shows,
+			items: `[{"watched_at":"2026-10-01T10:00:00.000Z","show":{"title":"Dark","ids":{"trakt":2}},"episode":{"season":1,"number":3}}]`,
+			want:  `"shows":[{"ids":{"trakt":2},"seasons":[{"number":1,"episodes":[{"number":3,"watched_at":"2026-10-01T10:00:00Z"}]}]}]`,
+		},
+	}
+	for _, tt := range cases {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+			added := consts.EmptyString
+			s.Mux.HandleFunc("/sync/history/remove", func(w http.ResponseWriter, _ *http.Request) {
+				test.SafeFprint(w, `{}`)
+			})
+			s.Mux.HandleFunc("/sync/history", func(w http.ResponseWriter, r *http.Request) {
+				body, err := io.ReadAll(r.Body)
+				test.AssertNilError(t, err)
+				added = string(body)
+				test.SafeFprint(w, `{}`)
+			})
+
+			dir := inTempDir(t)
+			options := str.Options{Module: "sync", Action: consts.AddToHistory, Type: tt.stype, Output: filepath.Join(dir, "out.json"), Items: filepath.Join(dir, "items.json")}
+			test.AssertNilError(t, os.WriteFile(options.Items, []byte(tt.items), 0o600))
+
+			test.AssertNilError(t, SyncAddToHistoryHandler{}.Handle(&options, s.Client))
+			assert.Contains(t, added, tt.want)
+		})
+	}
+}
+
 func TestSyncAddToHistoryFailedCleanup(t *testing.T) {
 	s := setup(t)
 	defer s.Teardown()
