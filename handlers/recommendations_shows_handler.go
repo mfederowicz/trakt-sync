@@ -23,6 +23,10 @@ func (r RecommendationsShowsHandler) Handle(options *str.Options, client *trakt.
 		return r.HandleHide(client, options)
 	}
 
+	if err := checkMediaFilters(options); err != nil {
+		return err
+	}
+
 	result, err := r.common.FetchShowRecommendations(client, options, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("fetch show recommendations error:%w", err)

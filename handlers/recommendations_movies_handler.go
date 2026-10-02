@@ -23,6 +23,10 @@ func (r RecommendationsMoviesHandler) Handle(options *str.Options, client *trakt
 		return r.HandleHide(client, options)
 	}
 
+	if err := checkMediaFilters(options); err != nil {
+		return err
+	}
+
 	result, err := r.common.FetchMovieRecommendations(client, options, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("fetch movie recommendations error:%w", err)

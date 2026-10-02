@@ -441,7 +441,7 @@ func setOptionsDependsOnModuleRecommendations(options str.Options) str.Options {
 	options.Action = *_recommendationsAction
 	options.Hide = *_recommendationsHide
 	options.InternalID = *_recommendationsInternalID
-	return options
+	return _recommendationsFilters.apply(options)
 }
 
 func setOptionsDependsOnModuleDefault(options str.Options) str.Options {
@@ -530,7 +530,7 @@ func setOptionsDependsOnModuleNetworks(options str.Options) str.Options {
 
 func setOptionsDependsOnModuleMedia(options str.Options) str.Options {
 	options.Action = *_mediaAction
-	return options
+	return _mediaFilters.apply(options)
 }
 
 func setOptionsDependsOnModuleSmartLists(options str.Options) str.Options {

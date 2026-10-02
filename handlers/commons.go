@@ -761,7 +761,7 @@ func (c *CommonLogic) FetchUpdatedComments(client *trakt.Client, options *str.Op
 // FetchMovieRecommendations helper function to fetch movie recommendations
 func (c *CommonLogic) FetchMovieRecommendations(client *trakt.Client, options *str.Options, page int) ([]*str.Recommendation, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, IgnoreCollected: options.IgnoreCollected, IgnoreWatchlisted: options.IgnoreWatchlisted,
-		IgnoreWatched: options.IgnoreWatched, WatchWindow: options.WatchWindow}
+		IgnoreWatched: options.IgnoreWatched, WatchWindow: options.WatchWindow, Filters: mediaFilters(options)}
 	list, resp, err := client.Recommendations.GetMovieRecommendations(
 		cli.ContextFromOptions(options),
 		&opts,
@@ -789,7 +789,7 @@ func (c *CommonLogic) FetchMovieRecommendations(client *trakt.Client, options *s
 // FetchShowRecommendations helper function to fetch movie recommendations
 func (c *CommonLogic) FetchShowRecommendations(client *trakt.Client, options *str.Options, page int) ([]*str.Recommendation, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, IgnoreCollected: options.IgnoreCollected, IgnoreWatchlisted: options.IgnoreWatchlisted,
-		IgnoreWatched: options.IgnoreWatched, WatchWindow: options.WatchWindow}
+		IgnoreWatched: options.IgnoreWatched, WatchWindow: options.WatchWindow, Filters: mediaFilters(options)}
 	list, resp, err := client.Recommendations.GetShowRecommendations(
 		cli.ContextFromOptions(options),
 		&opts,
