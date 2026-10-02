@@ -34,8 +34,7 @@ schedule.
 
 ### Fixed
 
-- `users -a hidden_items -section comments` (with `-t user` or without `-t`) exported the hidden users without the user: each item held only `hidden_at` and `type`. The `user` object is now exported, so the file can be passed to `users -a add_hidden_items|remove_hidden_items -section comments`.
-- Library: `str.HiddenItem` has a new `User` field; `UsersService.GetHiddenItems` dropped the `user` object of hidden users before.
+- Library: `str.HiddenItem` has a new `User` field for hidden users. The live API does not return them yet: `GET /users/hidden/comments` answers with an empty list even when a user is hidden (see the Findings in `API_COVERAGE.md`), so `users -a hidden_items -section comments` still exports `[]`.
 - `users -a add_hidden_items|remove_hidden_items -section comments` wrote a result file without the users: the `users` counter under `added` / `deleted` and the `users` and `people` lists under `not_found` were dropped, so the file did not show whether a user was hidden. They are now written.
 - Library: `str.ResultCounters` has a new `Users` field and `str.ResultNotFound` new `People` and `Users` fields; they were dropped from add and remove results before.
 - A device login that failed (no code, code denied, expired, already used or unknown, or not approved in time) went on to run the module without a token. The run now stops with `Error: device login failed: ...` and exit status 1. A code that is not approved in time is reported as `Error: device login failed: time out, the device code was not approved` instead of `Time out!`.
