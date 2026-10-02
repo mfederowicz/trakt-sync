@@ -20,6 +20,9 @@ type ShowsAnticipatedHandler struct{}
 
 // Handle to handle shows: anticipated action
 func (h ShowsAnticipatedHandler) Handle(options *str.Options, client *trakt.Client) error {
+	if err := checkShowFilters(options); err != nil {
+		return err
+	}
 	printer.Println("Returns the most anticipated shows based on the number of lists a show appears on.")
 	result, err := h.fetchShowsAnticipated(client, options, consts.DefaultPage)
 	if err != nil {
@@ -45,7 +48,7 @@ func (h ShowsAnticipatedHandler) Handle(options *str.Options, client *trakt.Clie
 }
 
 func (h ShowsAnticipatedHandler) fetchShowsAnticipated(client *trakt.Client, options *str.Options, page int) ([]*str.ShowsItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options), Status: showStatus(options)}
 	list, resp, err := client.Shows.GetAnticipatedShows(
 		cli.ContextFromOptions(options),
 		&opts,

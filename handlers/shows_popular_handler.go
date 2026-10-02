@@ -20,6 +20,9 @@ type ShowsPopularHandler struct{}
 
 // Handle to handle shows: popular action
 func (h ShowsPopularHandler) Handle(options *str.Options, client *trakt.Client) error {
+	if err := checkShowFilters(options); err != nil {
+		return err
+	}
 	printer.Println("Returns the most popular shows. Popularity is calculated using the rating percentage and the number of ratings.")
 	result, err := h.fetchShowsPopular(client, options, consts.DefaultPage)
 	if err != nil {
@@ -45,7 +48,7 @@ func (h ShowsPopularHandler) Handle(options *str.Options, client *trakt.Client) 
 }
 
 func (h ShowsPopularHandler) fetchShowsPopular(client *trakt.Client, options *str.Options, page int) ([]*str.Show, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options), Status: showStatus(options)}
 	list, resp, err := client.Shows.GetPopularShows(
 		cli.ContextFromOptions(options),
 		&opts,

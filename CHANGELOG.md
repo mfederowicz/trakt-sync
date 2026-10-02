@@ -32,10 +32,14 @@ schedule.
 
 - `movies -a trending|popular|anticipated|watched|played|collected|favorited|hot|streaming` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`, `-start_date`, `-end_date` and `-watchnow`. The flags were accepted or missing before, but no filter was sent, so the lists were never filtered.
 - Library: new `uri.MediaFilters` and the `uri.ListOptions.Filters` field carry the media filters (`watchnow`, `genres`, `subgenres`, `years`, `ratings`, `start_date`, `end_date`, `runtimes`, `countries`, `certifications`) of the list routes.
+- `shows -a trending|popular|anticipated|watched|played|collected|favorited` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`, `-start_date`, `-end_date` and `-watchnow`, plus `-status` (for example `-status ended`). No filter was sent before, so the lists were never filtered.
 
 ### Changed
 
 ### Fixed
+
+- `users -allow_comments` and `users -display_numbers` (used by `users -a update_list`) stopped the run with `invalid flags`. They are accepted now. The deprecated `-query`, `-studio_ids` and `notes -notes_id` also ended with `invalid flags` instead of their deprecation note.
+- Library: `uri.StatusOptions` listed the show status `running series`; the API value is `returning series`.
 
 ## [1.23.0] - 2026-10-02
 

@@ -56,6 +56,7 @@ var Avflags = map[string]bool{
 	"lifetime_stats":         true,
 	"only_rewatching":        true,
 	"all_data":               true,
+	"allow_comments":         true,
 	"c":                      true,
 	"calendars":              true,
 	"certifications":         true,
@@ -73,6 +74,7 @@ var Avflags = map[string]bool{
 	"delete":                 true,
 	"deny":                   true,
 	"description":            true,
+	"display_numbers":        true,
 	"end_at":                 true,
 	"episode":                true,
 	"episode_abs":            true,
@@ -108,6 +110,7 @@ var Avflags = map[string]bool{
 	"message":                true,
 	"networks":               true,
 	"notes":                  true,
+	"notes_id":               true,
 	"o":                      true,
 	"pause":                  true,
 	"people":                 true,
@@ -116,6 +119,7 @@ var Avflags = map[string]bool{
 	"privacy":                true,
 	"progress":               true,
 	"q":                      true,
+	"query":                  true,
 	"r":                      true,
 	"rating":                 true,
 	"reaction":               true,
@@ -143,6 +147,8 @@ var Avflags = map[string]bool{
 	"start":                  true,
 	"start_at":               true,
 	"start_date":             true,
+	"status":                 true,
+	"studio_ids":             true,
 	"stop":                   true,
 	"sync":                   true,
 	"t":                      true,
@@ -1470,6 +1476,19 @@ func UpdateOptionsWithCommandShowsFlags(c *Command, options *str.Options) *str.O
 	if len(*_showsLinks) > consts.ZeroValue {
 		options.Links = *_showsLinks
 	}
+
+	options.WatchNow = *_showsWatchNow
+	options.Subgenres = *_showsSubgenres
+	options.Ratings = *_showsRatings
+	options.Certifications = *_showsCertifications
+	options.ShowStatus = *_showsStatus
+	// the list actions send -start_date / -end_date as media filters; updates reads -start_date through options.StartDate
+	options.MediaStartDate = *_showsStartDate
+	options.MediaEndDate = *_showsEndDate
+	options.Genres = *_genres
+	options.Years = *_years
+	options.Countries = *_countries
+	options.Runtimes = *_runtimes
 
 	return options
 }

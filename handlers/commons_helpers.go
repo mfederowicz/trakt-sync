@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"slices"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
@@ -165,6 +166,27 @@ func mediaFilters(options *str.Options) uri.MediaFilters {
 func checkMediaFilters(options *str.Options) error {
 	if len(options.WatchNow) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.WatchNowFilters, options.WatchNow) {
 		return fmt.Errorf("watchnow '%s' is not valid, available values: %v", options.WatchNow, cfg.WatchNowFilters)
+	}
+	return nil
+}
+
+// showStatus builds the status filter of a shows list route from the -status flag.
+func showStatus(options *str.Options) []string {
+	if len(options.ShowStatus) == consts.ZeroValue {
+		return nil
+	}
+	return strings.Split(options.ShowStatus, consts.SeparatorString)
+}
+
+// checkShowFilters reports a -watchnow or -status value the API does not know.
+func checkShowFilters(options *str.Options) error {
+	if err := checkMediaFilters(options); err != nil {
+		return err
+	}
+	for _, status := range showStatus(options) {
+		if !slices.Contains(uri.StatusOptions, status) {
+			return fmt.Errorf("status '%s' is not valid, available values: %v", status, uri.StatusOptions)
+		}
 	}
 	return nil
 }

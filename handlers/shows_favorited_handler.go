@@ -20,6 +20,9 @@ type ShowsFavoritedHandler struct{}
 
 // Handle to handle shows: favorited action
 func (h ShowsFavoritedHandler) Handle(options *str.Options, client *trakt.Client) error {
+	if err := checkShowFilters(options); err != nil {
+		return err
+	}
 	printer.Println("Returns the most favorited shows in the specified time period")
 	result, err := h.fetchShowsFavorited(client, options, consts.DefaultPage)
 	if err != nil {
@@ -45,7 +48,7 @@ func (h ShowsFavoritedHandler) Handle(options *str.Options, client *trakt.Client
 }
 
 func (h ShowsFavoritedHandler) fetchShowsFavorited(client *trakt.Client, options *str.Options, page int) ([]*str.ShowsItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options), Status: showStatus(options)}
 	period := options.Period
 	list, resp, err := client.Shows.GetFavoritedShows(
 		cli.ContextFromOptions(options),

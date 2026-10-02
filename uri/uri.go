@@ -13,7 +13,7 @@ import (
 
 // config slices
 var (
-	StatusOptions = []string{"running series", "continuing", "in production", "planned", "upcoming", "pilot", "canceled", "ended"}
+	StatusOptions = []string{"returning series", "continuing", "in production", "planned", "upcoming", "pilot", "canceled", "ended"}
 	EpisodeTypes  = []string{"standard", "series_premiere", "season_premiere", "mid_season_finale", "mid_season_premiere", "season_finale", "series_finale"}
 )
 
