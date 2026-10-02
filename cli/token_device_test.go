@@ -3,6 +3,7 @@ package cli
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -253,6 +254,35 @@ func TestHandleTokenFetchesMissingUserSettings(t *testing.T) {
 	}
 }
 
+// A device login that fails is reported, the error used to be dropped without a word.
+func TestHandleTokenReportsFailedDeviceLogin(t *testing.T) {
+	openBrowser = func(string) error { return nil }
+	t.Cleanup(func() { openBrowser = OpenBrowser })
+
+	config := credentialsConfig(t)
+	writeFile(t, config.TokenPath, `{}`)
+	writeFile(t, config.SettingsPath, `{}`)
+	s := trakttest.Setup()
+	defer s.Teardown()
+	s.Mux.HandleFunc("/oauth/device/code", func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+	})
+
+	stderr := os.Stderr
+	r, w, err := os.Pipe()
+	if !assert.NoError(t, err) {
+		return
+	}
+	os.Stderr = w
+	HandleToken(afero.NewOsFs(), config, s.Client.WithClientID(config.ClientID), str.Options{})
+	os.Stderr = stderr
+	assert.NoError(t, w.Close())
+
+	out, err := io.ReadAll(r)
+	assert.NoError(t, err)
+	assert.Contains(t, string(out), "generate new device code:")
+}
+
 func TestFetchNewDeviceCodeForClient(t *testing.T) {
 	config := credentialsConfig(t)
 
@@ -282,7 +312,7 @@ func TestFetchNewDeviceCodeForClient(t *testing.T) {
 
 		code, err := fetchNewDeviceCodeForClient(config, s.Client, &str.Options{})
 		assert.Nil(t, code)
-		assert.ErrorContains(t, err, "Error generate new device code:")
+		assert.ErrorContains(t, err, "generate new device code:")
 	})
 }
 
@@ -309,7 +339,9 @@ func TestDeviceCodeVerification(t *testing.T) {
 		})
 
 		options := &str.Options{}
-		assert.True(t, deviceCodeVerification(deviceToken(config), s.Client, config, options))
+		verified, err := deviceCodeVerification(deviceToken(config), s.Client, config, options)
+		assert.NoError(t, err)
+		assert.True(t, verified)
 		assert.Equal(t, "d9c126a7", *sent.Code)
 		assert.Equal(t, "client-secret", *sent.ClientSecret)
 		assert.Equal(t, "device-token", options.Token.AccessToken)
@@ -325,28 +357,38 @@ func TestDeviceCodeVerification(t *testing.T) {
 		}
 	})
 
-	for name, status := range map[string]int{
-		"pending":       http.StatusBadRequest,
-		"not connected": http.StatusTeapot,
-		"not found":     http.StatusNotFound,
-		"already used":  http.StatusConflict,
-		"expired":       http.StatusGone,
-		"slow down":     http.StatusTooManyRequests,
-		"server error":  http.StatusInternalServerError,
+	// final says whether the answer ends the polling
+	for name, tc := range map[string]struct {
+		status int
+		final  string
+	}{
+		"pending":      {status: http.StatusBadRequest},
+		"slow down":    {status: http.StatusTooManyRequests},
+		"server error": {status: http.StatusInternalServerError},
+		"denied":       {status: http.StatusTeapot, final: "device code denied"},
+		"not found":    {status: http.StatusNotFound, final: "invalid device code"},
+		"already used": {status: http.StatusConflict, final: "device code already used"},
+		"expired":      {status: http.StatusGone, final: "device code expired"},
 	} {
-		name, status := name, status
+		name, tc := name, tc
 		t.Run(name, func(t *testing.T) {
 			config := credentialsConfig(t)
 			s := trakttest.Setup()
 			defer s.Teardown()
 			s.Mux.HandleFunc("/oauth/device/token", func(w http.ResponseWriter, _ *http.Request) {
-				w.WriteHeader(status)
+				w.WriteHeader(tc.status)
 			})
 
 			options := &str.Options{}
-			assert.False(t, deviceCodeVerification(deviceToken(config), s.Client, config, options))
+			verified, err := deviceCodeVerification(deviceToken(config), s.Client, config, options)
+			assert.False(t, verified)
+			if tc.final == consts.EmptyString {
+				assert.NoError(t, err)
+			} else {
+				assert.ErrorContains(t, err, tc.final)
+			}
 			assert.Empty(t, options.Token.AccessToken)
-			_, err := os.Stat(config.TokenPath)
+			_, err = os.Stat(config.TokenPath)
 			assert.True(t, os.IsNotExist(err), "no token file is written")
 		})
 	}
@@ -362,7 +404,9 @@ func TestDeviceCodeVerificationWithoutResponse(t *testing.T) {
 	token := &str.NewDeviceToken{Code: &code, ClientID: &config.ClientID, ClientSecret: &config.ClientSecret}
 	options := &str.Options{}
 	assert.NotPanics(t, func() {
-		assert.False(t, deviceCodeVerification(token, s.Client, config, options))
+		verified, err := deviceCodeVerification(token, s.Client, config, options)
+		assert.NoError(t, err)
+		assert.False(t, verified)
 	})
 	assert.Empty(t, options.Token.AccessToken)
 }
@@ -385,7 +429,7 @@ func TestVerifyCode(t *testing.T) {
 		})
 
 		options := &str.Options{}
-		verifyCode(device, config, s.Client, options)
+		assert.NoError(t, verifyCode(device, config, s.Client, options))
 		assert.Equal(t, 1, attempts)
 		assert.Equal(t, "device-token", options.Token.AccessToken)
 	})
@@ -401,7 +445,7 @@ func TestVerifyCode(t *testing.T) {
 		})
 
 		options := &str.Options{}
-		verifyCode(device, config, s.Client, options)
+		assert.NoError(t, verifyCode(device, config, s.Client, options))
 		assert.Equal(t, 1, attempts)
 		assert.Empty(t, options.Token.AccessToken)
 	})
@@ -421,7 +465,7 @@ func TestVerifyCodeStopsPastExpiry(t *testing.T) {
 	done := make(chan struct{})
 	go func() {
 		defer close(done)
-		verifyCode(&str.DeviceCode{DeviceCode: "d9c126a7", ExpiresIn: 1, Interval: 2}, config, s.Client, &str.Options{})
+		assert.NoError(t, verifyCode(&str.DeviceCode{DeviceCode: "d9c126a7", ExpiresIn: 1, Interval: 2}, config, s.Client, &str.Options{}))
 	}()
 	select {
 	case <-done:
@@ -429,6 +473,47 @@ func TestVerifyCodeStopsPastExpiry(t *testing.T) {
 		t.Fatal("verifyCode keeps polling after the code expired")
 	}
 	assert.Equal(t, 1, attempts)
+}
+
+// A denied, used, expired or unknown code ends the polling at once, it used to go on until the code's lifetime ran out.
+func TestPoolNewDeviceCodeStopsOnFinalAnswer(t *testing.T) {
+	openBrowser = func(string) error { return nil }
+	t.Cleanup(func() { openBrowser = OpenBrowser })
+
+	for name, status := range map[string]int{
+		"denied":       http.StatusTeapot,
+		"not found":    http.StatusNotFound,
+		"already used": http.StatusConflict,
+		"expired":      http.StatusGone,
+	} {
+		name, status := name, status
+		t.Run(name, func(t *testing.T) {
+			config := credentialsConfig(t)
+			s := trakttest.Setup()
+			defer s.Teardown()
+			s.Mux.HandleFunc("/oauth/device/code", func(w http.ResponseWriter, _ *http.Request) {
+				test.SafeFprint(w, `{"device_code":"d9c126a7","user_code":"5055CC52","verification_url":"https://trakt.tv/activate","expires_in":600,"interval":0}`)
+			})
+			attempts := 0
+			s.Mux.HandleFunc("/oauth/device/token", func(w http.ResponseWriter, _ *http.Request) {
+				attempts++
+				if attempts == 1 {
+					w.WriteHeader(status)
+					return
+				}
+				// a later attempt would be approved, so the test ends even without the fix
+				test.SafeFprint(w, tokenJSON("device-token", 7776000))
+			})
+			s.Mux.HandleFunc("/users/settings", func(w http.ResponseWriter, _ *http.Request) {
+				test.SafeFprint(w, testSettings)
+			})
+
+			options := &str.Options{}
+			assert.Error(t, PoolNewDeviceCode(config, s.Client, options))
+			assert.Equal(t, 1, attempts)
+			assert.Empty(t, options.Token.AccessToken)
+		})
+	}
 }
 
 // A device code answer without a code is an error, it used to be returned as nil without an error.

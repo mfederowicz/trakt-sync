@@ -144,7 +144,9 @@ func RefreshUserSettings(config *cfg.Config, client *trakt.Client, options *str.
 // HandleToken process token check and refresh, and returns the client with the current access token
 func HandleToken(fs afero.Fs, config *cfg.Config, client *trakt.Client, options str.Options) *trakt.Client {
 	if !ValidAccessToken(config, client, &options) {
-		PoolNewDeviceCode(config, client, &options)
+		if err := PoolNewDeviceCode(config, client, &options); err != nil {
+			fail("Error: " + err.Error())
+		}
 	}
 
 	options, _ = cfg.OptionsFromConfig(fs, config)

@@ -3,6 +3,7 @@ package cli
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -19,28 +20,35 @@ func fail(err string) {
 	printer.Fprintln(os.Stderr, err)
 }
 
-// check if user accept device code or not
-func deviceCodeVerification(deviceToken *str.NewDeviceToken, client *trakt.Client, config *cfg.Config, options *str.Options) bool {
+// answers that end the polling: the device code can no longer be approved
+var deviceCodeFinalErrors = map[int]error{
+	http.StatusNotFound: errors.New("invalid device code"),
+	http.StatusConflict: errors.New("device code already used"),
+	http.StatusGone:     errors.New("device code expired"),
+	http.StatusTeapot:   errors.New("device code denied, your device is not connected"),
+}
+
+// check if user accept device code or not, the error says that polling again is pointless
+func deviceCodeVerification(deviceToken *str.NewDeviceToken, client *trakt.Client, config *cfg.Config, options *str.Options) (bool, error) {
 	token, resp, err := client.Oauth.PollForAccessToken(ContextFromOptions(options), deviceToken)
 	// no response at all, such as a network error
 	if resp == nil {
 		printer.Println("Error:", err)
-		return false
+		return false, nil
 	}
 
-	if (resp.StatusCode != http.StatusBadRequest && resp.StatusCode != http.StatusTeapot) && err != nil {
+	if finalErr, found := deviceCodeFinalErrors[resp.StatusCode]; found {
+		return false, finalErr
+	}
+
+	if resp.StatusCode != http.StatusBadRequest && err != nil {
 		printer.Println("Error:", err)
-		return false
+		return false, nil
 	}
 
 	if resp.StatusCode == http.StatusBadRequest {
 		printer.Println("Wait for code")
-		return false
-	}
-
-	if resp.StatusCode == http.StatusTeapot {
-		fail("Error: Your device is not connected")
-		return false
+		return false, nil
 	}
 
 	if resp.StatusCode == http.StatusOK {
@@ -56,7 +64,7 @@ func deviceCodeVerification(deviceToken *str.NewDeviceToken, client *trakt.Clien
 		printer.Println("User settings refreshed!")
 	}
 
-	return resp.StatusCode == http.StatusOK
+	return resp.StatusCode == http.StatusOK, nil
 }
 
 // fetch new device code for client
@@ -66,14 +74,14 @@ func fetchNewDeviceCodeForClient(config *cfg.Config, client *trakt.Client, optio
 		&str.NewDeviceCode{ClientID: &config.ClientID})
 
 	if err != nil {
-		return nil, printer.Errorf("Error generate new device code:" + err.Error())
+		return nil, fmt.Errorf("generate new device code: %w", err)
 	}
 
 	if resp.StatusCode == http.StatusOK {
 		return code, nil
 	}
 
-	return nil, printer.Errorf("Error generate new device code: unexpected status %d", resp.StatusCode)
+	return nil, fmt.Errorf("generate new device code: unexpected status %d", resp.StatusCode)
 }
 
 // PoolNewDeviceCode pool new device code (open browser and wait for correct code activation)
@@ -82,13 +90,12 @@ func PoolNewDeviceCode(config *cfg.Config, client *trakt.Client, options *str.Op
 
 	device, err := fetchNewDeviceCodeForClient(config, client, options)
 	if err != nil {
-		return errors.New("Error generate new device code:" + err.Error())
+		return err
 	}
 
 	showCodeAndOpenBrowser(device)
 
-	verifyCode(device, config, client, options)
-	return nil
+	return verifyCode(device, config, client, options)
 }
 
 // show new device code to stdout and open browser
@@ -103,7 +110,7 @@ func showCodeAndOpenBrowser(device *str.DeviceCode) {
 }
 
 // verify device code in loop with intervals
-func verifyCode(device *str.DeviceCode, config *cfg.Config, client *trakt.Client, options *str.Options) {
+func verifyCode(device *str.DeviceCode, config *cfg.Config, client *trakt.Client, options *str.Options) error {
 	const (
 		counterNoSeconds = 0
 	)
@@ -115,7 +122,11 @@ func verifyCode(device *str.DeviceCode, config *cfg.Config, client *trakt.Client
 			ClientID:     &config.ClientID,
 			ClientSecret: &config.ClientSecret,
 		}
-		if verified := deviceCodeVerification(token, client, config, options); verified {
+		verified, err := deviceCodeVerification(token, client, config, options)
+		if err != nil {
+			return err
+		}
+		if verified {
 			printer.Println("Device code verified!")
 			break
 		}
@@ -126,4 +137,6 @@ func verifyCode(device *str.DeviceCode, config *cfg.Config, client *trakt.Client
 		}
 		time.Sleep(time.Duration(device.Interval) * time.Second)
 	}
+
+	return nil
 }
