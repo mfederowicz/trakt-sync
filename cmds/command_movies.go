@@ -10,17 +10,21 @@ import (
 )
 
 var (
-	_moviesAction     = MoviesCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
-	_moviesInternalID = MoviesCmd.Flag.String("i", cfg.DefaultConfig().InternalID, consts.MovieIDUsage)
-	_moviesPeriod     = MoviesCmd.Flag.String("period", cfg.DefaultConfig().MoviesPeriod, consts.MoviesPeriodUsage)
-	_moviesCountry    = MoviesCmd.Flag.String("country", cfg.DefaultConfig().MoviesCountry, consts.MoviesCountryUsage)
-	_moviesLanguage   = MoviesCmd.Flag.String("language", cfg.DefaultConfig().MoviesLanguage, consts.MoviesLanguageUsage)
-	_moviesSort       = MoviesCmd.Flag.String("s", cfg.DefaultConfig().MoviesSort, consts.MoviesSortUsage)
-	_moviesType       = MoviesCmd.Flag.String("t", cfg.DefaultConfig().MoviesType, consts.MoviesTypeUsage)
-	_moviesStartDate  = MoviesCmd.Flag.String("start_date", "", consts.StartDateUsage)
-	_moviesReason     = MoviesCmd.Flag.String("r", cfg.DefaultConfig().Reason, consts.ReasonUsage)
-	_moviesMessage    = MoviesCmd.Flag.String("message", cfg.DefaultConfig().Msg, consts.ReportMsgUsage)
-	_moviesLinks      = MoviesCmd.Flag.String("links", consts.EmptyString, consts.MoviesLinksUsage)
+	_moviesAction         = MoviesCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
+	_moviesInternalID     = MoviesCmd.Flag.String("i", cfg.DefaultConfig().InternalID, consts.MovieIDUsage)
+	_moviesPeriod         = MoviesCmd.Flag.String("period", cfg.DefaultConfig().MoviesPeriod, consts.MoviesPeriodUsage)
+	_moviesCountry        = MoviesCmd.Flag.String("country", cfg.DefaultConfig().MoviesCountry, consts.MoviesCountryUsage)
+	_moviesLanguage       = MoviesCmd.Flag.String("language", cfg.DefaultConfig().MoviesLanguage, consts.MoviesLanguageUsage)
+	_moviesSort           = MoviesCmd.Flag.String("s", cfg.DefaultConfig().MoviesSort, consts.MoviesSortUsage)
+	_moviesType           = MoviesCmd.Flag.String("t", cfg.DefaultConfig().MoviesType, consts.MoviesTypeUsage)
+	_moviesStartDate      = MoviesCmd.Flag.String("start_date", "", consts.StartDateUsage)
+	_moviesReason         = MoviesCmd.Flag.String("r", cfg.DefaultConfig().Reason, consts.ReasonUsage)
+	_moviesMessage        = MoviesCmd.Flag.String("message", cfg.DefaultConfig().Msg, consts.ReportMsgUsage)
+	_moviesLinks          = MoviesCmd.Flag.String("links", consts.EmptyString, consts.MoviesLinksUsage)
+	_moviesWatchNow       = MoviesCmd.Flag.String("watchnow", consts.EmptyString, consts.WatchNowUsage)
+	_moviesSubgenres      = MoviesCmd.Flag.String("subgenres", consts.EmptyString, consts.SubgenresUsage)
+	_moviesRatings        = MoviesCmd.Flag.String("ratings", consts.EmptyString, consts.RatingsFilterUsage)
+	_moviesCertifications = MoviesCmd.Flag.String("certifications", consts.EmptyString, consts.CertificationsUsage)
 
 	validMoviesActions = []string{
 		consts.Trending, consts.Popular, consts.Favorited, consts.Played, consts.Watched, consts.Collected,

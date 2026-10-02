@@ -184,6 +184,22 @@ func TestBuildQuerySyncProgressBools(t *testing.T) {
 	}
 }
 
+func TestBuildQueryMediaFilters(t *testing.T) {
+	opts := ListOptions{Page: 2, Filters: MediaFilters{
+		WatchNow: "free", Genres: "action,drama", Subgenres: "space", Years: "2020-2026", Ratings: "75-100",
+		StartDate: "2026-01-01", EndDate: "2026-12-31", Runtimes: "90-150", Countries: "us", Certifications: "pg-13",
+	}}
+	expectedURL := BaseURL + "?certifications=pg-13&countries=us&end_date=2026-12-31&genres=" + url.QueryEscape("action,drama") +
+		"&page=2&ratings=75-100&runtimes=90-150&start_date=2026-01-01&subgenres=space&watchnow=free&years=2020-2026"
+	got, err := AddQuery(BaseURL, opts)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got != expectedURL {
+		t.Fatalf(Expected, expectedURL, got)
+	}
+}
+
 func TestAddQueryNilOptions(t *testing.T) {
 	tests := []struct {
 		name string

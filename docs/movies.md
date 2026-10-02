@@ -70,6 +70,16 @@ the CLI then reports that the route is not served.
 ```console
 $ ./trakt-sync movies -a streaming -period daily -> export_movies_streaming_daily.json
 ```
+##### Filter the movie lists
+`trending`, `popular`, `anticipated`, `hot` and `streaming` take the Trakt media filters:
+`-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications` (comma separated where a
+filter takes several values) and `-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all`.
+```console
+$ ./trakt-sync movies -a trending -genres action,drama -years 2020-2026 -ratings 75-100
+```
+```console
+$ ./trakt-sync movies -a popular -countries us -certifications pg-13 -watchnow subscriptions
+```
 ##### Get the weekend box office
 ```console
 $ ./trakt-sync movies -a boxoffice

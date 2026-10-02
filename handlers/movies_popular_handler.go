@@ -20,6 +20,9 @@ type MoviesPopularHandler struct{}
 
 // Handle to handle lists: popular action
 func (h MoviesPopularHandler) Handle(options *str.Options, client *trakt.Client) error {
+	if err := checkMediaFilters(options); err != nil {
+		return err
+	}
 	printer.Println("Returns the most popular lists. Popularity is calculated using total number of likes and comments.")
 	result, err := h.fetchMoviesPopular(client, options, consts.DefaultPage)
 	if err != nil {
@@ -45,7 +48,7 @@ func (h MoviesPopularHandler) Handle(options *str.Options, client *trakt.Client)
 }
 
 func (h MoviesPopularHandler) fetchMoviesPopular(client *trakt.Client, options *str.Options, page int) ([]*str.Movie, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options)}
 	list, resp, err := client.Movies.GetPopularMovies(
 		cli.ContextFromOptions(options),
 		&opts,

@@ -24,9 +24,11 @@ type ListOptions struct {
 	Certifications []string `url:"certifications,omitempty"`
 	Countries      []string `url:"countries,omitempty"`
 	// Deprecated: episode_types is no longer part of the Trakt API (not in its OpenAPI spec or contract).
-	EpisodeTypes      []string       `url:"episode_types,omitempty"`
-	Extended          string         `url:"extended,omitempty"`
-	Field             string         `url:"fields,omitempty"`
+	EpisodeTypes []string `url:"episode_types,omitempty"`
+	Extended     string   `url:"extended,omitempty"`
+	Field        string   `url:"fields,omitempty"`
+	// Filters are the media filters; set them here rather than in the typed filter fields of ListOptions.
+	Filters           MediaFilters
 	Genres            []string       `url:"genres,omitempty"`
 	IgnoreCollected   string         `url:"ignore_collected,omitempty"`
 	IgnoreWatched     string         `url:"ignore_watched,omitempty"`
