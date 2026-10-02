@@ -18,6 +18,9 @@ type UsersCollectionHandler struct{ common CommonLogic }
 
 // Handle to handle users: collection action
 func (u UsersCollectionHandler) Handle(options *str.Options, client *trakt.Client) error {
+	if err := checkMediaFilters(options); err != nil {
+		return err
+	}
 	err := u.common.CheckTypes(options)
 	if err != nil {
 		return err

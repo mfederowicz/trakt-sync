@@ -509,7 +509,7 @@ func setOptionsDependsOnModuleUsers(options str.Options) str.Options {
 	options.ReturnURL = *_usersReturnURL
 	options.AllData = *_usersAllData
 
-	return options
+	return _usersFilters.apply(options)
 }
 
 func setOptionsDependsOnModuleNotes(options str.Options) str.Options {
@@ -1199,12 +1199,15 @@ func UpdateOptionsWithCommandSyncFlags(c *Command, options *str.Options) *str.Op
 	options.HideNotCompleted = *_syncHideNotCompleted
 	options.OnlyRewatching = *_syncOnlyRewatching
 	options.Intent = *_syncIntent
-	options.WatchNow = *_syncWatchNow
-	options.Subgenres = *_syncSubgenres
-	options.Ratings = *_syncRatings
-	options.Certifications = *_syncCertifications
-	options.MediaStartDate = *_syncStartDate
-	options.MediaEndDate = *_syncEndDate
+	// users runs this updater too, but has its own media filter flags
+	if c.Name == consts.Sync {
+		options.WatchNow = *_syncWatchNow
+		options.Subgenres = *_syncSubgenres
+		options.Ratings = *_syncRatings
+		options.Certifications = *_syncCertifications
+		options.MediaStartDate = *_syncStartDate
+		options.MediaEndDate = *_syncEndDate
+	}
 	options.Genres = *_genres
 	options.Years = *_years
 	options.Countries = *_countries

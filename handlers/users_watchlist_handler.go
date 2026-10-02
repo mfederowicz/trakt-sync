@@ -17,6 +17,9 @@ type UsersWatchlistHandler struct{ common CommonLogic }
 
 // Handle to handle users: watchlist action
 func (m UsersWatchlistHandler) Handle(options *str.Options, client *trakt.Client) error {
+	if err := checkMediaFilters(options); err != nil {
+		return err
+	}
 	err := m.common.CheckTypes(options)
 	if err != nil {
 		return err

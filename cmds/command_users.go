@@ -38,6 +38,7 @@ var (
 	_usersSortPath               = UsersCmd.Flag.String("sort", consts.EmptyString, consts.SortPathUsage)
 	_usersReturnURL              = UsersCmd.Flag.String("return_url", consts.DefaultReturnURL, consts.ReturnURLUsage)
 	_usersAllData                = UsersCmd.Flag.Bool("all_data", false, consts.AllDataUsage)
+	_usersFilters                = newMediaFilterFlags(&UsersCmd.Flag)
 )
 
 // UsersCmd Returns all personal lists for a user.

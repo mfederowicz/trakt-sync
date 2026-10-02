@@ -18,6 +18,9 @@ type UsersListItemsHandler struct{ common CommonLogic }
 
 // Handle to handle users: list_items action
 func (u UsersListItemsHandler) Handle(options *str.Options, client *trakt.Client) error {
+	if err := checkMediaFilters(options); err != nil {
+		return err
+	}
 	err := u.common.CheckTypes(options)
 	if err != nil {
 		return err
