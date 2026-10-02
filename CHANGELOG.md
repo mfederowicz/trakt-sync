@@ -32,6 +32,12 @@ schedule.
 
 ### Changed
 
+### Fixed
+
+## [1.23.0] - 2026-10-02
+
+### Changed
+
 - `sync -a add_to_history` with `-t movies`, `-t seasons`, `-t episodes` or `-t all` now adds every play of the input back. An item watched several times came back with one play before (the first one in the input file), so its other plays were lost from the Trakt history. `-t shows` already kept every episode play. With `-t all`, an episode entry that also names its show was sent twice, with the show and as an episode; it is now sent once, with the show. To keep one play per item, leave only that entry in the input file.
 
 ### Fixed
@@ -42,7 +48,6 @@ schedule.
 - `users -a add_hidden_items|remove_hidden_items -section comments` wrote a result file without the users: the `users` counter under `added` / `deleted` and the `users` and `people` lists under `not_found` were dropped, so the file did not show whether a user was hidden. They are now written.
 - Library: `str.ResultCounters` has a new `Users` field and `str.ResultNotFound` new `People` and `Users` fields; they were dropped from add and remove results before.
 - A device login that failed (no code, code denied, expired, already used or unknown, or not approved in time) went on to run the module without a token. The run now stops with `Error: device login failed: ...` and exit status 1. A code that is not approved in time is reported as `Error: device login failed: time out, the device code was not approved` instead of `Time out!`.
-
 - The device login kept polling until the code's lifetime ran out after Trakt had already given a final answer: code denied, expired, already used or unknown. It now stops at once with `Error: device login failed: device code denied, your device is not connected` (or `device code expired`, `device code already used`, `invalid device code`). A device login that could not get a code at all is now reported as `Error: ...`; it ended without any message before.
 - The device login (first run, or an expired token that cannot be refreshed) crashed with `panic: runtime error: invalid memory address or nil pointer dereference` when a polling request got no response, for example on a network error. The failed attempt is now reported as `Error: ...` and polling goes on. Polling also ends with a time out when the code's lifetime is not a multiple of the polling interval; it never ended before.
 - `sync -a get_collection -t seasons` stopped with `panic error:runtime error: invalid memory address or nil pointer dereference` on every run. It now exports the collected seasons, each with its own IDs, and follows the pages of the collection.
@@ -670,7 +675,8 @@ schedule.
 - First release, with the `calendars`, `collection`, `help`, `history`, `lists`, `people`, `search` and `watchlist`
   commands exporting Trakt data to JSON.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.22.0...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.23.0...HEAD
+[1.23.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.22.0...v1.23.0
 [1.22.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.21.0...v1.22.0
 [1.21.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.20.0...v1.21.0
 [1.20.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.19.1...v1.20.0
