@@ -491,7 +491,8 @@ func TestConvertBytesToItemsListRepeatPlays(t *testing.T) {
 				return
 			}
 			for name, list := range lists {
-				if stype != consts.ActionTypeAll && stype != name {
+				// with all, the episodes of repeatList are sent in the seasons of their show only
+				if stype != consts.ActionTypeAll && stype != name || stype == consts.ActionTypeAll && name == consts.Episodes {
 					assert.Empty(t, list(got), name)
 					continue
 				}
@@ -522,6 +523,16 @@ func TestConvertBytesToItemsListRepeatPlays(t *testing.T) {
 			assert.Equal(t, []int{2, 1}, days)
 		})
 	}
+
+	t.Run("add_to_history all episode without show", func(t *testing.T) {
+		const data = `[{"watched_at":"2026-10-02T12:00:00Z","episode":{"ids":{"trakt":4}}},{"watched_at":"2026-10-01T12:00:00Z","episode":{"ids":{"trakt":4}}}]`
+		got, err := c.ConvertBytesToItemsList([]byte(data), consts.AddToHistory, consts.ActionTypeAll)
+		if !assert.NoError(t, err) {
+			return
+		}
+		assert.Empty(t, *got.Shows)
+		assert.Equal(t, []int{2, 1}, watchedDays(*got.Episodes))
+	})
 
 	for _, action := range []string{consts.RemoveFromHistory, consts.AddToRatings, consts.RemoveFromRatings} {
 		action := action

@@ -1362,7 +1362,7 @@ func (c *CommonLogic) ListToItemsAgregate(items *str.ItemsList, list []*str.Expo
 
 // ListToPlays converts a history list to the items add_to_history sends: one item per play of a movie,
 // season or episode, in the order of the list. Shows are grouped by ListToItems, which keeps every
-// episode play in the seasons of its show.
+// episode play in the seasons of its show; with the type all such a play is sent with its show only.
 func (c *CommonLogic) ListToPlays(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
 	all := stype == consts.ActionTypeAll
 	if all || stype == consts.Shows {
@@ -1386,7 +1386,8 @@ func (c *CommonLogic) ListToPlays(items *str.ItemsList, list []*str.ExportlistIt
 				IDs:       item.Season.IDs,
 			})
 		}
-		if (all || stype == consts.Episodes) && item.Episode != nil {
+		// with all, the episode of a show is already in the seasons of that show
+		if (stype == consts.Episodes || all && item.Show == nil) && item.Episode != nil {
 			*items.Episodes = append(*items.Episodes, str.ExportlistItem{
 				Episode:   &str.Episode{Title: item.Episode.Title, IDs: item.Episode.IDs},
 				WatchedAt: item.WatchedAt,
