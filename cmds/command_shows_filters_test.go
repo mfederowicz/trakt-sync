@@ -69,16 +69,17 @@ func TestMediaFilterFlagsAreAvailable(t *testing.T) {
 
 // every flag a module or the global flag set registers must be in Avflags, or main answers "invalid flags".
 func TestRegisteredFlagsAreAvailable(t *testing.T) {
-	for _, command := range Commands {
-		name := command.Name
-		command.Flag.VisitAll(func(f *flag.Flag) {
-			assert.True(t, Avflags[f.Name], "%s -%s is missing in Avflags", name, f.Name)
-		})
-	}
-	flag.VisitAll(func(f *flag.Flag) {
-		if strings.HasPrefix(f.Name, "test.") {
-			return
+	check := func(owner string) func(*flag.Flag) {
+		return func(f *flag.Flag) {
+			// go test registers its own test.* flags in the global set, and Exec copies the global flags to a module
+			if strings.HasPrefix(f.Name, "test.") {
+				return
+			}
+			assert.True(t, Avflags[f.Name], "%s -%s is missing in Avflags", owner, f.Name)
 		}
-		assert.True(t, Avflags[f.Name], "global -%s is missing in Avflags", f.Name)
-	})
+	}
+	for _, command := range Commands {
+		command.Flag.VisitAll(check(command.Name))
+	}
+	flag.VisitAll(check("global"))
 }
