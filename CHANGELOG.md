@@ -34,6 +34,7 @@ schedule.
 
 ### Fixed
 
+- The device login kept polling until the code's lifetime ran out after Trakt had already given a final answer: code denied, expired, already used or unknown. It now stops at once with `Error: device code denied, your device is not connected` (or `device code expired`, `device code already used`, `invalid device code`). A device login that could not get a code at all is now reported as `Error: ...`; it ended without any message before.
 - The device login (first run, or an expired token that cannot be refreshed) crashed with `panic: runtime error: invalid memory address or nil pointer dereference` when a polling request got no response, for example on a network error. The failed attempt is now reported as `Error: ...` and polling goes on. Polling also ends with `Time out!` when the code's lifetime is not a multiple of the polling interval; it never ended before.
 - `sync -a get_collection -t seasons` stopped with `panic error:runtime error: invalid memory address or nil pointer dereference` on every run. It now exports the collected seasons, each with its own IDs, and follows the pages of the collection.
 - Library: `SyncService.GetCollectedSeasons` returned a nil `*str.Response` on success and a list in which every item pointed at the last collected season. It now returns the response of the collection request and one item per season.
