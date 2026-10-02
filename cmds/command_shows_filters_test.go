@@ -2,6 +2,8 @@
 package cmds
 
 import (
+	"flag"
+	"strings"
 	"testing"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
@@ -63,4 +65,20 @@ func TestMediaFilterFlagsAreAvailable(t *testing.T) {
 			}
 		}
 	}
+}
+
+// every flag a module or the global flag set registers must be in Avflags, or main answers "invalid flags".
+func TestRegisteredFlagsAreAvailable(t *testing.T) {
+	for _, command := range Commands {
+		name := command.Name
+		command.Flag.VisitAll(func(f *flag.Flag) {
+			assert.True(t, Avflags[f.Name], "%s -%s is missing in Avflags", name, f.Name)
+		})
+	}
+	flag.VisitAll(func(f *flag.Flag) {
+		if strings.HasPrefix(f.Name, "test.") {
+			return
+		}
+		assert.True(t, Avflags[f.Name], "global -%s is missing in Avflags", f.Name)
+	})
 }
