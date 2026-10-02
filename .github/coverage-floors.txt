@@ -3,7 +3,7 @@
 # Floors only go up: raise one when a package gains coverage, never lower one to make a PR pass.
 buffer 60
 cfg 88
-cli 78
+cli 85
 cmds 70
 handlers 81
 printer 78

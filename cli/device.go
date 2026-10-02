@@ -22,6 +22,11 @@ func fail(err string) {
 // check if user accept device code or not
 func deviceCodeVerification(deviceToken *str.NewDeviceToken, client *trakt.Client, config *cfg.Config, options *str.Options) bool {
 	token, resp, err := client.Oauth.PollForAccessToken(ContextFromOptions(options), deviceToken)
+	// no response at all, such as a network error
+	if resp == nil {
+		printer.Println("Error:", err)
+		return false
+	}
 
 	if (resp.StatusCode != http.StatusBadRequest && resp.StatusCode != http.StatusTeapot) && err != nil {
 		printer.Println("Error:", err)
@@ -68,7 +73,7 @@ func fetchNewDeviceCodeForClient(config *cfg.Config, client *trakt.Client, optio
 		return code, nil
 	}
 
-	return nil, nil
+	return nil, printer.Errorf("Error generate new device code: unexpected status %d", resp.StatusCode)
 }
 
 // PoolNewDeviceCode pool new device code (open browser and wait for correct code activation)
@@ -91,7 +96,7 @@ func showCodeAndOpenBrowser(device *str.DeviceCode) {
 	printer.Println("Go to:" + device.VerificationURL)
 	printer.Println("Enter code: " + device.UserCode)
 
-	browserErr := OpenBrowser(device.VerificationURL)
+	browserErr := openBrowser(device.VerificationURL)
 	if browserErr != nil {
 		fail("Error opening browser:" + browserErr.Error())
 	}
@@ -115,7 +120,7 @@ func verifyCode(device *str.DeviceCode, config *cfg.Config, client *trakt.Client
 			break
 		}
 		count -= device.Interval
-		if count == counterNoSeconds {
+		if count <= counterNoSeconds {
 			printer.Println("Time out!")
 			break
 		}
