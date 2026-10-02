@@ -4,9 +4,11 @@ package trakt
 import (
 	"context"
 	"net/http"
+	"slices"
 	"testing"
 
 	"github.com/mfederowicz/trakt-sync/str"
+	"github.com/mfederowicz/trakt-sync/test"
 	"github.com/mfederowicz/trakt-sync/uri"
 )
 
@@ -183,5 +185,37 @@ func TestSmallServicesOwnErrorMessages(t *testing.T) {
 				t.Errorf("error is %q, want %q", err.Error(), tc.want)
 			}
 		})
+	}
+}
+
+// Every collected season is returned with its own ids (all items used to point at the last season),
+// together with the response of the collection request, which callers page on (it used to be nil).
+func TestSyncGetCollectedSeasons(t *testing.T) {
+	delay := collectedSeasonsDelay
+	collectedSeasonsDelay = 0
+	t.Cleanup(func() { collectedSeasonsDelay = delay })
+
+	setup := Setup()
+	defer setup.Teardown()
+	setup.Mux.HandleFunc("/sync/collection/shows", func(w http.ResponseWriter, r *http.Request) {
+		test.AssertMethod(t, r, http.MethodGet)
+		test.SafeFprint(w, `[{"show":{"title":"Tron","ids":{"slug":"tron"}},"seasons":[{"number":1},{"number":2}]}]`)
+	})
+	setup.Mux.HandleFunc("/shows/tron/seasons", func(w http.ResponseWriter, r *http.Request) {
+		test.AssertMethod(t, r, http.MethodGet)
+		test.SafeFprint(w, `[{"number":1,"ids":{"trakt":11}},{"number":2,"ids":{"trakt":12}},{"number":3,"ids":{"trakt":13}}]`)
+	})
+
+	list, resp, err := setup.Client.Sync.GetCollectedSeasons(context.Background(), &uri.ListOptions{})
+	test.AssertNilError(t, err)
+	got := []int64{}
+	for _, item := range list {
+		got = append(got, *item.Season.IDs.Trakt)
+	}
+	if want := []int64{11, 12}; !slices.Equal(got, want) {
+		t.Errorf("collected season ids = %v, want %v", got, want)
+	}
+	if resp == nil {
+		t.Error("GetCollectedSeasons returned a nil response")
 	}
 }

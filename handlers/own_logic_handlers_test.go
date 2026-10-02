@@ -249,3 +249,21 @@ func TestShowsEpisodeHandlersWithoutTitle(t *testing.T) {
 		})
 	}
 }
+
+// get_collection -t seasons with an empty collection writes an empty list, it used to panic on a nil response.
+func TestSyncGetCollectionSeasonsEmpty(t *testing.T) {
+	s := setup(t)
+	defer s.Teardown()
+	s.Mux.HandleFunc("/sync/collection/shows", func(w http.ResponseWriter, r *http.Request) {
+		test.AssertMethod(t, r, http.MethodGet)
+		test.SafeFprint(w, `[]`)
+	})
+
+	options := str.Options{Module: "sync", Action: "get_collection", Type: "seasons", Output: filepath.Join(t.TempDir(), "out.json")}
+	assert.NotPanics(t, func() {
+		test.AssertNilError(t, SyncGetCollectionHandler{}.Handle(&options, s.Client))
+	})
+	written, err := os.ReadFile(options.Output)
+	test.AssertNilError(t, err)
+	assert.JSONEq(t, `[]`, string(written))
+}

@@ -218,6 +218,9 @@ func (s *SyncService) AddItemsToCollection(ctx context.Context, items *str.Items
 	return result, resp, nil
 }
 
+// collectedSeasonsDelay is the pause before the seasons of each collected show are fetched; tests set it to zero.
+var collectedSeasonsDelay = time.Duration(consts.SleepNumberOfSeconds) * time.Second
+
 // GetCollectedSeasons dedicated function do prepare collection: seasons format
 func (s *SyncService) GetCollectedSeasons(ctx context.Context, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
 	// fetch collected shows
@@ -228,7 +231,7 @@ func (s *SyncService) GetCollectedSeasons(ctx context.Context, options *uri.List
 	}
 	collected := []str.Season{}
 	for _, val := range shows {
-		time.Sleep(time.Duration(consts.SleepNumberOfSeconds) * time.Second)
+		time.Sleep(collectedSeasonsDelay)
 
 		seasonsNumbers := []int{}
 		for _, sitem := range *val.Seasons {
@@ -250,14 +253,14 @@ func (s *SyncService) GetCollectedSeasons(ctx context.Context, options *uri.List
 
 	strType = consts.Season
 	list := []*str.ExportlistItem{}
-	for _, citem := range collected {
+	for i := range collected {
 		item := &str.ExportlistItem{}
 		item.Type = &strType
-		item.Season = &citem
+		item.Season = &collected[i]
 		list = append(list, item)
 	}
 
-	return list, nil, nil
+	return list, resp, nil
 }
 
 // RemoveItemsFromCollection remove items from user's collection
