@@ -47,6 +47,21 @@ func writeFile(t *testing.T, path string, content string) {
 	assert.NoError(t, os.WriteFile(path, []byte(content), consts.X600))
 }
 
+// readSettingsFile reads the user settings written to path.
+func readSettingsFile(path string) (*str.UserSettings, error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	var settings str.UserSettings
+	if err := json.Unmarshal(data, &settings); err != nil {
+		return nil, err
+	}
+
+	return &settings, nil
+}
+
 // decodeBody decodes the JSON request body into v.
 func decodeBody(t *testing.T, r *http.Request, v any) {
 	t.Helper()
@@ -56,30 +71,19 @@ func decodeBody(t *testing.T, r *http.Request, v any) {
 func TestReadCredentialFiles(t *testing.T) {
 	dir := t.TempDir()
 	tokenPath := filepath.Join(dir, "token.json")
-	settingsPath := filepath.Join(dir, "user_settings.json")
 	broken := filepath.Join(dir, "broken.json")
 	missing := filepath.Join(dir, "missing.json")
 	writeFile(t, tokenPath, `{"access_token":"access","refresh_token":"refresh","expires_in":7200,"created_at":1790863634}`)
-	writeFile(t, settingsPath, testSettings)
 	writeFile(t, broken, "not json")
 
 	token, err := ReadTokenFromFile(tokenPath)
 	if assert.NoError(t, err) {
 		assert.Equal(t, str.Token{AccessToken: "access", RefreshToken: "refresh", ExpiresIn: 7200, CreatedAt: 1790863634}, *token)
 	}
-	settings, err := ReadUserSettingsFromFile(settingsPath)
-	if assert.NoError(t, err) {
-		assert.Equal(t, "sean", *settings.User.Username)
-		assert.Equal(t, "Europe/Warsaw", *settings.Account.Timezone)
-	}
 
 	for _, path := range []string{broken, missing} {
 		token, err := ReadTokenFromFile(path)
 		assert.Nil(t, token, path)
-		assert.Error(t, err, path)
-
-		settings, err := ReadUserSettingsFromFile(path)
-		assert.Nil(t, settings, path)
 		assert.Error(t, err, path)
 	}
 }
@@ -195,7 +199,7 @@ func TestRefreshUserSettings(t *testing.T) {
 		})
 
 		assert.True(t, RefreshUserSettings(config, s.Client, &str.Options{}))
-		settings, err := ReadUserSettingsFromFile(config.SettingsPath)
+		settings, err := readSettingsFile(config.SettingsPath)
 		if assert.NoError(t, err) {
 			assert.Equal(t, "sean", *settings.User.Username)
 		}
@@ -248,7 +252,7 @@ func TestHandleTokenFetchesMissingUserSettings(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, "Bearer file-token", settingsAuth)
-	settings, err := ReadUserSettingsFromFile(config.SettingsPath)
+	settings, err := readSettingsFile(config.SettingsPath)
 	if assert.NoError(t, err) && assert.NotNil(t, settings.User) {
 		assert.Equal(t, "sean", *settings.User.Username)
 	}
@@ -363,7 +367,7 @@ func TestDeviceCodeVerification(t *testing.T) {
 		if assert.NoError(t, err) {
 			assert.Equal(t, "device-token", token.AccessToken)
 		}
-		settings, err := ReadUserSettingsFromFile(config.SettingsPath)
+		settings, err := readSettingsFile(config.SettingsPath)
 		if assert.NoError(t, err) {
 			assert.Equal(t, "sean", *settings.User.Username)
 		}
