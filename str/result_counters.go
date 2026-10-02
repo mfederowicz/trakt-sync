@@ -6,6 +6,7 @@ type ResultCounters struct {
 	Episodes *int `json:"episodes,omitempty"`
 	Shows    *int `json:"shows,omitempty"`
 	Seasons  *int `json:"seasons,omitempty"`
+	Users    *int `json:"users,omitempty"`
 }
 
 func (c ResultCounters) String() string {
