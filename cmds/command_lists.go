@@ -18,6 +18,7 @@ var (
 	_listType       = ListsCmd.Flag.String("t", cfg.DefaultConfig().ListsType, consts.ListTypeUsage)
 	_listReason     = ListsCmd.Flag.String("r", cfg.DefaultConfig().Reason, consts.ReasonUsage)
 	_listMessage    = ListsCmd.Flag.String("message", cfg.DefaultConfig().Msg, consts.ReportMsgUsage)
+	_listFilters    = newMediaFilterFlags(&ListsCmd.Flag)
 )
 
 // ListsCmd returns movies and episodes that a user has watched, sorted by most recent.

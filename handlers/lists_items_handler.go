@@ -20,6 +20,9 @@ type ListsItemsHandler struct{}
 
 // Handle to handle lists: items action
 func (h ListsItemsHandler) Handle(options *str.Options, client *trakt.Client) error {
+	if err := checkMediaFilters(options); err != nil {
+		return err
+	}
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyListIDMsg)
 	}
@@ -51,7 +54,7 @@ func (h ListsItemsHandler) Handle(options *str.Options, client *trakt.Client) er
 }
 
 func (h ListsItemsHandler) fetchListItems(client *trakt.Client, options *str.Options, page int) ([]*str.UserListItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, SortBy: options.SortBy, SortHow: options.SortHow}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, SortBy: options.SortBy, SortHow: options.SortHow, Filters: mediaFilters(options)}
 	itemTypes := options.Type
 	if len(itemTypes) == consts.ZeroValue {
 		itemTypes = consts.ListItemsAll

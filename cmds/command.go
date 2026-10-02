@@ -670,7 +670,7 @@ func setOptionsDependsOnModuleLists(options str.Options) str.Options {
 	options.InternalID = selectFirstNonEmpty(*_listTraktID, *_listInternalID)
 	options.Sort = *_listSort
 	options.Type = *_listType
-	return options
+	return _listFilters.apply(options)
 }
 
 func setOptionsDependsOnModuleCheckin(options str.Options) str.Options {

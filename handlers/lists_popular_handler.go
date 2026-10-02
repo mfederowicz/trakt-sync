@@ -20,6 +20,9 @@ type ListsPopularHandler struct{}
 
 // Handle to handle lists: popular action
 func (h ListsPopularHandler) Handle(options *str.Options, client *trakt.Client) error {
+	if err := checkMediaFilters(options); err != nil {
+		return err
+	}
 	printer.Println("Returns the most popular lists. Popularity is calculated using total number of likes and comments.")
 	result, err := h.fetchListsPopular(client, options, consts.DefaultPage)
 	if err != nil {
@@ -45,7 +48,7 @@ func (h ListsPopularHandler) Handle(options *str.Options, client *trakt.Client) 
 }
 
 func (h ListsPopularHandler) fetchListsPopular(client *trakt.Client, options *str.Options, page int) ([]*str.List, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options)}
 	ctx := cli.ContextFromOptions(options)
 	var list []*str.List
 	var resp *str.Response

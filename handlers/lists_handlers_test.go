@@ -112,3 +112,64 @@ func TestListsReportHandler(t *testing.T) {
 		})
 	}
 }
+
+// trending, popular and items send the media filter flags; an unknown -watchnow stops before the request.
+func TestListsHandlersMediaFilters(t *testing.T) {
+	const filtered = "certifications=pg-13&countries=us&end_date=2026-12-31&genres=action%2Cdrama&page=1&ratings=75-100&runtimes=90-150&start_date=2026-01-01&subgenres=space&watchnow=free&years=2020-2026"
+	filters := str.Options{
+		WatchNow: "free", Genres: "action,drama", Subgenres: "space", Years: "2020-2026", Ratings: "75-100", Runtimes: "90-150", Countries: "us",
+		Certifications: "pg-13", MediaStartDate: "2026-01-01", MediaEndDate: "2026-12-31",
+	}
+	handlers := []struct {
+		name    string
+		handler Handler
+		path    string
+		body    string
+	}{
+		{name: "trending", handler: ListsTrendingHandler{}, path: "/lists/trending", body: `[{"like_count":1,"list":{"name":"Top"}}]`},
+		{name: "popular", handler: ListsPopularHandler{}, path: "/lists/popular", body: `[{"like_count":1,"list":{"name":"Top"}}]`},
+		{name: "items", handler: ListsItemsHandler{}, path: "/lists/55/items/" + consts.ListItemsAll, body: `[{"rank":1}]`},
+	}
+	cases := []struct {
+		name    string
+		options str.Options
+		query   string
+		wantErr string
+	}{
+		{name: "all filters", options: filters, query: filtered},
+		{name: "no filters", query: "page=1"},
+		{name: "unknown watchnow", options: str.Options{WatchNow: "cinema"}, wantErr: "watchnow 'cinema' is not valid"},
+	}
+
+	for _, h := range handlers {
+		for _, tt := range cases {
+			h, tt := h, tt
+			t.Run(h.name+" "+tt.name, func(t *testing.T) {
+				s := setup(t)
+				defer s.Teardown()
+				requests := []string{}
+				s.Mux.HandleFunc("/lists/", func(w http.ResponseWriter, r *http.Request) {
+					test.AssertMethod(t, r, http.MethodGet)
+					requests = append(requests, r.URL.Path+"?"+r.URL.RawQuery)
+					test.SafeFprint(w, h.body)
+				})
+
+				options := tt.options
+				options.InternalID = "55"
+				options.Output = filepath.Join(t.TempDir(), "out.json")
+				err := h.handler.Handle(&options, s.Client)
+				if tt.wantErr != "" {
+					if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+						t.Fatalf("error is %v, want it to contain %q", err, tt.wantErr)
+					}
+					if len(requests) != consts.ZeroValue {
+						t.Errorf("requests are %v, want none", requests)
+					}
+					return
+				}
+				test.AssertNilError(t, err)
+				test.AssertNoDiff(t, []string{h.path + "?" + tt.query}, requests)
+			})
+		}
+	}
+}
