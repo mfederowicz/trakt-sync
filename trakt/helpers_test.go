@@ -37,5 +37,3 @@ func Setup() *SetupData {
 		Teardown:  server.Close,
 	}
 }
-
-type values map[string]string

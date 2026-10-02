@@ -23,18 +23,7 @@ type TestSetup struct {
 	Teardown  func()
 }
 
-const (
-	emptyTimeStr                     = `"0001-01-01T00:00:00Z"`
-	referenceTimeStr                 = `"2006-01-02T15:04:05Z"`
-	referenceTimeStrFractional       = `"2006-01-02T15:04:05.000Z"` // This format was returned by the Projects API before October 1, 2017.
-	referenceUnixTimeStr             = `1136214245`
-	referenceUnixTimeStrMilliSeconds = `1136214245000` // Millisecond-granular timestamps were introduced in the Audit log API.
-)
-
-var (
-	referenceTime = time.Date(2006, time.January, 02, 15, 04, 05, 0, time.UTC)
-	unixOrigin    = time.Unix(0, 0).In(time.UTC)
-)
+var referenceTime = time.Date(2006, time.January, 02, 15, 04, 05, 0, time.UTC)
 
 // setup sets up a test HTTP server along with a trakt.Client that is
 // configured to talk to that test server. Tests should register handlers on
@@ -132,7 +121,7 @@ func TestCreateCheckinUserSettingsError(t *testing.T) {
 func TestCreateCheckinUnknownAction(t *testing.T) {
 	testSetup := setup(t)
 	mux := testSetup.Mux
-	mux = MuxUserSettings(t, mux)
+	MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
 	s := &str.UserSettings{}
@@ -250,7 +239,7 @@ func TestCreateCheckinForShowEpisodeInvalidLength(t *testing.T) {
 	o.Action = consts.ShowEpisode
 	o.InternalID = "12345"
 	o.EpisodeCode = "12"
-	mux = MuxShow(t, mux, o)
+	MuxShow(t, mux, o)
 	_, err := c.CreateCheckin(testSetup.Client, o)
 	assert.Contains(t, err.Error(), "invalid length")
 }
@@ -269,7 +258,7 @@ func TestCreateCheckinForShowEpisodeInvalidFormat(t *testing.T) {
 	o.UserSettings = *s
 	o.Action = consts.ShowEpisode
 	o.EpisodeCode = "123456"
-	mux = MuxShow(t, mux, o)
+	MuxShow(t, mux, o)
 	_, err := c.CreateCheckin(testSetup.Client, o)
 	assert.Contains(t, err.Error(), "invalid format")
 }
@@ -289,7 +278,7 @@ func TestCreateCheckinForShowEpisodeEpisodeCode(t *testing.T) {
 	o.Action = consts.ShowEpisode
 	o.EpisodeCode = "6x10"
 	o.InternalID = "353"
-	mux = MuxShow(t, mux, o)
+	MuxShow(t, mux, o)
 	checkin, _ := c.CreateCheckin(testSetup.Client, o)
 	assert.Equal(t, checkin.Episode.Season, test.Ptr(consts.TestEpisodeSeason6))
 	assert.Equal(t, checkin.Episode.Number, test.Ptr(consts.TestEpisodeNumber10))
@@ -311,7 +300,7 @@ func TestCreateCheckinForShowEpisodeAbs(t *testing.T) {
 	o.Action = consts.ShowEpisode
 	o.EpisodeAbs = consts.TestEpisodeAbs
 	o.InternalID = "353"
-	mux = MuxShow(t, mux, o)
+	MuxShow(t, mux, o)
 
 	checkin, _ := c.CreateCheckin(testSetup.Client, o)
 	assert.Equal(t, checkin.Episode.NumberAbs, test.Ptr(consts.TestEpisodeAbs))
@@ -321,7 +310,7 @@ func TestCreateCheckinForShowEpisodeAbs(t *testing.T) {
 func TestConvertDateString(t *testing.T) {
 	testSetup := setup(t)
 	mux := testSetup.Mux
-	mux = MuxUserSettings(t, mux)
+	MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	o := &str.Options{}
 	o.ResetAt = "2025-01-24"
@@ -335,7 +324,7 @@ func TestConvertDateString(t *testing.T) {
 func TestCurrnetDateString(t *testing.T) {
 	testSetup := setup(t)
 	mux := testSetup.Mux
-	mux = MuxUserSettings(t, mux)
+	MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	out := c.CurrentDateString(time.UTC.String(), true)
 	currentTime := time.Now().UTC().Truncate(time.Hour)
@@ -345,7 +334,7 @@ func TestCurrnetDateString(t *testing.T) {
 func TestListToHistoryItems(t *testing.T) {
 	testSetup := setup(t)
 	mux := testSetup.Mux
-	mux = MuxUserSettings(t, mux)
+	MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	items := &str.ItemsList{}
 	items.Shows = &[]str.ExportlistItem{}
@@ -411,7 +400,7 @@ func TestListToHistoryItems(t *testing.T) {
 func TestConvertBytesToItemsListEmptyByte(t *testing.T) {
 	testSetup := setup(t)
 	mux := testSetup.Mux
-	mux = MuxUserSettings(t, mux)
+	MuxUserSettings(t, mux)
 	c := &CommonLogic{}
 	_, err := c.ConvertBytesToItemsList([]byte{}, consts.AddToHistory, consts.Movies)
 	assert.Contains(t, err.Error(), "unexpected end of JSON input")
