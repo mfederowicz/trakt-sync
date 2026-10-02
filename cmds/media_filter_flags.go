@@ -31,14 +31,29 @@ func newMediaFilterFlags(fs *flag.FlagSet) mediaFilterFlags {
 	}
 }
 
+// newMediaFilterFlagsWithoutDates registers the media filter flags in fs, except -start_date and -end_date,
+// for a module where those names are taken or make no sense.
+func newMediaFilterFlagsWithoutDates(fs *flag.FlagSet) mediaFilterFlags {
+	return mediaFilterFlags{
+		watchNow:       fs.String("watchnow", consts.EmptyString, consts.WatchNowUsage),
+		subgenres:      fs.String("subgenres", consts.EmptyString, consts.SubgenresUsage),
+		ratings:        fs.String("ratings", consts.EmptyString, consts.RatingsFilterUsage),
+		certifications: fs.String("certifications", consts.EmptyString, consts.CertificationsUsage),
+	}
+}
+
 // apply copies the media filter flags and the global filter flags to options.
 func (m mediaFilterFlags) apply(options str.Options) str.Options {
 	options.WatchNow = *m.watchNow
 	options.Subgenres = *m.subgenres
 	options.Ratings = *m.ratings
 	options.Certifications = *m.certifications
-	options.MediaStartDate = *m.startDate
-	options.MediaEndDate = *m.endDate
+	if m.startDate != nil {
+		options.MediaStartDate = *m.startDate
+	}
+	if m.endDate != nil {
+		options.MediaEndDate = *m.endDate
+	}
 	options.Genres = *_genres
 	options.Years = *_years
 	options.Countries = *_countries

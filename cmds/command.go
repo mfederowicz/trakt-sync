@@ -468,7 +468,7 @@ func setOptionsDependsOnModuleCalendars(options str.Options) str.Options {
 	options.Action = normalizeCalendarsAction(*_calAction)
 	options.StartDate = *_calStartDate
 	options.Days = *_calDays
-	return options
+	return _calFilters.apply(options)
 }
 
 func setOptionsDependsOnModulePeople(options str.Options) str.Options {
