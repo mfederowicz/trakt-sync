@@ -30,7 +30,7 @@ schedule.
 
 ### Added
 
-- `movies -a trending|popular|anticipated|hot|streaming` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications` and `-watchnow`. The flags were accepted or missing before, but no filter was sent, so the lists were never filtered.
+- `movies -a trending|popular|anticipated|hot|streaming` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`, `-start_date`, `-end_date` and `-watchnow`. The flags were accepted or missing before, but no filter was sent, so the lists were never filtered.
 - Library: new `uri.MediaFilters` and the `uri.ListOptions.Filters` field carry the media filters (`watchnow`, `genres`, `subgenres`, `years`, `ratings`, `start_date`, `end_date`, `runtimes`, `countries`, `certifications`) of the list routes.
 
 ### Changed

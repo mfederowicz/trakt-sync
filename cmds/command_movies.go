@@ -18,6 +18,7 @@ var (
 	_moviesSort           = MoviesCmd.Flag.String("s", cfg.DefaultConfig().MoviesSort, consts.MoviesSortUsage)
 	_moviesType           = MoviesCmd.Flag.String("t", cfg.DefaultConfig().MoviesType, consts.MoviesTypeUsage)
 	_moviesStartDate      = MoviesCmd.Flag.String("start_date", "", consts.StartDateUsage)
+	_moviesEndDate        = MoviesCmd.Flag.String("end_date", consts.EmptyString, consts.EndDateUsage)
 	_moviesReason         = MoviesCmd.Flag.String("r", cfg.DefaultConfig().Reason, consts.ReasonUsage)
 	_moviesMessage        = MoviesCmd.Flag.String("message", cfg.DefaultConfig().Msg, consts.ReportMsgUsage)
 	_moviesLinks          = MoviesCmd.Flag.String("links", consts.EmptyString, consts.MoviesLinksUsage)

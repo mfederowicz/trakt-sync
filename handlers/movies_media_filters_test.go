@@ -13,8 +13,8 @@ import (
 
 // the movies list actions send the media filter flags as query parameters.
 func TestMoviesHandlersMediaFilters(t *testing.T) {
-	const filtered = "certifications=pg-13&countries=us&genres=action%2Cdrama&page=1&ratings=75-100&runtimes=90-150&subgenres=space&watchnow=free&years=2020-2026"
-	filters := str.Options{WatchNow: "free", Genres: "action,drama", Subgenres: "space", Years: "2020-2026", Ratings: "75-100", Runtimes: "90-150", Countries: "us", Certifications: "pg-13"}
+	const filtered = "certifications=pg-13&countries=us&end_date=2026-12-31&genres=action%2Cdrama&page=1&ratings=75-100&runtimes=90-150&start_date=2026-01-01&subgenres=space&watchnow=free&years=2020-2026"
+	filters := str.Options{WatchNow: "free", Genres: "action,drama", Subgenres: "space", Years: "2020-2026", Ratings: "75-100", Runtimes: "90-150", Countries: "us", Certifications: "pg-13", MediaStartDate: "2026-01-01", MediaEndDate: "2026-12-31"}
 	handlers := []struct {
 		name    string
 		handler Handler

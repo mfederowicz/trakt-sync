@@ -1410,6 +1410,9 @@ func UpdateOptionsWithCommandMoviesFlags(c *Command, options *str.Options) *str.
 	options.Subgenres = *_moviesSubgenres
 	options.Ratings = *_moviesRatings
 	options.Certifications = *_moviesCertifications
+	// the list actions send -start_date / -end_date as media filters; updates reads -start_date through options.StartDate
+	options.MediaStartDate = *_moviesStartDate
+	options.MediaEndDate = *_moviesEndDate
 	options.Genres = *_genres
 	options.Years = *_years
 	options.Countries = *_countries

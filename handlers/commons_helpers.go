@@ -153,6 +153,8 @@ func mediaFilters(options *str.Options) uri.MediaFilters {
 		Subgenres:      options.Subgenres,
 		Years:          options.Years,
 		Ratings:        options.Ratings,
+		StartDate:      options.MediaStartDate,
+		EndDate:        options.MediaEndDate,
 		Runtimes:       options.Runtimes,
 		Countries:      options.Countries,
 		Certifications: options.Certifications,
