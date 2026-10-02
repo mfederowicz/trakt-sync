@@ -20,6 +20,9 @@ type MoviesWatchedHandler struct{}
 
 // Handle to handle movies: watched action
 func (h MoviesWatchedHandler) Handle(options *str.Options, client *trakt.Client) error {
+	if err := checkMediaFilters(options); err != nil {
+		return err
+	}
 	printer.Println("Returns the most watched (unique users) movies in the specified time period, defaulting to weekly.")
 	result, err := h.fetchMoviesWatched(client, options, consts.DefaultPage)
 	if err != nil {
@@ -45,7 +48,7 @@ func (h MoviesWatchedHandler) Handle(options *str.Options, client *trakt.Client)
 }
 
 func (h MoviesWatchedHandler) fetchMoviesWatched(client *trakt.Client, options *str.Options, page int) ([]*str.MoviesItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options)}
 	period := options.Period
 	list, resp, err := client.Movies.GetWatchedMovies(
 		cli.ContextFromOptions(options),
