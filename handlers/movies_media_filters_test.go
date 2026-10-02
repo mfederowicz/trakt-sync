@@ -25,6 +25,10 @@ func TestMoviesHandlersMediaFilters(t *testing.T) {
 		{name: "popular", handler: MoviesPopularHandler{}, path: "/movies/popular"},
 		{name: "hot", handler: MoviesHotHandler{}, path: "/movies/hot"},
 		{name: "streaming", handler: MoviesStreamingHandler{}, path: "/movies/streaming/weekly"},
+		{name: "watched", handler: MoviesWatchedHandler{}, path: "/movies/watched/weekly"},
+		{name: "favorited", handler: MoviesFavoritedHandler{}, path: "/movies/favorited/weekly"},
+		{name: "played", handler: MoviesPlayedHandler{}, path: "/movies/played/weekly"},
+		{name: "collected", handler: MoviesCollectedHandler{}, path: "/movies/collected/weekly"},
 	}
 	cases := []struct {
 		name    string

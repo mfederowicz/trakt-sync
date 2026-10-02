@@ -20,6 +20,9 @@ type MoviesPlayedHandler struct{}
 
 // Handle to handle movies: played action
 func (h MoviesPlayedHandler) Handle(options *str.Options, client *trakt.Client) error {
+	if err := checkMediaFilters(options); err != nil {
+		return err
+	}
 	printer.Println("Returns the most played (a single user can watch multiple times) movies in the specified time period")
 	result, err := h.fetchMoviesPlayed(client, options, consts.DefaultPage)
 	if err != nil {
@@ -45,7 +48,7 @@ func (h MoviesPlayedHandler) Handle(options *str.Options, client *trakt.Client) 
 }
 
 func (h MoviesPlayedHandler) fetchMoviesPlayed(client *trakt.Client, options *str.Options, page int) ([]*str.MoviesItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options)}
 	period := options.Period
 	list, resp, err := client.Movies.GetPlayedMovies(
 		cli.ContextFromOptions(options),

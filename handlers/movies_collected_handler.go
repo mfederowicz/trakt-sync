@@ -20,6 +20,9 @@ type MoviesCollectedHandler struct{}
 
 // Handle to handle movies: collected action
 func (h MoviesCollectedHandler) Handle(options *str.Options, client *trakt.Client) error {
+	if err := checkMediaFilters(options); err != nil {
+		return err
+	}
 	printer.Println("Returns the most collected (unique users) movies in the specified time period, defaulting to weekly.")
 	result, err := h.fetchMoviesCollected(client, options, consts.DefaultPage)
 	if err != nil {
@@ -45,7 +48,7 @@ func (h MoviesCollectedHandler) Handle(options *str.Options, client *trakt.Clien
 }
 
 func (h MoviesCollectedHandler) fetchMoviesCollected(client *trakt.Client, options *str.Options, page int) ([]*str.MoviesItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options)}
 	period := options.Period
 	list, resp, err := client.Movies.GetCollectedMovies(
 		cli.ContextFromOptions(options),
