@@ -341,6 +341,11 @@ func (*CommonLogic) CreateItemsToAdd(items *str.ItemsList) str.HistoryItems {
 			Notes:    m.Notes,
 			HiddenAt: m.HiddenAt,
 		}
+		// a show without seasons stands for all its episodes: send no empty seasons list, and its own date
+		if m.Seasons == nil || len(*m.Seasons) == consts.ZeroValue {
+			show.Seasons = nil
+			show.WatchedAt = m.WatchedAt
+		}
 		shows = append(shows, show)
 	}
 	seasons := []str.Season{}
