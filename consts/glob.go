@@ -94,6 +94,7 @@ const (
 	ErrorsPlaceholders           = "%v %v: %d %v"
 	ExtendedInfoUsage            = "allow to overwrite extended flag"
 	FieldUsage                   = "allow use selected field"
+	FilterStartDateUsage         = "filter start date ie: -start_date 2026-01-01"
 	FirstPage                    = 1
 	FormatUsage                  = "allow to overwrite default ID type format"
 	HavePagesErrorStr            = "HavePages: %v, want %v"

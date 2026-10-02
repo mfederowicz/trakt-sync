@@ -10,6 +10,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
+	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -20,7 +21,13 @@ type MediaHandler interface {
 
 // exportMedia fetches all pages of a media list and writes them to the output file.
 func exportMedia[T any](client *trakt.Client, options *str.Options, fetch pageFetcher[T]) error {
-	result, err := fetchAllPages(client, options, consts.DefaultPage, fetch)
+	if err := checkMediaFilters(options); err != nil {
+		return err
+	}
+	result, err := fetchAllPages(client, options, consts.DefaultPage, func(opts *uri.ListOptions) ([]T, *str.Response, error) {
+		opts.Filters = mediaFilters(options)
+		return fetch(opts)
+	})
 	if err != nil {
 		return fmt.Errorf("fetch media %s error: %w", options.Action, err)
 	}
