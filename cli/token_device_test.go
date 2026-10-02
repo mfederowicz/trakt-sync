@@ -3,7 +3,6 @@ package cli
 
 import (
 	"encoding/json"
-	"io"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -245,7 +244,8 @@ func TestHandleTokenFetchesMissingUserSettings(t *testing.T) {
 		test.SafeFprint(w, testSettings)
 	})
 
-	HandleToken(afero.NewOsFs(), config, s.Client.WithClientID(config.ClientID), str.Options{})
+	_, err := HandleToken(afero.NewOsFs(), config, s.Client.WithClientID(config.ClientID), str.Options{})
+	assert.NoError(t, err)
 
 	assert.Equal(t, "Bearer file-token", settingsAuth)
 	settings, err := ReadUserSettingsFromFile(config.SettingsPath)
@@ -254,8 +254,8 @@ func TestHandleTokenFetchesMissingUserSettings(t *testing.T) {
 	}
 }
 
-// A device login that fails is reported, the error used to be dropped without a word.
-func TestHandleTokenReportsFailedDeviceLogin(t *testing.T) {
+// A device login that fails ends the run, the module used to be started without a token.
+func TestHandleTokenReturnsFailedDeviceLogin(t *testing.T) {
 	openBrowser = func(string) error { return nil }
 	t.Cleanup(func() { openBrowser = OpenBrowser })
 
@@ -268,19 +268,31 @@ func TestHandleTokenReportsFailedDeviceLogin(t *testing.T) {
 		w.WriteHeader(http.StatusInternalServerError)
 	})
 
-	stderr := os.Stderr
-	r, w, err := os.Pipe()
-	if !assert.NoError(t, err) {
-		return
-	}
-	os.Stderr = w
-	HandleToken(afero.NewOsFs(), config, s.Client.WithClientID(config.ClientID), str.Options{})
-	os.Stderr = stderr
-	assert.NoError(t, w.Close())
+	client, err := HandleToken(afero.NewOsFs(), config, s.Client.WithClientID(config.ClientID), str.Options{})
+	assert.ErrorContains(t, err, "device login failed: generate new device code:")
+	assert.Nil(t, client)
+}
 
-	out, err := io.ReadAll(r)
-	assert.NoError(t, err)
-	assert.Contains(t, string(out), "generate new device code:")
+// A device code that nobody approves in time ends the run as well.
+func TestHandleTokenReturnsDeviceLoginTimeout(t *testing.T) {
+	openBrowser = func(string) error { return nil }
+	t.Cleanup(func() { openBrowser = OpenBrowser })
+
+	config := credentialsConfig(t)
+	writeFile(t, config.TokenPath, `{}`)
+	writeFile(t, config.SettingsPath, `{}`)
+	s := trakttest.Setup()
+	defer s.Teardown()
+	s.Mux.HandleFunc("/oauth/device/code", func(w http.ResponseWriter, _ *http.Request) {
+		test.SafeFprint(w, `{"device_code":"d9c126a7","user_code":"5055CC52","verification_url":"https://trakt.tv/activate","expires_in":0,"interval":0}`)
+	})
+	s.Mux.HandleFunc("/oauth/device/token", func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusBadRequest)
+	})
+
+	client, err := HandleToken(afero.NewOsFs(), config, s.Client.WithClientID(config.ClientID), str.Options{})
+	assert.ErrorIs(t, err, errDeviceCodeTimeout)
+	assert.Nil(t, client)
 }
 
 func TestFetchNewDeviceCodeForClient(t *testing.T) {
@@ -445,7 +457,7 @@ func TestVerifyCode(t *testing.T) {
 		})
 
 		options := &str.Options{}
-		assert.NoError(t, verifyCode(device, config, s.Client, options))
+		assert.ErrorIs(t, verifyCode(device, config, s.Client, options), errDeviceCodeTimeout)
 		assert.Equal(t, 1, attempts)
 		assert.Empty(t, options.Token.AccessToken)
 	})
@@ -465,7 +477,7 @@ func TestVerifyCodeStopsPastExpiry(t *testing.T) {
 	done := make(chan struct{})
 	go func() {
 		defer close(done)
-		assert.NoError(t, verifyCode(&str.DeviceCode{DeviceCode: "d9c126a7", ExpiresIn: 1, Interval: 2}, config, s.Client, &str.Options{}))
+		assert.ErrorIs(t, verifyCode(&str.DeviceCode{DeviceCode: "d9c126a7", ExpiresIn: 1, Interval: 2}, config, s.Client, &str.Options{}), errDeviceCodeTimeout)
 	}()
 	select {
 	case <-done:

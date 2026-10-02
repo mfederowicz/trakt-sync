@@ -45,7 +45,11 @@ func main() {
 		return
 	}
 
-	client := cli.HandleToken(fs, config, cli.NewClient(config, options.Token), options)
+	client, err := cli.HandleToken(fs, config, cli.NewClient(config, options.Token), options)
+	if err != nil {
+		printer.Printf("Error: %v\n", err)
+		os.Exit(consts.ErrorExitCode)
+	}
 	err = cmds.ModulesRuntime(args, fs, config, client)
 	if err != nil {
 		os.Exit(consts.ErrorExitCode)

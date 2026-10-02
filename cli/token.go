@@ -3,6 +3,7 @@ package cli
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -141,11 +142,12 @@ func RefreshUserSettings(config *cfg.Config, client *trakt.Client, options *str.
 	return false
 }
 
-// HandleToken process token check and refresh, and returns the client with the current access token
-func HandleToken(fs afero.Fs, config *cfg.Config, client *trakt.Client, options str.Options) *trakt.Client {
+// HandleToken process token check and refresh, and returns the client with the current access token.
+// A device login that does not end with a token is an error.
+func HandleToken(fs afero.Fs, config *cfg.Config, client *trakt.Client, options str.Options) (*trakt.Client, error) {
 	if !ValidAccessToken(config, client, &options) {
 		if err := PoolNewDeviceCode(config, client, &options); err != nil {
-			fail("Error: " + err.Error())
+			return nil, fmt.Errorf("device login failed: %w", err)
 		}
 	}
 
@@ -158,5 +160,5 @@ func HandleToken(fs afero.Fs, config *cfg.Config, client *trakt.Client, options 
 		printer.Println("User settings refreshed!")
 	}
 
-	return client
+	return client, nil
 }

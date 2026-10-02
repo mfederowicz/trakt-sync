@@ -20,6 +20,9 @@ func fail(err string) {
 	printer.Fprintln(os.Stderr, err)
 }
 
+// the device code was not approved before it expired
+var errDeviceCodeTimeout = errors.New("time out, the device code was not approved")
+
 // answers that end the polling: the device code can no longer be approved
 var deviceCodeFinalErrors = map[int]error{
 	http.StatusNotFound: errors.New("invalid device code"),
@@ -132,8 +135,7 @@ func verifyCode(device *str.DeviceCode, config *cfg.Config, client *trakt.Client
 		}
 		count -= device.Interval
 		if count <= counterNoSeconds {
-			printer.Println("Time out!")
-			break
+			return errDeviceCodeTimeout
 		}
 		time.Sleep(time.Duration(device.Interval) * time.Second)
 	}
