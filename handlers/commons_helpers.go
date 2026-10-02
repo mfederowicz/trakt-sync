@@ -145,6 +145,30 @@ func waitPageDelay() {
 	time.Sleep(pageDelay)
 }
 
+// mediaFilters builds the media filters of a list route from the filter flags.
+func mediaFilters(options *str.Options) uri.MediaFilters {
+	return uri.MediaFilters{
+		WatchNow:       options.WatchNow,
+		Genres:         options.Genres,
+		Subgenres:      options.Subgenres,
+		Years:          options.Years,
+		Ratings:        options.Ratings,
+		StartDate:      options.MediaStartDate,
+		EndDate:        options.MediaEndDate,
+		Runtimes:       options.Runtimes,
+		Countries:      options.Countries,
+		Certifications: options.Certifications,
+	}
+}
+
+// checkMediaFilters reports a -watchnow value the API does not know.
+func checkMediaFilters(options *str.Options) error {
+	if len(options.WatchNow) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.WatchNowFilters, options.WatchNow) {
+		return fmt.Errorf("watchnow '%s' is not valid, available values: %v", options.WatchNow, cfg.WatchNowFilters)
+	}
+	return nil
+}
+
 // pageFetcher fetches one page of a paginated list.
 type pageFetcher[T any] func(opts *uri.ListOptions) ([]T, *str.Response, error)
 
