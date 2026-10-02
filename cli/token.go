@@ -49,21 +49,6 @@ func ValidAccessToken(config *cfg.Config, client *trakt.Client, options *str.Opt
 	return !token.Expired()
 }
 
-// ReadUserSettingsFromFile reads user settings from the specified file
-func ReadUserSettingsFromFile(filePath string) (*str.UserSettings, error) {
-	data, err := os.ReadFile(filePath)
-	if err != nil {
-		return nil, err
-	}
-
-	var settings str.UserSettings
-	if err := json.Unmarshal(data, &settings); err != nil {
-		return nil, err
-	}
-
-	return &settings, nil
-}
-
 // ReadTokenFromFile reads the token from the specified file
 func ReadTokenFromFile(filePath string) (*str.Token, error) {
 	data, err := os.ReadFile(filePath)
