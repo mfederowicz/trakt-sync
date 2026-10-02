@@ -2148,7 +2148,7 @@ func (c CommonLogic) FetchUsersListLikes(client *trakt.Client, options *str.Opti
 
 // FetchUsersCollection helper funciton to users: collection
 func (c CommonLogic) FetchUsersCollection(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options)}
 	list, resp, err := client.Users.GetCollection(
 		cli.ContextFromOptions(options),
 		options.UserName,
@@ -2326,7 +2326,7 @@ func (*CommonLogic) UsersListLike(client *trakt.Client, options *str.Options) (*
 
 // FetchUsersListItems helper function to fetch items on a personal list
 func (c CommonLogic) FetchUsersListItems(client *trakt.Client, options *str.Options, page int) ([]*str.UserListItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options)}
 	user := options.UserName
 	listID := options.ID
 	strType := options.Type
@@ -2506,7 +2506,7 @@ func (c CommonLogic) FetchFriends(client *trakt.Client, options *str.Options, pa
 
 // FetchUsersHistory helper function to fetch watched history.
 func (c CommonLogic) FetchUsersHistory(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
-	opts := uri.ListOptions{StartAt: options.StartDate, EndAt: options.EndDate, Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{StartAt: options.StartDate, EndAt: options.EndDate, Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options)}
 	list, resp, err := client.Users.GetHistory(
 		cli.ContextFromOptions(options),
 		options.UserName,
@@ -2535,7 +2535,7 @@ func (c CommonLogic) FetchUsersHistory(client *trakt.Client, options *str.Option
 
 // FetchUsersWatchlist helper function to fetch watchlist.
 func (c CommonLogic) FetchUsersWatchlist(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options)}
 	var (
 		list []*str.ExportlistItem
 		resp *str.Response

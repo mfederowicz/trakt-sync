@@ -22,6 +22,7 @@ func TestModuleMediaFilterFlags(t *testing.T) {
 		{command: MediaCmd, action: "trending", dates: true},
 		{command: RecommendationsCmd, action: "movies", dates: true},
 		{command: ListsCmd, action: "trending", dates: true},
+		{command: UsersCmd, action: "watchlist", dates: true},
 		{command: CalendarsCmd, action: "all_shows"},
 	}
 	for _, m := range modules {

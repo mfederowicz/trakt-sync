@@ -803,3 +803,17 @@ Without `-i` every selected server is synced; `-all_data` re-pulls the full hist
 ```console
 $ ./trakt-sync users -a plex_sync -i <server id> -all_data
 ```
+##### Filter watchlist, history, collection and list items
+`watchlist`, `history`, `collection` and `list_items` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`,
+`-runtimes`, `-countries`, `-certifications` (comma separated where a filter takes several values), `-start_date`, `-end_date` and
+`-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all`.
+In `history`, `-start_at` and `-end_at` still set the watched-at window; `-start_date` and `-end_date` are the separate media date filters.
+```console
+$ ./trakt-sync users -a watchlist -t movies -genres horror -years 2020-2026
+```
+```console
+$ ./trakt-sync users -a history -t movies -genres drama -ratings 75-100
+```
+```console
+$ ./trakt-sync users -a collection -t shows -watchnow subscriptions
+```

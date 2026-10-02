@@ -18,6 +18,9 @@ type UsersHistoryHandler struct{ common CommonLogic }
 
 // Handle to handle users: history action
 func (m UsersHistoryHandler) Handle(options *str.Options, client *trakt.Client) error {
+	if err := checkMediaFilters(options); err != nil {
+		return err
+	}
 	err := m.common.CheckTypes(options)
 	if err != nil {
 		return err
