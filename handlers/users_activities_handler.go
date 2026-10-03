@@ -24,14 +24,24 @@ func (h UsersActivitiesHandler) Handle(options *str.Options, client *trakt.Clien
 		return fmt.Errorf("set -t to one of %v for activities", cfg.SocialActivityTypes)
 	}
 
+	if err := checkMediaFilters(options); err != nil {
+		return err
+	}
+
 	printer.Println("Returns recent activity of your " + options.Type)
 	opts := uri.SocialActivityOptions{
-		Limit:     options.PerPage,
-		Extended:  options.ExtendedInfo,
-		Genres:    options.Genres,
-		Years:     options.Years,
-		Runtimes:  options.Runtimes,
-		Countries: options.Countries,
+		Limit:          options.PerPage,
+		Extended:       options.ExtendedInfo,
+		WatchNow:       options.WatchNow,
+		Genres:         options.Genres,
+		Subgenres:      options.Subgenres,
+		Years:          options.Years,
+		Ratings:        options.Ratings,
+		StartDate:      options.MediaStartDate,
+		EndDate:        options.MediaEndDate,
+		Runtimes:       options.Runtimes,
+		Countries:      options.Countries,
+		Certifications: options.Certifications,
 	}
 	result, err := h.fetchActivities(client, options, &opts, consts.DefaultPage)
 	if apiErr := notOpenToAPIApps(options.Action, err); apiErr != nil {

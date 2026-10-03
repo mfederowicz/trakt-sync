@@ -37,6 +37,8 @@ schedule.
 - Every `calendars` action takes the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications` and `-watchnow`. The dates of a calendar stay `-start_date` and `-days`.
 - `lists -a trending|popular|items` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`, `-start_date`, `-end_date` and `-watchnow`.
 - `users -a watchlist|history|collection|list_items` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`, `-start_date`, `-end_date` and `-watchnow`. In `history`, `-start_at` / `-end_at` still set the watched-at window; `-start_date` / `-end_date` are the separate media date filters.
+- `users -a activities` sends the rest of the Trakt media filters: `-subgenres`, `-ratings`, `-certifications`, `-start_date`, `-end_date` and `-watchnow`, next to `-genres`, `-years`, `-runtimes` and `-countries`. The six flags were accepted before, but not sent. An unknown `-watchnow` value stops the run before any request.
+- Library: `uri.SocialActivityOptions` has the new fields `Certifications`, `EndDate`, `Ratings`, `StartDate`, `Subgenres` and `WatchNow`.
 
 ### Changed
 
