@@ -178,6 +178,7 @@ func MergeConfigs(defaultConfig *Config, fileConfig *Config, flagConfig map[stri
 	defaultConfig.Module = processOptionModule(defaultConfig, fileConfig, flagConfig, flagset)
 	defaultConfig.Action = processOptionAction(defaultConfig, fileConfig, flagConfig, flagset)
 	defaultConfig.Sort = processOptionSort(defaultConfig, fileConfig, flagConfig, flagset)
+	processOptionIgnore(defaultConfig, fileConfig)
 
 	err = normalizeConfig(defaultConfig)
 	if err != nil {
@@ -198,6 +199,23 @@ func processOptionSettingsPath(defaultConfig *Config, fileConfig *Config, _ map[
 		return "", fmt.Errorf("failed to expand tilde from settingsPath: %w", err)
 	}
 	return settingsPath, nil
+}
+
+// processOptionIgnore takes the ignore_* and watch_window values of the config file;
+// the flags of the modules that send them are applied later and win.
+func processOptionIgnore(defaultConfig *Config, fileConfig *Config) {
+	if len(fileConfig.IgnoreCollected) > consts.ZeroValue {
+		defaultConfig.IgnoreCollected = fileConfig.IgnoreCollected
+	}
+	if len(fileConfig.IgnoreWatched) > consts.ZeroValue {
+		defaultConfig.IgnoreWatched = fileConfig.IgnoreWatched
+	}
+	if len(fileConfig.IgnoreWatchlisted) > consts.ZeroValue {
+		defaultConfig.IgnoreWatchlisted = fileConfig.IgnoreWatchlisted
+	}
+	if fileConfig.WatchWindow > consts.ZeroValue {
+		defaultConfig.WatchWindow = fileConfig.WatchWindow
+	}
 }
 
 func processOptionPagesLimit(defaultConfig *Config, fileConfig *Config, _ map[string]string, _ map[string]bool) int {

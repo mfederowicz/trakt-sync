@@ -41,6 +41,15 @@ warningCode = 0
 per_page = 500
 pages_limit = 10
 ```
+Optional defaults for the recommendation filters (the flags of the same name win over them):
+```console
+ignore_collected = "true"
+ignore_watched = "true"
+ignore_watchlisted = "true"
+watch_window = 30
+```
+The three `ignore_*` values are quoted strings (`"true"` or `"false"`). They are used by `recommendations`, `social_recommendations`,
+`smart_lists -a items` and `users -a activities`; `watch_window` by `recommendations` and `social_recommendations`.
 
 ## Usage
 

@@ -424,8 +424,12 @@ func setOptionsDependsOnModuleSmartLists(options str.Options) str.Options {
 	options.Subgenres = *_smartListsSubgenres
 	options.Ratings = *_smartListsRatings
 	options.Certifications = *_smartListsCertifications
-	options.IgnoreWatched = *_smartListsIgnoreWatched
-	options.IgnoreWatchlisted = *_smartListsIgnoreWatchlisted
+	if len(*_smartListsIgnoreWatched) > consts.ZeroValue {
+		options.IgnoreWatched = *_smartListsIgnoreWatched
+	}
+	if len(*_smartListsIgnoreWatchlisted) > consts.ZeroValue {
+		options.IgnoreWatchlisted = *_smartListsIgnoreWatchlisted
+	}
 	options.Genres = *_genres
 	options.Years = *_years
 	options.Countries = *_countries
@@ -435,10 +439,18 @@ func setOptionsDependsOnModuleSmartLists(options str.Options) str.Options {
 
 func setOptionsDependsOnModuleSocialRecommendations(options str.Options) str.Options {
 	options.Action = *_socialRecommendationsAction
-	options.IgnoreCollected = *_socialRecommendationsIgnoreCollected
-	options.IgnoreWatched = *_socialRecommendationsIgnoreWatched
-	options.IgnoreWatchlisted = *_socialRecommendationsIgnoreWatchlisted
-	options.WatchWindow = *_socialRecommendationsWatchWindow
+	if len(*_socialRecommendationsIgnoreCollected) > consts.ZeroValue {
+		options.IgnoreCollected = *_socialRecommendationsIgnoreCollected
+	}
+	if len(*_socialRecommendationsIgnoreWatched) > consts.ZeroValue {
+		options.IgnoreWatched = *_socialRecommendationsIgnoreWatched
+	}
+	if len(*_socialRecommendationsIgnoreWatchlisted) > consts.ZeroValue {
+		options.IgnoreWatchlisted = *_socialRecommendationsIgnoreWatchlisted
+	}
+	if *_socialRecommendationsWatchWindow > consts.ZeroValue {
+		options.WatchWindow = *_socialRecommendationsWatchWindow
+	}
 	return options
 }
 

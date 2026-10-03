@@ -526,3 +526,25 @@ func TestSyncOptionsFromFlagsKeepsConfigVerbose(t *testing.T) {
 	}
 	assert.True(t, options.Verbose, "verbose from the config file survives the merge with the module flags")
 }
+
+// ignore_* and watch_window are read from the config file as written there (TOML strings and a number).
+func TestConfigFileIgnoreKeysReachOptions(t *testing.T) {
+	flagMap := useFlags(t)
+	fs := credentialsFs(t)
+	content := "client_id = \"client-id\"\nclient_secret = \"client-secret\"\ntoken_path = \"" + testTokenPath + "\"\nsettings_path = \"" + testSettingsPath + "\"\n" +
+		"ignore_collected = \"true\"\nignore_watched = \"true\"\nignore_watchlisted = \"false\"\nwatch_window = 30\n"
+	assert.NoError(t, afero.WriteFile(fs, "/config-ignore.toml", []byte(content), consts.X644))
+
+	file, err := ReadConfigFromFile(fs, "/config-ignore.toml")
+	if !assert.NoError(t, err) {
+		return
+	}
+	options, err := SyncOptionsFromFlags(fs, file, flagMap)
+	if !assert.NoError(t, err) {
+		return
+	}
+	assert.Equal(t, "true", options.IgnoreCollected)
+	assert.Equal(t, "true", options.IgnoreWatched)
+	assert.Equal(t, "false", options.IgnoreWatchlisted)
+	assert.Equal(t, 30, options.WatchWindow)
+}
