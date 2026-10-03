@@ -30,6 +30,9 @@ schedule.
 
 ### Added
 
+- `recommendations -a movies|shows` and `social_recommendations -a movies|shows` read the `favorited_by` and `recommended_by` entries in both shapes: the nested one (`user` object plus `notes`) and the flat one of the Trakt API contract (profile fields plus `notes`). A flat entry kept only its `notes` before. The export writes `user` plus `notes` in both cases. Both shapes were tested against a mock server only: on 2026-10-04 the live API returned empty lists.
+- Library: `str.UserNotes` decodes a flat entry (profile fields plus `notes`) into `User` and `Notes`, next to the nested one.
+
 ### Changed
 
 ### Fixed
