@@ -39,7 +39,7 @@ func TestUsersHistoryHandlerRoutes(t *testing.T) {
 			s.Mux.HandleFunc("/users/sean/history/", func(w http.ResponseWriter, r *http.Request) {
 				calls[r.URL.Path]++
 				test.AssertMethod(t, r, http.MethodGet)
-				test.SafeFprint(w, `[]`)
+				test.SafeFprint(w, `[{"id":1}]`)
 			})
 
 			options := &str.Options{
