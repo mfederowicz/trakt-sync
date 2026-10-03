@@ -61,6 +61,7 @@ schedule.
 - `users -allow_comments` and `users -display_numbers` (used by `users -a update_list`) stopped the run with `invalid flags`. They are accepted now. The deprecated `-query`, `-studio_ids` and `notes -notes_id` also ended with `invalid flags` instead of their deprecation note.
 - Library: `uri.StatusOptions` listed the show status `running series`; the API value is `returning series`.
 - `recommendations -a movies|shows -ex full` and `social_recommendations -a movies|shows -ex full` exported only `title`, `year`, `ids` and the `favorited_by` / `recommended_by` lists; the extended fields the API returned were dropped. The export now keeps `language`, `languages`, `genres`, `overview`, `runtime`, `rating`, `certification`, `country`, `status` and the other `full` fields the `movies` and `shows` exports have.
+- `users -a watchlist` with a filter that matches less than the whole watchlist (for example `-languages pl` or `-genres drama`) kept asking for empty pages, up to `pages_limit` or the page count of the unfiltered watchlist. It now stops at the first empty page.
 - `lists -a items` and `users -a list_items` with a filter that matches nothing (for example `-languages pl` on a list without Polish titles) kept asking for the next page, up to `pages_limit` or the page count of the unfiltered list, because the page count the API sends ignores the filters. They now stop at the first empty page.
 
 ## [1.23.0] - 2026-10-02
