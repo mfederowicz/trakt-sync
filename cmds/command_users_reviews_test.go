@@ -32,6 +32,7 @@ func TestUsersReviewAndActivityFlags(t *testing.T) {
 		wantMonth  int
 		wantType   string
 		wantOutput string
+		wantIgnore []string
 	}{
 		{name: "month in review", args: []string{"-a", "month_in_review", "-year", "2026", "-month", "8"}, wantYear: 2026, wantMonth: 8,
 			wantOutput: "export_users_month_in_review_2026-08.json"},
@@ -39,6 +40,8 @@ func TestUsersReviewAndActivityFlags(t *testing.T) {
 			wantOutput: "export_users_year_in_review_2025.json"},
 		{name: "activities", args: []string{"-a", "activities", "-t", "following"}, wantType: "following",
 			wantOutput: "export_users_activities_following.json"},
+		{name: "activities ignore flags", args: []string{"-a", "activities", "-t", "friends", "-ignore_collected", "true", "-ignore_watched=true", "-ignore_watchlisted", "false"},
+			wantType: "friends", wantOutput: "export_users_activities_friends.json", wantIgnore: []string{"true", "true", "false"}},
 		{name: "comment reactions", args: []string{"-a", "comment_reactions"}, wantOutput: "export_users_comment_reactions.json"},
 	}
 	for _, tt := range tests {
@@ -57,6 +60,10 @@ func TestUsersReviewAndActivityFlags(t *testing.T) {
 			assert.Equal(t, tt.wantMonth, got.Month)
 			assert.Equal(t, tt.wantType, got.Type)
 			assert.Equal(t, tt.wantOutput, got.Output)
+			if tt.wantIgnore == nil {
+				tt.wantIgnore = []string{"", "", ""}
+			}
+			assert.Equal(t, tt.wantIgnore, []string{got.IgnoreCollected, got.IgnoreWatched, got.IgnoreWatchlisted})
 		})
 	}
 }

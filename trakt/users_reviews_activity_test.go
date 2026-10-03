@@ -40,7 +40,8 @@ func TestUsersServiceGetSocialActivity(t *testing.T) {
 
 	setup.Mux.HandleFunc("/users/sean/following/activities", func(w http.ResponseWriter, r *http.Request) {
 		test.AssertMethod(t, r, http.MethodGet)
-		if got, want := r.URL.RawQuery, "certifications=pg-13&countries=us&end_date=2026-12-31&extended=full&genres=drama&limit=10&page=2&ratings=75-100&runtimes=90-150&start_date=2026-01-01&subgenres=space&watchnow=free&years=2020-2026"; got != want {
+		if got, want := r.URL.RawQuery, "certifications=pg-13&countries=us&end_date=2026-12-31&extended=full&genres=drama&ignore_collected=true&ignore_watched=true&ignore_watchlisted=false"+
+			"&limit=10&page=2&ratings=75-100&runtimes=90-150&start_date=2026-01-01&subgenres=space&watchnow=free&years=2020-2026"; got != want {
 			t.Errorf("query is %q, want %q", got, want)
 		}
 		test.SafeFprint(w, `[{"id":9001,"activity_at":"2026-09-02T20:00:00.000Z","action":"watch","user":{"username":"justin"},"user_rating":8,`+
@@ -49,7 +50,8 @@ func TestUsersServiceGetSocialActivity(t *testing.T) {
 	})
 
 	opts := &uri.SocialActivityOptions{Page: 2, Limit: 10, Extended: "full", WatchNow: "free", Genres: "drama", Subgenres: "space", Years: "2020-2026", Ratings: "75-100",
-		StartDate: "2026-01-01", EndDate: "2026-12-31", Runtimes: "90-150", Countries: "us", Certifications: "pg-13"}
+		StartDate: "2026-01-01", EndDate: "2026-12-31", Runtimes: "90-150", Countries: "us", Certifications: "pg-13",
+		IgnoreCollected: "true", IgnoreWatched: "true", IgnoreWatchlisted: "false"}
 	got, _, err := setup.Client.Users.GetSocialActivity(context.Background(), "sean", "following", opts)
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, []*str.SocialActivity{
