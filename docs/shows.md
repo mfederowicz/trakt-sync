@@ -70,7 +70,8 @@ $ ./trakt-sync shows -a anticipated
 filter takes several values), `-start_date`, `-end_date`,
 `-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all` and
 `-status` (`returning series`, `continuing`, `in production`, `planned`, `upcoming`, `pilot`, `canceled`, `ended`; comma separated).
-They also take `-languages` (language codes, comma separated).
+They also take `-languages` (language codes, comma separated), `-imdb_ratings` (range, for example `8.5-10.0`),
+`-rt_meters` and `-rt_user_meters` (Rotten Tomatoes ranges, for example `90-100`).
 On these actions `-start_date` is a filter; on `updates` and `updated_ids` it stays the date to list changes from.
 ```console
 $ ./trakt-sync shows -a trending -genres drama -years 2020-2026 -ratings 75-100
@@ -80,6 +81,9 @@ $ ./trakt-sync shows -a popular -status ended -countries us
 ```
 ```console
 $ ./trakt-sync shows -a popular -languages pl
+```
+```console
+$ ./trakt-sync shows -a trending -imdb_ratings 8.5-10.0 -rt_meters 90-100
 ```
 ```console
 $ ./trakt-sync shows -a watched -period monthly -status "returning series,continuing" -watchnow subscriptions

@@ -32,6 +32,9 @@ var (
 	_showsRatings        = ShowsCmd.Flag.String("ratings", consts.EmptyString, consts.RatingsFilterUsage)
 	_showsCertifications = ShowsCmd.Flag.String("certifications", consts.EmptyString, consts.CertificationsUsage)
 	_showsStatus         = ShowsCmd.Flag.String("status", consts.EmptyString, consts.ShowStatusUsage)
+	_showsImdbRatings    = ShowsCmd.Flag.String("imdb_ratings", consts.EmptyString, consts.ImdbRatingsUsage)
+	_showsRtMeters       = ShowsCmd.Flag.String("rt_meters", consts.EmptyString, consts.RtMetersUsage)
+	_showsRtUserMeters   = ShowsCmd.Flag.String("rt_user_meters", consts.EmptyString, consts.RtUserMetersUsage)
 
 	validShowsActions = []string{
 		consts.Trending, consts.Popular, consts.Favorited, consts.Played, consts.Watched, consts.Collected,
