@@ -42,6 +42,7 @@ schedule.
 - `movies -a trending|popular|anticipated|watched|played|collected|favorited|hot|streaming` take three more filters: `-imdb_ratings` (for example `8.0-10.0`), `-rt_meters` and `-rt_user_meters` (for example `90-100`).
 - `shows -a trending|popular|anticipated|watched|played|collected|favorited` take the same three filters: `-imdb_ratings`, `-rt_meters` and `-rt_user_meters`.
 - `-languages` (for example `-languages en,pl`) filters the `movies` and `shows` list actions. Since 1.22.0 the flag only printed a note that the Trakt API no longer supports it; the live API does apply the filter, so the note is gone and the value is sent.
+- Library: `str.Recommendation` has the extended info fields of a movie or a show (`Language`, `Genres`, `Overview`, `Runtime`, `Rating`, `Released`, `FirstAired`, `Airs`, `Network` and so on).
 - Library: `uri.MediaFilters` has the new fields `ImdbRatings`, `Languages`, `RtMeters` and `RtUserMeters`. `uri.ListOptions.Languages` is no longer marked deprecated.
 - `-languages` also filters `media -a trending|popular|anticipated`, `recommendations -a movies|shows`, every `calendars` action, `lists -a items` and `users -a watchlist|history|list_items`. It is sent by `lists -a trending|popular` and `users -a collection` too, but on 2026-10-03 the live API ignored it there.
 
@@ -56,6 +57,7 @@ schedule.
 - Flags written as `-flag=value` after the module name (for example `movies -a=trending` or `shows -status=ended`) stopped the run with `invalid flags`; only `-flag value` worked. Both forms are accepted now. An empty value (`-i ""`) no longer crashes the flag check.
 - `users -allow_comments` and `users -display_numbers` (used by `users -a update_list`) stopped the run with `invalid flags`. They are accepted now. The deprecated `-query`, `-studio_ids` and `notes -notes_id` also ended with `invalid flags` instead of their deprecation note.
 - Library: `uri.StatusOptions` listed the show status `running series`; the API value is `returning series`.
+- `recommendations -a movies|shows -ex full` and `social_recommendations -a movies|shows -ex full` exported only `title`, `year`, `ids` and the `favorited_by` / `recommended_by` lists; the extended fields the API returned were dropped. The export now keeps `language`, `languages`, `genres`, `overview`, `runtime`, `rating`, `certification`, `country`, `status` and the other `full` fields the `movies` and `shows` exports have.
 - `lists -a items` with a filter that matches nothing (for example `-languages pl` on a list without Polish titles) kept asking for the next page, up to `pages_limit` or the page count of the unfiltered list, because the page count the API sends ignores the filters. It now stops at the first empty page.
 
 ## [1.23.0] - 2026-10-02
