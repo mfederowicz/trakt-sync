@@ -728,17 +728,24 @@ func (c *Command) fetchFlagsMap() map[string]string {
 	return flagMap
 }
 
+// cleanKey returns the flag name of an argument: without the leading dashes and without a "=value" part.
 func cleanKey(arg string) string {
-	return strings.TrimLeft(arg, "-")
+	name, _, _ := strings.Cut(strings.TrimLeft(arg, consts.FlagPrefix), consts.FlagValueSeparator)
+	return name
 }
 func processArgsItem(arg string, key string, argMap map[string]bool) (string, map[string]bool) {
 	// If the argument starts with "-", consider it a key
-	if arg[consts.FirstArgElement] == '-' {
+	if strings.HasPrefix(arg, consts.FlagPrefix) {
 		// If we already have a key, it means it's a single argument without a value
 		if key != consts.EmptyString {
 			argMap[cleanKey(key)] = true // Set the key to true for bool map
 		}
 		key = arg
+		// -flag=value carries its value, so the next argument does not belong to it
+		if strings.Contains(arg, consts.FlagValueSeparator) {
+			argMap[cleanKey(key)] = true
+			key = consts.EmptyString
+		}
 	} else {
 		// If we have a key, assign the value to it
 		if key != consts.EmptyString {
@@ -770,7 +777,12 @@ func argsToMap(args []string) map[string]bool {
 
 // ValidFlags validate if flag is in our list
 func (*Command) ValidFlags() bool {
-	for f := range argsToMap(flag.Args()) {
+	return validArgs(flag.Args())
+}
+
+// validArgs reports whether every flag and standalone argument in args is in Avflags
+func validArgs(args []string) bool {
+	for f := range argsToMap(args) {
 		if _, ok := Avflags[f]; !ok {
 			return false
 		}
