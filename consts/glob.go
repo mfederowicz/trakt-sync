@@ -96,6 +96,8 @@ const (
 	FieldUsage                   = "allow use selected field"
 	FilterStartDateUsage         = "filter start date ie: -start_date 2026-01-01"
 	FirstPage                    = 1
+	FlagPrefix                   = "-"
+	FlagValueSeparator           = "="
 	FormatUsage                  = "allow to overwrite default ID type format"
 	HavePagesErrorStr            = "HavePages: %v, want %v"
 	HideBothProgressMsg          = "use only one of -hide_completed and -hide_not_completed"
