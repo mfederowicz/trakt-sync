@@ -70,6 +70,11 @@ func (h ListsItemsHandler) fetchListItems(client *trakt.Client, options *str.Opt
 		return nil, err
 	}
 
+	// An empty page is the last one: the page count header ignores the media filters
+	if len(list) == consts.ZeroValue {
+		return list, nil
+	}
+
 	// Check if there are more pages
 	if client.HavePages(page, resp, options.PagesLimit) {
 		waitPageDelay()

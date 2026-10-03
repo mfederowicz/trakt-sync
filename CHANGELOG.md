@@ -56,6 +56,7 @@ schedule.
 - Flags written as `-flag=value` after the module name (for example `movies -a=trending` or `shows -status=ended`) stopped the run with `invalid flags`; only `-flag value` worked. Both forms are accepted now. An empty value (`-i ""`) no longer crashes the flag check.
 - `users -allow_comments` and `users -display_numbers` (used by `users -a update_list`) stopped the run with `invalid flags`. They are accepted now. The deprecated `-query`, `-studio_ids` and `notes -notes_id` also ended with `invalid flags` instead of their deprecation note.
 - Library: `uri.StatusOptions` listed the show status `running series`; the API value is `returning series`.
+- `lists -a items` with a filter that matches nothing (for example `-languages pl` on a list without Polish titles) kept asking for the next page, up to `pages_limit` or the page count of the unfiltered list, because the page count the API sends ignores the filters. It now stops at the first empty page.
 
 ## [1.23.0] - 2026-10-02
 
