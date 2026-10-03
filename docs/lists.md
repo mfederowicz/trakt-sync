@@ -45,6 +45,7 @@ $ ./trakt-sync lists -a report -trakt_id 2142753 -r spam -message "only ads"
 `trending`, `popular` and `items` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`,
 `-certifications` (comma separated where a filter takes several values), `-start_date`, `-end_date` and
 `-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all`.
+`-languages` (language codes, comma separated) filters `items`; on 2026-10-03 the live API ignored it for `trending` and `popular`.
 ```console
 $ ./trakt-sync lists -a items -trakt_id 2142753 -genres horror -years 2020-2026
 ```

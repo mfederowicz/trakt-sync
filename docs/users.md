@@ -810,6 +810,7 @@ $ ./trakt-sync users -a plex_sync -i <server id> -all_data
 `watchlist`, `history`, `collection` and `list_items` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`,
 `-runtimes`, `-countries`, `-certifications` (comma separated where a filter takes several values), `-start_date`, `-end_date` and
 `-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all`.
+`-languages` (language codes, comma separated) filters `watchlist`, `history` and `list_items`; on 2026-10-03 the live API ignored it for `collection`.
 In `history`, `-start_at` and `-end_at` still set the watched-at window; `-start_date` and `-end_date` are the separate media date filters.
 ```console
 $ ./trakt-sync users -a watchlist -t movies -genres horror -years 2020-2026

@@ -49,9 +49,9 @@ func TestModuleMediaFilterFlags(t *testing.T) {
 				return nil
 			}}
 			args := []string{"-a", m.action, "-watchnow", "free", "-genres", "action", "-subgenres", "space", "-years", "2020-2026", "-ratings", "75-100",
-				"-runtimes", "90-150", "-countries", "us", "-certifications", "pg-13"}
+				"-runtimes", "90-150", "-countries", "us", "-certifications", "pg-13", "-languages", "en,pl"}
 			want := str.Options{WatchNow: "free", Genres: "action", Subgenres: "space", Years: "2020-2026", Ratings: "75-100", Runtimes: "90-150",
-				Countries: "us", Certifications: "pg-13"}
+				Countries: "us", Certifications: "pg-13", Languages: "en,pl"}
 			if m.dates {
 				args = append(args, "-start_date", "2026-01-01", "-end_date", "2026-12-31")
 				want.MediaStartDate = "2026-01-01"
@@ -60,7 +60,7 @@ func TestModuleMediaFilterFlags(t *testing.T) {
 			assert.NoError(t, command.Exec(fs, trakt.NewClient(nil), fileConfig, args))
 			assert.Equal(t, m.action, got.Action)
 			assert.Equal(t, want, str.Options{WatchNow: got.WatchNow, Genres: got.Genres, Subgenres: got.Subgenres, Years: got.Years, Ratings: got.Ratings,
-				Runtimes: got.Runtimes, Countries: got.Countries, Certifications: got.Certifications, MediaStartDate: got.MediaStartDate, MediaEndDate: got.MediaEndDate})
+				Runtimes: got.Runtimes, Countries: got.Countries, Certifications: got.Certifications, MediaStartDate: got.MediaStartDate, MediaEndDate: got.MediaEndDate, Languages: got.Languages})
 		})
 	}
 }

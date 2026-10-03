@@ -76,10 +76,10 @@ func TestCalendarsHandlersTargetPerCall(t *testing.T) {
 // every calendar action sends the media filter flags; the start_date and end_date filters are left out,
 // the calendar's own start date and days are in the path.
 func TestCalendarsHandlersMediaFilters(t *testing.T) {
-	const filtered = "certifications=pg-13&countries=us&genres=action%2Cdrama&ratings=75-100&runtimes=90-150&subgenres=space&watchnow=free&years=2020-2026"
+	const filtered = "certifications=pg-13&countries=us&genres=action%2Cdrama&languages=en%2Cpl&ratings=75-100&runtimes=90-150&subgenres=space&watchnow=free&years=2020-2026"
 	filters := str.Options{
 		WatchNow: "free", Genres: "action,drama", Subgenres: "space", Years: "2020-2026", Ratings: "75-100", Runtimes: "90-150", Countries: "us",
-		Certifications: "pg-13", MediaStartDate: "2026-01-01", MediaEndDate: "2026-12-31",
+		Certifications: "pg-13", MediaStartDate: "2026-01-01", MediaEndDate: "2026-12-31", Languages: "en,pl",
 	}
 	handlers := []struct {
 		action  string

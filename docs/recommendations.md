@@ -32,6 +32,7 @@ $ ./trakt-sync recommendations -a shows -ignore_watched true -watch_window 30
 `-a movies` and `-a shows` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`,
 `-certifications` (comma separated where a filter takes several values), `-start_date`, `-end_date` and
 `-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all`.
+`-languages` (language codes, comma separated) filters them too.
 ```console
 $ ./trakt-sync recommendations -a movies -genres horror -years 2020-2026
 ```
