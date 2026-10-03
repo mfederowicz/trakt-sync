@@ -30,18 +30,21 @@ func (h UsersActivitiesHandler) Handle(options *str.Options, client *trakt.Clien
 
 	printer.Println("Returns recent activity of your " + options.Type)
 	opts := uri.SocialActivityOptions{
-		Limit:          options.PerPage,
-		Extended:       options.ExtendedInfo,
-		WatchNow:       options.WatchNow,
-		Genres:         options.Genres,
-		Subgenres:      options.Subgenres,
-		Years:          options.Years,
-		Ratings:        options.Ratings,
-		StartDate:      options.MediaStartDate,
-		EndDate:        options.MediaEndDate,
-		Runtimes:       options.Runtimes,
-		Countries:      options.Countries,
-		Certifications: options.Certifications,
+		Limit:             options.PerPage,
+		Extended:          options.ExtendedInfo,
+		WatchNow:          options.WatchNow,
+		Genres:            options.Genres,
+		Subgenres:         options.Subgenres,
+		Years:             options.Years,
+		Ratings:           options.Ratings,
+		StartDate:         options.MediaStartDate,
+		EndDate:           options.MediaEndDate,
+		Runtimes:          options.Runtimes,
+		Countries:         options.Countries,
+		Certifications:    options.Certifications,
+		IgnoreCollected:   options.IgnoreCollected,
+		IgnoreWatched:     options.IgnoreWatched,
+		IgnoreWatchlisted: options.IgnoreWatchlisted,
 	}
 	result, err := h.fetchActivities(client, options, &opts, consts.DefaultPage)
 	if apiErr := notOpenToAPIApps(options.Action, err); apiErr != nil {

@@ -8,6 +8,7 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/test"
+	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -63,6 +64,49 @@ func TestUsersHandlersMediaFilters(t *testing.T) {
 			options := str.Options{Module: "users", Action: h.action, UserName: "sean", Type: "movies", ID: "55", WatchNow: "cinema", Output: filepath.Join(t.TempDir(), "out.json")}
 			assert.ErrorContains(t, h.handler.Handle(&options, s.Client), "watchnow 'cinema' is not valid")
 			assert.Zero(t, requests, "no request is sent")
+		})
+	}
+}
+
+// The page count header of a personal list ignores the media filters, so an empty page ends the paging.
+func TestUsersListItemsHandlerStopsOnEmptyPage(t *testing.T) {
+	tests := []struct {
+		name      string
+		pages     map[string]string
+		wantCalls int
+		wantErr   string
+	}{
+		{name: "filter matches nothing", pages: map[string]string{}, wantCalls: 1, wantErr: "empty list items"},
+		{name: "filter matches one page", pages: map[string]string{"1": `[{"rank":1}]`}, wantCalls: 2},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+
+			calls := 0
+			s.Mux.HandleFunc("/users/me/lists/55/items/", func(w http.ResponseWriter, r *http.Request) {
+				calls++
+				page := r.URL.Query().Get("page")
+				w.Header().Set(trakt.HeaderPaginationPage, page)
+				w.Header().Set(trakt.HeaderPaginationPageCount, "5")
+				body, ok := tt.pages[page]
+				if !ok {
+					body = `[]`
+				}
+				test.SafeFprint(w, body)
+			})
+
+			options := &str.Options{Module: "users", Action: "list_items", UserName: "me", ID: "55", Type: "movies", Languages: "pl", Output: filepath.Join(t.TempDir(), "out.json")}
+			err := UsersListItemsHandler{}.Handle(options, s.Client)
+			if tt.wantErr != "" {
+				assert.ErrorContains(t, err, tt.wantErr)
+			} else {
+				test.AssertNilError(t, err)
+			}
+			assert.Equal(t, tt.wantCalls, calls, "API calls")
 		})
 	}
 }

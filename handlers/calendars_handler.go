@@ -42,7 +42,7 @@ func calendarOptions(options *str.Options) (uri.ListOptions, error) {
 
 // writeCalendarList writes a fetched calendar list to the output file.
 func writeCalendarList(options *str.Options, result []*str.CalendarList) error {
-	if result == nil {
+	if len(result) == consts.ZeroValue {
 		return errors.New(consts.EmptyResult)
 	}
 

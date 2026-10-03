@@ -10,6 +10,8 @@ import (
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/test"
+	"github.com/mfederowicz/trakt-sync/trakt"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestListsTrendingPopularHandlersRoute(t *testing.T) {
@@ -171,5 +173,48 @@ func TestListsHandlersMediaFilters(t *testing.T) {
 				test.AssertNoDiff(t, []string{h.path + "?" + tt.query}, requests)
 			})
 		}
+	}
+}
+
+// The page count header of a list ignores the media filters, so an empty page ends the paging.
+func TestListsItemsHandlerStopsOnEmptyPage(t *testing.T) {
+	tests := []struct {
+		name      string
+		pages     map[string]string
+		wantCalls int
+		wantErr   string
+	}{
+		{name: "filter matches nothing", pages: map[string]string{}, wantCalls: 1, wantErr: "empty list"},
+		{name: "filter matches one page", pages: map[string]string{"1": `[{"rank":1}]`}, wantCalls: 2},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+
+			calls := 0
+			s.Mux.HandleFunc("/lists/55/items/"+consts.ListItemsAll, func(w http.ResponseWriter, r *http.Request) {
+				calls++
+				page := r.URL.Query().Get("page")
+				w.Header().Set(trakt.HeaderPaginationPage, page)
+				w.Header().Set(trakt.HeaderPaginationPageCount, "5")
+				body, ok := tt.pages[page]
+				if !ok {
+					body = `[]`
+				}
+				test.SafeFprint(w, body)
+			})
+
+			options := &str.Options{Action: consts.Items, InternalID: "55", Languages: "pl", Output: filepath.Join(t.TempDir(), "out.json")}
+			err := ListsItemsHandler{}.Handle(options, s.Client)
+			if tt.wantErr != "" {
+				assert.EqualError(t, err, tt.wantErr)
+			} else {
+				test.AssertNilError(t, err)
+			}
+			assert.Equal(t, tt.wantCalls, calls, "API calls")
+		})
 	}
 }

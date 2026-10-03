@@ -25,7 +25,7 @@ func (CalendarsSeasonPremieresHandler) Handle(options *str.Options, client *trak
 		return fmt.Errorf("fetch calendar "+options.Action+" premieres error:%w", err)
 	}
 
-	if result == nil {
+	if len(result) == consts.ZeroValue {
 		return errors.New(consts.EmptyResult)
 	}
 

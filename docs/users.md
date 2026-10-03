@@ -730,6 +730,7 @@ $ ./trakt-sync users -a comment_reactions -ex min
 > routes work with the same token); they fail with `this route is not open to API apps yet` and are kept for when Trakt opens them.
 
 What people in your social graph watched, scrobbled or checked in to. `-t` is required; the media filters (`-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`, `-start_date`, `-end_date`, `-watchnow`) and `-ex` narrow the feed.
+`-ignore_watched true`, `-ignore_collected true` and `-ignore_watchlisted true` leave out what you already watched, collected or watchlisted.
 ```console
 $ ./trakt-sync users -a activities -t following -> export_users_activities_following.json
 ```
@@ -738,6 +739,9 @@ $ ./trakt-sync users -a activities -t friends -genres drama -years 2020-2026
 ```
 ```console
 $ ./trakt-sync users -a activities -t following -watchnow free -ratings 75-100 -certifications pg-13
+```
+```console
+$ ./trakt-sync users -a activities -t friends -ignore_watched true -ignore_watchlisted true
 ```
 ##### Get month in review
 ```console

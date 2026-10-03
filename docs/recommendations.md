@@ -28,6 +28,11 @@ $ ./trakt-sync recommendations -a shows -ignore_collected false -ignore_watchlis
 ```console
 $ ./trakt-sync recommendations -a shows -ignore_watched true -watch_window 30
 ```
+##### Extended info:
+`-ex full` adds the extended fields of each movie or show (`language`, `genres`, `overview`, `runtime`, `rating`, ...) to the export.
+```console
+$ ./trakt-sync recommendations -a movies -ex full
+```
 ##### Filter the recommendations:
 `-a movies` and `-a shows` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`,
 `-certifications` (comma separated where a filter takes several values), `-start_date`, `-end_date` and

@@ -25,7 +25,7 @@ func (CalendarsDvdHandler) Handle(options *str.Options, client *trakt.Client) er
 		return fmt.Errorf("fetch calendar "+options.Action+" error:%w", err)
 	}
 
-	if result == nil {
+	if len(result) == consts.ZeroValue {
 		return errors.New(consts.EmptyResult)
 	}
 
