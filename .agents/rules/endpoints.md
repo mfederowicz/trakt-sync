@@ -115,9 +115,7 @@ func (m *NetworksService) GetNetworksList(ctx context.Context, opts *uri.ListOpt
   action list passed to `cmd.common.GenActionsUsage`.
 - New flags use `consts` usage strings and `cfg.DefaultConfig()` defaults.
 - A new module: new `XCmd` with `Name`, `Summary`, `Help`, `Run` set in
-  `init()`, an entry in the `cmds/runtime.go` command list (kept A-Z), and its
-  name in `Avflags` (`cmds/command.go`); otherwise every call fails with
-  `invalid flags`.
+  `init()` and an entry in the `cmds/runtime.go` command list (kept A-Z).
 
 ## 7. Docs
 

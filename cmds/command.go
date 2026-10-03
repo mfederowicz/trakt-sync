@@ -39,133 +39,6 @@ var (
 	_sortHow      = flag.String("sort_how", cfg.DefaultConfig().SortHow, consts.SortHowUsage)
 )
 
-// Avflags contains all available flags
-var Avflags = map[string]bool{
-	"a":                      true,
-	"available_on":           true,
-	"end_date":               true,
-	"intent":                 true,
-	"ratings":                true,
-	"runtimes":               true,
-	"subgenres":              true,
-	"watchnow":               true,
-	"years":                  true,
-	"hide_completed":         true,
-	"hide_not_completed":     true,
-	"include_stats":          true,
-	"lifetime_stats":         true,
-	"only_rewatching":        true,
-	"all_data":               true,
-	"allow_comments":         true,
-	"c":                      true,
-	"calendars":              true,
-	"certifications":         true,
-	"checkin":                true,
-	"collection":             true,
-	"items":                  true,
-	"comment":                true,
-	"comment_id":             true,
-	"comment_type":           true,
-	"comments":               true,
-	"count_specials":         true,
-	"countries":              true,
-	"country":                true,
-	"days":                   true,
-	"delete":                 true,
-	"deny":                   true,
-	"description":            true,
-	"display_numbers":        true,
-	"end_at":                 true,
-	"episode":                true,
-	"episode_abs":            true,
-	"episode_code":           true,
-	"episodes":               true,
-	"ex":                     true,
-	"f":                      true,
-	"follower_request":       true,
-	"field":                  true,
-	"genres":                 true,
-	"godoc":                  true,
-	"help":                   true,
-	"hidden":                 true,
-	"hide":                   true,
-	"history":                true,
-	"i":                      true,
-	"id_type":                true,
-	"ignore_collected":       true,
-	"ignore_watched":         true,
-	"ignore_watchlisted":     true,
-	"include_replies":        true,
-	"item":                   true,
-	"language":               true,
-	"languages":              true,
-	"links":                  true,
-	"lists":                  true,
-	"media":                  true,
-	"list_item_id":           true,
-	"item_id":                true,
-	"movies":                 true,
-	"month":                  true,
-	"msg":                    true,
-	"message":                true,
-	"networks":               true,
-	"notes":                  true,
-	"notes_id":               true,
-	"o":                      true,
-	"pause":                  true,
-	"people":                 true,
-	"period":                 true,
-	"playback_id":            true,
-	"privacy":                true,
-	"progress":               true,
-	"q":                      true,
-	"query":                  true,
-	"r":                      true,
-	"rating":                 true,
-	"reaction":               true,
-	"recommendations":        true,
-	"releases":               true,
-	"remove":                 true,
-	"reply":                  true,
-	"reset_at":               true,
-	"return_url":             true,
-	"s":                      true,
-	"scrobble":               true,
-	"section":                true,
-	"service_id":             true,
-	"search":                 true,
-	"season":                 true,
-	"seasons":                true,
-	"shows":                  true,
-	"smart_lists":            true,
-	"social_recommendations": true,
-	"sort":                   true,
-	"sort_by":                true,
-	"sort_how":               true,
-	"specials":               true,
-	"spoiler":                true,
-	"start":                  true,
-	"start_at":               true,
-	"start_date":             true,
-	"status":                 true,
-	"studio_ids":             true,
-	"stop":                   true,
-	"sync":                   true,
-	"t":                      true,
-	"team":                   true,
-	"trakt_id":               true,
-	"translations":           true,
-	"u":                      true,
-	"undo":                   true,
-	"users":                  true,
-	"v":                      true,
-	"version":                true,
-	"watch_window":           true,
-	"watchlist":              true,
-	"year":                   true,
-	"younify":                true,
-}
-
 type fatal struct{}
 
 // A Command represents a subcommand of trakt-sync.
@@ -180,8 +53,10 @@ type Command struct {
 	Summary string
 	Help    string
 	Abbrev  string
-	exit    int
-	common  handlers.CommonLogic
+	// TakesArgs is set for a command that reads arguments after its flags (help <command>)
+	TakesArgs bool
+	exit      int
+	common    handlers.CommonLogic
 }
 
 // UpdateMovieFlagsValues update movies flags values only in command
@@ -308,6 +183,10 @@ func (c *Command) Exec(fs afero.Fs, client *trakt.Client, config *cfg.Config, ar
 		}
 		return fmt.Errorf("%s: %w", c.Name, err)
 	}
+	// Parse stops at the first argument that is not a flag, so anything left was not read
+	if !c.TakesArgs && c.Flag.NArg() > consts.ZeroValue {
+		return fmt.Errorf("%s: unexpected argument %q", c.Name, c.Flag.Arg(consts.ZeroValue))
+	}
 	c.warnDeprecatedFlags()
 	m := c.fetchFlagsMap()
 	options, err := cfg.SyncOptionsFromFlags(fs, c.Config, m)
@@ -325,10 +204,6 @@ func (c *Command) Exec(fs afero.Fs, client *trakt.Client, config *cfg.Config, ar
 	options.Module = c.Name
 	options = setOptionsDependsOnModule(c.Name, options)
 	c.Options = &options
-
-	if !c.ValidFlags() {
-		return errors.New("invalid flags")
-	}
 
 	processVerbose(&options, config.ClientID)
 	client.DebugLogger = debugLogger(options.Verbose)
@@ -726,68 +601,6 @@ func (c *Command) fetchFlagsMap() map[string]string {
 	})
 
 	return flagMap
-}
-
-// cleanKey returns the flag name of an argument: without the leading dashes and without a "=value" part.
-func cleanKey(arg string) string {
-	name, _, _ := strings.Cut(strings.TrimLeft(arg, consts.FlagPrefix), consts.FlagValueSeparator)
-	return name
-}
-func processArgsItem(arg string, key string, argMap map[string]bool) (string, map[string]bool) {
-	// If the argument starts with "-", consider it a key
-	if strings.HasPrefix(arg, consts.FlagPrefix) {
-		// If we already have a key, it means it's a single argument without a value
-		if key != consts.EmptyString {
-			argMap[cleanKey(key)] = true // Set the key to true for bool map
-		}
-		key = arg
-		// -flag=value carries its value, so the next argument does not belong to it
-		if strings.Contains(arg, consts.FlagValueSeparator) {
-			argMap[cleanKey(key)] = true
-			key = consts.EmptyString
-		}
-	} else {
-		// If we have a key, assign the value to it
-		if key != consts.EmptyString {
-			argMap[cleanKey(key)] = true // Set the key to true for bool map
-			key = consts.EmptyString
-		} else {
-			// If we don't have a key, consider it a standalone argument
-			argMap[arg] = true // Set the key to true for bool map
-		}
-	}
-
-	return key, argMap
-}
-func argsToMap(args []string) map[string]bool {
-	argMap := map[string]bool{}
-	var key string
-
-	for _, arg := range args {
-		key, argMap = processArgsItem(arg, key, argMap)
-	}
-
-	// If we still have a key at the end, it means it's a single argument without a value
-	if key != consts.EmptyString {
-		argMap[cleanKey(key)] = true // Set the key to true for bool map
-	}
-
-	return argMap
-}
-
-// ValidFlags validate if flag is in our list
-func (*Command) ValidFlags() bool {
-	return validArgs(flag.Args())
-}
-
-// validArgs reports whether every flag and standalone argument in args is in Avflags
-func validArgs(args []string) bool {
-	for f := range argsToMap(args) {
-		if _, ok := Avflags[f]; !ok {
-			return false
-		}
-	}
-	return true
 }
 
 // unknownActionError is returned after the actions usage, so a wrong or missing -a exits with status 1.
