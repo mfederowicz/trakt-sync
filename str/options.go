@@ -7,10 +7,14 @@ type Options struct {
 	Certifications    string
 	Countries         string
 	Genres            string
+	ImdbRatings       string
 	Intent            string
+	Languages         string
 	MediaEndDate      string
 	MediaStartDate    string
 	Ratings           string
+	RtMeters          string
+	RtUserMeters      string
 	Runtimes          string
 	ShowStatus        string
 	Subgenres         string

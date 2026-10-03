@@ -13,11 +13,11 @@ import (
 
 // the shows list actions send the media filter flags and -status as query parameters.
 func TestShowsHandlersMediaFilters(t *testing.T) {
-	const filtered = "certifications=tv-14&countries=us&end_date=2026-12-31&genres=action%2Cdrama&page=1&ratings=75-100&runtimes=30-60" +
+	const filtered = "certifications=tv-14&countries=us&end_date=2026-12-31&genres=action%2Cdrama&languages=en%2Cpl&page=1&ratings=75-100&runtimes=30-60" +
 		"&start_date=2026-01-01&status=returning+series%2Cended&subgenres=space&watchnow=free&years=2020-2026"
 	filters := str.Options{
 		WatchNow: "free", Genres: "action,drama", Subgenres: "space", Years: "2020-2026", Ratings: "75-100", Runtimes: "30-60", Countries: "us",
-		Certifications: "tv-14", MediaStartDate: "2026-01-01", MediaEndDate: "2026-12-31", ShowStatus: "returning series,ended",
+		Certifications: "tv-14", MediaStartDate: "2026-01-01", MediaEndDate: "2026-12-31", ShowStatus: "returning series,ended", Languages: "en,pl",
 	}
 	handlers := []struct {
 		name    string

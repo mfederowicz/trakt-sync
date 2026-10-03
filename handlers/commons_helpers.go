@@ -159,6 +159,10 @@ func mediaFilters(options *str.Options) uri.MediaFilters {
 		Runtimes:       options.Runtimes,
 		Countries:      options.Countries,
 		Certifications: options.Certifications,
+		Languages:      options.Languages,
+		ImdbRatings:    options.ImdbRatings,
+		RtMeters:       options.RtMeters,
+		RtUserMeters:   options.RtUserMeters,
 	}
 }
 
