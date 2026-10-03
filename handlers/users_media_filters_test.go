@@ -3,9 +3,11 @@ package handlers
 
 import (
 	"net/http"
+	"os"
 	"path/filepath"
 	"testing"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/test"
 	"github.com/mfederowicz/trakt-sync/trakt"
@@ -149,6 +151,10 @@ func TestUsersWatchlistHandlerStopsOnEmptyPage(t *testing.T) {
 			err := UsersWatchlistHandler{}.Handle(options, s.Client)
 			if len(tt.pages) > 0 {
 				test.AssertNilError(t, err)
+			} else {
+				assert.EqualError(t, err, consts.EmptyResult)
+				_, statErr := os.Stat(options.Output)
+				assert.True(t, os.IsNotExist(statErr), "no output file is written")
 			}
 			assert.Equal(t, tt.wantCalls, calls, "API calls")
 		})
