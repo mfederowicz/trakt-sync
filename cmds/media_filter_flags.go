@@ -9,7 +9,7 @@ import (
 )
 
 // mediaFilterFlags are the media filter flags a module registers in its own flag set;
-// -genres, -years, -countries and -runtimes are global flags.
+// -genres, -years, -countries, -runtimes and -languages are global flags.
 type mediaFilterFlags struct {
 	watchNow       *string
 	subgenres      *string
@@ -58,5 +58,6 @@ func (m mediaFilterFlags) apply(options str.Options) str.Options {
 	options.Years = *_years
 	options.Countries = *_countries
 	options.Runtimes = *_runtimes
+	options.Languages = *_languages
 	return options
 }

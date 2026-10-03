@@ -43,6 +43,7 @@ schedule.
 - `shows -a trending|popular|anticipated|watched|played|collected|favorited` take the same three filters: `-imdb_ratings`, `-rt_meters` and `-rt_user_meters`.
 - `-languages` (for example `-languages en,pl`) filters the `movies` and `shows` list actions. Since 1.22.0 the flag only printed a note that the Trakt API no longer supports it; the live API does apply the filter, so the note is gone and the value is sent.
 - Library: `uri.MediaFilters` has the new fields `ImdbRatings`, `Languages`, `RtMeters` and `RtUserMeters`. `uri.ListOptions.Languages` is no longer marked deprecated.
+- `-languages` also filters `media -a trending|popular|anticipated`, `recommendations -a movies|shows`, every `calendars` action, `lists -a items` and `users -a watchlist|history|list_items`. It is sent by `lists -a trending|popular` and `users -a collection` too, but on 2026-10-03 the live API ignored it there.
 
 ### Changed
 

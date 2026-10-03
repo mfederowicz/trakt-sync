@@ -40,6 +40,7 @@ $ ./trakt-sync calendars -a hot_finales -> export_calendars_hot_finales_20240707
 Every calendar action takes the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`,
 `-certifications` (comma separated where a filter takes several values) and
 `-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all`.
+`-languages` (language codes, comma separated) filters them too.
 The dates of a calendar are set with `-start_date` and `-days`.
 ```console
 $ ./trakt-sync calendars -a all_movies -genres horror -countries us

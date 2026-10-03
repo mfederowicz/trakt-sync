@@ -15,7 +15,7 @@ import (
 func TestUsersHandlersMediaFilters(t *testing.T) {
 	filtered := str.Options{
 		WatchNow: "free", Genres: "action,drama", Subgenres: "space", Years: "2020-2026", Ratings: "75-100", Runtimes: "90-150", Countries: "us",
-		Certifications: "pg-13", MediaStartDate: "2026-01-01", MediaEndDate: "2026-12-31",
+		Certifications: "pg-13", MediaStartDate: "2026-01-01", MediaEndDate: "2026-12-31", Languages: "en,pl",
 	}
 	handlers := []struct {
 		action  string
@@ -45,7 +45,7 @@ func TestUsersHandlersMediaFilters(t *testing.T) {
 			test.AssertNilError(t, h.handler.Handle(&options, s.Client))
 			if assert.Len(t, queries, 1) {
 				got := queries[0]
-				for _, param := range []string{"certifications=pg-13", "countries=us", "end_date=2026-12-31", "genres=action%2Cdrama", "ratings=75-100",
+				for _, param := range []string{"certifications=pg-13", "countries=us", "end_date=2026-12-31", "genres=action%2Cdrama", "languages=en%2Cpl", "ratings=75-100",
 					"runtimes=90-150", "start_date=2026-01-01", "subgenres=space", "watchnow=free", "years=2020-2026"} {
 					assert.Contains(t, got, param)
 				}
