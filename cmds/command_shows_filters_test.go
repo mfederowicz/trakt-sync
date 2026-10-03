@@ -2,8 +2,6 @@
 package cmds
 
 import (
-	"flag"
-	"strings"
 	"testing"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
@@ -52,34 +50,16 @@ func TestShowsMediaFilterFlags(t *testing.T) {
 	assert.Equal(t, "2026-12-31", got.MediaEndDate)
 }
 
-// main rejects a flag that is not in Avflags with "invalid flags", before the module runs.
+// TestMediaFilterFlagsAreAvailable checks that movies and shows register every media filter flag that is not global.
 func TestMediaFilterFlagsAreAvailable(t *testing.T) {
 	filters := []string{"watchnow", "subgenres", "ratings", "certifications", "start_date", "end_date", "genres", "years", "countries", "runtimes"}
 	modules := map[*Command][]string{MoviesCmd: filters, ShowsCmd: append([]string{"status"}, filters...)}
 	global := []string{"genres", "years", "countries", "runtimes"}
 	for command, names := range modules {
 		for _, name := range names {
-			assert.True(t, Avflags[name], "%s -%s is missing in Avflags", command.Name, name)
 			if !str.ContainString(name, global) {
 				assert.NotNil(t, command.Flag.Lookup(name), "%s has no -%s flag", command.Name, name)
 			}
 		}
 	}
-}
-
-// every flag a module or the global flag set registers must be in Avflags, or main answers "invalid flags".
-func TestRegisteredFlagsAreAvailable(t *testing.T) {
-	check := func(owner string) func(*flag.Flag) {
-		return func(f *flag.Flag) {
-			// go test registers its own test.* flags in the global set, and Exec copies the global flags to a module
-			if strings.HasPrefix(f.Name, "test.") {
-				return
-			}
-			assert.True(t, Avflags[f.Name], "%s -%s is missing in Avflags", owner, f.Name)
-		}
-	}
-	for _, command := range Commands {
-		command.Flag.VisitAll(check(command.Name))
-	}
-	flag.VisitAll(check("global"))
 }

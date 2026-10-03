@@ -25,9 +25,10 @@ var (
 
 // HelpCmd shows help on the trakt-sync command and subcommands.
 var HelpCmd = &Command{
-	Name:    "help",
-	Usage:   "[<commands>]",
-	Summary: "Help on the trakt-sync command and subcommands.",
+	Name:      "help",
+	Usage:     "[<commands>]",
+	Summary:   "Help on the trakt-sync command and subcommands.",
+	TakesArgs: true,
 }
 
 var helpDump = HelpCmd.Flag.Bool("godoc", false, "Dump the godoc output for the command(s)")

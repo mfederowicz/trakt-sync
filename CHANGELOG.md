@@ -40,8 +40,11 @@ schedule.
 
 ### Changed
 
+- A word that is not a flag or a flag's value now stops the run with a message that names it, for example `movies: unexpected argument "foo"` (it was `invalid flags`). A stray word that happened to be a module or flag name, as in `movies shows -a trending`, was accepted before and the flags after it were silently ignored; it is rejected now. `help <module>` works as before.
+
 ### Fixed
 
+- A flag value that starts with a dash (for example a negative number) was read as a flag name and could stop the run with `invalid flags`.
 - Flags written as `-flag=value` after the module name (for example `movies -a=trending` or `shows -status=ended`) stopped the run with `invalid flags`; only `-flag value` worked. Both forms are accepted now. An empty value (`-i ""`) no longer crashes the flag check.
 - `users -allow_comments` and `users -display_numbers` (used by `users -a update_list`) stopped the run with `invalid flags`. They are accepted now. The deprecated `-query`, `-studio_ids` and `notes -notes_id` also ended with `invalid flags` instead of their deprecation note.
 - Library: `uri.StatusOptions` listed the show status `running series`; the API value is `returning series`.

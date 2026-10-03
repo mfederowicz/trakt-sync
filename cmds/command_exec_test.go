@@ -44,7 +44,7 @@ func TestExecReturnsRecoveredPanic(t *testing.T) {
 	}
 }
 
-// TestExecStopsOnFlagErrors checks that an unknown flag or -h stops Exec before the command runs.
+// TestExecStopsOnFlagErrors checks that an unknown flag, a leftover argument or -h stops Exec before the command runs.
 func TestExecStopsOnFlagErrors(t *testing.T) {
 	fs := afero.NewMemMapFs()
 	assert.NoError(t, fs.MkdirAll("/exec/", consts.X755))
@@ -61,8 +61,16 @@ func TestExecStopsOnFlagErrors(t *testing.T) {
 		wantErr string
 	}{
 		{name: "unknown flag", args: []string{"-no_such_flag", "x"}, wantErr: "exec_test: flag provided but not defined: -no_such_flag"},
+		{name: "unknown flag=value", args: []string{"-no_such_flag=x"}, wantErr: "exec_test: flag provided but not defined: -no_such_flag"},
+		{name: "argument before the flags", args: []string{"foo", "-o", "out.json"}, wantErr: `exec_test: unexpected argument "foo"`},
+		{name: "argument after the flags", args: []string{"-o", "out.json", "foo"}, wantErr: `exec_test: unexpected argument "foo"`},
+		{name: "argument that is a module name", args: []string{"shows", "-o", "out.json"}, wantErr: `exec_test: unexpected argument "shows"`},
+		{name: "argument that is a flag name", args: []string{"o", "out.json"}, wantErr: `exec_test: unexpected argument "o"`},
 		{name: "help", args: []string{"-h"}},
 		{name: "known flag", args: []string{"-o", "out.json"}, wantRun: true},
+		{name: "known flag=value", args: []string{"-o=out.json"}, wantRun: true},
+		{name: "empty value", args: []string{"-o", ""}, wantRun: true},
+		{name: "value starting with a dash", args: []string{"-o", "-5"}, wantRun: true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -100,7 +108,9 @@ func TestModulesRuntimeReturnsErrors(t *testing.T) {
 		{name: "unknown command", args: []string{"no_such_command"}, wantErr: `unknown command "no_such_command"`},
 		{name: "ambiguous prefix", args: []string{"s"}, wantErr: `non-unique command prefix "s"`},
 		{name: "failing command", args: []string{"checkin", "-no_such_flag"}, wantErr: "checkin: flag provided but not defined: -no_such_flag"},
+		{name: "argument after a module", args: []string{"checkin", "foo"}, wantErr: `checkin: unexpected argument "foo"`},
 		{name: "success", args: []string{"help"}},
+		{name: "help takes a command name", args: []string{"help", "movies"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
