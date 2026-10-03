@@ -26,6 +26,13 @@ type Movie struct {
 	Languages             *[]string    `json:"languages,omitempty"`
 	AvailableTranslations *[]string    `json:"available_translations,omitempty"`
 	Genres                *[]string    `json:"genres,omitempty"`
+	Subgenres             *[]string    `json:"subgenres,omitempty"`
+	OriginalTitle         *string      `json:"original_title,omitempty"`
+	AfterCredits          *bool        `json:"after_credits,omitempty"`
+	DuringCredits         *bool        `json:"during_credits,omitempty"`
+	Images                *MediaImages `json:"images,omitempty"`
+	Colors                *MediaColors `json:"colors,omitempty"`
+	SocialIDs             *SocialIDs   `json:"social_ids,omitempty"`
 	Certification         *string      `json:"certification,omitempty"`
 	User                  *UserProfile `json:"user,omitempty"`
 	MediaType             *string      `json:"media_type,omitempty"`
