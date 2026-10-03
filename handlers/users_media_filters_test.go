@@ -110,3 +110,47 @@ func TestUsersListItemsHandlerStopsOnEmptyPage(t *testing.T) {
 		})
 	}
 }
+
+// The page count header of the watchlist ignores the media filters, so an empty page ends the paging.
+func TestUsersWatchlistHandlerStopsOnEmptyPage(t *testing.T) {
+	const item = `[{"id":1,"type":"movie","movie":{"title":"Tron","ids":{"trakt":1}}}]`
+	tests := []struct {
+		name      string
+		sortPath  string
+		pages     map[string]string
+		wantCalls int
+	}{
+		{name: "filter matches nothing", pages: map[string]string{}, wantCalls: 1},
+		{name: "filter matches one page", pages: map[string]string{"1": item}, wantCalls: 2},
+		{name: "sort route, filter matches one page", sortPath: "added", pages: map[string]string{"1": item}, wantCalls: 2},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+
+			calls := 0
+			s.Mux.HandleFunc("/users/sean/watchlist/", func(w http.ResponseWriter, r *http.Request) {
+				calls++
+				page := r.URL.Query().Get("page")
+				w.Header().Set(trakt.HeaderPaginationPage, page)
+				w.Header().Set(trakt.HeaderPaginationPageCount, "5")
+				body, ok := tt.pages[page]
+				if !ok {
+					body = `[]`
+				}
+				test.SafeFprint(w, body)
+			})
+
+			options := &str.Options{Module: "users", Action: "watchlist", UserName: "sean", Type: "movies", SortPath: tt.sortPath, Languages: "pl",
+				Output: filepath.Join(t.TempDir(), "out.json")}
+			err := UsersWatchlistHandler{}.Handle(options, s.Client)
+			if len(tt.pages) > 0 {
+				test.AssertNilError(t, err)
+			}
+			assert.Equal(t, tt.wantCalls, calls, "API calls")
+		})
+	}
+}
