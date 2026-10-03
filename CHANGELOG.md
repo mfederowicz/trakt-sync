@@ -39,6 +39,9 @@ schedule.
 - `users -a watchlist|history|collection|list_items` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`, `-start_date`, `-end_date` and `-watchnow`. In `history`, `-start_at` / `-end_at` still set the watched-at window; `-start_date` / `-end_date` are the separate media date filters.
 - `users -a activities` sends the rest of the Trakt media filters: `-subgenres`, `-ratings`, `-certifications`, `-start_date`, `-end_date` and `-watchnow`, next to `-genres`, `-years`, `-runtimes` and `-countries`. The six flags were accepted before, but not sent. An unknown `-watchnow` value stops the run before any request.
 - Library: `uri.SocialActivityOptions` has the new fields `Certifications`, `EndDate`, `Ratings`, `StartDate`, `Subgenres` and `WatchNow`.
+- `movies -a trending|popular|anticipated|watched|played|collected|favorited|hot|streaming` take three more filters: `-imdb_ratings` (for example `8.0-10.0`), `-rt_meters` and `-rt_user_meters` (for example `90-100`).
+- `-languages` (for example `-languages en,pl`) filters the `movies` and `shows` list actions. Since 1.22.0 the flag only printed a note that the Trakt API no longer supports it; the live API does apply the filter, so the note is gone and the value is sent.
+- Library: `uri.MediaFilters` has the new fields `ImdbRatings`, `Languages`, `RtMeters` and `RtUserMeters`. `uri.ListOptions.Languages` is no longer marked deprecated.
 
 ### Changed
 

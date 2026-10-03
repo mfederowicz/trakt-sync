@@ -36,7 +36,7 @@ type ListOptions struct {
 	ImdbRatings       RatingRange    `url:"imdb_ratings,omitempty"`
 	ImdbVotes         ImdbVotesRange `url:"imdb_votes,omitempty"`
 	IncludeReplies    string         `url:"include_replies,omitempty"`
-	// Deprecated: languages is no longer part of the Trakt API (not in its OpenAPI spec or contract).
+	// Languages is the languages filter; prefer Filters.Languages.
 	Languages    []string `url:"languages,omitempty"`
 	Translations []string `url:"translations,omitempty"`
 	Limit        int      `url:"limit,omitempty"`

@@ -34,7 +34,8 @@ func TestShowsMediaFilterFlags(t *testing.T) {
 		return nil
 	}}
 	args := []string{"-a", "trending", "-watchnow", "free", "-genres", "action", "-subgenres", "space", "-years", "2020-2026",
-		"-ratings", "75-100", "-runtimes", "90-150", "-countries", "us", "-certifications", "tv-14", "-status", "returning series,ended", "-start_date", "2026-01-01", "-end_date", "2026-12-31"}
+		"-ratings", "75-100", "-runtimes", "90-150", "-countries", "us", "-certifications", "tv-14", "-status", "returning series,ended", "-start_date", "2026-01-01", "-end_date", "2026-12-31",
+		"-languages", "en,pl"}
 	assert.NoError(t, command.Exec(fs, trakt.NewClient(nil), fileConfig, args))
 	assert.Equal(t, "trending", got.Action)
 	assert.Equal(t, "free", got.WatchNow)
@@ -48,13 +49,14 @@ func TestShowsMediaFilterFlags(t *testing.T) {
 	assert.Equal(t, "returning series,ended", got.ShowStatus)
 	assert.Equal(t, "2026-01-01", got.MediaStartDate)
 	assert.Equal(t, "2026-12-31", got.MediaEndDate)
+	assert.Equal(t, "en,pl", got.Languages)
 }
 
 // TestMediaFilterFlagsAreAvailable checks that movies and shows register every media filter flag that is not global.
 func TestMediaFilterFlagsAreAvailable(t *testing.T) {
-	filters := []string{"watchnow", "subgenres", "ratings", "certifications", "start_date", "end_date", "genres", "years", "countries", "runtimes"}
-	modules := map[*Command][]string{MoviesCmd: filters, ShowsCmd: append([]string{"status"}, filters...)}
-	global := []string{"genres", "years", "countries", "runtimes"}
+	filters := []string{"watchnow", "subgenres", "ratings", "certifications", "start_date", "end_date", "genres", "years", "countries", "runtimes", "languages"}
+	modules := map[*Command][]string{MoviesCmd: append([]string{"imdb_ratings", "rt_meters", "rt_user_meters"}, filters...), ShowsCmd: append([]string{"status"}, filters...)}
+	global := []string{"genres", "years", "countries", "runtimes", "languages"}
 	for command, names := range modules {
 		for _, name := range names {
 			if !str.ContainString(name, global) {

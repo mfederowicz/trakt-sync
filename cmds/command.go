@@ -29,7 +29,7 @@ var (
 	_query        = flag.String("query", "", consts.DeprecatedSearchQueryUsage)
 	_years        = flag.String("years", "", "")
 	_genres       = flag.String("genres", "", "")
-	_languages    = flag.String("languages", "", consts.DeprecatedNoAPIUsage)
+	_languages    = flag.String("languages", "", consts.LanguagesFilterUsage)
 	_translations = flag.String("translations", "", "")
 	_countries    = flag.String("countries", "", "")
 	_runtimes     = flag.String("runtimes", "", "")
@@ -624,14 +624,13 @@ func unknownTypeError(module string, strType string) error {
 func (c *Command) warnDeprecatedFlags() {
 	global := map[string]string{
 		"query":      fmt.Sprintf(consts.DeprecatedFlagUse, "query", "q"),
-		"languages":  fmt.Sprintf(consts.DeprecatedFlagNoAPI, "languages"),
 		"studio_ids": fmt.Sprintf(consts.DeprecatedFlagNoAPI, "studio_ids"),
 	}
 	module := map[string]map[string]string{
 		consts.Notes:    {"notes_id": fmt.Sprintf(consts.DeprecatedFlagUse, "notes_id", "i")},
 		consts.Scrobble: {"delete": fmt.Sprintf(consts.DeprecatedFlagIgnored, "delete")},
 	}
-	for _, name := range []string{"query", "languages", "studio_ids"} {
+	for _, name := range []string{"query", "studio_ids"} {
 		if c.flagIsSet(name) || flagSetIn(flag.CommandLine, name) {
 			printer.Print(global[name])
 		}
@@ -1244,6 +1243,10 @@ func UpdateOptionsWithCommandMoviesFlags(c *Command, options *str.Options) *str.
 	options.Subgenres = *_moviesSubgenres
 	options.Ratings = *_moviesRatings
 	options.Certifications = *_moviesCertifications
+	options.ImdbRatings = *_moviesImdbRatings
+	options.RtMeters = *_moviesRtMeters
+	options.RtUserMeters = *_moviesRtUserMeters
+	options.Languages = *_languages
 	// the list actions send -start_date / -end_date as media filters; updates reads -start_date through options.StartDate
 	options.MediaStartDate = *_moviesStartDate
 	options.MediaEndDate = *_moviesEndDate
@@ -1310,6 +1313,7 @@ func UpdateOptionsWithCommandShowsFlags(c *Command, options *str.Options) *str.O
 	options.Ratings = *_showsRatings
 	options.Certifications = *_showsCertifications
 	options.ShowStatus = *_showsStatus
+	options.Languages = *_languages
 	// the list actions send -start_date / -end_date as media filters; updates reads -start_date through options.StartDate
 	options.MediaStartDate = *_showsStartDate
 	options.MediaEndDate = *_showsEndDate

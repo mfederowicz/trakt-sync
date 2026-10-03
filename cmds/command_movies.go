@@ -26,6 +26,9 @@ var (
 	_moviesSubgenres      = MoviesCmd.Flag.String("subgenres", consts.EmptyString, consts.SubgenresUsage)
 	_moviesRatings        = MoviesCmd.Flag.String("ratings", consts.EmptyString, consts.RatingsFilterUsage)
 	_moviesCertifications = MoviesCmd.Flag.String("certifications", consts.EmptyString, consts.CertificationsUsage)
+	_moviesImdbRatings    = MoviesCmd.Flag.String("imdb_ratings", consts.EmptyString, consts.ImdbRatingsUsage)
+	_moviesRtMeters       = MoviesCmd.Flag.String("rt_meters", consts.EmptyString, consts.RtMetersUsage)
+	_moviesRtUserMeters   = MoviesCmd.Flag.String("rt_user_meters", consts.EmptyString, consts.RtUserMetersUsage)
 
 	validMoviesActions = []string{
 		consts.Trending, consts.Popular, consts.Favorited, consts.Played, consts.Watched, consts.Collected,

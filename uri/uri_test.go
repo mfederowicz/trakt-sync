@@ -188,9 +188,11 @@ func TestBuildQueryMediaFilters(t *testing.T) {
 	opts := ListOptions{Page: 2, Filters: MediaFilters{
 		WatchNow: "free", Genres: "action,drama", Subgenres: "space", Years: "2020-2026", Ratings: "75-100",
 		StartDate: "2026-01-01", EndDate: "2026-12-31", Runtimes: "90-150", Countries: "us", Certifications: "pg-13",
+		ImdbRatings: "8.0-10.0", Languages: "en,pl", RtMeters: "90-100", RtUserMeters: "80-100",
 	}}
 	expectedURL := BaseURL + "?certifications=pg-13&countries=us&end_date=2026-12-31&genres=" + url.QueryEscape("action,drama") +
-		"&page=2&ratings=75-100&runtimes=90-150&start_date=2026-01-01&subgenres=space&watchnow=free&years=2020-2026"
+		"&imdb_ratings=8.0-10.0&languages=" + url.QueryEscape("en,pl") + "&page=2&ratings=75-100&rt_meters=90-100&rt_user_meters=80-100" +
+		"&runtimes=90-150&start_date=2026-01-01&subgenres=space&watchnow=free&years=2020-2026"
 	got, err := AddQuery(BaseURL, opts)
 	if err != nil {
 		t.Fatal(err)

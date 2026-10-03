@@ -7,7 +7,11 @@ type MediaFilters struct {
 	Countries      string `url:"countries,omitempty"`
 	EndDate        string `url:"end_date,omitempty"`
 	Genres         string `url:"genres,omitempty"`
+	ImdbRatings    string `url:"imdb_ratings,omitempty"`
+	Languages      string `url:"languages,omitempty"`
 	Ratings        string `url:"ratings,omitempty"`
+	RtMeters       string `url:"rt_meters,omitempty"`
+	RtUserMeters   string `url:"rt_user_meters,omitempty"`
 	Runtimes       string `url:"runtimes,omitempty"`
 	StartDate      string `url:"start_date,omitempty"`
 	Subgenres      string `url:"subgenres,omitempty"`

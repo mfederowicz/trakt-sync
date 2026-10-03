@@ -29,7 +29,7 @@ func TestDeprecatedFlags(t *testing.T) {
 		want string
 	}{
 		{name: "studio_ids", cmd: MoviesCmd, args: []string{"-a", "trending", "-studio_ids", "1,2"}, want: "flag -studio_ids is no longer supported by the Trakt API and is ignored\n"},
-		{name: "languages", cmd: ShowsCmd, args: []string{"-a", "trending", "-languages", "en"}, want: "flag -languages is no longer supported by the Trakt API and is ignored\n"},
+		{name: "languages is a filter again", cmd: ShowsCmd, args: []string{"-a", "trending", "-languages", "en"}, want: ""},
 		{name: "query", cmd: SearchCmd, args: []string{"-a", "text_query", "-query", "tron"}, want: "flag -query is deprecated, use -q\n"},
 		{name: "notes_id", cmd: NotesCmd, args: []string{"-a", "note", "-notes_id", "5"}, want: "flag -notes_id is deprecated, use -i\n"},
 		{name: "scrobble delete", cmd: ScrobbleCmd, args: []string{"-a", "start", "-delete"}, want: "flag -delete is deprecated and is ignored\n"},
