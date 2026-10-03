@@ -3,6 +3,7 @@ package handlers
 
 import (
 	"net/http"
+	"os"
 	"path/filepath"
 	"testing"
 
@@ -138,5 +139,42 @@ func TestCalendarsHandlersMediaFilters(t *testing.T) {
 				assert.Equal(t, []string{h.path + "?" + tt.query}, requests)
 			})
 		}
+	}
+}
+
+// an empty calendar ends with an error and writes no file, like the other list actions.
+func TestCalendarsHandlersEmptyResult(t *testing.T) {
+	handlers := []struct {
+		action  string
+		handler Handler
+	}{
+		{action: consts.AllShows, handler: CalendarsShowsHandler{}},
+		{action: consts.AllNewShows, handler: CalendarsNewShowsHandler{}},
+		{action: consts.AllSeasonPremieres, handler: CalendarsSeasonPremieresHandler{}},
+		{action: consts.AllFinales, handler: CalendarsFinalesHandler{}},
+		{action: consts.AllMovies, handler: CalendarsMoviesHandler{}},
+		{action: consts.AllStreaming, handler: CalendarsStreamingHandler{}},
+		{action: consts.AllDvd, handler: CalendarsDvdHandler{}},
+		{action: consts.AllMedia, handler: CalendarsMediaHandler{}},
+		{action: consts.HotReleases, handler: CalendarsHotReleasesHandler{}},
+		{action: consts.HotPremieres, handler: CalendarsHotPremieresHandler{}},
+		{action: consts.HotFinales, handler: CalendarsHotFinalesHandler{}},
+		{action: consts.HotNewShows, handler: CalendarsHotNewShowsHandler{}},
+	}
+
+	for _, h := range handlers {
+		h := h
+		t.Run(h.action, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+			s.Mux.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
+				test.SafeFprint(w, `[]`)
+			})
+
+			options := str.Options{Action: h.action, StartDate: "2026-10-01", Days: 7, Output: filepath.Join(t.TempDir(), "out.json")}
+			assert.EqualError(t, h.handler.Handle(&options, s.Client), consts.EmptyResult)
+			_, err := os.Stat(options.Output)
+			assert.True(t, os.IsNotExist(err), "no output file is written")
+		})
 	}
 }

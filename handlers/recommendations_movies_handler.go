@@ -31,6 +31,9 @@ func (r RecommendationsMoviesHandler) Handle(options *str.Options, client *trakt
 	if err != nil {
 		return fmt.Errorf("fetch movie recommendations error:%w", err)
 	}
+	if len(result) == consts.ZeroValue {
+		return errors.New(consts.EmptyResult)
+	}
 	jsonData, err := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
 	if err != nil {
 		return fmt.Errorf("encode %s result: %w", options.Action, err)

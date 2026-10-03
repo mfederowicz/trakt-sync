@@ -25,7 +25,7 @@ func (CalendarsNewShowsHandler) Handle(options *str.Options, client *trakt.Clien
 		return fmt.Errorf("fetch "+options.Action+" calendar error:%w", err)
 	}
 
-	if result == nil {
+	if len(result) == consts.ZeroValue {
 		return errors.New("empty result")
 	}
 

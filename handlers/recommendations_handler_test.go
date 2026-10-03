@@ -10,6 +10,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/test"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRecommendationsHandlersQuery(t *testing.T) {
@@ -64,6 +65,35 @@ func TestRecommendationsHandlersQuery(t *testing.T) {
 			if _, err := os.Stat(options.Output); err != nil {
 				t.Errorf("output file was not written: %v", err)
 			}
+		})
+	}
+}
+
+// no recommendations ends with an error and writes no file, like the other list actions.
+func TestRecommendationsHandlersEmptyResult(t *testing.T) {
+	tests := []struct {
+		name    string
+		handler Handler
+		action  string
+		path    string
+	}{
+		{name: "movies", handler: RecommendationsMoviesHandler{}, action: consts.Movies, path: "/recommendations/movies"},
+		{name: "shows", handler: RecommendationsShowsHandler{}, action: consts.Shows, path: "/recommendations/shows"},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+			s.Mux.HandleFunc(tt.path, func(w http.ResponseWriter, _ *http.Request) {
+				test.SafeFprint(w, `[]`)
+			})
+
+			options := str.Options{Action: tt.action, PerPage: 10, Output: filepath.Join(t.TempDir(), "out.json")}
+			assert.EqualError(t, tt.handler.Handle(&options, s.Client), consts.EmptyResult)
+			_, err := os.Stat(options.Output)
+			assert.True(t, os.IsNotExist(err), "no output file is written")
 		})
 	}
 }
