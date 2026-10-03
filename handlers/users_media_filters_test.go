@@ -160,3 +160,31 @@ func TestUsersWatchlistHandlerStopsOnEmptyPage(t *testing.T) {
 		})
 	}
 }
+
+// history, favorites and ratings end with an error and write no file when the API returns no items, like watchlist.
+func TestUsersHandlersEmptyResult(t *testing.T) {
+	handlers := []struct {
+		action  string
+		handler Handler
+	}{
+		{action: "history", handler: UsersHistoryHandler{}},
+		{action: "favorites", handler: UsersFavoritesHandler{}},
+		{action: "ratings", handler: UsersRatingsHandler{}},
+	}
+
+	for _, h := range handlers {
+		h := h
+		t.Run(h.action, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+			s.Mux.HandleFunc("/users/sean/"+h.action+"/", func(w http.ResponseWriter, _ *http.Request) {
+				test.SafeFprint(w, `[]`)
+			})
+
+			options := &str.Options{Module: "users", Action: h.action, UserName: "sean", Type: "movies", Output: filepath.Join(t.TempDir(), "out.json")}
+			assert.EqualError(t, h.handler.Handle(options, s.Client), consts.EmptyResult)
+			_, err := os.Stat(options.Output)
+			assert.True(t, os.IsNotExist(err), "no output file is written")
+		})
+	}
+}

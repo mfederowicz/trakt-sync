@@ -34,7 +34,7 @@ func TestUsersHistoryDates(t *testing.T) {
 	var gotStartAt, gotEndAt string
 	setup.Mux.HandleFunc("/users/sean/history/movies", func(w http.ResponseWriter, r *http.Request) {
 		gotStartAt, gotEndAt = r.URL.Query().Get("start_at"), r.URL.Query().Get("end_at")
-		_, _ = w.Write([]byte(`[]`))
+		_, _ = w.Write([]byte(`[{"id":1}]`))
 	})
 
 	args := []string{"-o", filepath.Join(t.TempDir(), "out.json"), "-a", "history", "-u", "sean", "-start_at", "2026-01-15", "-end_at", "2026-01-20"}
