@@ -3,6 +3,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -36,6 +37,9 @@ func (m UsersWatchlistHandler) Handle(options *str.Options, client *trakt.Client
 	items, err := m.usersWatchlist(client, options, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("get watchlist error:%w", err)
+	}
+	if len(items) == consts.ZeroValue {
+		return errors.New(consts.EmptyResult)
 	}
 	jsonData, err := json.MarshalIndent(items, consts.EmptyString, consts.JSONDataFormat)
 	if err != nil {

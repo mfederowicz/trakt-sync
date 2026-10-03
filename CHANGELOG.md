@@ -53,6 +53,7 @@ schedule.
 
 - A word that is not a flag or a flag's value now stops the run with a message that names it, for example `movies: unexpected argument "foo"` (it was `invalid flags`). A stray word that happened to be a module or flag name, as in `movies shows -a trending`, was accepted before and the flags after it were silently ignored; it is rejected now. `help <module>` works as before.
 - Every `calendars` action and `recommendations -a movies|shows` now end with `empty result` and exit status 1 when the API returns no items, like the other list actions. Before, they wrote a file holding an empty list `[]` and ended with exit status 0. The output file is not written (an existing one is left as it is).
+- `users -a watchlist` does the same: an empty watchlist, or a filter that matches nothing, ends with `empty result` and exit status 1 instead of a file holding `[]`.
 
 ### Fixed
 
