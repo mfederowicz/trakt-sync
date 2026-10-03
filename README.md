@@ -1,7 +1,7 @@
 [![Test](https://github.com/mfederowicz/trakt-sync/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/mfederowicz/trakt-sync/actions/workflows/test.yaml?query=branch%3Amain)
 [![Go Reference](https://pkg.go.dev/badge/github.com/mfederowicz/trakt-sync/trakt.svg)](https://pkg.go.dev/github.com/mfederowicz/trakt-sync/trakt)
 [![Coverage](https://img.shields.io/badge/coverage-82%25-green)](https://github.com/mfederowicz/trakt-sync/actions/workflows/test.yaml?query=branch%3Amain)
-[![Version](https://img.shields.io/badge/version-v1.23.0-blue)](https://github.com/mfederowicz/trakt-sync/releases/latest)
+[![Version](https://img.shields.io/badge/version-v1.24.0-blue)](https://github.com/mfederowicz/trakt-sync/releases/latest)
 
 <!-- TOC -->
 

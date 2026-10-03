@@ -30,6 +30,14 @@ schedule.
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.24.0] - 2026-10-04
+
+### Added
+
 - `movies -a trending|popular|anticipated|watched|played|collected|favorited|hot|streaming` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`, `-start_date`, `-end_date` and `-watchnow`. The flags were accepted or missing before, but no filter was sent, so the lists were never filtered.
 - Library: new `uri.MediaFilters` and the `uri.ListOptions.Filters` field carry the media filters (`watchnow`, `genres`, `subgenres`, `years`, `ratings`, `start_date`, `end_date`, `runtimes`, `countries`, `certifications`) of the list routes.
 - `shows -a trending|popular|anticipated|watched|played|collected|favorited` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`, `-start_date`, `-end_date` and `-watchnow`, plus `-status` (for example `-status ended`). No filter was sent before, so the lists were never filtered. The live API does not always apply `status`: on 2026-10-03 it returned the unfiltered list.
@@ -708,7 +716,8 @@ schedule.
 - First release, with the `calendars`, `collection`, `help`, `history`, `lists`, `people`, `search` and `watchlist`
   commands exporting Trakt data to JSON.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.23.0...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.24.0...HEAD
+[1.24.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.23.0...v1.24.0
 [1.23.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.22.0...v1.23.0
 [1.22.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.21.0...v1.22.0
 [1.21.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.20.0...v1.21.0
