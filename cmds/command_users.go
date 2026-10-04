@@ -8,6 +8,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/handlers"
+	"github.com/mfederowicz/trakt-sync/str"
 )
 
 var (
@@ -56,6 +57,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 	options := cmd.Options
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
+	usersListsSort(options, cmd.flagIsSet("sort_by"), cmd.flagIsSet("sort_how"))
 	err := cmd.ValidModuleActionType(options)
 	if err != nil {
 		return fmt.Errorf("%s/%s: %w", cmd.Name, options.Action, err)
@@ -174,4 +176,18 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 
 func init() {
 	UsersCmd.Run = usersListsFunc
+}
+
+// usersListsSort sends sort_by and sort_how for the lists action only when set on the command line,
+// so the global defaults (rank, asc) do not override the API's own order
+func usersListsSort(options *str.Options, sortBySet bool, sortHowSet bool) {
+	if options.Action != consts.Lists {
+		return
+	}
+	if !sortBySet {
+		options.SortBy = consts.EmptyString
+	}
+	if !sortHowSet {
+		options.SortHow = consts.EmptyString
+	}
 }

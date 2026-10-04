@@ -206,7 +206,7 @@ func TestOptionalPathSegments(t *testing.T) {
 			return err
 		}},
 		{name: "user lists me", path: "/users/me/lists", call: func(c *Client) error {
-			_, _, err := c.Users.GetUsersPersonalLists(ctx, "")
+			_, _, err := c.Users.GetUsersPersonalLists(ctx, "", nil)
 			return err
 		}},
 		{name: "user list items me", path: "/users/me/lists/55/items/movie", call: func(c *Client) error {

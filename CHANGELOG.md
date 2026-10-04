@@ -34,8 +34,11 @@ schedule.
 - Library: `str.UserNotes` decodes a flat entry (profile fields plus `notes`) into `User` and `Notes`, next to the nested one.
 - Exports keep three newer groups of fields the API returns: `email` in `users -a settings`, `height` of a person with `-ex full` (for example `people -a summary`), and the VIP veteran fields of a user profile with `-ex vip` (`vip_veteran_since`, `vip_veteran_years`, `vip_veteran_tier`, `vip_veteran_title`, `vip_grace_ends_at`). These fields were dropped before. On 2026-10-04 the live API sent `height` (in centimetres) and the VIP veteran fields; `email` is in the Trakt API contract, but the live API did not send it yet.
 - Library: `str.UserProfile` has the new fields `Email`, `VipVeteranSince`, `VipVeteranYears`, `VipVeteranTier`, `VipVeteranTitle` and `VipGraceEndsAt`; `str.Person` has `Height`.
+- `users -a lists` takes `-sort_how asc|desc` and `-sort_by`, which the Trakt API contract added to the lists route. They are sent only when given, so the default order is unchanged. On 2026-10-04 the live API applied the direction (`-sort_how desc` reverses the overview) but kept the same order for every `-sort_by` value tried.
 
 ### Changed
+
+- Library: `UsersService.GetUsersPersonalLists` takes a third argument, `opts *uri.ListOptions` (`SortBy`, `SortHow`); pass `nil` for the old behaviour.
 
 ### Fixed
 

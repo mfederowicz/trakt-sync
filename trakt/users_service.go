@@ -52,10 +52,14 @@ func (u *UsersService) GetListItemsByType(ctx context.Context, id string, listID
 // GetUsersPersonalLists Returns all personal lists for a user.
 //
 // API docs: https://docs.trakt.tv/reference/getuserslistspersonal
-func (u *UsersService) GetUsersPersonalLists(ctx context.Context, id string) ([]*str.PersonalList, *str.Response, error) {
+func (u *UsersService) GetUsersPersonalLists(ctx context.Context, id string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
 	var url string
 
 	url = fmt.Sprintf("users/%s/lists", userOrMe(id))
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	req, err := u.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
