@@ -1133,7 +1133,7 @@ func (u *UsersService) GetWatchlist(ctx context.Context, user string, types stri
 // By default, the comments are sorted by most likes.
 // Other sorting options include likes_30, most replies, replies_30, most plays, highest rating, and added date.
 // API docs: https://docs.trakt.tv/reference/getuserswatchlistcomments
-func (u *UsersService) GetWatchlistComments(ctx context.Context, user string, sort string, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+func (u *UsersService) GetWatchlistComments(ctx context.Context, user string, sort string, options *uri.ListOptions) ([]*str.ListComment, *str.Response, error) {
 	var url string
 
 	url = fmt.Sprintf("users/%s/watchlist/comments/%s", userOrMe(user), sort)
@@ -1147,7 +1147,7 @@ func (u *UsersService) GetWatchlistComments(ctx context.Context, user string, so
 		return nil, nil, err
 	}
 
-	list := []*str.ExportlistItem{}
+	list := []*str.ListComment{}
 	resp, err := u.client.Do(ctx, req, &list)
 
 	if err != nil {
@@ -1190,7 +1190,7 @@ func (u *UsersService) GetFavorites(ctx context.Context, user string, strType st
 // By default, the comments are sorted by most likes. Other sorting options include
 // likes_30, most replies, replies_30, most plays, highest rating, and added date.
 // API docs: https://docs.trakt.tv/reference/getusersfavoritescomments
-func (u *UsersService) GetFavoritesComments(ctx context.Context, user string, sort string, options *uri.ListOptions) ([]*str.ExportlistItem, *str.Response, error) {
+func (u *UsersService) GetFavoritesComments(ctx context.Context, user string, sort string, options *uri.ListOptions) ([]*str.ListComment, *str.Response, error) {
 	var url string
 	url = fmt.Sprintf("users/%s/favorites/comments/%s", userOrMe(user), sort)
 	url, err := uri.AddQuery(url, options)
@@ -1203,7 +1203,7 @@ func (u *UsersService) GetFavoritesComments(ctx context.Context, user string, so
 		return nil, nil, err
 	}
 
-	list := []*str.ExportlistItem{}
+	list := []*str.ListComment{}
 	resp, err := u.client.Do(ctx, req, &list)
 
 	if err != nil {

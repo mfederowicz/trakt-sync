@@ -36,7 +36,7 @@ func (m UsersWatchlistCommentsHandler) Handle(options *str.Options, client *trak
 	return nil
 }
 
-func (m UsersWatchlistCommentsHandler) usersWatchlistComments(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+func (m UsersWatchlistCommentsHandler) usersWatchlistComments(client *trakt.Client, options *str.Options, page int) ([]*str.ListComment, error) {
 	items, err := m.common.FetchUsersWatchlistComments(client, options, page)
 
 	if err != nil {

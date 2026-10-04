@@ -19,6 +19,7 @@ func TestUsersServiceRequests(t *testing.T) {
 		followRequest = `{"id":3,"user":{"username":"sean","private":false}}`
 		list          = `{"name":"Star Wars","privacy":"public","item_count":5}`
 		items         = `[{"title":"TRON: Legacy","year":2010,"movie":{"title":"TRON: Legacy","year":2010}}]`
+		comments      = `[{"id":8,"comment":"Can't wait to watch everything on this epic list!","spoiler":false,"likes":2}]`
 		reordered     = `{"updated":2,"skipped_ids":[12]}`
 	)
 	cases := []serviceCase{
@@ -76,7 +77,7 @@ func TestUsersServiceRequests(t *testing.T) {
 			}},
 		{name: "Unblock", method: http.MethodDelete, path: "/users/sean/block", status: http.StatusNoContent,
 			call: func(c *Client) (any, error) { _, err := c.Users.Unblock(ctx, user); return nil, err }},
-		{name: "GetWatchlistComments", method: http.MethodGet, path: "/users/sean/watchlist/comments/newest", query: "limit=10", body: items,
+		{name: "GetWatchlistComments", method: http.MethodGet, path: "/users/sean/watchlist/comments/newest", query: "limit=10", body: comments,
 			call: func(c *Client) (any, error) {
 				r, _, err := c.Users.GetWatchlistComments(ctx, user, "newest", opts)
 				return r, err
@@ -86,7 +87,7 @@ func TestUsersServiceRequests(t *testing.T) {
 				r, _, err := c.Users.GetFavorites(ctx, user, "movies", "rank", "asc", opts)
 				return r, err
 			}},
-		{name: "GetFavoritesComments", method: http.MethodGet, path: "/users/sean/favorites/comments/likes", query: "limit=10", body: items,
+		{name: "GetFavoritesComments", method: http.MethodGet, path: "/users/sean/favorites/comments/likes", query: "limit=10", body: comments,
 			call: func(c *Client) (any, error) {
 				r, _, err := c.Users.GetFavoritesComments(ctx, user, "likes", opts)
 				return r, err
