@@ -37,6 +37,8 @@ schedule.
 
 ### Fixed
 
+- `users -a collection`: the docs and the 1.24.0 notes said it takes the media filters (`-genres`, `-years`, `-watchnow` and so on). The flags are sent, as the Trakt API contract lists them for this route, but on 2026-10-04 the live API ignored `-genres`, `-years` and `-languages` and returned the whole collection. `docs/users.md` now says so.
+
 ## [1.24.0] - 2026-10-04
 
 ### Added
