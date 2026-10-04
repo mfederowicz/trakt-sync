@@ -239,6 +239,11 @@ $ ./trakt-sync users -a lists -u username -i 123456 -t movie,show
 ```console
 $ ./trakt-sync users -a lists -u username
 ```
+`-sort_how asc|desc` sets the direction of the lists overview. `-sort_by` is sent too, as the Trakt API contract lists it for this route,
+but on 2026-10-04 the live API kept the same order (rank) for every value tried and only applied the direction.
+```console
+$ ./trakt-sync users -a lists -u username -sort_how desc
+```
 ##### Create personal list for selected user - via -items flag:
 ```console
 $ ./trakt-sync users -a add_list -items personal_list.json

@@ -12,6 +12,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
+	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -90,9 +91,11 @@ func getAvlistsFromPersonals(personalLists []*str.PersonalList) []int {
 
 func fetchUsersPersonalLists(client *trakt.Client, options *str.Options) ([]*str.PersonalList, *str.Response, error) {
 	username := options.UserName
+	opts := uri.ListOptions{SortBy: options.SortBy, SortHow: options.SortHow}
 	lists, resp, err := client.Users.GetUsersPersonalLists(
 		cli.ContextFromOptions(options),
 		username,
+		&opts,
 	)
 
 	return lists, resp, err
