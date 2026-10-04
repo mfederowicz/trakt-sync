@@ -7,6 +7,7 @@ type Person struct {
 	SocialIDs          *SocialIDs `json:"social_ids,omitempty"`
 	Biography          *string    `json:"biography,omitempty"`
 	Birthday           *string    `json:"birthday,omitempty"`
+	Height             *float64   `json:"height,omitempty"`
 	Death              *string    `json:"death,omitempty"`
 	Birthplace         *string    `json:"birthplace,omitempty"`
 	Homepage           *string    `json:"homepage,omitempty"`
