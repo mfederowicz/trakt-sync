@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"runtime/debug"
 	"strings"
+	"time"
 
 	"github.com/mfederowicz/trakt-sync/consts"
 )
@@ -41,7 +42,7 @@ func UserAgent() string {
 func genBuildInfo() string {
 	var buildInfo string
 	if date != "unknown" && builtBy != "unknown" {
-		buildInfo = fmt.Sprintf("Built\t\t%s by %s", date, builtBy)
+		buildInfo = fmt.Sprintf("Built\t\t%s by %s", localBuildDate(date, time.Local), builtBy)
 	}
 
 	if commit != "none" {
@@ -49,6 +50,19 @@ func genBuildInfo() string {
 	}
 
 	return buildInfo
+}
+
+// localBuildDate converts the build date from ldflags (Makefile or GoReleaser layout) to loc;
+// a date in another layout is returned as it is
+func localBuildDate(built string, loc *time.Location) string {
+	for _, layout := range []string{consts.BuildDateFormat, time.RFC3339} {
+		t, err := time.Parse(layout, built)
+		if err == nil {
+			return t.In(loc).Format(consts.BuildDateFormat)
+		}
+	}
+
+	return built
 }
 
 func genDev(info string) string {

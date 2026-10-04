@@ -4,6 +4,7 @@ package cli
 import (
 	"runtime/debug"
 	"testing"
+	"time"
 )
 
 // TestUserAgent checks the User-Agent names trakt-sync and the ldflags version.
@@ -49,6 +50,35 @@ func TestAppVersionFromBuildInfo(t *testing.T) {
 
 			if got := AppVersion(); got != tc.want {
 				t.Errorf("AppVersion() = %q, want %q", got, tc.want)
+			}
+		})
+	}
+}
+
+// TestLocalBuildDate checks the build date is shown in the given zone for both ldflags layouts.
+func TestLocalBuildDate(t *testing.T) {
+	cest := time.FixedZone("CEST", 2*60*60)
+	est := time.FixedZone("EST", -5*60*60)
+
+	cases := []struct {
+		name string
+		in   string
+		loc  *time.Location
+		want string
+	}{
+		{name: "makefile layout", in: "2026-10-04 12:30 UTC", loc: cest, want: "2026-10-04 14:30 CEST"},
+		{name: "goreleaser layout", in: "2026-10-04T12:30:45Z", loc: cest, want: "2026-10-04 14:30 CEST"},
+		{name: "goreleaser layout with offset", in: "2026-10-04T14:30:45+02:00", loc: time.UTC, want: "2026-10-04 12:30 UTC"},
+		{name: "day changes", in: "2026-10-04 02:00 UTC", loc: est, want: "2026-10-03 21:00 EST"},
+		{name: "utc stays utc", in: "2026-10-04 12:30 UTC", loc: time.UTC, want: "2026-10-04 12:30 UTC"},
+		{name: "unknown layout is kept", in: "2026-10-01", loc: cest, want: "2026-10-01"},
+	}
+
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			if got := localBuildDate(tc.in, tc.loc); got != tc.want {
+				t.Errorf("localBuildDate(%q) = %q, want %q", tc.in, got, tc.want)
 			}
 		})
 	}
