@@ -527,24 +527,36 @@ func TestSyncOptionsFromFlagsKeepsConfigVerbose(t *testing.T) {
 	assert.True(t, options.Verbose, "verbose from the config file survives the merge with the module flags")
 }
 
-// ignore_* and watch_window are read from the config file as written there (TOML strings and a number).
+// ignore_* are read from the config file quoted or as TOML booleans, watch_window as a number.
 func TestConfigFileIgnoreKeysReachOptions(t *testing.T) {
-	flagMap := useFlags(t)
-	fs := credentialsFs(t)
-	content := "client_id = \"client-id\"\nclient_secret = \"client-secret\"\ntoken_path = \"" + testTokenPath + "\"\nsettings_path = \"" + testSettingsPath + "\"\n" +
-		"ignore_collected = \"true\"\nignore_watched = \"true\"\nignore_watchlisted = \"false\"\nwatch_window = 30\n"
-	assert.NoError(t, afero.WriteFile(fs, "/config-ignore.toml", []byte(content), consts.X644))
+	cases := []struct {
+		name string
+		keys string
+	}{
+		{name: "quoted", keys: "ignore_collected = \"true\"\nignore_watched = \"true\"\nignore_watchlisted = \"false\"\n"},
+		{name: "unquoted", keys: "ignore_collected = true\nignore_watched = true\nignore_watchlisted = false\n"},
+	}
+	for _, tt := range cases {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			flagMap := useFlags(t)
+			fs := credentialsFs(t)
+			content := "client_id = \"client-id\"\nclient_secret = \"client-secret\"\ntoken_path = \"" + testTokenPath + "\"\nsettings_path = \"" + testSettingsPath + "\"\n" +
+				tt.keys + "watch_window = 30\n"
+			assert.NoError(t, afero.WriteFile(fs, "/config-ignore.toml", []byte(content), consts.X644))
 
-	file, err := ReadConfigFromFile(fs, "/config-ignore.toml")
-	if !assert.NoError(t, err) {
-		return
+			file, err := ReadConfigFromFile(fs, "/config-ignore.toml")
+			if !assert.NoError(t, err) {
+				return
+			}
+			options, err := SyncOptionsFromFlags(fs, file, flagMap)
+			if !assert.NoError(t, err) {
+				return
+			}
+			assert.Equal(t, "true", options.IgnoreCollected)
+			assert.Equal(t, "true", options.IgnoreWatched)
+			assert.Equal(t, "false", options.IgnoreWatchlisted)
+			assert.Equal(t, 30, options.WatchWindow)
+		})
 	}
-	options, err := SyncOptionsFromFlags(fs, file, flagMap)
-	if !assert.NoError(t, err) {
-		return
-	}
-	assert.Equal(t, "true", options.IgnoreCollected)
-	assert.Equal(t, "true", options.IgnoreWatched)
-	assert.Equal(t, "false", options.IgnoreWatchlisted)
-	assert.Equal(t, 30, options.WatchWindow)
 }

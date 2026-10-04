@@ -38,9 +38,9 @@ var (
 	_usersSortPath               = UsersCmd.Flag.String("sort", consts.EmptyString, consts.SortPathUsage)
 	_usersReturnURL              = UsersCmd.Flag.String("return_url", consts.DefaultReturnURL, consts.ReturnURLUsage)
 	_usersAllData                = UsersCmd.Flag.Bool("all_data", false, consts.AllDataUsage)
-	_usersIgnoreCollected        = UsersCmd.Flag.String("ignore_collected", cfg.DefaultConfig().IgnoreCollected, consts.IgnoreCollectedUsage)
-	_usersIgnoreWatched          = UsersCmd.Flag.String("ignore_watched", cfg.DefaultConfig().IgnoreWatched, consts.IgnoreWatchedUsage)
-	_usersIgnoreWatchlisted      = UsersCmd.Flag.String("ignore_watchlisted", cfg.DefaultConfig().IgnoreWatchlisted, consts.IgnoreWatchlistedUsage)
+	_usersIgnoreCollected        = UsersCmd.Flag.String("ignore_collected", string(cfg.DefaultConfig().IgnoreCollected), consts.IgnoreCollectedUsage)
+	_usersIgnoreWatched          = UsersCmd.Flag.String("ignore_watched", string(cfg.DefaultConfig().IgnoreWatched), consts.IgnoreWatchedUsage)
+	_usersIgnoreWatchlisted      = UsersCmd.Flag.String("ignore_watchlisted", string(cfg.DefaultConfig().IgnoreWatchlisted), consts.IgnoreWatchlistedUsage)
 	_usersFilters                = newMediaFilterFlags(&UsersCmd.Flag)
 )
 
