@@ -188,3 +188,51 @@ func TestUsersHandlersEmptyResult(t *testing.T) {
 		})
 	}
 }
+
+// watchlist sends -hide on both of its routes; an unknown value stops before the request.
+func TestUsersWatchlistHandlerHide(t *testing.T) {
+	tests := []struct {
+		name      string
+		options   str.Options
+		want      string
+		wantErr   string
+		wantCalls int
+	}{
+		{name: "typed route", options: str.Options{HideItems: "rated"}, want: "hide=rated", wantCalls: 1},
+		{name: "sorted route", options: str.Options{HideItems: "airing", SortPath: "rank"}, want: "hide=airing", wantCalls: 1},
+		{name: "not set", options: str.Options{}, wantCalls: 1},
+		{name: "unknown value", options: str.Options{HideItems: "boring"}, wantErr: "hide 'boring' is not valid"},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+			queries := []string{}
+			s.Mux.HandleFunc("/users/sean/watchlist/", func(w http.ResponseWriter, r *http.Request) {
+				test.AssertMethod(t, r, http.MethodGet)
+				queries = append(queries, r.URL.RawQuery)
+				test.SafeFprint(w, `[{"id":1,"type":"movie","movie":{"title":"Tron","ids":{"trakt":1}}}]`)
+			})
+
+			options := tt.options
+			options.Module, options.Action, options.UserName, options.Type = "users", "watchlist", "sean", "movies"
+			options.Output = filepath.Join(t.TempDir(), "out.json")
+			err := UsersWatchlistHandler{}.Handle(&options, s.Client)
+			if tt.wantErr != consts.EmptyString {
+				assert.ErrorContains(t, err, tt.wantErr)
+			} else {
+				test.AssertNilError(t, err)
+			}
+			if !assert.Len(t, queries, tt.wantCalls) || tt.wantCalls == consts.ZeroValue {
+				return
+			}
+			if tt.want == consts.EmptyString {
+				assert.NotContains(t, queries[0], "hide")
+				return
+			}
+			assert.Contains(t, queries[0], tt.want)
+		})
+	}
+}

@@ -822,11 +822,17 @@ $ ./trakt-sync users -a plex_sync -i <server id> -all_data
 `collection` sends the filters, as the Trakt API contract lists them for this route, but on 2026-10-04 the live API ignored `-genres`,
 `-years` and `-languages` there and returned the whole collection.
 In `history`, `-start_at` and `-end_at` still set the watched-at window; `-start_date` and `-end_date` are the separate media date filters.
+`watchlist` also takes `-hide <value>`, which leaves items out: `unwatched`, `collected`, `uncollected`, `rated`, `unrated`, `unreleased`, `noreleasedate`,
+`ended`, `airing`, `unwatchlisted`, `listed`, `notes` or `nonotes` (one value). On 2026-10-04 the live API applied `unwatched`, `collected`, `uncollected`, `rated`,
+`unrated`, `ended`, `airing`, `listed` and `notes`; the other four returned the whole list.
 ```console
 $ ./trakt-sync users -a watchlist -t movies -genres horror -years 2020-2026
 ```
 ```console
 $ ./trakt-sync users -a history -t movies -genres drama -ratings 75-100
+```
+```console
+$ ./trakt-sync users -a watchlist -t shows -hide ended
 ```
 ```console
 $ ./trakt-sync users -a list_items -u username -i 123456 -t movies -watchnow subscriptions

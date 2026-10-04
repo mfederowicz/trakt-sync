@@ -42,6 +42,7 @@ var (
 	_usersIgnoreCollected        = UsersCmd.Flag.String("ignore_collected", string(cfg.DefaultConfig().IgnoreCollected), consts.IgnoreCollectedUsage)
 	_usersIgnoreWatched          = UsersCmd.Flag.String("ignore_watched", string(cfg.DefaultConfig().IgnoreWatched), consts.IgnoreWatchedUsage)
 	_usersIgnoreWatchlisted      = UsersCmd.Flag.String("ignore_watchlisted", string(cfg.DefaultConfig().IgnoreWatchlisted), consts.IgnoreWatchlistedUsage)
+	_usersHide                   = UsersCmd.Flag.String("hide", consts.EmptyString, consts.WatchlistHideUsage)
 	_usersFilters                = newMediaFilterFlags(&UsersCmd.Flag)
 )
 

@@ -52,6 +52,7 @@ type Options struct {
 	Format            string
 	Hidden            string
 	Hide              bool
+	HideItems         string
 	ID                string
 	IgnoreCollected   string
 	IgnoreWatched     string
