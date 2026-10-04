@@ -12,6 +12,7 @@ const (
 	AvailableOnUsage             = "filter by media server ie: -available_on plex"
 	BaseURLPath                  = "/trakt"
 	BearerPrefix                 = "Bearer "
+	BuildDateFormat              = "2006-01-02 15:04 MST"
 	AllDataSegment               = "all_data"
 	AllDataUsage                 = "full re-sync of all data instead of an incremental one"
 	CMD                          = "cmd"
