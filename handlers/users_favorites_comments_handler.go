@@ -36,7 +36,7 @@ func (m UsersFavoritesCommentsHandler) Handle(options *str.Options, client *trak
 	return nil
 }
 
-func (m UsersFavoritesCommentsHandler) usersFavoritesComments(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+func (m UsersFavoritesCommentsHandler) usersFavoritesComments(client *trakt.Client, options *str.Options, page int) ([]*str.ListComment, error) {
 	items, err := m.common.FetchUsersFavoritesComments(client, options, page)
 
 	if err != nil {

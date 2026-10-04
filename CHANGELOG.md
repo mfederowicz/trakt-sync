@@ -41,11 +41,13 @@ schedule.
 ### Changed
 
 - Library: `UsersService.GetUsersPersonalLists` takes a third argument, `opts *uri.ListOptions` (`SortBy`, `SortHow`); pass `nil` for the old behaviour.
+- Library: `UsersService.GetWatchlistComments` and `UsersService.GetFavoritesComments` return `[]*str.ListComment` instead of `[]*str.ExportlistItem`, which could not hold a comment.
 
 ### Fixed
 
 - The config file keys `ignore_collected`, `ignore_watched` and `ignore_watchlisted` can be written without quotes (`ignore_collected = true`). Before, an unquoted value stopped every run with `cannot parse the config file: toml: ... incompatible types: TOML value has type bool; destination has type string`. The quoted form (`"true"`) works as before.
 - `users -a collection`: the docs and the 1.24.0 notes said it takes the media filters (`-genres`, `-years`, `-watchnow` and so on). The flags are sent, as the Trakt API contract lists them for this route, but on 2026-10-04 the live API ignored `-genres`, `-years`, `-languages` and `-watchnow` and returned the whole collection. `docs/users.md` now says so.
+- `users -a watchlist_comments` and `users -a favorites_comments` exported only the `id`, `updated_at` and `user` of each comment. The export now holds the whole comment: its text, `spoiler`, `review`, `replies`, `likes`, `created_at`, `parent_id` and `user_stats`. Tested against a mock server only: on 2026-10-04 the live API returned no comments for the accounts tried.
 
 ## [1.24.0] - 2026-10-04
 

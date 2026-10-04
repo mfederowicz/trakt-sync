@@ -13,6 +13,7 @@ import (
 
 const (
 	testPageQuery = "limit=10&page=1"
+	testComments  = `[{"id":8,"comment":"Can't wait to watch everything on this epic list!","spoiler":false,"likes":2}]`
 	testFollowers = `[{"user":{"username":"justin","private":false}}]`
 	testItems     = `[{"rank":1,"type":"movie","movie":{"title":"TRON: Legacy","year":2010}}]`
 	testLikes     = `[{"type":"list","list":{"name":"Star Wars","privacy":"public"}}]`
@@ -131,7 +132,7 @@ func TestCommonUsersFetchLists(t *testing.T) {
 				return c.FetchUsersWatchlist(client, o, consts.DefaultPage)
 			}},
 		{name: "FetchUsersWatchlistComments", options: str.Options{UserName: "sean", PerPage: 10, Sort: "likes"},
-			method: http.MethodGet, path: "/users/sean/watchlist/comments/likes", query: testPageQuery, body: testItems,
+			method: http.MethodGet, path: "/users/sean/watchlist/comments/likes", query: testPageQuery, body: testComments,
 			call: func(c *CommonLogic, client *trakt.Client, o *str.Options) (any, error) {
 				return c.FetchUsersWatchlistComments(client, o, consts.DefaultPage)
 			}},
@@ -146,7 +147,7 @@ func TestCommonUsersFetchLists(t *testing.T) {
 				return c.FetchUsersFavorites(client, o, consts.DefaultPage)
 			}},
 		{name: "FetchUsersFavoritesComments", options: str.Options{UserName: "sean", PerPage: 10, Sort: "newest"},
-			method: http.MethodGet, path: "/users/sean/favorites/comments/newest", query: testPageQuery, body: testItems,
+			method: http.MethodGet, path: "/users/sean/favorites/comments/newest", query: testPageQuery, body: testComments,
 			call: func(c *CommonLogic, client *trakt.Client, o *str.Options) (any, error) {
 				return c.FetchUsersFavoritesComments(client, o, consts.DefaultPage)
 			}},

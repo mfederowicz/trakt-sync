@@ -56,7 +56,7 @@ type CommonInterface interface {
 	FetchCommentItem(client *trakt.Client, options *str.Options) (*str.CommentMediaItem, error)
 	FetchCommentUserLikes(client *trakt.Client, options *str.Options, page int) ([]*str.CommentUserLike, error)
 	FetchUsersFavorites(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
-	FetchUsersFavoritesComments(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
+	FetchUsersFavoritesComments(client *trakt.Client, options *str.Options, page int) ([]*str.ListComment, error)
 	FetchFollowRequests(client *trakt.Client, options *str.Options) ([]*str.FollowRequest, error)
 	FetchFollowers(client *trakt.Client, options *str.Options, page int) ([]*str.Follower, error)
 	FetchFollowing(client *trakt.Client, options *str.Options, page int) ([]*str.Follower, error)
@@ -87,7 +87,7 @@ type CommonInterface interface {
 	FetchUsersListLikes(client *trakt.Client, options *str.Options, page int) ([]*str.UserLike, error)
 	FetchUsersNotes(client *trakt.Client, options *str.Options, page int) ([]*str.NotesItem, error)
 	FetchUsersWatchlist(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
-	FetchUsersWatchlistComments(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
+	FetchUsersWatchlistComments(client *trakt.Client, options *str.Options, page int) ([]*str.ListComment, error)
 	FetchWatchlist(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error)
 	GenActionTypeItemUsage(options *str.Options, items []string)
 	GenActionTypeUsage(options *str.Options, types []string)
@@ -2589,7 +2589,7 @@ func (c CommonLogic) FetchUsersWatchlist(client *trakt.Client, options *str.Opti
 }
 
 // FetchUsersWatchlistComments helper function to fetch watchlist comments.
-func (c CommonLogic) FetchUsersWatchlistComments(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+func (c CommonLogic) FetchUsersWatchlistComments(client *trakt.Client, options *str.Options, page int) ([]*str.ListComment, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetWatchlistComments(
 		cli.ContextFromOptions(options),
@@ -2664,7 +2664,7 @@ func (c CommonLogic) FetchUsersFavorites(client *trakt.Client, options *str.Opti
 }
 
 // FetchUsersFavoritesComments helper function to fetch watchlist comments.
-func (c CommonLogic) FetchUsersFavoritesComments(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
+func (c CommonLogic) FetchUsersFavoritesComments(client *trakt.Client, options *str.Options, page int) ([]*str.ListComment, error) {
 	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetFavoritesComments(
 		cli.ContextFromOptions(options),
