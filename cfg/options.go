@@ -518,9 +518,9 @@ func OptionsFromConfig(fs afero.Fs, config *Config) (str.Options, error) {
 	options.Sort = config.Sort
 	options.Action = config.Action
 	options.PagesLimit = config.PagesLimit
-	options.IgnoreCollected = config.IgnoreCollected
-	options.IgnoreWatched = config.IgnoreWatched
-	options.IgnoreWatchlisted = config.IgnoreWatchlisted
+	options.IgnoreCollected = string(config.IgnoreCollected)
+	options.IgnoreWatched = string(config.IgnoreWatched)
+	options.IgnoreWatchlisted = string(config.IgnoreWatchlisted)
 	options.WatchWindow = config.WatchWindow
 
 	token, err := readTokenFromFile(fs, config.TokenPath)

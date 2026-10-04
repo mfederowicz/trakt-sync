@@ -11,9 +11,9 @@ import (
 
 var (
 	_socialRecommendationsAction            = SocialRecommendationsCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
-	_socialRecommendationsIgnoreCollected   = SocialRecommendationsCmd.Flag.String("ignore_collected", cfg.DefaultConfig().IgnoreCollected, consts.IgnoreCollectedUsage)
-	_socialRecommendationsIgnoreWatched     = SocialRecommendationsCmd.Flag.String("ignore_watched", cfg.DefaultConfig().IgnoreWatched, consts.IgnoreWatchedUsage)
-	_socialRecommendationsIgnoreWatchlisted = SocialRecommendationsCmd.Flag.String("ignore_watchlisted", cfg.DefaultConfig().IgnoreWatchlisted, consts.IgnoreWatchlistedUsage)
+	_socialRecommendationsIgnoreCollected   = SocialRecommendationsCmd.Flag.String("ignore_collected", string(cfg.DefaultConfig().IgnoreCollected), consts.IgnoreCollectedUsage)
+	_socialRecommendationsIgnoreWatched     = SocialRecommendationsCmd.Flag.String("ignore_watched", string(cfg.DefaultConfig().IgnoreWatched), consts.IgnoreWatchedUsage)
+	_socialRecommendationsIgnoreWatchlisted = SocialRecommendationsCmd.Flag.String("ignore_watchlisted", string(cfg.DefaultConfig().IgnoreWatchlisted), consts.IgnoreWatchlistedUsage)
 	_socialRecommendationsWatchWindow       = SocialRecommendationsCmd.Flag.Int("watch_window", cfg.DefaultConfig().WatchWindow, consts.WatchWindowUsage)
 )
 

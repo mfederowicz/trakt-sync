@@ -54,9 +54,9 @@ func TestConfigFileIgnoreOptions(t *testing.T) {
 				fileConfig.ClientSecret = "b"
 				fileConfig.TokenPath = tmpPath + "token.json"
 				fileConfig.SettingsPath = tmpPath + "user_settings.json"
-				fileConfig.IgnoreCollected = fromFile.IgnoreCollected
-				fileConfig.IgnoreWatched = fromFile.IgnoreWatched
-				fileConfig.IgnoreWatchlisted = fromFile.IgnoreWatchlisted
+				fileConfig.IgnoreCollected = cfg.BoolText(fromFile.IgnoreCollected)
+				fileConfig.IgnoreWatched = cfg.BoolText(fromFile.IgnoreWatched)
+				fileConfig.IgnoreWatchlisted = cfg.BoolText(fromFile.IgnoreWatchlisted)
 				fileConfig.WatchWindow = fromFile.WatchWindow
 
 				var got *str.Options

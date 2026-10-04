@@ -16,8 +16,8 @@ var (
 	_smartListsSubgenres         = SmartListsCmd.Flag.String("subgenres", consts.EmptyString, consts.SubgenresUsage)
 	_smartListsRatings           = SmartListsCmd.Flag.String("ratings", consts.EmptyString, consts.RatingsFilterUsage)
 	_smartListsCertifications    = SmartListsCmd.Flag.String("certifications", consts.EmptyString, consts.CertificationsUsage)
-	_smartListsIgnoreWatched     = SmartListsCmd.Flag.String("ignore_watched", cfg.DefaultConfig().IgnoreWatched, consts.IgnoreWatchedUsage)
-	_smartListsIgnoreWatchlisted = SmartListsCmd.Flag.String("ignore_watchlisted", cfg.DefaultConfig().IgnoreWatchlisted, consts.IgnoreWatchlistedUsage)
+	_smartListsIgnoreWatched     = SmartListsCmd.Flag.String("ignore_watched", string(cfg.DefaultConfig().IgnoreWatched), consts.IgnoreWatchedUsage)
+	_smartListsIgnoreWatchlisted = SmartListsCmd.Flag.String("ignore_watchlisted", string(cfg.DefaultConfig().IgnoreWatchlisted), consts.IgnoreWatchlistedUsage)
 )
 
 // SmartListsCmd returns smart list definitions and the items they resolve to.
