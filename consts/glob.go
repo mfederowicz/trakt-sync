@@ -216,6 +216,7 @@ const (
 	WatchNowCountryUsage         = "2 character country code, all countries when not set ie: -country us"
 	WatchNowUsage                = "where to watch: favorites, any, any_all, free, free_all, subscriptions, subscriptions_all"
 	WatchlistDescriptionUsage    = "allow to overwrite description"
+	WatchlistHideUsage           = "leave watchlist items out: unwatched, collected, uncollected, rated, unrated, unreleased, noreleasedate, ended, airing, unwatchlisted, listed, notes, nonotes"
 	WatchlistNotesUsage          = "allow to overwrite notes"
 	YearMonthFormat              = "%d-%02d"
 	YearUsage                    = "review year ie: -year 2025"

@@ -63,6 +63,9 @@ var SyncAvailableOn = []string{"plex"}
 // SyncUpNextIntents are the sync/progress/up_next_nitro intent values from the API contract
 var SyncUpNextIntents = []string{"all", "continue", "start", "completed"}
 
+// WatchlistHideFilters are the hide filter values of the users watchlist routes from the API contract
+var WatchlistHideFilters = []string{"unwatched", "collected", "uncollected", "rated", "unrated", "unreleased", "noreleasedate", "ended", "airing", "unwatchlisted", "listed", "notes", "nonotes"}
+
 // WatchNowFilters are the watchnow media filter values from the API contract
 var WatchNowFilters = []string{"favorites", "any", "any_all", "free", "free_all", "subscriptions", "subscriptions_all"}
 

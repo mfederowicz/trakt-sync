@@ -62,6 +62,7 @@ type ListOptions struct {
 	WatchWindow   int             `url:"watch_window,omitempty"`
 	Years         string          `url:"years,omitempty"`
 	Hidden        string          `url:"hidden,omitempty"`
+	Hide          string          `url:"hide,omitempty"`
 	Specials      string          `url:"specials,omitempty"`
 	CountSpecials string          `url:"count_specials,omitempty"`
 	StartAt       string          `url:"start_at,omitempty"`

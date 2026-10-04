@@ -383,6 +383,7 @@ func setOptionsDependsOnModuleUsers(options str.Options) str.Options {
 	options.SortPath = *_usersSortPath
 	options.ReturnURL = *_usersReturnURL
 	options.AllData = *_usersAllData
+	options.HideItems = *_usersHide
 	if len(*_usersIgnoreCollected) > consts.ZeroValue {
 		options.IgnoreCollected = *_usersIgnoreCollected
 	}

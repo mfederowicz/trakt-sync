@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -20,6 +21,9 @@ type UsersWatchlistHandler struct{ common CommonLogic }
 func (m UsersWatchlistHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if err := checkMediaFilters(options); err != nil {
 		return err
+	}
+	if len(options.HideItems) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.WatchlistHideFilters, options.HideItems) {
+		return fmt.Errorf("hide '%s' is not valid, available values: %v", options.HideItems, cfg.WatchlistHideFilters)
 	}
 	err := m.common.CheckTypes(options)
 	if err != nil {

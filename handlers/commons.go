@@ -2540,7 +2540,7 @@ func (c CommonLogic) FetchUsersHistory(client *trakt.Client, options *str.Option
 
 // FetchUsersWatchlist helper function to fetch watchlist.
 func (c CommonLogic) FetchUsersWatchlist(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options)}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Hide: options.HideItems, Filters: mediaFilters(options)}
 	var (
 		list []*str.ExportlistItem
 		resp *str.Response
