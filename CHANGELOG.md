@@ -43,6 +43,7 @@ schedule.
 
 - Library: `UsersService.GetUsersPersonalLists` takes a third argument, `opts *uri.ListOptions` (`SortBy`, `SortHow`); pass `nil` for the old behaviour.
 - Library: `UsersService.GetWatchlistComments` and `UsersService.GetFavoritesComments` return `[]*str.ListComment` instead of `[]*str.ExportlistItem`, which could not hold a comment.
+- A date flag with a value that is not a date (`YYYY-MM-DD`) now stops the run before any request, for example `sync: invalid -start_at "2026-02-30", want YYYY-MM-DD`, with exit status 1. This covers `-start_date` in `movies`, `shows` and `people`, `-start_at` and `-end_at` in `sync` and `users`, and `-reset_at` in `shows`. Before, such a value was silently replaced by the current date, so a typo in `sync -a get_history -start_at` exported the wrong window, and `shows -a reset_show_progress -reset_at` with a typo or a full date and time reset the progress at the current time.
 
 ### Fixed
 
