@@ -26,12 +26,18 @@ func (t Timestamp) UTC() *Timestamp {
 const (
 	dateFormat     = "2006-01-02"
 	dateTimeFormat = time.RFC3339 // "2006-01-02T15:04:05Z07:00"
+	jsonNull       = "null"
 	minStrLen      = 2
 	start          = 1
 )
 
 // UnmarshalJSON supports both date and datetime formats
 func (t *Timestamp) UnmarshalJSON(b []byte) error {
+	// A JSON null leaves the value as it is, like the standard library types do
+	if string(b) == jsonNull {
+		return nil
+	}
+
 	// Remove quotes from JSON string
 	s := string(b)
 	if len(s) >= minStrLen {

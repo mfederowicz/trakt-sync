@@ -95,6 +95,38 @@ func TestTimestampRoundTrip(t *testing.T) {
 	}
 }
 
+// TestTimestampNull checks that a JSON null leaves a Timestamp value as it is, as encoding/json expects of an Unmarshaler.
+func TestTimestampNull(t *testing.T) {
+	rate := Rate{Reset: Timestamp{Time: time.Date(2026, time.October, 1, 14, 7, 14, 0, time.UTC)}}
+	if err := json.Unmarshal([]byte(`{"reset":null,"limit":1000,"remaining":999}`), &rate); err != nil {
+		t.Fatalf("decode a rate with a null reset: %v", err)
+	}
+	if rate.Limit != 1000 || rate.Remaining != 999 {
+		t.Errorf("rate is %+v, want limit 1000 and remaining 999", rate)
+	}
+	if want := time.Date(2026, time.October, 1, 14, 7, 14, 0, time.UTC); !rate.Reset.Equal(want) {
+		t.Errorf("reset is %v, want it unchanged: %v", rate.Reset.Time, want)
+	}
+
+	date := Timestamp{Time: time.Date(2026, time.October, 1, 0, 0, 0, 0, time.UTC), DateOnly: true}
+	if err := json.Unmarshal([]byte(`null`), &date); err != nil {
+		t.Fatalf("decode null: %v", err)
+	}
+	if !date.DateOnly || date.IsZero() {
+		t.Errorf("null changed the value to %+v", date)
+	}
+
+	var ptr struct {
+		At *Timestamp `json:"at"`
+	}
+	if err := json.Unmarshal([]byte(`{"at":null}`), &ptr); err != nil {
+		t.Fatalf("decode a null pointer field: %v", err)
+	}
+	if ptr.At != nil {
+		t.Errorf("pointer field is %v, want nil", ptr.At)
+	}
+}
+
 func TestTimestampInvalid(t *testing.T) {
 	var ts Timestamp
 	err := json.Unmarshal([]byte(`"yesterday"`), &ts)
