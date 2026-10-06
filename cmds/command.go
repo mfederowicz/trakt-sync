@@ -8,6 +8,7 @@ import (
 	"io"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/cli"
@@ -188,6 +189,9 @@ func (c *Command) Exec(fs afero.Fs, client *trakt.Client, config *cfg.Config, ar
 		return fmt.Errorf("%s: unexpected argument %q", c.Name, c.Flag.Arg(consts.ZeroValue))
 	}
 	c.warnDeprecatedFlags()
+	if err = c.checkDateFlags(); err != nil {
+		return err
+	}
 	m := c.fetchFlagsMap()
 	options, err := cfg.SyncOptionsFromFlags(fs, c.Config, m)
 
@@ -662,6 +666,28 @@ func (c *Command) warnDeprecatedFlags() {
 			printer.Print(note)
 		}
 	}
+}
+
+// checkDateFlags stops the run when a date flag of the module holds a value that is not a date.
+// These flags go through ConvertDateString, which replaces such a value with the current date.
+func (c *Command) checkDateFlags() error {
+	module := map[string][]string{
+		consts.Movies: {"start_date"},
+		consts.People: {"start_date"},
+		consts.Shows:  {"start_date", "reset_at"},
+		consts.Sync:   {"start_at", "end_at"},
+		consts.Users:  {"start_at", "end_at"},
+	}
+	for _, name := range module[c.Name] {
+		f := c.Flag.Lookup(name)
+		if f == nil || len(f.Value.String()) == consts.ZeroValue {
+			continue
+		}
+		if _, err := time.Parse(consts.DefaultDateFormat, f.Value.String()); err != nil {
+			return fmt.Errorf("%s: invalid -%s %q, want YYYY-MM-DD", c.Name, name, f.Value.String())
+		}
+	}
+	return nil
 }
 
 // flagSetIn reports whether the flag was given in fs; for flag.CommandLine that means before the module name.
