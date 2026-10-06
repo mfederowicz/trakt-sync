@@ -37,6 +37,7 @@ schedule.
 - `users -a lists` takes `-sort_how asc|desc` and `-sort_by`, which the Trakt API contract added to the lists route. They are sent only when given, so the default order is unchanged. On 2026-10-04 the live API applied the direction (`-sort_how desc` reverses the overview) but kept the same order for every `-sort_by` value tried.
 - `users -a watchlist` takes `-hide <value>` to leave items out of the export: `unwatched`, `collected`, `uncollected`, `rated`, `unrated`, `unreleased`, `noreleasedate`, `ended`, `airing`, `unwatchlisted`, `listed`, `notes` or `nonotes`. An unknown value stops the run before any request. On 2026-10-04 the live API applied nine of them; `unreleased`, `noreleasedate`, `unwatchlisted` and `nonotes` returned the whole list.
 - Library: `uri.ListOptions` has the new field `Hide`.
+- Library: `str.Timestamp` has the new field `DateOnly`, set when the value was decoded from a date without a time. Such a value is encoded as a date again.
 
 ### Changed
 
@@ -49,6 +50,7 @@ schedule.
 - `users -a collection`: the docs and the 1.24.0 notes said it takes the media filters (`-genres`, `-years`, `-watchnow` and so on). The flags are sent, as the Trakt API contract lists them for this route, but on 2026-10-04 the live API ignored `-genres`, `-years`, `-languages` and `-watchnow` and returned the whole collection. `docs/users.md` now says so.
 - `users -a watchlist_comments` and `users -a favorites_comments` exported only the `id`, `updated_at` and `user` of each comment. The export now holds the whole comment: its text, `spoiler`, `review`, `replies`, `likes`, `created_at`, `parent_id` and `user_stats`. Tested against a mock server only: on 2026-10-04 the live API returned no comments for the accounts tried.
 - `-version` shows the `Built` date in the system timezone (for example `2026-10-04 14:30 CEST`). Before, it was always printed in UTC, as stored at build time; release builds printed it as `2026-10-04T12:30:45Z`.
+- Exports write every date and time in full. Before, a time that was exactly midnight in the configured `timezone` lost its time and offset and was written as a date only: with `timezone = "Europe/Warsaw"`, `2026-09-30T22:00:00Z` became `2026-10-01` instead of `2026-10-01T00:00:00+02:00`, and with the default UTC, `2026-10-01T00:00:00Z` became `2026-10-01`. Read back, such a value was midnight UTC, so the moment moved by the timezone offset. The same happened to times sent to the API, for example `watched_at` in `sync -a add_to_history`. A value that comes as a date without a time is still written as a date, and it now keeps its day in every timezone (west of UTC it was moved to the evening before).
 
 ## [1.24.0] - 2026-10-04
 
