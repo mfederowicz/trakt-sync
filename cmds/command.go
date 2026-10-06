@@ -670,6 +670,7 @@ func (c *Command) warnDeprecatedFlags() {
 
 // checkDateFlags stops the run when a date flag of the module holds a value that is not a date.
 // These flags go through ConvertDateString, which replaces such a value with the current date.
+// shows -reset_at also takes a full date and time.
 func (c *Command) checkDateFlags() error {
 	module := map[string][]string{
 		consts.Movies: {"start_date"},
@@ -683,8 +684,14 @@ func (c *Command) checkDateFlags() error {
 		if f == nil || len(f.Value.String()) == consts.ZeroValue {
 			continue
 		}
-		if _, err := time.Parse(consts.DefaultDateFormat, f.Value.String()); err != nil {
+		if _, err := time.Parse(consts.DefaultDateFormat, f.Value.String()); err == nil {
+			continue
+		}
+		if name != "reset_at" {
 			return fmt.Errorf("%s: invalid -%s %q, want YYYY-MM-DD", c.Name, name, f.Value.String())
+		}
+		if _, err := time.Parse(consts.DefaultStartDateFormat, f.Value.String()); err != nil {
+			return fmt.Errorf("%s: invalid -%s %q, want YYYY-MM-DD or a full time like 2026-01-15T20:30:00Z", c.Name, name, f.Value.String())
 		}
 	}
 	return nil
@@ -1341,7 +1348,11 @@ func UpdateOptionsWithCommandShowsFlags(c *Command, options *str.Options) *str.O
 	}
 
 	if len(*_showsResetAt) > consts.ZeroValue {
-		options.ResetAt = c.common.ConvertDateString(*_showsResetAt, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
+		// a full date and time is sent as given; a date gets the current full hour
+		options.ResetAt = *_showsResetAt
+		if _, err := time.Parse(consts.DefaultStartDateFormat, *_showsResetAt); err != nil {
+			options.ResetAt = c.common.ConvertDateString(*_showsResetAt, consts.DefaultStartDateFormat, options.Timezone, options.FullHour)
+		}
 	}
 
 	if len(*_showsReason) > consts.ZeroValue {

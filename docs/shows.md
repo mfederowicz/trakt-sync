@@ -189,9 +189,10 @@ $ ./trakt-sync shows -a watched_progress -i the-sopranos -hidden true -specials 
 ```console
 $ ./trakt-sync shows -a reset_show_progress -i the-sopranos
 ```
-`-reset_at YYYY-MM-DD` sets the day of the reset; the time of day is the current full hour. Without it Trakt uses the current time.
+`-reset_at` sets the time of the reset: a day (`YYYY-MM-DD`, with the current time of day in UTC) or a full date and time with an offset. Without it Trakt uses the current time.
 ```console
 $ ./trakt-sync shows -a reset_show_progress -i the-sopranos -reset_at 2026-10-01
+$ ./trakt-sync shows -a reset_show_progress -i the-sopranos -reset_at 2026-10-01T20:30:00+02:00
 ```
 ##### Undo Reset show progress
 ```console
