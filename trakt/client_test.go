@@ -2,6 +2,7 @@ package trakt
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -223,6 +224,47 @@ func TestWithTimezone(t *testing.T) {
 
 	assert.Equal(t, loc, client.GetTimezone(WithTimezone(context.Background(), loc)))
 	assert.Equal(t, time.UTC, client.GetTimezone(context.Background()))
+}
+
+// TestDoTimezoneKeepsMidnight checks a response time that is midnight in the user's timezone keeps its time,
+// and a date without a time keeps its day.
+func TestDoTimezoneKeepsMidnight(t *testing.T) {
+	testSetup := Setup()
+	client := testSetup.Client
+	mux := testSetup.Mux
+	teardown := testSetup.Teardown
+
+	defer teardown()
+
+	mux.HandleFunc("/"+consts.TestURL, func(w http.ResponseWriter, r *http.Request) {
+		test.AssertMethod(t, r, http.MethodGet)
+		printer.Fprint(w, `[{"listed_at":"2026-09-30T22:00:00.000Z"},{"listed_at":"2026-10-01T04:00:00.000Z"},{"listed_at":"2026-10-01"}]`)
+	})
+
+	cases := []struct {
+		name string
+		loc  *time.Location
+		want string
+	}{
+		{name: "UTC", loc: time.UTC, want: `[{"listed_at":"2026-09-30T22:00:00Z"},{"listed_at":"2026-10-01T04:00:00Z"},{"listed_at":"2026-10-01"}]`},
+		{name: "east of UTC", loc: time.FixedZone("CEST", 2*60*60), want: `[{"listed_at":"2026-10-01T00:00:00+02:00"},{"listed_at":"2026-10-01T06:00:00+02:00"},{"listed_at":"2026-10-01"}]`},
+		{name: "west of UTC", loc: time.FixedZone("EDT", -4*60*60), want: `[{"listed_at":"2026-09-30T18:00:00-04:00"},{"listed_at":"2026-10-01T00:00:00-04:00"},{"listed_at":"2026-10-01"}]`},
+	}
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			req, err := client.NewRequest(http.MethodGet, consts.TestURL, nil)
+			assert.NoError(t, err)
+
+			list := []*str.UserListItem{}
+			_, err = client.Do(WithTimezone(context.Background(), tc.loc), req, &list)
+			assert.NoError(t, err)
+
+			got, err := json.Marshal(list)
+			assert.NoError(t, err)
+			assert.Equal(t, tc.want, string(got))
+		})
+	}
 }
 
 // TestDebugLogger checks DebugLogger gets the service note and the request line, with client_secret redacted.

@@ -16,6 +16,8 @@ func TestTimestampJSON(t *testing.T) {
 		{name: "date and time", in: `"2026-10-01T14:07:14Z"`, want: time.Date(2026, time.October, 1, 14, 7, 14, 0, time.UTC), out: `"2026-10-01T14:07:14Z"`},
 		{name: "milliseconds are dropped on encode", in: `"2026-10-01T14:07:14.000Z"`, want: time.Date(2026, time.October, 1, 14, 7, 14, 0, time.UTC), out: `"2026-10-01T14:07:14Z"`},
 		{name: "date only", in: `"2026-10-01"`, want: time.Date(2026, time.October, 1, 0, 0, 0, 0, time.UTC), out: `"2026-10-01"`},
+		{name: "midnight keeps its time", in: `"2026-10-01T00:00:00Z"`, want: time.Date(2026, time.October, 1, 0, 0, 0, 0, time.UTC), out: `"2026-10-01T00:00:00Z"`},
+		{name: "midnight with an offset keeps its time and offset", in: `"2026-10-01T00:00:00+02:00"`, want: time.Date(2026, time.September, 30, 22, 0, 0, 0, time.UTC), out: `"2026-10-01T00:00:00+02:00"`},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -34,6 +36,62 @@ func TestTimestampJSON(t *testing.T) {
 				t.Errorf("encoded time is %s, want %s", out, tc.out)
 			}
 		})
+	}
+}
+
+// TestTimestampTimezone checks the encoded form of values moved to another timezone, as the client does with WithTimezone.
+func TestTimestampTimezone(t *testing.T) {
+	warsaw := time.FixedZone("CEST", 2*60*60)
+	newYork := time.FixedZone("EDT", -4*60*60)
+	cases := []struct {
+		name string
+		in   string
+		loc  *time.Location
+		out  string
+	}{
+		{name: "local midnight east of UTC keeps its time", in: `"2026-09-30T22:00:00Z"`, loc: warsaw, out: `"2026-10-01T00:00:00+02:00"`},
+		{name: "local midnight west of UTC keeps its time", in: `"2026-10-01T04:00:00Z"`, loc: newYork, out: `"2026-10-01T00:00:00-04:00"`},
+		{name: "UTC midnight is a local time", in: `"2026-10-01T00:00:00Z"`, loc: warsaw, out: `"2026-10-01T02:00:00+02:00"`},
+		{name: "date only east of UTC stays the same day", in: `"2026-10-01"`, loc: warsaw, out: `"2026-10-01"`},
+		{name: "date only west of UTC stays the same day", in: `"2026-10-01"`, loc: newYork, out: `"2026-10-01"`},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			var ts Timestamp
+			if err := json.Unmarshal([]byte(tc.in), &ts); err != nil {
+				t.Fatalf("decode %s: %v", tc.in, err)
+			}
+			ts.Time = ts.Time.In(tc.loc)
+			out, err := json.Marshal(ts)
+			if err != nil {
+				t.Fatalf("encode: %v", err)
+			}
+			if string(out) != tc.out {
+				t.Errorf("encoded time is %s, want %s", out, tc.out)
+			}
+		})
+	}
+}
+
+// TestTimestampRoundTrip checks that a value encoded and decoded again is the same moment.
+func TestTimestampRoundTrip(t *testing.T) {
+	warsaw := time.FixedZone("CEST", 2*60*60)
+	for _, want := range []time.Time{
+		time.Date(2026, time.October, 1, 0, 0, 0, 0, time.UTC),
+		time.Date(2026, time.October, 1, 0, 0, 0, 0, warsaw),
+		time.Date(2026, time.October, 1, 14, 7, 14, 0, warsaw),
+	} {
+		out, err := json.Marshal(Timestamp{Time: want})
+		if err != nil {
+			t.Fatalf("encode %v: %v", want, err)
+		}
+		var got Timestamp
+		if err := json.Unmarshal(out, &got); err != nil {
+			t.Fatalf("decode %s: %v", out, err)
+		}
+		if !got.Equal(want) {
+			t.Errorf("%s decodes to %v, want %v", out, got.Time, want)
+		}
 	}
 }
 

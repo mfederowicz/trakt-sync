@@ -5,9 +5,12 @@ import (
 	"time"
 )
 
-// Timestamp object
+// Timestamp is a date and time from the Trakt API. A value decoded from a
+// date without a time ("2006-01-02") is encoded as a date again.
 type Timestamp struct {
 	time.Time
+	// DateOnly is set when the value was decoded from a date without a time
+	DateOnly bool
 }
 
 func (t Timestamp) String() string {
@@ -16,7 +19,7 @@ func (t Timestamp) String() string {
 
 // UTC returns a copy of Timestamp with time converted to UTC.
 func (t Timestamp) UTC() *Timestamp {
-	return &Timestamp{Time: t.Time.UTC()}
+	return &Timestamp{Time: t.Time.UTC(), DateOnly: t.DateOnly}
 }
 
 // Define the possible formats
@@ -25,7 +28,6 @@ const (
 	dateTimeFormat = time.RFC3339 // "2006-01-02T15:04:05Z07:00"
 	minStrLen      = 2
 	start          = 1
-	zero           = 0
 )
 
 // UnmarshalJSON supports both date and datetime formats
@@ -40,6 +42,7 @@ func (t *Timestamp) UnmarshalJSON(b []byte) error {
 	parsedTime, err := time.Parse(dateTimeFormat, s)
 	if err == nil {
 		t.Time = parsedTime
+		t.DateOnly = false
 		return nil
 	}
 
@@ -47,6 +50,7 @@ func (t *Timestamp) UnmarshalJSON(b []byte) error {
 	parsedTime, err = time.Parse(dateFormat, s)
 	if err == nil {
 		t.Time = parsedTime
+		t.DateOnly = true
 		return nil
 	}
 
@@ -55,9 +59,10 @@ func (t *Timestamp) UnmarshalJSON(b []byte) error {
 
 // MarshalJSON marshal json object to string
 func (t Timestamp) MarshalJSON() ([]byte, error) {
-	// If time is exactly midnight (00:00:00 UTC), assume it was a date-only input
-	if t.Hour() == zero && t.Minute() == zero && t.Second() == zero {
-		return fmt.Appendf(nil, `"%s"`, t.Format("2006-01-02")), nil
+	// A date has no timezone: write the day it was decoded from, even when
+	// the client moved the value to the user's timezone
+	if t.DateOnly {
+		return fmt.Appendf(nil, `"%s"`, t.Time.UTC().Format(dateFormat)), nil
 	}
 
 	// Otherwise, return full RFC3339 format
