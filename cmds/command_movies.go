@@ -29,6 +29,7 @@ var (
 	_moviesImdbRatings    = MoviesCmd.Flag.String("imdb_ratings", consts.EmptyString, consts.ImdbRatingsUsage)
 	_moviesRtMeters       = MoviesCmd.Flag.String("rt_meters", consts.EmptyString, consts.RtMetersUsage)
 	_moviesRtUserMeters   = MoviesCmd.Flag.String("rt_user_meters", consts.EmptyString, consts.RtUserMetersUsage)
+	_moviesStatus         = MoviesCmd.Flag.String("status", consts.EmptyString, consts.MoviesStatusUsage)
 
 	validMoviesActions = []string{
 		consts.Trending, consts.Popular, consts.Favorited, consts.Played, consts.Watched, consts.Collected,

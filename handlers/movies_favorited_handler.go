@@ -20,7 +20,7 @@ type MoviesFavoritedHandler struct{}
 
 // Handle to handle movies: favorited action
 func (h MoviesFavoritedHandler) Handle(options *str.Options, client *trakt.Client) error {
-	if err := checkMediaFilters(options); err != nil {
+	if err := checkMovieFilters(options); err != nil {
 		return err
 	}
 	printer.Println("Returns the most favorited movies in the specified time period")
@@ -48,7 +48,7 @@ func (h MoviesFavoritedHandler) Handle(options *str.Options, client *trakt.Clien
 }
 
 func (h MoviesFavoritedHandler) fetchMoviesFavorited(client *trakt.Client, options *str.Options, page int) ([]*str.MoviesItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options)}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options), Status: movieStatus(options)}
 	period := options.Period
 	list, resp, err := client.Movies.GetFavoritedMovies(
 		cli.ContextFromOptions(options),

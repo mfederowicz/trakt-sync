@@ -147,6 +147,7 @@ const (
 	MoviesLanguageUsage          = "allow to overwrite language"
 	MoviesPeriodUsage            = "allow to overwrite period"
 	MoviesSortUsage              = "allow to overwrite sort"
+	MoviesStatusUsage            = "movie status, comma separated: released, in production, post production, planned, rumored, canceled"
 	MoviesTypeUsage              = "allow to overwrite type"
 	NewLine                      = "\n"
 	NoEpisodeTitle               = "no episode title"

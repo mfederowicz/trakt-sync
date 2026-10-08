@@ -11,12 +11,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// the movies list actions send the media filter flags as query parameters.
+// the movies list actions send the media filter flags and -status as query parameters.
 func TestMoviesHandlersMediaFilters(t *testing.T) {
 	const filtered = "certifications=pg-13&countries=us&end_date=2026-12-31&genres=action%2Cdrama&imdb_ratings=8.0-10.0&languages=en%2Cpl&page=1&ratings=75-100" +
-		"&rt_meters=90-100&rt_user_meters=80-100&runtimes=90-150&start_date=2026-01-01&subgenres=space&watchnow=free&years=2020-2026"
+		"&rt_meters=90-100&rt_user_meters=80-100&runtimes=90-150&start_date=2026-01-01&statuses=released%2Cin+production&subgenres=space&watchnow=free&years=2020-2026"
 	filters := str.Options{WatchNow: "free", Genres: "action,drama", Subgenres: "space", Years: "2020-2026", Ratings: "75-100", Runtimes: "90-150", Countries: "us", Certifications: "pg-13", MediaStartDate: "2026-01-01", MediaEndDate: "2026-12-31",
-		ImdbRatings: "8.0-10.0", RtMeters: "90-100", RtUserMeters: "80-100", Languages: "en,pl"}
+		ImdbRatings: "8.0-10.0", RtMeters: "90-100", RtUserMeters: "80-100", Languages: "en,pl", MovieStatus: "released,in production"}
 	handlers := []struct {
 		name    string
 		handler Handler
@@ -41,6 +41,8 @@ func TestMoviesHandlersMediaFilters(t *testing.T) {
 		{name: "all filters", options: filters, query: filtered},
 		{name: "no filters", query: "page=1"},
 		{name: "unknown watchnow", options: str.Options{WatchNow: "cinema"}, wantErr: "watchnow 'cinema' is not valid"},
+		{name: "one status", options: str.Options{MovieStatus: "rumored"}, query: "page=1&statuses=rumored"},
+		{name: "unknown status", options: str.Options{MovieStatus: "released,ended"}, wantErr: "status 'ended' is not valid"},
 	}
 
 	for _, h := range handlers {

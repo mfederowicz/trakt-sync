@@ -1305,6 +1305,7 @@ func UpdateOptionsWithCommandMoviesFlags(c *Command, options *str.Options) *str.
 	}
 
 	options.WatchNow = *_moviesWatchNow
+	options.MovieStatus = *_moviesStatus
 	options.Subgenres = *_moviesSubgenres
 	options.Ratings = *_moviesRatings
 	options.Certifications = *_moviesCertifications

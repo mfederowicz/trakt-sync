@@ -59,7 +59,8 @@ func TestShowsMediaFilterFlags(t *testing.T) {
 func TestMediaFilterFlagsAreAvailable(t *testing.T) {
 	filters := []string{"watchnow", "subgenres", "ratings", "certifications", "start_date", "end_date", "genres", "years", "countries", "runtimes", "languages"}
 	filters = append(filters, "imdb_ratings", "rt_meters", "rt_user_meters")
-	modules := map[*Command][]string{MoviesCmd: filters, ShowsCmd: append([]string{"status"}, filters...)}
+	filters = append(filters, "status")
+	modules := map[*Command][]string{MoviesCmd: filters, ShowsCmd: filters}
 	global := []string{"genres", "years", "countries", "runtimes", "languages"}
 	for command, names := range modules {
 		for _, name := range names {

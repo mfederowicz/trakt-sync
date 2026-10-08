@@ -20,7 +20,7 @@ type MoviesAnticipatedHandler struct{}
 
 // Handle to handle movies: anticipated action
 func (h MoviesAnticipatedHandler) Handle(options *str.Options, client *trakt.Client) error {
-	if err := checkMediaFilters(options); err != nil {
+	if err := checkMovieFilters(options); err != nil {
 		return err
 	}
 	printer.Println("Returns the most anticipated movies based on the number of lists a movie appears on.")
@@ -48,7 +48,7 @@ func (h MoviesAnticipatedHandler) Handle(options *str.Options, client *trakt.Cli
 }
 
 func (h MoviesAnticipatedHandler) fetchMoviesAnticipated(client *trakt.Client, options *str.Options, page int) ([]*str.MoviesItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options)}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options), Status: movieStatus(options)}
 	list, resp, err := client.Movies.GetAnticipatedMovies(
 		cli.ContextFromOptions(options),
 		&opts,
