@@ -23,12 +23,8 @@ const (
 	PagesLimit            = 2
 	PerPage               = 50
 	RatingRageMin         = 0
-	RatingRageMinFloat    = 0.00
 	RatingRangeMax        = 100
-	RatingRangeMaxFloat   = 100.00
 	SleepNumberOfSeconds  = 2
-	TmdbRatingRangeMax    = 10.00
-	TmdbRatingRangeMin    = 0.00
 	TwoValue              = 2
 	VotesRangeMax         = 100000
 	VotesRangeMin         = 0

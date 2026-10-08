@@ -23,10 +23,8 @@ type ListOptions struct {
 	AvailableOn    string   `url:"available_on,omitempty"`
 	Certifications []string `url:"certifications,omitempty"`
 	Countries      []string `url:"countries,omitempty"`
-	// Deprecated: episode_types is no longer part of the Trakt API (not in its OpenAPI spec or contract).
-	EpisodeTypes []string `url:"episode_types,omitempty"`
-	Extended     string   `url:"extended,omitempty"`
-	Field        string   `url:"fields,omitempty"`
+	Extended       string   `url:"extended,omitempty"`
+	Field          string   `url:"fields,omitempty"`
 	// Filters are the media filters; set them here rather than in the typed filter fields of ListOptions.
 	Filters           MediaFilters
 	Genres            []string       `url:"genres,omitempty"`
@@ -37,14 +35,10 @@ type ListOptions struct {
 	ImdbVotes         ImdbVotesRange `url:"imdb_votes,omitempty"`
 	IncludeReplies    string         `url:"include_replies,omitempty"`
 	// Languages is the languages filter; prefer Filters.Languages.
-	Languages    []string `url:"languages,omitempty"`
-	Translations []string `url:"translations,omitempty"`
-	Limit        int      `url:"limit,omitempty"`
-	Links        string   `url:"links,omitempty"`
-	// Deprecated: metascores is no longer part of the Trakt API (not in its OpenAPI spec or contract).
-	Metascores RatingRangeFloat `url:"metascores,omitempty"`
-	// Deprecated: network_ids is no longer part of the Trakt API (not in its OpenAPI spec or contract).
-	NetworkIDs   []int       `url:"network_ids,omitempty"`
+	Languages    []string    `url:"languages,omitempty"`
+	Translations []string    `url:"translations,omitempty"`
+	Limit        int         `url:"limit,omitempty"`
+	Links        string      `url:"links,omitempty"`
 	Page         int         `url:"page,omitempty"`
 	Query        string      `url:"query,omitempty"`
 	Ratings      RatingRange `url:"ratings,omitempty"`
@@ -52,26 +46,22 @@ type ListOptions struct {
 	RtUserMeters RatingRange `url:"rt_user_meters,omitempty"`
 	Runtimes     string      `url:"runtimes,omitempty"`
 	// Status is the show status filter; it is sent as statuses, the name the API applies.
-	Status []string `url:"statuses,omitempty"`
-	// Deprecated: studio_ids is no longer part of the Trakt API (not in its OpenAPI spec or contract).
-	StudioIDs []int `url:"studio_ids,omitempty"`
-	// Deprecated: tmdb_ratings is no longer part of the Trakt API (not in its OpenAPI spec or contract).
-	TmdbRatings   TmdbRatingRange `url:"tmdb_ratings,omitempty"`
-	TmdbVotes     VotesRange      `url:"tmdb_votes,omitempty"`
-	Type          string          `url:"type,omitempty"`
-	Votes         VotesRange      `url:"votes,omitempty"`
-	WatchWindow   int             `url:"watch_window,omitempty"`
-	Years         string          `url:"years,omitempty"`
-	Hidden        string          `url:"hidden,omitempty"`
-	Hide          string          `url:"hide,omitempty"`
-	LastActivity  string          `url:"last_activity,omitempty"`
-	Specials      string          `url:"specials,omitempty"`
-	CountSpecials string          `url:"count_specials,omitempty"`
-	StartAt       string          `url:"start_at,omitempty"`
-	EndAt         string          `url:"end_at,omitempty"`
-	Rating        []string        `url:"rating,omitempty"`
-	SortBy        string          `url:"sort_by,omitempty"`
-	SortHow       string          `url:"sort_how,omitempty"`
+	Status        []string   `url:"statuses,omitempty"`
+	TmdbVotes     VotesRange `url:"tmdb_votes,omitempty"`
+	Type          string     `url:"type,omitempty"`
+	Votes         VotesRange `url:"votes,omitempty"`
+	WatchWindow   int        `url:"watch_window,omitempty"`
+	Years         string     `url:"years,omitempty"`
+	Hidden        string     `url:"hidden,omitempty"`
+	Hide          string     `url:"hide,omitempty"`
+	LastActivity  string     `url:"last_activity,omitempty"`
+	Specials      string     `url:"specials,omitempty"`
+	CountSpecials string     `url:"count_specials,omitempty"`
+	StartAt       string     `url:"start_at,omitempty"`
+	EndAt         string     `url:"end_at,omitempty"`
+	Rating        []string   `url:"rating,omitempty"`
+	SortBy        string     `url:"sort_by,omitempty"`
+	SortHow       string     `url:"sort_how,omitempty"`
 }
 
 // AddQuery adds query parameters to s. Nil options add no query.
@@ -100,11 +90,9 @@ type CustomTypeHandler func(reflect.Value, *url.Values, string) error
 
 // customTypeHandlers maps custom types to their corresponding handling functions
 var customTypeHandlers = map[reflect.Type]CustomTypeHandler{
-	reflect.TypeOf(RatingRange{}):      handleRatingRange,
-	reflect.TypeOf(VotesRange{}):       handleVotesRange,
-	reflect.TypeOf(TmdbRatingRange{}):  handleTmdbRatingRange,
-	reflect.TypeOf(ImdbVotesRange{}):   handleImdbVotesRange,
-	reflect.TypeOf(RatingRangeFloat{}): handleMetaCriticRange,
+	reflect.TypeOf(RatingRange{}):    handleRatingRange,
+	reflect.TypeOf(VotesRange{}):     handleVotesRange,
+	reflect.TypeOf(ImdbVotesRange{}): handleImdbVotesRange,
 }
 
 // isCorrectFieldTag check if fieldTag and value not empty
@@ -133,29 +121,9 @@ func handleVotesRange(fieldValue reflect.Value, qs *url.Values, fieldTag string)
 	return nil
 }
 
-// handleTmdbRatingRange handles the TmdbRatingRange custom type
-func handleTmdbRatingRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) error {
-	if rr, ok := fieldValue.Interface().(TmdbRatingRange); ok && isCorrectFieldTag(fieldTag, rr.String()) {
-		// Remove omitempty tag from the field tag
-		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
-		qs.Add(fieldTag, rr.String())
-	}
-	return nil
-}
-
 // handleImdbVotesRange handles the ImdbVotesRange custom type
 func handleImdbVotesRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) error {
 	if rr, ok := fieldValue.Interface().(ImdbVotesRange); ok && isCorrectFieldTag(fieldTag, rr.String()) {
-		// Remove omitempty tag from the field tag
-		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
-		qs.Add(fieldTag, rr.String())
-	}
-	return nil
-}
-
-// handleMetaCriticRange handles the RatingRangeFloat custom type
-func handleMetaCriticRange(fieldValue reflect.Value, qs *url.Values, fieldTag string) error {
-	if rr, ok := fieldValue.Interface().(RatingRangeFloat); ok && isCorrectFieldTag(fieldTag, rr.String()) {
 		// Remove omitempty tag from the field tag
 		fieldTag = strings.Split(fieldTag, consts.SeparatorString)[consts.ZeroValue]
 		qs.Add(fieldTag, rr.String())

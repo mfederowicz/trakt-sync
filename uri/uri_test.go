@@ -8,18 +8,15 @@ import (
 var (
 	DefaultRange                     = RatingRange{Min: 10, Max: 45}
 	ListOptionsBasic                 = ListOptions{Page: 1, Limit: 10, Extended: "full"}
-	ListOptionsCommon                = ListOptions{Genres: []string{"action", "adventure", "comedy"}, Years: "2016", StudioIDs: []int{1, 2, 3}}
+	ListOptionsCommon                = ListOptions{Genres: []string{"action", "adventure", "comedy"}, Years: "2016"}
 	ListOptionsRatings               = ListOptions{Ratings: RatingRange{Min: 10, Max: 45}}
 	ListOptionsInvalidRatings        = ListOptions{Ratings: RatingRange{Min: 100, Max: 48}}
 	ListOptionsVotes                 = ListOptions{Votes: VotesRange{Min: 10, Max: 45}}
-	ListOptionsEpisodesFilters       = ListOptions{Certifications: []string{"pg-13", "pg-16"}, NetworkIDs: []int{1, 2, 45}, EpisodeTypes: []string{"standard", "series_premiere"}}
-	ListOptionsTmdbRatingsFilters    = ListOptions{TmdbRatings: TmdbRatingRange{Min: 5.5, Max: 10.0}}
-	ListOptionsShowsFilters          = ListOptions{Certifications: []string{"pg-13", "pg-16"}, NetworkIDs: []int{1, 2, 45}, Status: []string{"pilot", "ended"}}
+	ListOptionsShowsFilters          = ListOptions{Certifications: []string{"pg-13", "pg-16"}, Status: []string{"pilot", "ended"}}
 	ListOptionsCertificationsFilters = ListOptions{Certifications: []string{"pg-13", "pg-16"}}
 	ListOptionsTmdbVotes             = ListOptions{TmdbVotes: VotesRange{Min: 25, Max: 40}}
 	ListOptionsImdbVotes             = ListOptions{ImdbRatings: RatingRange{Min: 3, Max: 6}, ImdbVotes: ImdbVotesRange{Min: 10, Max: 25}}
 	ListOptionsRt                    = ListOptions{RtMeters: RatingRange{Min: 55, Max: 100}, RtUserMeters: RatingRange{Min: 65, Max: 100}}
-	ListOptionsMetascores            = ListOptions{Metascores: RatingRangeFloat{Min: 55, Max: 100}}
 )
 
 const (
@@ -43,7 +40,7 @@ func TestBuildQueryBasic(t *testing.T) {
 func TestBuildQueryCommonFilters(t *testing.T) {
 	t.Helper()
 
-	expectedURL := BaseURL + "?genres=" + url.QueryEscape("action,adventure,comedy") + "&studio_ids=" + url.QueryEscape("1,2,3") + "&years=2016"
+	expectedURL := BaseURL + "?genres=" + url.QueryEscape("action,adventure,comedy") + "&years=2016"
 	got, _ := AddQuery(BaseURL, ListOptionsCommon)
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
@@ -80,17 +77,6 @@ func TestBuildQueryRatingFiltersVotes(t *testing.T) {
 	}
 }
 
-func TestBuildQueryRatingFiltersTmdbRatings(t *testing.T) {
-	t.Helper()
-
-	expectedURL := BaseURL + "?tmdb_ratings=5.5-10.0"
-
-	got, _ := AddQuery(BaseURL, ListOptionsTmdbRatingsFilters)
-	if string(got) != expectedURL {
-		t.Fatalf(Expected, expectedURL, string(got))
-	}
-}
-
 func TestBuildQueryRatingFiltersTmdbVotes(t *testing.T) {
 	t.Helper()
 
@@ -122,17 +108,6 @@ func TestBuildQueryRatingFiltersRt(t *testing.T) {
 	}
 }
 
-func TestBuildQueryRatingFiltersMeta(t *testing.T) {
-	t.Helper()
-
-	expectedURL := BaseURL + "?metascores=55.0-100.0"
-
-	got, _ := AddQuery(BaseURL, ListOptionsMetascores)
-	if string(got) != expectedURL {
-		t.Fatalf(Expected, expectedURL, string(got))
-	}
-}
-
 func TestBuildQueryCertificationsFilters(t *testing.T) {
 	t.Helper()
 
@@ -149,25 +124,10 @@ func TestBuildQueryShowFilters(t *testing.T) {
 
 	params := url.Values{}
 	params.Set("certifications", "pg-13,pg-16")
-	params.Set("network_ids", "1,2,45")
 	params.Set("statuses", "pilot,ended")
 	expectedURL := BaseURL + "?" + params.Encode()
 
 	got, _ := AddQuery(BaseURL, ListOptionsShowsFilters)
-	if string(got) != expectedURL {
-		t.Fatalf(Expected, expectedURL, string(got))
-	}
-}
-
-func TestBuildQueryEpisodeFilters(t *testing.T) {
-	t.Helper()
-
-	expectedURL := BaseURL + "?certifications=" + url.QueryEscape("pg-13,pg-16") + "&episode_types=" + url.QueryEscape("standard,series_premiere") + "&network_ids=" + url.QueryEscape("1,2,45")
-	got, err := AddQuery(BaseURL, ListOptionsEpisodesFilters)
-	if err != nil {
-		t.Logf("error:%s", err)
-	}
-
 	if string(got) != expectedURL {
 		t.Fatalf(Expected, expectedURL, string(got))
 	}
