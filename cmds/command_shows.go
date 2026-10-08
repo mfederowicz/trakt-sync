@@ -18,6 +18,7 @@ var (
 	_showsSpecials       = ShowsCmd.Flag.String("specials", cfg.DefaultConfig().Specials, consts.ShowsSpecialsUsage)
 	_showsCountSpecials  = ShowsCmd.Flag.String("count_specials", cfg.DefaultConfig().CountSpecials, consts.ShowsCountSpecialsUsage)
 	_showsLanguage       = ShowsCmd.Flag.String("language", cfg.DefaultConfig().ShowsLanguage, consts.ShowsLanguageUsage)
+	_showsLastActivity   = ShowsCmd.Flag.String("last_activity", consts.EmptyString, consts.ShowsLastActivityUsage)
 	_showsSort           = ShowsCmd.Flag.String("s", cfg.DefaultConfig().ShowsSort, consts.ShowsSortUsage)
 	_showsType           = ShowsCmd.Flag.String("t", cfg.DefaultConfig().ShowsType, consts.ShowsTypeUsage)
 	_showsStartDate      = ShowsCmd.Flag.String("start_date", "", consts.StartDateUsage)
