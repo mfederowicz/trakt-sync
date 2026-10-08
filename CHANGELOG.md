@@ -40,6 +40,7 @@ schedule.
 
 - The flags deprecated in 1.22.0 are gone: `-query` (use `search -q`), `-studio_ids` (the Trakt API has no such filter), `notes -notes_id` (use `notes -i`) and `scrobble -delete` (it never did anything). None of them had any effect; using one now stops the run with `flag provided but not defined`.
 - Library: the `uri.ListOptions` fields `EpisodeTypes`, `Metascores`, `NetworkIDs`, `StudioIDs` and `TmdbRatings`, deprecated in 1.22.0, are gone, together with the types `uri.RatingRangeFloat` and `uri.TmdbRatingRange` that only they used. The Trakt API has no such query parameters and the CLI never sent them.
+- Library: the variable `uri.EpisodeTypes` (the value list of the removed `episode_types` filter) is gone; nothing used it.
 
 ## [1.25.0] - 2026-10-08
 
