@@ -66,7 +66,6 @@ type Config struct {
 	MoviesType        string    `toml:"type"`
 	Msg               string    `toml:"msg"`
 	Notes             string    `toml:"notes"`
-	NotesID           int       `toml:"notes_id"`
 	Output            string    `toml:"output"`
 	PagesLimit        int       `toml:"pages_limit"`
 	PlaybackID        int       `toml:"playback_id"`
@@ -536,7 +535,6 @@ func DefaultConfig() *Config {
 		ListsType:      consts.EmptyString,
 		MoviesType:     consts.EmptyString,
 		Msg:            consts.EmptyString,
-		NotesID:        consts.ZeroValue,
 		Output:         consts.EmptyString,
 		PagesLimit:     consts.PagesLimit,
 		PerPage:        consts.DefaultPerPage,
