@@ -51,7 +51,8 @@ type ListOptions struct {
 	RtMeters     RatingRange `url:"rt_meters,omitempty"`
 	RtUserMeters RatingRange `url:"rt_user_meters,omitempty"`
 	Runtimes     string      `url:"runtimes,omitempty"`
-	Status       []string    `url:"status,omitempty"`
+	// Status is the show status filter; it is sent as statuses, the name the API applies.
+	Status []string `url:"statuses,omitempty"`
 	// Deprecated: studio_ids is no longer part of the Trakt API (not in its OpenAPI spec or contract).
 	StudioIDs []int `url:"studio_ids,omitempty"`
 	// Deprecated: tmdb_ratings is no longer part of the Trakt API (not in its OpenAPI spec or contract).

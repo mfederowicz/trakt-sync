@@ -56,6 +56,8 @@ schedule.
 
 ### Fixed
 
+- `shows -a trending|popular|anticipated|watched|played|collected|favorited -status <value>` filters again. The flag was sent as `status`, which the live API ignores: the list came back unfiltered. It is now sent as `statuses`, the name in the Trakt API contract. Checked live on 2026-10-08 on all seven actions: `status=ended` changed nothing, `statuses=ended` returned ended shows only.
+- Library: `uri.ListOptions.Status` is sent as the query parameter `statuses` instead of `status`.
 - The config file keys `ignore_collected`, `ignore_watched` and `ignore_watchlisted` can be written without quotes (`ignore_collected = true`). Before, an unquoted value stopped every run with `cannot parse the config file: toml: ... incompatible types: TOML value has type bool; destination has type string`. The quoted form (`"true"`) works as before.
 - `users -a collection`: the docs and the 1.24.0 notes said it takes the media filters (`-genres`, `-years`, `-watchnow` and so on). The flags are sent, as the Trakt API contract lists them for this route, but on 2026-10-04 the live API ignored `-genres`, `-years`, `-languages` and `-watchnow` and returned the whole collection. `docs/users.md` now says so.
 - `users -a watchlist_comments` and `users -a favorites_comments` exported only the `id`, `updated_at` and `user` of each comment. The export now holds the whole comment: its text, `spoiler`, `review`, `replies`, `likes`, `created_at`, `parent_id` and `user_stats`. Tested against a mock server only: on 2026-10-04 the live API returned no comments for the accounts tried.
