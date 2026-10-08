@@ -163,7 +163,6 @@ const (
 	ReturnURLUsage               = "where the web auth returns: trakt://... or https://*.trakt.tv"
 	RatingsFilterUsage           = "Trakt rating range ie: -ratings 75-100"
 	RangeFormatDigits            = "%d-%d"
-	RangeFormatFloats            = "%.1f-%.1f"
 	Recent                       = "recent"
 	RtMetersUsage                = "Rotten Tomatoes tomatometer range ie: -rt_meters 90-100"
 	RtUserMetersUsage            = "Rotten Tomatoes audience score range ie: -rt_user_meters 80-100"
