@@ -99,8 +99,6 @@ const (
 	Languages             = "languages"
 	LastActivities        = "last_activities"
 	LastEpisode           = "last_episode"
-	LegacyIDLookup        = "id-lookup"
-	LegacyTextQuery       = "text-query"
 	Like                  = "like"
 	Likes                 = "likes"
 	List                  = "list"
