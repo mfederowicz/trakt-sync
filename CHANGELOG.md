@@ -34,6 +34,10 @@ schedule.
 
 ### Fixed
 
+### Removed
+
+- The flags deprecated in 1.22.0 are gone: `-query` (use `search -q`), `-studio_ids` (the Trakt API has no such filter), `notes -notes_id` (use `notes -i`) and `scrobble -delete` (it never did anything). None of them had any effect; using one now stops the run with `flag provided but not defined`.
+
 ## [1.25.0] - 2026-10-08
 
 ### Added

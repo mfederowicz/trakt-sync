@@ -27,14 +27,12 @@ var (
 	_output       = flag.String("o", cfg.DefaultConfig().Output, consts.OutputUsage)
 	_format       = flag.String("f", cfg.DefaultConfig().Format, consts.FormatUsage)
 	_extendedInfo = flag.String("ex", "", consts.ExtendedInfoUsage)
-	_query        = flag.String("query", "", consts.DeprecatedSearchQueryUsage)
 	_years        = flag.String("years", "", "")
 	_genres       = flag.String("genres", "", "")
 	_languages    = flag.String("languages", "", consts.LanguagesFilterUsage)
 	_translations = flag.String("translations", "", "")
 	_countries    = flag.String("countries", "", "")
 	_runtimes     = flag.String("runtimes", "", "")
-	_studioIDs    = flag.String("studio_ids", "", consts.DeprecatedNoAPIUsage)
 	_rating       = flag.String("rating", "", "")
 	_sortBy       = flag.String("sort_by", cfg.DefaultConfig().SortBy, consts.SortByUsage)
 	_sortHow      = flag.String("sort_how", cfg.DefaultConfig().SortHow, consts.SortHowUsage)
@@ -188,7 +186,6 @@ func (c *Command) Exec(fs afero.Fs, client *trakt.Client, config *cfg.Config, ar
 	if !c.TakesArgs && c.Flag.NArg() > consts.ZeroValue {
 		return fmt.Errorf("%s: unexpected argument %q", c.Name, c.Flag.Arg(consts.ZeroValue))
 	}
-	c.warnDeprecatedFlags()
 	if err = c.checkDateFlags(); err != nil {
 		return err
 	}
@@ -655,29 +652,6 @@ func unknownTypeError(module string, strType string) error {
 	return fmt.Errorf("%s: unknown type %q", module, strType)
 }
 
-// warnDeprecatedFlags prints a note for flags that are still accepted but do nothing any more;
-// they are removed in the next major version.
-func (c *Command) warnDeprecatedFlags() {
-	global := map[string]string{
-		"query":      fmt.Sprintf(consts.DeprecatedFlagUse, "query", "q"),
-		"studio_ids": fmt.Sprintf(consts.DeprecatedFlagNoAPI, "studio_ids"),
-	}
-	module := map[string]map[string]string{
-		consts.Notes:    {"notes_id": fmt.Sprintf(consts.DeprecatedFlagUse, "notes_id", "i")},
-		consts.Scrobble: {"delete": fmt.Sprintf(consts.DeprecatedFlagIgnored, "delete")},
-	}
-	for _, name := range []string{"query", "studio_ids"} {
-		if c.flagIsSet(name) || flagSetIn(flag.CommandLine, name) {
-			printer.Print(global[name])
-		}
-	}
-	for name, note := range module[c.Name] {
-		if c.flagIsSet(name) {
-			printer.Print(note)
-		}
-	}
-}
-
 // checkDateFlags stops the run when a date flag of the module holds a value that is not a date.
 // These flags go through ConvertDateString, which replaces such a value with the current date.
 // shows -reset_at also takes a full date and time.
@@ -705,17 +679,6 @@ func (c *Command) checkDateFlags() error {
 		}
 	}
 	return nil
-}
-
-// flagSetIn reports whether the flag was given in fs; for flag.CommandLine that means before the module name.
-func flagSetIn(fs *flag.FlagSet, name string) bool {
-	set := false
-	fs.Visit(func(f *flag.Flag) {
-		if f.Name == name {
-			set = true
-		}
-	})
-	return set
 }
 
 // flagIsSet reports whether the flag was given on the command line of this command.
