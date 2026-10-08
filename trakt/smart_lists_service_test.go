@@ -69,6 +69,31 @@ func TestSmartListsServiceGetSmartListItems(t *testing.T) {
 	}, got)
 }
 
+func TestSmartListsServiceGetSmartListItemsByTypeAndSort(t *testing.T) {
+	setup := Setup()
+	defer setup.Teardown()
+
+	setup.Mux.HandleFunc("/smart-lists/top-sci-fi/items/movies/imdb_rating/desc", func(w http.ResponseWriter, r *http.Request) {
+		test.AssertMethod(t, r, http.MethodGet)
+		want := "limit=10&page=2&parental_alcohol=0-3&parental_frightening=1-2&parental_include_unrated=true&parental_nudity=0-1" +
+			"&parental_profanity=0-1&parental_violence=0-2&watchnow=free&watchnow_country=pl"
+		if got := r.URL.RawQuery; got != want {
+			t.Errorf("query is %q, want %q", got, want)
+		}
+		test.SafeFprint(w, `[{"rank":1,"type":"movie","movie":{"title":"Arrival","year":2016}}]`)
+	})
+
+	opts := &uri.SmartListItemsOptions{
+		Page: 2, Limit: 10, WatchNow: "free", WatchNowCountry: "pl", ParentalNudity: "0-1", ParentalViolence: "0-2", ParentalProfanity: "0-1",
+		ParentalAlcohol: "0-3", ParentalFrightening: "1-2", ParentalIncludeUnrated: true,
+	}
+	got, _, err := setup.Client.SmartLists.GetSmartListItemsByTypeAndSort(context.Background(), "top-sci-fi", "movies", "imdb_rating", "desc", opts)
+	test.AssertNilError(t, err)
+	test.AssertNoDiff(t, []*str.UserListItem{
+		{Rank: test.Ptr(1), Type: str.String("movie"), Movie: &str.Movie{Title: str.String("Arrival"), Year: test.Ptr(2016)}},
+	}, got)
+}
+
 func TestSmartListsServiceNotFound(t *testing.T) {
 	setup := Setup()
 	defer setup.Teardown()

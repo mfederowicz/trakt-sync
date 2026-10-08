@@ -18,3 +18,23 @@ $ ./trakt-sync smart_lists -a items -i <slug> -genres action -years 2020-2026 -r
 ```console
 $ ./trakt-sync smart_lists -a items -i <slug> -watchnow subscriptions -ignore_watchlisted true
 ```
+Send the `-watchnow` filter for another region with `-watchnow_country <xx>` (two lowercase letters). Without it the API uses the list region, then the owner's region, then `us`:
+```console
+$ ./trakt-sync smart_lists -a items -i <slug> -watchnow free -watchnow_country pl
+```
+Filter by parental guide with `-parental_nudity`, `-parental_violence`, `-parental_profanity`, `-parental_alcohol` and `-parental_frightening`.
+Each takes a severity range `min-max` from 0 (none) to 3 (severe). Titles without a parental guide are left out, unless you add `-parental_include_unrated`:
+```console
+$ ./trakt-sync smart_lists -a items -i <slug> -parental_violence 0-1 -parental_frightening 0-2 -parental_include_unrated
+```
+##### Smart list items by type and sort:
+`-t all|movies|shows` narrows a list that holds both movies and shows, `-sort_by` and `-sort_how asc|desc` reorder it. Sort values: `rank` (the list's own order),
+`random`, `title`, `released`, `runtime`, `percentage`, `votes`, `imdb_rating`, `imdb_votes`, `tmdb_rating`, `tmdb_votes`, `rt_tomatometer`, `rt_audience`, `metascore`,
+and `added` on watchlist lists. Give at least one of the three flags after the module name; the others default to `-t all`, `-sort_by rank`, and `-sort_how asc` for `rank` and `title`, `desc` otherwise.
+The filters above work here too, and the output file is the same.
+```console
+$ ./trakt-sync smart_lists -a items -i <slug> -t movies -sort_by imdb_rating
+```
+```console
+$ ./trakt-sync smart_lists -a items -i <slug> -sort_by released -sort_how asc
+```

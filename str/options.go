@@ -19,6 +19,7 @@ type Options struct {
 	ShowStatus        string
 	Subgenres         string
 	WatchNow          string
+	WatchNowCountry   string
 	WatchWindow       int
 	ServiceID         string
 	ReturnURL         string
@@ -70,6 +71,7 @@ type Options struct {
 	Notes             string
 	Output            string
 	PagesLimit        int
+	Parental          ParentalGuide
 	PerPage           int
 	Period            string
 	Privacy           string

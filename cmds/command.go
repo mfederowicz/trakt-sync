@@ -429,6 +429,15 @@ func setOptionsDependsOnModuleSmartLists(options str.Options) str.Options {
 	options.Subgenres = *_smartListsSubgenres
 	options.Ratings = *_smartListsRatings
 	options.Certifications = *_smartListsCertifications
+	options.WatchNowCountry = *_smartListsWatchNowCountry
+	options.Parental = str.ParentalGuide{
+		Alcohol:        *_smartListsAlcohol,
+		Frightening:    *_smartListsFrightening,
+		IncludeUnrated: *_smartListsUnrated,
+		Nudity:         *_smartListsNudity,
+		Profanity:      *_smartListsProfanity,
+		Violence:       *_smartListsViolence,
+	}
 	if len(*_smartListsIgnoreWatched) > consts.ZeroValue {
 		options.IgnoreWatched = *_smartListsIgnoreWatched
 	}

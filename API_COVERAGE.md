@@ -35,14 +35,14 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`search`](#search) | 6 | 0 | 0 | 0 | 0 | 6 |
 | [`seasons`](#seasons) | 1 | 0 | 0 | 0 | 0 | 1 |
 | [`shows`](#shows) | 58 | 0 | 0 | 2 | 0 | 60 |
-| [`smart-lists`](#smart-lists) | 2 | 0 | 1 | 0 | 0 | 3 |
+| [`smart-lists`](#smart-lists) | 3 | 0 | 0 | 0 | 0 | 3 |
 | [`social_recommendations`](#social_recommendations) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
 | [`users`](#users) | 85 | 0 | 0 | 18 | 1 | 104 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **304** | **0** | **1** | **28** | **3** | **336** |
+| **Total** | **305** | **0** | **0** | **28** | **3** | **336** |
 
 ## calendars
 
@@ -332,7 +332,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | :---: | --- | --- | --- | --- |
 | ✅ | GET | `/smart-lists/{list_id}` | Get smart list | `SmartListsService.GetSmartList` |
 | ✅ | GET | `/smart-lists/{list_id}/items` | Get smart list items | `SmartListsService.GetSmartListItems` |
-| ⬜ | GET | `/smart-lists/{list_id}/items/{type}/{sort_by}/{sort_how}` | Get smart list items by type and sort | |
+| ✅ | GET | `/smart-lists/{list_id}/items/{type}/{sort_by}/{sort_how}` | Get smart list items by type and sort | `SmartListsService.GetSmartListItemsByTypeAndSort` |
 
 ## social_recommendations
 

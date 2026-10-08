@@ -44,6 +44,10 @@ func TestUsersSmartListsHandlers(t *testing.T) {
 			wantErr: consts.EmptySmartListIDMsg, wantNoAPI: true},
 		{name: "add", handler: UsersAddSmartListHandler{}, options: str.Options{Action: consts.AddSmartList}, input: create,
 			method: http.MethodPost, path: "/users/sean/smart-lists", status: http.StatusCreated, body: `{"ids":{"trakt":7,"slug":"sci-fi"}}`, wantOutput: true},
+		{name: "add parental filters and watchnow country", handler: UsersAddSmartListHandler{}, options: str.Options{Action: consts.AddSmartList},
+			input: `{"name":"Family","source":"popular","media_type":"movies","filters":{"watchnow":["free"],"watchnow_country":"pl","parental_nudity":[0,1],` +
+				`"parental_violence":[0,2],"parental_profanity":[0,1],"parental_alcohol":[0,3],"parental_frightening":[1,2],"parental_include_unrated":true}}`,
+			method: http.MethodPost, path: "/users/sean/smart-lists", status: http.StatusCreated, body: `{"ids":{"trakt":8,"slug":"family"}}`, wantOutput: true},
 		{name: "add missing source", handler: UsersAddSmartListHandler{}, options: str.Options{Action: consts.AddSmartList},
 			input: `{"name":"Sci-Fi","media_type":"movies"}`, wantErr: "needs name, source and media_type", wantNoAPI: true},
 		{name: "add invalid media_type", handler: UsersAddSmartListHandler{}, options: str.Options{Action: consts.AddSmartList},

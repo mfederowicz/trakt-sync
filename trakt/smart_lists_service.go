@@ -54,3 +54,26 @@ func (s *SmartListsService) GetSmartListItems(ctx context.Context, id string, op
 
 	return list, resp, nil
 }
+
+// GetSmartListItemsByTypeAndSort Returns the items of a smart list narrowed to a type (all, movies, shows) and sorted.
+//
+// API docs: https://docs.trakt.tv/reference/getsmart_liststypedsorted
+func (s *SmartListsService) GetSmartListItemsByTypeAndSort(ctx context.Context, id string, itemType string, sortBy string, sortHow string, opts *uri.SmartListItemsOptions) ([]*str.UserListItem, *str.Response, error) {
+	var url = fmt.Sprintf("smart-lists/%s/items/%s/%s/%s", id, itemType, sortBy, sortHow)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.UserListItem{}
+	resp, err := s.client.Do(ctx, req, &list)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
