@@ -191,6 +191,7 @@ const (
 	ShowsCountryUsage            = "allow to overwrite country"
 	ShowsHiddenUsage             = "allow to overwrite hidden"
 	ShowsLanguageUsage           = "allow to overwrite language"
+	ShowsLastActivityUsage       = "episode that last_episode and next_episode are counted from: aired, or collected (collection_progress) / watched (watched_progress)"
 	ShowsPeriodUsage             = "allow to overwrite period"
 	ShowsSortUsage               = "allow to overwrite sort"
 	ShowsSpecialsUsage           = "allow to overwrite specials"

@@ -62,6 +62,7 @@ type Options struct {
 	InternalID        string
 	Item              string
 	Language          string
+	LastActivity      string
 	Links             string
 	List              string
 	ListItemID        int

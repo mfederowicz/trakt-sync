@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
@@ -23,6 +24,10 @@ func (m ShowsCollectionProgressHandler) Handle(options *str.Options, client *tra
 	printer.Println("Returns collection progress for a show including details on all aired seasons and episodes.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyShowIDMsg)
+	}
+
+	if len(options.LastActivity) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.ShowsCollectionLastActivity, options.LastActivity) {
+		return fmt.Errorf("last_activity '%s' is not valid, avaliable values: %v", options.LastActivity, cfg.ShowsCollectionLastActivity)
 	}
 
 	err := m.common.CheckSortAndTypes(options)
@@ -49,7 +54,7 @@ func (m ShowsCollectionProgressHandler) Handle(options *str.Options, client *tra
 }
 
 func (ShowsCollectionProgressHandler) fetchShowsCollectionProgress(client *trakt.Client, options *str.Options) (*str.CollectionProgress, error) {
-	opts := uri.ListOptions{Hidden: options.Hidden, Specials: options.Specials, CountSpecials: options.CountSpecials}
+	opts := uri.ListOptions{Hidden: options.Hidden, Specials: options.Specials, CountSpecials: options.CountSpecials, LastActivity: options.LastActivity}
 
 	result, _, err := client.Shows.GetShowCollectionProgress(
 		cli.ContextFromOptions(options),

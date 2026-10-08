@@ -509,6 +509,7 @@ func setOptionsDependsOnModuleShows(options str.Options) str.Options {
 	options.Specials = *_showsSpecials
 	options.CountSpecials = *_showsCountSpecials
 	options.Language = *_showsLanguage
+	options.LastActivity = *_showsLastActivity
 	options.Sort = *_showsSort
 	options.Type = *_showsType
 	options.Delete = *_showsUndo

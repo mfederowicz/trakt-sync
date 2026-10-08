@@ -45,6 +45,8 @@ schedule.
 - Library: new `SmartListsService.GetSmartListItemsByTypeAndSort`; `uri.SmartListItemsOptions` has the new fields `WatchNowCountry`, `ParentalNudity`, `ParentalViolence`, `ParentalProfanity`, `ParentalAlcohol`, `ParentalFrightening` and `ParentalIncludeUnrated`; `str.SmartListFilters` has `WatchNowCountry`, the five `Parental*` ranges and `ParentalIncludeUnrated`; new type `str.ParentalGuide`, used by the new `str.Options` field `Parental`, next to the new `WatchNowCountry`.
 - Exports keep two more groups of fields the API returns: the `gif` of a comment (`url` and `slug`), for example in `comments -a comment`, `movies -a comments`, `shows -a comments` and `users -a watchlist_comments`, and `share_code` and `display_ads` of the account in `users -a settings`. Before, they were dropped. The `gif` is tested against a mock server only: on 2026-10-08 none of the 446 newest comments read from the live API had one.
 - Library: new type `str.CommentGif`, used by the new field `Gif` of `str.Comment` and `str.ListComment`; `str.UserAccount` has the new fields `ShareCode` and `DisplayAds`.
+- `shows -a collection_progress` takes `-last_activity aired|collected` and `shows -a watched_progress` takes `-last_activity aired|watched`. It chooses the episode that `last_episode` and `next_episode` are counted from: the last aired one you collected or watched (the default), or the one you collected or watched most recently. Another value stops the run before any request. On 2026-10-08 the live API accepted every value on both routes, but its effect could not be seen: the shows tried were watched in order and not collected, so all modes gave the same episodes.
+- Library: `uri.ListOptions` has the new field `LastActivity`.
 
 ### Changed
 

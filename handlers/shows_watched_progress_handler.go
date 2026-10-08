@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
@@ -23,6 +24,10 @@ func (m ShowsWatchedProgressHandler) Handle(options *str.Options, client *trakt.
 	printer.Println("Returns watched progress for a show including details on all aired seasons and episodes.")
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyShowIDMsg)
+	}
+
+	if len(options.LastActivity) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.ShowsWatchedLastActivity, options.LastActivity) {
+		return fmt.Errorf("last_activity '%s' is not valid, avaliable values: %v", options.LastActivity, cfg.ShowsWatchedLastActivity)
 	}
 
 	err := m.common.CheckSortAndTypes(options)
@@ -49,7 +54,7 @@ func (m ShowsWatchedProgressHandler) Handle(options *str.Options, client *trakt.
 }
 
 func (ShowsWatchedProgressHandler) fetchShowsWatchedProgress(client *trakt.Client, options *str.Options) (*str.WatchedProgress, error) {
-	opts := uri.ListOptions{Hidden: options.Hidden, Specials: options.Specials, CountSpecials: options.CountSpecials}
+	opts := uri.ListOptions{Hidden: options.Hidden, Specials: options.Specials, CountSpecials: options.CountSpecials, LastActivity: options.LastActivity}
 
 	result, _, err := client.Shows.GetShowWatchedProgress(
 		cli.ContextFromOptions(options),

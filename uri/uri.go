@@ -63,6 +63,7 @@ type ListOptions struct {
 	Years         string          `url:"years,omitempty"`
 	Hidden        string          `url:"hidden,omitempty"`
 	Hide          string          `url:"hide,omitempty"`
+	LastActivity  string          `url:"last_activity,omitempty"`
 	Specials      string          `url:"specials,omitempty"`
 	CountSpecials string          `url:"count_specials,omitempty"`
 	StartAt       string          `url:"start_at,omitempty"`
