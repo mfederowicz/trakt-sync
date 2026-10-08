@@ -3,7 +3,6 @@ package cmds
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/mfederowicz/trakt-sync/cfg"
@@ -76,27 +75,6 @@ func calendarsFunc(cmd *Command, _ ...string) error {
 	}
 
 	return nil
-}
-
-// calendarsActions lists the calendars actions; each one also accepts its old hyphenated name (my-shows)
-var calendarsActions = []string{
-	consts.MyShows, consts.AllShows, consts.MyNewShows, consts.AllNewShows,
-	consts.MySeasonPremieres, consts.AllSeasonPremieres, consts.MyFinales, consts.AllFinales,
-	consts.MyMovies, consts.AllMovies, consts.MyDvd, consts.AllDvd,
-	consts.MyMedia, consts.AllMedia, consts.MyStreaming, consts.AllStreaming,
-	consts.HotReleases, consts.HotPremieres, consts.HotNewShows, consts.HotFinales,
-}
-
-// normalizeCalendarsAction maps an old hyphenated action name to the current one and prints a deprecation note
-func normalizeCalendarsAction(action string) string {
-	for _, current := range calendarsActions {
-		legacy := strings.ReplaceAll(current, consts.ActionSeparator, consts.LegacyActionSeparator)
-		if action == legacy && legacy != current {
-			printer.Printf("action %s is deprecated, use %s\n", action, current)
-			return current
-		}
-	}
-	return action
 }
 
 func init() {

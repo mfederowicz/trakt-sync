@@ -1,5 +1,5 @@
 #### Search:
-The old action names `text-query` and `id-lookup` still work, but are deprecated: use `text_query` and `id_lookup`.
+The old action names `text-query` and `id-lookup` were removed: use `text_query` and `id_lookup`.
 
 ##### Export search result by Text Query:
 Every `--field` value must be valid for every `-t` type given.

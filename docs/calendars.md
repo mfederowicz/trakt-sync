@@ -1,5 +1,5 @@
 #### Calendars:
-The old hyphenated action names (`my-shows`, `all-new-shows`, `hot-releases`, ...) still work, but are deprecated: use the underscore names (`my_shows`, `all_new_shows`, `hot_releases`). Every `all_*` action also has a `my_*` variant for your own calendar.
+Action names use underscores (`my_shows`, `all_new_shows`, `hot_releases`); the old hyphenated names (`my-shows`, `all-new-shows`, `hot-releases`, ...) were removed. Every `all_*` action also has a `my_*` variant for your own calendar.
 ```console
 $ ./trakt-sync calendars -a all_shows -> export_calendars_shows_20240707_7.json
 ```

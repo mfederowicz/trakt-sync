@@ -332,7 +332,7 @@ func setOptionsDependsOnModuleSync(options str.Options) str.Options {
 }
 
 func setOptionsDependsOnModuleSearch(options str.Options) str.Options {
-	options.Action = normalizeSearchAction(*_searchAction)
+	options.Action = *_searchAction
 	options.SearchType = _searchType
 	options.SearchField = _searchField
 	options.ID = *_searchID
@@ -341,7 +341,7 @@ func setOptionsDependsOnModuleSearch(options str.Options) str.Options {
 }
 
 func setOptionsDependsOnModuleCalendars(options str.Options) str.Options {
-	options.Action = normalizeCalendarsAction(*_calAction)
+	options.Action = *_calAction
 	options.StartDate = *_calStartDate
 	options.Days = *_calDays
 	return _calFilters.apply(options)
