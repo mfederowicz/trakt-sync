@@ -23,13 +23,14 @@ func (MoviesStreamingHandler) Handle(options *str.Options, client *trakt.Client)
 		return fmt.Errorf("period '%s' is not valid for streaming, avaliable periods:%s", options.Period, periods)
 	}
 
-	if err := checkMediaFilters(options); err != nil {
+	if err := checkMovieFilters(options); err != nil {
 		return err
 	}
 
 	printer.Println("Returns the most streamed movies in the specified time period.")
 	result, err := fetchAllPages(client, options, consts.DefaultPage, func(opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
 		opts.Filters = mediaFilters(options)
+		opts.Status = movieStatus(options)
 		return client.Movies.GetStreamingMovies(cli.ContextFromOptions(options), options.Period, opts)
 	})
 	if err != nil {

@@ -195,6 +195,27 @@ func checkShowFilters(options *str.Options) error {
 	return nil
 }
 
+// movieStatus builds the status filter of a movies list route from the -status flag.
+func movieStatus(options *str.Options) []string {
+	if len(options.MovieStatus) == consts.ZeroValue {
+		return nil
+	}
+	return strings.Split(options.MovieStatus, consts.SeparatorString)
+}
+
+// checkMovieFilters reports a -watchnow or -status value the API does not know.
+func checkMovieFilters(options *str.Options) error {
+	if err := checkMediaFilters(options); err != nil {
+		return err
+	}
+	for _, status := range movieStatus(options) {
+		if !slices.Contains(cfg.MovieStatusFilters, status) {
+			return fmt.Errorf("status '%s' is not valid, available values: %v", status, cfg.MovieStatusFilters)
+		}
+	}
+	return nil
+}
+
 // pageFetcher fetches one page of a paginated list.
 type pageFetcher[T any] func(opts *uri.ListOptions) ([]T, *str.Response, error)
 

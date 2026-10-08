@@ -26,6 +26,7 @@ type Options struct {
 	AllData           bool
 	Year              int
 	Month             int
+	MovieStatus       string
 	SortPath          string
 	Years             string
 	HideCompleted     bool

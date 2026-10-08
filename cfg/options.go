@@ -87,6 +87,9 @@ var DataSyncTypes = []string{"younify", "plex", "import"}
 // SmartListSources are the smart list source values from the API contract
 var SmartListSources = []string{"trending", "popular", "anticipated", "recommendations", "discover", "watchlist", "library"}
 
+// MovieStatusFilters are the status values of a movie from the API contract, used by the statuses media filter
+var MovieStatusFilters = []string{"released", "in production", "post production", "planned", "rumored", "canceled"}
+
 // ShowsCollectionLastActivity are the shows/{id}/progress/collection last_activity values from the API contract
 var ShowsCollectionLastActivity = []string{"aired", "collected"}
 

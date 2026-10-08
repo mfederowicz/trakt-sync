@@ -73,13 +73,17 @@ $ ./trakt-sync movies -a streaming -period daily -> export_movies_streaming_dail
 ##### Filter the movie lists
 `trending`, `popular`, `anticipated`, `watched`, `played`, `collected`, `favorited`, `hot` and `streaming` take the Trakt media filters:
 `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications` (comma separated where a
-filter takes several values), `-start_date`, `-end_date` and
-`-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all`.
+filter takes several values), `-start_date`, `-end_date`,
+`-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all` and
+`-status` (`released`, `in production`, `post production`, `planned`, `rumored`, `canceled`; comma separated).
 They also take `-languages` (language codes, comma separated), `-imdb_ratings` (range, for example `8.0-10.0`),
 `-rt_meters` and `-rt_user_meters` (Rotten Tomatoes ranges, for example `90-100`).
 On these actions `-start_date` is a filter; on `updates` and `updated_ids` it stays the date to list changes from.
 ```console
 $ ./trakt-sync movies -a trending -genres action,drama -years 2020-2026 -ratings 75-100
+```
+```console
+$ ./trakt-sync movies -a anticipated -status "in production,post production"
 ```
 ```console
 $ ./trakt-sync movies -a popular -countries us -certifications pg-13 -watchnow subscriptions

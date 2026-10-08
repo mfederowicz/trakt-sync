@@ -15,12 +15,13 @@ type MoviesHotHandler struct{}
 
 // Handle to handle movies: hot action
 func (MoviesHotHandler) Handle(options *str.Options, client *trakt.Client) error {
-	if err := checkMediaFilters(options); err != nil {
+	if err := checkMovieFilters(options); err != nil {
 		return err
 	}
 	printer.Println("Returns hot movies, based on current list activity.")
 	result, err := fetchAllPages(client, options, consts.DefaultPage, func(opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
 		opts.Filters = mediaFilters(options)
+		opts.Status = movieStatus(options)
 		return client.Movies.GetHotMovies(cli.ContextFromOptions(options), opts)
 	})
 	if err != nil {

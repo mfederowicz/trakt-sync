@@ -47,6 +47,7 @@ schedule.
 - Library: new type `str.CommentGif`, used by the new field `Gif` of `str.Comment` and `str.ListComment`; `str.UserAccount` has the new fields `ShareCode` and `DisplayAds`.
 - `shows -a collection_progress` takes `-last_activity aired|collected` and `shows -a watched_progress` takes `-last_activity aired|watched`. It chooses the episode that `last_episode` and `next_episode` are counted from: the last aired one you collected or watched (the default), or the one you collected or watched most recently. Another value stops the run before any request. On 2026-10-08 the live API accepted every value on both routes, but its effect could not be seen: the shows tried were watched in order and not collected, so all modes gave the same episodes.
 - Library: `uri.ListOptions` has the new field `LastActivity`.
+- `movies -a trending|popular|anticipated|watched|played|collected|favorited|hot|streaming` take `-status <value>` (`released`, `in production`, `post production`, `planned`, `rumored`, `canceled`; comma separated), sent as the `statuses` media filter. An unknown value stops the run before any request.
 
 ### Changed
 
