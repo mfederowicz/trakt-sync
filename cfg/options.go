@@ -87,6 +87,15 @@ var DataSyncTypes = []string{"younify", "plex", "import"}
 // SmartListSources are the smart list source values from the API contract
 var SmartListSources = []string{"trending", "popular", "anticipated", "recommendations", "discover", "watchlist", "library"}
 
+// SmartListItemsSortBy are the smart-lists/{list_id}/items/{type}/{sort_by}/{sort_how} sort_by values from the API contract; added is for watchlist lists
+var SmartListItemsSortBy = []string{"rank", "random", "title", "released", "runtime", "percentage", "votes", "imdb_rating", "imdb_votes", "tmdb_rating", "tmdb_votes", "rt_tomatometer", "rt_audience", "metascore", "added"}
+
+// SmartListItemsSortHow are the smart-lists/{list_id}/items/{type}/{sort_by}/{sort_how} sort_how values from the API contract
+var SmartListItemsSortHow = []string{"asc", "desc"}
+
+// SmartListItemsTypes are the smart-lists/{list_id}/items/{type}/{sort_by}/{sort_how} type values from the API contract
+var SmartListItemsTypes = []string{"all", "movies", "shows"}
+
 // SmartListMediaTypes are the smart list media_type values from the API contract
 var SmartListMediaTypes = []string{"movies", "shows", "media"}
 
