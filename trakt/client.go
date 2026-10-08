@@ -22,6 +22,10 @@ import (
 
 type contextKey string
 
+// DefaultTimeout is the time limit of one request, from the connection to the end of the response body,
+// for the http.Client that NewClient creates when it gets nil. A client passed to NewClient keeps its own Timeout.
+const DefaultTimeout = 60 * time.Second
+
 // basic consts for client
 const (
 	HeaderPaginationPage                     = "X-Pagination-Page"
@@ -168,7 +172,7 @@ func (*Client) HavePages(page int, resp *str.Response, limit int) bool {
 // initialize sets default values and initializes services.
 func (c *Client) initialize() {
 	if c.client == nil {
-		c.client = &http.Client{}
+		c.client = &http.Client{Timeout: DefaultTimeout}
 	}
 	if c.BaseURL == nil {
 		c.BaseURL, _ = url.Parse(defaultBaseURL)
@@ -716,10 +720,10 @@ func (*Client) ParseUpgradeUser(r *http.Response) *url.URL {
 }
 
 // NewClient returns a new API client. If a nil httpClient is
-// provided, a new http.Client will be used.
+// provided, a new http.Client with the DefaultTimeout will be used.
 func NewClient(httpClient *http.Client) *Client {
 	if httpClient == nil {
-		httpClient = &http.Client{}
+		httpClient = &http.Client{Timeout: DefaultTimeout}
 	}
 	httpClient2 := *httpClient
 	c := &Client{client: &httpClient2}

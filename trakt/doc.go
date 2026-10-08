@@ -22,7 +22,8 @@ which only names this library, so Trakt cannot tell your app apart from others b
 
 	movies, _, err := client.Movies.GetTrendingMovies(ctx, &uri.ListOptions{Limit: 10})
 
-NewClient takes an optional *http.Client, for example one with a timeout. WithClientID, WithAuthToken and
+NewClient takes an optional *http.Client, for example one with your own timeout or transport; with nil, requests
+are limited to DefaultTimeout (60 seconds), so a stalled response ends with an error. WithClientID, WithAuthToken and
 WithUserAgent return a copy of the client; the original is never modified, so one base client can hand out
 variants (for example one per user token).
 

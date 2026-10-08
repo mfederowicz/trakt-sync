@@ -50,12 +50,14 @@ schedule.
 
 ### Changed
 
+- Library: `trakt.NewClient(nil)` creates its `http.Client` with the new `trakt.DefaultTimeout` (60 seconds) instead of no time limit. A client passed to `NewClient` keeps its own `Timeout`; pass one to choose another limit.
 - Library: `UsersService.GetUsersPersonalLists` takes a third argument, `opts *uri.ListOptions` (`SortBy`, `SortHow`); pass `nil` for the old behaviour.
 - Library: `UsersService.GetWatchlistComments` and `UsersService.GetFavoritesComments` return `[]*str.ListComment` instead of `[]*str.ExportlistItem`, which could not hold a comment.
 - A date flag with a value that is not a date (`YYYY-MM-DD`) now stops the run before any request, for example `sync: invalid -start_at "2026-02-30", want YYYY-MM-DD`, with exit status 1. This covers `-start_date` in `movies`, `shows` and `people`, `-start_at` and `-end_at` in `sync` and `users`, and `-reset_at` in `shows`. Before, such a value was silently replaced by the current date, so a typo in `sync -a get_history -start_at` exported the wrong window, and `shows -a reset_show_progress -reset_at` with a typo reset the progress at the current time.
 
 ### Fixed
 
+- A request that Trakt never answers no longer hangs the run. Every request is now limited to 60 seconds and then ends with an error such as `context deadline exceeded (Client.Timeout exceeded while awaiting headers)` and exit status 1. Before, there was no time limit: on 2026-10-08 one `smart_lists -a items` run waited on a stalled response until it was stopped by hand.
 - `shows -a trending|popular|anticipated|watched|played|collected|favorited -status <value>` filters again. The flag was sent as `status`, which the live API ignores: the list came back unfiltered. It is now sent as `statuses`, the name in the Trakt API contract. Checked live on 2026-10-08 on all seven actions: `status=ended` changed nothing, `statuses=ended` returned ended shows only.
 - Library: `uri.ListOptions.Status` is sent as the query parameter `statuses` instead of `status`.
 - The config file keys `ignore_collected`, `ignore_watched` and `ignore_watchlisted` can be written without quotes (`ignore_collected = true`). Before, an unquoted value stopped every run with `cannot parse the config file: toml: ... incompatible types: TOML value has type bool; destination has type string`. The quoted form (`"true"`) works as before.
