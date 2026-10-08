@@ -7,6 +7,8 @@ Versioning follows [SemVer](https://semver.org/):
 
 - **Major** (`X.0.0`) - breaking changes to the CLI surface: a removed or renamed module,
   action or flag, or a changed output file name or JSON shape that scripts may depend on.
+  Exception: a flag that was deprecated in an earlier release and had no effect may be removed
+  in a minor release, listed under `### Removed`.
 - **Minor** (`1.X.0`) - a module or action lands (new endpoints/commands), or other
   user-facing behavior changes in a compatible way.
 - **Patch** (`1.15.X`) - bug fixes, CI/tooling changes, docs-only changes, refactors with no
@@ -33,6 +35,10 @@ schedule.
 ### Changed
 
 ### Fixed
+
+### Removed
+
+- The flags deprecated in 1.22.0 are gone: `-query` (use `search -q`), `-studio_ids` (the Trakt API has no such filter), `notes -notes_id` (use `notes -i`) and `scrobble -delete` (it never did anything). None of them had any effect; using one now stops the run with `flag provided but not defined`.
 
 ## [1.25.0] - 2026-10-08
 
