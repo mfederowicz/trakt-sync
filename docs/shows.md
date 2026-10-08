@@ -62,9 +62,6 @@ $ ./trakt-sync shows -a collected -period all
 $ ./trakt-sync shows -a anticipated
 ```
 ##### Filter the show lists
-> **Note:** on 2026-10-03 the live API ignored `status` on `shows/popular` (`-status ended` returned the unfiltered list), although
-> it filtered the day before and the Trakt filters guide lists it. The flag is still sent; check the result when you rely on it.
-
 `trending`, `popular`, `anticipated`, `watched`, `played`, `collected` and `favorited` take the Trakt media filters:
 `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications` (comma separated where a
 filter takes several values), `-start_date`, `-end_date`,
