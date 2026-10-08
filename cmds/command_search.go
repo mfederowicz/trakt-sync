@@ -12,6 +12,12 @@ import (
 var _searchField str.Slice
 var _searchType str.Slice
 
+// legacySearchActions maps the old hyphenated action names to the current ones
+var legacySearchActions = map[string]string{
+	consts.LegacyIDLookup:  consts.IDLookup,
+	consts.LegacyTextQuery: consts.TextQuery,
+}
+
 var (
 	_searchAction = SearchCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
 	_searchQuery  = SearchCmd.Flag.String("q", cfg.DefaultConfig().Query, consts.QueryUsage)
@@ -64,4 +70,15 @@ func init() {
 	SearchCmd.Flag.Var(&_searchType, "t", consts.TypeUsage)
 	SearchCmd.Flag.Var(&_searchField, "field", consts.FieldUsage)
 	SearchCmd.Run = searchFunc
+}
+
+// normalizeSearchAction replaces a deprecated action name with the current one
+func normalizeSearchAction(action string) string {
+	current, found := legacySearchActions[action]
+	if !found {
+		return action
+	}
+
+	printer.Printf("action %s is deprecated, use %s\n", action, current)
+	return current
 }

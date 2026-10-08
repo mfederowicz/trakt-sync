@@ -110,6 +110,7 @@ const (
 	JSONDataFormat               = "  "
 	LanguageUsage                = "allow to overwrite language"
 	LanguagesFilterUsage         = "language codes, comma separated ie: -languages en,pl"
+	LegacyActionSeparator        = "-"
 	LifetimeStatsUsage           = "count completed episodes and stats across all rewatches ie: -lifetime_stats"
 	LinksUsage                   = "provider links to include, comma separated: tvos,direct,android,webos"
 	ListCommentSortUsage         = "allow to overwrite comments sort"
