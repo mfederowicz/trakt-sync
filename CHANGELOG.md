@@ -30,6 +30,14 @@ schedule.
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.25.0] - 2026-10-08
+
+### Added
+
 - `recommendations -a movies|shows` and `social_recommendations -a movies|shows` read the `favorited_by` and `recommended_by` entries in both shapes: the nested one (`user` object plus `notes`) and the flat one of the Trakt API contract (profile fields plus `notes`). A flat entry kept only its `notes` before. The export writes `user` plus `notes` in both cases. Both shapes were tested against a mock server only: on 2026-10-04 the live API returned empty lists.
 - Library: `str.UserNotes` decodes a flat entry (profile fields plus `notes`) into `User` and `Notes`, next to the nested one.
 - Exports keep three newer groups of fields the API returns: `email` in `users -a settings`, `height` of a person with `-ex full` (for example `people -a summary`), and the VIP veteran fields of a user profile with `-ex vip` (`vip_veteran_since`, `vip_veteran_years`, `vip_veteran_tier`, `vip_veteran_title`, `vip_grace_ends_at`). These fields were dropped before. On 2026-10-04 the live API sent `height` (in centimetres) and the VIP veteran fields; `email` is in the Trakt API contract, but the live API did not send it yet.
@@ -750,7 +758,8 @@ schedule.
 - First release, with the `calendars`, `collection`, `help`, `history`, `lists`, `people`, `search` and `watchlist`
   commands exporting Trakt data to JSON.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.24.0...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.25.0...HEAD
+[1.25.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.24.0...v1.25.0
 [1.24.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.23.0...v1.24.0
 [1.23.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.22.0...v1.23.0
 [1.22.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.21.0...v1.22.0
