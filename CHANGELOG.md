@@ -7,6 +7,8 @@ Versioning follows [SemVer](https://semver.org/):
 
 - **Major** (`X.0.0`) - breaking changes to the CLI surface: a removed or renamed module,
   action or flag, or a changed output file name or JSON shape that scripts may depend on.
+  Exception: a flag that was deprecated in an earlier release and had no effect may be removed
+  in a minor release, listed under `### Removed`.
 - **Minor** (`1.X.0`) - a module or action lands (new endpoints/commands), or other
   user-facing behavior changes in a compatible way.
 - **Patch** (`1.15.X`) - bug fixes, CI/tooling changes, docs-only changes, refactors with no
