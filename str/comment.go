@@ -7,6 +7,7 @@ type Comment struct {
 	CreatedAt *Timestamp    `json:"created_at,omitempty"`
 	UpdatedAt *Timestamp    `json:"updated_at,omitempty"`
 	Comment   *string       `json:"comment,omitempty"`
+	Gif       *CommentGif   `json:"gif,omitempty"`
 	Spoiler   *bool         `json:"spoiler,omitempty"`
 	Sharing   *Sharing      `json:"sharing,omitempty"`
 	Review    *bool         `json:"review,omitempty"`

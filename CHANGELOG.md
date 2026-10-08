@@ -43,6 +43,8 @@ schedule.
 - `smart_lists -a items` takes `-watchnow_country <xx>` (region for `-watchnow`) and the parental guide filters `-parental_nudity`, `-parental_violence`, `-parental_profanity`, `-parental_alcohol`, `-parental_frightening` (severity range `min-max`, 0 to 3) and `-parental_include_unrated`. A value in the wrong format stops the run before any request. Tested against a mock server only.
 - `users -a add_smart_list|update_smart_list` accept `watchnow_country` and the `parental_*` keys in the `filters` object. Before, a file with one of these keys was rejected as invalid JSON.
 - Library: new `SmartListsService.GetSmartListItemsByTypeAndSort`; `uri.SmartListItemsOptions` has the new fields `WatchNowCountry`, `ParentalNudity`, `ParentalViolence`, `ParentalProfanity`, `ParentalAlcohol`, `ParentalFrightening` and `ParentalIncludeUnrated`; `str.SmartListFilters` has `WatchNowCountry`, the five `Parental*` ranges and `ParentalIncludeUnrated`; new type `str.ParentalGuide`, used by the new `str.Options` field `Parental`, next to the new `WatchNowCountry`.
+- Exports keep two more groups of fields the API returns: the `gif` of a comment (`url` and `slug`), for example in `comments -a comment`, `movies -a comments`, `shows -a comments` and `users -a watchlist_comments`, and `share_code` and `display_ads` of the account in `users -a settings`. Before, they were dropped. The `gif` is tested against a mock server only: on 2026-10-08 none of the 446 newest comments read from the live API had one.
+- Library: new type `str.CommentGif`, used by the new field `Gif` of `str.Comment` and `str.ListComment`; `str.UserAccount` has the new fields `ShareCode` and `DisplayAds`.
 
 ### Changed
 
