@@ -39,7 +39,6 @@ schedule.
 ### Removed
 
 - The flags deprecated in 1.22.0 are gone: `-query` (use `search -q`), `-studio_ids` (the Trakt API has no such filter), `notes -notes_id` (use `notes -i`) and `scrobble -delete` (it never did anything). None of them had any effect; using one now stops the run with `flag provided but not defined`.
-- The old hyphenated action names are gone: `calendars -a my-shows`, `all-new-shows`, `hot-releases` and the other hyphenated `calendars` names (deprecated in 1.22.0), and `search -a text-query|id-lookup` (deprecated in 1.17.0). Use the underscore names (`my_shows`, `text_query`, ...). An old name now stops the run with `unknown action`.
 - Library: the `uri.ListOptions` fields `EpisodeTypes`, `Metascores`, `NetworkIDs`, `StudioIDs` and `TmdbRatings`, deprecated in 1.22.0, are gone, together with the types `uri.RatingRangeFloat` and `uri.TmdbRatingRange` that only they used. The Trakt API has no such query parameters and the CLI never sent them.
 - Library: the variable `uri.EpisodeTypes` (the value list of the removed `episode_types` filter) is gone; nothing used it.
 

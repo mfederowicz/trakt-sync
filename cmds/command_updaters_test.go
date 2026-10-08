@@ -106,6 +106,7 @@ func TestModuleFlagUpdaters(t *testing.T) {
 		{name: "people default start", cmd: PeopleCmd, args: []string{"-a", "updates"}, path: func(tz string) string { return "/people/updates/" + window(tz) }},
 		{name: "calendars -start_date", cmd: CalendarsCmd, args: []string{"-a", "all_shows", "-start_date", "2026-01-15", "-days", "3"}, path: func(string) string { return "/calendars/all/shows/2026-01-15/3" }},
 		{name: "calendars default", cmd: CalendarsCmd, args: []string{"-a", "all_shows"}, path: func(string) string { return "/calendars/all/shows/" + time.Now().Format("2006-01-02") + "/7" }},
+		{name: "calendars legacy action name", cmd: CalendarsCmd, args: []string{"-a", "all-shows"}, path: func(string) string { return "/calendars/all/shows/" + time.Now().Format("2006-01-02") + "/7" }},
 		{name: "sync default window", cmd: SyncCmd, args: []string{"-a", "get_history", "-t", "movies"}, path: func(string) string { return "/sync/history/movies" }},
 		{name: "users history default window", cmd: UsersCmd, args: []string{"-a", "history", "-u", "sean"}, path: func(string) string { return "/users/sean/history/movies" }},
 	}
