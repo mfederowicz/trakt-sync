@@ -343,6 +343,7 @@ func setOptionsDependsOnModuleRecommendations(options str.Options) str.Options {
 	options.Action = *_recommendationsAction
 	options.Hide = *_recommendationsHide
 	options.InternalID = *_recommendationsInternalID
+	options.Theme = *_recommendationsTheme
 	return _recommendationsFilters.apply(options)
 }
 
@@ -442,6 +443,7 @@ func setOptionsDependsOnModuleNetworks(options str.Options) str.Options {
 
 func setOptionsDependsOnModuleMedia(options str.Options) str.Options {
 	options.Action = *_mediaAction
+	options.Theme = *_mediaTheme
 	return _mediaFilters.apply(options)
 }
 
@@ -1305,6 +1307,7 @@ func UpdateOptionsWithCommandMoviesFlags(c *Command, options *str.Options) *str.
 	options.WatchNow = *_moviesWatchNow
 	options.MovieStatus = *_moviesStatus
 	options.Subgenres = *_moviesSubgenres
+	options.Theme = *_moviesTheme
 	options.Ratings = *_moviesRatings
 	options.Certifications = *_moviesCertifications
 	options.ImdbRatings = *_moviesImdbRatings
@@ -1378,6 +1381,7 @@ func UpdateOptionsWithCommandShowsFlags(c *Command, options *str.Options) *str.O
 
 	options.WatchNow = *_showsWatchNow
 	options.Subgenres = *_showsSubgenres
+	options.Theme = *_showsTheme
 	options.Ratings = *_showsRatings
 	options.Certifications = *_showsCertifications
 	options.ShowStatus = *_showsStatus

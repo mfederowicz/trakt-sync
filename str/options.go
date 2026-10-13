@@ -25,6 +25,7 @@ type Options struct {
 	ShowStatus        string
 	Studios           string
 	Subgenres         string
+	Theme             string
 	TmdbRatings       string
 	Votes             string
 	WatchNow          string

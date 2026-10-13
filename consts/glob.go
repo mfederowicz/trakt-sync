@@ -220,6 +220,7 @@ const (
 	StringString                 = "%s%s"
 	SubgenresUsage               = "subgenre slugs, comma separated"
 	TestURL                      = "test-url"
+	ThemeUsage                   = "seasonal theme ie: halloween, christmas; filters you set yourself take priority"
 	TestURLNext                  = "test-url-next"
 	TraktIDUsage                 = "allow to overwrite trakt_id"
 	TranslationsUsage            = "allow to overwrite translations"

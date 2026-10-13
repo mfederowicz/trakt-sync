@@ -48,7 +48,7 @@ func (h ShowsTrendingHandler) Handle(options *str.Options, client *trakt.Client)
 }
 
 func (h ShowsTrendingHandler) fetchShowsTrending(client *trakt.Client, options *str.Options, page int) ([]*str.ShowsItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options), Status: showStatus(options)}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options), Status: showStatus(options), Theme: options.Theme}
 	list, resp, err := client.Shows.GetTrendingShows(
 		cli.ContextFromOptions(options),
 		&opts,

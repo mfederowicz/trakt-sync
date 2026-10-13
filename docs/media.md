@@ -13,6 +13,10 @@ All three actions take the Trakt media filters: `-genres`, `-subgenres`, `-years
 `-certifications` (comma separated where a filter takes several values), `-start_date`, `-end_date` and
 `-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all`.
 `-languages` (language codes, comma separated) filters them too.
+`-theme <name>` applies a seasonal theme such as `halloween` or `christmas`: Trakt turns it into filters for the list, a filter you set yourself wins over it, and an unknown theme is ignored.
+```console
+$ ./trakt-sync media -a trending -theme halloween
+```
 ```console
 $ ./trakt-sync media -a trending -genres action,drama -years 2020-2026 -ratings 75-100
 ```

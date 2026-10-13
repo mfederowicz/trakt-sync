@@ -40,6 +40,8 @@ schedule.
 - Library: `str.SmartListFilters` has the fields `Studios`, `People`, `PeopleOperator`, `PeopleRole`, `ReleasedWithinDays`, `TmdbRatings`, `Metascores`, `Votes` and `ImdbVotes`; `uri.SmartListItemsOptions` has the same nine as query parameters.
 - List exports (such as `users -a lists` and `lists -a list`) keep two new fields: `stale_origin` (name and url of the tool that stopped updating your list, shown to the owner only) and `converted_to` (ids of the smart list the list was turned into). `watchnow -a sources` keeps the `type` of a source (`free`, `tv_everywhere`, `subscription`, `purchase` or `cinema`).
 - Library: `str.PersonalList` has the fields `StaleOrigin` (new type `str.ListStaleOrigin`) and `ConvertedTo`; `str.WatchNowSource` has `Type`.
+- `-theme <name>` on `movies`, `shows` and `media` `-a trending|popular|anticipated` and on `recommendations -a movies|shows`: a seasonal theme such as `halloween` or `christmas`, which Trakt turns into filters for the list. A filter you set yourself wins over the theme, and an unknown theme is ignored.
+- Library: `uri.ListOptions.Theme`, the `theme` query parameter of those routes.
 - Library: `trakt.EndpointRemovedError`, returned without a request by a method whose Trakt endpoint is locked or removed; its `Notice` holds the endpoint and the dates it was deprecated, locked and removed. The notices live in the new package `deprecation` (`Lookup`, `LookupRoute`, `Notices`). No endpoint is locked yet.
 
 ### Changed

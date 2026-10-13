@@ -78,6 +78,10 @@ filter takes several values), `-start_date`, `-end_date`,
 `-status` (`released`, `in production`, `post production`, `planned`, `rumored`, `canceled`; comma separated).
 They also take `-languages` (language codes, comma separated), `-imdb_ratings` (range, for example `8.0-10.0`),
 `-rt_meters` and `-rt_user_meters` (Rotten Tomatoes ranges, for example `90-100`).
+`trending`, `popular` and `anticipated` also take `-theme <name>`, a seasonal theme such as `halloween` or `christmas`: Trakt turns it into filters for the list, a filter you set yourself wins over it, and an unknown theme is ignored.
+```console
+$ ./trakt-sync movies -a popular -theme halloween
+```
 On these actions `-start_date` is a filter; on `updates` and `updated_ids` it stays the date to list changes from.
 ```console
 $ ./trakt-sync movies -a trending -genres action,drama -years 2020-2026 -ratings 75-100

@@ -30,6 +30,7 @@ var (
 	_showsEndDate        = ShowsCmd.Flag.String("end_date", consts.EmptyString, consts.EndDateUsage)
 	_showsWatchNow       = ShowsCmd.Flag.String("watchnow", consts.EmptyString, consts.WatchNowUsage)
 	_showsSubgenres      = ShowsCmd.Flag.String("subgenres", consts.EmptyString, consts.SubgenresUsage)
+	_showsTheme          = ShowsCmd.Flag.String("theme", consts.EmptyString, consts.ThemeUsage)
 	_showsRatings        = ShowsCmd.Flag.String("ratings", consts.EmptyString, consts.RatingsFilterUsage)
 	_showsCertifications = ShowsCmd.Flag.String("certifications", consts.EmptyString, consts.CertificationsUsage)
 	_showsStatus         = ShowsCmd.Flag.String("status", consts.EmptyString, consts.ShowStatusUsage)

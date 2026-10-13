@@ -48,7 +48,7 @@ func (h MoviesPopularHandler) Handle(options *str.Options, client *trakt.Client)
 }
 
 func (h MoviesPopularHandler) fetchMoviesPopular(client *trakt.Client, options *str.Options, page int) ([]*str.Movie, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options), Status: movieStatus(options)}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options), Status: movieStatus(options), Theme: options.Theme}
 	list, resp, err := client.Movies.GetPopularMovies(
 		cli.ContextFromOptions(options),
 		&opts,
