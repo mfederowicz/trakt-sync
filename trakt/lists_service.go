@@ -74,9 +74,13 @@ func (l *ListsService) GetPopularLists(ctx context.Context, opts *uri.ListOption
 // GetList Returns a single list. Use the /lists/:id/items method to get the actual items this list contains.
 //
 // API docs: https://docs.trakt.tv/reference/getlistssummary
-func (l *ListsService) GetList(ctx context.Context, id string) (*str.PersonalList, *str.Response, error) {
+func (l *ListsService) GetList(ctx context.Context, id string, opts *uri.ListOptions) (*str.PersonalList, *str.Response, error) {
 	var url = fmt.Sprintf("lists/%s", id)
 	l.client.debug("fetch single list:" + url)
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
 	req, err := l.client.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err

@@ -12,6 +12,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
+	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -49,9 +50,11 @@ func (h ListsListHandler) Handle(options *str.Options, client *trakt.Client) err
 
 func (ListsListHandler) fetchSingleList(client *trakt.Client, options *str.Options) (*str.PersonalList, *str.Response, error) {
 	listID := options.InternalID
+	opts := uri.ListOptions{Extended: options.ExtendedInfo}
 	result, resp, err := client.Lists.GetList(
 		cli.ContextFromOptions(options),
 		listID,
+		&opts,
 	)
 
 	return result, resp, err

@@ -239,7 +239,12 @@ $ ./trakt-sync users -a lists -u username -i 123456 -t movie,show
 ```
 ##### Fetch lists for selected user:
 ```console
-$ ./trakt-sync users -a lists -u username
+$ ./trakt-sync users -a lists -u username -> export_users_lists.json
+```
+Without `-i` the lists overview is the result: it prints the id of every list and how to export the items of one (`-i <list id>`).
+`-ex images` adds the list posters:
+```console
+$ ./trakt-sync users -a lists -u username -ex images
 ```
 `-sort_how asc|desc` sets the direction of the lists overview. `-sort_by` is sent too, as the Trakt API contract lists it for this route,
 but on 2026-10-04 the live API kept the same order (rank) for every value tried and only applied the direction.

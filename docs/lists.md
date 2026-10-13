@@ -15,6 +15,10 @@ $ ./trakt-sync lists -a popular -t official -> export_lists_popular_official.jso
 ```console
 $ ./trakt-sync lists -a list -trakt_id 2142753
 ```
+`-ex images` adds the list posters:
+```console
+$ ./trakt-sync lists -a list -trakt_id 2142753 -ex images
+```
 ```console
 $ ./trakt-sync lists -a likes -trakt_id 2142753
 ```

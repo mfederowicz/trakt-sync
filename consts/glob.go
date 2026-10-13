@@ -243,6 +243,7 @@ const (
 	UsersSectionUsage            = "allow to overwrite section"
 	UserPendingFollowRequest     = "user is already being followed or there is a pending follow request"
 	UserBlockedAlready           = "user is already blocked, or you try to block yourself"
+	UsersListsItemsHint          = "to export the items of one list add: -i <list id>"
 	VerboseUsage                 = "print additional verbose information"
 	VersionUsage                 = "get trakt-sync version"
 	WatchedProgressError         = "watched progress error:%w"
