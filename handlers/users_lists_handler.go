@@ -43,6 +43,12 @@ func (UsersListsHandler) Handle(options *str.Options, client *trakt.Client) erro
 
 	avLists := getAvlistsFromPersonals(personalLists)
 
+	// without -i the overview is the result
+	if len(options.ID) == consts.ZeroValue {
+		printer.Println(consts.UsersListsItemsHint)
+		return nil
+	}
+
 	intID, _ := strconv.Atoi(options.ID)
 	if intID == consts.ZeroValue {
 		return errors.New("please set personal listid")
@@ -91,7 +97,7 @@ func getAvlistsFromPersonals(personalLists []*str.PersonalList) []int {
 
 func fetchUsersPersonalLists(client *trakt.Client, options *str.Options) ([]*str.PersonalList, *str.Response, error) {
 	username := options.UserName
-	opts := uri.ListOptions{SortBy: options.SortBy, SortHow: options.SortHow}
+	opts := uri.ListOptions{SortBy: options.SortBy, SortHow: options.SortHow, Extended: options.ExtendedInfo}
 	lists, resp, err := client.Users.GetUsersPersonalLists(
 		cli.ContextFromOptions(options),
 		username,

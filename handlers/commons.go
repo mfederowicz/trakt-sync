@@ -585,6 +585,7 @@ func (*CommonLogic) FetchList(client *trakt.Client, options *str.Options) (*str.
 	result, _, err := client.Lists.GetList(
 		cli.ContextFromOptions(options),
 		listID,
+		nil,
 	)
 
 	return result, err

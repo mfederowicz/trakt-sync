@@ -21,7 +21,12 @@ func TestListsServiceRequests(t *testing.T) {
 		{name: "GetPopularLists", method: http.MethodGet, path: "/lists/popular", query: "limit=10", body: lists,
 			call: func(c *Client) (any, error) { r, _, err := c.Lists.GetPopularLists(ctx, opts); return r, err }},
 		{name: "GetList", method: http.MethodGet, path: "/lists/2143363", body: `{"name":"Star Wars","privacy":"public","item_count":5}`,
-			call: func(c *Client) (any, error) { r, _, err := c.Lists.GetList(ctx, id); return r, err }},
+			call: func(c *Client) (any, error) { r, _, err := c.Lists.GetList(ctx, id, nil); return r, err }},
+		{name: "GetList extended", method: http.MethodGet, path: "/lists/2143363", query: "extended=images", body: `{"name":"Star Wars","images":{"posters":["p.webp"]}}`,
+			call: func(c *Client) (any, error) {
+				r, _, err := c.Lists.GetList(ctx, id, &uri.ListOptions{Extended: "images"})
+				return r, err
+			}},
 		{name: "GetAllUsersWhoLikedList", method: http.MethodGet, path: "/lists/2143363/likes", query: "limit=10", body: `[{"user":{"username":"sean","private":false}}]`,
 			call: func(c *Client) (any, error) {
 				r, _, err := c.Lists.GetAllUsersWhoLikedList(ctx, opts, id)
@@ -44,7 +49,7 @@ func TestListsServiceGetListNotFound(t *testing.T) {
 		w.WriteHeader(http.StatusNotFound)
 	})
 
-	_, _, err := setup.Client.Lists.GetList(context.Background(), "2143363")
+	_, _, err := setup.Client.Lists.GetList(context.Background(), "2143363", nil)
 	if err == nil {
 		t.Fatal("error is nil, want a not found error")
 	}
