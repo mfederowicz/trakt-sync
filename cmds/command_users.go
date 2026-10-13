@@ -59,6 +59,7 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 	client := cmd.Client
 	options = cmd.UpdateOptionsWithCommandFlags(options)
 	usersListsSort(options, cmd.flagIsSet("sort_by"), cmd.flagIsSet("sort_how"))
+	usersUpdateListSettings(options, cmd.flagIsSet)
 	err := cmd.ValidModuleActionType(options)
 	if err != nil {
 		return fmt.Errorf("%s/%s: %w", cmd.Name, options.Action, err)
@@ -182,6 +183,25 @@ func usersListsFunc(cmd *Command, _ ...string) error {
 
 func init() {
 	UsersCmd.Run = usersListsFunc
+}
+
+// usersUpdateListSettings keeps the update_list settings only when set on the command line,
+// so the flag defaults (private, no comments, numbers, rank, asc) do not reset what the list has
+func usersUpdateListSettings(options *str.Options, flagIsSet func(name string) bool) {
+	if options.Action != consts.UpdateList {
+		return
+	}
+	if !flagIsSet("privacy") {
+		options.Privacy = consts.EmptyString
+	}
+	if !flagIsSet("sort_by") {
+		options.SortBy = consts.EmptyString
+	}
+	if !flagIsSet("sort_how") {
+		options.SortHow = consts.EmptyString
+	}
+	options.AllowCommentsSet = flagIsSet("allow_comments")
+	options.DisplayNumbersSet = flagIsSet("display_numbers")
 }
 
 // usersListsSort sends sort_by and sort_how for the lists action only when set on the command line,

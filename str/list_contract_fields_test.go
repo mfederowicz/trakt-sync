@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// PersonalList and WatchNowSource keep the fields added to the contract on 2026-10-13 when decoded and encoded again.
+// PersonalList and WatchNowSource keep the contract fields when decoded and encoded again.
 func TestListAndWatchNowSourceKeepContractFields(t *testing.T) {
 	tests := []struct {
 		name string
@@ -17,6 +17,8 @@ func TestListAndWatchNowSourceKeepContractFields(t *testing.T) {
 		{name: "list stale origin", in: `{"name":"Imported","stale_origin":{"name":"Some Sync Tool","url":"https://example.com"}}`, v: &PersonalList{}},
 		{name: "list stale origin without url", in: `{"name":"Imported","stale_origin":{"name":"Some Sync Tool"}}`, v: &PersonalList{}},
 		{name: "list converted to smart list", in: `{"name":"Imported","converted_to":{"ids":{"trakt":42,"slug":"imported"}}}`, v: &PersonalList{}},
+		{name: "list display numbers", in: `{"name":"Imported","display_numbers":false,"allow_comments":true}`, v: &PersonalList{}},
+		{name: "list images", in: `{"name":"Imported","images":{"posters":["p1.webp","p2.webp"]}}`, v: &PersonalList{}},
 		{name: "watch now source type", in: `{"source":"netflix","name":"Netflix","type":"subscription"}`, v: &WatchNowSource{}},
 	}
 

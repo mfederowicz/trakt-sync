@@ -65,11 +65,22 @@ func (UsersUpdateListHandler) usersUpdateList(client *trakt.Client, list *str.Pe
 	if len(options.Description) > consts.ZeroValue {
 		list.Description = &options.Description
 	}
-	list.Privacy = &options.Privacy
-	list.DisplayNumbers = &options.DisplayNumbers
-	list.AllowComments = &options.AllowComments
-	list.SortBy = &options.SortBy
-	list.SortHow = &options.SortHow
+	// a setting that is not given keeps the value the list has; a flag default must not change it
+	if len(options.Privacy) > consts.ZeroValue {
+		list.Privacy = &options.Privacy
+	}
+	if options.DisplayNumbersSet {
+		list.DisplayNumbers = &options.DisplayNumbers
+	}
+	if options.AllowCommentsSet {
+		list.AllowComments = &options.AllowComments
+	}
+	if len(options.SortBy) > consts.ZeroValue {
+		list.SortBy = &options.SortBy
+	}
+	if len(options.SortHow) > consts.ZeroValue {
+		list.SortHow = &options.SortHow
+	}
 	result, resp, err := client.Users.UpdateList(
 		cli.ContextFromOptions(options),
 		options.UserName,

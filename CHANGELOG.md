@@ -42,6 +42,7 @@ schedule.
 - Library: `str.PersonalList` has the fields `StaleOrigin` (new type `str.ListStaleOrigin`) and `ConvertedTo`; `str.WatchNowSource` has `Type`.
 - `-theme <name>` on `movies`, `shows` and `media` `-a trending|popular|anticipated` and on `recommendations -a movies|shows`: a seasonal theme such as `halloween` or `christmas`, which Trakt turns into filters for the list. A filter you set yourself wins over the theme, and an unknown theme is ignored.
 - Library: `uri.ListOptions.Theme`, the `theme` query parameter of those routes.
+- List exports keep `images` (the list posters) where `-ex images` is sent: `lists -a trending`, `lists -a popular` and `users -a list`. Library: `str.PersonalList.Images`.
 - Library: `trakt.EndpointRemovedError`, returned without a request by a method whose Trakt endpoint is locked or removed; its `Notice` holds the endpoint and the dates it was deprecated, locked and removed. The notices live in the new package `deprecation` (`Lookup`, `LookupRoute`, `Notices`). No endpoint is locked yet.
 
 ### Changed
@@ -49,6 +50,10 @@ schedule.
 - `smart_lists -a items -watchnow` takes a service name such as `netflix` and the `-` prefix that leaves a service out (`-watchnow=-netflix`), next to `favorites`, `any`, `free` and `subscriptions`. The value is no longer checked against a fixed list before the request.
 
 ### Fixed
+
+- `users -a update_list` reset the settings you did not give: every run sent `privacy` as `private`, `allow_comments` as off, `sort_by` as `rank` and `sort_how` as `asc`, so changing only the description also changed those four. A setting is now sent only when its flag is given (`-privacy`, `-allow_comments`, `-display_numbers`, `-sort_by`, `-sort_how`); without the flag the list keeps the value it has.
+- `users -a update_list -display_numbers` had no effect: the setting was sent under the wrong name, `display_strings`. It is now sent as `display_numbers` (`-display_numbers`, or `-display_numbers=false` to turn it off). List exports (such as `users -a lists` and `lists -a list`) left `display_numbers` out and now keep it.
+- Library: `str.PersonalList.DisplayNumbers` has the JSON name `display_numbers`; it was `display_strings`, so the field was never read and was written under a name the API does not know.
 
 ### Deprecated
 

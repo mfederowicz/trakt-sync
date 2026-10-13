@@ -280,6 +280,11 @@ $ ./trakt-sync users -a update_list -u username -i 123456 -description "short wa
 ```console
 $ ./trakt-sync users -a update_list -u username -i 123456 -sort_by added -sort_how desc
 ```
+`update_list` changes only what you give: `-description`, `-privacy`, `-allow_comments`, `-display_numbers`, `-sort_by` and `-sort_how`. A setting without its flag keeps the value the list has.
+`-display_numbers` and `-allow_comments` turn a setting on; write `=false` to turn it off:
+```console
+$ ./trakt-sync users -a update_list -u username -i 123456 -display_numbers=false -allow_comments
+```
 ##### Delete single personal list (Trakt ID or Trakt slug):
 ```console
 $ ./trakt-sync users -a delete_list -u username -i 123456
