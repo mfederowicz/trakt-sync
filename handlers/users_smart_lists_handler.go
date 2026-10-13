@@ -80,5 +80,30 @@ func validSmartListWrite(list *str.SmartListWrite, create bool) error {
 		}
 	}
 
+	return validSmartListFilters(list.Filters)
+}
+
+// validSmartListFilters checks the people enums and released_within_days of the smart list filters.
+func validSmartListFilters(filters *str.SmartListFilters) error {
+	if filters == nil {
+		return nil
+	}
+	if filters.ReleasedWithinDays != nil {
+		if err := validReleasedWithinDays(*filters.ReleasedWithinDays); err != nil {
+			return err
+		}
+	}
+
+	return checkEnums([]enumCheck{
+		{name: "people_operator", value: filters.PeopleOperator, valid: cfg.SmartListPeopleOperators},
+		{name: "people_role", value: filters.PeopleRole, valid: cfg.SmartListPeopleRoles},
+	})
+}
+
+// validReleasedWithinDays checks the released_within_days range of the API contract.
+func validReleasedWithinDays(days int) error {
+	if days < consts.ReleasedWithinMin || days > consts.ReleasedWithinMax {
+		return fmt.Errorf("released_within_days '%d' is not valid, want %d to %d", days, consts.ReleasedWithinMin, consts.ReleasedWithinMax)
+	}
 	return nil
 }

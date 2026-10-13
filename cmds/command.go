@@ -453,6 +453,15 @@ func setOptionsDependsOnModuleSmartLists(options str.Options) str.Options {
 	options.Ratings = *_smartListsRatings
 	options.Certifications = *_smartListsCertifications
 	options.WatchNowCountry = *_smartListsWatchNowCountry
+	options.Studios = *_smartListsStudios
+	options.People = *_smartListsPeople
+	options.PeopleOperator = *_smartListsPeopleOperator
+	options.PeopleRole = *_smartListsPeopleRole
+	options.ReleasedWithin = *_smartListsReleasedWithin
+	options.TmdbRatings = *_smartListsTmdbRatings
+	options.Metascores = *_smartListsMetascores
+	options.Votes = *_smartListsVotes
+	options.ImdbVotes = *_smartListsImdbVotes
 	options.Parental = str.ParentalGuide{
 		Alcohol:        *_smartListsAlcohol,
 		Frightening:    *_smartListsFrightening,

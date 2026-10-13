@@ -29,9 +29,6 @@ func (h SmartListsItemsHandler) Handle(options *str.Options, client *trakt.Clien
 	if err := validSmartListID(options); err != nil {
 		return err
 	}
-	if len(options.WatchNow) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.WatchNowFilters, options.WatchNow) {
-		return fmt.Errorf("watchnow '%s' is not valid, avaliable values: %v", options.WatchNow, cfg.WatchNowFilters)
-	}
 	if err := validSmartListItemsFilters(options); err != nil {
 		return err
 	}
@@ -54,6 +51,16 @@ func (h SmartListsItemsHandler) Handle(options *str.Options, client *trakt.Clien
 		IgnoreWatched:     options.IgnoreWatched,
 		IgnoreWatchlisted: options.IgnoreWatchlisted,
 		WatchNowCountry:   options.WatchNowCountry,
+
+		ImdbVotes:          options.ImdbVotes,
+		Metascores:         options.Metascores,
+		People:             options.People,
+		PeopleOperator:     options.PeopleOperator,
+		PeopleRole:         options.PeopleRole,
+		ReleasedWithinDays: options.ReleasedWithin,
+		Studios:            options.Studios,
+		TmdbRatings:        options.TmdbRatings,
+		Votes:              options.Votes,
 
 		ParentalAlcohol:        options.Parental.Alcohol,
 		ParentalFrightening:    options.Parental.Frightening,
@@ -131,7 +138,7 @@ func smartListItemsSort(options *str.Options) error {
 	})
 }
 
-// validSmartListItemsFilters checks the format of -watchnow_country and the parental guide ranges.
+// validSmartListItemsFilters checks the format of -watchnow_country and the parental guide ranges, -released_within_days and the people enums.
 func validSmartListItemsFilters(options *str.Options) error {
 	if len(options.WatchNowCountry) > consts.ZeroValue && !watchNowCountry.MatchString(options.WatchNowCountry) {
 		return fmt.Errorf("watchnow_country '%s' is not valid, want a 2 character lowercase code ie: us", options.WatchNowCountry)
@@ -150,5 +157,20 @@ func validSmartListItemsFilters(options *str.Options) error {
 		}
 	}
 
-	return nil
+	// 0 is the flag not given
+	if options.ReleasedWithin != consts.ZeroValue {
+		if err := validReleasedWithinDays(options.ReleasedWithin); err != nil {
+			return err
+		}
+	}
+
+	checks := []enumCheck{}
+	if len(options.PeopleOperator) > consts.ZeroValue {
+		checks = append(checks, enumCheck{name: "people_operator", value: &options.PeopleOperator, valid: cfg.SmartListPeopleOperators})
+	}
+	if len(options.PeopleRole) > consts.ZeroValue {
+		checks = append(checks, enumCheck{name: "people_role", value: &options.PeopleRole, valid: cfg.SmartListPeopleRoles})
+	}
+
+	return checkEnums(checks)
 }

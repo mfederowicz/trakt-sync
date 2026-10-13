@@ -36,7 +36,9 @@ func TestSmartListsFlags(t *testing.T) {
 	args := []string{"-a", "items", "-i", "top-sci-fi", "-watchnow", "free", "-genres", "action", "-subgenres", "space", "-years", "2020-2026",
 		"-ratings", "75-100", "-runtimes", "90-150", "-countries", "us", "-certifications", "pg-13", "-ignore_watched", "true", "-ignore_watchlisted", "false",
 		"-watchnow_country", "pl", "-parental_nudity", "0-1", "-parental_violence", "0-2", "-parental_profanity", "0-1", "-parental_alcohol", "0-3",
-		"-parental_frightening", "1-2", "-parental_include_unrated", "-t", "shows", "-sort_by", "imdb_rating", "-sort_how", "desc"}
+		"-parental_frightening", "1-2", "-parental_include_unrated", "-t", "shows", "-sort_by", "imdb_rating", "-sort_how", "desc",
+		"-studios", "pixar,-dreamworks-animation", "-people=-tom-hanks", "-people_operator", "and", "-people_role", "cast", "-released_within_days", "365",
+		"-tmdb_ratings", "7.5-10", "-metascores", "70-100", "-votes", "1000-", "-imdb_votes", "5000-"}
 	assert.NoError(t, command.Exec(fs, trakt.NewClient(nil), fileConfig, args))
 	assert.Equal(t, "items", got.Action)
 	assert.Equal(t, "top-sci-fi", got.InternalID)
@@ -52,6 +54,15 @@ func TestSmartListsFlags(t *testing.T) {
 	assert.Equal(t, "false", got.IgnoreWatchlisted)
 	assert.Equal(t, "pl", got.WatchNowCountry)
 	assert.Equal(t, str.ParentalGuide{Nudity: "0-1", Violence: "0-2", Profanity: "0-1", Alcohol: "0-3", Frightening: "1-2", IncludeUnrated: true}, got.Parental)
+	assert.Equal(t, "pixar,-dreamworks-animation", got.Studios)
+	assert.Equal(t, "-tom-hanks", got.People)
+	assert.Equal(t, "and", got.PeopleOperator)
+	assert.Equal(t, "cast", got.PeopleRole)
+	assert.Equal(t, 365, got.ReleasedWithin)
+	assert.Equal(t, "7.5-10", got.TmdbRatings)
+	assert.Equal(t, "70-100", got.Metascores)
+	assert.Equal(t, "1000-", got.Votes)
+	assert.Equal(t, "5000-", got.ImdbVotes)
 	assert.Equal(t, "shows", got.Type)
 	assert.Equal(t, "imdb_rating", got.SortBy)
 	assert.Equal(t, "desc", got.SortHow)

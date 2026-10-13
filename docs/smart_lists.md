@@ -10,7 +10,7 @@ Paging follows `per_page` and `pages_limit` from the config file; `-ex` sets ext
 ```console
 $ ./trakt-sync smart_lists -a items -i <slug> -> export_smart_lists_items_<slug>.json
 ```
-Refine the items with media filters (`-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all`,
+Refine the items with media filters (`-watchnow favorites|any|free|subscriptions` or a service name such as `netflix`,
 `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`) and skip what you already watched or watchlisted:
 ```console
 $ ./trakt-sync smart_lists -a items -i <slug> -genres action -years 2020-2026 -ratings 75-100 -ignore_watched true
@@ -21,6 +21,20 @@ $ ./trakt-sync smart_lists -a items -i <slug> -watchnow subscriptions -ignore_wa
 Send the `-watchnow` filter for another region with `-watchnow_country <xx>` (two lowercase letters). Without it the API uses the list region, then the owner's region, then `us`:
 ```console
 $ ./trakt-sync smart_lists -a items -i <slug> -watchnow free -watchnow_country pl
+```
+Filter by production company with `-studios` (slugs or names) and by person with `-people` (person slugs), both comma separated.
+`-people_operator and|or` asks for every listed person or any of them (`or` is the default), `-people_role any|cast|directing|writing|producing` limits where a person counts (`any` is the default):
+```console
+$ ./trakt-sync smart_lists -a items -i <slug> -studios pixar -people steven-spielberg,tom-hanks -people_operator and -people_role cast
+```
+A value of a list filter (`-genres`, `-studios`, `-people`, `-watchnow` and similar) that starts with `-` is left out of the result. Write a flag whose first value starts with `-` in the `-flag=value` form:
+```console
+$ ./trakt-sync smart_lists -a items -i <slug> -studios pixar,-dreamworks-animation -watchnow=-netflix
+```
+`-released_within_days <1-3650>` keeps titles released in the last N days (movies by release date, shows by first aired date). `-tmdb_ratings` (0 to 10), `-metascores` (0 to 100),
+`-votes` (Trakt votes) and `-imdb_votes` take a range `min-max`; either side can be left out:
+```console
+$ ./trakt-sync smart_lists -a items -i <slug> -released_within_days 365 -tmdb_ratings 7.5-10 -metascores 70-100 -votes 1000- -imdb_votes 5000-
 ```
 Filter by parental guide with `-parental_nudity`, `-parental_violence`, `-parental_profanity`, `-parental_alcohol` and `-parental_frightening`.
 Each takes a severity range `min-max` from 0 (none) to 3 (severe). Titles without a parental guide are left out, unless you add `-parental_include_unrated`:

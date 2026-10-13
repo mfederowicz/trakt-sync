@@ -8,16 +8,25 @@ type Options struct {
 	Countries         string
 	Genres            string
 	ImdbRatings       string
+	ImdbVotes         string
 	Intent            string
 	Languages         string
 	MediaEndDate      string
 	MediaStartDate    string
+	Metascores        string
+	People            string
+	PeopleOperator    string
+	PeopleRole        string
 	Ratings           string
+	ReleasedWithin    int
 	RtMeters          string
 	RtUserMeters      string
 	Runtimes          string
 	ShowStatus        string
+	Studios           string
 	Subgenres         string
+	TmdbRatings       string
+	Votes             string
 	WatchNow          string
 	WatchNowCountry   string
 	WatchWindow       int

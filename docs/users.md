@@ -297,6 +297,8 @@ $ ./trakt-sync users -a smart_list -i <slug> -> export_users_smart_list_<slug>.j
 ##### Create smart list - via -items flag or stdin:
 `name`, `source` and `media_type` (`movies`, `shows`, `media`) are required; `filters` and `privacy` (`public`, `private`, `friends`) are optional.
 Smart lists are VIP Enhanced: a non-VIP account has a limit on how many it can create.
+`filters` also takes `studios` and `people` (lists; a value that starts with `-` is left out), `people_operator` (`and`, `or`), `people_role` (`any`, `cast`, `directing`, `writing`, `producing`),
+`released_within_days` (1 to 3650) and the ranges `tmdb_ratings`, `metascores`, `votes` and `imdb_votes` (`[min, max]`).
 ```json
 {
   "name": "Popular sci-fi",

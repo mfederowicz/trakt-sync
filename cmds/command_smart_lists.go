@@ -13,7 +13,7 @@ import (
 var (
 	_smartListsAction            = SmartListsCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
 	_smartListsID                = SmartListsCmd.Flag.String("i", cfg.DefaultConfig().InternalID, consts.SmartListIDUsage)
-	_smartListsWatchNow          = SmartListsCmd.Flag.String("watchnow", consts.EmptyString, consts.WatchNowUsage)
+	_smartListsWatchNow          = SmartListsCmd.Flag.String("watchnow", consts.EmptyString, consts.SmartListWatchNowUsage)
 	_smartListsSubgenres         = SmartListsCmd.Flag.String("subgenres", consts.EmptyString, consts.SubgenresUsage)
 	_smartListsRatings           = SmartListsCmd.Flag.String("ratings", consts.EmptyString, consts.RatingsFilterUsage)
 	_smartListsCertifications    = SmartListsCmd.Flag.String("certifications", consts.EmptyString, consts.CertificationsUsage)
@@ -26,6 +26,15 @@ var (
 	_smartListsAlcohol           = SmartListsCmd.Flag.String("parental_alcohol", consts.EmptyString, consts.ParentalRangeUsage)
 	_smartListsFrightening       = SmartListsCmd.Flag.String("parental_frightening", consts.EmptyString, consts.ParentalRangeUsage)
 	_smartListsUnrated           = SmartListsCmd.Flag.Bool("parental_include_unrated", false, consts.ParentalUnratedUsage)
+	_smartListsStudios           = SmartListsCmd.Flag.String("studios", consts.EmptyString, consts.SmartListStudiosUsage)
+	_smartListsPeople            = SmartListsCmd.Flag.String("people", consts.EmptyString, consts.SmartListPeopleUsage)
+	_smartListsPeopleOperator    = SmartListsCmd.Flag.String("people_operator", consts.EmptyString, consts.SmartListPeopleOperatorUsage)
+	_smartListsPeopleRole        = SmartListsCmd.Flag.String("people_role", consts.EmptyString, consts.SmartListPeopleRoleUsage)
+	_smartListsReleasedWithin    = SmartListsCmd.Flag.Int("released_within_days", consts.ZeroValue, consts.SmartListReleasedWithinUsage)
+	_smartListsTmdbRatings       = SmartListsCmd.Flag.String("tmdb_ratings", consts.EmptyString, consts.SmartListTmdbRatingsUsage)
+	_smartListsMetascores        = SmartListsCmd.Flag.String("metascores", consts.EmptyString, consts.SmartListMetascoresUsage)
+	_smartListsVotes             = SmartListsCmd.Flag.String("votes", consts.EmptyString, consts.SmartListVotesUsage)
+	_smartListsImdbVotes         = SmartListsCmd.Flag.String("imdb_votes", consts.EmptyString, consts.SmartListImdbVotesUsage)
 )
 
 // SmartListsCmd returns smart list definitions and the items they resolve to.
