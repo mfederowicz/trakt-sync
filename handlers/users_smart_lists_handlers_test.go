@@ -48,6 +48,18 @@ func TestUsersSmartListsHandlers(t *testing.T) {
 			input: `{"name":"Family","source":"popular","media_type":"movies","filters":{"watchnow":["free"],"watchnow_country":"pl","parental_nudity":[0,1],` +
 				`"parental_violence":[0,2],"parental_profanity":[0,1],"parental_alcohol":[0,3],"parental_frightening":[1,2],"parental_include_unrated":true}}`,
 			method: http.MethodPost, path: "/users/sean/smart-lists", status: http.StatusCreated, body: `{"ids":{"trakt":8,"slug":"family"}}`, wantOutput: true},
+		{name: "add people, studios, votes and release window filters", handler: UsersAddSmartListHandler{}, options: str.Options{Action: consts.AddSmartList},
+			input: `{"name":"Spielberg","source":"popular","media_type":"movies","filters":{"studios":["pixar","-dreamworks-animation"],"people":["steven-spielberg"],` +
+				`"people_operator":"and","people_role":"directing","released_within_days":365,"tmdb_ratings":[7.5,10],"metascores":[70,100],"votes":[1000],"imdb_votes":[5000,900000]}}`,
+			method: http.MethodPost, path: "/users/sean/smart-lists", status: http.StatusCreated, body: `{"ids":{"trakt":9,"slug":"spielberg"}}`, wantOutput: true},
+		{name: "add invalid people_operator", handler: UsersAddSmartListHandler{}, options: str.Options{Action: consts.AddSmartList},
+			input: `{"name":"Sci-Fi","source":"popular","media_type":"movies","filters":{"people_operator":"xor"}}`, wantErr: "people_operator 'xor' is not valid", wantNoAPI: true},
+		{name: "add empty people_role", handler: UsersAddSmartListHandler{}, options: str.Options{Action: consts.AddSmartList},
+			input: `{"name":"Sci-Fi","source":"popular","media_type":"movies","filters":{"people_role":""}}`, wantErr: "people_role '' is not valid", wantNoAPI: true},
+		{name: "add released_within_days zero", handler: UsersAddSmartListHandler{}, options: str.Options{Action: consts.AddSmartList},
+			input: `{"name":"Sci-Fi","source":"popular","media_type":"movies","filters":{"released_within_days":0}}`, wantErr: "released_within_days '0' is not valid, want 1 to 3650", wantNoAPI: true},
+		{name: "update invalid people_role", handler: UsersUpdateSmartListHandler{}, options: str.Options{Action: consts.UpdateSmartList, ID: "sci-fi"},
+			input: `{"filters":{"people_role":"actor"}}`, wantErr: "people_role 'actor' is not valid", wantNoAPI: true},
 		{name: "add missing source", handler: UsersAddSmartListHandler{}, options: str.Options{Action: consts.AddSmartList},
 			input: `{"name":"Sci-Fi","media_type":"movies"}`, wantErr: "needs name, source and media_type", wantNoAPI: true},
 		{name: "add invalid media_type", handler: UsersAddSmartListHandler{}, options: str.Options{Action: consts.AddSmartList},

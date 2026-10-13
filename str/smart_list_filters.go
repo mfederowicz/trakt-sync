@@ -12,12 +12,21 @@ type SmartListFilters struct {
 	Networks               []string  `json:"networks,omitempty"`
 	Keywords               []string  `json:"keywords,omitempty"`
 	KeywordsOperator       *string   `json:"keywords_operator,omitempty"`
+	Studios                []string  `json:"studios,omitempty"`
+	People                 []string  `json:"people,omitempty"`
+	PeopleOperator         *string   `json:"people_operator,omitempty"`
+	PeopleRole             *string   `json:"people_role,omitempty"`
 	WatchNow               []string  `json:"watchnow,omitempty"`
 	WatchNowCountry        *string   `json:"watchnow_country,omitempty"`
 	Years                  []int     `json:"years,omitempty"`
+	ReleasedWithinDays     *int      `json:"released_within_days,omitempty"`
 	Ratings                []int     `json:"ratings,omitempty"`
 	Runtimes               []int     `json:"runtimes,omitempty"`
 	ImdbRatings            []float64 `json:"imdb_ratings,omitempty"`
+	TmdbRatings            []float64 `json:"tmdb_ratings,omitempty"`
+	Metascores             []int     `json:"metascores,omitempty"`
+	Votes                  []int     `json:"votes,omitempty"`
+	ImdbVotes              []int     `json:"imdb_votes,omitempty"`
 	RtMeters               []int     `json:"rt_meters,omitempty"`
 	RtUserMeters           []int     `json:"rt_user_meters,omitempty"`
 	LetterboxdRatings      []float64 `json:"letterboxd_ratings,omitempty"`

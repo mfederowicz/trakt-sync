@@ -25,6 +25,8 @@ const (
 	PersonaMinYear        = 2026
 	RatingRageMin         = 0
 	RatingRangeMax        = 100
+	ReleasedWithinMax     = 3650
+	ReleasedWithinMin     = 1
 	SleepNumberOfSeconds  = 2
 	TwoValue              = 2
 	VotesRangeMax         = 100000

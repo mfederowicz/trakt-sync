@@ -108,6 +108,12 @@ var SmartListItemsTypes = []string{"all", "movies", "shows"}
 // SmartListMediaTypes are the smart list media_type values from the API contract
 var SmartListMediaTypes = []string{"movies", "shows", "media"}
 
+// SmartListPeopleOperators are the smart list people_operator values from the API contract
+var SmartListPeopleOperators = []string{"and", "or"}
+
+// SmartListPeopleRoles are the smart list people_role values from the API contract
+var SmartListPeopleRoles = []string{"any", "cast", "directing", "writing", "producing"}
+
 // SmartListPrivacy are the smart list privacy values from the API contract
 var SmartListPrivacy = []string{"public", "private", "friends"}
 

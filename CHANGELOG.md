@@ -35,9 +35,14 @@ schedule.
 - `users -a smart_list_drafts` lists your personal lists that stopped updating and are ready to become smart lists; `users -a smart_list_draft -i <list>` returns the ready-made smart list setup for one of them; `users -a convert_to_smart_list -i <list>` turns the list into a smart list from the same JSON `add_smart_list` takes (`-items` file or stdin).
 - `users -a year_in_review_persona -year <2026 or later>` exports the watching persona of a year in review. Trakt marks it VIP only: a non-VIP account gets `year_in_review_persona is VIP only` (checked live), the export itself was tested against a mock server only.
 - Library: `UsersService.GetSmartListDrafts`, `GetSmartListDraft`, `ConvertListToSmartList` and `GetYearInReviewPersona`, with the types `str.SmartListDraftsSummary`, `str.SmartListDraft`, `str.SmartListDraftList`, `str.SmartListDraftConverted`, `str.ReviewPersona`, `str.ReviewPersonaHighlight`, `str.ReviewPersonaStreak` and `str.ReviewPersonaMonth`.
+- `smart_lists -a items` takes nine more filters: `-studios`, `-people`, `-people_operator and|or`, `-people_role any|cast|directing|writing|producing`, `-released_within_days <1-3650>`, `-tmdb_ratings`, `-metascores`, `-votes` and `-imdb_votes`. A value of a list filter that starts with `-` is left out of the result, such as `-studios pixar,-dreamworks-animation`.
+- `users -a add_smart_list`, `update_smart_list` and `convert_to_smart_list` accept the `filters` keys `studios`, `people`, `people_operator`, `people_role`, `released_within_days`, `tmdb_ratings`, `metascores`, `votes` and `imdb_votes`. Before, a body with one of them stopped with `invalid smart list JSON`, and `users -a smart_list` and `smart_lists -a summary` left them out of the export.
+- Library: `str.SmartListFilters` has the fields `Studios`, `People`, `PeopleOperator`, `PeopleRole`, `ReleasedWithinDays`, `TmdbRatings`, `Metascores`, `Votes` and `ImdbVotes`; `uri.SmartListItemsOptions` has the same nine as query parameters.
 - Library: `trakt.EndpointRemovedError`, returned without a request by a method whose Trakt endpoint is locked or removed; its `Notice` holds the endpoint and the dates it was deprecated, locked and removed. The notices live in the new package `deprecation` (`Lookup`, `LookupRoute`, `Notices`). No endpoint is locked yet.
 
 ### Changed
+
+- `smart_lists -a items -watchnow` takes a service name such as `netflix` and the `-` prefix that leaves a service out (`-watchnow=-netflix`), next to `favorites`, `any`, `free` and `subscriptions`. The value is no longer checked against a fixed list before the request.
 
 ### Fixed
 

@@ -20,7 +20,9 @@ func TestSmartListsServiceGetSmartList(t *testing.T) {
 		test.AssertMethod(t, r, http.MethodGet)
 		test.SafeFprint(w, `{"name":"Top Sci-Fi","privacy":"public","created_at":"2026-09-01T10:00:00.000Z","updated_at":"2026-09-02T10:00:00.000Z",`+
 			`"ids":{"trakt":42,"slug":"top-sci-fi"},"images":{"posters":["p1.jpg"]},"source":"trakt","media_type":"movie",`+
-			`"filters":{"genres":["science-fiction"],"genres_operator":"and","years":[2000,2026],"imdb_ratings":[7.5,10],"ignore_watched":true}}`)
+			`"filters":{"genres":["science-fiction"],"genres_operator":"and","studios":["pixar","-dreamworks-animation"],"people":["steven-spielberg"],`+
+			`"people_operator":"or","people_role":"directing","years":[2000,2026],"released_within_days":365,"imdb_ratings":[7.5,10],"tmdb_ratings":[7,10],`+
+			`"metascores":[70,100],"votes":[1000],"imdb_votes":[5000,900000],"ignore_watched":true}}`)
 	})
 
 	got, _, err := setup.Client.SmartLists.GetSmartList(context.Background(), "top-sci-fi")
@@ -35,11 +37,20 @@ func TestSmartListsServiceGetSmartList(t *testing.T) {
 		Source:    str.String("trakt"),
 		MediaType: str.String("movie"),
 		Filters: &str.SmartListFilters{
-			Genres:         []string{"science-fiction"},
-			GenresOperator: str.String("and"),
-			Years:          []int{2000, 2026},
-			ImdbRatings:    []float64{7.5, 10},
-			IgnoreWatched:  test.Ptr(true),
+			Genres:             []string{"science-fiction"},
+			GenresOperator:     str.String("and"),
+			Studios:            []string{"pixar", "-dreamworks-animation"},
+			People:             []string{"steven-spielberg"},
+			PeopleOperator:     str.String("or"),
+			PeopleRole:         str.String("directing"),
+			Years:              []int{2000, 2026},
+			ReleasedWithinDays: test.Ptr(365),
+			ImdbRatings:        []float64{7.5, 10},
+			TmdbRatings:        []float64{7, 10},
+			Metascores:         []int{70, 100},
+			Votes:              []int{1000},
+			ImdbVotes:          []int{5000, 900000},
+			IgnoreWatched:      test.Ptr(true),
 		},
 	}, got)
 }
@@ -50,8 +61,9 @@ func TestSmartListsServiceGetSmartListItems(t *testing.T) {
 
 	setup.Mux.HandleFunc("/smart-lists/top-sci-fi/items", func(w http.ResponseWriter, r *http.Request) {
 		test.AssertMethod(t, r, http.MethodGet)
-		want := "certifications=pg-13&countries=us&extended=full&genres=action&ignore_watched=true&ignore_watchlisted=false&limit=10&page=2" +
-			"&ratings=75-100&runtimes=90-150&subgenres=space&watchnow=free&years=2020-2026"
+		want := "certifications=pg-13&countries=us&extended=full&genres=action&ignore_watched=true&ignore_watchlisted=false&imdb_votes=5000-&limit=10" +
+			"&metascores=70-100&page=2&people=steven-spielberg%2C-tom-hanks&people_operator=and&people_role=directing&ratings=75-100&released_within_days=365" +
+			"&runtimes=90-150&studios=pixar%2C-dreamworks-animation&subgenres=space&tmdb_ratings=7.5-10&votes=1000-&watchnow=free&years=2020-2026"
 		if got := r.URL.RawQuery; got != want {
 			t.Errorf("query is %q, want %q", got, want)
 		}
@@ -61,6 +73,8 @@ func TestSmartListsServiceGetSmartListItems(t *testing.T) {
 	opts := &uri.SmartListItemsOptions{
 		Page: 2, Limit: 10, Extended: "full", WatchNow: "free", Genres: "action", Subgenres: "space", Years: "2020-2026",
 		Ratings: "75-100", Runtimes: "90-150", Countries: "us", Certifications: "pg-13", IgnoreWatched: "true", IgnoreWatchlisted: "false",
+		Studios: "pixar,-dreamworks-animation", People: "steven-spielberg,-tom-hanks", PeopleOperator: "and", PeopleRole: "directing", ReleasedWithinDays: 365,
+		TmdbRatings: "7.5-10", Metascores: "70-100", Votes: "1000-", ImdbVotes: "5000-",
 	}
 	got, _, err := setup.Client.SmartLists.GetSmartListItems(context.Background(), "top-sci-fi", opts)
 	test.AssertNilError(t, err)

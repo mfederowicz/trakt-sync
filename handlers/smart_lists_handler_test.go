@@ -48,8 +48,14 @@ func TestSmartListsHandlers(t *testing.T) {
 			wantErr: "watchnow_country 'USA' is not valid", wantNoAPI: true},
 		{name: "items invalid parental range", handler: SmartListsItemsHandler{}, options: str.Options{Action: consts.Items, InternalID: "top-sci-fi", Parental: str.ParentalGuide{Violence: "0-4"}},
 			wantErr: "parental_violence '0-4' is not valid", wantNoAPI: true},
-		{name: "items invalid watchnow", handler: SmartListsItemsHandler{}, options: str.Options{Action: consts.Items, InternalID: "top-sci-fi", WatchNow: "cable"},
-			wantErr: "watchnow 'cable' is not valid", wantNoAPI: true},
+		{name: "items invalid people_operator", handler: SmartListsItemsHandler{}, options: str.Options{Action: consts.Items, InternalID: "top-sci-fi", PeopleOperator: "xor"},
+			wantErr: "people_operator 'xor' is not valid", wantNoAPI: true},
+		{name: "items invalid people_role", handler: SmartListsItemsHandler{}, options: str.Options{Action: consts.Items, InternalID: "top-sci-fi", PeopleRole: "actor"},
+			wantErr: "people_role 'actor' is not valid", wantNoAPI: true},
+		{name: "items released_within_days too big", handler: SmartListsItemsHandler{}, options: str.Options{Action: consts.Items, InternalID: "top-sci-fi", ReleasedWithin: 3651},
+			wantErr: "released_within_days '3651' is not valid, want 1 to 3650", wantNoAPI: true},
+		{name: "items released_within_days negative", handler: SmartListsItemsHandler{}, options: str.Options{Action: consts.Items, InternalID: "top-sci-fi", ReleasedWithin: -1},
+			wantErr: "released_within_days '-1' is not valid", wantNoAPI: true},
 	}
 
 	for _, tt := range tests {
@@ -139,6 +145,13 @@ func TestSmartListsItemsHandlerRoutes(t *testing.T) {
 			options: str.Options{WatchNow: "free", WatchNowCountry: "pl",
 				Parental: str.ParentalGuide{Nudity: "0-1", Violence: "0-2", Profanity: "0-1", Alcohol: "0-3", Frightening: "1-2", IncludeUnrated: true}},
 			wantQuery: "parental_alcohol=0-3&parental_frightening=1-2&parental_include_unrated=true&parental_nudity=0-1&parental_profanity=0-1&parental_violence=0-2&watchnow=free&watchnow_country=pl"},
+		{name: "people, studios, votes and release window filters", wantPath: "/smart-lists/mixed/items",
+			options: str.Options{Studios: "pixar,-dreamworks-animation", People: "steven-spielberg,-tom-hanks", PeopleOperator: "and", PeopleRole: "directing",
+				ReleasedWithin: 365, TmdbRatings: "7.5-10", Metascores: "70-100", Votes: "1000-", ImdbVotes: "5000-"},
+			wantQuery: "imdb_votes=5000-&metascores=70-100&people=steven-spielberg%2C-tom-hanks&people_operator=and&people_role=directing&released_within_days=365" +
+				"&studios=pixar%2C-dreamworks-animation&tmdb_ratings=7.5-10&votes=1000-"},
+		{name: "watchnow takes a service name and the exclude prefix", options: str.Options{WatchNow: "-netflix"}, wantPath: "/smart-lists/mixed/items", wantQuery: "watchnow=-netflix"},
+		{name: "released_within_days limits", options: str.Options{ReleasedWithin: 3650}, wantPath: "/smart-lists/mixed/items", wantQuery: "released_within_days=3650"},
 	}
 
 	for _, tt := range tests {
