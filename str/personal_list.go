@@ -7,7 +7,7 @@ type PersonalList struct {
 	Privacy        *string          `json:"privacy,omitempty"`
 	ShareLink      *string          `json:"share_link,omitempty"`
 	Type           *string          `json:"type,omitempty"`
-	DisplayNumbers *bool            `json:"display_strings,omitempty"`
+	DisplayNumbers *bool            `json:"display_numbers,omitempty"`
 	AllowComments  *bool            `json:"allow_comments,omitempty"`
 	SortBy         *string          `json:"sort_by,omitempty"`
 	SortHow        *string          `json:"sort_how,omitempty"`
@@ -20,6 +20,7 @@ type PersonalList struct {
 	User           *UserProfile     `json:"user,omitempty"`
 	StaleOrigin    *ListStaleOrigin `json:"stale_origin,omitempty"`
 	ConvertedTo    *SmartList       `json:"converted_to,omitempty"`
+	Images         *SmartListImages `json:"images,omitempty"`
 }
 
 func (p PersonalList) String() string {

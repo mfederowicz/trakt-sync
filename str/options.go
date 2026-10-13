@@ -88,7 +88,9 @@ type Options struct {
 	Period            string
 	Privacy           string
 	DisplayNumbers    bool
+	DisplayNumbersSet bool
 	AllowComments     bool
+	AllowCommentsSet  bool
 	Progress          float64
 	Query             string
 	Remove            bool
