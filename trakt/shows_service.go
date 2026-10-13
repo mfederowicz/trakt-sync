@@ -802,7 +802,13 @@ func (s *ShowsService) GetShowVideos(ctx context.Context, id string, opts *uri.L
 // RefreshShowMetadata Queue this show for a full metadata and image refresh.
 // It might take up to 8 hours for the updated metadata to be availabe through the API.
 // API docs: https://docs.trakt.tv/reference/postshowsrefresh
+//
+// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13. The method still sends its
+// request; in a later release it will return an *EndpointRemovedError instead, and then be removed.
 func (s *ShowsService) RefreshShowMetadata(ctx context.Context, id string) (*str.Response, error) {
+	if err := lockedEndpoint(http.MethodPost, "shows/{id}/refresh"); err != nil {
+		return nil, err
+	}
 	var url = fmt.Sprintf("shows/%s/refresh", id)
 	s.client.debug("refresh show:" + url)
 	req, err := s.client.NewRequest(http.MethodPost, url, nil)

@@ -13,6 +13,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
+	"github.com/mfederowicz/trakt-sync/deprecation"
 	"github.com/mfederowicz/trakt-sync/handlers"
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
@@ -209,6 +210,12 @@ func (c *Command) Exec(fs afero.Fs, client *trakt.Client, config *cfg.Config, ar
 	processVerbose(&options, config.ClientID)
 	client.DebugLogger = debugLogger(options.Verbose)
 
+	if notice, ok := deprecation.Lookup(c.Name, c.actionFlag()); ok {
+		if err = deprecationResult(notice); err != nil {
+			return err
+		}
+	}
+
 	// err is the named result, so a recovered panic is returned instead of nil
 	defer func() {
 		if r := recover(); r != nil {
@@ -223,6 +230,25 @@ func (c *Command) Exec(fs afero.Fs, client *trakt.Client, config *cfg.Config, ar
 	err = c.Run(c, c.Flag.Args()...)
 
 	return err
+}
+
+// deprecationResult prints the notice of an action that still runs, or returns it as the error of one that
+// sends no request any more
+func deprecationResult(notice deprecation.Notice) error {
+	if notice.Blocked() {
+		return errors.New(notice.Message())
+	}
+	printer.Println(notice.Message())
+	return nil
+}
+
+// actionFlag returns the value of the module's -a flag, empty when the module has none
+func (c *Command) actionFlag() string {
+	f := c.Flag.Lookup("a")
+	if f == nil {
+		return consts.EmptyString
+	}
+	return f.Value.String()
 }
 
 // debugLogger returns the -v debug output for the client, or nil when -v is off.

@@ -255,7 +255,8 @@ an API app without access gets a limited access error.
 ```console
 $ ./trakt-sync shows -a videos -i the-sopranos
 ```
-##### Refresh show metadata
+##### Refresh show metadata (deprecated)
+Deprecated since 2026-10-13: Trakt dropped this endpoint from its API contract. `shows -a refresh` still works (checked 2026-10-13) and prints a deprecation notice; it may stop working.
 ```console
 $ ./trakt-sync shows -a refresh -i the-sopranos
 ```

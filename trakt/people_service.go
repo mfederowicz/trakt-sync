@@ -223,7 +223,13 @@ func (p *PeopleService) GetRecentlyUpdatedPeopleTraktIDs(ctx context.Context, st
 // It might take up to 8 hours for the updated metadata to be availabe through the API.
 //
 // API docs: https://docs.trakt.tv/reference/postpeoplerefresh
+//
+// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13. The method still sends its
+// request; in a later release it will return an *EndpointRemovedError instead, and then be removed.
 func (p *PeopleService) RefreshPersonMetadata(ctx context.Context, id string) (*str.Response, error) {
+	if err := lockedEndpoint(http.MethodPost, "people/{id}/refresh"); err != nil {
+		return nil, err
+	}
 	var url = fmt.Sprintf("people/%s/refresh", id)
 	p.client.debug("refresh people:" + url)
 	req, err := p.client.NewRequest(http.MethodPost, url, nil)

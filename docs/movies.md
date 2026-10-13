@@ -210,7 +210,8 @@ an API app without access gets a limited access error.
 ```console
 $ ./trakt-sync movies -a videos -i the-sopranos
 ```
-##### Refresh movie metadata
+##### Refresh movie metadata (deprecated)
+Deprecated since 2026-10-13: Trakt dropped this endpoint from its API contract. `movies -a refresh` still works (checked 2026-10-13) and prints a deprecation notice; it may stop working.
 ```console
 $ ./trakt-sync movies -a refresh -i the-sopranos
 ```

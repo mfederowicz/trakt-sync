@@ -9,6 +9,7 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
+	"github.com/mfederowicz/trakt-sync/deprecation"
 	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
@@ -89,6 +90,10 @@ func TestUnknownActionOrTypeFails(t *testing.T) {
 		c := c
 		// help has no actions; collection, history and watchlist have no -a flag (a given -a already fails to parse)
 		if c.Name == "help" || c.Name == consts.Collection || c.Name == consts.History || c.Name == consts.Watchlist {
+			continue
+		}
+		// a deprecated module answers with its notice for every action, see TestDeprecatedActionsSendNoRequest
+		if _, deprecated := deprecation.Lookup(c.Name, consts.EmptyString); deprecated {
 			continue
 		}
 		t.Run(c.Name, func(t *testing.T) {

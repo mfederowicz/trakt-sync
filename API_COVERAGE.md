@@ -523,6 +523,7 @@ The ⚠️ routes are live API gaps, not client bugs. A row that ends with "Upst
 
 | Go method | Route | Note |
 | --- | --- | --- |
+| `MoviesService.RefreshMovieMetadata`, `ShowsService.RefreshShowMetadata`, `PeopleService.RefreshPersonMetadata`, `SearchService.RemoveRecentSearch`, `UsersService.AddSavedFilters`, `DeleteSavedFilter`, `SyncService.UpdateFavorites`, `SocialRecommendationsService.*` | `POST /movies/{id}/refresh`, `/shows/{id}/refresh`, `/people/{id}/refresh`, `POST /search/recent/remove`, `POST /users/saved_filters`, `DELETE /users/saved_filters/{id}`, `PUT /sync/favorites`, `GET /social_recommendations/movies/`, `/shows/` | Trakt dropped these 9 routes from the contract on 2026-10-13 (trakt/trakt-api `f3a3b0c`), but the live API still serves all of them (checked 2026-10-13: 200/201/204, 426 for the VIP ones, while a made-up path answers 400 or 405). The rows stay ✅; the actions and methods are deprecated in the `deprecation` registry and still send their request. Re-check before moving them to the locked stage. |
 | `MoviesService.GetHotMovies` | `GET /movies/hot` | live API returns 404 (checked 2026-09-24); the CLI explains the 404. Upstream issue: not filed yet |
 | - | `GET /shows/hot` | live API routes it to `GET /shows/{id}` and returns the show with slug `hot` (checked 2026-09-24). Upstream issue: not filed yet |
 | `MoviesService.GetStreamingMovies` | `GET /movies/streaming/{period}` | live API returns 404 `{"error":"endpoint removed"}` (checked 2026-09-24); the CLI explains the 404. Upstream issue: not filed yet |

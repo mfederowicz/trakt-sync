@@ -32,9 +32,16 @@ schedule.
 
 ### Added
 
+- Library: `trakt.EndpointRemovedError`, returned without a request by a method whose Trakt endpoint is locked or removed; its `Notice` holds the endpoint and the dates it was deprecated, locked and removed. The notices live in the new package `deprecation` (`Lookup`, `LookupRoute`, `Notices`). No endpoint is locked yet.
+
 ### Changed
 
 ### Fixed
+
+### Deprecated
+
+- Trakt dropped nine endpoints from its API contract on 2026-10-13. They still answer (checked that day), so their actions keep working, but each now prints a notice first, such as `movies -a refresh is deprecated since 2026-10-13: Trakt dropped this endpoint from its API contract, it may stop working`: `movies -a refresh`, `shows -a refresh`, `people -a refresh`, `search -a remove_recent`, `users -a add_saved_filters`, `users -a delete_saved_filter`, `sync -a update_favorites`, and `social_recommendations -a movies` and `-a shows` (the whole module). In a later release these actions will stop sending the request and only print their status; the action names stay. `refresh_justwatch` and `younify -a refresh` are not affected.
+- Library: the methods of those endpoints are marked deprecated: `MoviesService.RefreshMovieMetadata`, `ShowsService.RefreshShowMetadata`, `PeopleService.RefreshPersonMetadata`, `SearchService.RemoveRecentSearch`, `UsersService.AddSavedFilters`, `UsersService.DeleteSavedFilter`, `SyncService.UpdateFavorites`, `SocialRecommendationsService.GetSocialMovieRecommendations` and `GetSocialShowRecommendations`. They still send their request; in a later release they will return a `*trakt.EndpointRemovedError` instead, and then be removed.
 
 ### Removed
 
