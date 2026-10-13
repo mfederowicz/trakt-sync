@@ -45,7 +45,9 @@ type ListOptions struct {
 	RtUserMeters RatingRange `url:"rt_user_meters,omitempty"`
 	Runtimes     string      `url:"runtimes,omitempty"`
 	// Status is the show status filter; it is sent as statuses, the name the API applies.
-	Status        []string   `url:"statuses,omitempty"`
+	Status []string `url:"statuses,omitempty"`
+	// Theme is a seasonal theme such as halloween or christmas, for the trending, popular, anticipated and recommendations routes of movies, shows and media.
+	Theme         string     `url:"theme,omitempty"`
 	TmdbVotes     VotesRange `url:"tmdb_votes,omitempty"`
 	Type          string     `url:"type,omitempty"`
 	Votes         VotesRange `url:"votes,omitempty"`

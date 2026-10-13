@@ -24,6 +24,7 @@ var (
 	_moviesLinks          = MoviesCmd.Flag.String("links", consts.EmptyString, consts.MoviesLinksUsage)
 	_moviesWatchNow       = MoviesCmd.Flag.String("watchnow", consts.EmptyString, consts.WatchNowUsage)
 	_moviesSubgenres      = MoviesCmd.Flag.String("subgenres", consts.EmptyString, consts.SubgenresUsage)
+	_moviesTheme          = MoviesCmd.Flag.String("theme", consts.EmptyString, consts.ThemeUsage)
 	_moviesRatings        = MoviesCmd.Flag.String("ratings", consts.EmptyString, consts.RatingsFilterUsage)
 	_moviesCertifications = MoviesCmd.Flag.String("certifications", consts.EmptyString, consts.CertificationsUsage)
 	_moviesImdbRatings    = MoviesCmd.Flag.String("imdb_ratings", consts.EmptyString, consts.ImdbRatingsUsage)

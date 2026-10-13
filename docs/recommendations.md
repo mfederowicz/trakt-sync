@@ -38,6 +38,7 @@ $ ./trakt-sync recommendations -a movies -ex full
 `-certifications` (comma separated where a filter takes several values), `-start_date`, `-end_date` and
 `-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all`.
 `-languages` (language codes, comma separated) filters them too.
+`-theme <name>` applies a seasonal theme such as `halloween` or `christmas`: Trakt turns it into filters for the recommendations, a filter you set yourself wins over it, and an unknown theme is ignored.
 ```console
 $ ./trakt-sync recommendations -a movies -genres horror -years 2020-2026
 ```

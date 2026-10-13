@@ -26,6 +26,7 @@ func exportMedia[T any](client *trakt.Client, options *str.Options, fetch pageFe
 	}
 	result, err := fetchAllPages(client, options, consts.DefaultPage, func(opts *uri.ListOptions) ([]T, *str.Response, error) {
 		opts.Filters = mediaFilters(options)
+		opts.Theme = options.Theme
 		return fetch(opts)
 	})
 	if err != nil {

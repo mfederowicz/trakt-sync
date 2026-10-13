@@ -18,6 +18,7 @@ var (
 	_recommendationsIgnoreWatched     = RecommendationsCmd.Flag.String("ignore_watched", string(cfg.DefaultConfig().IgnoreWatched), consts.IgnoreWatchedUsage)
 	_recommendationsWatchWindow       = RecommendationsCmd.Flag.Int("watch_window", cfg.DefaultConfig().WatchWindow, consts.WatchWindowUsage)
 	_recommendationsFilters           = newMediaFilterFlags(&RecommendationsCmd.Flag)
+	_recommendationsTheme             = RecommendationsCmd.Flag.String("theme", consts.EmptyString, consts.ThemeUsage)
 )
 
 // RecommendationsCmd manage movie and shows recommendations for user.

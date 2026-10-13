@@ -48,7 +48,7 @@ func (h ShowsPopularHandler) Handle(options *str.Options, client *trakt.Client) 
 }
 
 func (h ShowsPopularHandler) fetchShowsPopular(client *trakt.Client, options *str.Options, page int) ([]*str.Show, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options), Status: showStatus(options)}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options), Status: showStatus(options), Theme: options.Theme}
 	list, resp, err := client.Shows.GetPopularShows(
 		cli.ContextFromOptions(options),
 		&opts,

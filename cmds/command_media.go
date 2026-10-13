@@ -12,6 +12,7 @@ import (
 var (
 	_mediaAction  = MediaCmd.Flag.String("a", cfg.DefaultConfig().Action, consts.ActionUsage)
 	_mediaFilters = newMediaFilterFlags(&MediaCmd.Flag)
+	_mediaTheme   = MediaCmd.Flag.String("theme", consts.EmptyString, consts.ThemeUsage)
 )
 
 // MediaCmd returns trending, popular and anticipated movies and shows together.

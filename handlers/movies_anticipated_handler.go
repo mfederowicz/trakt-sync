@@ -48,7 +48,7 @@ func (h MoviesAnticipatedHandler) Handle(options *str.Options, client *trakt.Cli
 }
 
 func (h MoviesAnticipatedHandler) fetchMoviesAnticipated(client *trakt.Client, options *str.Options, page int) ([]*str.MoviesItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options), Status: movieStatus(options)}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options), Status: movieStatus(options), Theme: options.Theme}
 	list, resp, err := client.Movies.GetAnticipatedMovies(
 		cli.ContextFromOptions(options),
 		&opts,
