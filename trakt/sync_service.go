@@ -442,7 +442,13 @@ func (s *SyncService) UpdateWatchlist(ctx context.Context, update *str.PersonalL
 // UpdateFavorites Update the favorites list by sending 1 or more parameters.
 //
 // API docs: https://docs.trakt.tv/reference/putsyncfavoritesupdate
+//
+// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13. The method still sends its
+// request; in a later release it will return an *EndpointRemovedError instead, and then be removed.
 func (s *SyncService) UpdateFavorites(ctx context.Context, update *str.PersonalList) (*str.PersonalList, *str.Response, error) {
+	if err := lockedEndpoint(http.MethodPut, "sync/favorites"); err != nil {
+		return nil, nil, err
+	}
 	var url = "sync/favorites"
 	s.client.debug("update favorites")
 	req, err := s.client.NewRequest(http.MethodPut, url, update)

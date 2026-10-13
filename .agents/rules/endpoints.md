@@ -126,6 +126,12 @@ from its ⬜ rows. A route the contract lists but the live API answers with 404 
 every API app, even with a working token) is marked ⚠️ with a row in the Findings table (Go method, what the live API
 returns, date checked, upstream issue). Implemented ⚠️ routes stay in the CLI
 and turn the 404 into a clear "documented, but not served" error.
+A route Trakt removes from the contract after we implemented it keeps its action
+name: add a row to `deprecation/registry.go` (method, route template, dates),
+start the service method with `lockedEndpoint(method, route)`, mark it
+`// Deprecated:`, add a Findings row (the route turns ⚠️ only once the live API
+stops serving it) and add the changelog entries (stages and wording: see
+`project.md`).
 A route the CLI has no use for is marked ➖ with the reason in the Go method
 column and counted in the ➖ summary column.
 Add a `CHANGELOG.md` entry under `[Unreleased]` (see `project.md`).

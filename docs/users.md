@@ -29,12 +29,14 @@ $ ./trakt-sync users -a follower_requests -follower_request 123 -deny
 ```console
 $ ./trakt-sync users -a saved_filters -u username
 ```
-##### Add saved filters (VIP only) - via -items flag or stdin:
+##### Add saved filters (deprecated) - via -items flag or stdin:
+Deprecated since 2026-10-13: Trakt dropped this endpoint from its API contract. `users -a add_saved_filters` still works (checked 2026-10-13) and prints a deprecation notice; it may stop working.
 A JSON array of `name` + `url` (a trakt.tv page with its filters).
 ```console
 $ echo '[{"name":"Sci-fi","url":"https://trakt.tv/movies/trending?genres=science-fiction"}]' | ./trakt-sync users -a add_saved_filters -> users_add_saved_filters_results.json
 ```
-##### Delete saved filter (VIP only):
+##### Delete saved filter (deprecated):
+Deprecated since 2026-10-13: Trakt dropped this endpoint from its API contract. `users -a delete_saved_filter` still works (checked 2026-10-13) and prints a deprecation notice; it may stop working.
 ```console
 $ ./trakt-sync users -a delete_saved_filter -i 101
 ```

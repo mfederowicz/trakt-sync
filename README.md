@@ -93,7 +93,7 @@ One exception: `type` in the config file is ignored by `episodes`, `lists`, `mov
 - [`seasons`](./docs/seasons.md) - Returns data about seasons: summary, season, episodes, translations, comments etc...
 - [`shows`](./docs/shows.md) - Returns data about movies: trending, popular, list, likes, like, items, comments etc...
 - [`smart_lists`](./docs/smart_lists.md) - Returns a smart list definition or the items it resolves to.
-- [`social_recommendations`](./docs/social_recommendations.md) - Movie and show recommendations based on the people you follow.
+- [`social_recommendations`](./docs/social_recommendations.md) - Deprecated since 2026-10-13 (Trakt dropped the endpoints from its API contract): movie and show recommendations based on the people you follow.
 - [`sync`](./docs/sync.md) - Sync data useful for mediacenters: activities, playbacks, collections, ratings, watchlists, favorites.
 - [`team`](./docs/team.md) - Returns Trakt team members.
 - [`users`](./docs/users.md) - Returns all data for a user.

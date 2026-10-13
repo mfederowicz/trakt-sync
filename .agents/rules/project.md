@@ -34,6 +34,7 @@ Go module (run `go` commands inside it); keep it building when the `trakt` API c
 Supporting packages: `cfg/` (TOML config and `str.Options`), `consts/` (named
 constants and usage strings), `printer/` (all console output), `writer/`
 (JSON file output), `buffer/`, `cli/` (OAuth device flow, token, version),
+`deprecation/` (notices for actions whose Trakt endpoint is gone),
 `test/` (shared test helpers), `testdata/` (fixtures), `docs/<module>.md`
 (per-module user docs).
 
@@ -117,6 +118,16 @@ and SemVer. The versioning rules are at the top of the file.
 - Changes nobody outside the repo notices (tests only, refactors, rule files) may
   be skipped or grouped into one line.
 - Never edit a released section; a correction goes into `[Unreleased]`.
+- When Trakt removes or announces the end of an endpoint, the module and action
+  names stay and the endpoint gets a row in `deprecation/registry.go`. A row moves
+  through three stages, each a new date on it and a `CHANGELOG.md` entry:
+  `Deprecated` (the action still sends its request and prints the notice),
+  `Locked` (`Command.Exec` and the service method send nothing; the method returns
+  `*trakt.EndpointRemovedError`), `Removed` (the handler and method bodies are
+  deleted, the notice stays). Check the live API before picking a stage: a route
+  the contract dropped but the API still serves starts at `Deprecated`, one that is
+  already gone starts at `Locked`.
+  Removing the action name itself is a major change.
 
 ### Releasing
 

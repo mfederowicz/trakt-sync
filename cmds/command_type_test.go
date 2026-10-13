@@ -6,6 +6,7 @@ import (
 
 	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/consts"
+	"github.com/mfederowicz/trakt-sync/deprecation"
 	"github.com/mfederowicz/trakt-sync/trakt"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
@@ -65,6 +66,10 @@ func TestConfigTypePerModule(t *testing.T) {
 
 	for _, c := range Commands {
 		c := c
+		// a deprecated module never runs, see TestDeprecatedActionsSendNoRequest
+		if _, deprecated := deprecation.Lookup(c.Name, consts.EmptyString); deprecated {
+			continue
+		}
 		t.Run(c.Name, func(t *testing.T) {
 			resetAllFlags()
 			t.Cleanup(resetAllFlags)

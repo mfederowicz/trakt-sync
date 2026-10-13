@@ -1482,7 +1482,13 @@ func (u *UsersService) UpdateSettings(ctx context.Context, settings *str.Setting
 // AddSavedFilters Create saved filters for the authenticated user.
 //
 // API docs: https://docs.trakt.tv/reference/postusersfiltersadd
+//
+// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13. The method still sends its
+// request; in a later release it will return an *EndpointRemovedError instead, and then be removed.
 func (u *UsersService) AddSavedFilters(ctx context.Context, filters []*str.SavedFilterAdd) (*str.SavedFiltersResult, *str.Response, error) {
+	if err := lockedEndpoint(http.MethodPost, "users/saved_filters"); err != nil {
+		return nil, nil, err
+	}
 	req, err := u.client.NewRequest(http.MethodPost, "users/saved_filters", filters)
 	if err != nil {
 		return nil, nil, err
@@ -1500,7 +1506,13 @@ func (u *UsersService) AddSavedFilters(ctx context.Context, filters []*str.Saved
 // DeleteSavedFilter Delete a saved filter by id.
 //
 // API docs: https://docs.trakt.tv/reference/deleteusersfiltersdelete
+//
+// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13. The method still sends its
+// request; in a later release it will return an *EndpointRemovedError instead, and then be removed.
 func (u *UsersService) DeleteSavedFilter(ctx context.Context, id int) (*str.Response, error) {
+	if err := lockedEndpoint(http.MethodDelete, "users/saved_filters/{id}"); err != nil {
+		return nil, err
+	}
 	req, err := u.client.NewRequest(http.MethodDelete, fmt.Sprintf("users/saved_filters/%d", id), nil)
 	if err != nil {
 		return nil, err

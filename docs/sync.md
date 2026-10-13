@@ -455,7 +455,8 @@ $ ./trakt-sync sync -a get_favorites -t movies -sort_by percentage
 imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to rank.
 ```
 
-##### Update Favorites
+##### Update Favorites (deprecated)
+Deprecated since 2026-10-13: Trakt dropped this endpoint from its API contract. `sync -a update_favorites` still works (checked 2026-10-13) and prints a deprecation notice; it may stop working.
 ```console
 $ ./trakt-sync sync -a update_favorites -description "short favorites description" -sort_how asc
 ```

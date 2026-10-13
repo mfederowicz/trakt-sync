@@ -76,6 +76,7 @@ one value: `movies`, `shows`, `people` or `lists`; `-i` must be the numeric Trak
 ```console
 $ ./trakt-sync search -a add_recent -t shows -q reacher -i 139606
 ```
+`remove_recent` is deprecated since 2026-10-13: Trakt dropped this endpoint from its API contract. `search -a remove_recent` still works (checked 2026-10-13) and prints a deprecation notice; it may stop working.
 ```console
 $ ./trakt-sync search -a remove_recent -t shows -q reacher -i 139606
 ```
