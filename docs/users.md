@@ -321,6 +321,21 @@ $ echo '{"privacy":"public"}' | ./trakt-sync users -a update_smart_list -i <slug
 ```console
 $ ./trakt-sync users -a delete_smart_list -i <slug>
 ```
+##### Fetch the lists that are ready to become smart lists:
+A personal list that stopped updating (its `stale_origin` is set) can have a ready-made smart list setup, a "draft". The summary gives the number of such lists, the best `confidence` and the top three lists. Only the owner can read it.
+```console
+$ ./trakt-sync users -a smart_list_drafts -> export_users_smart_list_drafts.json
+```
+##### Fetch the smart list draft of a personal list (Trakt ID or Trakt slug):
+`filters`, `source` and `media_type` of the draft have the shape `add_smart_list` takes; `confidence` (0 to 1) is the share of the list's current titles the setup brings back. A list without a good setup ends with `no smart list draft for list`.
+```console
+$ ./trakt-sync users -a smart_list_draft -i <list> -> export_users_smart_list_draft_<list>.json
+```
+##### Turn a personal list into a smart list - via -items flag or stdin:
+Takes the same JSON as `add_smart_list` (`name`, `source`, `media_type`, optional `filters` and `privacy`), usually built from the draft. The list keeps its address and its items are then served from the smart list. Running it again on a converted list returns the existing smart list.
+```console
+$ ./trakt-sync users -a convert_to_smart_list -i <list> -items smart_list.json -> users_convert_to_smart_list_results.json
+```
 ##### Fetch all users who liked a list (Trakt ID or Trakt slug):
 ```console
 $ ./trakt-sync users -a list_likes -u username -i 123456
@@ -757,6 +772,11 @@ $ ./trakt-sync users -a month_in_review -year 2026 -month 8 -> export_users_mont
 ##### Get year in review
 ```console
 $ ./trakt-sync users -a year_in_review -year 2025 -> export_users_year_in_review_2025.json
+```
+##### Get year in review persona (VIP only)
+The watching persona a user earned for a year, with its runner-up, traits, highlights, scores, longest streak and monthly personas. `-year` is 2026 or later. A non-VIP account asking for its own persona ends with `year_in_review_persona is VIP only`.
+```console
+$ ./trakt-sync users -a year_in_review_persona -year 2026 -> export_users_year_in_review_persona_2026.json
 ```
 ##### Get data syncs (younify, plex, import)
 > **Note:** as of 2026-09-25 Trakt answers `data_syncs` with 401 for API apps (other OAuth routes work with the same token), and the

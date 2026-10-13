@@ -1282,6 +1282,64 @@ func (u *UsersService) GetSmartLists(ctx context.Context, user string) ([]*str.S
 	return list, resp, nil
 }
 
+// GetSmartListDrafts Returns how many personal lists that stopped updating are ready to become smart lists, with the top three.
+//
+// API docs: https://docs.trakt.tv/reference/getuserssmartlistdraftssummary
+func (u *UsersService) GetSmartListDrafts(ctx context.Context, user string) (*str.SmartListDraftsSummary, *str.Response, error) {
+	var url = fmt.Sprintf("users/%s/smart-list-drafts", userOrMe(user))
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.SmartListDraftsSummary)
+	resp, err := u.client.Do(ctx, req, result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// GetSmartListDraft Returns the ready-made smart list setup for a personal list that stopped updating.
+//
+// API docs: https://docs.trakt.tv/reference/getuserslistslistsmartlistdraft
+func (u *UsersService) GetSmartListDraft(ctx context.Context, user string, listID string) (*str.SmartListDraft, *str.Response, error) {
+	var url = fmt.Sprintf("users/%s/lists/%s/smart-list-draft", userOrMe(user), listID)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.SmartListDraft)
+	resp, err := u.client.Do(ctx, req, result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
+// ConvertListToSmartList Turns a personal list that stopped updating into a smart list; the response holds the smart list ids.
+// The API answers 201 when it converts the list and 200 when the list was converted before.
+//
+// API docs: https://docs.trakt.tv/reference/postuserslistslistconverttosmartlist
+func (u *UsersService) ConvertListToSmartList(ctx context.Context, user string, listID string, list *str.SmartListWrite) (*str.SmartList, *str.Response, error) {
+	var url = fmt.Sprintf("users/%s/lists/%s/smart-list-draft/convert", userOrMe(user), listID)
+	req, err := u.client.NewRequest(http.MethodPost, url, list)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.SmartList)
+	resp, err := u.client.Do(ctx, req, result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
+}
+
 // GetSmartList Returns a single smart list definition of a user.
 //
 // API docs: https://docs.trakt.tv/reference/getuserssmartlistssmartlistsummary
@@ -1409,6 +1467,25 @@ func (u *UsersService) GetMonthInReview(ctx context.Context, user string, year i
 // API docs: https://docs.trakt.tv/reference/getusersyear_in_review
 func (u *UsersService) GetYearInReview(ctx context.Context, user string, year int, opts *uri.ListOptions) (*str.Review, *str.Response, error) {
 	return u.fetchReview(ctx, fmt.Sprintf("users/%s/yir/%d", userOrMe(user), year), opts)
+}
+
+// GetYearInReviewPersona Returns the watching persona a user earned for a year in review (VIP only, 2026 or later).
+//
+// API docs: https://docs.trakt.tv/reference/getusersyear_in_review_persona
+func (u *UsersService) GetYearInReviewPersona(ctx context.Context, user string, year int) (*str.ReviewPersona, *str.Response, error) {
+	var url = fmt.Sprintf("users/%s/yir/%d/persona", userOrMe(user), year)
+	req, err := u.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(str.ReviewPersona)
+	resp, err := u.client.Do(ctx, req, result)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return result, resp, nil
 }
 
 func (u *UsersService) fetchReview(ctx context.Context, url string, opts *uri.ListOptions) (*str.Review, *str.Response, error) {

@@ -1020,12 +1020,12 @@ func getOutputForModuleUsers(options *str.Options) string {
 			options.Module,
 			options.Action,
 			strings.ReplaceAll(options.Type, consts.CommaString, consts.EmptyString))
-	case consts.Stats, consts.Collaborations, consts.SmartLists:
+	case consts.Stats, consts.Collaborations, consts.SmartLists, consts.SmartListDrafts:
 		options.Output = fmt.Sprintf(
 			consts.DefaultOutputFormat2,
 			options.Module,
 			options.Action)
-	case consts.SmartList:
+	case consts.SmartList, consts.SmartListDraft:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.ID)
 	case consts.CommentReactions:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
@@ -1044,7 +1044,7 @@ func getOutputForModuleUsers(options *str.Options) string {
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.Type)
 	case consts.MonthInReview:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, fmt.Sprintf(consts.YearMonthFormat, options.Year, options.Month))
-	case consts.YearInReview:
+	case consts.YearInReview, consts.YearInReviewPersona:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, strconv.Itoa(options.Year))
 	case consts.List:
 		options.Output = fmt.Sprintf(
@@ -1081,7 +1081,7 @@ func getOutputForModuleUsers(options *str.Options) string {
 			options.Module,
 			options.Action)
 	case consts.AddList, consts.ReorderLists, consts.AddListItems, consts.RemoveListItems, consts.ReorderListItems,
-		consts.AddHiddenItems, consts.RemoveHiddenItems, consts.AddSmartList, consts.AddSavedFilters:
+		consts.AddHiddenItems, consts.RemoveHiddenItems, consts.AddSmartList, consts.AddSavedFilters, consts.ConvertToSmartList:
 		options.Output = fmt.Sprintf(consts.DefaultResultsFormat, options.Module, options.Action)
 	case consts.UpdateList, consts.Watching, consts.UpdateSmartList:
 		options.Output = fmt.Sprintf(consts.DefaultExportResultsFormat, options.Module, options.Action)

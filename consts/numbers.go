@@ -22,6 +22,7 @@ const (
 	OneValue              = 1
 	PagesLimit            = 2
 	PerPage               = 50
+	PersonaMinYear        = 2026
 	RatingRageMin         = 0
 	RatingRangeMax        = 100
 	SleepNumberOfSeconds  = 2

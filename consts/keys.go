@@ -48,6 +48,7 @@ const (
 	Comments              = "comments"
 	Connect               = "connect"
 	Connections           = "connections"
+	ConvertToSmartList    = "convert_to_smart_list"
 	Countries             = "countries"
 	DataSync              = "data_sync"
 	DataSyncPaused        = "data_sync_paused"
@@ -188,6 +189,8 @@ const (
 	ShowEpisode           = "show_episode"
 	Shows                 = "shows"
 	SmartList             = "smart_list"
+	SmartListDraft        = "smart_list_draft"
+	SmartListDrafts       = "smart_list_drafts"
 	SmartLists            = "smart_lists"
 	SocialRecommendations = "social_recommendations"
 	SortAsc               = "asc"
@@ -237,6 +240,7 @@ const (
 	Watchlist             = "watchlist"
 	WatchlistComments     = "watchlist_comments"
 	YearInReview          = "year_in_review"
+	YearInReviewPersona   = "year_in_review_persona"
 	Younify               = "younify"
 )
 

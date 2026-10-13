@@ -3,7 +3,7 @@
 Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 - Source: [trakt/trakt-api](https://github.com/trakt/trakt-api) contracts, via the generated spec at <https://developer.trakt.tv/openapi.json>.
-- Snapshot date: 2026-10-08. Update rows when the contract changes.
+- Snapshot date: 2026-10-13. Update rows when the contract changes.
 - ✅ implemented: a service method in `trakt/` calls this exact route.
 - 🟡 needs checking: a service method calls this route only through a generic path parameter (for example `sync/collection/%s`); confirm the CLI accepts this value.
 - ⬜ missing: no service method calls this route.
@@ -39,10 +39,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`social_recommendations`](#social_recommendations) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
-| [`users`](#users) | 85 | 0 | 0 | 18 | 1 | 104 |
+| [`users`](#users) | 89 | 0 | 0 | 18 | 1 | 108 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **305** | **0** | **0** | **28** | **3** | **336** |
+| **Total** | **309** | **0** | **0** | **28** | **3** | **340** |
 
 ## calendars
 
@@ -472,6 +472,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/users/{id}/lists/{list_id}/likes` | Get all users who liked a list | `UsersService.GetListLikes` |
 | ➖ | POST | `/users/{id}/lists/{list_id}/reorder` | Reorder items on a list | not used: same request as `/users/{id}/lists/{list_id}/items/reorder`, which `users -a reorder_list_items` calls |
 | ✅ | POST | `/users/{id}/lists/{list_id}/report` | Report a user's list | `UsersService.ReportList` |
+| ✅ | GET | `/users/{id}/lists/{list_id}/smart-list-draft` | Get a smart list draft for a list | `UsersService.GetSmartListDraft` |
+| ✅ | POST | `/users/{id}/lists/{list_id}/smart-list-draft/convert` | Turn a list into a smart list | `UsersService.ConvertListToSmartList` |
 | ⚠️ | GET | `/users/{id}/mir/{year}/{month}` | Get month in review | `UsersService.GetMonthInReview` |
 | ✅ | GET | `/users/{id}/notes/{type}` | Get notes | `UsersService.GetNotes` |
 | ✅ | GET | `/users/{id}/ratings/` | Get all ratings | `UsersService.GetRatings` |
@@ -480,6 +482,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/users/{id}/ratings/shows` | Get show ratings | `UsersService.GetRatings` |
 | ✅ | GET | `/users/{id}/ratings/{type}/{rating}` | Get ratings | `UsersService.GetRatings` |
 | ✅ | POST | `/users/{id}/report` | Report a user | `UsersService.Report` |
+| ✅ | GET | `/users/{id}/smart-list-drafts` | Get lists ready to become smart lists | `UsersService.GetSmartListDrafts` |
 | ✅ | GET | `/users/{id}/smart-lists` | Get a user's smart lists | `UsersService.GetSmartLists` |
 | ✅ | POST | `/users/{id}/smart-lists` | Create smart list | `UsersService.AddSmartList` |
 | ✅ | GET | `/users/{id}/smart-lists/{list_id}/` | Get smart list | `UsersService.GetSmartList` |
@@ -496,6 +499,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/users/{id}/watchlist/shows/{sort}` | Get show watchlist | `UsersService.GetWatchlistBySort` |
 | ✅ | GET | `/users/{id}/watchlist/{type}/{sort_by}/{sort_how}` | Get watchlist | `UsersService.GetWatchlist` |
 | ⚠️ | GET | `/users/{id}/yir/{year}` | Get year in review | `UsersService.GetYearInReview` |
+| ✅ | GET | `/users/{id}/yir/{year}/persona` | Get year in review persona | `UsersService.GetYearInReviewPersona` |
 | ⚠️ | GET | `/users/{id}/{type}/activities` | Get social activity | `UsersService.GetSocialActivity` |
 
 ## watchnow
@@ -523,7 +527,7 @@ The ⚠️ routes are live API gaps, not client bugs. A row that ends with "Upst
 
 | Go method | Route | Note |
 | --- | --- | --- |
-| `MoviesService.RefreshMovieMetadata`, `ShowsService.RefreshShowMetadata`, `PeopleService.RefreshPersonMetadata`, `SearchService.RemoveRecentSearch`, `UsersService.AddSavedFilters`, `DeleteSavedFilter`, `SyncService.UpdateFavorites`, `SocialRecommendationsService.*` | `POST /movies/{id}/refresh`, `/shows/{id}/refresh`, `/people/{id}/refresh`, `POST /search/recent/remove`, `POST /users/saved_filters`, `DELETE /users/saved_filters/{id}`, `PUT /sync/favorites`, `GET /social_recommendations/movies/`, `/shows/` | Trakt dropped these 9 routes from the contract on 2026-10-13 (trakt/trakt-api `f3a3b0c`), but the live API still serves all of them (checked 2026-10-13: 200/201/204, 426 for the VIP ones, while a made-up path answers 400 or 405). The rows stay ✅; the actions and methods are deprecated in the `deprecation` registry and still send their request. Re-check before moving them to the locked stage. |
+| `MoviesService.RefreshMovieMetadata`, `ShowsService.RefreshShowMetadata`, `PeopleService.RefreshPersonMetadata`, `SearchService.RemoveRecentSearch`, `UsersService.AddSavedFilters`, `DeleteSavedFilter`, `SyncService.UpdateFavorites`, `SocialRecommendationsService.*` | `POST /movies/{id}/refresh`, `/shows/{id}/refresh`, `/people/{id}/refresh`, `POST /search/recent/remove`, `POST /users/saved_filters`, `DELETE /users/saved_filters/{id}`, `PUT /sync/favorites`, `GET /social_recommendations/movies/`, `/shows/` | Trakt dropped these 9 routes from the contract on 2026-10-13 (trakt/trakt-api `f3a3b0c`), but the live API still serves all of them (checked 2026-10-13: 200/201/204, 426 for the VIP ones, while a made-up path answers 400 or 405). The rows stay ✅ and in the totals (the contract itself now lists 331 routes); the actions and methods are deprecated in the `deprecation` registry and still send their request. Re-check before moving them to the locked stage. |
 | `MoviesService.GetHotMovies` | `GET /movies/hot` | live API returns 404 (checked 2026-09-24); the CLI explains the 404. Upstream issue: not filed yet |
 | - | `GET /shows/hot` | live API routes it to `GET /shows/{id}` and returns the show with slug `hot` (checked 2026-09-24). Upstream issue: not filed yet |
 | `MoviesService.GetStreamingMovies` | `GET /movies/streaming/{period}` | live API returns 404 `{"error":"endpoint removed"}` (checked 2026-09-24); the CLI explains the 404. Upstream issue: not filed yet |

@@ -25,6 +25,28 @@ func TestUsersServiceRequests(t *testing.T) {
 	cases := []serviceCase{
 		{name: "GetSavedFilters", method: http.MethodGet, path: "/users/saved_filters/movies", body: `[{"rank":1,"id":101,"section":"movies","name":"Movies: IMDB + TMDB ratings","path":"/movies/recommended/weekly","query":"imdb_ratings=6.9-10.0"}]`,
 			call: func(c *Client) (any, error) { r, _, err := c.Users.GetSavedFilters(ctx, "movies"); return r, err }},
+		{name: "GetYearInReviewPersona", method: http.MethodGet, path: "/users/sean/yir/2026/persona",
+			body: `{"persona":"cinephile","runner_up":"critic","confidence":"strong","rarity":12,"card_number":7,"traits":["night-owl","doc-nerd"],` +
+				`"highlights":[{"kind":"movies","value":212},{"kind":"avg-rating","value":7.4}],"runner_up_highlights":[{"kind":"ratings","value":180}],` +
+				`"scores":{"cinephile":91,"critic":77},"streak":{"longest":21,"started_at":"2026-03-01T10:00:00Z"},"monthly":[{"month":1,"persona":"cinephile"}]}`,
+			call: func(c *Client) (any, error) {
+				r, _, err := c.Users.GetYearInReviewPersona(ctx, user, 2026)
+				return r, err
+			}},
+		{name: "GetSmartListDrafts", method: http.MethodGet, path: "/users/sean/smart-list-drafts",
+			body: `{"convertible_count":2,"best_confidence":0.92,"lists":[{"ids":{"trakt":55,"slug":"star-wars"},"name":"Star Wars","item_count":12,"confidence":0.92}]}`,
+			call: func(c *Client) (any, error) { r, _, err := c.Users.GetSmartListDrafts(ctx, user); return r, err }},
+		{name: "GetSmartListDraft", method: http.MethodGet, path: "/users/sean/lists/star-wars/smart-list-draft",
+			body: `{"list":{"ids":{"trakt":55,"slug":"star-wars"}},"origin_url":"https://example.com/lists/star-wars","source":"popular","media_type":"movies",` +
+				`"filters":{"genres":["science-fiction"],"years":[1977,2019]},"unsupported":["collection"],"confidence":0.92,` +
+				`"converted":{"smart_list_id":7,"converted_at":"2026-10-12T08:30:00Z"}}`,
+			call: func(c *Client) (any, error) { r, _, err := c.Users.GetSmartListDraft(ctx, user, listID); return r, err }},
+		{name: "ConvertListToSmartList", method: http.MethodPost, path: "/users/sean/lists/star-wars/smart-list-draft/convert", status: http.StatusCreated,
+			body: `{"ids":{"trakt":7,"slug":"star-wars-smart"}}`,
+			call: func(c *Client) (any, error) {
+				r, _, err := c.Users.ConvertListToSmartList(ctx, user, listID, &str.SmartListWrite{Name: str.String("Star Wars"), Source: str.String("popular"), MediaType: str.String("movies")})
+				return r, err
+			}},
 		{name: "GetSettings", method: http.MethodGet, path: "/users/settings", body: `{"user":{"username":"sean","private":false},"account":{"timezone":"America/Los_Angeles","time_24hr":false}}`,
 			call: func(c *Client) (any, error) { r, _, err := c.Users.GetSettings(ctx); return r, err }},
 		{name: "ApproveFollowRequest", method: http.MethodPost, path: "/users/requests/3", body: followRequest,
