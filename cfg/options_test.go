@@ -174,3 +174,10 @@ func TestGetOutputForModuleWriteResults(t *testing.T) {
 		})
 	}
 }
+
+func TestGetOutputForModuleUsersDraftsPersona(t *testing.T) {
+	assert.Equal(t, "export_users_year_in_review_persona_2026.json", GetOutputForModule(&str.Options{Module: "users", Action: "year_in_review_persona", Year: 2026}))
+	assert.Equal(t, "export_users_smart_list_drafts.json", GetOutputForModule(&str.Options{Module: "users", Action: "smart_list_drafts"}))
+	assert.Equal(t, "export_users_smart_list_draft_star-wars.json", GetOutputForModule(&str.Options{Module: "users", Action: "smart_list_draft", ID: "star-wars"}))
+	assert.Equal(t, "users_convert_to_smart_list_results.json", GetOutputForModule(&str.Options{Module: "users", Action: "convert_to_smart_list"}))
+}

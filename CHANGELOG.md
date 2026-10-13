@@ -32,6 +32,9 @@ schedule.
 
 ### Added
 
+- `users -a smart_list_drafts` lists your personal lists that stopped updating and are ready to become smart lists; `users -a smart_list_draft -i <list>` returns the ready-made smart list setup for one of them; `users -a convert_to_smart_list -i <list>` turns the list into a smart list from the same JSON `add_smart_list` takes (`-items` file or stdin).
+- `users -a year_in_review_persona -year <2026 or later>` exports the watching persona of a year in review. Trakt marks it VIP only: a non-VIP account gets `year_in_review_persona is VIP only` (checked live), the export itself was tested against a mock server only.
+- Library: `UsersService.GetSmartListDrafts`, `GetSmartListDraft`, `ConvertListToSmartList` and `GetYearInReviewPersona`, with the types `str.SmartListDraftsSummary`, `str.SmartListDraft`, `str.SmartListDraftList`, `str.SmartListDraftConverted`, `str.ReviewPersona`, `str.ReviewPersonaHighlight`, `str.ReviewPersonaStreak` and `str.ReviewPersonaMonth`.
 - Library: `trakt.EndpointRemovedError`, returned without a request by a method whose Trakt endpoint is locked or removed; its `Notice` holds the endpoint and the dates it was deprecated, locked and removed. The notices live in the new package `deprecation` (`Lookup`, `LookupRoute`, `Notices`). No endpoint is locked yet.
 
 ### Changed
