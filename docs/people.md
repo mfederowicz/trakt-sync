@@ -8,6 +8,10 @@ $ ./trakt-sync people -a updated_ids -start_date 2024-10-13
 ```console
 $ ./trakt-sync people -a summary -i john-wayne
 ```
+`-ex full` adds the `biography` as plain text; `-ex full,markdown` returns it with markdown links to the movies and shows it mentions:
+```console
+$ ./trakt-sync people -a summary -i john-wayne -ex full,markdown
+```
 ```console
 $ ./trakt-sync people -a movies -i john-wayne
 ```

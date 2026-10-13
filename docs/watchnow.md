@@ -1,5 +1,6 @@
 #### Watch now:
 Watch now sources (streaming providers) supported by Trakt, grouped by country. Trakt marks these routes as limited access: an API app without access gets a readable "limited access" error.
+A source can carry `type`, its main offer: `free`, `tv_everywhere`, `subscription`, `purchase` or `cinema`.
 ```console
 $ ./trakt-sync watchnow -a sources -> export_watchnow_sources.json
 ```

@@ -4,6 +4,7 @@ package str
 type WatchNowSource struct {
 	Source    *string               `json:"source,omitempty"`
 	Name      *string               `json:"name,omitempty"`
+	Type      *string               `json:"type,omitempty"`
 	Free      *bool                 `json:"free,omitempty"`
 	Cinema    *bool                 `json:"cinema,omitempty"`
 	Amazon    *bool                 `json:"amazon,omitempty"`

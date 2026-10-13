@@ -11,11 +11,12 @@ import (
 )
 
 func TestWatchNowServiceGetSources(t *testing.T) {
-	body := `[{"us":[{"source":"netflix","name":"Netflix","free":false,"cinema":false,"amazon":false,"color":"#e50914",` +
+	body := `[{"us":[{"source":"netflix","name":"Netflix","type":"subscription","free":false,"cinema":false,"amazon":false,"color":"#e50914",` +
 		`"link_count":1200,"images":{"logo":"netflix.png","channel":null}}]}]`
 	want := []map[string][]*str.WatchNowSource{{"us": {{
 		Source:    str.String("netflix"),
 		Name:      str.String("Netflix"),
+		Type:      str.String("subscription"),
 		Free:      test.Ptr(false),
 		Cinema:    test.Ptr(false),
 		Amazon:    test.Ptr(false),
