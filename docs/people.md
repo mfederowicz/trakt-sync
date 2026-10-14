@@ -8,7 +8,7 @@ $ ./trakt-sync people -a updated_ids -start_date 2024-10-13
 ```console
 $ ./trakt-sync people -a summary -i john-wayne
 ```
-`-ex full` adds the `biography` as plain text; `-ex full,markdown` returns it with markdown links to the movies and shows it mentions:
+The export holds the `biography` and a short `summary` (two or three sentences) as plain text. The API contract lists both under `-ex full`, but on 2026-10-14 the live API sent them without `-ex` too. `-ex full,markdown` returns both with markdown links to the movies and shows they mention:
 ```console
 $ ./trakt-sync people -a summary -i john-wayne -ex full,markdown
 ```

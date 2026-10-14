@@ -122,6 +122,8 @@ func TestSearchServiceRequests(t *testing.T) {
 func TestSmallServicesRequests(t *testing.T) {
 	ctx := context.Background()
 	opts := &uri.ListOptions{Limit: 10}
+	// watchlist and favorites reorder answer with the state of the list (contract 2026-10-14)
+	const reorderedList = `{"updated":2,"skipped_ids":[12],"list":{"updated_at":"2026-10-14T10:00:00Z","item_count":5}}`
 	cases := []serviceCase{
 		{name: "Checkin.DeleteAnyActiveCheckins", method: http.MethodDelete, path: "/checkin", status: http.StatusNoContent,
 			call: func(c *Client) (any, error) { _, err := c.Checkin.DeleteAnyActiveCheckins(ctx); return nil, err }},
@@ -133,6 +135,16 @@ func TestSmallServicesRequests(t *testing.T) {
 			call: func(c *Client) (any, error) { r, _, err := c.Sync.GetLastActivity(ctx); return r, err }},
 		{name: "Sync.GetWatched", method: http.MethodGet, path: "/sync/watched/movies", query: "limit=10", body: `[{"plays":4,"movie":{"title":"TRON: Legacy","year":2010}}]`,
 			call: func(c *Client) (any, error) { r, _, err := c.Sync.GetWatched(ctx, "movies", opts); return r, err }},
+		{name: "Sync.ReorderWatchlistItems", method: http.MethodPost, path: "/sync/watchlist/reorder", body: reorderedList,
+			call: func(c *Client) (any, error) {
+				r, _, err := c.Sync.ReorderWatchlistItems(ctx, new(str.ItemsToReorder))
+				return r, err
+			}},
+		{name: "Sync.ReorderFavoritesItems", method: http.MethodPost, path: "/sync/favorites/reorder", body: reorderedList,
+			call: func(c *Client) (any, error) {
+				r, _, err := c.Sync.ReorderFavoritesItems(ctx, new(str.ItemsToReorder))
+				return r, err
+			}},
 		{name: "Sync.GetCollectedSeasons empty collection", method: http.MethodGet, path: "/sync/collection/shows", query: "limit=10", body: `[]`,
 			call: func(c *Client) (any, error) { r, _, err := c.Sync.GetCollectedSeasons(ctx, opts); return r, err }},
 	}

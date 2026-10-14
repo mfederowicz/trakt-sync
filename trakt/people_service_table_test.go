@@ -15,7 +15,7 @@ func TestPeopleServiceRequests(t *testing.T) {
 	const id = "bryan-cranston"
 	const (
 		credits = `{"cast":[{"character":"Walter White"}]}`
-		person  = `{"name":"Bryan Cranston","birthday":"1956-03-07","birthplace":"San Fernando Valley, California, USA"}`
+		person  = `{"name":"Bryan Cranston","summary":"American actor, best known as Walter White.","birthday":"1956-03-07","birthplace":"San Fernando Valley, California, USA"}`
 	)
 	cases := []serviceCase{
 		{name: "GetListsContainingThisPerson", method: http.MethodGet, path: "/people/bryan-cranston/lists/personal/popular", query: "limit=10", body: `[{"name":"Best actors","privacy":"public","item_count":5}]`,
