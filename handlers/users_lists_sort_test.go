@@ -5,21 +5,23 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/test"
 	"github.com/stretchr/testify/assert"
 )
 
-// the lists overview request carries sort_by and sort_how only when the options hold them.
+// the lists overview request carries the page, and limit, sort_by and sort_how only when the options hold them.
 func TestFetchUsersPersonalListsSort(t *testing.T) {
 	tests := []struct {
 		name      string
 		options   str.Options
 		wantQuery string
 	}{
-		{name: "no sort", options: str.Options{UserName: "sean"}, wantQuery: ""},
-		{name: "sort_how only", options: str.Options{UserName: "sean", SortHow: "desc"}, wantQuery: "sort_how=desc"},
-		{name: "both", options: str.Options{UserName: "sean", SortBy: "rank", SortHow: "desc"}, wantQuery: "sort_by=rank&sort_how=desc"},
+		{name: "no sort", options: str.Options{UserName: "sean"}, wantQuery: "page=1"},
+		{name: "sort_how only", options: str.Options{UserName: "sean", SortHow: "desc"}, wantQuery: "page=1&sort_how=desc"},
+		{name: "both", options: str.Options{UserName: "sean", SortBy: "rank", SortHow: "desc"}, wantQuery: "page=1&sort_by=rank&sort_how=desc"},
+		{name: "per page", options: str.Options{UserName: "sean", PerPage: 100}, wantQuery: "limit=100&page=1"},
 	}
 
 	for _, tt := range tests {
@@ -35,7 +37,7 @@ func TestFetchUsersPersonalListsSort(t *testing.T) {
 			})
 
 			options := tt.options
-			lists, _, err := fetchUsersPersonalLists(s.Client, &options)
+			lists, err := fetchUsersPersonalLists(s.Client, &options, consts.DefaultPage)
 			test.AssertNilError(t, err)
 			assert.Equal(t, tt.wantQuery, gotQuery)
 			assert.Len(t, lists, 1)

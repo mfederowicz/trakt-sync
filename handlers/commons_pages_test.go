@@ -54,6 +54,7 @@ func pagedFetches() map[string]pagedFetch {
 		"FetchUsersWatchlist":         countItems(c.FetchUsersWatchlist),
 		"FetchUsersWatchlistComments": countItems(c.FetchUsersWatchlistComments),
 		"FetchWatchlist":              countItems(c.FetchWatchlist),
+		"fetchUsersPersonalLists":     countItems(fetchUsersPersonalLists),
 	}
 }
 

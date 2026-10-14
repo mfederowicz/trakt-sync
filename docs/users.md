@@ -242,6 +242,7 @@ $ ./trakt-sync users -a lists -u username -i 123456 -t movie,show
 $ ./trakt-sync users -a lists -u username -> export_users_lists.json
 ```
 Without `-i` the lists overview is the result: it prints the id of every list and how to export the items of one (`-i <list id>`).
+Paging of the overview follows `per_page` and `pages_limit` from the config file; with `-i` the list must be on one of the fetched pages.
 `-ex images` adds the list posters:
 ```console
 $ ./trakt-sync users -a lists -u username -ex images
