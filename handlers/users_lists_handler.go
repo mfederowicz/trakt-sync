@@ -22,7 +22,7 @@ type UsersListsHandler struct{}
 // Handle to handle users: lists action
 func (UsersListsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("fetch private lists for:" + options.UserName)
-	personalLists, _, err := fetchUsersPersonalLists(client, options)
+	personalLists, err := fetchUsersPersonalLists(client, options, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("fetch user list error:%w", err)
 	}
@@ -95,16 +95,29 @@ func getAvlistsFromPersonals(personalLists []*str.PersonalList) []int {
 	return avLists
 }
 
-func fetchUsersPersonalLists(client *trakt.Client, options *str.Options) ([]*str.PersonalList, *str.Response, error) {
+func fetchUsersPersonalLists(client *trakt.Client, options *str.Options, page int) ([]*str.PersonalList, error) {
 	username := options.UserName
-	opts := uri.ListOptions{SortBy: options.SortBy, SortHow: options.SortHow, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, SortBy: options.SortBy, SortHow: options.SortHow, Extended: options.ExtendedInfo}
 	lists, resp, err := client.Users.GetUsersPersonalLists(
 		cli.ContextFromOptions(options),
 		username,
 		&opts,
 	)
+	if err != nil {
+		return nil, err
+	}
 
-	return lists, resp, err
+	// Check if there are more pages
+	if client.HavePages(page, resp, options.PagesLimit) {
+		waitPageDelay()
+		nextPageItems, err := fetchUsersPersonalLists(client, options, page+consts.NextPageStep)
+		if err != nil {
+			return nil, err
+		}
+		lists = append(lists, nextPageItems...)
+	}
+
+	return lists, nil
 }
 
 func fetchUsersPersonalList(client *trakt.Client, options *str.Options) ([]*str.UserListItem, *str.Response, error) {

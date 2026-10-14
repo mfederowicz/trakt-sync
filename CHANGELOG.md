@@ -49,6 +49,7 @@ schedule.
 ### Changed
 
 - Library: `ListsService.GetList` takes the query options as a third argument, `GetList(ctx, id, opts)`; pass `nil` for none.
+- `users -a lists` pages through the lists overview: it sends `page` and `limit` and follows `per_page` and `pages_limit` from the config file, like the other paged actions. With the defaults (100 per page, 2 pages) it reads up to 200 lists; `-i` must name a list on those pages.
 - `smart_lists -a items -watchnow` takes a service name such as `netflix` and the `-` prefix that leaves a service out (`-watchnow=-netflix`), next to `favorites`, `any`, `free` and `subscriptions`. The value is no longer checked against a fixed list before the request.
 
 ### Fixed

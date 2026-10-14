@@ -28,11 +28,11 @@ func TestUsersListsHandlerOverview(t *testing.T) {
 		wantQuery string
 		wantErr   string
 	}{
-		{name: "no id", options: str.Options{}},
-		{name: "no id with extended info", options: str.Options{ExtendedInfo: "images"}, wantQuery: "extended=images"},
-		{name: "no id with sort", options: str.Options{SortHow: "desc"}, wantQuery: "sort_how=desc"},
-		{name: "id that is not a number", options: str.Options{ID: "my-list"}, wantErr: "please set personal listid"},
-		{name: "id of another list", options: str.Options{ID: "2"}, wantErr: "unknown listid:2"},
+		{name: "no id", options: str.Options{}, wantQuery: "page=1"},
+		{name: "no id with extended info", options: str.Options{ExtendedInfo: "images"}, wantQuery: "extended=images&page=1"},
+		{name: "no id with sort", options: str.Options{SortHow: "desc"}, wantQuery: "page=1&sort_how=desc"},
+		{name: "id that is not a number", options: str.Options{ID: "my-list"}, wantQuery: "page=1", wantErr: "please set personal listid"},
+		{name: "id of another list", options: str.Options{ID: "2"}, wantQuery: "page=1", wantErr: "unknown listid:2"},
 	}
 
 	for _, tt := range tests {
