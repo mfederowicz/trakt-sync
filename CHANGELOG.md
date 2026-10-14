@@ -44,6 +44,7 @@ schedule.
 - Library: `uri.ListOptions.Theme`, the `theme` query parameter of those routes.
 - List exports keep `images` (the list posters) with `-ex images`: `lists -a trending`, `lists -a popular`, `lists -a list`, `users -a list` and `users -a lists`. Library: `str.PersonalList.Images`.
 - `users -a lists` and `lists -a list` send `-ex`; before, the flag had no effect on them.
+- `people -a summary` keeps the new `summary` field, a short summary of the person next to the longer `biography` (with markdown links under `-ex full,markdown`). Library: `str.Person.Summary`.
 - Library: `trakt.EndpointRemovedError`, returned without a request by a method whose Trakt endpoint is locked or removed; its `Notice` holds the endpoint and the dates it was deprecated, locked and removed. The notices live in the new package `deprecation` (`Lookup`, `LookupRoute`, `Notices`). No endpoint is locked yet.
 
 ### Changed
