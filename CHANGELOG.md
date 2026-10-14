@@ -32,6 +32,14 @@ schedule.
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.26.0] - 2026-10-14
+
+### Added
+
 - `users -a smart_list_drafts` lists your personal lists that stopped updating and are ready to become smart lists; `users -a smart_list_draft -i <list>` returns the ready-made smart list setup for one of them; `users -a convert_to_smart_list -i <list>` turns the list into a smart list from the same JSON `add_smart_list` takes (`-items` file or stdin).
 - `users -a year_in_review_persona -year <2026 or later>` exports the watching persona of a year in review. Trakt marks it VIP only: a non-VIP account gets `year_in_review_persona is VIP only` (checked live), the export itself was tested against a mock server only.
 - Library: `UsersService.GetSmartListDrafts`, `GetSmartListDraft`, `ConvertListToSmartList` and `GetYearInReviewPersona`, with the types `str.SmartListDraftsSummary`, `str.SmartListDraft`, `str.SmartListDraftList`, `str.SmartListDraftConverted`, `str.ReviewPersona`, `str.ReviewPersonaHighlight`, `str.ReviewPersonaStreak` and `str.ReviewPersonaMonth`.
@@ -795,7 +803,8 @@ schedule.
 - First release, with the `calendars`, `collection`, `help`, `history`, `lists`, `people`, `search` and `watchlist`
   commands exporting Trakt data to JSON.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.25.0...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.26.0...HEAD
+[1.26.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.25.0...v1.26.0
 [1.25.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.24.0...v1.25.0
 [1.24.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.23.0...v1.24.0
 [1.23.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.22.0...v1.23.0
