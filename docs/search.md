@@ -25,6 +25,10 @@ $  ./trakt-sync search -a text_query -t movie -t show -q freddy --field original
 ```console
 $  ./trakt-sync search -a text_query -t episode -q freddy --field show_title
 ```
+On a `person` search, `-ex markdown` adds markdown links to the movies and shows mentioned in the `biography`.
+```console
+$  ./trakt-sync search -a text_query -t person -q keanu -ex full,markdown
+```
 ##### Export search result by Id lookup:
 ```console
 $ ./trakt-sync search -a id_lookup -i 12601 -t movie -t show

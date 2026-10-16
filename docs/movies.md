@@ -174,6 +174,10 @@ $ ./trakt-sync movies -a lists -i the-sopranos -t all -s updated
 ```console
 $ ./trakt-sync movies -a people -i the-sopranos
 ```
+`-ex markdown` adds markdown links to the movies and shows mentioned in the person biographies.
+```console
+$ ./trakt-sync movies -a people -i tron-legacy-2010 -ex full,markdown
+```
 ##### Get movie ratings
 ```console
 $ ./trakt-sync movies -a ratings -i the-sopranos
