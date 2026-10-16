@@ -56,6 +56,10 @@ $ ./trakt-sync episodes -a lists -i the-sopranos -season 1 -episode 1 -t all -s 
 ```console
 $ ./trakt-sync episodes -a people -i the-sopranos -season 1 -episode 1
 ```
+`-ex markdown` adds markdown links to the movies and shows mentioned in the person biographies.
+```console
+$ ./trakt-sync episodes -a people -i the-sopranos -season 1 -episode 1 -ex full,markdown
+```
 ##### Get episode ratings
 ```console
 $ ./trakt-sync episodes -a ratings -i the-sopranos -season 1 -episode 1

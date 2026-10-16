@@ -32,6 +32,9 @@ schedule.
 
 ### Added
 
+- Show exports (such as `shows -a summary -ex full`) keep the new `ending` field: `concluded` when a canceled or ended show was finished on purpose, `open` when it was cut off, absent while it is unknown or the show still airs. Library: `str.Show.Ending`.
+- Docs: `-ex markdown` on `movies`, `shows`, `seasons` and `episodes -a people` and on a `person` search (`search -a text_query -t person`) adds markdown links to the person biographies; the flag already reached the API before.
+
 ### Changed
 
 ### Fixed

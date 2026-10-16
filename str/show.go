@@ -19,6 +19,7 @@ type Show struct {
 	Trailer               *string      `json:"trailer,omitempty"`
 	Homepage              *string      `json:"homepage,omitempty"`
 	Status                *string      `json:"status,omitempty"`
+	Ending                *string      `json:"ending,omitempty"`
 	Rating                *float32     `json:"rating,omitempty"`
 	Votes                 *int         `json:"votes,omitempty"`
 	CommentCount          *int         `json:"comment_count,omitempty"`

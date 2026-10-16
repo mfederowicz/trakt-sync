@@ -214,6 +214,10 @@ $ ./trakt-sync shows -a people -i the-sopranos
 ```console
 $ ./trakt-sync shows -a people -i the-sopranos -ex guest_stars
 ```
+`-ex markdown` adds markdown links to the movies and shows mentioned in the person biographies.
+```console
+$ ./trakt-sync shows -a people -i the-sopranos -ex full,markdown
+```
 ##### Get show ratings
 ```console
 $ ./trakt-sync shows -a ratings -i the-sopranos
