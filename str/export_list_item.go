@@ -45,36 +45,37 @@ func (i *ExportlistItemJSON) Uptime(options *Options, data *ExportlistItem) {
 
 // ExportlistItem represents JSON for list item
 type ExportlistItem struct {
-	Title           *string      `json:"title,omitempty"`
-	Year            *int         `json:"year,omitempty"`
-	Rank            *int         `json:"rank,omitempty"`
-	Rating          *int         `json:"rating,omitempty"`
-	ID              *int64       `json:"id,omitempty"`
-	IDs             *IDs         `json:"ids,omitempty"`
-	WatchedAt       *Timestamp   `json:"watched_at,omitempty"`
-	ListedAt        *Timestamp   `json:"listed_at,omitempty"`
-	CollectedAt     *Timestamp   `json:"collected_at,omitempty"`
-	LastCollectedAt *Timestamp   `json:"last_collected_at,omitempty"`
-	UpdatedAt       *Timestamp   `json:"updated_at,omitempty"`
-	LastUpdatedAt   *Timestamp   `json:"last_updated_at,omitempty"`
-	RatedAt         *Timestamp   `json:"rated_at,omitempty"`
-	HiddenAt        *Timestamp   `json:"hidden_at,omitempty"`
-	Notes           *string      `json:"notes,omitempty"`
-	Type            *string      `json:"type,omitempty"`
-	Movie           *Movie       `json:"movie,omitempty"`
-	Show            *Show        `json:"show,omitempty"`
-	Season          *Season      `json:"season,omitempty"`
-	Seasons         *[]Season    `json:"seasons,omitempty"`
-	Episode         *Episode     `json:"episode,omitempty"`
-	Person          *Person      `json:"person,omitempty"`
-	User            *UserProfile `json:"user,omitempty"`
-	Metadata        *Metadata    `json:"metadata,omitempty"`
-	MediaType       *string      `json:"media_type,omitempty"`
-	Resolution      *string      `json:"resolution,omitempty"`
-	Hdr             *string      `json:"hdr,omitempty"`
-	Audio           *string      `json:"audio,omitempty"`
-	AudioChannels   *string      `json:"audio_channels,omitempty"`
-	ThreeD          *bool        `json:"3d,omitempty"`
+	Title           *string        `json:"title,omitempty"`
+	Year            *int           `json:"year,omitempty"`
+	Rank            *int           `json:"rank,omitempty"`
+	Rating          *int           `json:"rating,omitempty"`
+	ID              *int64         `json:"id,omitempty"`
+	IDs             *IDs           `json:"ids,omitempty"`
+	WatchedAt       *Timestamp     `json:"watched_at,omitempty"`
+	ListedAt        *Timestamp     `json:"listed_at,omitempty"`
+	CollectedAt     *Timestamp     `json:"collected_at,omitempty"`
+	LastCollectedAt *Timestamp     `json:"last_collected_at,omitempty"`
+	UpdatedAt       *Timestamp     `json:"updated_at,omitempty"`
+	LastUpdatedAt   *Timestamp     `json:"last_updated_at,omitempty"`
+	RatedAt         *Timestamp     `json:"rated_at,omitempty"`
+	HiddenAt        *Timestamp     `json:"hidden_at,omitempty"`
+	Notes           *string        `json:"notes,omitempty"`
+	Type            *string        `json:"type,omitempty"`
+	Movie           *Movie         `json:"movie,omitempty"`
+	Show            *Show          `json:"show,omitempty"`
+	Season          *Season        `json:"season,omitempty"`
+	Seasons         *[]Season      `json:"seasons,omitempty"`
+	Episode         *Episode       `json:"episode,omitempty"`
+	Person          *Person        `json:"person,omitempty"`
+	User            *UserProfile   `json:"user,omitempty"`
+	Metadata        *Metadata      `json:"metadata,omitempty"`
+	MediaType       *string        `json:"media_type,omitempty"`
+	Resolution      *string        `json:"resolution,omitempty"`
+	Hdr             *string        `json:"hdr,omitempty"`
+	Audio           *string        `json:"audio,omitempty"`
+	AudioChannels   *string        `json:"audio_channels,omitempty"`
+	ThreeD          *bool          `json:"3d,omitempty"`
+	AvailableOn     []*AvailableOn `json:"available_on,omitempty"`
 }
 
 func (i ExportlistItem) String() string {

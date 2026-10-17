@@ -2,36 +2,37 @@ package str
 
 // Episode represents JSON response for media object
 type Episode struct {
-	Season                *int       `json:"season,omitempty"`
-	Number                *int       `json:"number,omitempty"`
-	Plays                 *int       `json:"plays,omitempty"`
-	Title                 *string    `json:"title,omitempty"`
-	IDs                   *IDs       `json:"ids,omitempty"`
-	Notes                 *string    `json:"notes,omitempty"`
-	NumberAbs             *int       `json:"number_abs,omitempty"`
-	Overview              *string    `json:"overview,omitempty"`
-	Rating                *float32   `json:"rating,omitempty"`
-	Votes                 *int       `json:"votes,omitempty"`
-	CommentCount          *int       `json:"comment_count,omitempty"`
-	FirstAired            *Timestamp `json:"first_aired,omitempty"`
-	LastWatchedAt         *Timestamp `json:"last_watched_at,omitempty"`
-	WatchedAt             *Timestamp `json:"watched_at,omitempty"`
-	RatedAt               *Timestamp `json:"rated_at,omitempty"`
-	UpdatedAt             *Timestamp `json:"updated_at,omitempty"`
-	CompletedAt           *Timestamp `json:"completed_at,omitempty"`
-	CollectedAt           *Timestamp `json:"collected_at,omitempty"`
-	HiddenAt              *Timestamp `json:"hidden_at,omitempty"`
-	Metadata              *Metadata  `json:"metadata,omitempty"`
-	AvailableTranslations *[]string  `json:"available_translations,omitempty"`
-	Runtime               *int       `json:"runtime,omitempty"`
-	EpisodeType           *string    `json:"episode_type,omitempty"`
-	Completed             *bool      `json:"completed,omitempty"`
-	MediaType             *string    `json:"media_type,omitempty"`
-	Resolution            *string    `json:"resolution,omitempty"`
-	HDR                   *string    `json:"hdr,omitempty"`
-	Audio                 *string    `json:"audio,omitempty"`
-	AudioChannels         *string    `json:"audio_channels,omitempty"`
-	ThreeD                *bool      `json:"3d,omitempty"`
+	Season                *int           `json:"season,omitempty"`
+	Number                *int           `json:"number,omitempty"`
+	Plays                 *int           `json:"plays,omitempty"`
+	Title                 *string        `json:"title,omitempty"`
+	IDs                   *IDs           `json:"ids,omitempty"`
+	Notes                 *string        `json:"notes,omitempty"`
+	NumberAbs             *int           `json:"number_abs,omitempty"`
+	Overview              *string        `json:"overview,omitempty"`
+	Rating                *float32       `json:"rating,omitempty"`
+	Votes                 *int           `json:"votes,omitempty"`
+	CommentCount          *int           `json:"comment_count,omitempty"`
+	FirstAired            *Timestamp     `json:"first_aired,omitempty"`
+	LastWatchedAt         *Timestamp     `json:"last_watched_at,omitempty"`
+	WatchedAt             *Timestamp     `json:"watched_at,omitempty"`
+	RatedAt               *Timestamp     `json:"rated_at,omitempty"`
+	UpdatedAt             *Timestamp     `json:"updated_at,omitempty"`
+	CompletedAt           *Timestamp     `json:"completed_at,omitempty"`
+	CollectedAt           *Timestamp     `json:"collected_at,omitempty"`
+	HiddenAt              *Timestamp     `json:"hidden_at,omitempty"`
+	Metadata              *Metadata      `json:"metadata,omitempty"`
+	AvailableTranslations *[]string      `json:"available_translations,omitempty"`
+	Runtime               *int           `json:"runtime,omitempty"`
+	EpisodeType           *string        `json:"episode_type,omitempty"`
+	Completed             *bool          `json:"completed,omitempty"`
+	MediaType             *string        `json:"media_type,omitempty"`
+	Resolution            *string        `json:"resolution,omitempty"`
+	HDR                   *string        `json:"hdr,omitempty"`
+	Audio                 *string        `json:"audio,omitempty"`
+	AudioChannels         *string        `json:"audio_channels,omitempty"`
+	ThreeD                *bool          `json:"3d,omitempty"`
+	AvailableOn           []*AvailableOn `json:"available_on,omitempty"`
 }
 
 func (e Episode) String() string {
