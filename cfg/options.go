@@ -57,8 +57,9 @@ var SearchTrendingTypes = []string{"movies", "shows", "people"}
 // SearchRecentTypes are the search/recent body type values from the API contract
 var SearchRecentTypes = []string{"movies", "shows", "people", "lists"}
 
-// SyncAvailableOn are the sync/collection available_on values from the API contract
-var SyncAvailableOn = []string{"plex"}
+// SyncAvailableOn are the sync/collection available_on values from the API contract,
+// plus plex, which left the contract but the live API still applied on 2026-10-17
+var SyncAvailableOn = []string{"digital", "other", "plex"}
 
 // SyncUpNextIntents are the sync/progress/up_next_nitro intent values from the API contract
 var SyncUpNextIntents = []string{"all", "continue", "start", "completed"}

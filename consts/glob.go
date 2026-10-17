@@ -9,7 +9,7 @@ const (
 	ActionUsage                  = "allow use selected action"
 	AllPages                     = 10
 	AppName                      = "trakt-sync"
-	AvailableOnUsage             = "filter by media server ie: -available_on plex"
+	AvailableOnUsage             = "filter by source: digital (synced from a media server) or other ie: -available_on digital"
 	BaseURLPath                  = "/trakt"
 	BearerPrefix                 = "Bearer "
 	BuildDateFormat              = "2006-01-02 15:04 MST"

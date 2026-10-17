@@ -45,12 +45,15 @@ $ ./trakt-sync sync -a get_collection -t media -ex metadata
 ```
 ##### Get minimal collection
 A compact map for syncing local state: `-t movies|episodes` gives Trakt ID -> collected_at, `-t shows` gives
-show Trakt ID -> season -> episode -> collected_at. `-available_on plex` limits it to items available on Plex.
+show Trakt ID -> season -> episode -> collected_at. `-available_on digital` limits it to items synced from a connected media server (such as Plex), `-available_on other` to everything else.
+`plex` left the Trakt contract but is still accepted while the live API applies it. On 2026-10-17 the live API answered
+`-available_on other` with malformed dates (a trailing `|`), so that value fails with `invalid timestamp format` until Trakt
+fixes it.
 ```console
 $ ./trakt-sync sync -a get_minimal_collection -t movies
 ```
 ```console
-$ ./trakt-sync sync -a get_minimal_collection -t shows -available_on plex
+$ ./trakt-sync sync -a get_minimal_collection -t shows -available_on digital
 ```
 ##### Up next
 Shows you are watching, each with its next episode and progress. `-include_stats` adds play count and minutes,

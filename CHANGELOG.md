@@ -39,6 +39,8 @@ schedule.
 
 ### Fixed
 
+- `sync -a get_minimal_collection -available_on` takes the values of the current Trakt contract, `digital` (items synced from a connected media server) and `other`; before it rejected both and accepted only `plex`. `plex` still works while the live API applies it. Trakt currently answers `other` with malformed dates, so it fails with `invalid timestamp format` until Trakt fixes it (see `docs/sync.md`).
+
 ## [1.26.0] - 2026-10-14
 
 ### Added
