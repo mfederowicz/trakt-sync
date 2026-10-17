@@ -43,6 +43,12 @@ $ ./trakt-sync sync -a get_collection -t seasons -ex metadata
 ```console
 $ ./trakt-sync sync -a get_collection -t media -ex metadata
 ```
+##### Get collection - source of each item
+`-ex available_on` adds `available_on` (for example `[{"name":"plex"}]`) to collected movies and episodes, and to the episodes inside each collected show's seasons.
+Items without a known source have no `available_on` in the export:
+```console
+$ ./trakt-sync sync -a get_collection -t movies -ex available_on
+```
 ##### Get minimal collection
 A compact map for syncing local state: `-t movies|episodes` gives Trakt ID -> collected_at, `-t shows` gives
 show Trakt ID -> season -> episode -> collected_at. `-available_on digital` limits it to items synced from a connected media server (such as Plex), `-available_on other` to everything else.
