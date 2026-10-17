@@ -32,12 +32,18 @@ schedule.
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.27.0] - 2026-10-17
+
+### Added
+
 - Show exports (such as `shows -a summary -ex full`) keep the new `ending` field: `concluded` when a canceled or ended show was finished on purpose, `open` when it was cut off, absent while it is unknown or the show still airs. Library: `str.Show.Ending`.
 - Docs: `-ex markdown` on `movies`, `shows`, `seasons` and `episodes -a people` and on a `person` search (`search -a text_query -t person`) adds markdown links to the person biographies; the flag already reached the API before.
 - `smart_lists -a templates`: the official smart list templates (id, source, media type, filters, and the total plus up to 3 items for templates that do not depend on the viewer), written to `export_smart_lists_templates.json`. Library: `SmartListsService.GetSmartListTemplates`, `str.SmartListTemplate`.
 - `sync -a get_collection -ex available_on` keeps the `available_on` source list (such as `plex` or `digital`) on collected movies, episodes and the episodes of collected shows; the export dropped it before. The empty list Trakt sends on every item is left out. Library: `str.AvailableOn`, `str.ExportlistItem.AvailableOn`, `str.Episode.AvailableOn`.
-
-### Changed
 
 ### Fixed
 
@@ -810,7 +816,8 @@ schedule.
 - First release, with the `calendars`, `collection`, `help`, `history`, `lists`, `people`, `search` and `watchlist`
   commands exporting Trakt data to JSON.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.26.0...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.27.0...HEAD
+[1.27.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.26.0...v1.27.0
 [1.26.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.25.0...v1.26.0
 [1.25.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.24.0...v1.25.0
 [1.24.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.23.0...v1.24.0
