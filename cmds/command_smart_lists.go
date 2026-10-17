@@ -41,7 +41,7 @@ var (
 var SmartListsCmd = &Command{
 	Name:    "smart_lists",
 	Usage:   "",
-	Summary: "Returns a smart list definition (summary) or the items it resolves to (items).",
+	Summary: "Returns a smart list definition (summary), the items it resolves to (items) or the official templates (templates).",
 	Help:    `smart_lists command`,
 }
 
@@ -52,13 +52,14 @@ func smartListsFunc(cmd *Command, _ ...string) error {
 	smartListsItemsSort(options, cmd.flagIsSet("t"), cmd.flagIsSet("sort_by"), cmd.flagIsSet("sort_how"))
 	var handler handlers.SmartListsHandler
 	allHandlers := map[string]handlers.Handler{
-		consts.Summary: handlers.SmartListsSummaryHandler{},
-		consts.Items:   handlers.SmartListsItemsHandler{},
+		consts.Summary:   handlers.SmartListsSummaryHandler{},
+		consts.Items:     handlers.SmartListsItemsHandler{},
+		consts.Templates: handlers.SmartListsTemplatesHandler{},
 	}
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	if err != nil {
-		cmd.common.GenActionsUsage(cmd.Name, []string{consts.Summary, consts.Items})
+		cmd.common.GenActionsUsage(cmd.Name, []string{consts.Summary, consts.Items, consts.Templates})
 		return unknownActionError(cmd.Name, options.Action)
 	}
 

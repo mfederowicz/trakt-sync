@@ -56,6 +56,12 @@ func TestSmartListsHandlers(t *testing.T) {
 			wantErr: "released_within_days '3651' is not valid, want 1 to 3650", wantNoAPI: true},
 		{name: "items released_within_days negative", handler: SmartListsItemsHandler{}, options: str.Options{Action: consts.Items, InternalID: "top-sci-fi", ReleasedWithin: -1},
 			wantErr: "released_within_days '-1' is not valid", wantNoAPI: true},
+		{name: "templates", handler: SmartListsTemplatesHandler{}, options: str.Options{Action: consts.Templates}, status: http.StatusOK,
+			body: `[{"id":"trending-sci-fi","source":"trending","media_type":"movies","personal":false,"total":120,"items":[{"rank":1,"type":"movie","movie":{"title":"Arrival"}}]}]`},
+		{name: "templates empty", handler: SmartListsTemplatesHandler{}, options: str.Options{Action: consts.Templates}, status: http.StatusOK, body: `[]`,
+			wantErr: consts.EmptyResult},
+		{name: "templates server error", handler: SmartListsTemplatesHandler{}, options: str.Options{Action: consts.Templates}, status: http.StatusInternalServerError, body: `{}`,
+			wantErr: "fetch smart list templates error"},
 	}
 
 	for _, tt := range tests {
