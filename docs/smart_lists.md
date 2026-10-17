@@ -52,3 +52,13 @@ $ ./trakt-sync smart_lists -a items -i <slug> -t movies -sort_by imdb_rating
 ```console
 $ ./trakt-sync smart_lists -a items -i <slug> -sort_by released -sort_how asc
 ```
+##### Smart list templates:
+The official smart list templates in display order, no `-i` needed. Each template has an `id`, a `source`, a `media_type` and the same
+`filters` a saved smart list returns. Templates that depend on the viewer have `personal: true` and no `total` or `items`; the others
+return their `total` and up to 3 `items`. `-ex images` adds posters to the items.
+```console
+$ ./trakt-sync smart_lists -a templates -> export_smart_lists_templates.json
+```
+```console
+$ ./trakt-sync -ex images smart_lists -a templates
+```

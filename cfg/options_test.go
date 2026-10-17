@@ -104,6 +104,7 @@ func TestGetOutputForModuleYounify(t *testing.T) {
 func TestGetOutputForModuleSmartLists(t *testing.T) {
 	assert.Equal(t, "export_smart_lists_summary_top-sci-fi.json", GetOutputForModule(&str.Options{Module: "smart_lists", Action: "summary", InternalID: "top-sci-fi"}))
 	assert.Equal(t, "export_smart_lists_items_top-sci-fi.json", GetOutputForModule(&str.Options{Module: "smart_lists", Action: "items", InternalID: "top-sci-fi"}))
+	assert.Equal(t, "export_smart_lists_templates.json", GetOutputForModule(&str.Options{Module: "smart_lists", Action: "templates"}))
 }
 
 func TestGetOutputForModuleWatchNowSources(t *testing.T) {

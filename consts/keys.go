@@ -207,6 +207,7 @@ const (
 	Summary               = "summary"
 	Sync                  = "sync"
 	Team                  = "team"
+	Templates             = "templates"
 	TextQuery             = "text_query"
 	TmdbFormat            = "tmdb"
 	TmdbIDFormat          = "Tmdb"

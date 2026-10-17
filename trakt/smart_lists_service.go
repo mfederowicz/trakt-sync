@@ -77,3 +77,26 @@ func (s *SmartListsService) GetSmartListItemsByTypeAndSort(ctx context.Context, 
 
 	return list, resp, nil
 }
+
+// GetSmartListTemplates Returns the official smart list templates in display order.
+//
+// API docs: https://docs.trakt.tv/reference/getsmart_liststemplates
+func (s *SmartListsService) GetSmartListTemplates(ctx context.Context, opts *uri.ListOptions) ([]*str.SmartListTemplate, *str.Response, error) {
+	var url = "smart-lists/templates"
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.SmartListTemplate{}
+	resp, err := s.client.Do(ctx, req, &list)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}

@@ -34,6 +34,7 @@ schedule.
 
 - Show exports (such as `shows -a summary -ex full`) keep the new `ending` field: `concluded` when a canceled or ended show was finished on purpose, `open` when it was cut off, absent while it is unknown or the show still airs. Library: `str.Show.Ending`.
 - Docs: `-ex markdown` on `movies`, `shows`, `seasons` and `episodes -a people` and on a `person` search (`search -a text_query -t person`) adds markdown links to the person biographies; the flag already reached the API before.
+- `smart_lists -a templates`: the official smart list templates (id, source, media type, filters, and the total plus up to 3 items for templates that do not depend on the viewer), written to `export_smart_lists_templates.json`. Library: `SmartListsService.GetSmartListTemplates`, `str.SmartListTemplate`.
 
 ### Changed
 

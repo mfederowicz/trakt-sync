@@ -127,3 +127,34 @@ func TestSmartListsServiceNotFound(t *testing.T) {
 		t.Errorf("response is %v, want status %d", resp, http.StatusNotFound)
 	}
 }
+
+func TestSmartListsServiceGetSmartListTemplates(t *testing.T) {
+	setup := Setup()
+	defer setup.Teardown()
+
+	setup.Mux.HandleFunc("/smart-lists/templates", func(w http.ResponseWriter, r *http.Request) {
+		test.AssertMethod(t, r, http.MethodGet)
+		test.AssertNoDiff(t, "extended=images", r.URL.RawQuery)
+		test.SafeFprint(w, `[{"id":"trending-sci-fi","source":"trending","media_type":"movies","filters":{"genres":["science-fiction"]},"personal":false,"total":120,`+
+			`"items":[{"rank":1,"type":"movie","movie":{"title":"Arrival","year":2016}}]},`+
+			`{"id":"up-next","source":"watchlist","media_type":"shows","filters":{"ignore_watched":true},"personal":true,"total":null,"items":[]}]`)
+	})
+
+	got, _, err := setup.Client.SmartLists.GetSmartListTemplates(context.Background(), &uri.ListOptions{Extended: "images"})
+	test.AssertNilError(t, err)
+	test.AssertNoDiff(t, []*str.SmartListTemplate{
+		{
+			ID: str.String("trending-sci-fi"), Source: str.String("trending"), MediaType: str.String("movies"),
+			Filters:  &str.SmartListFilters{Genres: []string{"science-fiction"}},
+			Personal: test.Ptr(false), Total: test.Ptr(120),
+			Items: []*str.UserListItem{
+				{Rank: test.Ptr(1), Type: str.String("movie"), Movie: &str.Movie{Title: str.String("Arrival"), Year: test.Ptr(2016)}},
+			},
+		},
+		{
+			ID: str.String("up-next"), Source: str.String("watchlist"), MediaType: str.String("shows"),
+			Filters:  &str.SmartListFilters{IgnoreWatched: test.Ptr(true)},
+			Personal: test.Ptr(true), Items: []*str.UserListItem{},
+		},
+	}, got)
+}

@@ -842,6 +842,9 @@ func getOutputForModuleMedia(options *str.Options) string {
 }
 
 func getOutputForModuleSmartLists(options *str.Options) string {
+	if options.Action == consts.Templates {
+		return fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
+	}
 	return fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.InternalID)
 }
 
