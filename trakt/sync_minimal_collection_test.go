@@ -20,11 +20,11 @@ func TestSyncServiceGetMinimalCollection(t *testing.T) {
 
 			setup.Mux.HandleFunc("/sync/collection/minimal/"+strType, func(w http.ResponseWriter, r *http.Request) {
 				test.AssertMethod(t, r, http.MethodGet)
-				test.AssertNoDiff(t, "available_on=plex", r.URL.RawQuery)
+				test.AssertNoDiff(t, "available_on=digital", r.URL.RawQuery)
 				test.SafeFprint(w, `{"12601":"2026-09-01T10:20:30.000Z"}`)
 			})
 
-			got, _, err := setup.Client.Sync.GetMinimalCollection(context.Background(), strType, &uri.ListOptions{AvailableOn: "plex"})
+			got, _, err := setup.Client.Sync.GetMinimalCollection(context.Background(), strType, &uri.ListOptions{AvailableOn: "digital"})
 			test.AssertNilError(t, err)
 			test.AssertNoDiff(t, str.MinimalCollection{
 				"12601": {Time: time.Date(2026, time.September, 1, 10, 20, 30, 0, time.UTC)},

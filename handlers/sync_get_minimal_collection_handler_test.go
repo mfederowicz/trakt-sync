@@ -24,10 +24,12 @@ func TestSyncGetMinimalCollectionHandler(t *testing.T) {
 		wantErr     string
 	}{
 		{name: "movies", typ: "movies", body: `{"12601":"2026-09-01T10:20:30.000Z"}`, wantCall: "/sync/collection/minimal/movies?", wantFile: `"12601": "2026-09-01T10:20:30Z"`},
-		{name: "episodes on plex", typ: "episodes", availableOn: "plex", body: `{"73640":"2026-09-01T10:20:30.000Z"}`, wantCall: "/sync/collection/minimal/episodes?available_on=plex", wantFile: `"73640"`},
+		{name: "episodes digital", typ: "episodes", availableOn: "digital", body: `{"73640":"2026-09-01T10:20:30.000Z"}`, wantCall: "/sync/collection/minimal/episodes?available_on=digital", wantFile: `"73640"`},
+		{name: "movies other", typ: "movies", availableOn: "other", body: `{"12601":"2026-09-01T10:20:30.000Z"}`, wantCall: "/sync/collection/minimal/movies?available_on=other", wantFile: `"12601"`},
 		{name: "shows nested", typ: "shows", body: `{"1390":{"1":{"1":"2026-09-01T10:20:30.000Z"}}}`, wantCall: "/sync/collection/minimal/shows?", wantFile: `"1390": {`},
 		{name: "type not in contract", typ: "seasons", wantErr: "not found type for module 'sync'"},
 		{name: "available_on not in contract", typ: "movies", availableOn: "kodi", wantErr: "available_on 'kodi' is not valid"},
+		{name: "available_on plex still served", typ: "movies", availableOn: "plex", body: `{}`, wantCall: "/sync/collection/minimal/movies?available_on=plex", wantFile: `{}`},
 	}
 
 	for _, tt := range tests {
