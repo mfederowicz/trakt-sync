@@ -763,6 +763,8 @@ $ ./trakt-sync users -a comment_reactions -ex min
 ##### Get social activity (friends, followers or following)
 > **Note:** as of 2026-09-25 Trakt answers `activities`, `month_in_review` and `year_in_review` with 401 for API apps (other OAuth
 > routes work with the same token); they fail with `this route is not open to API apps yet` and are kept for when Trakt opens them.
+> Since 2026-10-31 `activities` gets 403 instead: the contract marks it limited to Trakt's own apps, and it fails with
+> `activities is limited access on Trakt and not available for this API app`.
 
 What people in your social graph watched, scrobbled or checked in to. `-t` is required; the media filters (`-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications`, `-start_date`, `-end_date`, `-watchnow`) and `-ex` narrow the feed.
 `-ignore_watched true`, `-ignore_collected true` and `-ignore_watchlisted true` leave out what you already watched, collected or watchlisted.

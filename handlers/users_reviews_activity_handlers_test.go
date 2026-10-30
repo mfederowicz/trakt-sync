@@ -61,6 +61,8 @@ func TestUsersReviewsAndActivityHandlers(t *testing.T) {
 			path: "/users/sean/yir/2025", query: "extended=full", status: http.StatusOK, body: review},
 		{name: "activities not open to API apps", handler: UsersActivitiesHandler{}, options: str.Options{Action: consts.Activities, Type: "friends"},
 			path: "/users/sean/friends/activities", query: "page=1", status: http.StatusUnauthorized, body: `{}`, wantErr: "activities: Trakt answered 401"},
+		{name: "activities limited access", handler: UsersActivitiesHandler{}, options: str.Options{Action: consts.Activities, Type: "following"},
+			path: "/users/sean/following/activities", query: "page=1", status: http.StatusForbidden, body: `{}`, wantErr: "activities is limited access on Trakt and not available for this API app"},
 		{name: "month in review not open to API apps", handler: UsersMonthInReviewHandler{}, options: str.Options{Action: consts.MonthInReview, Year: 2026, Month: 8},
 			path: "/users/sean/mir/2026/8", status: http.StatusUnauthorized, body: `{}`, wantErr: "this route is not open to API apps yet"},
 		{name: "year in review not open to API apps", handler: UsersYearInReviewHandler{}, options: str.Options{Action: consts.YearInReview, Year: 2025},

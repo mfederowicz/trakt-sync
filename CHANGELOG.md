@@ -36,6 +36,7 @@ schedule.
 
 - `younify`: a 403 from Trakt now ends with `younify is not open to API apps yet`, like a 401 did; on 2026-10-31 Trakt answered
   `younify -a connections` with 403 instead of 401.
+- `users -a activities`: a 403 from Trakt now ends with `activities is limited access on Trakt and not available for this API app` instead of a bare `403`. Since 2026-10-31 Trakt answers the route with 403 (401 before), and the contract limits it to Trakt's own apps.
 
 ### Fixed
 

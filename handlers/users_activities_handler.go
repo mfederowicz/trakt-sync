@@ -50,6 +50,11 @@ func (h UsersActivitiesHandler) Handle(options *str.Options, client *trakt.Clien
 	if apiErr := notOpenToAPIApps(options.Action, err); apiErr != nil {
 		return apiErr
 	}
+	// the contract marks the route limited access: third-party apps get 403 (live since 2026-10-31, 401 before)
+	var forbidden *trakt.ForbiddenError
+	if errors.As(err, &forbidden) {
+		return fmt.Errorf(consts.LimitedAccessMsg, options.Action, err)
+	}
 	if err != nil {
 		return fmt.Errorf("fetch %s activities error: %w", options.Type, err)
 	}
