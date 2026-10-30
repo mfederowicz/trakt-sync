@@ -34,7 +34,13 @@ schedule.
 
 ### Changed
 
+- `younify`: a 403 from Trakt now ends with `younify is not open to API apps yet`, like a 401 did; on 2026-10-31 Trakt answered
+  `younify -a connections` with 403 instead of 401.
+
 ### Fixed
+
+- `younify -a refresh -all_data`: the full re-sync was sent to `.../refresh/<service_id>/all_data`; the Trakt contract wants
+  `.../refresh/<service_id>/true`, so the request now goes there.
 
 ## [1.27.0] - 2026-10-17
 
