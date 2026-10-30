@@ -203,6 +203,7 @@ $ ./trakt-sync shows -a reset_show_progress -i the-sopranos
 $ ./trakt-sync shows -a reset_show_progress -i the-sopranos -reset_at 2026-10-01
 $ ./trakt-sync shows -a reset_show_progress -i the-sopranos -reset_at 2026-10-01T20:30:00+02:00
 ```
+Trakt marks reset and undo VIP only; when Trakt answers with 426 the upgrade page opens in the browser.
 ##### Undo Reset show progress
 ```console
 $ ./trakt-sync shows -a reset_show_progress -i the-sopranos -undo

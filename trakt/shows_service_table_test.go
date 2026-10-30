@@ -137,7 +137,7 @@ func TestShowsServiceRequests(t *testing.T) {
 			call: func(c *Client) (any, error) { r, _, err := c.Shows.GetAllShowAliases(ctx, id); return r, err }},
 		{name: "GetAllShowCertifications", method: http.MethodGet, path: "/shows/breaking-bad/certifications", body: `[{"country":"us","certification":"TV-MA"}]`,
 			call: func(c *Client) (any, error) { r, _, err := c.Shows.GetAllShowCertifications(ctx, id); return r, err }},
-		{name: "ResetShowProgress", method: http.MethodPost, path: "/shows/breaking-bad/progress/watched/reset", body: `{"aired":62,"completed":10}`,
+		{name: "ResetShowProgress", method: http.MethodPost, path: "/shows/breaking-bad/progress/watched/reset", status: http.StatusCreated, body: `{"reset_at":"2026-10-01T18:30:00Z"}`,
 			call: func(c *Client) (any, error) {
 				r, _, err := c.Shows.ResetShowProgress(ctx, id, new(str.WatchedProgress))
 				return r, err
