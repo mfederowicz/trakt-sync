@@ -25,12 +25,13 @@ func validServiceID(options *str.Options) error {
 	return nil
 }
 
-// younifyError maps a younify response to a readable error: not open to API apps (401), unknown service (404),
+// younifyError maps a younify response to a readable error: not open to API apps (401 / 403), unknown service (404),
 // VIP gating (422 / 426) and a rejected return_url (400).
 func younifyError(action string, serviceID string, resp *str.Response, err error) error {
-	// the developer portal gets 401 too, so a 401 here is not an expired token of this app
-	if resp != nil && resp.StatusCode == http.StatusUnauthorized {
-		return fmt.Errorf(consts.YounifyUnauthorizedMsg, action, err)
+	// Trakt answered 401 on 2026-09-25 and 403 on 2026-10-31 while other OAuth routes worked,
+	// so neither is an expired token of this app
+	if resp != nil && (resp.StatusCode == http.StatusUnauthorized || resp.StatusCode == http.StatusForbidden) {
+		return fmt.Errorf(consts.YounifyUnauthorizedMsg, action, resp.StatusCode, err)
 	}
 
 	if resp != nil && resp.StatusCode == http.StatusNotFound {

@@ -1,8 +1,8 @@
 #### Younify (streaming service connections):
 Connect streaming services (Netflix, Hulu, ...) to your Trakt account so Trakt can sync from them. All actions need OAuth; some services need Trakt VIP (`vip: true` / `connectable: false` in `connections`).
 
-> **Note:** as of 2026-09-25 Trakt answers `younify -a connections` with 401 for API apps (the developer portal too), and the other
-> actions are expected to do the same; they fail with `younify is not open to API apps yet`. They are kept for when Trakt opens younify to API apps.
+> **Note:** Trakt answers `younify -a connections` for API apps with 401 (2026-09-25, the developer portal too) and with 403
+> (2026-10-31), and the other actions are expected to do the same; they fail with `younify is not open to API apps yet`. They are kept for when Trakt opens younify to API apps.
 
 ##### Streaming services and your connection status:
 ```console

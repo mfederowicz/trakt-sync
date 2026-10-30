@@ -68,7 +68,7 @@ func TestYounifyServiceRefreshAndDisconnect(t *testing.T) {
 			call: func(s *YounifyService) (*str.Response, error) {
 				return s.RefreshService(context.Background(), "netflix", false)
 			}},
-		{name: "refresh all data", method: http.MethodPost, path: "/younify/users/refresh/netflix/all_data",
+		{name: "refresh all data", method: http.MethodPost, path: "/younify/users/refresh/netflix/true",
 			call: func(s *YounifyService) (*str.Response, error) {
 				return s.RefreshService(context.Background(), "netflix", true)
 			}},
