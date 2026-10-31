@@ -199,23 +199,21 @@ func (*CommonLogic) CreateItemsToAddRatings(items *str.ItemsList) str.RatingItem
 		}
 		movies = append(movies, movie)
 	}
+	// a show is sent with its own rating only: a show with seasons would rate those seasons instead,
+	// and season and episode ratings go in their own lists with their ids
 	shows := []str.Show{}
 	for _, m := range *items.Shows {
-		show := str.Show{
+		if m.Rating == nil {
+			continue
+		}
+		rating := float32(*m.Rating)
+		shows = append(shows, str.Show{
 			Title:   m.Title,
 			Year:    m.Year,
 			IDs:     m.IDs,
-			Seasons: m.Seasons,
-		}
-		if m.Rating != nil {
-			rating := float32(*m.Rating)
-			show.Rating = &rating
-			show.RatedAt = m.RatedAt
-		}
-		if len(*m.Seasons) == consts.ZeroValue {
-			show.Seasons = nil
-		}
-		shows = append(shows, show)
+			Rating:  &rating,
+			RatedAt: m.RatedAt,
+		})
 	}
 	seasons := []str.Season{}
 	for _, m := range *items.Seasons {
@@ -1526,9 +1524,12 @@ func (*CommonLogic) ListToItems(items *str.ItemsList, list []*str.ExportlistItem
 						IDs:       item.Show.IDs,
 						Seasons:   &[]str.Season{},
 						WatchedAt: item.WatchedAt,
-						RatedAt:   item.RatedAt,
-						Rating:    item.Rating,
 					}
+				}
+				// the show's own item rates the show, not a season or episode rating that comes before it
+				if item.Season == nil && item.Episode == nil {
+					show.RatedAt = item.RatedAt
+					show.Rating = item.Rating
 				}
 				// Initialize seasons if nil
 				if show.Seasons == nil {

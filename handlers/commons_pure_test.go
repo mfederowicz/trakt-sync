@@ -406,9 +406,9 @@ func TestCreateItemsToAddRatings(t *testing.T) {
 			{Title: Ptr("TRON"), Year: Ptr(2010), IDs: ids(1), RatedAt: stamp(1), Rating: Ptr(float32(9))},
 			{IDs: ids(7)},
 		},
+		// shows go without their seasons, and a show without its own rating is left out
 		Shows: &[]str.Show{
-			{Title: Ptr("Dark"), Year: Ptr(2017), IDs: ids(2), Seasons: seasons, RatedAt: stamp(2), Rating: Ptr(float32(8))},
-			{IDs: ids(8)},
+			{Title: Ptr("Dark"), Year: Ptr(2017), IDs: ids(2), RatedAt: stamp(2), Rating: Ptr(float32(8))},
 		},
 		Seasons:  &[]str.Season{{IDs: ids(3), RatedAt: stamp(3), Rating: Ptr(float32(7))}},
 		Episodes: &[]str.Episode{{IDs: ids(4), RatedAt: stamp(4), Rating: Ptr(float32(6))}},
