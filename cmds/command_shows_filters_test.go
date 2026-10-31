@@ -35,7 +35,8 @@ func TestShowsMediaFilterFlags(t *testing.T) {
 	}}
 	args := []string{"-a", "trending", "-watchnow", "free", "-genres", "action", "-subgenres", "space", "-years", "2020-2026",
 		"-ratings", "75-100", "-runtimes", "90-150", "-countries", "us", "-certifications", "tv-14", "-status", "returning series,ended", "-start_date", "2026-01-01", "-end_date", "2026-12-31",
-		"-languages", "en,pl", "-imdb_ratings", "8.5-10.0", "-rt_meters", "90-100", "-rt_user_meters", "80-100"}
+		"-languages", "en,pl", "-imdb_ratings", "8.5-10.0", "-rt_meters", "90-100", "-rt_user_meters", "80-100",
+		"-parental_nudity", "0-1", "-parental_violence", "0-2", "-parental_profanity", "0-1", "-parental_alcohol", "0-3", "-parental_frightening", "1-2", "-parental_include_unrated"}
 	assert.NoError(t, command.Exec(fs, trakt.NewClient(nil), fileConfig, args))
 	assert.Equal(t, "trending", got.Action)
 	assert.Equal(t, "free", got.WatchNow)
@@ -53,12 +54,14 @@ func TestShowsMediaFilterFlags(t *testing.T) {
 	assert.Equal(t, "8.5-10.0", got.ImdbRatings)
 	assert.Equal(t, "90-100", got.RtMeters)
 	assert.Equal(t, "80-100", got.RtUserMeters)
+	assert.Equal(t, str.ParentalGuide{Nudity: "0-1", Violence: "0-2", Profanity: "0-1", Alcohol: "0-3", Frightening: "1-2", IncludeUnrated: true}, got.Parental)
 }
 
 // TestMediaFilterFlagsAreAvailable checks that movies and shows register every media filter flag that is not global.
 func TestMediaFilterFlagsAreAvailable(t *testing.T) {
 	filters := []string{"watchnow", "subgenres", "ratings", "certifications", "start_date", "end_date", "genres", "years", "countries", "runtimes", "languages"}
 	filters = append(filters, "imdb_ratings", "rt_meters", "rt_user_meters")
+	filters = append(filters, "parental_alcohol", "parental_frightening", "parental_include_unrated", "parental_nudity", "parental_profanity", "parental_violence")
 	filters = append(filters, "status")
 	modules := map[*Command][]string{MoviesCmd: filters, ShowsCmd: filters}
 	global := []string{"genres", "years", "countries", "runtimes", "languages"}

@@ -13,13 +13,15 @@ import (
 
 // the shows list actions send the media filter flags and -status as query parameters.
 func TestShowsHandlersMediaFilters(t *testing.T) {
-	const filtered = "certifications=tv-14&countries=us&end_date=2026-12-31&genres=action%2Cdrama&imdb_ratings=8.5-10.0&languages=en%2Cpl&page=1&ratings=75-100" +
+	const filtered = "certifications=tv-14&countries=us&end_date=2026-12-31&genres=action%2Cdrama&imdb_ratings=8.5-10.0&languages=en%2Cpl&page=1" +
+		"&parental_alcohol=0-3&parental_frightening=1-2&parental_include_unrated=true&parental_nudity=0-1&parental_profanity=0-1&parental_violence=0-2&ratings=75-100" +
 		"&rt_meters=90-100&rt_user_meters=80-100&runtimes=30-60" +
 		"&start_date=2026-01-01&statuses=returning+series%2Cended&subgenres=space&watchnow=free&years=2020-2026"
 	filters := str.Options{
 		WatchNow: "free", Genres: "action,drama", Subgenres: "space", Years: "2020-2026", Ratings: "75-100", Runtimes: "30-60", Countries: "us",
 		Certifications: "tv-14", MediaStartDate: "2026-01-01", MediaEndDate: "2026-12-31", ShowStatus: "returning series,ended", Languages: "en,pl",
 		ImdbRatings: "8.5-10.0", RtMeters: "90-100", RtUserMeters: "80-100",
+		Parental: str.ParentalGuide{Nudity: "0-1", Violence: "0-2", Profanity: "0-1", Alcohol: "0-3", Frightening: "1-2", IncludeUnrated: true},
 	}
 	handlers := []struct {
 		name    string
@@ -44,6 +46,7 @@ func TestShowsHandlersMediaFilters(t *testing.T) {
 		{name: "no filters", query: "page=1"},
 		{name: "unknown watchnow", options: str.Options{WatchNow: "cinema"}, wantErr: "watchnow 'cinema' is not valid"},
 		{name: "unknown status", options: str.Options{ShowStatus: "ended,running"}, wantErr: "status 'running' is not valid"},
+		{name: "parental range out of 0-3", options: str.Options{Parental: str.ParentalGuide{Nudity: "0-4"}}, wantErr: "parental_nudity '0-4' is not valid"},
 	}
 
 	for _, h := range handlers {

@@ -36,6 +36,7 @@ func TestMoviesMediaFilterFlags(t *testing.T) {
 	args := []string{"-a", "trending", "-watchnow", "free", "-genres", "action", "-subgenres", "space", "-years", "2020-2026",
 		"-ratings", "75-100", "-runtimes", "90-150", "-countries", "us", "-certifications", "pg-13", "-start_date", "2026-01-01", "-end_date", "2026-12-31",
 		"-imdb_ratings", "8.0-10.0", "-rt_meters", "90-100", "-rt_user_meters", "80-100", "-languages", "en,pl",
+		"-parental_nudity", "0-1", "-parental_violence", "0-2", "-parental_profanity", "0-1", "-parental_alcohol", "0-3", "-parental_frightening", "1-2", "-parental_include_unrated",
 		"-status", "released,in production"}
 	assert.NoError(t, command.Exec(fs, trakt.NewClient(nil), fileConfig, args))
 	assert.Equal(t, "trending", got.Action)
@@ -52,6 +53,7 @@ func TestMoviesMediaFilterFlags(t *testing.T) {
 	assert.Equal(t, "8.0-10.0", got.ImdbRatings)
 	assert.Equal(t, "90-100", got.RtMeters)
 	assert.Equal(t, "80-100", got.RtUserMeters)
+	assert.Equal(t, str.ParentalGuide{Nudity: "0-1", Violence: "0-2", Profanity: "0-1", Alcohol: "0-3", Frightening: "1-2", IncludeUnrated: true}, got.Parental)
 	assert.Equal(t, "en,pl", got.Languages)
 	assert.Equal(t, "released,in production", got.MovieStatus)
 }

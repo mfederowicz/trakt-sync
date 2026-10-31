@@ -32,6 +32,9 @@ schedule.
 
 ### Added
 
+- Parental guide filters on every list that takes the media filters: `-parental_nudity`, `-parental_violence`, `-parental_profanity`, `-parental_alcohol` and `-parental_frightening`, each a severity range `min-max` from 0 (none) to 3 (severe) such as `-parental_violence 0-1`, and `-parental_include_unrated` to keep titles without a parental guide. They work on the `movies` and `shows` lists (`trending`, `popular`, `anticipated`, ...), `calendars`, `lists`, `media`, `recommendations` and `users -a watchlist|history|collection|list_items|activities`, as on `smart_lists -a items` before. A range outside 0-3 stops the run before any request. The live API applied all five on `movies` and `shows -a popular` (checked 2026-10-31).
+- Library: `uri.MediaFilters` and `uri.SocialActivityOptions` have the fields `ParentalAlcohol`, `ParentalFrightening`, `ParentalIncludeUnrated`, `ParentalNudity`, `ParentalProfanity` and `ParentalViolence`.
+
 ### Changed
 
 - `younify`: a 403 from Trakt now ends with `younify is not open to API apps yet`, like a 401 did; on 2026-10-31 Trakt answered

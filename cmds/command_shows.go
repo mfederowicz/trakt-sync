@@ -37,6 +37,7 @@ var (
 	_showsImdbRatings    = ShowsCmd.Flag.String("imdb_ratings", consts.EmptyString, consts.ImdbRatingsUsage)
 	_showsRtMeters       = ShowsCmd.Flag.String("rt_meters", consts.EmptyString, consts.RtMetersUsage)
 	_showsRtUserMeters   = ShowsCmd.Flag.String("rt_user_meters", consts.EmptyString, consts.RtUserMetersUsage)
+	_showsParental       = newParentalFilterFlags(&ShowsCmd.Flag)
 
 	validShowsActions = []string{
 		consts.Trending, consts.Popular, consts.Favorited, consts.Played, consts.Watched, consts.Collected,

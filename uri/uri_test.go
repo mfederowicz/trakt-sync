@@ -149,9 +149,11 @@ func TestBuildQueryMediaFilters(t *testing.T) {
 		WatchNow: "free", Genres: "action,drama", Subgenres: "space", Years: "2020-2026", Ratings: "75-100",
 		StartDate: "2026-01-01", EndDate: "2026-12-31", Runtimes: "90-150", Countries: "us", Certifications: "pg-13",
 		ImdbRatings: "8.0-10.0", Languages: "en,pl", RtMeters: "90-100", RtUserMeters: "80-100",
+		ParentalAlcohol: "0-3", ParentalFrightening: "1-2", ParentalIncludeUnrated: true, ParentalNudity: "0-1", ParentalProfanity: "0-1", ParentalViolence: "0-2",
 	}}
 	expectedURL := BaseURL + "?certifications=pg-13&countries=us&end_date=2026-12-31&genres=" + url.QueryEscape("action,drama") +
-		"&imdb_ratings=8.0-10.0&languages=" + url.QueryEscape("en,pl") + "&page=2&ratings=75-100&rt_meters=90-100&rt_user_meters=80-100" +
+		"&imdb_ratings=8.0-10.0&languages=" + url.QueryEscape("en,pl") + "&page=2" +
+		"&parental_alcohol=0-3&parental_frightening=1-2&parental_include_unrated=true&parental_nudity=0-1&parental_profanity=0-1&parental_violence=0-2&ratings=75-100&rt_meters=90-100&rt_user_meters=80-100" +
 		"&runtimes=90-150&start_date=2026-01-01&subgenres=space&watchnow=free&years=2020-2026"
 	got, err := AddQuery(BaseURL, opts)
 	if err != nil {

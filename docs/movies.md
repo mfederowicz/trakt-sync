@@ -78,6 +78,7 @@ filter takes several values), `-start_date`, `-end_date`,
 `-status` (`released`, `in production`, `post production`, `planned`, `rumored`, `canceled`; comma separated).
 They also take `-languages` (language codes, comma separated), `-imdb_ratings` (range, for example `8.0-10.0`),
 `-rt_meters` and `-rt_user_meters` (Rotten Tomatoes ranges, for example `90-100`).
+`-parental_nudity`, `-parental_violence`, `-parental_profanity`, `-parental_alcohol` and `-parental_frightening` filter by parental guide: each takes a severity range `min-max` from 0 (none) to 3 (severe), ie: `-parental_violence 0-1`. Titles without a parental guide are left out, unless you add `-parental_include_unrated`. The live API applied all five on `movies -a popular` (checked 2026-10-31).
 `trending`, `popular` and `anticipated` also take `-theme <name>`, a seasonal theme such as `halloween` or `christmas`: Trakt turns it into filters for the list, a filter you set yourself wins over it, and an unknown theme is ignored.
 ```console
 $ ./trakt-sync movies -a popular -theme halloween

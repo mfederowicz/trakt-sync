@@ -41,6 +41,7 @@ Every calendar action takes the Trakt media filters: `-genres`, `-subgenres`, `-
 `-certifications` (comma separated where a filter takes several values) and
 `-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all`.
 `-languages` (language codes, comma separated) filters them too.
+`-parental_nudity`, `-parental_violence`, `-parental_profanity`, `-parental_alcohol` and `-parental_frightening` filter by parental guide: each takes a severity range `min-max` from 0 (none) to 3 (severe), ie: `-parental_violence 0-1`. Titles without a parental guide are left out, unless you add `-parental_include_unrated`.
 The dates of a calendar are set with `-start_date` and `-days`.
 ```console
 $ ./trakt-sync calendars -a all_movies -genres horror -countries us

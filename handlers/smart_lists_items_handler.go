@@ -15,9 +15,6 @@ import (
 	"github.com/mfederowicz/trakt-sync/uri"
 )
 
-// parentalRange is a parental guide severity range min-max, from 0 (none) to 3 (severe).
-var parentalRange = regexp.MustCompile(`^[0-3]-[0-3]$`)
-
 // watchNowCountry is the two-letter lowercase region of the watchnow filter.
 var watchNowCountry = regexp.MustCompile(`^[a-z]{2}$`)
 
@@ -144,17 +141,8 @@ func validSmartListItemsFilters(options *str.Options) error {
 		return fmt.Errorf("watchnow_country '%s' is not valid, want a 2 character lowercase code ie: us", options.WatchNowCountry)
 	}
 
-	ranges := []struct{ name, value string }{
-		{"parental_alcohol", options.Parental.Alcohol},
-		{"parental_frightening", options.Parental.Frightening},
-		{"parental_nudity", options.Parental.Nudity},
-		{"parental_profanity", options.Parental.Profanity},
-		{"parental_violence", options.Parental.Violence},
-	}
-	for _, r := range ranges {
-		if len(r.value) > consts.ZeroValue && !parentalRange.MatchString(r.value) {
-			return fmt.Errorf("%s '%s' is not valid, want a range min-max from 0 to 3 ie: 0-1", r.name, r.value)
-		}
+	if err := checkParentalRanges(options.Parental); err != nil {
+		return err
 	}
 
 	// 0 is the flag not given
