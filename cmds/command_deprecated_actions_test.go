@@ -33,6 +33,8 @@ func TestDeprecatedActionsPrintNoticeAndRun(t *testing.T) {
 		{name: "movies refresh", command: MoviesCmd, args: []string{"-a", "refresh", "-i", "tron-legacy-2010"}, want: "movies -a refresh" + status},
 		{name: "shows refresh", command: ShowsCmd, args: []string{"-a", "refresh", "-i", "the-sopranos"}, want: "shows -a refresh" + status},
 		{name: "people refresh", command: PeopleCmd, args: []string{"-a", "refresh", "-i", "bryan-cranston"}, want: "people -a refresh" + status},
+		{name: "people lists", command: PeopleCmd, args: []string{"-a", "lists", "-i", "bryan-cranston"},
+			want: "people -a lists is deprecated since 2026-10-20: Trakt deprecated this endpoint: lists no longer hold people, so it always returns no lists\n"},
 		{name: "search remove_recent", command: SearchCmd, args: []string{"-a", "remove_recent", "-q", "reacher", "-i", "139606"}, want: "search -a remove_recent" + status},
 		{name: "users add_saved_filters", command: UsersCmd, args: []string{"-a", "add_saved_filters"}, want: "users -a add_saved_filters" + status},
 		{name: "users delete_saved_filter", command: UsersCmd, args: []string{"-a", "delete_saved_filter", "-i", "101"}, want: "users -a delete_saved_filter" + status},

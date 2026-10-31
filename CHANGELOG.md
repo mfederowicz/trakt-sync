@@ -44,6 +44,11 @@ schedule.
   `.../refresh/<service_id>/true`, so the request now goes there.
 - `shows -a reset_show_progress`: a successful reset printed nothing, because Trakt answers it with 201 and only 200 was treated as success; it now prints `result: success` with the stored `reset_at` (mock-tested; the route is VIP only).
 
+### Deprecated
+
+- `people -a lists`: Trakt marked the endpoint deprecated in its API contract on 2026-10-20, because lists no longer hold people and it always returns no lists (checked again 2026-10-31). The action still sends its request but now prints `people -a lists is deprecated since 2026-10-20: Trakt deprecated this endpoint: lists no longer hold people, so it always returns no lists` first. In a later release it will stop sending the request; the action name stays.
+- Library: `PeopleService.GetListsContainingThisPerson` is marked deprecated. It still sends its request; in a later release it will return a `*trakt.EndpointRemovedError` instead, and then be removed.
+
 ## [1.27.0] - 2026-10-17
 
 ### Added

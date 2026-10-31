@@ -27,7 +27,8 @@ $ ./trakt-sync people -a lists -i john-wayne -t official -s likes
 `-t` is one of: `all`, `personal` (default), `official`, `watchlist`, `favorites`.
 `-s` is one of: `popular` (default), `likes`, `comments`, `items`, `added`, `updated`.
 
-The Trakt API currently returns no lists for any person on this route (checked 2026-10-01), so the command ends with `empty lists`.
+The Trakt API currently returns no lists for any person on this route (checked 2026-10-01, again 2026-10-31), so the command ends with `empty lists`.
+Deprecated since 2026-10-20: the Trakt API contract marks the endpoint deprecated because lists no longer hold people. `people -a lists` still sends its request and prints a deprecation notice first; it may stop working.
 ##### Refresh person metadata (deprecated)
 ```console
 $ ./trakt-sync people -a refresh -i john-wayne

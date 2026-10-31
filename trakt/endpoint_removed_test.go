@@ -33,6 +33,7 @@ func TestLockedEndpointsSendNoRequest(t *testing.T) {
 		name   string
 		method string
 		route  string
+		reason string // the reason of the 2026-10-13 routes when not set
 		call   func(c *Client) (*str.Response, error)
 	}{
 		{name: "RefreshMovieMetadata", method: http.MethodPost, route: "movies/{id}/refresh", call: func(c *Client) (*str.Response, error) {
@@ -44,6 +45,11 @@ func TestLockedEndpointsSendNoRequest(t *testing.T) {
 		{name: "RefreshPersonMetadata", method: http.MethodPost, route: "people/{id}/refresh", call: func(c *Client) (*str.Response, error) {
 			return c.People.RefreshPersonMetadata(ctx, "bryan-cranston")
 		}},
+		{name: "GetListsContainingThisPerson", method: http.MethodGet, route: "people/{id}/lists/{type}/{sort}",
+			reason: "Trakt deprecated this endpoint: lists no longer hold people, so it always returns no lists", call: func(c *Client) (*str.Response, error) {
+				_, resp, err := c.People.GetListsContainingThisPerson(ctx, "bryan-cranston", "personal", "popular", &uri.ListOptions{})
+				return resp, err
+			}},
 		{name: "RemoveRecentSearch", method: http.MethodPost, route: "search/recent/remove", call: func(c *Client) (*str.Response, error) {
 			return c.Search.RemoveRecentSearch(ctx, &str.RecentSearch{Query: "reacher", ID: 139606, Type: "shows"})
 		}},
@@ -92,7 +98,11 @@ func TestLockedEndpointsSendNoRequest(t *testing.T) {
 			if removed.Notice.Method != tt.method || removed.Notice.Route != tt.route {
 				t.Errorf("notice is for %s %s, want %s %s", removed.Notice.Method, removed.Notice.Route, tt.method, tt.route)
 			}
-			want := tt.method + " " + tt.route + " is locked since 2026-11-01: Trakt dropped this endpoint from its API contract, it may stop working; no request was sent"
+			reason := "Trakt dropped this endpoint from its API contract, it may stop working"
+			if tt.reason != "" {
+				reason = tt.reason
+			}
+			want := tt.method + " " + tt.route + " is locked since 2026-11-01: " + reason + "; no request was sent"
 			if err.Error() != want {
 				t.Errorf("error is %q, want %q", err.Error(), want)
 			}
