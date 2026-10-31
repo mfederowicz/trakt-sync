@@ -163,11 +163,13 @@ func TestSyncUpNextNitroFlags(t *testing.T) {
 		got = c.UpdateOptionsWithCommandFlags(c.Options)
 		return nil
 	}}
-	args := []string{"-a", "get_up_next_nitro", "-intent", "continue", "-watchnow", "free", "-genres", "action", "-years", "2020", "-start_date", "2026-01-01"}
+	args := []string{"-a", "get_up_next_nitro", "-intent", "continue", "-watchnow", "free", "-genres", "action", "-years", "2020", "-start_date", "2026-01-01",
+		"-parental_nudity", "0-1", "-parental_violence", "0-2", "-parental_profanity", "0-1", "-parental_alcohol", "0-3", "-parental_frightening", "1-2", "-parental_include_unrated"}
 	assert.NoError(t, command.Exec(fs, trakt.NewClient(nil), fileConfig, args))
 	assert.Equal(t, "continue", got.Intent)
 	assert.Equal(t, "free", got.WatchNow)
 	assert.Equal(t, "action", got.Genres)
 	assert.Equal(t, "2020", got.Years)
 	assert.Equal(t, "2026-01-01", got.MediaStartDate)
+	assert.Equal(t, str.ParentalGuide{Nudity: "0-1", Violence: "0-2", Profanity: "0-1", Alcohol: "0-3", Frightening: "1-2", IncludeUnrated: true}, got.Parental)
 }
