@@ -18,7 +18,14 @@ type PeopleService Service
 // GetListsContainingThisPerson Returns all lists that contain this person.
 //
 // API docs: https://docs.trakt.tv/reference/getpeoplelists
+//
+// Deprecated: Trakt deprecated this endpoint in its API contract on 2026-10-20: lists no longer hold people, so it
+// always returns an empty list. The method still sends its request; in a later release it will return an
+// *EndpointRemovedError instead, and then be removed.
 func (p *PeopleService) GetListsContainingThisPerson(ctx context.Context, id string, typeString string, sort string, opts *uri.ListOptions) ([]*str.PersonalList, *str.Response, error) {
+	if err := lockedEndpoint(http.MethodGet, "people/{id}/lists/{type}/{sort}"); err != nil {
+		return nil, nil, err
+	}
 	var url string
 
 	url = fmt.Sprintf("people/%s/lists/%s/%s", id, typeString, sort)

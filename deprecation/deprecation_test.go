@@ -21,6 +21,7 @@ func TestLookup(t *testing.T) {
 		{name: "movies refresh", module: consts.Movies, action: consts.Refresh, method: http.MethodPost, route: "movies/{id}/refresh", want: true},
 		{name: "shows refresh", module: consts.Shows, action: consts.Refresh, method: http.MethodPost, route: "shows/{id}/refresh", want: true},
 		{name: "people refresh", module: consts.People, action: consts.Refresh, method: http.MethodPost, route: "people/{id}/refresh", want: true},
+		{name: "people lists", module: consts.People, action: consts.Lists, method: http.MethodGet, route: "people/{id}/lists/{type}/{sort}", want: true},
 		{name: "search remove_recent", module: consts.Search, action: consts.RemoveRecent, method: http.MethodPost, route: "search/recent/remove", want: true},
 		{name: "users add_saved_filters", module: consts.Users, action: consts.AddSavedFilters, method: http.MethodPost, route: "users/saved_filters", want: true},
 		{name: "users delete_saved_filter", module: consts.Users, action: consts.DeleteSavedFilter, method: http.MethodDelete, route: "users/saved_filters/{id}", want: true},

@@ -9,14 +9,19 @@ import (
 
 const (
 	endpointDropped = "Trakt dropped this endpoint from its API contract, it may stop working"
+	// peopleListsEmpty is the reason the contract gives for deprecating the people lists route
+	peopleListsEmpty = "Trakt deprecated this endpoint: lists no longer hold people, so it always returns no lists"
 	// day20261013 is the day the routes left the Trakt API contract; the live API still served them that day
 	day20261013 = "2026-10-13"
+	// day20261020 is the day the Trakt API contract marked the people lists route deprecated
+	day20261020 = "2026-10-20"
 )
 
 // notices lists every deprecated endpoint with the module action that calls it.
 // A stage change is a new date on the row: Locked stops the requests, Removed marks the code as gone.
 var notices = []Notice{
 	{Module: consts.Movies, Action: consts.Refresh, Method: http.MethodPost, Route: "movies/{id}/refresh", Reason: endpointDropped, Deprecated: day20261013},
+	{Module: consts.People, Action: consts.Lists, Method: http.MethodGet, Route: "people/{id}/lists/{type}/{sort}", Reason: peopleListsEmpty, Deprecated: day20261020},
 	{Module: consts.People, Action: consts.Refresh, Method: http.MethodPost, Route: "people/{id}/refresh", Reason: endpointDropped, Deprecated: day20261013},
 	{Module: consts.Search, Action: consts.RemoveRecent, Method: http.MethodPost, Route: "search/recent/remove", Reason: endpointDropped, Deprecated: day20261013},
 	{Module: consts.Shows, Action: consts.Refresh, Method: http.MethodPost, Route: "shows/{id}/refresh", Reason: endpointDropped, Deprecated: day20261013},
