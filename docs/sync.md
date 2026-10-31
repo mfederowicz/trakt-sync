@@ -263,6 +263,7 @@ $ ./trakt-sync sync -t episodes -a add_to_ratings -items export_sync_ratings_epi
 ```console
 $ ./trakt-sync sync -t seasons -a add_to_ratings -items export_sync_ratings_seasons.json
 ```
+`-t` picks which ratings of the export are sent: `-t shows` sends the ratings of the shows themselves, `-t seasons` and `-t episodes` those of seasons and episodes, and `-t all` every rating, each with its own `rated_at`.
 ##### Add ratings - via stdin
 ```console
 $ cat export_sync_ratings_movies.json |

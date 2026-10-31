@@ -43,6 +43,7 @@ schedule.
 - `younify -a refresh -all_data`: the full re-sync was sent to `.../refresh/<service_id>/all_data`; the Trakt contract wants
   `.../refresh/<service_id>/true`, so the request now goes there.
 - `shows -a reset_show_progress`: a successful reset printed nothing, because Trakt answers it with 201 and only 200 was treated as success; it now prints `result: success` with the stored `reset_at` (mock-tested; the route is VIP only).
+- `sync -a add_to_ratings -t shows` or `-t all` with an export that also holds season or episode ratings: the show was sent with the rating of whichever of its items came first, such as an episode rated 7 instead of the show's own 9; with `-t shows` its season ratings were dropped and its episode ratings went inside the show, where Trakt rates those instead of the show. A show now gets only its own rating and `rated_at`; with `-t all` seasons and episodes still go in their own lists.
 
 ### Deprecated
 
