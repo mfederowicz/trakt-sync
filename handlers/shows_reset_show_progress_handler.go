@@ -64,7 +64,8 @@ func (m ShowsResetShowProgressHandler) handleResetShowProgress(options *str.Opti
 		return vipErr
 	}
 
-	if resp.StatusCode == http.StatusOK {
+	// the contract answers 201 with the stored reset_at; older docs said 200
+	if resp.StatusCode == http.StatusCreated || resp.StatusCode == http.StatusOK {
 		printer.Printf("result: success, reset show progress:%v \n", result.ResetAt)
 	}
 

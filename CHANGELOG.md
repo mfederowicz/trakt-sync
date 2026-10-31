@@ -42,6 +42,7 @@ schedule.
 
 - `younify -a refresh -all_data`: the full re-sync was sent to `.../refresh/<service_id>/all_data`; the Trakt contract wants
   `.../refresh/<service_id>/true`, so the request now goes there.
+- `shows -a reset_show_progress`: a successful reset printed nothing, because Trakt answers it with 201 and only 200 was treated as success; it now prints `result: success` with the stored `reset_at` (mock-tested; the route is VIP only).
 
 ## [1.27.0] - 2026-10-17
 
