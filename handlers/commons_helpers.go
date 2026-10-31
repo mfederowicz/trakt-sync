@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"regexp"
 	"slices"
 	"strconv"
 	"strings"
@@ -163,13 +164,40 @@ func mediaFilters(options *str.Options) uri.MediaFilters {
 		ImdbRatings:    options.ImdbRatings,
 		RtMeters:       options.RtMeters,
 		RtUserMeters:   options.RtUserMeters,
+
+		ParentalAlcohol:        options.Parental.Alcohol,
+		ParentalFrightening:    options.Parental.Frightening,
+		ParentalIncludeUnrated: options.Parental.IncludeUnrated,
+		ParentalNudity:         options.Parental.Nudity,
+		ParentalProfanity:      options.Parental.Profanity,
+		ParentalViolence:       options.Parental.Violence,
 	}
 }
 
-// checkMediaFilters reports a -watchnow value the API does not know.
+// checkMediaFilters reports a -watchnow value the API does not know, or a parental guide range that is not min-max from 0 to 3.
 func checkMediaFilters(options *str.Options) error {
 	if len(options.WatchNow) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.WatchNowFilters, options.WatchNow) {
 		return fmt.Errorf("watchnow '%s' is not valid, available values: %v", options.WatchNow, cfg.WatchNowFilters)
+	}
+	return checkParentalRanges(options.Parental)
+}
+
+// parentalRange is a parental guide severity range min-max, from 0 (none) to 3 (severe).
+var parentalRange = regexp.MustCompile(`^[0-3]-[0-3]$`)
+
+// checkParentalRanges reports a parental guide range that is not min-max from 0 to 3.
+func checkParentalRanges(p str.ParentalGuide) error {
+	ranges := []struct{ name, value string }{
+		{"parental_alcohol", p.Alcohol},
+		{"parental_frightening", p.Frightening},
+		{"parental_nudity", p.Nudity},
+		{"parental_profanity", p.Profanity},
+		{"parental_violence", p.Violence},
+	}
+	for _, r := range ranges {
+		if len(r.value) > consts.ZeroValue && !parentalRange.MatchString(r.value) {
+			return fmt.Errorf("%s '%s' is not valid, want a range min-max from 0 to 3 ie: 0-1", r.name, r.value)
+		}
 	}
 	return nil
 }

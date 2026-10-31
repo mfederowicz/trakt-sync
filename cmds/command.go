@@ -1313,6 +1313,7 @@ func UpdateOptionsWithCommandMoviesFlags(c *Command, options *str.Options) *str.
 	options.ImdbRatings = *_moviesImdbRatings
 	options.RtMeters = *_moviesRtMeters
 	options.RtUserMeters = *_moviesRtUserMeters
+	*options = _moviesParental.apply(*options)
 	options.Languages = *_languages
 	// the list actions send -start_date / -end_date as media filters; updates reads -start_date through options.StartDate
 	options.MediaStartDate = *_moviesStartDate
@@ -1388,6 +1389,7 @@ func UpdateOptionsWithCommandShowsFlags(c *Command, options *str.Options) *str.O
 	options.ImdbRatings = *_showsImdbRatings
 	options.RtMeters = *_showsRtMeters
 	options.RtUserMeters = *_showsRtUserMeters
+	*options = _showsParental.apply(*options)
 	options.Languages = *_languages
 	// the list actions send -start_date / -end_date as media filters; updates reads -start_date through options.StartDate
 	options.MediaStartDate = *_showsStartDate

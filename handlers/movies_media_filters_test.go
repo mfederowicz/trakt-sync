@@ -13,10 +13,12 @@ import (
 
 // the movies list actions send the media filter flags and -status as query parameters.
 func TestMoviesHandlersMediaFilters(t *testing.T) {
-	const filtered = "certifications=pg-13&countries=us&end_date=2026-12-31&genres=action%2Cdrama&imdb_ratings=8.0-10.0&languages=en%2Cpl&page=1&ratings=75-100" +
+	const filtered = "certifications=pg-13&countries=us&end_date=2026-12-31&genres=action%2Cdrama&imdb_ratings=8.0-10.0&languages=en%2Cpl&page=1" +
+		"&parental_alcohol=0-3&parental_frightening=1-2&parental_include_unrated=true&parental_nudity=0-1&parental_profanity=0-1&parental_violence=0-2&ratings=75-100" +
 		"&rt_meters=90-100&rt_user_meters=80-100&runtimes=90-150&start_date=2026-01-01&statuses=released%2Cin+production&subgenres=space&watchnow=free&years=2020-2026"
 	filters := str.Options{WatchNow: "free", Genres: "action,drama", Subgenres: "space", Years: "2020-2026", Ratings: "75-100", Runtimes: "90-150", Countries: "us", Certifications: "pg-13", MediaStartDate: "2026-01-01", MediaEndDate: "2026-12-31",
-		ImdbRatings: "8.0-10.0", RtMeters: "90-100", RtUserMeters: "80-100", Languages: "en,pl", MovieStatus: "released,in production"}
+		ImdbRatings: "8.0-10.0", RtMeters: "90-100", RtUserMeters: "80-100", Languages: "en,pl", MovieStatus: "released,in production",
+		Parental: str.ParentalGuide{Nudity: "0-1", Violence: "0-2", Profanity: "0-1", Alcohol: "0-3", Frightening: "1-2", IncludeUnrated: true}}
 	handlers := []struct {
 		name    string
 		handler Handler
@@ -43,6 +45,7 @@ func TestMoviesHandlersMediaFilters(t *testing.T) {
 		{name: "unknown watchnow", options: str.Options{WatchNow: "cinema"}, wantErr: "watchnow 'cinema' is not valid"},
 		{name: "one status", options: str.Options{MovieStatus: "rumored"}, query: "page=1&statuses=rumored"},
 		{name: "unknown status", options: str.Options{MovieStatus: "released,ended"}, wantErr: "status 'ended' is not valid"},
+		{name: "parental range not min-max", options: str.Options{Parental: str.ParentalGuide{Violence: "2"}}, wantErr: "parental_violence '2' is not valid"},
 	}
 
 	for _, h := range handlers {

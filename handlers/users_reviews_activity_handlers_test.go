@@ -34,11 +34,15 @@ func TestUsersReviewsAndActivityHandlers(t *testing.T) {
 			path: "/users/sean/friends/activities", query: "genres=drama&limit=10&page=1", status: http.StatusOK, body: `[{"id":1,"type":"movie","movie":{"title":"Arrival"}}]`},
 		{name: "activities all filters", handler: UsersActivitiesHandler{}, options: str.Options{Action: consts.Activities, Type: "following", WatchNow: "free", Genres: "action,drama", Subgenres: "space",
 			Years: "2020-2026", Ratings: "75-100", Runtimes: "90-150", Countries: "us", Certifications: "pg-13", MediaStartDate: "2026-01-01", MediaEndDate: "2026-12-31",
-			IgnoreCollected: "true", IgnoreWatched: "true", IgnoreWatchlisted: "false"},
+			IgnoreCollected: "true", IgnoreWatched: "true", IgnoreWatchlisted: "false",
+			Parental: str.ParentalGuide{Nudity: "0-1", Violence: "0-2", Profanity: "0-1", Alcohol: "0-3", Frightening: "1-2", IncludeUnrated: true}},
 			path: "/users/sean/following/activities",
 			query: "certifications=pg-13&countries=us&end_date=2026-12-31&genres=action%2Cdrama&ignore_collected=true&ignore_watched=true&ignore_watchlisted=false" +
-				"&page=1&ratings=75-100&runtimes=90-150&start_date=2026-01-01&subgenres=space&watchnow=free&years=2020-2026",
+				"&page=1&parental_alcohol=0-3&parental_frightening=1-2&parental_include_unrated=true&parental_nudity=0-1&parental_profanity=0-1&parental_violence=0-2" +
+				"&ratings=75-100&runtimes=90-150&start_date=2026-01-01&subgenres=space&watchnow=free&years=2020-2026",
 			status: http.StatusOK, body: `[{"id":1,"type":"movie","movie":{"title":"Arrival"}}]`},
+		{name: "activities parental range out of 0-3", handler: UsersActivitiesHandler{}, options: str.Options{Action: consts.Activities, Type: "friends",
+			Parental: str.ParentalGuide{Alcohol: "1-5"}}, wantErr: "parental_alcohol '1-5' is not valid", wantNoAPI: true},
 		{name: "activities unknown watchnow", handler: UsersActivitiesHandler{}, options: str.Options{Action: consts.Activities, Type: "friends", WatchNow: "cinema"},
 			wantErr: "watchnow 'cinema' is not valid", wantNoAPI: true},
 		{name: "activities without type", handler: UsersActivitiesHandler{}, options: str.Options{Action: consts.Activities},

@@ -856,6 +856,7 @@ $ ./trakt-sync users -a plex_sync -i <server id> -all_data
 `watchlist`, `history`, `collection` and `list_items` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`,
 `-runtimes`, `-countries`, `-certifications` (comma separated where a filter takes several values), `-start_date`, `-end_date`,
 `-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all` and `-languages` (language codes, comma separated).
+`-parental_nudity`, `-parental_violence`, `-parental_profanity`, `-parental_alcohol` and `-parental_frightening` filter by parental guide: each takes a severity range `min-max` from 0 (none) to 3 (severe), ie: `-parental_violence 0-1`. Titles without a parental guide are left out, unless you add `-parental_include_unrated`. `activities` takes them too.
 `collection` sends the filters, as the Trakt API contract lists them for this route, but on 2026-10-04 the live API ignored `-genres`,
 `-years`, `-languages` and `-watchnow` there and returned the whole collection.
 In `history`, `-start_at` and `-end_at` still set the watched-at window; `-start_date` and `-end_date` are the separate media date filters.

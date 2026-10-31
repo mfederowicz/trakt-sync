@@ -49,9 +49,10 @@ func TestModuleMediaFilterFlags(t *testing.T) {
 				return nil
 			}}
 			args := []string{"-a", m.action, "-watchnow", "free", "-genres", "action", "-subgenres", "space", "-years", "2020-2026", "-ratings", "75-100",
-				"-runtimes", "90-150", "-countries", "us", "-certifications", "pg-13", "-languages", "en,pl"}
+				"-runtimes", "90-150", "-countries", "us", "-certifications", "pg-13", "-languages", "en,pl",
+				"-parental_nudity", "0-1", "-parental_violence", "0-2", "-parental_profanity", "0-1", "-parental_alcohol", "0-3", "-parental_frightening", "1-2", "-parental_include_unrated"}
 			want := str.Options{WatchNow: "free", Genres: "action", Subgenres: "space", Years: "2020-2026", Ratings: "75-100", Runtimes: "90-150",
-				Countries: "us", Certifications: "pg-13", Languages: "en,pl"}
+				Countries: "us", Certifications: "pg-13", Languages: "en,pl", Parental: str.ParentalGuide{Nudity: "0-1", Violence: "0-2", Profanity: "0-1", Alcohol: "0-3", Frightening: "1-2", IncludeUnrated: true}}
 			if m.dates {
 				args = append(args, "-start_date", "2026-01-01", "-end_date", "2026-12-31")
 				want.MediaStartDate = "2026-01-01"
@@ -60,7 +61,8 @@ func TestModuleMediaFilterFlags(t *testing.T) {
 			assert.NoError(t, command.Exec(fs, trakt.NewClient(nil), fileConfig, args))
 			assert.Equal(t, m.action, got.Action)
 			assert.Equal(t, want, str.Options{WatchNow: got.WatchNow, Genres: got.Genres, Subgenres: got.Subgenres, Years: got.Years, Ratings: got.Ratings,
-				Runtimes: got.Runtimes, Countries: got.Countries, Certifications: got.Certifications, MediaStartDate: got.MediaStartDate, MediaEndDate: got.MediaEndDate, Languages: got.Languages})
+				Runtimes: got.Runtimes, Countries: got.Countries, Certifications: got.Certifications, MediaStartDate: got.MediaStartDate, MediaEndDate: got.MediaEndDate, Languages: got.Languages,
+				Parental: got.Parental})
 		})
 	}
 }
