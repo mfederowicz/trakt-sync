@@ -24,23 +24,32 @@ func (SyncGetUpNextNitroHandler) Handle(options *str.Options, client *trakt.Clie
 	if len(options.WatchNow) > consts.ZeroValue && !cfg.IsValidConfigType(cfg.WatchNowFilters, options.WatchNow) {
 		return fmt.Errorf("watchnow '%s' is not valid, avaliable values: %v", options.WatchNow, cfg.WatchNowFilters)
 	}
+	if err := checkParentalRanges(options.Parental); err != nil {
+		return err
+	}
 
 	printer.Println("Get up next nitro progress")
 	opts := uri.UpNextNitroOptions{
-		Limit:          options.PerPage,
-		SortBy:         options.SortBy,
-		SortHow:        options.SortHow,
-		Intent:         options.Intent,
-		WatchNow:       options.WatchNow,
-		Genres:         options.Genres,
-		Subgenres:      options.Subgenres,
-		Years:          options.Years,
-		Ratings:        options.Ratings,
-		StartDate:      options.MediaStartDate,
-		EndDate:        options.MediaEndDate,
-		Runtimes:       options.Runtimes,
-		Countries:      options.Countries,
-		Certifications: options.Certifications,
+		Limit:                  options.PerPage,
+		SortBy:                 options.SortBy,
+		SortHow:                options.SortHow,
+		Intent:                 options.Intent,
+		WatchNow:               options.WatchNow,
+		Genres:                 options.Genres,
+		Subgenres:              options.Subgenres,
+		Years:                  options.Years,
+		Ratings:                options.Ratings,
+		StartDate:              options.MediaStartDate,
+		EndDate:                options.MediaEndDate,
+		Runtimes:               options.Runtimes,
+		Countries:              options.Countries,
+		Certifications:         options.Certifications,
+		ParentalAlcohol:        options.Parental.Alcohol,
+		ParentalFrightening:    options.Parental.Frightening,
+		ParentalIncludeUnrated: options.Parental.IncludeUnrated,
+		ParentalNudity:         options.Parental.Nudity,
+		ParentalProfanity:      options.Parental.Profanity,
+		ParentalViolence:       options.Parental.Violence,
 	}
 	result, err := fetchSyncProgress(client, options, consts.DefaultPage, func(ctx context.Context, page int) ([]*str.ShowProgress, *str.Response, error) {
 		opts.Page = page

@@ -65,9 +65,11 @@ func TestSyncProgressHandlers(t *testing.T) {
 				Action: consts.GetUpNextNitro, Intent: "start", WatchNow: "free_all", Genres: "action", Subgenres: "heist",
 				Years: "2020", Ratings: "75-100", MediaStartDate: "2026-01-01", MediaEndDate: "2026-12-31", Runtimes: "30-60",
 				Countries: "us", Certifications: "tv-14", SortBy: "added", SortHow: "desc", PerPage: 20,
+				Parental: str.ParentalGuide{Nudity: "0-1", Violence: "0-2", Profanity: "0-1", Alcohol: "0-3", Frightening: "1-2", IncludeUnrated: true},
 			},
 			wantCall: "/sync/progress/up_next_nitro?certifications=tv-14&countries=us&end_date=2026-12-31&genres=action&intent=start&limit=20" +
-				"&page=1&ratings=75-100&runtimes=30-60&sort_by=added&sort_how=desc&start_date=2026-01-01&subgenres=heist&watchnow=free_all&years=2020",
+				"&page=1&parental_alcohol=0-3&parental_frightening=1-2&parental_include_unrated=true&parental_nudity=0-1&parental_profanity=0-1&parental_violence=0-2" +
+				"&ratings=75-100&runtimes=30-60&sort_by=added&sort_how=desc&start_date=2026-01-01&subgenres=heist&watchnow=free_all&years=2020",
 		},
 		{
 			name:     "up next nitro ignores progress-only flags",
@@ -86,6 +88,12 @@ func TestSyncProgressHandlers(t *testing.T) {
 			handler: SyncGetUpNextNitroHandler{},
 			options: str.Options{Action: consts.GetUpNextNitro, WatchNow: "rent"},
 			wantErr: "watchnow 'rent' is not valid",
+		},
+		{
+			name:    "up next nitro parental range out of 0-3",
+			handler: SyncGetUpNextNitroHandler{},
+			options: str.Options{Action: consts.GetUpNextNitro, Parental: str.ParentalGuide{Profanity: "1-9"}},
+			wantErr: "parental_profanity '1-9' is not valid",
 		},
 		{
 			name:    "watched progress with both hide filters",

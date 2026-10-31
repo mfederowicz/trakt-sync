@@ -33,6 +33,7 @@ var (
 	_syncCertifications       = SyncCmd.Flag.String("certifications", consts.EmptyString, consts.CertificationsUsage)
 	_syncStartDate            = SyncCmd.Flag.String("start_date", consts.EmptyString, consts.StartDateUsage)
 	_syncEndDate              = SyncCmd.Flag.String("end_date", consts.EmptyString, consts.EndDateUsage)
+	_syncParental             = newParentalFilterFlags(&SyncCmd.Flag)
 
 	validSyncActions = []string{
 		consts.LastActivities, consts.Playback, consts.RemovePlayback, consts.GetCollection, consts.GetMinimalCollection,

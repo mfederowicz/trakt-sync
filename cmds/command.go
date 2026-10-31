@@ -1096,6 +1096,7 @@ func UpdateOptionsWithCommandSyncFlags(c *Command, options *str.Options) *str.Op
 		options.Certifications = *_syncCertifications
 		options.MediaStartDate = *_syncStartDate
 		options.MediaEndDate = *_syncEndDate
+		*options = _syncParental.apply(*options)
 	}
 	options.Genres = *_genres
 	options.Years = *_years

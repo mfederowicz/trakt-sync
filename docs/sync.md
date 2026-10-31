@@ -76,6 +76,7 @@ Up next for intent-based clients, with media filters. `-intent` is `all`, `conti
 `-watchnow` is `favorites`, `any`, `any_all`, `free`, `free_all`, `subscriptions` or `subscriptions_all`.
 Other filters are passed as given: `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`,
 `-certifications`, `-start_date`, `-end_date` (comma separated where a filter takes several values).
+`-parental_nudity`, `-parental_violence`, `-parental_profanity`, `-parental_alcohol` and `-parental_frightening` filter by parental guide: each takes a severity range `min-max` from 0 (none) to 3 (severe), ie: `-parental_violence 0-1`. Titles without a parental guide are left out, unless you add `-parental_include_unrated`.
 `-sort_by` and `-sort_how` are sent only when given.
 ```console
 $ ./trakt-sync sync -a get_up_next_nitro -intent continue
