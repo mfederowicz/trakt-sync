@@ -48,6 +48,7 @@ func (m *Movie) UpdateCollectedData(item *ExportlistItem) {
 	if item.Metadata != nil {
 		m.MediaType = item.Metadata.MediaType
 		m.Resolution = item.Metadata.Resolution
+		m.HDR = item.Metadata.Hdr
 		m.Audio = item.Metadata.Audio
 		m.AudioChannels = item.Metadata.AudioChannels
 		m.ThreeD = item.Metadata.ThreeD

@@ -44,6 +44,7 @@ func (e *Episode) UpdateCollectedData(item *ExportlistItem) {
 	if item.Metadata != nil {
 		e.MediaType = item.Metadata.MediaType
 		e.Resolution = item.Metadata.Resolution
+		e.HDR = item.Metadata.Hdr
 		e.Audio = item.Metadata.Audio
 		e.AudioChannels = item.Metadata.AudioChannels
 		e.ThreeD = item.Metadata.ThreeD

@@ -599,6 +599,33 @@ func TestConvertBytesToItemsList(t *testing.T) {
 		assert.True(t, show.WatchedAt.Equal(stamp(2).Time))
 	})
 
+	t.Run("collection export sent back", func(t *testing.T) {
+		// shapes written by sync -a get_collection: a movie with -ex metadata, a show without it
+		export := `[
+	{"collected_at":"2026-10-01T12:00:00Z","movie":{"title":"TRON: Legacy","ids":{"trakt":1}},"metadata":{"media_type":"bluray","hdr":"dolby_vision"}},
+	{"last_collected_at":"2026-10-02T12:00:00Z","show":{"title":"Dark","ids":{"trakt":2}},"seasons":[{"number":1,"episodes":[{"number":3,"collected_at":"2026-10-02T12:00:00Z"}]}]}
+]`
+		got, err := c.ConvertBytesToItemsList([]byte(export), consts.AddToCollection, consts.Movies)
+		if !assert.NoError(t, err) || !assert.Len(t, *got.Movies, 1) {
+			return
+		}
+		movie := (*got.Movies)[0]
+		assert.Equal(t, "bluray", *movie.MediaType)
+		assert.Equal(t, "dolby_vision", *movie.Hdr)
+
+		got, err = c.ConvertBytesToItemsList([]byte(export), consts.AddToCollection, consts.Shows)
+		if !assert.NoError(t, err) || !assert.Len(t, *got.Shows, 1) {
+			return
+		}
+		show := (*got.Shows)[0]
+		if !assert.Len(t, *show.Seasons, 1) || !assert.Len(t, *(*show.Seasons)[0].Episodes, 1) {
+			return
+		}
+		episode := (*(*show.Seasons)[0].Episodes)[0]
+		assert.Equal(t, 3, *episode.Number)
+		assert.Nil(t, episode.MediaType)
+	})
+
 	t.Run("collection of people", func(t *testing.T) {
 		got, err := c.ConvertBytesToItemsList([]byte(mixedList), consts.AddListItems, consts.People)
 		if !assert.NoError(t, err) {

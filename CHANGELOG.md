@@ -48,6 +48,8 @@ schedule.
   `.../refresh/<service_id>/true`, so the request now goes there.
 - `shows -a reset_show_progress`: a successful reset printed nothing, because Trakt answers it with 201 and only 200 was treated as success; it now prints `result: success` with the stored `reset_at` (mock-tested; the route is VIP only).
 - `sync -a add_to_ratings -t shows` or `-t all` with an export that also holds season or episode ratings: the show was sent with the rating of whichever of its items came first, such as an episode rated 7 instead of the show's own 9; with `-t shows` its season ratings were dropped and its episode ratings went inside the show, where Trakt rates those instead of the show. A show now gets only its own rating and `rated_at`; with `-t all` seasons and episodes still go in their own lists.
+- `sync -a add_to_collection`: the `hdr` value from an export made with `-ex metadata` was never sent, while Trakt clears collection metadata that a request leaves out (per its API contract since 2026-11-03), so re-adding an export could drop the HDR format of every item; `hdr` is now sent with the other metadata. An export of `-t shows` made without `-ex metadata` crashed `add_to_collection -t shows` with a nil pointer error; it now sends those episodes without metadata.
+- Library: the `UpdateCollectedData` methods of `str.ExportlistItem`, `str.Movie`, `str.Show`, `str.Season` and `str.Episode` copy `Metadata.Hdr`, and `ExportlistItem.UpdateCollectedData` no longer panics on a season episode without `metadata` or `collected_at`.
 
 ### Deprecated
 
