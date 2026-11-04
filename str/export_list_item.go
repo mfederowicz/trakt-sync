@@ -129,6 +129,7 @@ func (i *ExportlistItem) UpdateCollectedData(item *ExportlistItem) {
 	if item.Metadata != nil {
 		i.MediaType = item.Metadata.MediaType
 		i.Resolution = item.Metadata.Resolution
+		i.Hdr = item.Metadata.Hdr
 		i.Audio = item.Metadata.Audio
 		i.AudioChannels = item.Metadata.AudioChannels
 		i.ThreeD = item.Metadata.ThreeD
@@ -143,13 +144,18 @@ func (i *ExportlistItem) UpdateCollectedData(item *ExportlistItem) {
 				s.Episodes = &[]Episode{}
 				for _, ep := range *season.Episodes {
 					e := Episode{}
-					e.CollectedAt = ep.CollectedAt.UTC()
+					if ep.CollectedAt != nil {
+						e.CollectedAt = ep.CollectedAt.UTC()
+					}
 					e.Number = ep.Number
-					e.MediaType = ep.Metadata.MediaType
-					e.Resolution = ep.Metadata.Resolution
-					e.Audio = ep.Metadata.Audio
-					e.AudioChannels = ep.Metadata.AudioChannels
-					e.ThreeD = ep.Metadata.ThreeD
+					if ep.Metadata != nil {
+						e.MediaType = ep.Metadata.MediaType
+						e.Resolution = ep.Metadata.Resolution
+						e.HDR = ep.Metadata.Hdr
+						e.Audio = ep.Metadata.Audio
+						e.AudioChannels = ep.Metadata.AudioChannels
+						e.ThreeD = ep.Metadata.ThreeD
+					}
 
 					*s.Episodes = append(*s.Episodes, e)
 				}

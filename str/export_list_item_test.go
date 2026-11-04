@@ -13,6 +13,7 @@ func testMetadata() *Metadata {
 	return &Metadata{
 		MediaType:     String("bluray"),
 		Resolution:    String("uhd_4k"),
+		Hdr:           String("dolby_vision"),
 		Audio:         String("dts"),
 		AudioChannels: String("5.1"),
 		ThreeD:        Bool(true),
@@ -115,6 +116,7 @@ func TestExportlistItemUpdateCollectedData(t *testing.T) {
 			{Number: Int(1), Episodes: &[]Episode{
 				{Number: Int(1), CollectedAt: testStamp(4), Metadata: testMetadata()},
 				{Number: Int(2), CollectedAt: testStamp(5), Metadata: &Metadata{}},
+				{Number: Int(3)},
 			}},
 			{Number: Int(2)},
 		},
@@ -133,7 +135,7 @@ func TestExportlistItemUpdateCollectedData(t *testing.T) {
 			t.Errorf("%s is %v, want %v in UTC", name, got, want)
 		}
 	}
-	if *item.MediaType != "bluray" || *item.Resolution != "uhd_4k" || *item.Audio != "dts" || *item.AudioChannels != "5.1" || !*item.ThreeD {
+	if *item.MediaType != "bluray" || *item.Resolution != "uhd_4k" || *item.Hdr != "dolby_vision" || *item.Audio != "dts" || *item.AudioChannels != "5.1" || !*item.ThreeD {
 		t.Errorf("metadata was not copied: %v", item)
 	}
 
@@ -147,11 +149,11 @@ func TestExportlistItemUpdateCollectedData(t *testing.T) {
 	if second.Episodes != nil {
 		t.Errorf("season without episodes got %v", second.Episodes)
 	}
-	if first.Episodes == nil || len(*first.Episodes) != 2 {
-		t.Fatalf("episodes are %v, want 2", first.Episodes)
+	if first.Episodes == nil || len(*first.Episodes) != 3 {
+		t.Fatalf("episodes are %v, want 3", first.Episodes)
 	}
 	episode := (*first.Episodes)[0]
-	if *episode.Number != 1 || *episode.MediaType != "bluray" || !*episode.ThreeD {
+	if *episode.Number != 1 || *episode.MediaType != "bluray" || *episode.HDR != "dolby_vision" || !*episode.ThreeD {
 		t.Errorf("episode is %v, want number 1 with its metadata", episode)
 	}
 	if !episode.CollectedAt.Equal(testStamp(4).Time) || episode.CollectedAt.Location() != time.UTC {
@@ -159,6 +161,9 @@ func TestExportlistItemUpdateCollectedData(t *testing.T) {
 	}
 	if bare := (*first.Episodes)[1]; *bare.Number != 2 || bare.MediaType != nil {
 		t.Errorf("episode without metadata is %v, want only number 2", bare)
+	}
+	if plain := (*first.Episodes)[2]; *plain.Number != 3 || plain.CollectedAt != nil || plain.MediaType != nil {
+		t.Errorf("episode without collected_at and metadata is %v, want only number 3", plain)
 	}
 }
 
@@ -209,6 +214,16 @@ func TestMediaUpdateCollectedData(t *testing.T) {
 	} {
 		if got == nil || *got != "bluray" {
 			t.Errorf("%s media_type is %v, want bluray", name, got)
+		}
+	}
+	for name, got := range map[string]*string{
+		"movie":   movie.HDR,
+		"show":    show.HDR,
+		"episode": episode.HDR,
+		"season":  season.HDR,
+	} {
+		if got == nil || *got != "dolby_vision" {
+			t.Errorf("%s hdr is %v, want dolby_vision", name, got)
 		}
 	}
 	if season.Resolution == nil || *season.Resolution != "uhd_4k" || season.ThreeD == nil || !*season.ThreeD {
