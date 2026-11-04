@@ -34,11 +34,13 @@ type ListOptions struct {
 	ImdbVotes         ImdbVotesRange `url:"imdb_votes,omitempty"`
 	IncludeReplies    string         `url:"include_replies,omitempty"`
 	// Languages is the languages filter; prefer Filters.Languages.
-	Languages    []string    `url:"languages,omitempty"`
-	Translations []string    `url:"translations,omitempty"`
-	Limit        int         `url:"limit,omitempty"`
-	Links        string      `url:"links,omitempty"`
-	Page         int         `url:"page,omitempty"`
+	Languages    []string `url:"languages,omitempty"`
+	Translations []string `url:"translations,omitempty"`
+	Limit        int      `url:"limit,omitempty"`
+	Links        string   `url:"links,omitempty"`
+	Page         int      `url:"page,omitempty"`
+	// Personalized re-orders the related movies or shows toward the user's taste; Trakt applies it only for VIP accounts.
+	Personalized bool        `url:"personalized,omitempty"`
 	Query        string      `url:"query,omitempty"`
 	Ratings      RatingRange `url:"ratings,omitempty"`
 	RtMeters     RatingRange `url:"rt_meters,omitempty"`

@@ -187,6 +187,10 @@ $ ./trakt-sync movies -a ratings -i the-sopranos
 ```console
 $ ./trakt-sync movies -a related -i the-sopranos
 ```
+`-personalized` asks Trakt to re-order the related movies toward your taste. Trakt applies it only for VIP accounts and ignores it for everyone else.
+```console
+$ ./trakt-sync movies -a related -i the-sopranos -personalized
+```
 ##### Get movies stats
 ```console
 $ ./trakt-sync movies -a stats -i the-sopranos

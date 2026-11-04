@@ -228,6 +228,10 @@ $ ./trakt-sync shows -a ratings -i the-sopranos
 ```console
 $ ./trakt-sync shows -a related -i the-sopranos
 ```
+`-personalized` asks Trakt to re-order the related shows toward your taste. Trakt applies it only for VIP accounts and ignores it for everyone else.
+```console
+$ ./trakt-sync shows -a related -i the-sopranos -personalized
+```
 ##### Get show sentiments
 ```console
 $ ./trakt-sync shows -a sentiments -i the-sopranos -> export_shows_sentiments_the-sopranos.json

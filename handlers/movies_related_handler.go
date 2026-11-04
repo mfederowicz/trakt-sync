@@ -43,7 +43,7 @@ func (m MoviesRelatedHandler) Handle(options *str.Options, client *trakt.Client)
 }
 
 func (m MoviesRelatedHandler) fetchMoviesRelated(client *trakt.Client, options *str.Options, page int) ([]*str.Movie, *str.Response, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Personalized: options.Personalized}
 	list, resp, err := client.Movies.GetRelatedMovies(
 		cli.ContextFromOptions(options),
 		options.InternalID,

@@ -43,7 +43,7 @@ func (m ShowsRelatedHandler) Handle(options *str.Options, client *trakt.Client) 
 }
 
 func (m ShowsRelatedHandler) fetchShowsRelated(client *trakt.Client, options *str.Options, page int) ([]*str.Show, *str.Response, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Personalized: options.Personalized}
 	list, resp, err := client.Shows.GetRelatedShows(
 		cli.ContextFromOptions(options),
 		options.InternalID,
