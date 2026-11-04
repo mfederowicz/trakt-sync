@@ -201,6 +201,7 @@ const (
 	SmartListIDUsage             = "smart list slug (ids.slug)"
 	ParentalUnratedUsage         = "keep titles without a parental guide when a parental range is set"
 	ParentalRangeUsage           = "parental guide severity range min-max, from 0 (none) to 3 (severe) ie: 0-1"
+	PersonalizedUsage            = "for -a related: re-order the related titles toward your taste (VIP only, ignored for other accounts)"
 	SmartListCountryUsage        = "2 character region for -watchnow, default: the list region, then the owner region, then us"
 	SmartListImdbVotesUsage      = "IMDb vote count range, either side optional ie: -imdb_votes 5000-"
 	SmartListMetascoresUsage     = "Metascore range ie: -metascores 70-100"

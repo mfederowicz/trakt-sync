@@ -38,6 +38,7 @@ var (
 	_showsRtMeters       = ShowsCmd.Flag.String("rt_meters", consts.EmptyString, consts.RtMetersUsage)
 	_showsRtUserMeters   = ShowsCmd.Flag.String("rt_user_meters", consts.EmptyString, consts.RtUserMetersUsage)
 	_showsParental       = newParentalFilterFlags(&ShowsCmd.Flag)
+	_showsPersonalized   = ShowsCmd.Flag.Bool("personalized", false, consts.PersonalizedUsage)
 
 	validShowsActions = []string{
 		consts.Trending, consts.Popular, consts.Favorited, consts.Played, consts.Watched, consts.Collected,

@@ -73,6 +73,11 @@ func TestMoviesServiceRequests(t *testing.T) {
 			call: func(c *Client) (any, error) { r, _, err := c.Movies.GetMovieRatings(ctx, id); return r, err }},
 		{name: "GetRelatedMovies", method: http.MethodGet, path: "/movies/tron-legacy-2010/related", query: "limit=10", body: movies,
 			call: func(c *Client) (any, error) { r, _, err := c.Movies.GetRelatedMovies(ctx, id, opts); return r, err }},
+		{name: "GetRelatedMovies personalized", method: http.MethodGet, path: "/movies/tron-legacy-2010/related", query: "limit=10&personalized=true", body: movies,
+			call: func(c *Client) (any, error) {
+				r, _, err := c.Movies.GetRelatedMovies(ctx, id, &uri.ListOptions{Limit: 10, Personalized: true})
+				return r, err
+			}},
 		{name: "GetMovieStats", method: http.MethodGet, path: "/movies/tron-legacy-2010/stats", body: stats,
 			call: func(c *Client) (any, error) { r, _, err := c.Movies.GetMovieStats(ctx, id); return r, err }},
 		{name: "GetMovieStudios", method: http.MethodGet, path: "/movies/tron-legacy-2010/studios", body: studios,

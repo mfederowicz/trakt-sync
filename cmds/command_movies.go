@@ -32,6 +32,7 @@ var (
 	_moviesRtUserMeters   = MoviesCmd.Flag.String("rt_user_meters", consts.EmptyString, consts.RtUserMetersUsage)
 	_moviesStatus         = MoviesCmd.Flag.String("status", consts.EmptyString, consts.MoviesStatusUsage)
 	_moviesParental       = newParentalFilterFlags(&MoviesCmd.Flag)
+	_moviesPersonalized   = MoviesCmd.Flag.Bool("personalized", false, consts.PersonalizedUsage)
 
 	validMoviesActions = []string{
 		consts.Trending, consts.Popular, consts.Favorited, consts.Played, consts.Watched, consts.Collected,

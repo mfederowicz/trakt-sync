@@ -148,6 +148,11 @@ func TestShowsServiceRequests(t *testing.T) {
 			call: func(c *Client) (any, error) { r, _, err := c.Shows.GetShowRatings(ctx, id); return r, err }},
 		{name: "GetRelatedShows", method: http.MethodGet, path: "/shows/breaking-bad/related", query: "limit=10", body: shows,
 			call: func(c *Client) (any, error) { r, _, err := c.Shows.GetRelatedShows(ctx, id, opts); return r, err }},
+		{name: "GetRelatedShows personalized", method: http.MethodGet, path: "/shows/breaking-bad/related", query: "limit=10&personalized=true", body: shows,
+			call: func(c *Client) (any, error) {
+				r, _, err := c.Shows.GetRelatedShows(ctx, id, &uri.ListOptions{Limit: 10, Personalized: true})
+				return r, err
+			}},
 		{name: "GetShowStats", method: http.MethodGet, path: "/shows/breaking-bad/stats", body: stats,
 			call: func(c *Client) (any, error) { r, _, err := c.Shows.GetShowStats(ctx, id); return r, err }},
 		{name: "GetShowStudios", method: http.MethodGet, path: "/shows/breaking-bad/studios", body: `[{"name":"Sony Pictures Television","country":"us"}]`,

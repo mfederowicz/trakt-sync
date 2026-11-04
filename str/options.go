@@ -85,6 +85,7 @@ type Options struct {
 	PagesLimit        int
 	Parental          ParentalGuide
 	PerPage           int
+	Personalized      bool
 	Period            string
 	Privacy           string
 	DisplayNumbers    bool
