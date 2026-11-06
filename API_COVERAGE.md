@@ -39,10 +39,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`social_recommendations`](#social_recommendations) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
-| [`users`](#users) | 89 | 0 | 0 | 18 | 1 | 108 |
+| [`users`](#users) | 89 | 0 | 0 | 19 | 1 | 109 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **310** | **0** | **0** | **28** | **3** | **341** |
+| **Total** | **310** | **0** | **0** | **29** | **3** | **342** |
 
 ## calendars
 
@@ -395,6 +395,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
 | ⚠️ | PUT | `/users/avatar` | Update avatar |  |
+| ⚠️ | DELETE | `/users/avatar` | Remove avatar |  |
 | ✅ | GET | `/users/blocked` | Get blocked users | `UsersService.GetBlockedUsers` |
 | ✅ | POST | `/users/hidden/calendar/remove` | Remove hidden calendar items | `UsersService.RemoveHiddenItems` |
 | ✅ | GET | `/users/hidden/dropped` | Get dropped shows | `UsersService.GetHiddenItems` |
@@ -537,6 +538,6 @@ The ⚠️ routes are live API gaps, not client bugs. A row that ends with "Upst
 | `UsersService.GetMonthInReview`, `GetYearInReview`, `GetSocialActivity` | `GET /users/{id}/mir/{year}/{month}`, `/users/{id}/yir/{year}`, `/users/{id}/{type}/activities` | live API returns 401 while `GET /users/reactions/comments` (OAuth required) works with the same token (checked 2026-09-25); looks not open to API apps. The CLI explains the 401. Activities answered 403 on 2026-10-31, and the contract now marks it limited to first-party apps; the CLI explains the 403 as limited access. Upstream issue: not filed yet |
 | `PeopleService.GetListsContainingThisPerson` | `GET /people/{id}/lists/{type}/{sort}` | live API returns 200 with an empty array and `X-Pagination-Item-Count: 0` for every person, type and sort tried, while `GET /movies/{id}/lists/{type}/{sort}` returns lists (checked 2026-10-01, again 2026-10-02 and 2026-10-31). On 2026-10-20 the contract marked the route deprecated (trakt/trakt-api `d09fe69`: "Lists no longer support people, so this always returns an empty array"); the action and method are deprecated in the `deprecation` registry and still send their request. |
 | `UsersService.GetHiddenItems` | `GET /users/hidden/comments` | live API returns 200 with an empty array, with and without `type=user` / `type=users`, right after `POST /users/hidden/comments` answered `added.users: 1`; the other sections (e.g. `calendar`) return their items (checked 2026-10-02). The route stays ✅ because it serves the other sections. Upstream issue: not filed yet |
-| - | `PUT /users/avatar`, `PUT /users/set_cover` | the contract marks both Limited Access: "available only to first-party Trakt applications. Third-party applications receive a `401` response even with a valid OAuth token." Not implemented. |
+| - | `PUT /users/avatar`, `DELETE /users/avatar`, `PUT /users/set_cover` | the contract marks all three Limited Access: "available only to first-party Trakt applications. Third-party applications receive a `401` response even with a valid OAuth token." Not implemented. |
 | `UsersService.GetDataSyncs`, `GetDataSync`, `GetDataSyncItems`, `UndoDataSync` | `/users/syncs/*` (all 6 routes) | `GET /users/syncs/` returns 401 with the maintainer's token (checked 2026-09-25), which works on other OAuth routes such as `/users/reactions/comments`; looks not open to API apps. The other routes were not tried; assumed the same. The CLI explains a 401. Upstream issue: not filed yet |
 | `UsersService.GetPlexSettings`, `UpdatePlexSettings`, `ConnectPlex`, `DisconnectPlex`, `GetPlexServers`, `GetPlexServerAccounts`, `SyncPlex` | `/users/settings/plex/*` (all 7 routes) | `GET /users/settings/plex/` and `GET /users/settings/plex/servers` return 401 with the maintainer's token (checked 2026-09-25), which works on other OAuth routes; looks not open to API apps. The write routes were not tried; assumed the same. The CLI explains a 401 (a Plex `error_code` 401 is reported as a Plex error instead). Upstream issue: not filed yet |
