@@ -104,3 +104,48 @@ func TestUsersWritesHandlers(t *testing.T) {
 		})
 	}
 }
+
+// The live API accepted add and delete from a non-VIP account (checked 2026-11-08), so the output must not call them VIP only.
+func TestUsersSavedFilterWritesNoVIPNote(t *testing.T) {
+	tests := []struct {
+		name    string
+		handler Handler
+		options str.Options
+		input   string
+		status  int
+		body    string
+	}{
+		{name: "add", handler: UsersAddSavedFiltersHandler{}, options: str.Options{Action: consts.AddSavedFilters},
+			input: `[{"name":"Sci-fi","url":"https://trakt.tv/movies/trending?genres=science-fiction"}]`, status: http.StatusCreated, body: `{"added":[{"id":101}],"skipped":[]}`},
+		{name: "delete", handler: UsersDeleteSavedFilterHandler{}, options: str.Options{Action: consts.DeleteSavedFilter, ID: "101"}, status: http.StatusNoContent},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+
+			s.Mux.HandleFunc("/users/", func(w http.ResponseWriter, _ *http.Request) {
+				w.WriteHeader(tt.status)
+				test.SafeFprint(w, tt.body)
+			})
+
+			dir := t.TempDir()
+			options := tt.options
+			options.Output = filepath.Join(dir, "out.json")
+			if tt.input != "" {
+				options.Items = filepath.Join(dir, "input.json")
+				test.AssertNilError(t, os.WriteFile(options.Items, []byte(tt.input), consts.X644))
+			}
+			var err error
+			out := captureStdout(t, func() {
+				err = tt.handler.Handle(&options, s.Client)
+			})
+			test.AssertNilError(t, err)
+			if strings.Contains(out, "VIP only") {
+				t.Errorf("output calls the route VIP only: %q", out)
+			}
+		})
+	}
+}

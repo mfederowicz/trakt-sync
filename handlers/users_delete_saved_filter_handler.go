@@ -24,7 +24,7 @@ func (UsersDeleteSavedFilterHandler) Handle(options *str.Options, client *trakt.
 		return errors.New("set saved filter id ie: -i 101 (ids from users -a saved_filters)")
 	}
 
-	printer.Printf("Delete saved filter %d (VIP only)\n", id)
+	printer.Printf("Delete saved filter %d\n", id)
 	resp, err := client.Users.DeleteSavedFilter(cli.ContextFromOptions(options), id)
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found saved filter:%d", id)
