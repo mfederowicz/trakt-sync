@@ -98,6 +98,9 @@ type UsersPlexServersHandler struct{}
 func (UsersPlexServersHandler) Handle(options *str.Options, client *trakt.Client) error {
 	printer.Println("Returns your Plex servers.")
 	result, resp, err := client.Users.GetPlexServers(cli.ContextFromOptions(options))
+	if resp != nil && resp.StatusCode == http.StatusMethodNotAllowed {
+		return fmt.Errorf(consts.MethodNotAllowedMsg, options.Action, err)
+	}
 	if err = plexError(options.Action, resp, err); err != nil {
 		return err
 	}

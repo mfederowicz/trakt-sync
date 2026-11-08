@@ -823,6 +823,7 @@ $ ./trakt-sync users -a undo_data_sync -i 157
 ##### Plex settings
 > **Note:** as of 2026-09-25 Trakt answers `plex_settings` and `plex_servers` with 401 for API apps (other OAuth routes work with the
 > same token), and the other Plex actions are expected to do the same; they fail with `this route is not open to API apps yet`.
+> Since 2026-10-31 `plex_servers` gets 405 instead (checked again 2026-11-04 and 2026-11-08) and fails with `it looks not served to API apps right now`.
 
 Connection status, real-time scrobbler webhook, sync selection and toggles.
 ```console
