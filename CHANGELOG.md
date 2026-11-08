@@ -38,6 +38,7 @@ schedule.
 
 - `users -a plex_servers` explains the 405 Trakt has answered since 2026-10-31 (the API docs still list the route as GET) instead of printing a bare `405` error.
 - `users -a add_saved_filters` and `users -a delete_saved_filter` no longer print "VIP only": the live API accepted both from a non-VIP account (checked 2026-11-08).
+- `docs/movies.md`: the `movies` examples used the show slug `the-sopranos`; they now use the movie `tron-legacy-2010`.
 
 ## [1.28.0] - 2026-11-04
 
