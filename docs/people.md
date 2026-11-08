@@ -33,7 +33,7 @@ Deprecated since 2026-10-20: the Trakt API contract marks the endpoint deprecate
 ```console
 $ ./trakt-sync people -a refresh -i john-wayne
 ```
-Deprecated since 2026-10-13: Trakt dropped this endpoint from its API contract. `people -a refresh` still works (checked 2026-10-13) and prints a deprecation notice; it may stop working.
+Deprecated since 2026-10-13: Trakt dropped this endpoint from its API contract. `people -a refresh` still works (checked 2026-10-13 and 2026-11-08) and prints a deprecation notice; it may stop working.
 ##### Report a person
 ```console
 $ ./trakt-sync people -a report -i john-wayne -r metadata -message "birthday is wrong"
