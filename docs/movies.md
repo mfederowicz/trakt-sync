@@ -116,64 +116,64 @@ $ ./trakt-sync movies -a updated_ids -start_date YYYY-MM-DD
 ```
 ##### Get a movie
 ```console
-$ ./trakt-sync movies -a summary -i the-sopranos
+$ ./trakt-sync movies -a summary -i tron-legacy-2010
 ```
 ##### Get all movie aliases
 ```console
-$ ./trakt-sync movies -a aliases -i the-sopranos
+$ ./trakt-sync movies -a aliases -i tron-legacy-2010
 ```
 ##### Get all movie releases
 ```console
-$ ./trakt-sync movies -a releases -i the-sopranos -country us
+$ ./trakt-sync movies -a releases -i tron-legacy-2010 -country us
 ```
 ##### Get all movie translations
 ```console
-$ ./trakt-sync movies -a translations -i the-sopranos -language es
+$ ./trakt-sync movies -a translations -i tron-legacy-2010 -language es
 ```
 ##### Get all movie comments
 ```console
-$ ./trakt-sync movies -a comments -i the-sopranos -s newest
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s newest
 ```
 ```console
-$ ./trakt-sync movies -a comments -i the-sopranos -s oldest
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s oldest
 ```
 ```console
-$ ./trakt-sync movies -a comments -i the-sopranos -s likes
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s likes
 ```
 ```console
-$ ./trakt-sync movies -a comments -i the-sopranos -s replies
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s replies
 ```
 ```console
-$ ./trakt-sync movies -a comments -i the-sopranos -s highest
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s highest
 ```
 ```console
-$ ./trakt-sync movies -a comments -i the-sopranos -s lowest
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s lowest
 ```
 ```console
-$ ./trakt-sync movies -a comments -i the-sopranos -s plays
+$ ./trakt-sync movies -a comments -i tron-legacy-2010 -s plays
 ```
 ##### Get lists containing the movie
 ```console
-$ ./trakt-sync movies -a lists -i the-sopranos -t all -s popular
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s popular
 ```
 ```console
-$ ./trakt-sync movies -a lists -i the-sopranos -t all -s likes
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s likes
 ```
 ```console
-$ ./trakt-sync movies -a lists -i the-sopranos -t all -s comments
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s comments
 ```
 ```console
-$ ./trakt-sync movies -a lists -i the-sopranos -t all -s items
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s items
 ```
 ```console
-$ ./trakt-sync movies -a lists -i the-sopranos -t all -s added
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s added
 ```
 ```console
-$ ./trakt-sync movies -a lists -i the-sopranos -t all -s updated
+$ ./trakt-sync movies -a lists -i tron-legacy-2010 -t all -s updated
 ```
 ##### Get all people for movie
 ```console
-$ ./trakt-sync movies -a people -i the-sopranos
+$ ./trakt-sync movies -a people -i tron-legacy-2010
 ```
 `-ex markdown` adds markdown links to the movies and shows mentioned in the person biographies.
 ```console
@@ -181,30 +181,30 @@ $ ./trakt-sync movies -a people -i tron-legacy-2010 -ex full,markdown
 ```
 ##### Get movie ratings
 ```console
-$ ./trakt-sync movies -a ratings -i the-sopranos
+$ ./trakt-sync movies -a ratings -i tron-legacy-2010
 ```
 ##### Get related movies
 ```console
-$ ./trakt-sync movies -a related -i the-sopranos
+$ ./trakt-sync movies -a related -i tron-legacy-2010
 ```
 `-personalized` asks Trakt to re-order the related movies toward your taste. Trakt applies it only for VIP accounts and ignores it for everyone else.
 ```console
-$ ./trakt-sync movies -a related -i the-sopranos -personalized
+$ ./trakt-sync movies -a related -i tron-legacy-2010 -personalized
 ```
 ##### Get movies stats
 ```console
-$ ./trakt-sync movies -a stats -i the-sopranos
+$ ./trakt-sync movies -a stats -i tron-legacy-2010
 ```
 ```console
 $ ./trakt-sync movies -a sentiments -i tron-legacy-2010 -> export_movies_sentiments_tron-legacy-2010.json
 ```
 ##### Get movies studios
 ```console
-$ ./trakt-sync movies -a studios -i the-sopranos
+$ ./trakt-sync movies -a studios -i tron-legacy-2010
 ```
 ##### Get users watching right now
 ```console
-$ ./trakt-sync movies -a watching -i the-sopranos
+$ ./trakt-sync movies -a watching -i tron-legacy-2010
 ```
 ##### Get where to watch
 ```console
@@ -221,7 +221,7 @@ $ ./trakt-sync movies -a justwatch_links -i tron-legacy-2010 -country pl -> expo
 an API app without access gets a limited access error.
 ##### Get all videos
 ```console
-$ ./trakt-sync movies -a videos -i the-sopranos
+$ ./trakt-sync movies -a videos -i tron-legacy-2010
 ```
 ##### Refresh movie metadata (deprecated)
 Deprecated since 2026-10-13: Trakt dropped this endpoint from its API contract. `movies -a refresh` still works (checked 2026-10-13 and 2026-11-08) and prints a deprecation notice; it may stop working.
