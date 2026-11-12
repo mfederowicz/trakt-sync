@@ -37,6 +37,7 @@ schedule.
 ### Fixed
 
 - Library: `str.Movie` sends and reads `Notes` under the contract key `notes`; it used `note`, so Trakt ignored the notes of a movie added with `SyncService.AddItemsToWatchlist`, `AddItemsToFavorites` or `UsersService.AddListItems`. The CLI does not send item notes, so its output does not change.
+- `sync -a update_favorites` sends only the settings you give (`-description`, `-sort_by`, `-sort_how`). Before, a setting without its flag was sent with its default, so `-description` alone reset the sort to `rank`/`asc` and `-sort_by` alone cleared the description. With none of the three it now stops with a message instead of sending a request.
 
 ## [1.29.0] - 2026-11-12
 

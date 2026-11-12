@@ -3,6 +3,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cli"
@@ -40,10 +41,20 @@ func (m SyncUpdateFavoritesHandler) Handle(options *str.Options, client *trakt.C
 }
 
 func (SyncUpdateFavoritesHandler) syncUpdateFavorites(client *trakt.Client, options *str.Options) (*str.PersonalList, error) {
+	// a setting that is not given keeps the value the favorites have; a flag default must not change it
 	update := new(str.PersonalList)
-	update.Description = &options.Description
-	update.SortBy = &options.SortBy
-	update.SortHow = &options.SortHow
+	if len(options.Description) > consts.ZeroValue {
+		update.Description = &options.Description
+	}
+	if len(options.SortBy) > consts.ZeroValue {
+		update.SortBy = &options.SortBy
+	}
+	if len(options.SortHow) > consts.ZeroValue {
+		update.SortHow = &options.SortHow
+	}
+	if update.Description == nil && update.SortBy == nil && update.SortHow == nil {
+		return nil, errors.New(consts.EmptyFavoritesSettingsMsg)
+	}
 
 	result, _, err := client.Sync.UpdateFavorites(cli.ContextFromOptions(options), update)
 	if err != nil {

@@ -43,6 +43,7 @@ const (
 	DisplayNumbersUsage          = "set display_numbers ie: -display_numbers true or false"
 	AllowCommentsUsage           = "set allow_comments ie: -allow_comments true or false"
 	EmptyCommentIDMsg            = "set commentId ie: -comment_id 123"
+	EmptyFavoritesSettingsMsg    = "set at least one of -description, -sort_by, -sort_how"
 	EmptyFollowerRequestMsg      = "set FollowerRequest ie: -follower_request 123"
 	EmptyHistoryIDMsg            = "set historyId ie: -i 12345 from watched history"
 	EmptyIncludeReplies          = "set includeReplies ie: -include_replies true or false"
