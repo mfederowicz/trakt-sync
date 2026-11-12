@@ -465,6 +465,9 @@ func setOptionsDependsOnModuleSmartLists(options str.Options) str.Options {
 	options.Metascores = *_smartListsMetascores
 	options.Votes = *_smartListsVotes
 	options.ImdbVotes = *_smartListsImdbVotes
+	options.Awards = *_smartListsAwards
+	options.AwardYears = *_smartListsAwardYears
+	options.AwardWon = *_smartListsAwardWon
 	options.Parental = str.ParentalGuide{
 		Alcohol:        *_smartListsAlcohol,
 		Frightening:    *_smartListsFrightening,

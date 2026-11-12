@@ -31,6 +31,11 @@ A value of a list filter (`-genres`, `-studios`, `-people`, `-watchnow` and simi
 ```console
 $ ./trakt-sync smart_lists -a items -i <slug> -studios pixar,-dreamworks-animation -watchnow=-netflix
 ```
+`-awards` (award slugs, comma separated) keeps titles nominated for or winning any of the listed awards. `-award_years` (ceremony year range `min-max`, either side optional) and `-award_won` (only the winners) need `-awards`.
+Trakt lists the award slugs only through a route limited to its own apps; `oscars-best-picture` is the example its API docs give:
+```console
+$ ./trakt-sync smart_lists -a items -i <slug> -awards oscars-best-picture -award_years 2020-2026 -award_won
+```
 `-released_within_days <1-3650>` keeps titles released in the last N days (movies by release date, shows by first aired date). `-tmdb_ratings` (0 to 10), `-metascores` (0 to 100),
 `-votes` (Trakt votes) and `-imdb_votes` take a range `min-max`; either side can be left out:
 ```console

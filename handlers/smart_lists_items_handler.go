@@ -59,6 +59,10 @@ func (h SmartListsItemsHandler) Handle(options *str.Options, client *trakt.Clien
 		TmdbRatings:        options.TmdbRatings,
 		Votes:              options.Votes,
 
+		Awards:     options.Awards,
+		AwardYears: options.AwardYears,
+		AwardWon:   options.AwardWon,
+
 		ParentalAlcohol:        options.Parental.Alcohol,
 		ParentalFrightening:    options.Parental.Frightening,
 		ParentalIncludeUnrated: options.Parental.IncludeUnrated,
@@ -135,8 +139,13 @@ func smartListItemsSort(options *str.Options) error {
 	})
 }
 
-// validSmartListItemsFilters checks the format of -watchnow_country and the parental guide ranges, -released_within_days and the people enums.
+// validSmartListItemsFilters checks the format of -watchnow_country and the parental guide ranges, -released_within_days, the people enums
+// and that -award_years and -award_won come with -awards.
 func validSmartListItemsFilters(options *str.Options) error {
+	if len(options.Awards) == consts.ZeroValue && (len(options.AwardYears) > consts.ZeroValue || options.AwardWon) {
+		return errors.New(consts.SmartListAwardsNeededMsg)
+	}
+
 	if len(options.WatchNowCountry) > consts.ZeroValue && !watchNowCountry.MatchString(options.WatchNowCountry) {
 		return fmt.Errorf("watchnow_country '%s' is not valid, want a 2 character lowercase code ie: us", options.WatchNowCountry)
 	}

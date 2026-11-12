@@ -16,6 +16,9 @@ type SmartListFilters struct {
 	People                 []string  `json:"people,omitempty"`
 	PeopleOperator         *string   `json:"people_operator,omitempty"`
 	PeopleRole             *string   `json:"people_role,omitempty"`
+	Awards                 []string  `json:"awards,omitempty"`
+	AwardYears             []int     `json:"award_years,omitempty"`
+	AwardWon               *bool     `json:"award_won,omitempty"`
 	WatchNow               []string  `json:"watchnow,omitempty"`
 	WatchNowCountry        *string   `json:"watchnow_country,omitempty"`
 	Years                  []int     `json:"years,omitempty"`
