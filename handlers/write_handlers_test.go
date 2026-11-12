@@ -68,6 +68,8 @@ func writeHandlers() []writeHandler {
 	updateItem.Notes = "rewatch"
 	updateFavorites := sync("update_favorites")
 	updateFavorites.SortBy = "added"
+	updateWatchlist := sync("update_watchlist")
+	updateWatchlist.SortBy = "added"
 	return []writeHandler{
 		{name: "comments delete comment", handler: CommentsCommentHandler{}, options: removeComment, method: http.MethodDelete, path: "/comments/417", status: http.StatusNoContent},
 		{name: "comments reply", handler: CommentsRepliesHandler{}, options: reply, sends: `"comment":"agreed, the sequel is good too"`, method: http.MethodPost, path: "/comments/417/replies", status: http.StatusCreated},
@@ -91,7 +93,7 @@ func writeHandlers() []writeHandler {
 		{name: "sync reorder watchlist", handler: SyncReorderWatchlistHandler{}, options: sync("reorder_watchlist"), items: movies, sends: `{"rank":[7]}`, method: http.MethodPost, path: "/sync/watchlist/reorder", writes: true},
 		{name: "sync update favorite item", handler: SyncUpdateFavoriteItemHandler{}, options: str.Options{ListItemID: 7, Notes: "rewatch"}, sends: note, method: http.MethodPut, path: "/sync/favorites/7", status: http.StatusNoContent},
 		{name: "sync update favorites", handler: SyncUpdateFavoritesHandler{}, options: updateFavorites, sends: `"sort_by"`, method: http.MethodPut, path: "/sync/favorites", writes: true},
-		{name: "sync update watchlist", handler: SyncUpdateWatchlistHandler{}, options: sync("update_watchlist"), sends: `"sort_by"`, method: http.MethodPut, path: "/sync/watchlist", writes: true},
+		{name: "sync update watchlist", handler: SyncUpdateWatchlistHandler{}, options: updateWatchlist, sends: `"sort_by"`, method: http.MethodPut, path: "/sync/watchlist", writes: true},
 		{name: "sync update watchlist item", handler: SyncUpdateWatchlistItemHandler{}, options: str.Options{ListItemID: 7, Notes: "rewatch"}, sends: note, method: http.MethodPut, path: "/sync/watchlist/7", status: http.StatusNoContent},
 		{name: "users add hidden items", handler: UsersAddHiddenItemsHandler{}, options: users("add_hidden_items"), items: movies, sends: movie, method: http.MethodPost, path: "/users/hidden/calendar", status: http.StatusCreated, writes: true},
 		{name: "users add list items", handler: UsersAddListItemsHandler{}, options: users("add_list_items"), items: movies, sends: movie, method: http.MethodPost, path: "/users/me/lists/55/items", status: http.StatusCreated, writes: true},
