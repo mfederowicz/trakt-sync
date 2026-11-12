@@ -5,7 +5,7 @@ type Movie struct {
 	Title                 *string      `json:"title,omitempty"`
 	Year                  *int         `json:"year,omitempty"`
 	IDs                   *IDs         `json:"ids,omitempty"`
-	Notes                 *string      `json:"note,omitempty"`
+	Notes                 *string      `json:"notes,omitempty"`
 	Tagline               *string      `json:"tagline,omitempty"`
 	Overview              *string      `json:"overview,omitempty"`
 	Released              *string      `json:"released,omitempty"`
