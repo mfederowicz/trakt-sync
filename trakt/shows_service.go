@@ -246,6 +246,29 @@ func (s *ShowsService) GetAnticipatedShows(ctx context.Context, opts *uri.ListOp
 	return list, resp, nil
 }
 
+// GetAnticipatedRecommendations Returns unreleased shows ranked for the taste of the user, at most 100 in total.
+//
+// API docs: https://docs.trakt.tv/reference/getshowsanticipatedrecommendations
+func (s *ShowsService) GetAnticipatedRecommendations(ctx context.Context, opts *uri.ListOptions) ([]*str.AnticipatedRecommendation, *str.Response, error) {
+	var url = "shows/recommendations/anticipated"
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	req, err := s.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.AnticipatedRecommendation{}
+	resp, err := s.client.Do(ctx, req, &list)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
 // GetRecentlyUpdatedShows Returns all shows updated since the specified UTC date and time.
 // API docs: https://docs.trakt.tv/reference/getshowsupdates
 func (s *ShowsService) GetRecentlyUpdatedShows(ctx context.Context, startDate string, opts *uri.ListOptions) ([]*str.ShowsItem, *str.Response, error) {

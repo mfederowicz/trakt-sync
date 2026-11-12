@@ -224,6 +224,29 @@ func (m *MoviesService) GetAnticipatedMovies(ctx context.Context, opts *uri.List
 	return list, resp, nil
 }
 
+// GetAnticipatedRecommendations Returns unreleased movies ranked for the taste of the user, at most 100 in total.
+//
+// API docs: https://docs.trakt.tv/reference/getmoviesanticipatedrecommendations
+func (m *MoviesService) GetAnticipatedRecommendations(ctx context.Context, opts *uri.ListOptions) ([]*str.AnticipatedRecommendation, *str.Response, error) {
+	var url = "movies/recommendations/anticipated"
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.AnticipatedRecommendation{}
+	resp, err := m.client.Do(ctx, req, &list)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
 // GetBoxoffice Returns the top 10 grossing movies in the U.S. box office last weekend. Updated every Monday morning.
 // API docs: https://docs.trakt.tv/reference/getmoviesboxoffice
 func (m *MoviesService) GetBoxoffice(ctx context.Context, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {

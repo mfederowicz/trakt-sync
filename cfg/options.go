@@ -872,7 +872,7 @@ func getOutputForModuleWatchNow(options *str.Options) string {
 
 func getOutputForModuleMovies(options *str.Options) string {
 	switch options.Action {
-	case consts.Trending, consts.Popular, consts.Anticipated, consts.Boxoffice, consts.Updates, consts.UpdatedIDs, consts.Hot:
+	case consts.Trending, consts.Popular, consts.Anticipated, consts.AnticipatedRecs, consts.Boxoffice, consts.Updates, consts.UpdatedIDs, consts.Hot:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
 	case consts.Favorited, consts.Played, consts.Watched, consts.Collected, consts.Streaming:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.Period)
@@ -888,7 +888,7 @@ func getOutputForModuleMovies(options *str.Options) string {
 
 func getOutputForModuleShows(options *str.Options) string {
 	switch options.Action {
-	case consts.Trending, consts.Popular, consts.Anticipated, consts.Boxoffice, consts.Updates, consts.UpdatedIDs:
+	case consts.Trending, consts.Popular, consts.Anticipated, consts.AnticipatedRecs, consts.Boxoffice, consts.Updates, consts.UpdatedIDs:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, options.Action)
 	case consts.Favorited, consts.Played, consts.Watched, consts.Collected:
 		options.Output = fmt.Sprintf(consts.DefaultOutputFormat3, options.Module, options.Action, options.Period)

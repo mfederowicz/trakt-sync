@@ -19,7 +19,7 @@ var (
 var MediaCmd = &Command{
 	Name:    "media",
 	Usage:   "",
-	Summary: "Returns movies and shows together: trending, popular, anticipated.",
+	Summary: "Returns movies and shows together: trending, popular, anticipated, anticipated_recommendations.",
 	Help:    `media command`,
 }
 
@@ -32,11 +32,13 @@ func mediaFunc(cmd *Command, _ ...string) error {
 		consts.Trending:    handlers.MediaTrendingHandler{},
 		consts.Popular:     handlers.MediaPopularHandler{},
 		consts.Anticipated: handlers.MediaAnticipatedHandler{},
+
+		consts.AnticipatedRecs: handlers.MediaAnticipatedRecommendationsHandler{},
 	}
 	handler, err := cmd.common.GetHandlerForMap(options.Action, allHandlers)
 
 	if err != nil {
-		cmd.common.GenActionsUsage(cmd.Name, []string{consts.Trending, consts.Popular, consts.Anticipated})
+		cmd.common.GenActionsUsage(cmd.Name, []string{consts.Trending, consts.Popular, consts.Anticipated, consts.AnticipatedRecs})
 		return unknownActionError(cmd.Name, options.Action)
 	}
 

@@ -42,7 +42,7 @@ var (
 
 	validShowsActions = []string{
 		consts.Trending, consts.Popular, consts.Favorited, consts.Played, consts.Watched, consts.Collected,
-		consts.Anticipated, consts.Updates, consts.UpdatedIDs, consts.Summary, consts.Aliases, consts.Certifications,
+		consts.Anticipated, consts.AnticipatedRecs, consts.Updates, consts.UpdatedIDs, consts.Summary, consts.Aliases, consts.Certifications,
 		consts.CollectionProgress, consts.WatchedProgress, consts.ResetShowProgress, consts.Translations, consts.Comments, consts.Lists, consts.People, consts.Ratings,
 		consts.Related, consts.Stats, consts.Studios, consts.Watching, consts.NextEpisode, consts.LastEpisode, consts.Videos, consts.Refresh,
 		consts.Report, consts.Sentiments, consts.WatchNow, consts.JustwatchLinks, consts.RefreshJustwatch}
@@ -81,6 +81,7 @@ func showsFunc(cmd *Command, _ ...string) error {
 		consts.Watched:            handlers.ShowsWatchedHandler{},
 		consts.Collected:          handlers.ShowsCollectedHandler{},
 		consts.Anticipated:        handlers.ShowsAnticipatedHandler{},
+		consts.AnticipatedRecs:    handlers.ShowsAnticipatedRecommendationsHandler{},
 		consts.Updates:            handlers.ShowsUpdatesHandler{},
 		consts.UpdatedIDs:         handlers.ShowsUpdatedIDsHandler{},
 		consts.Summary:            handlers.ShowsSummaryHandler{},

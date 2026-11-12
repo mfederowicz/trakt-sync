@@ -21,3 +21,8 @@ $ ./trakt-sync media -a trending -theme halloween
 ```console
 $ ./trakt-sync media -a trending -genres action,drama -years 2020-2026 -ratings 75-100
 ```
+##### Anticipated recommendations
+Needs your login (OAuth). Returns unreleased movies and shows ranked for your taste, at most 100 in total, each with a `score` and its `released` date (`YYYY-MM-DD`, left out when Trakt does not know it yet). Takes no filters or `-ex`; paging follows `per_page` and `pages_limit`.
+```console
+$ ./trakt-sync media -a anticipated_recommendations -> export_media_anticipated_recommendations.json
+```

@@ -51,6 +51,29 @@ func (m *MediaService) GetAnticipatedMedia(ctx context.Context, opts *uri.ListOp
 	return list, resp, nil
 }
 
+// GetAnticipatedRecommendations Returns unreleased movies and shows ranked for the taste of the user, at most 100 in total.
+//
+// API docs: https://docs.trakt.tv/reference/getmediaanticipatedrecommendations
+func (m *MediaService) GetAnticipatedRecommendations(ctx context.Context, opts *uri.ListOptions) ([]*str.AnticipatedRecommendation, *str.Response, error) {
+	var url = "media/recommendations/anticipated"
+	url, err := uri.AddQuery(url, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	req, err := m.client.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := []*str.AnticipatedRecommendation{}
+	resp, err := m.client.Do(ctx, req, &list)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return list, resp, nil
+}
+
 func (m *MediaService) fetchList(ctx context.Context, url string, opts *uri.ListOptions, list any) (*str.Response, error) {
 	url, err := uri.AddQuery(url, opts)
 	if err != nil {

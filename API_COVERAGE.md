@@ -25,8 +25,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`genres`](#genres) | 1 | 0 | 0 | 0 | 0 | 1 |
 | [`languages`](#languages) | 1 | 0 | 0 | 0 | 0 | 1 |
 | [`lists`](#lists) | 15 | 0 | 0 | 0 | 0 | 15 |
-| [`media`](#media) | 3 | 0 | 1 | 0 | 0 | 4 |
-| [`movies`](#movies) | 29 | 0 | 1 | 3 | 0 | 33 |
+| [`media`](#media) | 4 | 0 | 0 | 0 | 0 | 4 |
+| [`movies`](#movies) | 30 | 0 | 0 | 3 | 0 | 33 |
 | [`networks`](#networks) | 1 | 0 | 0 | 0 | 0 | 1 |
 | [`notes`](#notes) | 5 | 0 | 0 | 0 | 0 | 5 |
 | [`oauth`](#oauth) | 3 | 0 | 0 | 0 | 2 | 5 |
@@ -35,7 +35,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`scrobble`](#scrobble) | 3 | 0 | 0 | 0 | 0 | 3 |
 | [`search`](#search) | 6 | 0 | 0 | 0 | 0 | 6 |
 | [`seasons`](#seasons) | 1 | 0 | 0 | 0 | 0 | 1 |
-| [`shows`](#shows) | 58 | 0 | 1 | 3 | 0 | 62 |
+| [`shows`](#shows) | 59 | 0 | 0 | 3 | 0 | 62 |
 | [`smart-lists`](#smart-lists) | 4 | 0 | 0 | 0 | 0 | 4 |
 | [`social_recommendations`](#social_recommendations) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
@@ -43,7 +43,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`users`](#users) | 89 | 0 | 0 | 21 | 1 | 111 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **310** | **0** | **3** | **36** | **3** | **352** |
+| **Total** | **313** | **0** | **0** | **36** | **3** | **352** |
 
 ## awards
 
@@ -158,7 +158,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | :---: | --- | --- | --- | --- |
 | ✅ | GET | `/media/anticipated` | Get anticipated media | `MediaService.GetAnticipatedMedia` |
 | ✅ | GET | `/media/popular` | Get popular media | `MediaService.GetPopularMedia` |
-| ⬜ | GET | `/media/recommendations/anticipated` | Get anticipated media recommendations |  |
+| ✅ | GET | `/media/recommendations/anticipated` | Get anticipated media recommendations | `MediaService.GetAnticipatedRecommendations` |
 | ✅ | GET | `/media/trending` | Get trending media | `MediaService.GetTrendingMedia` |
 
 ## movies
@@ -172,7 +172,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ⚠️ | GET | `/movies/hot` | Get hot movies | `MoviesService.GetHotMovies` |
 | ✅ | GET | `/movies/played/{period}` | Get the most played movies | `MoviesService.GetPlayedMovies` |
 | ✅ | GET | `/movies/popular` | Get popular movies | `MoviesService.GetPopularMovies` |
-| ⬜ | GET | `/movies/recommendations/anticipated` | Get anticipated movie recommendations |  |
+| ✅ | GET | `/movies/recommendations/anticipated` | Get anticipated movie recommendations | `MoviesService.GetAnticipatedRecommendations` |
 | ⚠️ | GET | `/movies/streaming/{period}` | Get streaming movies | `MoviesService.GetStreamingMovies` |
 | ✅ | GET | `/movies/trending` | Get trending movies | `MoviesService.GetTrendingMovies` |
 | ✅ | GET | `/movies/updates/id/{start_date}` | Get recently updated movie Trakt IDs | `MoviesService.GetRecentlyUpdatedMoviesTraktIDs` |
@@ -283,7 +283,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ⚠️ | GET | `/shows/hot` | Get hot shows |  |
 | ✅ | GET | `/shows/played/{period}` | Get the most played shows | `ShowsService.GetPlayedShows` |
 | ✅ | GET | `/shows/popular` | Get popular shows | `ShowsService.GetPopularShows` |
-| ⬜ | GET | `/shows/recommendations/anticipated` | Get anticipated show recommendations |  |
+| ✅ | GET | `/shows/recommendations/anticipated` | Get anticipated show recommendations | `ShowsService.GetAnticipatedRecommendations` |
 | ⚠️ | GET | `/shows/streaming/{period}` | Get streaming shows |  |
 | ✅ | GET | `/shows/trending` | Get trending shows | `ShowsService.GetTrendingShows` |
 | ✅ | GET | `/shows/updates/id/{start_date}` | Get recently updated show Trakt IDs | `ShowsService.GetRecentlyUpdatedShowsTraktIDs` |
