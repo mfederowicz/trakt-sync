@@ -35,6 +35,9 @@ var (
 	_smartListsMetascores        = SmartListsCmd.Flag.String("metascores", consts.EmptyString, consts.SmartListMetascoresUsage)
 	_smartListsVotes             = SmartListsCmd.Flag.String("votes", consts.EmptyString, consts.SmartListVotesUsage)
 	_smartListsImdbVotes         = SmartListsCmd.Flag.String("imdb_votes", consts.EmptyString, consts.SmartListImdbVotesUsage)
+	_smartListsAwards            = SmartListsCmd.Flag.String("awards", consts.EmptyString, consts.SmartListAwardsUsage)
+	_smartListsAwardYears        = SmartListsCmd.Flag.String("award_years", consts.EmptyString, consts.SmartListAwardYearsUsage)
+	_smartListsAwardWon          = SmartListsCmd.Flag.Bool("award_won", false, consts.SmartListAwardWonUsage)
 )
 
 // SmartListsCmd returns smart list definitions and the items they resolve to.

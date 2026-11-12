@@ -32,6 +32,8 @@ schedule.
 
 ### Added
 
+- `smart_lists -a items` takes `-awards` (award slugs, like `oscars-best-picture`), `-award_years` (ceremony year range) and `-award_won` (only the winners); the last two need `-awards`. The `users` smart list actions (`smart_lists`, `smart_list`, `add_smart_list`, `update_smart_list`) keep `awards`, `award_years` and `award_won` in `filters`, for export and for sending. Library: `str.SmartListFilters` has the fields `Awards`, `AwardYears` and `AwardWon`, `uri.SmartListItemsOptions` has `Awards`, `AwardYears` and `AwardWon`, and `str.Options` has `Awards`, `AwardYears` and `AwardWon`.
+
 - `people -a summary` takes `-language` (like `pt` or `pt-br`) to pick the language of the person's Wikipedia page; a code Trakt rejects gets a readable error. With `-ex full` the export's `social_ids` now keeps `tiktok`, `youtube`, `wikidata` and `wikipedia_language`. Library: `uri.ListOptions` has the field `Language`, sent as `language`, and `str.SocialIDs` has `TikTok`, `YouTube`, `Wikidata` and `WikipediaLanguage`.
 
 ### Changed

@@ -52,6 +52,10 @@ func TestSmartListsHandlers(t *testing.T) {
 			wantErr: "people_operator 'xor' is not valid", wantNoAPI: true},
 		{name: "items invalid people_role", handler: SmartListsItemsHandler{}, options: str.Options{Action: consts.Items, InternalID: "top-sci-fi", PeopleRole: "actor"},
 			wantErr: "people_role 'actor' is not valid", wantNoAPI: true},
+		{name: "items award_years without awards", handler: SmartListsItemsHandler{}, options: str.Options{Action: consts.Items, InternalID: "top-sci-fi", AwardYears: "2020-2026"},
+			wantErr: consts.SmartListAwardsNeededMsg, wantNoAPI: true},
+		{name: "items award_won without awards", handler: SmartListsItemsHandler{}, options: str.Options{Action: consts.Items, InternalID: "top-sci-fi", AwardWon: true},
+			wantErr: consts.SmartListAwardsNeededMsg, wantNoAPI: true},
 		{name: "items released_within_days too big", handler: SmartListsItemsHandler{}, options: str.Options{Action: consts.Items, InternalID: "top-sci-fi", ReleasedWithin: 3651},
 			wantErr: "released_within_days '3651' is not valid, want 1 to 3650", wantNoAPI: true},
 		{name: "items released_within_days negative", handler: SmartListsItemsHandler{}, options: str.Options{Action: consts.Items, InternalID: "top-sci-fi", ReleasedWithin: -1},
@@ -157,6 +161,9 @@ func TestSmartListsItemsHandlerRoutes(t *testing.T) {
 			wantQuery: "imdb_votes=5000-&metascores=70-100&people=steven-spielberg%2C-tom-hanks&people_operator=and&people_role=directing&released_within_days=365" +
 				"&studios=pixar%2C-dreamworks-animation&tmdb_ratings=7.5-10&votes=1000-"},
 		{name: "watchnow takes a service name and the exclude prefix", options: str.Options{WatchNow: "-netflix"}, wantPath: "/smart-lists/mixed/items", wantQuery: "watchnow=-netflix"},
+		{name: "award filters", options: str.Options{Awards: "oscars-best-picture,oscars-best-director", AwardYears: "2020-", AwardWon: true}, wantPath: "/smart-lists/mixed/items",
+			wantQuery: "award_won=true&award_years=2020-&awards=oscars-best-picture%2Coscars-best-director"},
+		{name: "awards alone", options: str.Options{Awards: "oscars-best-picture"}, wantPath: "/smart-lists/mixed/items", wantQuery: "awards=oscars-best-picture"},
 		{name: "released_within_days limits", options: str.Options{ReleasedWithin: 3650}, wantPath: "/smart-lists/mixed/items", wantQuery: "released_within_days=3650"},
 	}
 

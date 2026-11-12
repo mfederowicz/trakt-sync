@@ -4,6 +4,9 @@ package str
 type Options struct {
 	Action            string
 	AvailableOn       string
+	AwardWon          bool
+	AwardYears        string
+	Awards            string
 	Certifications    string
 	Countries         string
 	Genres            string

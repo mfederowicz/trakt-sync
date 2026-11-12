@@ -21,7 +21,7 @@ func TestSmartListsServiceGetSmartList(t *testing.T) {
 		test.SafeFprint(w, `{"name":"Top Sci-Fi","privacy":"public","created_at":"2026-09-01T10:00:00.000Z","updated_at":"2026-09-02T10:00:00.000Z",`+
 			`"ids":{"trakt":42,"slug":"top-sci-fi"},"images":{"posters":["p1.jpg"]},"source":"trakt","media_type":"movie",`+
 			`"filters":{"genres":["science-fiction"],"genres_operator":"and","studios":["pixar","-dreamworks-animation"],"people":["steven-spielberg"],`+
-			`"people_operator":"or","people_role":"directing","years":[2000,2026],"released_within_days":365,"imdb_ratings":[7.5,10],"tmdb_ratings":[7,10],`+
+			`"people_operator":"or","people_role":"directing","awards":["oscars-best-picture"],"award_years":[2020,2026],"award_won":true,"years":[2000,2026],"released_within_days":365,"imdb_ratings":[7.5,10],"tmdb_ratings":[7,10],`+
 			`"metascores":[70,100],"votes":[1000],"imdb_votes":[5000,900000],"ignore_watched":true}}`)
 	})
 
@@ -43,6 +43,9 @@ func TestSmartListsServiceGetSmartList(t *testing.T) {
 			People:             []string{"steven-spielberg"},
 			PeopleOperator:     str.String("or"),
 			PeopleRole:         str.String("directing"),
+			Awards:             []string{"oscars-best-picture"},
+			AwardYears:         []int{2020, 2026},
+			AwardWon:           test.Ptr(true),
 			Years:              []int{2000, 2026},
 			ReleasedWithinDays: test.Ptr(365),
 			ImdbRatings:        []float64{7.5, 10},

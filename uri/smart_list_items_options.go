@@ -3,6 +3,10 @@ package uri
 // SmartListItemsOptions query options for smart-lists/{list_id}/items; parental ranges are min-max, from 0 (none) to 3 (severe).
 // A value of a list filter (genres, studios, people, watchnow and similar) with a - prefix is excluded.
 type SmartListItemsOptions struct {
+	// AwardWon keeps only the winners of Awards; AwardYears and AwardWon need Awards.
+	AwardWon               bool   `url:"award_won,omitempty"`
+	AwardYears             string `url:"award_years,omitempty"`
+	Awards                 string `url:"awards,omitempty"`
 	Certifications         string `url:"certifications,omitempty"`
 	Countries              string `url:"countries,omitempty"`
 	Extended               string `url:"extended,omitempty"`
