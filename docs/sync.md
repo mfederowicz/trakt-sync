@@ -468,6 +468,8 @@ imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to r
 
 ##### Update Favorites (deprecated)
 Deprecated since 2026-10-13: Trakt dropped this endpoint from its API contract. `sync -a update_favorites` still works (checked 2026-10-13) and prints a deprecation notice; it may stop working.
+
+`update_favorites` changes only what you give: `-description`, `-sort_by` and `-sort_how`. A setting without its flag keeps the value the favorites have; with none of them nothing is sent.
 ```console
 $ ./trakt-sync sync -a update_favorites -description "short favorites description" -sort_how asc
 ```
