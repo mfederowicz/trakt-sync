@@ -3,7 +3,7 @@
 Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 - Source: [trakt/trakt-api](https://github.com/trakt/trakt-api) contracts, via the generated spec at <https://developer.trakt.tv/openapi.json>.
-- Snapshot date: 2026-10-17. Update rows when the contract changes.
+- Snapshot date: 2026-11-12. Update rows when the contract changes.
 - ✅ implemented: a service method in `trakt/` calls this exact route.
 - 🟡 needs checking: a service method calls this route only through a generic path parameter (for example `sync/collection/%s`); confirm the CLI accepts this value.
 - ⬜ missing: no service method calls this route.
@@ -15,6 +15,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 | Domain | ✅ | 🟡 | ⬜ | ⚠️ | ➖ | Total |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| [`awards`](#awards) | 0 | 0 | 0 | 2 | 0 | 2 |
 | [`calendars`](#calendars) | 12 | 0 | 0 | 0 | 0 | 12 |
 | [`certifications`](#certifications) | 3 | 0 | 0 | 0 | 0 | 3 |
 | [`checkin`](#checkin) | 2 | 0 | 0 | 0 | 0 | 2 |
@@ -24,25 +25,32 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`genres`](#genres) | 1 | 0 | 0 | 0 | 0 | 1 |
 | [`languages`](#languages) | 1 | 0 | 0 | 0 | 0 | 1 |
 | [`lists`](#lists) | 15 | 0 | 0 | 0 | 0 | 15 |
-| [`media`](#media) | 3 | 0 | 0 | 0 | 0 | 3 |
-| [`movies`](#movies) | 29 | 0 | 0 | 2 | 0 | 31 |
+| [`media`](#media) | 3 | 0 | 1 | 0 | 0 | 4 |
+| [`movies`](#movies) | 29 | 0 | 1 | 3 | 0 | 33 |
 | [`networks`](#networks) | 1 | 0 | 0 | 0 | 0 | 1 |
 | [`notes`](#notes) | 5 | 0 | 0 | 0 | 0 | 5 |
 | [`oauth`](#oauth) | 3 | 0 | 0 | 0 | 2 | 5 |
-| [`people`](#people) | 7 | 0 | 0 | 1 | 0 | 8 |
+| [`people`](#people) | 7 | 0 | 0 | 2 | 0 | 9 |
 | [`recommendations`](#recommendations) | 4 | 0 | 0 | 0 | 0 | 4 |
 | [`scrobble`](#scrobble) | 3 | 0 | 0 | 0 | 0 | 3 |
 | [`search`](#search) | 6 | 0 | 0 | 0 | 0 | 6 |
 | [`seasons`](#seasons) | 1 | 0 | 0 | 0 | 0 | 1 |
-| [`shows`](#shows) | 58 | 0 | 0 | 2 | 0 | 60 |
+| [`shows`](#shows) | 58 | 0 | 1 | 3 | 0 | 62 |
 | [`smart-lists`](#smart-lists) | 4 | 0 | 0 | 0 | 0 | 4 |
 | [`social_recommendations`](#social_recommendations) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
-| [`users`](#users) | 89 | 0 | 0 | 19 | 1 | 109 |
+| [`users`](#users) | 89 | 0 | 0 | 21 | 1 | 111 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 0 | 5 | 0 | 5 |
-| **Total** | **310** | **0** | **0** | **29** | **3** | **342** |
+| **Total** | **310** | **0** | **3** | **36** | **3** | **352** |
+
+## awards
+
+| Status | Method | Path | Summary | Go method |
+| :---: | --- | --- | --- | --- |
+| ⚠️ | GET | `/awards` | Get the award catalog |  |
+| ⚠️ | GET | `/awards/ceremonies` | Get upcoming award ceremonies |  |
 
 ## calendars
 
@@ -150,6 +158,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | :---: | --- | --- | --- | --- |
 | ✅ | GET | `/media/anticipated` | Get anticipated media | `MediaService.GetAnticipatedMedia` |
 | ✅ | GET | `/media/popular` | Get popular media | `MediaService.GetPopularMedia` |
+| ⬜ | GET | `/media/recommendations/anticipated` | Get anticipated media recommendations |  |
 | ✅ | GET | `/media/trending` | Get trending media | `MediaService.GetTrendingMedia` |
 
 ## movies
@@ -163,6 +172,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ⚠️ | GET | `/movies/hot` | Get hot movies | `MoviesService.GetHotMovies` |
 | ✅ | GET | `/movies/played/{period}` | Get the most played movies | `MoviesService.GetPlayedMovies` |
 | ✅ | GET | `/movies/popular` | Get popular movies | `MoviesService.GetPopularMovies` |
+| ⬜ | GET | `/movies/recommendations/anticipated` | Get anticipated movie recommendations |  |
 | ⚠️ | GET | `/movies/streaming/{period}` | Get streaming movies | `MoviesService.GetStreamingMovies` |
 | ✅ | GET | `/movies/trending` | Get trending movies | `MoviesService.GetTrendingMovies` |
 | ✅ | GET | `/movies/updates/id/{start_date}` | Get recently updated movie Trakt IDs | `MoviesService.GetRecentlyUpdatedMoviesTraktIDs` |
@@ -170,6 +180,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/movies/watched/{period}` | Get the most watched movies | `MoviesService.GetWatchedMovies` |
 | ✅ | GET | `/movies/{id}` | Get a movie | `MoviesService.GetMovie` |
 | ✅ | GET | `/movies/{id}/aliases` | Get all movie aliases | `MoviesService.GetAllMovieAliases` |
+| ⚠️ | GET | `/movies/{id}/awards` | Get movie awards |  |
 | ✅ | GET | `/movies/{id}/comments/{sort}` | Get all movie comments | `MoviesService.GetAllMovieComments` |
 | ✅ | GET | `/movies/{id}/lists/{type}/{sort}` | Get lists containing this movie | `MoviesService.GetListsContainingMovie` |
 | ✅ | GET | `/movies/{id}/people` | Get all people for a movie | `MoviesService.GetAllPeopleForMovie` |
@@ -221,6 +232,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/people/updates/id/{start_date}` | Get recently updated people Trakt IDs | `PeopleService.GetRecentlyUpdatedPeopleTraktIDs` |
 | ✅ | GET | `/people/updates/{start_date}` | Get recently updated people | `PeopleService.GetRecentlyUpdatedPeople` |
 | ✅ | GET | `/people/{id}/` | Get a single person | `PeopleService.GetSinglePerson` |
+| ⚠️ | GET | `/people/{id}/awards` | Get person awards |  |
 | ⚠️ | GET | `/people/{id}/lists/{type}/{sort}` | Get lists containing this person | `PeopleService.GetListsContainingThisPerson` |
 | ✅ | GET | `/people/{id}/movies` | Get movie credits | `PeopleService.GetMovieCredits` |
 | ✅ | POST | `/people/{id}/refresh` | Refresh person metadata | `PeopleService.RefreshPersonMetadata` |
@@ -271,6 +283,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ⚠️ | GET | `/shows/hot` | Get hot shows |  |
 | ✅ | GET | `/shows/played/{period}` | Get the most played shows | `ShowsService.GetPlayedShows` |
 | ✅ | GET | `/shows/popular` | Get popular shows | `ShowsService.GetPopularShows` |
+| ⬜ | GET | `/shows/recommendations/anticipated` | Get anticipated show recommendations |  |
 | ⚠️ | GET | `/shows/streaming/{period}` | Get streaming shows |  |
 | ✅ | GET | `/shows/trending` | Get trending shows | `ShowsService.GetTrendingShows` |
 | ✅ | GET | `/shows/updates/id/{start_date}` | Get recently updated show Trakt IDs | `ShowsService.GetRecentlyUpdatedShowsTraktIDs` |
@@ -278,6 +291,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/shows/watched/{period}` | Get the most watched shows | `ShowsService.GetWatchedShows` |
 | ✅ | GET | `/shows/{id}` | Get a single show | `ShowsService.GetShow` |
 | ✅ | GET | `/shows/{id}/aliases` | Get all show aliases | `ShowsService.GetAllShowAliases` |
+| ⚠️ | GET | `/shows/{id}/awards` | Get show awards |  |
 | ✅ | GET | `/shows/{id}/certifications` | Get all show certifications | `ShowsService.GetAllShowCertifications` |
 | ✅ | GET | `/shows/{id}/comments/{sort}` | Get all show comments | `ShowsService.GetAllShowComments` |
 | ✅ | GET | `/shows/{id}/last_episode` | Get last episode | `ShowsService.GetLastEpisode` |
@@ -500,8 +514,10 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/users/{id}/watchlist/movies/{sort}` | Get movie watchlist | `UsersService.GetWatchlistBySort` |
 | ✅ | GET | `/users/{id}/watchlist/shows/{sort}` | Get show watchlist | `UsersService.GetWatchlistBySort` |
 | ✅ | GET | `/users/{id}/watchlist/{type}/{sort_by}/{sort_how}` | Get watchlist | `UsersService.GetWatchlist` |
+| ⚠️ | GET | `/users/{id}/yir/all` | Get all-time year in review |  |
 | ⚠️ | GET | `/users/{id}/yir/{year}` | Get year in review | `UsersService.GetYearInReview` |
 | ✅ | GET | `/users/{id}/yir/{year}/persona` | Get year in review persona | `UsersService.GetYearInReviewPersona` |
+| ⚠️ | GET | `/users/{id}/yir/{year}/{year_end}` | Get year in review for a range of years |  |
 | ⚠️ | GET | `/users/{id}/{type}/activities` | Get social activity | `UsersService.GetSocialActivity` |
 
 ## watchnow
@@ -535,9 +551,10 @@ The ⚠️ routes are live API gaps, not client bugs. A row that ends with "Upst
 | `MoviesService.GetStreamingMovies` | `GET /movies/streaming/{period}` | live API returns 404 `{"error":"endpoint removed"}` (checked 2026-09-24); the CLI explains the 404. Upstream issue: not filed yet |
 | - | `GET /shows/streaming/{period}` | live API returns 404 `{"error":"endpoint removed"}` (checked 2026-09-24). Upstream issue: not filed yet |
 | `YounifyService.*` | `/younify/*` (all 5 routes) | `GET /younify/connections` returns 401 for the maintainer's OAuth token, and the developer portal's own "try it" gets 401 too (checked 2026-09-25); 403 on 2026-10-31. Younify looks limited to Trakt's own apps. The other 4 routes change the account and were not tried; assumed the same. The CLI explains a 401 or 403. Upstream issue: not filed yet |
-| `UsersService.GetMonthInReview`, `GetYearInReview`, `GetSocialActivity` | `GET /users/{id}/mir/{year}/{month}`, `/users/{id}/yir/{year}`, `/users/{id}/{type}/activities` | live API returns 401 while `GET /users/reactions/comments` (OAuth required) works with the same token (checked 2026-09-25); looks not open to API apps. The CLI explains the 401. Activities answered 403 on 2026-10-31, and the contract now marks it limited to first-party apps; the CLI explains the 403 as limited access. Upstream issue: not filed yet |
+| `UsersService.GetMonthInReview`, `GetYearInReview`, `GetSocialActivity` | `GET /users/{id}/mir/{year}/{month}`, `/users/{id}/yir/{year}`, `/users/{id}/yir/{year}/{year_end}`, `/users/{id}/yir/all`, `/users/{id}/{type}/activities` | live API returns 401 for month and year in review while `GET /users/reactions/comments` (OAuth required) works with the same token (checked 2026-09-25, again 2026-10-31, 2026-11-04 and 2026-11-08). Since 2026-11-09 the contract documents why (trakt/trakt-api `c37ae56`): only official Trakt apps can call these routes, the profile owner needs VIP, and other apps get a 401. The same commit added `yir/{year}/{year_end}` and `yir/all` with the same access; trakt-sync does not implement them. The CLI explains the 401. Activities answered 403 on 2026-10-31, and the contract marks it limited to first-party apps; the CLI explains the 403 as limited access. |
 | `PeopleService.GetListsContainingThisPerson` | `GET /people/{id}/lists/{type}/{sort}` | live API returns 200 with an empty array and `X-Pagination-Item-Count: 0` for every person, type and sort tried, while `GET /movies/{id}/lists/{type}/{sort}` returns lists (checked 2026-10-01, again 2026-10-02 and 2026-10-31). On 2026-10-20 the contract marked the route deprecated (trakt/trakt-api `d09fe69`: "Lists no longer support people, so this always returns an empty array"); the action and method are deprecated in the `deprecation` registry and still send their request. |
 | `UsersService.GetHiddenItems` | `GET /users/hidden/comments` | live API returns 200 with an empty array, with and without `type=user` / `type=users`, right after `POST /users/hidden/comments` answered `added.users: 1`; the other sections (e.g. `calendar`) return their items (checked 2026-10-02). The route stays ✅ because it serves the other sections. Upstream issue: not filed yet |
+| - | `GET /awards`, `GET /awards/ceremonies`, `GET /movies/{id}/awards`, `GET /shows/{id}/awards`, `GET /people/{id}/awards` | the contract marks all five Limited Access: "This endpoint is limited to official apps and may not be available to all API consumers" (trakt/trakt-api `ea45607`, `030a5e3`, 2026-11-10). Not implemented. |
 | - | `PUT /users/avatar`, `DELETE /users/avatar`, `PUT /users/set_cover` | the contract marks all three Limited Access: "available only to first-party Trakt applications. Third-party applications receive a `401` response even with a valid OAuth token." Not implemented. |
 | `UsersService.GetDataSyncs`, `GetDataSync`, `GetDataSyncItems`, `UndoDataSync` | `/users/syncs/*` (all 6 routes) | `GET /users/syncs/` returns 401 with the maintainer's token (checked 2026-09-25), which works on other OAuth routes such as `/users/reactions/comments`; looks not open to API apps. The other routes were not tried; assumed the same. The CLI explains a 401. Upstream issue: not filed yet |
 | `UsersService.GetPlexSettings`, `UpdatePlexSettings`, `ConnectPlex`, `DisconnectPlex`, `GetPlexServers`, `GetPlexServerAccounts`, `SyncPlex` | `/users/settings/plex/*` (all 7 routes) | `GET /users/settings/plex/` and `GET /users/settings/plex/servers` return 401 with the maintainer's token (checked 2026-09-25), which works on other OAuth routes; looks not open to API apps. The write routes were not tried; assumed the same. The CLI explains a 401 (a Plex `error_code` 401 is reported as a Plex error instead). Since 2026-10-31 `GET /users/settings/plex/servers` answers 405 instead (again 2026-11-04 and 2026-11-08), while the contract still lists GET with 200/401/502/504 and `GET /users/settings/plex/` still answers 401; the CLI explains the 405. Upstream issue: not filed yet |
