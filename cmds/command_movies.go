@@ -36,7 +36,7 @@ var (
 
 	validMoviesActions = []string{
 		consts.Trending, consts.Popular, consts.Favorited, consts.Played, consts.Watched, consts.Collected,
-		consts.Anticipated, consts.Boxoffice, consts.Updates, consts.UpdatedIDs, consts.Summary, consts.Aliases,
+		consts.Anticipated, consts.AnticipatedRecs, consts.Boxoffice, consts.Updates, consts.UpdatedIDs, consts.Summary, consts.Aliases,
 		consts.Releases, consts.Translations, consts.Comments, consts.Lists, consts.People, consts.Ratings,
 		consts.Related, consts.Stats, consts.Studios, consts.Watching, consts.Videos, consts.Refresh,
 		consts.Hot, consts.Streaming, consts.Report, consts.RefreshJustwatch, consts.Sentiments,
@@ -103,6 +103,8 @@ func moviesFunc(cmd *Command, _ ...string) error {
 
 		consts.WatchNow:       handlers.MoviesWatchNowHandler{},
 		consts.JustwatchLinks: handlers.MoviesJustwatchLinksHandler{},
+
+		consts.AnticipatedRecs: handlers.MoviesAnticipatedRecommendationsHandler{},
 	}
 	handler, err = cmd.common.GetHandlerForMap(options.Action, allHandlers)
 

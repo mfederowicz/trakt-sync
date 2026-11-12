@@ -32,6 +32,7 @@ const (
 	AllShows              = "all_shows"
 	AllStreaming          = "all_streaming"
 	Anticipated           = "anticipated"
+	AnticipatedRecs       = "anticipated_recommendations"
 	Boxoffice             = "boxoffice"
 	Block                 = "block"
 	BlockedUsers          = "blocked_users"

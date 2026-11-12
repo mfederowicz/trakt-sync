@@ -61,6 +61,11 @@ $ ./trakt-sync movies -a collected -period all
 ```console
 $ ./trakt-sync movies -a anticipated
 ```
+##### Get anticipated movie recommendations
+Needs your login (OAuth). Returns unreleased movies ranked for your taste, at most 100 in total, each with a `score` and its `released` date (`YYYY-MM-DD`, left out when Trakt does not know it yet). Takes no filters or `-ex`; paging follows `per_page` and `pages_limit`.
+```console
+$ ./trakt-sync movies -a anticipated_recommendations -> export_movies_anticipated_recommendations.json
+```
 ```console
 $ ./trakt-sync movies -a hot -> export_movies_hot.json
 ```

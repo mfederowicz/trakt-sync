@@ -61,6 +61,11 @@ $ ./trakt-sync shows -a collected -period all
 ```console
 $ ./trakt-sync shows -a anticipated
 ```
+##### Get anticipated show recommendations
+Needs your login (OAuth). Returns unreleased shows ranked for your taste, at most 100 in total, each with a `score` and its `released` date (`YYYY-MM-DD`, left out when Trakt does not know it yet). Takes no filters or `-ex`; paging follows `per_page` and `pages_limit`.
+```console
+$ ./trakt-sync shows -a anticipated_recommendations -> export_shows_anticipated_recommendations.json
+```
 ##### Filter the show lists
 `trending`, `popular`, `anticipated`, `watched`, `played`, `collected` and `favorited` take the Trakt media filters:
 `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications` (comma separated where a
