@@ -33,6 +33,8 @@ type ListOptions struct {
 	ImdbRatings       RatingRange    `url:"imdb_ratings,omitempty"`
 	ImdbVotes         ImdbVotesRange `url:"imdb_votes,omitempty"`
 	IncludeReplies    string         `url:"include_replies,omitempty"`
+	// Language picks the Wikipedia page language of a person summary, like pt or pt-br.
+	Language string `url:"language,omitempty"`
 	// Languages is the languages filter; prefer Filters.Languages.
 	Languages    []string `url:"languages,omitempty"`
 	Translations []string `url:"translations,omitempty"`

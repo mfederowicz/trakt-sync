@@ -12,6 +12,10 @@ The export holds the `biography` and a short `summary` (two or three sentences) 
 ```console
 $ ./trakt-sync people -a summary -i john-wayne -ex full,markdown
 ```
+With `-ex full`, `social_ids` holds `twitter`, `facebook`, `instagram`, `tiktok`, `youtube`, `wikidata` and `wikipedia`; `wikipedia_language` is the language of the `wikipedia` page. `-language` picks that page's language (falls back to the base language, then English); a malformed code is rejected by Trakt with a `400`:
+```console
+$ ./trakt-sync people -a summary -i john-wayne -ex full -language pt-br
+```
 ```console
 $ ./trakt-sync people -a movies -i john-wayne
 ```
