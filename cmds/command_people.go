@@ -18,6 +18,7 @@ var (
 	_peopleMessage = PeopleCmd.Flag.String("message", cfg.DefaultConfig().Msg, consts.ReportMsgUsage)
 	_peopleSort    = PeopleCmd.Flag.String("s", consts.EmptyString, consts.PeopleSortUsage)
 	_peopleType    = PeopleCmd.Flag.String("t", consts.EmptyString, consts.PeopleTypeUsage)
+	_peopleLang    = PeopleCmd.Flag.String("language", consts.EmptyString, consts.PeopleLanguageUsage)
 )
 
 // PeopleCmd returns all data for selected person.

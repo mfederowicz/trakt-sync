@@ -46,12 +46,17 @@ func (p PeopleSummaryHandler) Handle(options *str.Options, client *trakt.Client)
 }
 
 func (PeopleSummaryHandler) fetchSinglePerson(client *trakt.Client, options *str.Options) (*str.Person, error) {
-	opts := uri.ListOptions{Extended: options.ExtendedInfo}
+	opts := uri.ListOptions{Extended: options.ExtendedInfo, Language: options.Language}
 	result, _, err := client.People.GetSinglePerson(
 		cli.ContextFromOptions(options),
 		options.ID,
 		&opts,
 	)
+
+	var badRequest *trakt.BadRequestError
+	if len(options.Language) > consts.ZeroValue && errors.As(err, &badRequest) {
+		return nil, fmt.Errorf(consts.PersonLanguageRejected, options.Language, err)
+	}
 
 	if err != nil {
 		return nil, err

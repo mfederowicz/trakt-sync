@@ -379,6 +379,7 @@ func setOptionsDependsOnModulePeople(options str.Options) str.Options {
 	options.ID = *_personID
 	options.Sort = *_peopleSort
 	options.Type = *_peopleType
+	options.Language = *_peopleLang
 	if options.Action == consts.Lists {
 		if len(options.Sort) == consts.ZeroValue {
 			options.Sort = consts.Popular

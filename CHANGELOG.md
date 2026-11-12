@@ -32,6 +32,8 @@ schedule.
 
 ### Added
 
+- `people -a summary` takes `-language` (like `pt` or `pt-br`) to pick the language of the person's Wikipedia page; a code Trakt rejects gets a readable error. With `-ex full` the export's `social_ids` now keeps `tiktok`, `youtube`, `wikidata` and `wikipedia_language`. Library: `uri.ListOptions` has the field `Language`, sent as `language`, and `str.SocialIDs` has `TikTok`, `YouTube`, `Wikidata` and `WikipediaLanguage`.
+
 ### Changed
 
 ### Fixed
