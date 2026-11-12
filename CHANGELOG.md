@@ -36,6 +36,8 @@ schedule.
 
 ### Fixed
 
+- Library: `str.Movie` sends and reads `Notes` under the contract key `notes`; it used `note`, so Trakt ignored the notes of a movie added with `SyncService.AddItemsToWatchlist`, `AddItemsToFavorites` or `UsersService.AddListItems`. The CLI does not send item notes, so its output does not change.
+
 ## [1.29.0] - 2026-11-12
 
 ### Added

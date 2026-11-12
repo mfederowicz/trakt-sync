@@ -43,3 +43,25 @@ func TestMediaImagesAndColorsString(t *testing.T) {
 	assert.Contains(t, images.String(), "p.webp")
 	assert.Contains(t, colors.String(), "#111111")
 }
+
+// Movie, Show, Season and Episode send their notes under the contract key "notes".
+func TestMediaTypesSendNotes(t *testing.T) {
+	notes := "rewatch"
+	tests := []struct {
+		name string
+		v    any
+	}{
+		{name: "movie", v: Movie{Notes: &notes}},
+		{name: "show", v: Show{Notes: &notes}},
+		{name: "season", v: Season{Notes: &notes}},
+		{name: "episode", v: Episode{Notes: &notes}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			out, err := json.Marshal(tt.v)
+			assert.NoError(t, err)
+			assert.JSONEq(t, `{"notes":"rewatch"}`, string(out))
+		})
+	}
+}
