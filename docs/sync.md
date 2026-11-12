@@ -350,6 +350,8 @@ $ ./trakt-sync sync -a get_watchlist -t movies -sort_by percentage
 imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to rank.
 ```
 ##### Update Watchlist
+
+`update_watchlist` changes only what you give: `-description`, `-sort_by` and `-sort_how`. A setting without its flag keeps the value the watchlist has; with none of them nothing is sent.
 ```console
 $ ./trakt-sync sync -a update_watchlist -description "short watchlist description" -sort_how asc
 ```

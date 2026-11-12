@@ -89,6 +89,8 @@ func TestSyncProgressSort(t *testing.T) {
 		{name: "up next nitro drops default sort", action: consts.GetUpNextNitro, wantBy: "", wantHow: ""},
 		{name: "update favorites drops default sort", action: consts.UpdateFavorites, wantBy: "", wantHow: ""},
 		{name: "update favorites keeps only sort_by", action: consts.UpdateFavorites, sortBySet: true, wantBy: "rank", wantHow: ""},
+		{name: "update watchlist drops default sort", action: consts.UpdateWatchlist, wantBy: "", wantHow: ""},
+		{name: "update watchlist keeps only sort_how", action: consts.UpdateWatchlist, sortHowSet: true, wantBy: "", wantHow: "asc"},
 		{name: "other action untouched", action: consts.GetWatchlist, wantBy: "rank", wantHow: "asc"},
 	}
 

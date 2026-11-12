@@ -127,11 +127,11 @@ func syncPlaybackType(options *str.Options, typeSet bool) string {
 	return options.Type
 }
 
-// syncProgressSort sends sort_by and sort_how for up next (nitro), watched progress and update_favorites only when set on the command line,
-// so the global defaults (rank, asc) do not override the API's own order or reset the favorites settings
+// syncProgressSort sends sort_by and sort_how for up next (nitro), watched progress, update_favorites and update_watchlist only when set on the command line,
+// so the global defaults (rank, asc) do not override the API's own order or reset the favorites and watchlist settings
 func syncProgressSort(options *str.Options, sortBySet bool, sortHowSet bool) {
 	if options.Action != consts.GetUpNext && options.Action != consts.GetUpNextNitro && options.Action != consts.GetWatchedProgress &&
-		options.Action != consts.UpdateFavorites {
+		options.Action != consts.UpdateFavorites && options.Action != consts.UpdateWatchlist {
 		return
 	}
 	if !sortBySet {
