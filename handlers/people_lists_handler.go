@@ -29,10 +29,6 @@ func (p PeopleListsHandler) Handle(options *str.Options, client *trakt.Client) e
 		return fmt.Errorf("fetch lists error:%v", err)
 	}
 
-	if len(result) == consts.ZeroValue {
-		return errors.New("empty lists")
-	}
-
 	printer.Printf("Found %d result \n", len(result))
 	exportJSON := []*str.PersonalList{}
 	exportJSON = append(exportJSON, result...)

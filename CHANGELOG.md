@@ -34,6 +34,8 @@ schedule.
 
 ### Changed
 
+- When Trakt answers with an empty list, the list actions of `movies`, `shows`, `people` (`lists`, `updates`, `updated_ids`), `networks`, `lists` and `comments` now write `[]` to the output file and exit with 0. Before, they stopped with an error such as `empty shows` (exit 1) and wrote no file, so a filter that matches nothing, like `shows -a anticipated -parental_violence 0-0`, looked like a failure.
+
 ### Fixed
 
 - Library: `str.Movie` sends and reads `Notes` under the contract key `notes`; it used `note`, so Trakt ignored the notes of a movie added with `SyncService.AddItemsToWatchlist`, `AddItemsToFavorites` or `UsersService.AddListItems`. The CLI does not send item notes, so its output does not change.

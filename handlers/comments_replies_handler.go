@@ -39,10 +39,6 @@ func (h CommentsRepliesHandler) allCommentReplies(client *trakt.Client, options 
 		return fmt.Errorf("fetch replies error:%v", err)
 	}
 
-	if len(result) == consts.ZeroValue {
-		return errors.New("empty replies")
-	}
-
 	printer.Printf("Found %d result \n", len(result))
 	exportJSON := []*str.Comment{}
 	exportJSON = append(exportJSON, result...)

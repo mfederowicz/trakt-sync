@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -23,10 +22,6 @@ func (h CommentsTrendingHandler) Handle(options *str.Options, client *trakt.Clie
 	result, err := h.common.FetchTrendingComments(client, options, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("fetch comments error:%v", err)
-	}
-
-	if len(result) == consts.ZeroValue {
-		return errors.New("empty list")
 	}
 
 	printer.Printf("Found %d result \n", len(result))

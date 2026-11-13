@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cli"
@@ -27,10 +26,6 @@ func (h ShowsAnticipatedHandler) Handle(options *str.Options, client *trakt.Clie
 	result, err := h.fetchShowsAnticipated(client, options, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("fetch shows error:%v", err)
-	}
-
-	if len(result) == consts.ZeroValue {
-		return errors.New("empty shows")
 	}
 
 	printer.Printf("Found %d result \n", len(result))

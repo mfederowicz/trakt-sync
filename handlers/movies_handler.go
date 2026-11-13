@@ -20,10 +20,6 @@ type MoviesHandler interface {
 
 // writeMoviesItems writes a fetched movies list to the output file.
 func writeMoviesItems(options *str.Options, result []*str.MoviesItem) error {
-	if len(result) == consts.ZeroValue {
-		return errors.New(consts.EmptyResult)
-	}
-
 	printer.Printf("Found %d result \n", len(result))
 	printer.Println("write data to:" + options.Output)
 	jsonData, err := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)

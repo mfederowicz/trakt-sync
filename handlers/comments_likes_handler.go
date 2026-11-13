@@ -28,10 +28,6 @@ func (h CommentsLikesHandler) Handle(options *str.Options, client *trakt.Client)
 		return fmt.Errorf("fetch likes error:%v", err)
 	}
 
-	if len(result) == consts.ZeroValue {
-		return errors.New("empty list")
-	}
-
 	printer.Printf("Found %d result \n", len(result))
 	exportJSON := []*str.CommentUserLike{}
 	exportJSON = append(exportJSON, result...)

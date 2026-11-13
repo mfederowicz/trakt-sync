@@ -35,10 +35,6 @@ func (h ListsItemsHandler) Handle(options *str.Options, client *trakt.Client) er
 		return fmt.Errorf("fetch list error:%v", err)
 	}
 
-	if len(result) == consts.ZeroValue {
-		return errors.New("empty list")
-	}
-
 	printer.Printf("Found %d result \n", len(result))
 	exportJSON := []*str.UserListItem{}
 	exportJSON = append(exportJSON, result...)

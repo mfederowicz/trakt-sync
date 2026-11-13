@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cli"
@@ -27,10 +26,6 @@ func (h MoviesPopularHandler) Handle(options *str.Options, client *trakt.Client)
 	result, err := h.fetchMoviesPopular(client, options, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("fetch lists error:%v", err)
-	}
-
-	if len(result) == consts.ZeroValue {
-		return errors.New("empty lists")
 	}
 
 	printer.Printf("Found %d result \n", len(result))
