@@ -182,9 +182,8 @@ func TestListsItemsHandlerStopsOnEmptyPage(t *testing.T) {
 		name      string
 		pages     map[string]string
 		wantCalls int
-		wantErr   string
 	}{
-		{name: "filter matches nothing", pages: map[string]string{}, wantCalls: 1, wantErr: "empty list"},
+		{name: "filter matches nothing", pages: map[string]string{}, wantCalls: 1},
 		{name: "filter matches one page", pages: map[string]string{"1": `[{"rank":1}]`}, wantCalls: 2},
 	}
 
@@ -209,11 +208,7 @@ func TestListsItemsHandlerStopsOnEmptyPage(t *testing.T) {
 
 			options := &str.Options{Action: consts.Items, InternalID: "55", Languages: "pl", Output: filepath.Join(t.TempDir(), "out.json")}
 			err := ListsItemsHandler{}.Handle(options, s.Client)
-			if tt.wantErr != "" {
-				assert.EqualError(t, err, tt.wantErr)
-			} else {
-				test.AssertNilError(t, err)
-			}
+			test.AssertNilError(t, err)
 			assert.Equal(t, tt.wantCalls, calls, "API calls")
 		})
 	}

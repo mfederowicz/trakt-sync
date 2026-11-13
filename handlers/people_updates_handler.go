@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cli"
@@ -27,23 +26,15 @@ func (p PeopleUpdatesHandler) Handle(options *str.Options, client *trakt.Client)
 		return fmt.Errorf("fetch peoples updates error:%w", err)
 	}
 
-	if len(updates) == consts.ZeroValue {
-		return errors.New("empty updates lists")
+	printer.Printf("Found %d items \n", len(updates))
+	exportJSON := []*str.PersonItem{}
+	exportJSON = append(exportJSON, updates...)
+	jsonData, err := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
 	}
-
-	if len(updates) > consts.ZeroValue {
-		printer.Printf("Found %d items \n", len(updates))
-		exportJSON := []*str.PersonItem{}
-		exportJSON = append(exportJSON, updates...)
-		jsonData, err := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
-		if err != nil {
-			return fmt.Errorf("encode %s result: %w", options.Action, err)
-		}
-		printer.Println("write data to:" + options.Output)
-		writer.WriteJSON(options, jsonData)
-	} else {
-		printer.Print("No update items to fetch\n")
-	}
+	printer.Println("write data to:" + options.Output)
+	writer.WriteJSON(options, jsonData)
 	return nil
 }
 

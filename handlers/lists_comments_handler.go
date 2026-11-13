@@ -29,10 +29,6 @@ func (h ListsCommentsHandler) Handle(options *str.Options, client *trakt.Client)
 		return fmt.Errorf("fetch list error:%v", err)
 	}
 
-	if len(result) == consts.ZeroValue {
-		return errors.New("empty comments list")
-	}
-
 	printer.Printf("Found %d result \n", len(result))
 	exportJSON := []*str.ListComment{}
 	exportJSON = append(exportJSON, result...)

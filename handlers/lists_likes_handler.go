@@ -29,10 +29,6 @@ func (h ListsLikesHandler) Handle(options *str.Options, client *trakt.Client) er
 		return fmt.Errorf("fetch users error:%v", err)
 	}
 
-	if len(result) == consts.ZeroValue {
-		return errors.New("empty users")
-	}
-
 	printer.Printf("Found %d result \n", len(result))
 	exportJSON := []*str.UserLike{}
 	exportJSON = append(exportJSON, result...)

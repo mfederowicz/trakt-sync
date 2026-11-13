@@ -33,10 +33,6 @@ func (CommentsReactionsHandler) Handle(options *str.Options, client *trakt.Clien
 		return fmt.Errorf("fetch reactions error: %w", err)
 	}
 
-	if len(result) == consts.ZeroValue {
-		return errors.New(consts.EmptyResult)
-	}
-
 	printer.Printf("Found %d result \n", len(result))
 	printer.Println("write data to:" + options.Output)
 	jsonData, err := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)
