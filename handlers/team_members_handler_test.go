@@ -47,7 +47,6 @@ func TestTeamMembersHandlerErrors(t *testing.T) {
 		body    string
 		wantErr string
 	}{
-		{name: "empty list", status: http.StatusOK, body: `[]`, wantErr: consts.EmptyResult},
 		{name: "server error", status: http.StatusInternalServerError, body: `{}`, wantErr: "fetch team members error"},
 	}
 

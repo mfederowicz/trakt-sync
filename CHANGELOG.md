@@ -35,6 +35,7 @@ schedule.
 ### Changed
 
 - When Trakt answers with an empty list, the list actions of `movies`, `shows`, `people` (`lists`, `updates`, `updated_ids`), `networks`, `lists` and `comments` now write `[]` to the output file and exit with 0. Before, they stopped with an error such as `empty shows` (exit 1) and wrote no file, so a filter that matches nothing, like `shows -a anticipated -parental_violence 0-0`, looked like a failure.
+- The same now holds for `calendars` (every action), `media` (`trending`, `popular`, `anticipated`, `anticipated_recommendations`), `movies` and `shows -a anticipated_recommendations`, `recommendations`, `social_recommendations`, `smart_lists` (`items`, `templates`), `team -a members`, `watchnow -a sources` and `younify -a connections`: an empty list writes `[]` and exits with 0 instead of stopping with `empty result`.
 
 ### Fixed
 

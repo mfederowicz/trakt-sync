@@ -28,7 +28,6 @@ func TestWatchNowSourcesHandler(t *testing.T) {
 		{name: "country", country: "us", path: "/watchnow/sources/us", status: http.StatusOK, body: body},
 		{name: "limited access", path: "/watchnow/sources", status: http.StatusForbidden, body: `{}`, wantErr: "watchnow sources is limited access on Trakt"},
 		{name: "country not found", country: "xx", path: "/watchnow/sources/xx", status: http.StatusNotFound, body: `{}`, wantErr: "not found sources for:xx"},
-		{name: "empty list", path: "/watchnow/sources", status: http.StatusOK, body: `[]`, wantErr: consts.EmptyResult},
 	}
 
 	for _, tt := range tests {

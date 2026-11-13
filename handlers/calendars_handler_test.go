@@ -172,9 +172,10 @@ func TestCalendarsHandlersEmptyResult(t *testing.T) {
 			})
 
 			options := str.Options{Action: h.action, StartDate: "2026-10-01", Days: 7, Output: filepath.Join(t.TempDir(), "out.json")}
-			assert.EqualError(t, h.handler.Handle(&options, s.Client), consts.EmptyResult)
-			_, err := os.Stat(options.Output)
-			assert.True(t, os.IsNotExist(err), "no output file is written")
+			test.AssertNilError(t, h.handler.Handle(&options, s.Client))
+			data, err := os.ReadFile(options.Output)
+			test.AssertNilError(t, err)
+			assert.Equal(t, "[]", string(data))
 		})
 	}
 }

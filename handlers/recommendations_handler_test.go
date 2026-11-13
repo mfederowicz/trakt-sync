@@ -92,9 +92,10 @@ func TestRecommendationsHandlersEmptyResult(t *testing.T) {
 			})
 
 			options := str.Options{Action: tt.action, PerPage: 10, Output: filepath.Join(t.TempDir(), "out.json")}
-			assert.EqualError(t, tt.handler.Handle(&options, s.Client), consts.EmptyResult)
-			_, err := os.Stat(options.Output)
-			assert.True(t, os.IsNotExist(err), "no output file is written")
+			test.AssertNilError(t, tt.handler.Handle(&options, s.Client))
+			data, err := os.ReadFile(options.Output)
+			test.AssertNilError(t, err)
+			assert.Equal(t, "[]", string(data))
 		})
 	}
 }

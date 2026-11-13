@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cli"
@@ -23,10 +22,6 @@ func (CalendarsShowsHandler) Handle(options *str.Options, client *trakt.Client) 
 	result, err := fetchCalendarShows(client, options)
 	if err != nil {
 		return fmt.Errorf("fetch "+options.Action+" calendar error:%w", err)
-	}
-
-	if len(result) == consts.ZeroValue {
-		return errors.New("empty result")
 	}
 
 	printer.Print("Found " + options.Action + " calendar data \n")

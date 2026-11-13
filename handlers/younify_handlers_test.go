@@ -31,7 +31,7 @@ func TestYounifyHandlers(t *testing.T) {
 		{name: "connections", handler: YounifyConnectionsHandler{}, options: str.Options{Action: consts.Connections},
 			method: http.MethodGet, path: "/younify/connections", status: http.StatusOK, body: `[{"id":"netflix","connected":true}]`, wantOutput: true},
 		{name: "connections empty", handler: YounifyConnectionsHandler{}, options: str.Options{Action: consts.Connections},
-			method: http.MethodGet, path: "/younify/connections", status: http.StatusOK, body: `[]`, wantErr: consts.EmptyResult},
+			method: http.MethodGet, path: "/younify/connections", status: http.StatusOK, body: `[]`, wantOutput: true},
 		{name: "connect default return_url", handler: YounifyConnectHandler{}, options: str.Options{Action: consts.Connect, ServiceID: "netflix"},
 			method: http.MethodPost, path: "/younify/connect", status: http.StatusOK, body: `{"url":"https://auth.example/x"}`,
 			wantBody: `{"service_id":"netflix","return_url":"https://trakt.tv"}`, wantOutput: true},
