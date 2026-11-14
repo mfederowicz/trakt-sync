@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -47,10 +46,6 @@ func (u UsersCommentsHandler) fetchComments(client *trakt.Client, options *str.O
 	comments, err := u.common.FetchUsersComments(client, options, page)
 	if err != nil {
 		return nil, fmt.Errorf("fetch comments error:%w", err)
-	}
-
-	if len(comments) == consts.ZeroValue {
-		return nil, errors.New("empty comments")
 	}
 
 	return comments, nil

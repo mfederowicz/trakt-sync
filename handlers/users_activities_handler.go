@@ -65,10 +65,6 @@ func (h UsersActivitiesHandler) Handle(options *str.Options, client *trakt.Clien
 		return fmt.Errorf("fetch %s activities error: %w", options.Type, err)
 	}
 
-	if len(result) == consts.ZeroValue {
-		return errors.New(consts.EmptyResult)
-	}
-
 	printer.Printf("Found %d result \n", len(result))
 	return writeResult(options, result)
 }

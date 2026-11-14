@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cli"
@@ -24,10 +23,6 @@ func (UsersCommentReactionsHandler) Handle(options *str.Options, client *trakt.C
 	})
 	if err != nil {
 		return fmt.Errorf("fetch comment reactions error: %w", err)
-	}
-
-	if len(result) == consts.ZeroValue {
-		return errors.New(consts.EmptyResult)
 	}
 
 	printer.Printf("Found %d result \n", len(result))

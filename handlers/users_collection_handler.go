@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -50,10 +49,6 @@ func (u UsersCollectionHandler) fetchCollection(client *trakt.Client, options *s
 	items, err := u.common.FetchUsersCollection(client, options, page)
 	if err != nil {
 		return nil, fmt.Errorf("fetch collection error:%w", err)
-	}
-
-	if len(items) == consts.ZeroValue {
-		return nil, errors.New("empty collection")
 	}
 
 	return items, nil

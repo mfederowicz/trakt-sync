@@ -76,9 +76,8 @@ func TestUsersListItemsHandlerStopsOnEmptyPage(t *testing.T) {
 		name      string
 		pages     map[string]string
 		wantCalls int
-		wantErr   string
 	}{
-		{name: "filter matches nothing", pages: map[string]string{}, wantCalls: 1, wantErr: "empty list items"},
+		{name: "filter matches nothing", pages: map[string]string{}, wantCalls: 1},
 		{name: "filter matches one page", pages: map[string]string{"1": `[{"rank":1}]`}, wantCalls: 2},
 	}
 
@@ -103,11 +102,7 @@ func TestUsersListItemsHandlerStopsOnEmptyPage(t *testing.T) {
 
 			options := &str.Options{Module: "users", Action: "list_items", UserName: "me", ID: "55", Type: "movies", Languages: "pl", Output: filepath.Join(t.TempDir(), "out.json")}
 			err := UsersListItemsHandler{}.Handle(options, s.Client)
-			if tt.wantErr != "" {
-				assert.ErrorContains(t, err, tt.wantErr)
-			} else {
-				test.AssertNilError(t, err)
-			}
+			test.AssertNilError(t, err)
 			assert.Equal(t, tt.wantCalls, calls, "API calls")
 		})
 	}
@@ -149,19 +144,13 @@ func TestUsersWatchlistHandlerStopsOnEmptyPage(t *testing.T) {
 			options := &str.Options{Module: "users", Action: "watchlist", UserName: "sean", Type: "movies", SortPath: tt.sortPath, Languages: "pl",
 				Output: filepath.Join(t.TempDir(), "out.json")}
 			err := UsersWatchlistHandler{}.Handle(options, s.Client)
-			if len(tt.pages) > 0 {
-				test.AssertNilError(t, err)
-			} else {
-				assert.EqualError(t, err, consts.EmptyResult)
-				_, statErr := os.Stat(options.Output)
-				assert.True(t, os.IsNotExist(statErr), "no output file is written")
-			}
+			test.AssertNilError(t, err)
 			assert.Equal(t, tt.wantCalls, calls, "API calls")
 		})
 	}
 }
 
-// history, favorites and ratings end with an error and write no file when the API returns no items, like watchlist.
+// history, favorites and ratings write [] when the API returns no items, like watchlist.
 func TestUsersHandlersEmptyResult(t *testing.T) {
 	handlers := []struct {
 		action  string
@@ -182,9 +171,10 @@ func TestUsersHandlersEmptyResult(t *testing.T) {
 			})
 
 			options := &str.Options{Module: "users", Action: h.action, UserName: "sean", Type: "movies", Output: filepath.Join(t.TempDir(), "out.json")}
-			assert.EqualError(t, h.handler.Handle(options, s.Client), consts.EmptyResult)
-			_, err := os.Stat(options.Output)
-			assert.True(t, os.IsNotExist(err), "no output file is written")
+			test.AssertNilError(t, h.handler.Handle(options, s.Client))
+			data, err := os.ReadFile(options.Output)
+			test.AssertNilError(t, err)
+			assert.Equal(t, "[]", string(data))
 		})
 	}
 }

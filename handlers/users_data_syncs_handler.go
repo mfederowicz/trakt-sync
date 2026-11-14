@@ -37,10 +37,6 @@ func (UsersDataSyncsHandler) Handle(options *str.Options, client *trakt.Client) 
 		return fmt.Errorf("fetch data syncs error: %w", err)
 	}
 
-	if len(result) == consts.ZeroValue {
-		return errors.New(consts.EmptyResult)
-	}
-
 	printer.Printf("Found %d result \n", len(result))
 	return writeResult(options, result)
 }
@@ -84,10 +80,6 @@ func (UsersDataSyncItemsHandler) Handle(options *str.Options, client *trakt.Clie
 	})
 	if err = dataSyncError(options.Action, id, lastResp, err); err != nil {
 		return err
-	}
-
-	if len(result) == consts.ZeroValue {
-		return fmt.Errorf("no %s items in data sync %d", section, id)
 	}
 
 	printer.Printf("Found %d result \n", len(result))

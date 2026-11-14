@@ -52,7 +52,7 @@ func TestUsersPlexHandlers(t *testing.T) {
 		{name: "servers", handler: UsersPlexServersHandler{}, options: str.Options{Action: consts.PlexServers},
 			method: http.MethodGet, path: "/users/settings/plex/servers", status: http.StatusOK, body: `{"servers":[{"id":"abc"}]}`, wantOutput: true},
 		{name: "servers empty", handler: UsersPlexServersHandler{}, options: str.Options{Action: consts.PlexServers},
-			method: http.MethodGet, path: "/users/settings/plex/servers", status: http.StatusOK, body: `{"servers":[]}`, wantErr: consts.EmptyResult},
+			method: http.MethodGet, path: "/users/settings/plex/servers", status: http.StatusOK, body: `{"servers":[]}`, wantOutput: true},
 		{name: "servers plex bad_auth", handler: UsersPlexServersHandler{}, options: str.Options{Action: consts.PlexServers},
 			method: http.MethodGet, path: "/users/settings/plex/servers", status: http.StatusUnauthorized, body: badAuth,
 			wantErr: "plex_servers: Plex bad_auth: Plex rejected the authorization. Reconnect Plex."},

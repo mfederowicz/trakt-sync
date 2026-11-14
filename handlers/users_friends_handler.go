@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -38,10 +37,6 @@ func (u UsersFriendsHandler) fetchFriends(client *trakt.Client, options *str.Opt
 	items, err := u.common.FetchFriends(client, options, page)
 	if err != nil {
 		return nil, fmt.Errorf("fetch friends error:%w", err)
-	}
-
-	if len(items) == consts.ZeroValue {
-		return nil, errors.New("empty list")
 	}
 
 	return items, nil

@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -38,10 +37,6 @@ func (u UsersBlockedUsersHandler) fetchBlockedUsers(client *trakt.Client, option
 	users, err := u.common.FetchBlockedUsers(client, options, page)
 	if err != nil {
 		return nil, fmt.Errorf("fetch blocked users error:%w", err)
-	}
-
-	if len(users) == consts.ZeroValue {
-		return nil, errors.New("empty list")
 	}
 
 	return users, nil
