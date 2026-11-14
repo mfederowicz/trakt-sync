@@ -34,6 +34,12 @@ schedule.
 
 ### Changed
 
+### Fixed
+
+## [1.30.0] - 2026-11-14
+
+### Changed
+
 - When Trakt answers with an empty list, the list actions of `movies`, `shows`, `people` (`lists`, `updates`, `updated_ids`), `networks`, `lists` and `comments` now write `[]` to the output file and exit with 0. Before, they stopped with an error such as `empty shows` (exit 1) and wrote no file, so a filter that matches nothing, like `shows -a anticipated -parental_violence 0-0`, looked like a failure.
 - The same now holds for `calendars` (every action), `media` (`trending`, `popular`, `anticipated`, `anticipated_recommendations`), `movies` and `shows -a anticipated_recommendations`, `recommendations`, `social_recommendations`, `smart_lists` (`items`, `templates`), `team -a members`, `watchnow -a sources` and `younify -a connections`: an empty list writes `[]` and exits with 0 instead of stopping with `empty result`.
 - `users` and `sync` follow too: `users -a` `watchlist`, `favorites`, `history`, `ratings`, `collection`, `activities`, `comment_reactions`, `comments`, `likes`, `notes`, `lists` (the overview, and the items of a list given with `-i`), `list_items`, `list_likes`, `list_comments`, `collaborations`, `blocked_users`, `followers`, `following`, `friends`, `saved_filters`, `smart_lists`, `data_syncs`, `data_sync_paused`, `data_sync_skipped`, and `sync -a get_watchlist` and `get_favorites` write `[]` for an empty list and exit with 0; `users -a plex_servers` writes `{}` when there are no servers. Before, they stopped with an error such as `empty watchlist`, `empty result` or `no paused items in data sync 157`.
@@ -872,7 +878,8 @@ schedule.
 - First release, with the `calendars`, `collection`, `help`, `history`, `lists`, `people`, `search` and `watchlist`
   commands exporting Trakt data to JSON.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.29.0...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.30.0...HEAD
+[1.30.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.29.0...v1.30.0
 [1.29.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.28.0...v1.29.0
 [1.28.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.27.0...v1.28.0
 [1.27.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.26.0...v1.27.0
