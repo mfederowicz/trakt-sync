@@ -58,7 +58,7 @@ $ ./trakt-sync users -a hidden_items -t show -section recommendations
 ```console
 $ ./trakt-sync users -a hidden_items -t user -section comments
 ```
-Note: the live API returns an empty list for the `comments` section even when a user is hidden (checked 2026-10-02), so this export is `[]`; keep your own input file to unhide a user with `remove_hidden_items`.
+Each hidden user is exported with `"type": "user"` and a `user` object. Until at least 2026-10-02 the live API answered the `comments` section with `[]` even when a user was hidden; since 2026-11-14 it lists them.
 ```console
 $ ./trakt-sync users -a hidden_items -t show -section dropped
 ```
