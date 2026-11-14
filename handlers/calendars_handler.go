@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"strings"
 
@@ -42,10 +41,6 @@ func calendarOptions(options *str.Options) (uri.ListOptions, error) {
 
 // writeCalendarList writes a fetched calendar list to the output file.
 func writeCalendarList(options *str.Options, result []*str.CalendarList) error {
-	if len(result) == consts.ZeroValue {
-		return errors.New(consts.EmptyResult)
-	}
-
 	printer.Println("Found " + options.Action + " calendar data")
 	printer.Println("write data to:" + options.Output)
 	jsonData, err := json.MarshalIndent(result, consts.EmptyString, consts.JSONDataFormat)

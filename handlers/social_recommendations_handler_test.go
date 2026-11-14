@@ -62,7 +62,6 @@ func TestSocialRecommendationsHandlerErrors(t *testing.T) {
 		body    string
 		wantErr string
 	}{
-		{name: "empty list", status: http.StatusOK, body: `[]`, wantErr: consts.EmptyResult},
 		{name: "unauthorized", status: http.StatusUnauthorized, body: `{}`, wantErr: "fetch social recommendations movies error"},
 	}
 

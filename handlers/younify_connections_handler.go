@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cli"
@@ -23,10 +22,6 @@ func (YounifyConnectionsHandler) Handle(options *str.Options, client *trakt.Clie
 	result, resp, err := client.Younify.GetConnections(cli.ContextFromOptions(options))
 	if err = younifyError(options.Action, consts.EmptyString, resp, err); err != nil {
 		return err
-	}
-
-	if len(result) == consts.ZeroValue {
-		return errors.New(consts.EmptyResult)
 	}
 
 	printer.Printf("Found %d result \n", len(result))

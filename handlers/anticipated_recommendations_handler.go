@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -24,10 +23,6 @@ func exportAnticipatedRecommendations(client *trakt.Client, options *str.Options
 	})
 	if err != nil {
 		return fmt.Errorf("fetch %s %s error: %w", options.Module, options.Action, err)
-	}
-
-	if len(result) == consts.ZeroValue {
-		return errors.New(consts.EmptyResult)
 	}
 
 	printer.Printf("Found %d result \n", len(result))

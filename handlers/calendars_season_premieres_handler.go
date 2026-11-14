@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cli"
@@ -23,10 +22,6 @@ func (CalendarsSeasonPremieresHandler) Handle(options *str.Options, client *trak
 	result, err := fetchCalendarSeasonPremieres(client, options)
 	if err != nil {
 		return fmt.Errorf("fetch calendar "+options.Action+" premieres error:%w", err)
-	}
-
-	if len(result) == consts.ZeroValue {
-		return errors.New(consts.EmptyResult)
 	}
 
 	printer.Print("Found " + options.Action + " calendar data \n")

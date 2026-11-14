@@ -8,7 +8,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/test"
 	"github.com/stretchr/testify/assert"
@@ -61,6 +60,8 @@ func TestAnticipatedRecommendationsHandlerEmpty(t *testing.T) {
 	})
 
 	options := str.Options{Output: filepath.Join(t.TempDir(), "out.json")}
-	err := MoviesAnticipatedRecommendationsHandler{}.Handle(&options, s.Client)
-	assert.ErrorContains(t, err, consts.EmptyResult)
+	test.AssertNilError(t, MoviesAnticipatedRecommendationsHandler{}.Handle(&options, s.Client))
+	data, err := os.ReadFile(options.Output)
+	test.AssertNilError(t, err)
+	assert.Equal(t, "[]", string(data))
 }

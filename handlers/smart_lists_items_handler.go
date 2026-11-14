@@ -75,10 +75,6 @@ func (h SmartListsItemsHandler) Handle(options *str.Options, client *trakt.Clien
 		return err
 	}
 
-	if len(result) == consts.ZeroValue {
-		return errors.New(consts.EmptyResult)
-	}
-
 	printer.Printf("Found %d result \n", len(result))
 	return writeSmartList(options, result)
 }

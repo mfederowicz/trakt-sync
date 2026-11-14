@@ -15,9 +15,10 @@ import (
 // a list action that gets an empty list from Trakt writes [] and returns no error.
 func TestListHandlersEmptyResult(t *testing.T) {
 	handlers := []struct {
-		module  string
-		name    string
-		handler Handler
+		module     string
+		name       string
+		handler    Handler
+		searchType str.Slice
 	}{
 		{module: "movies", name: "trending", handler: MoviesTrendingHandler{}},
 		{module: "movies", name: "popular", handler: MoviesPopularHandler{}},
@@ -55,6 +56,35 @@ func TestListHandlersEmptyResult(t *testing.T) {
 		{module: "comments", name: "replies", handler: CommentsRepliesHandler{}},
 		{module: "comments", name: "likes", handler: CommentsLikesHandler{}},
 		{module: "comments", name: "reactions", handler: CommentsReactionsHandler{}},
+		{module: "movies", name: "anticipated_recommendations", handler: MoviesAnticipatedRecommendationsHandler{}},
+		{module: "shows", name: "anticipated_recommendations", handler: ShowsAnticipatedRecommendationsHandler{}},
+		{module: "media", name: "anticipated_recommendations", handler: MediaAnticipatedRecommendationsHandler{}},
+		{module: "media", name: "trending", handler: MediaTrendingHandler{}},
+		{module: "media", name: "popular", handler: MediaPopularHandler{}},
+		{module: "media", name: "anticipated", handler: MediaAnticipatedHandler{}},
+		{module: "calendars", name: "my-shows", handler: CalendarsShowsHandler{}},
+		{module: "calendars", name: "my-new-shows", handler: CalendarsNewShowsHandler{}},
+		{module: "calendars", name: "my-season-premieres", handler: CalendarsSeasonPremieresHandler{}},
+		{module: "calendars", name: "my-finales", handler: CalendarsFinalesHandler{}},
+		{module: "calendars", name: "my-movies", handler: CalendarsMoviesHandler{}},
+		{module: "calendars", name: "my-dvd", handler: CalendarsDvdHandler{}},
+		{module: "calendars", name: "my-media", handler: CalendarsMediaHandler{}},
+		{module: "calendars", name: "hot-finales", handler: CalendarsHotFinalesHandler{}},
+		{module: "calendars", name: "hot-releases", handler: CalendarsHotReleasesHandler{}},
+		{module: "calendars", name: "hot-premieres", handler: CalendarsHotPremieresHandler{}},
+		{module: "calendars", name: "hot-new-shows", handler: CalendarsHotNewShowsHandler{}},
+		{module: "calendars", name: "streaming", handler: CalendarsStreamingHandler{}},
+		{module: "recommendations", name: "movies", handler: RecommendationsMoviesHandler{}},
+		{module: "recommendations", name: "shows", handler: RecommendationsShowsHandler{}},
+		{module: "social_recommendations", name: "movies", handler: SocialRecommendationsMoviesHandler{}},
+		{module: "social_recommendations", name: "shows", handler: SocialRecommendationsShowsHandler{}},
+		{module: "smart_lists", name: "templates", handler: SmartListsTemplatesHandler{}},
+		{module: "smart_lists", name: "items", handler: SmartListsItemsHandler{}},
+		{module: "team", name: "members", handler: TeamMembersHandler{}},
+		{module: "watchnow", name: "sources", handler: WatchNowSourcesHandler{}},
+		{module: "younify", name: "connections", handler: YounifyConnectionsHandler{}},
+		{module: "search", name: "text_query", handler: SearchTextQueryHandler{}, searchType: str.Slice{"movie"}},
+		{module: "search", name: "id_lookup", handler: SearchIDLookupHandler{}},
 	}
 
 	for _, h := range handlers {
@@ -70,7 +100,7 @@ func TestListHandlersEmptyResult(t *testing.T) {
 			})
 
 			output := filepath.Join(t.TempDir(), "out.json")
-			options := str.Options{Module: h.module, Action: h.name, Period: "weekly", ID: "keanu-reeves", InternalID: "123", CommentID: 1, Output: output}
+			options := str.Options{Module: h.module, Action: h.name, Period: "weekly", ID: "keanu-reeves", InternalID: "123", CommentID: 1, SearchType: h.searchType, Query: "tron", Output: output}
 			err := h.handler.Handle(&options, s.Client)
 			test.AssertNilError(t, err)
 			assert.Equal(t, 1, calls, "one request")

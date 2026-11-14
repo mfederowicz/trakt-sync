@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cli"
@@ -36,10 +35,6 @@ func (WatchNowSourcesHandler) Handle(options *str.Options, client *trakt.Client)
 	}
 	if err = watchNowError(consts.WatchNow+" "+consts.Sources, consts.Sources, country, resp, err); err != nil {
 		return err
-	}
-
-	if len(result) == consts.ZeroValue {
-		return errors.New(consts.EmptyResult)
 	}
 
 	printer.Println("write data to:" + options.Output)

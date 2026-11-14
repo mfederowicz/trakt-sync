@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -31,10 +30,6 @@ func exportMedia[T any](client *trakt.Client, options *str.Options, fetch pageFe
 	})
 	if err != nil {
 		return fmt.Errorf("fetch media %s error: %w", options.Action, err)
-	}
-
-	if len(result) == consts.ZeroValue {
-		return errors.New(consts.EmptyResult)
 	}
 
 	printer.Printf("Found %d result \n", len(result))

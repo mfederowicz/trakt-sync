@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cli"
@@ -25,10 +24,6 @@ func (TeamMembersHandler) Handle(options *str.Options, client *trakt.Client) err
 	result, _, err := client.Team.GetTeamMembers(cli.ContextFromOptions(options), &opts)
 	if err != nil {
 		return fmt.Errorf("fetch team %s error: %w", options.Action, err)
-	}
-
-	if len(result) == consts.ZeroValue {
-		return errors.New(consts.EmptyResult)
 	}
 
 	printer.Printf("Found %d result \n", len(result))
