@@ -40,6 +40,7 @@ schedule.
 
 ### Fixed
 
+- `users -a data_syncs`, `data_sync`, `data_sync_paused`, `data_sync_skipped` and `undo_data_sync` explain a 403 like a 401: `Trakt answered 403 ...; this route is not open to API apps yet`. Since 2026-11-14 Trakt answers `GET /users/syncs/` with 403 instead of 401 for API apps, and the CLI showed only the raw error.
 - Library: `str.Movie` sends and reads `Notes` under the contract key `notes`; it used `note`, so Trakt ignored the notes of a movie added with `SyncService.AddItemsToWatchlist`, `AddItemsToFavorites` or `UsersService.AddListItems`. The CLI does not send item notes, so its output does not change.
 - `sync -a update_favorites` sends only the settings you give (`-description`, `-sort_by`, `-sort_how`). Before, a setting without its flag was sent with its default, so `-description` alone reset the sort to `rank`/`asc` and `-sort_by` alone cleared the description. With none of the three it now stops with a message instead of sending a request.
 - `sync -a update_watchlist` sends only the settings you give (`-description`, `-sort_by`, `-sort_how`), like `update_favorites`. Before, a setting without its flag was sent with its default, so `-description` alone reset the sort to `rank`/`asc` and `-sort_by` alone cleared the description. With none of the three it now stops with a message instead of sending a request.
