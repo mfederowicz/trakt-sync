@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -43,10 +42,6 @@ func (m SyncGetFavoritesHandler) syncGetFavorites(client *trakt.Client, options 
 	favorites, err := m.common.FetchFavorites(client, options, page)
 	if err != nil {
 		return nil, fmt.Errorf("fetch favorites error:%w", err)
-	}
-
-	if len(favorites) == consts.ZeroValue {
-		return nil, errors.New("empty favorites")
 	}
 
 	return favorites, nil

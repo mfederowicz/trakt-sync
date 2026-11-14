@@ -39,10 +39,6 @@ func (m UsersHistoryHandler) Handle(options *str.Options, client *trakt.Client) 
 	if err != nil {
 		return fmt.Errorf("get watched error:%w", err)
 	}
-	if len(items) == consts.ZeroValue {
-		return errors.New(consts.EmptyResult)
-	}
-
 	jsonData, err := json.MarshalIndent(items, consts.EmptyString, consts.JSONDataFormat)
 	if err != nil {
 		return fmt.Errorf("encode %s result: %w", options.Action, err)

@@ -19,6 +19,10 @@ func TestListHandlersEmptyResult(t *testing.T) {
 		name       string
 		handler    Handler
 		searchType str.Slice
+		body       string
+		want       string
+		typ        string
+		id         string
 	}{
 		{module: "movies", name: "trending", handler: MoviesTrendingHandler{}},
 		{module: "movies", name: "popular", handler: MoviesPopularHandler{}},
@@ -85,6 +89,31 @@ func TestListHandlersEmptyResult(t *testing.T) {
 		{module: "younify", name: "connections", handler: YounifyConnectionsHandler{}},
 		{module: "search", name: "text_query", handler: SearchTextQueryHandler{}, searchType: str.Slice{"movie"}},
 		{module: "search", name: "id_lookup", handler: SearchIDLookupHandler{}},
+		{module: "users", name: "watchlist", handler: UsersWatchlistHandler{}},
+		{module: "users", name: "favorites", handler: UsersFavoritesHandler{}},
+		{module: "users", name: "history", handler: UsersHistoryHandler{}},
+		{module: "users", name: "ratings", handler: UsersRatingsHandler{}},
+		{module: "users", name: "collection", handler: UsersCollectionHandler{}},
+		{module: "users", name: "activities", handler: UsersActivitiesHandler{}, typ: "friends"},
+		{module: "users", name: "comment_reactions", handler: UsersCommentReactionsHandler{}},
+		{module: "users", name: "comments", handler: UsersCommentsHandler{}},
+		{module: "users", name: "likes", handler: UsersLikesHandler{}},
+		{module: "users", name: "notes", handler: UsersNotesHandler{}},
+		{module: "users", name: "collaborations", handler: UsersCollaborationsHandler{}},
+		{module: "users", name: "list_likes", handler: UsersListLikesHandler{}},
+		{module: "users", name: "list_items", handler: UsersListItemsHandler{}},
+		{module: "users", name: "list_comments", handler: UsersListCommentsHandler{}},
+		{module: "users", name: "blocked_users", handler: UsersBlockedUsersHandler{}},
+		{module: "users", name: "followers", handler: UsersFollowersHandler{}},
+		{module: "users", name: "following", handler: UsersFollowingHandler{}},
+		{module: "users", name: "friends", handler: UsersFriendsHandler{}},
+		{module: "users", name: "saved_filters", handler: UsersSavedFiltersHandler{}},
+		{module: "users", name: "smart_lists", handler: UsersSmartListsHandler{}},
+		{module: "users", name: "data_syncs", handler: UsersDataSyncsHandler{}},
+		{module: "users", name: "data_sync_paused", handler: UsersDataSyncItemsHandler{}, id: "157"},
+		{module: "users", name: "plex_servers", handler: UsersPlexServersHandler{}, body: `{"servers":[]}`, want: "{}"},
+		{module: "sync", name: "get_watchlist", handler: SyncGetWatchlistHandler{}},
+		{module: "sync", name: "get_favorites", handler: SyncGetFavoritesHandler{}},
 	}
 
 	for _, h := range handlers {
@@ -96,17 +125,29 @@ func TestListHandlersEmptyResult(t *testing.T) {
 			s.Mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 				test.AssertMethod(t, r, http.MethodGet)
 				calls++
-				test.SafeFprint(w, `[]`)
+				body := h.body
+				if body == "" {
+					body = `[]`
+				}
+				test.SafeFprint(w, body)
 			})
 
 			output := filepath.Join(t.TempDir(), "out.json")
-			options := str.Options{Module: h.module, Action: h.name, Period: "weekly", ID: "keanu-reeves", InternalID: "123", CommentID: 1, SearchType: h.searchType, Query: "tron", Output: output}
+			id := h.id
+			if id == "" {
+				id = "keanu-reeves"
+			}
+			options := str.Options{Module: h.module, Action: h.name, Type: h.typ, Period: "weekly", ID: id, InternalID: "123", CommentID: 1, SearchType: h.searchType, Query: "tron", Output: output}
 			err := h.handler.Handle(&options, s.Client)
 			test.AssertNilError(t, err)
 			assert.Equal(t, 1, calls, "one request")
 			data, err := os.ReadFile(output)
 			test.AssertNilError(t, err)
-			assert.Equal(t, "[]", string(data))
+			want := h.want
+			if want == "" {
+				want = "[]"
+			}
+			assert.Equal(t, want, string(data))
 		})
 	}
 }

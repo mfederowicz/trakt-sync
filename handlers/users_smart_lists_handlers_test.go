@@ -33,7 +33,7 @@ func TestUsersSmartListsHandlers(t *testing.T) {
 		{name: "list", handler: UsersSmartListsHandler{}, options: str.Options{Action: consts.SmartLists},
 			method: http.MethodGet, path: "/users/sean/smart-lists", status: http.StatusOK, body: `[{"name":"Sci-Fi"}]`, wantOutput: true},
 		{name: "list empty", handler: UsersSmartListsHandler{}, options: str.Options{Action: consts.SmartLists},
-			method: http.MethodGet, path: "/users/sean/smart-lists", status: http.StatusOK, body: `[]`, wantErr: consts.EmptyResult},
+			method: http.MethodGet, path: "/users/sean/smart-lists", status: http.StatusOK, body: `[]`, wantOutput: true},
 		{name: "get", handler: UsersSmartListHandler{}, options: str.Options{Action: consts.SmartList, ID: "sci-fi"},
 			method: http.MethodGet, path: "/users/sean/smart-lists/sci-fi", status: http.StatusOK, body: `{"name":"Sci-Fi"}`, wantOutput: true},
 		{name: "get empty object", handler: UsersSmartListHandler{}, options: str.Options{Action: consts.SmartList, ID: "nope"},

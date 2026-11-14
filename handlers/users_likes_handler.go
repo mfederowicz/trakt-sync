@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -47,10 +46,6 @@ func (u UsersLikesHandler) fetchLikes(client *trakt.Client, options *str.Options
 	likes, err := u.common.FetchUsersLikes(client, options, page)
 	if err != nil {
 		return nil, fmt.Errorf("fetch likes error:%w", err)
-	}
-
-	if len(likes) == consts.ZeroValue {
-		return nil, errors.New("empty likes")
 	}
 
 	return likes, nil

@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -43,10 +42,6 @@ func (m SyncGetWatchlistHandler) syncGetWatchlist(client *trakt.Client, options 
 	watchlist, err := m.common.FetchWatchlist(client, options, page)
 	if err != nil {
 		return nil, fmt.Errorf("fetch watchlist error:%w", err)
-	}
-
-	if len(watchlist) == consts.ZeroValue {
-		return nil, errors.New("empty watchlist")
 	}
 
 	return watchlist, nil

@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/cli"
@@ -28,10 +27,6 @@ func (UsersSavedFiltersHandler) Handle(options *str.Options, client *trakt.Clien
 
 	if vipErr := cli.HandleVIPResponse(resp, err); vipErr != nil {
 		return vipErr
-	}
-
-	if len(filters) == consts.ZeroValue {
-		return errors.New("empty list of filters")
 	}
 
 	printer.Print("Found " + options.Action + " data \n")

@@ -29,7 +29,7 @@ func TestUsersReviewsAndActivityHandlers(t *testing.T) {
 		{name: "comment reactions", handler: UsersCommentReactionsHandler{}, options: str.Options{Action: consts.CommentReactions, PerPage: 10},
 			path: "/users/reactions/comments", query: "limit=10&page=1", status: http.StatusOK, body: `[{"type":"comment","comment":{"id":1}}]`},
 		{name: "comment reactions empty", handler: UsersCommentReactionsHandler{}, options: str.Options{Action: consts.CommentReactions},
-			path: "/users/reactions/comments", query: "page=1", status: http.StatusOK, body: `[]`, wantErr: consts.EmptyResult},
+			path: "/users/reactions/comments", query: "page=1", status: http.StatusOK, body: `[]`},
 		{name: "activities", handler: UsersActivitiesHandler{}, options: str.Options{Action: consts.Activities, Type: "friends", PerPage: 10, Genres: "drama"},
 			path: "/users/sean/friends/activities", query: "genres=drama&limit=10&page=1", status: http.StatusOK, body: `[{"id":1,"type":"movie","movie":{"title":"Arrival"}}]`},
 		{name: "activities all filters", handler: UsersActivitiesHandler{}, options: str.Options{Action: consts.Activities, Type: "following", WatchNow: "free", Genres: "action,drama", Subgenres: "space",

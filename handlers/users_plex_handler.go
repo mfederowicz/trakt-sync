@@ -104,10 +104,6 @@ func (UsersPlexServersHandler) Handle(options *str.Options, client *trakt.Client
 	if err = plexError(options.Action, resp, err); err != nil {
 		return err
 	}
-	if len(result.Servers) == consts.ZeroValue {
-		return errors.New(consts.EmptyResult)
-	}
-
 	printer.Printf("Found %d result \n", len(result.Servers))
 	return writeResult(options, result)
 }

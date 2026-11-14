@@ -27,10 +27,6 @@ func (UsersSmartListsHandler) Handle(options *str.Options, client *trakt.Client)
 		return fmt.Errorf("fetch smart lists error: %w", err)
 	}
 
-	if len(result) == consts.ZeroValue {
-		return errors.New(consts.EmptyResult)
-	}
-
 	printer.Printf("Found %d result \n", len(result))
 	return writeSmartList(options, result)
 }

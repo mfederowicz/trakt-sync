@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -38,10 +37,6 @@ func (u UsersFollowingHandler) fetchFollowing(client *trakt.Client, options *str
 	items, err := u.common.FetchFollowing(client, options, page)
 	if err != nil {
 		return nil, fmt.Errorf("fetch following error:%w", err)
-	}
-
-	if len(items) == consts.ZeroValue {
-		return nil, errors.New("empty list")
 	}
 
 	return items, nil

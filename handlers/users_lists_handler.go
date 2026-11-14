@@ -27,9 +27,6 @@ func (UsersListsHandler) Handle(options *str.Options, client *trakt.Client) erro
 		return fmt.Errorf("fetch user list error:%w", err)
 	}
 
-	if len(personalLists) == consts.ZeroValue {
-		return errors.New("empty personal lists")
-	}
 	// the lists overview keeps its own file; options.Output (-o) is for the list items
 	overview := *options
 	overview.Output = fmt.Sprintf(consts.DefaultOutputFormat2, options.Module, consts.Lists)
@@ -66,21 +63,15 @@ func (UsersListsHandler) Handle(options *str.Options, client *trakt.Client) erro
 		return fmt.Errorf("users personal list error %s", itemsErr)
 	}
 
-	if len(itemsExportData) == consts.ZeroValue {
-		return fmt.Errorf("no %s items in list %d to fetch", options.Type, intID)
-	}
-
 	printer.Printf("Found %d items \n", len(itemsExportData))
 	exportJSON := []*str.UserListItem{}
 	exportJSON = append(exportJSON, itemsExportData...)
 	printer.Println("write data to:" + options.Output)
-	if len(exportJSON) > 0 {
-		jsonData, err := json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
-		if err != nil {
-			return fmt.Errorf("encode %s result: %w", options.Action, err)
-		}
-		writer.WriteJSON(options, jsonData)
+	jsonData, err = json.MarshalIndent(exportJSON, consts.EmptyString, consts.JSONDataFormat)
+	if err != nil {
+		return fmt.Errorf("encode %s result: %w", options.Action, err)
 	}
+	writer.WriteJSON(options, jsonData)
 
 	return nil
 }
