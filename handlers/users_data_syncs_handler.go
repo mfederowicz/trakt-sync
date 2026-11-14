@@ -30,7 +30,7 @@ func (UsersDataSyncsHandler) Handle(options *str.Options, client *trakt.Client) 
 	result, err := fetchAllPages(client, options, consts.DefaultPage, func(opts *uri.ListOptions) ([]*str.DataSync, *str.Response, error) {
 		return client.Users.GetDataSyncs(cli.ContextFromOptions(options), options.Type, opts)
 	})
-	if apiErr := notOpenToAPIApps(options.Action, err); apiErr != nil {
+	if apiErr := dataSyncAccessError(options.Action, err); apiErr != nil {
 		return apiErr
 	}
 	if err != nil {
@@ -120,11 +120,23 @@ func dataSyncError(action string, id int, resp *str.Response, err error) error {
 	if resp != nil && resp.StatusCode == http.StatusNotFound {
 		return fmt.Errorf("not found data sync:%d", id)
 	}
-	if apiErr := notOpenToAPIApps(action, err); apiErr != nil {
+	if apiErr := dataSyncAccessError(action, err); apiErr != nil {
 		return apiErr
 	}
 	if err != nil {
 		return fmt.Errorf("%s error: %w", action, err)
+	}
+	return nil
+}
+
+// dataSyncAccessError explains the 401 (until 2026-11-04) and the 403 (since 2026-11-14) data syncs answer to API apps; nil for any other error.
+func dataSyncAccessError(action string, err error) error {
+	if apiErr := notOpenToAPIApps(action, err); apiErr != nil {
+		return apiErr
+	}
+	var forbidden *trakt.ForbiddenError
+	if errors.As(err, &forbidden) {
+		return fmt.Errorf(consts.NotOpenToAPIAppsForbiddenMsg, action, err)
 	}
 	return nil
 }

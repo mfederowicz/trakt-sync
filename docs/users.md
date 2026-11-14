@@ -795,8 +795,8 @@ The watching persona a user earned for a year, with its runner-up, traits, highl
 $ ./trakt-sync users -a year_in_review_persona -year 2026 -> export_users_year_in_review_persona_2026.json
 ```
 ##### Get data syncs (younify, plex, import)
-> **Note:** as of 2026-09-25 Trakt answers `data_syncs` with 401 for API apps (other OAuth routes work with the same token), and the
-> other data sync actions are expected to do the same; they fail with `this route is not open to API apps yet`.
+> **Note:** Trakt answers `data_syncs` with 403 for API apps (since 2026-11-14; 401 from 2026-09-25 to 2026-11-04), while other OAuth
+> routes work with the same token, and the other data sync actions are expected to do the same; they fail with `this route is not open to API apps yet`.
 
 Syncs your connected apps ran for you, with added counts per section. `-t younify|plex|import` filters by the app.
 ```console
