@@ -38,7 +38,6 @@ $ ./trakt-sync lists -a items -trakt_id 2142753 -t movie,show
 $ ./trakt-sync lists -a items -trakt_id 2142753 -t movie -sort_by added -sort_how desc
 ```
 Without `-t`, `items` returns all item types (`movie,show,episode,season`).
--- (temp not working - problems with api endpoint)
 ```console
 $ ./trakt-sync lists -a comments -trakt_id 2142753
 ```
