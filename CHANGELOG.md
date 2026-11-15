@@ -32,9 +32,15 @@ schedule.
 
 ### Added
 
-- `users -a watchlist -ignore_watched true` leaves out what you already watched, on both the `-sort_by` and the `-sort` route; `ignore_watched = true` in the config file applies to it too. `-ignore_collected` and `-ignore_watchlisted` stay off the watchlist, because the live API ignores them there.
-
 ### Changed
+
+### Fixed
+
+## [1.31.0] - 2026-11-15
+
+### Added
+
+- `users -a watchlist -ignore_watched true` leaves out what you already watched, on both the `-sort_by` and the `-sort` route; `ignore_watched = true` in the config file applies to it too. `-ignore_collected` and `-ignore_watchlisted` stay off the watchlist, because the live API ignores them there.
 
 ### Fixed
 
@@ -883,7 +889,8 @@ schedule.
 - First release, with the `calendars`, `collection`, `help`, `history`, `lists`, `people`, `search` and `watchlist`
   commands exporting Trakt data to JSON.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.30.0...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.31.0...HEAD
+[1.31.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.30.0...v1.31.0
 [1.30.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.29.0...v1.30.0
 [1.29.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.28.0...v1.29.0
 [1.28.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.27.0...v1.28.0
