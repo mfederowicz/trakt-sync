@@ -49,7 +49,7 @@ ignore_watchlisted = "true"
 watch_window = 30
 ```
 The three `ignore_*` values are `"true"` or `"false"`, quoted or not (`ignore_collected = true` works too). They are used by `recommendations`, `social_recommendations`,
-`smart_lists -a items` and `users -a activities`; `watch_window` by `recommendations` and `social_recommendations`.
+`smart_lists -a items` and `users -a activities`; `ignore_watched` also by `users -a watchlist`; `watch_window` by `recommendations` and `social_recommendations`.
 
 ## Usage
 

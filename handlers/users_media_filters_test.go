@@ -226,3 +226,47 @@ func TestUsersWatchlistHandlerHide(t *testing.T) {
 		})
 	}
 }
+
+// watchlist sends -ignore_watched on both of its routes, but not -ignore_collected or -ignore_watchlisted, which Trakt ignores there.
+func TestUsersWatchlistHandlerIgnoreWatched(t *testing.T) {
+	tests := []struct {
+		name    string
+		options str.Options
+		want    string
+	}{
+		{name: "typed route", options: str.Options{IgnoreWatched: "true"}, want: "ignore_watched=true"},
+		{name: "sorted route", options: str.Options{IgnoreWatched: "true", SortPath: "rank"}, want: "ignore_watched=true"},
+		{name: "false", options: str.Options{IgnoreWatched: "false"}, want: "ignore_watched=false"},
+		{name: "not set", options: str.Options{}},
+		{name: "collected and watchlisted not sent", options: str.Options{IgnoreCollected: "true", IgnoreWatchlisted: "true"}},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+			queries := []string{}
+			s.Mux.HandleFunc("/users/sean/watchlist/", func(w http.ResponseWriter, r *http.Request) {
+				test.AssertMethod(t, r, http.MethodGet)
+				queries = append(queries, r.URL.RawQuery)
+				test.SafeFprint(w, `[{"id":1,"type":"movie","movie":{"title":"Tron","ids":{"trakt":1}}}]`)
+			})
+
+			options := tt.options
+			options.Module, options.Action, options.UserName, options.Type = "users", "watchlist", "sean", "movies"
+			options.Output = filepath.Join(t.TempDir(), "out.json")
+			test.AssertNilError(t, UsersWatchlistHandler{}.Handle(&options, s.Client))
+			if !assert.Len(t, queries, 1) {
+				return
+			}
+			assert.NotContains(t, queries[0], "ignore_collected")
+			assert.NotContains(t, queries[0], "ignore_watchlisted")
+			if tt.want == consts.EmptyString {
+				assert.NotContains(t, queries[0], "ignore_watched")
+				return
+			}
+			assert.Contains(t, queries[0], tt.want)
+		})
+	}
+}

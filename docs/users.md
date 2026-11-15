@@ -618,6 +618,11 @@ imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to r
 ```console
 $ ./trakt-sync users -a watchlist -u username -t movies -sort added
 ```
+`-ignore_watched true` leaves out what you already watched; it also takes `ignore_watched` from the config file. `-ignore_collected` and
+`-ignore_watchlisted` are not sent: on 2026-11-15 the live API ignored both on the watchlist.
+```console
+$ ./trakt-sync users -a watchlist -t movies -ignore_watched true
+```
 ##### Get user watchlist comments
 ```console
 $ ./trakt-sync users -a watchlist_comments -u username -s likes
