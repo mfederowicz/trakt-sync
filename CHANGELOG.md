@@ -32,6 +32,8 @@ schedule.
 
 ### Added
 
+- `users -a watchlist -ignore_watched true` leaves out what you already watched, on both the `-sort_by` and the `-sort` route; `ignore_watched = true` in the config file applies to it too. `-ignore_collected` and `-ignore_watchlisted` stay off the watchlist, because the live API ignores them there.
+
 ### Changed
 
 ### Fixed
