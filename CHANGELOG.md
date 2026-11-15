@@ -36,6 +36,8 @@ schedule.
 
 ### Fixed
 
+- `users -a watchlist_comments`, `favorites_comments` and `list_comments` take `-s likes`, `replies`, `newest` or `oldest`, the sorts Trakt accepts. They used to allow `likes_30`, `replies_30`, `plays`, `rating` and `added`, which Trakt rejects with `400 invalid_sort`, and refused `newest` and `oldest`.
+
 ## [1.30.0] - 2026-11-14
 
 ### Changed
