@@ -321,6 +321,9 @@ var ModuleActionConfig = map[string]OptionsConfig{
 		Type: []string{"movies", "shows", "seasons", "episodes", "persons"},
 		Sort: []string{"likes", "replies", "newest", "oldest"},
 	},
+	"lists:comments": {
+		Sort: []string{"likes", "replies", "newest", "oldest"},
+	},
 	"lists:report": {
 		Reason: []string{"duplicate", "remove", "metadata", "adult", "language", "spam", "other"},
 	},

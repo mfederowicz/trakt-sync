@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/mfederowicz/trakt-sync/cfg"
 	"github.com/mfederowicz/trakt-sync/cli"
 	"github.com/mfederowicz/trakt-sync/consts"
 	"github.com/mfederowicz/trakt-sync/printer"
@@ -22,6 +23,11 @@ type ListsCommentsHandler struct{}
 func (h ListsCommentsHandler) Handle(options *str.Options, client *trakt.Client) error {
 	if len(options.InternalID) == consts.ZeroValue {
 		return errors.New(consts.EmptyListIDMsg)
+	}
+	// live, every sort outside likes, replies, newest and oldest answers 400 (checked 2026-11-15)
+	sorts := cfg.ModuleActionConfig[options.Module+":"+options.Action].Sort
+	if !cfg.IsValidConfigType(sorts, options.Sort) {
+		return fmt.Errorf("sort '%s' is not valid, available values: %v", options.Sort, sorts)
 	}
 	printer.Println("Returns all top level comments for a list.")
 	result, err := h.fetchListComments(client, options, consts.DefaultPage)
