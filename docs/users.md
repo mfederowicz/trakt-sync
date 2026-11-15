@@ -474,22 +474,13 @@ $ ./trakt-sync users -a update_list_item -u username -i 27316587 -list_item_id 9
 $ ./trakt-sync users -a list_comments -i star-wars-in-machete-order -s likes
 ```
 ```console
-$ ./trakt-sync users -a list_comments -i star-wars-in-machete-order -s likes_30
-```
-```console
 $ ./trakt-sync users -a list_comments -i star-wars-in-machete-order -s replies
 ```
 ```console
-$ ./trakt-sync users -a list_comments -i star-wars-in-machete-order -s replies_30
+$ ./trakt-sync users -a list_comments -i star-wars-in-machete-order -s newest
 ```
 ```console
-$ ./trakt-sync users -a list_comments -i star-wars-in-machete-order -s plays
-```
-```console
-$ ./trakt-sync users -a list_comments -i star-wars-in-machete-order -s rating
-```
-```console
-$ ./trakt-sync users -a list_comments -i star-wars-in-machete-order -s added
+$ ./trakt-sync users -a list_comments -i star-wars-in-machete-order -s oldest
 ```
 ##### List report
 ```console
@@ -632,22 +623,13 @@ $ ./trakt-sync users -a watchlist -u username -t movies -sort added
 $ ./trakt-sync users -a watchlist_comments -u username -s likes
 ```
 ```console
-$ ./trakt-sync users -a watchlist_comments -u username -s likes_30
-```
-```console
 $ ./trakt-sync users -a watchlist_comments -u username -s replies
 ```
 ```console
-$ ./trakt-sync users -a watchlist_comments -u username -s replies_30
+$ ./trakt-sync users -a watchlist_comments -u username -s newest
 ```
 ```console
-$ ./trakt-sync users -a watchlist_comments -u username -s plays
-```
-```console
-$ ./trakt-sync users -a watchlist_comments -u username -s rating
-```
-```console
-$ ./trakt-sync users -a watchlist_comments -u username -s added
+$ ./trakt-sync users -a watchlist_comments -u username -s oldest
 ```
 ##### Get user favorites
 ```console
@@ -694,22 +676,13 @@ $ ./trakt-sync users -a favorites -sort released
 $ ./trakt-sync users -a favorites_comments -u username -s likes
 ```
 ```console
-$ ./trakt-sync users -a favorites_comments -u username -s likes_30
-```
-```console
 $ ./trakt-sync users -a favorites_comments -u username -s replies
 ```
 ```console
-$ ./trakt-sync users -a favorites_comments -u username -s replies_30
+$ ./trakt-sync users -a favorites_comments -u username -s newest
 ```
 ```console
-$ ./trakt-sync users -a favorites_comments -u username -s plays
-```
-```console
-$ ./trakt-sync users -a favorites_comments -u username -s rating
-```
-```console
-$ ./trakt-sync users -a favorites_comments -u username -s added
+$ ./trakt-sync users -a favorites_comments -u username -s oldest
 ```
 ##### Get user watching
 ```console

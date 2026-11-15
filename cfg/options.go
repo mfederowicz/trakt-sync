@@ -319,7 +319,7 @@ var ModuleActionConfig = map[string]OptionsConfig{
 	},
 	"users:list_comments": {
 		Type: []string{"movies", "shows", "seasons", "episodes", "persons"},
-		Sort: []string{"likes", "likes_30", "replies", "replies_30", "plays", "rating", "added"},
+		Sort: []string{"likes", "replies", "newest", "oldest"},
 	},
 	"lists:report": {
 		Reason: []string{"duplicate", "remove", "metadata", "adult", "language", "spam", "other"},
@@ -342,7 +342,7 @@ var ModuleActionConfig = map[string]OptionsConfig{
 			"watched", "collected"},
 	},
 	"users:watchlist_comments": {
-		Sort: []string{"likes", "likes_30", "replies", "replies_30", "plays", "rating", "added"},
+		Sort: []string{"likes", "replies", "newest", "oldest"},
 	},
 	"users:favorites": {
 		Type:    []string{"movies", "shows", "seasons", "episodes", "all"},
@@ -353,7 +353,7 @@ var ModuleActionConfig = map[string]OptionsConfig{
 			"watched", "collected"},
 	},
 	"users:favorites_comments": {
-		Sort: []string{"likes", "likes_30", "replies", "replies_30", "plays", "rating", "added"},
+		Sort: []string{"likes", "replies", "newest", "oldest"},
 	},
 }
 
