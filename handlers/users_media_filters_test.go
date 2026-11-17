@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/mfederowicz/trakt-sync/consts"
@@ -14,7 +15,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// watchlist, history, collection and list_items send the media filter flags; an unknown -watchnow stops before the request.
+// watchlist, history and list_items send the media filter flags; an unknown -watchnow stops before the request.
 func TestUsersHandlersMediaFilters(t *testing.T) {
 	filtered := str.Options{
 		WatchNow: "free", Genres: "action,drama", Subgenres: "space", Years: "2020-2026", Ratings: "75-100", Runtimes: "90-150", Countries: "us",
@@ -26,7 +27,6 @@ func TestUsersHandlersMediaFilters(t *testing.T) {
 	}{
 		{action: "watchlist", handler: UsersWatchlistHandler{}},
 		{action: "history", handler: UsersHistoryHandler{}},
-		{action: "collection", handler: UsersCollectionHandler{}},
 		{action: "list_items", handler: UsersListItemsHandler{}},
 	}
 
@@ -267,6 +267,43 @@ func TestUsersWatchlistHandlerIgnoreWatched(t *testing.T) {
 				return
 			}
 			assert.Contains(t, queries[0], tt.want)
+		})
+	}
+}
+
+// collection sends no media filter, because Trakt ignores them there, and prints a note when one is set.
+func TestUsersCollectionHandlerSendsNoMediaFilters(t *testing.T) {
+	tests := []struct {
+		name     string
+		options  str.Options
+		wantNote bool
+	}{
+		{name: "no filters", options: str.Options{}},
+		{name: "media filters", options: str.Options{Genres: "action", Years: "2020-2026", WatchNow: "free", Languages: "en"}, wantNote: true},
+		{name: "unknown watchnow is not checked", options: str.Options{WatchNow: "cinema"}, wantNote: true},
+		{name: "parental filter", options: str.Options{Parental: str.ParentalGuide{Violence: "0-1"}}, wantNote: true},
+		{name: "parental include unrated", options: str.Options{Parental: str.ParentalGuide{IncludeUnrated: true}}, wantNote: true},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+			queries := []string{}
+			s.Mux.HandleFunc("/users/sean/collection/movies", func(w http.ResponseWriter, r *http.Request) {
+				test.AssertMethod(t, r, http.MethodGet)
+				queries = append(queries, r.URL.RawQuery)
+				test.SafeFprint(w, `[{"collected_at":"2026-01-01T00:00:00.000Z","movie":{"title":"Tron","ids":{"trakt":1}}}]`)
+			})
+
+			options := tt.options
+			options.Module, options.Action, options.UserName, options.Type = "users", "collection", "sean", "movies"
+			options.Output = filepath.Join(t.TempDir(), "out.json")
+			var err error
+			out := captureStdout(t, func() { err = UsersCollectionHandler{}.Handle(&options, s.Client) })
+			test.AssertNilError(t, err)
+			assert.Equal(t, []string{"page=1"}, queries)
+			assert.Equal(t, tt.wantNote, strings.Contains(out, consts.CollectionFiltersNotSent))
 		})
 	}
 }

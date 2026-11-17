@@ -9,6 +9,7 @@ import (
 	"github.com/mfederowicz/trakt-sync/printer"
 	"github.com/mfederowicz/trakt-sync/str"
 	"github.com/mfederowicz/trakt-sync/trakt"
+	"github.com/mfederowicz/trakt-sync/uri"
 	"github.com/mfederowicz/trakt-sync/writer"
 )
 
@@ -17,8 +18,9 @@ type UsersCollectionHandler struct{ common CommonLogic }
 
 // Handle to handle users: collection action
 func (u UsersCollectionHandler) Handle(options *str.Options, client *trakt.Client) error {
-	if err := checkMediaFilters(options); err != nil {
-		return err
+	// Trakt ignores the media filters on this route and dropped them from its API contract (trakt/trakt-api#1088)
+	if mediaFilters(options) != (uri.MediaFilters{}) {
+		printer.Println(consts.CollectionFiltersNotSent)
 	}
 	err := u.common.CheckTypes(options)
 	if err != nil {

@@ -21,6 +21,7 @@ const (
 	CheckinMsgUsage              = "allow to overwrite msg"
 	ClientNewRequestFatal        = "client.NewRequest returned error: %v"
 	ItemsUsage                   = "allow to overwrite items file path"
+	CollectionFiltersNotSent     = "users -a collection: Trakt does not filter a collection, the media filters were not sent"
 	CollectionProgressError      = "collection progress error:%w"
 	CommaString                  = ","
 	CommentIDUsage               = "allow to overwrite comment_id"
