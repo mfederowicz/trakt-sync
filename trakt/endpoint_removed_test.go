@@ -68,6 +68,16 @@ func TestLockedEndpointsSendNoRequest(t *testing.T) {
 			_, resp, err := c.SocialRecommendations.GetSocialMovieRecommendations(ctx, &uri.ListOptions{})
 			return resp, err
 		}},
+		{name: "GetHotMovies", method: http.MethodGet, route: "movies/hot",
+			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
+				_, resp, err := c.Movies.GetHotMovies(ctx, &uri.ListOptions{})
+				return resp, err
+			}},
+		{name: "GetStreamingMovies", method: http.MethodGet, route: "movies/streaming/{period}",
+			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
+				_, resp, err := c.Movies.GetStreamingMovies(ctx, "daily", &uri.ListOptions{})
+				return resp, err
+			}},
 		{name: "GetSocialShowRecommendations", method: http.MethodGet, route: "social_recommendations/shows", call: func(c *Client) (*str.Response, error) {
 			_, resp, err := c.SocialRecommendations.GetSocialShowRecommendations(ctx, &uri.ListOptions{})
 			return resp, err

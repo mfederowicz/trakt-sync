@@ -738,14 +738,26 @@ func (m *MoviesService) RefreshMovieMetadata(ctx context.Context, id string) (*s
 // GetHotMovies Returns hot movies, based on current list activity.
 //
 // API docs: https://docs.trakt.tv/reference/getmovieshot
+//
+// Deprecated: Trakt removed this endpoint from its API contract on 2026-11-17; the live API no longer serves it.
+// The method sends no request and returns an *EndpointRemovedError; in a later release it will be removed.
 func (m *MoviesService) GetHotMovies(ctx context.Context, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
+	if err := lockedEndpoint(http.MethodGet, "movies/hot"); err != nil {
+		return nil, nil, err
+	}
 	return m.fetchMoviesItems(ctx, "movies/hot", opts)
 }
 
 // GetStreamingMovies Returns the most streamed movies in the specified time period.
 //
 // API docs: https://docs.trakt.tv/reference/getmoviesstreaming
+//
+// Deprecated: Trakt removed this endpoint from its API contract on 2026-11-17; the live API no longer serves it.
+// The method sends no request and returns an *EndpointRemovedError; in a later release it will be removed.
 func (m *MoviesService) GetStreamingMovies(ctx context.Context, period string, opts *uri.ListOptions) ([]*str.MoviesItem, *str.Response, error) {
+	if err := lockedEndpoint(http.MethodGet, "movies/streaming/{period}"); err != nil {
+		return nil, nil, err
+	}
 	return m.fetchMoviesItems(ctx, fmt.Sprintf("movies/streaming/%s", period), opts)
 }
 

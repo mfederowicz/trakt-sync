@@ -32,8 +32,6 @@ func TestListHandlersEmptyResult(t *testing.T) {
 		{module: "movies", name: "favorited", handler: MoviesFavoritedHandler{}},
 		{module: "movies", name: "played", handler: MoviesPlayedHandler{}},
 		{module: "movies", name: "collected", handler: MoviesCollectedHandler{}},
-		{module: "movies", name: "hot", handler: MoviesHotHandler{}},
-		{module: "movies", name: "streaming", handler: MoviesStreamingHandler{}},
 		{module: "movies", name: "updates", handler: MoviesUpdatesHandler{}},
 		{module: "movies", name: "updated_ids", handler: MoviesUpdatedIDsHandler{}},
 		{module: "shows", name: "trending", handler: ShowsTrendingHandler{}},

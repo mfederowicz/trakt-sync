@@ -18,6 +18,8 @@ func TestLookup(t *testing.T) {
 		route  string
 		want   bool
 	}{
+		{name: "movies hot", module: consts.Movies, action: consts.Hot, method: http.MethodGet, route: "movies/hot", want: true},
+		{name: "movies streaming", module: consts.Movies, action: consts.Streaming, method: http.MethodGet, route: "movies/streaming/{period}", want: true},
 		{name: "movies refresh", module: consts.Movies, action: consts.Refresh, method: http.MethodPost, route: "movies/{id}/refresh", want: true},
 		{name: "shows refresh", module: consts.Shows, action: consts.Refresh, method: http.MethodPost, route: "shows/{id}/refresh", want: true},
 		{name: "people refresh", module: consts.People, action: consts.Refresh, method: http.MethodPost, route: "people/{id}/refresh", want: true},

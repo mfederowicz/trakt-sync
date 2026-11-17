@@ -27,8 +27,6 @@ func TestMoviesHandlersMediaFilters(t *testing.T) {
 		{name: "trending", handler: MoviesTrendingHandler{}, path: "/movies/trending"},
 		{name: "anticipated", handler: MoviesAnticipatedHandler{}, path: "/movies/anticipated"},
 		{name: "popular", handler: MoviesPopularHandler{}, path: "/movies/popular"},
-		{name: "hot", handler: MoviesHotHandler{}, path: "/movies/hot"},
-		{name: "streaming", handler: MoviesStreamingHandler{}, path: "/movies/streaming/weekly"},
 		{name: "watched", handler: MoviesWatchedHandler{}, path: "/movies/watched/weekly"},
 		{name: "favorited", handler: MoviesFavoritedHandler{}, path: "/movies/favorited/weekly"},
 		{name: "played", handler: MoviesPlayedHandler{}, path: "/movies/played/weekly"},
