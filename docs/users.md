@@ -832,13 +832,14 @@ Without `-i` every selected server is synced; `-all_data` re-pulls the full hist
 ```console
 $ ./trakt-sync users -a plex_sync -i <server id> -all_data
 ```
-##### Filter watchlist, history, collection and list items
-`watchlist`, `history`, `collection` and `list_items` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`,
+##### Filter watchlist, history and list items
+`watchlist`, `history` and `list_items` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`,
 `-runtimes`, `-countries`, `-certifications` (comma separated where a filter takes several values), `-start_date`, `-end_date`,
 `-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all` and `-languages` (language codes, comma separated).
 `-parental_nudity`, `-parental_violence`, `-parental_profanity`, `-parental_alcohol` and `-parental_frightening` filter by parental guide: each takes a severity range `min-max` from 0 (none) to 3 (severe), ie: `-parental_violence 0-1`. Titles without a parental guide are left out, unless you add `-parental_include_unrated`. `activities` takes them too.
-`collection` sends the filters, as the Trakt API contract lists them for this route, but on 2026-10-04 the live API ignored `-genres`,
-`-years`, `-languages` and `-watchnow` there and returned the whole collection.
+`collection` takes no media or parental filters: Trakt returns the whole collection anyway (checked live 2026-10-04) and removed them
+from its API contract on 2026-11-17 ([trakt/trakt-api#1088](https://github.com/trakt/trakt-api/pull/1088)). When one is set,
+`collection` does not send it and prints `users -a collection: Trakt does not filter a collection, the media filters were not sent`.
 In `history`, `-start_at` and `-end_at` still set the watched-at window; `-start_date` and `-end_date` are the separate media date filters.
 `watchlist` also takes `-hide <value>`, which leaves items out: `unwatched`, `collected`, `uncollected`, `rated`, `unrated`, `unreleased`, `noreleasedate`,
 `ended`, `airing`, `unwatchlisted`, `listed`, `notes` or `nonotes` (one value). On 2026-10-04 the live API applied `unwatched`, `collected`, `uncollected`, `rated`,

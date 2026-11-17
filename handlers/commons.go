@@ -2150,7 +2150,7 @@ func (c CommonLogic) FetchUsersListLikes(client *trakt.Client, options *str.Opti
 
 // FetchUsersCollection helper funciton to users: collection
 func (c CommonLogic) FetchUsersCollection(client *trakt.Client, options *str.Options, page int) ([]*str.ExportlistItem, error) {
-	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo, Filters: mediaFilters(options)}
+	opts := uri.ListOptions{Page: page, Limit: options.PerPage, Extended: options.ExtendedInfo}
 	list, resp, err := client.Users.GetCollection(
 		cli.ContextFromOptions(options),
 		options.UserName,
