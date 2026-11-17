@@ -43,6 +43,8 @@ Every calendar action takes the Trakt media filters: `-genres`, `-subgenres`, `-
 `-languages` (language codes, comma separated) filters them too.
 `-parental_nudity`, `-parental_violence`, `-parental_profanity`, `-parental_alcohol` and `-parental_frightening` filter by parental guide: each takes a severity range `min-max` from 0 (none) to 3 (severe), ie: `-parental_violence 0-1`. Titles without a parental guide are left out, unless you add `-parental_include_unrated`.
 The dates of a calendar are set with `-start_date` and `-days`.
+Trakt ignores `-years` on the `*_shows`, `*_new_shows`, `*_season_premieres`, `*_finales`, `*_movies`, `*_streaming` and `*_dvd` actions,
+because `-start_date` and `-days` already set the window ([trakt/trakt-api#1078](https://github.com/trakt/trakt-api/issues/1078)).
 ```console
 $ ./trakt-sync calendars -a all_movies -genres horror -countries us
 ```
