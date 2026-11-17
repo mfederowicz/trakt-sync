@@ -21,13 +21,14 @@ func TestSyncServiceGetMinimalCollection(t *testing.T) {
 			setup.Mux.HandleFunc("/sync/collection/minimal/"+strType, func(w http.ResponseWriter, r *http.Request) {
 				test.AssertMethod(t, r, http.MethodGet)
 				test.AssertNoDiff(t, "available_on=digital", r.URL.RawQuery)
-				test.SafeFprint(w, `{"12601":"2026-09-01T10:20:30.000Z"}`)
+				test.SafeFprint(w, `{"12601":"2026-09-01T10:20:30.000Z|plex","12602":"2026-09-02T10:20:30.000Z|"}`)
 			})
 
 			got, _, err := setup.Client.Sync.GetMinimalCollection(context.Background(), strType, &uri.ListOptions{AvailableOn: "digital"})
 			test.AssertNilError(t, err)
 			test.AssertNoDiff(t, str.MinimalCollection{
-				"12601": {Time: time.Date(2026, time.September, 1, 10, 20, 30, 0, time.UTC)},
+				"12601": {CollectedAt: &str.Timestamp{Time: time.Date(2026, time.September, 1, 10, 20, 30, 0, time.UTC)}, Source: str.String("plex")},
+				"12602": {CollectedAt: &str.Timestamp{Time: time.Date(2026, time.September, 2, 10, 20, 30, 0, time.UTC)}, Source: str.String("")},
 			}, got)
 		})
 	}
@@ -47,8 +48,8 @@ func TestSyncServiceGetMinimalShowCollection(t *testing.T) {
 	test.AssertNilError(t, err)
 	test.AssertNoDiff(t, str.MinimalShowCollection{
 		"1390": {"1": {
-			"1": {Time: time.Date(2026, time.September, 1, 10, 20, 30, 0, time.UTC)},
-			"2": {Time: time.Date(2026, time.September, 2, 10, 20, 30, 0, time.UTC)},
+			"1": {CollectedAt: &str.Timestamp{Time: time.Date(2026, time.September, 1, 10, 20, 30, 0, time.UTC)}},
+			"2": {CollectedAt: &str.Timestamp{Time: time.Date(2026, time.September, 2, 10, 20, 30, 0, time.UTC)}},
 		}},
 	}, got)
 }
