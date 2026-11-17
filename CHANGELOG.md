@@ -37,8 +37,11 @@ schedule.
 - `movies -a hot` and `movies -a streaming` are locked: Trakt removed both charts from its API on 2026-11-17, after the live API had answered 404 for months. The actions send no request and stop with `movies -a hot is locked since 2026-11-17: Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent`; the action names stay.
 - Library: `MoviesService.GetHotMovies` and `GetStreamingMovies` are marked deprecated and return a `*trakt.EndpointRemovedError` without sending a request. They will be removed in a later release.
 - `users -a collection` no longer sends the media and parental filters (`-genres`, `-years`, `-watchnow`, `-languages`, `-parental_*`, ...) and no longer checks their values. Trakt never applied them on this route and removed them from its API contract on 2026-11-17; the export is the same as before. When one is set, the action prints `users -a collection: Trakt does not filter a collection, the media filters were not sent`.
+- Library: `str.MinimalCollection` (and so `str.MinimalShowCollection`) maps to the new `*str.MinimalCollected` instead of `*str.Timestamp`; it holds `CollectedAt` and, when Trakt sent one, `Source` (`plex`, `jellyfin` or empty).
 
 ### Fixed
+
+- `sync -a get_minimal_collection -available_on other` works, and so does `-available_on digital` for items with a source: Trakt sends each value as `collected_at|source` when `-available_on` is set, and the export keeps that form, such as `"2002-07-19T21:00:00Z|plex"` or `"2002-07-19T21:00:00Z|"`. Before, the action stopped with `invalid timestamp format`.
 
 ## [1.31.0] - 2026-11-15
 

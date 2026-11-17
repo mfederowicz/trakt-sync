@@ -52,9 +52,10 @@ $ ./trakt-sync sync -a get_collection -t movies -ex available_on
 ##### Get minimal collection
 A compact map for syncing local state: `-t movies|episodes` gives Trakt ID -> collected_at, `-t shows` gives
 show Trakt ID -> season -> episode -> collected_at. `-available_on digital` limits it to items synced from a connected media server (such as Plex), `-available_on other` to everything else.
-`plex` left the Trakt contract but is still accepted while the live API applies it. On 2026-10-17 the live API answered
-`-available_on other` with malformed dates (a trailing `|`), so that value fails with `invalid timestamp format` until Trakt
-fixes it.
+`plex` left the Trakt contract but is still accepted while the live API applies it.
+With `-available_on`, each value is `collected_at|source`, where `source` is `plex` or `jellyfin` for items synced from a
+media server and empty otherwise, for example `"12601": "2002-07-19T21:00:00Z|"`
+([trakt/trakt-api#1089](https://github.com/trakt/trakt-api/pull/1089)). Without it, each value is just `collected_at`.
 ```console
 $ ./trakt-sync sync -a get_minimal_collection -t movies
 ```

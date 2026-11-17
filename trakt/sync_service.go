@@ -665,7 +665,8 @@ func (s *SyncService) UpdateFavoriteItem(ctx context.Context, itemID int, update
 	return resp, nil
 }
 
-// GetMinimalCollection Returns the movie or episode collection in a minimal format: Trakt ID -> collected_at.
+// GetMinimalCollection Returns the movie or episode collection in a minimal format: Trakt ID -> collected_at,
+// or collected_at|source when opts sets AvailableOn.
 //
 // API docs: https://docs.trakt.tv/reference/getsynccollectionminimalmovies
 // API docs: https://docs.trakt.tv/reference/getsynccollectionminimalepisodes
@@ -690,7 +691,8 @@ func (s *SyncService) GetMinimalCollection(ctx context.Context, strType string, 
 	return result, resp, nil
 }
 
-// GetMinimalShowCollection Returns the show collection in a minimal format: show Trakt ID -> season -> episode -> collected_at.
+// GetMinimalShowCollection Returns the show collection in a minimal format: show Trakt ID -> season -> episode -> collected_at,
+// or collected_at|source when opts sets AvailableOn.
 //
 // API docs: https://docs.trakt.tv/reference/getsynccollectionminimalshows
 func (s *SyncService) GetMinimalShowCollection(ctx context.Context, opts *uri.ListOptions) (str.MinimalShowCollection, *str.Response, error) {
