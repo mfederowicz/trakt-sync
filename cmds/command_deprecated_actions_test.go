@@ -82,3 +82,43 @@ func TestDeprecationResult(t *testing.T) {
 	notice.Removed = "2026-12-01"
 	assert.EqualError(t, deprecationResult(notice), "movies -a refresh is removed since 2026-12-01: Trakt removed this endpoint; no request was sent")
 }
+
+// TestLockedActionsSendNothing checks that an action whose endpoint is locked ends with its notice as the error,
+// prints nothing and never runs.
+func TestLockedActionsSendNothing(t *testing.T) {
+	fs := afero.NewMemMapFs()
+	assert.NoError(t, fs.MkdirAll("/locked/", consts.X755))
+	assert.NoError(t, afero.WriteFile(fs, "/locked/token.json", []byte("{}"), consts.X644))
+	assert.NoError(t, afero.WriteFile(fs, "/locked/user_settings.json", []byte(`{"user":{"username":"sean"}}`), consts.X644))
+	config := cfg.DefaultConfig()
+	config.ClientID, config.ClientSecret = "a", "b"
+	config.TokenPath, config.SettingsPath = "/locked/token.json", "/locked/user_settings.json"
+
+	const status = " is locked since 2026-11-17: Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent"
+	tests := []struct {
+		name string
+		args []string
+		want string
+	}{
+		{name: "movies hot", args: []string{"-a", "hot"}, want: "movies -a hot" + status},
+		{name: "movies streaming", args: []string{"-a", "streaming", "-period", "daily"}, want: "movies -a streaming" + status},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			resetAllFlags()
+			t.Cleanup(resetAllFlags)
+
+			ran := false
+			command := &Command{Name: MoviesCmd.Name, Flag: MoviesCmd.Flag, Run: func(_ *Command, _ ...string) error {
+				ran = true
+				return nil
+			}}
+			var err error
+			out := captureStdout(t, func() { err = command.Exec(fs, trakt.NewClient(nil), config, tt.args) })
+			assert.EqualError(t, err, tt.want)
+			assert.False(t, ran)
+			assert.Empty(t, out)
+		})
+	}
+}

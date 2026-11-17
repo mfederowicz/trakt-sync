@@ -66,17 +66,16 @@ Needs your login (OAuth). Returns unreleased movies ranked for your taste, at mo
 ```console
 $ ./trakt-sync movies -a anticipated_recommendations -> export_movies_anticipated_recommendations.json
 ```
+##### Hot and streaming movies (locked)
+Trakt removed the `hot` and `streaming` charts from its API on 2026-11-17 (the live API already answered 404,
+[trakt/trakt-api#1074](https://github.com/trakt/trakt-api/issues/1074)). Both actions are locked: they send no request
+and stop with a notice:
 ```console
-$ ./trakt-sync movies -a hot -> export_movies_hot.json
-```
-`streaming` accepts `-period daily|weekly|monthly` (default `weekly`).
-`hot` and `streaming` are in the Trakt API docs, but the live API currently returns 404 for them;
-the CLI then reports that the route is not served.
-```console
-$ ./trakt-sync movies -a streaming -period daily -> export_movies_streaming_daily.json
+$ ./trakt-sync movies -a hot
+movies -a hot is locked since 2026-11-17: Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent
 ```
 ##### Filter the movie lists
-`trending`, `popular`, `anticipated`, `watched`, `played`, `collected`, `favorited`, `hot` and `streaming` take the Trakt media filters:
+`trending`, `popular`, `anticipated`, `watched`, `played`, `collected` and `favorited` take the Trakt media filters:
 `-genres`, `-subgenres`, `-years`, `-ratings`, `-runtimes`, `-countries`, `-certifications` (comma separated where a
 filter takes several values), `-start_date`, `-end_date`,
 `-watchnow favorites|any|any_all|free|free_all|subscriptions|subscriptions_all` and

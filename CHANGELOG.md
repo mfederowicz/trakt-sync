@@ -34,6 +34,9 @@ schedule.
 
 ### Changed
 
+- `movies -a hot` and `movies -a streaming` are locked: Trakt removed both charts from its API on 2026-11-17, after the live API had answered 404 for months. The actions send no request and stop with `movies -a hot is locked since 2026-11-17: Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent`; the action names stay.
+- Library: `MoviesService.GetHotMovies` and `GetStreamingMovies` are marked deprecated and return a `*trakt.EndpointRemovedError` without sending a request. They will be removed in a later release.
+
 ### Fixed
 
 ## [1.31.0] - 2026-11-15
