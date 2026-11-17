@@ -176,7 +176,7 @@ $ ./trakt-sync shows -a collection_progress -i the-sopranos -count_specials true
 ```console
 $ ./trakt-sync shows -a collection_progress -i the-sopranos -hidden true -specials true -count_specials true
 ```
-`last_episode` and `next_episode` are counted from the last aired episode you collected. `-last_activity collected` counts them from the episode you collected most recently:
+`last_episode` and `next_episode` are counted from the last aired episode you collected. `-last_activity collected` counts them from the episode you collected most recently (checked live 2026-11-15):
 ```console
 $ ./trakt-sync shows -a collection_progress -i the-sopranos -last_activity collected
 ```
@@ -196,7 +196,7 @@ $ ./trakt-sync shows -a watched_progress -i the-sopranos -count_specials true
 ```console
 $ ./trakt-sync shows -a watched_progress -i the-sopranos -hidden true -specials true -count_specials true
 ```
-`-last_activity watched` counts `last_episode` and `next_episode` from the episode you watched most recently, instead of the last aired one you watched:
+`-last_activity watched` counts `last_episode` and `next_episode` from the episode you watched most recently, instead of the last aired one you watched (checked live 2026-11-15):
 ```console
 $ ./trakt-sync shows -a watched_progress -i the-sopranos -last_activity watched
 ```
