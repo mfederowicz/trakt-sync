@@ -21,7 +21,7 @@ func (m UsersFavoritesCommentsHandler) Handle(options *str.Options, client *trak
 	if err != nil {
 		return err
 	}
-	printer.Println("Returns all top level comments for the favorites. sorted by:", options.Sort)
+	printer.Println("Returns all top level comments for the favorites. sorted by:", commentSortLabel(options.Sort))
 	items, err := m.usersFavoritesComments(client, options, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("get favorites comments error:%w", err)

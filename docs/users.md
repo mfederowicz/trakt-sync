@@ -470,6 +470,7 @@ $ cat export_users_list_movies.json | ./trakt-sync users -a reorder_list_items
 $ ./trakt-sync users -a update_list_item -u username -i 27316587 -list_item_id 996953153 -notes "best romcom"
 ```
 ##### Get all list comments
+Without `-s` no sort is sent and Trakt sorts by `newest`; `-s` is `newest`, `oldest`, `likes` or `replies`.
 ```console
 $ ./trakt-sync users -a list_comments -i star-wars-in-machete-order -s likes
 ```
@@ -624,6 +625,7 @@ $ ./trakt-sync users -a watchlist -u username -t movies -sort added
 $ ./trakt-sync users -a watchlist -t movies -ignore_watched true
 ```
 ##### Get user watchlist comments
+Without `-s` no sort is sent and Trakt sorts by `newest`; `-s` is `newest`, `oldest`, `likes` or `replies`.
 ```console
 $ ./trakt-sync users -a watchlist_comments -u username -s likes
 ```
@@ -677,6 +679,7 @@ imdb_votes, and tmdb_votes. If sent for a non VIP, the items will fall back to r
 $ ./trakt-sync users -a favorites -sort released
 ```
 ##### Get user favorites comments
+Without `-s` no sort is sent and Trakt sorts by `newest`; `-s` is `newest`, `oldest`, `likes` or `replies`.
 ```console
 $ ./trakt-sync users -a favorites_comments -u username -s likes
 ```

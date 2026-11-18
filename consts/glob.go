@@ -234,6 +234,7 @@ const (
 	TestURL                      = "test-url"
 	ThemeUsage                   = "seasonal theme ie: halloween, christmas; filters you set yourself take priority"
 	TestURLNext                  = "test-url-next"
+	TraktDefaultCommentSort      = "newest (Trakt default)"
 	TraktIDUsage                 = "allow to overwrite trakt_id"
 	TranslationsUsage            = "allow to overwrite translations"
 	WatchWindowUsage             = "watch window in days for the recommendations"

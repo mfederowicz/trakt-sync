@@ -142,6 +142,14 @@ func Ptr[T any](v T) *T {
 // pageDelay is the pause between two API calls of one action, such as the next page of a list; tests set it to zero.
 var pageDelay = time.Duration(consts.SleepNumberOfSeconds) * time.Second
 
+// commentSortLabel names the comment sort for console output; an empty sort leaves the order to Trakt
+func commentSortLabel(sort string) string {
+	if len(sort) == consts.ZeroValue {
+		return consts.TraktDefaultCommentSort
+	}
+	return sort
+}
+
 // waitPageDelay pauses before the next API call of the same action.
 func waitPageDelay() {
 	time.Sleep(pageDelay)
