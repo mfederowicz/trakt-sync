@@ -4,8 +4,8 @@ package str
 type ResultNotFound struct {
 	Movies   *[]ExportlistItem `json:"movies,omitempty"`
 	Shows    *[]Show           `json:"shows,omitempty"`
-	Seasons  *[]Season         `json:"seasons,omitempty"`
-	Episodes *[]Episodes       `json:"episodes,omitempty"`
+	Seasons  *[]Show           `json:"seasons,omitempty"`
+	Episodes *[]Show           `json:"episodes,omitempty"`
 	People   *[]Person         `json:"people,omitempty"`
 	Users    *[]UserProfile    `json:"users,omitempty"`
 }
