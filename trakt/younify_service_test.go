@@ -4,7 +4,9 @@ package trakt
 import (
 	"context"
 	"encoding/json"
+	"io"
 	"net/http"
+	"strings"
 	"testing"
 	"time"
 
@@ -59,18 +61,35 @@ func TestYounifyServiceConnect(t *testing.T) {
 
 func TestYounifyServiceRefreshAndDisconnect(t *testing.T) {
 	tests := []struct {
-		name   string
-		method string
-		path   string
-		call   func(s *YounifyService) (*str.Response, error)
+		name     string
+		method   string
+		path     string
+		wantBody string // the exact request body; empty means no body
+		call     func(s *YounifyService) (*str.Response, error)
 	}{
 		{name: "refresh", method: http.MethodPost, path: "/younify/users/refresh/netflix",
 			call: func(s *YounifyService) (*str.Response, error) {
-				return s.RefreshService(context.Background(), "netflix", false)
+				return s.RefreshService(context.Background(), "netflix", false, nil)
 			}},
 		{name: "refresh all data", method: http.MethodPost, path: "/younify/users/refresh/netflix/true",
 			call: func(s *YounifyService) (*str.Response, error) {
-				return s.RefreshService(context.Background(), "netflix", true)
+				return s.RefreshService(context.Background(), "netflix", true, nil)
+			}},
+		{name: "refresh skip_sync", method: http.MethodPost, path: "/younify/users/refresh/netflix", wantBody: `{"skip_sync":true}`,
+			call: func(s *YounifyService) (*str.Response, error) {
+				return s.RefreshService(context.Background(), "netflix", false, &str.YounifyRefresh{SkipSync: test.Ptr(true)})
+			}},
+		{name: "refresh all data skip_sync", method: http.MethodPost, path: "/younify/users/refresh/netflix/true", wantBody: `{"skip_sync":true}`,
+			call: func(s *YounifyService) (*str.Response, error) {
+				return s.RefreshService(context.Background(), "netflix", true, &str.YounifyRefresh{SkipSync: test.Ptr(true)})
+			}},
+		{name: "refresh service in the body", method: http.MethodPost, path: "/younify/users/refresh", wantBody: `{"service_id":"netflix","skip_sync":true}`,
+			call: func(s *YounifyService) (*str.Response, error) {
+				return s.RefreshServiceByBody(context.Background(), &str.YounifyRefreshService{ServiceID: str.String("netflix"), SkipSync: test.Ptr(true)})
+			}},
+		{name: "refresh service in the body without skip_sync", method: http.MethodPost, path: "/younify/users/refresh", wantBody: `{"service_id":"netflix"}`,
+			call: func(s *YounifyService) (*str.Response, error) {
+				return s.RefreshServiceByBody(context.Background(), &str.YounifyRefreshService{ServiceID: str.String("netflix")})
 			}},
 		{name: "disconnect", method: http.MethodDelete, path: "/younify/users/services/netflix",
 			call: func(s *YounifyService) (*str.Response, error) {
@@ -90,6 +109,11 @@ func TestYounifyServiceRefreshAndDisconnect(t *testing.T) {
 				test.AssertMethod(t, r, tt.method)
 				if r.URL.Path != tt.path {
 					t.Errorf("path is %q, want %q", r.URL.Path, tt.path)
+				}
+				body, err := io.ReadAll(r.Body)
+				test.AssertNilError(t, err)
+				if got := strings.TrimSpace(string(body)); got != tt.wantBody {
+					t.Errorf("body is %q, want %q", got, tt.wantBody)
 				}
 				w.WriteHeader(http.StatusNoContent)
 			})

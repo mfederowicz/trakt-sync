@@ -14,6 +14,7 @@ var (
 	_younifyServiceID = YounifyCmd.Flag.String("service_id", consts.EmptyString, consts.ServiceIDUsage)
 	_younifyReturnURL = YounifyCmd.Flag.String("return_url", consts.DefaultReturnURL, consts.ReturnURLUsage)
 	_younifyAllData   = YounifyCmd.Flag.Bool("all_data", false, consts.AllDataUsage)
+	_younifySkipSync  = YounifyCmd.Flag.Bool("skip_sync", false, consts.SkipSyncUsage)
 )
 
 // YounifyCmd manages streaming service connections (younify).

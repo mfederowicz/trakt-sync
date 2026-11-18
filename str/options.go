@@ -37,6 +37,7 @@ type Options struct {
 	ServiceID         string
 	ReturnURL         string
 	AllData           bool
+	SkipSync          bool
 	Year              int
 	Month             int
 	MovieStatus       string
