@@ -109,7 +109,6 @@ func TestListHandlersEmptyResult(t *testing.T) {
 		{module: "users", name: "smart_lists", handler: UsersSmartListsHandler{}},
 		{module: "users", name: "data_syncs", handler: UsersDataSyncsHandler{}},
 		{module: "users", name: "data_sync_paused", handler: UsersDataSyncItemsHandler{}, id: "157"},
-		{module: "users", name: "plex_servers", handler: UsersPlexServersHandler{}, body: `{"servers":[]}`, want: "{}"},
 		{module: "sync", name: "get_watchlist", handler: SyncGetWatchlistHandler{}},
 		{module: "sync", name: "get_favorites", handler: SyncGetFavoritesHandler{}},
 	}

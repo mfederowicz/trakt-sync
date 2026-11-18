@@ -1702,7 +1702,13 @@ func (u *UsersService) UpdatePlexSettings(ctx context.Context, settings *str.Ple
 // ConnectPlex Mints a Plex web auth URL that returns to returnURL.
 //
 // API docs: https://docs.trakt.tv/reference/postusersplexconnect
+//
+// Deprecated: Trakt removed this endpoint from its API contract on 2026-11-18; the live API no longer serves it.
+// The method sends no request and returns an *EndpointRemovedError; in a later release it will be removed.
 func (u *UsersService) ConnectPlex(ctx context.Context, connect *str.PlexConnect) (*str.PlexConnectResult, *str.Response, error) {
+	if err := lockedEndpoint(http.MethodPost, "users/settings/plex/connect"); err != nil {
+		return nil, nil, err
+	}
 	result := new(str.PlexConnectResult)
 	resp, err := u.plexRequest(ctx, http.MethodPost, "users/settings/plex/connect", connect, result)
 	if err != nil {
@@ -1722,7 +1728,13 @@ func (u *UsersService) DisconnectPlex(ctx context.Context) (*str.Response, error
 // GetPlexServers Lists the user's Plex servers.
 //
 // API docs: https://docs.trakt.tv/reference/getusersplexservers
+//
+// Deprecated: Trakt removed this endpoint from its API contract on 2026-11-18; the live API no longer serves it.
+// The method sends no request and returns an *EndpointRemovedError; in a later release it will be removed.
 func (u *UsersService) GetPlexServers(ctx context.Context) (*str.PlexServers, *str.Response, error) {
+	if err := lockedEndpoint(http.MethodGet, "users/settings/plex/servers"); err != nil {
+		return nil, nil, err
+	}
 	result := new(str.PlexServers)
 	resp, err := u.plexRequest(ctx, http.MethodGet, "users/settings/plex/servers", nil, result)
 	if err != nil {
@@ -1735,7 +1747,13 @@ func (u *UsersService) GetPlexServers(ctx context.Context) (*str.PlexServers, *s
 // GetPlexServerAccounts Returns the home accounts and syncable libraries of a Plex server.
 //
 // API docs: https://docs.trakt.tv/reference/getusersplexserveraccounts
+//
+// Deprecated: Trakt removed this endpoint from its API contract on 2026-11-18; the live API no longer serves it.
+// The method sends no request and returns an *EndpointRemovedError; in a later release it will be removed.
 func (u *UsersService) GetPlexServerAccounts(ctx context.Context, serverID string) (*str.PlexServerAccounts, *str.Response, error) {
+	if err := lockedEndpoint(http.MethodGet, "users/settings/plex/servers/{server_id}"); err != nil {
+		return nil, nil, err
+	}
 	result := new(str.PlexServerAccounts)
 	resp, err := u.plexRequest(ctx, http.MethodGet, fmt.Sprintf("users/settings/plex/servers/%s", serverID), nil, result)
 	if err != nil {
@@ -1748,7 +1766,13 @@ func (u *UsersService) GetPlexServerAccounts(ctx context.Context, serverID strin
 // SyncPlex Enqueues a Plex sync now (201); 422 when there is no server to sync.
 //
 // API docs: https://docs.trakt.tv/reference/postusersplexsync
+//
+// Deprecated: Trakt removed this endpoint from its API contract on 2026-11-18; the live API no longer serves it.
+// The method sends no request and returns an *EndpointRemovedError; in a later release it will be removed.
 func (u *UsersService) SyncPlex(ctx context.Context, sync *str.PlexSyncRequest) (*str.Response, error) {
+	if err := lockedEndpoint(http.MethodPost, "users/settings/plex/sync"); err != nil {
+		return nil, err
+	}
 	return u.plexRequest(ctx, http.MethodPost, "users/settings/plex/sync", sync, nil)
 }
 

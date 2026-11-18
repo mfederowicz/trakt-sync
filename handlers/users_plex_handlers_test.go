@@ -15,7 +15,7 @@ import (
 )
 
 func TestUsersPlexHandlers(t *testing.T) {
-	badAuth := `{"error_code":"bad_auth","message":"Plex rejected the authorization.","guidance":"Reconnect Plex."}`
+	const locked = " is locked since 2026-11-18: Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent"
 	tests := []struct {
 		name       string
 		handler    Handler
@@ -42,39 +42,18 @@ func TestUsersPlexHandlers(t *testing.T) {
 			input: `{}`, wantErr: "needs at least one of sync, scrobbler, webhook, trigger_sync", wantNoAPI: true},
 		{name: "update settings unknown key", handler: UsersUpdatePlexSettingsHandler{}, options: str.Options{Action: consts.UpdatePlexSettings},
 			input: `{"scrobbler":{"toggles":{"movie":{"seen":true}}}}`, wantErr: "invalid update_plex_settings JSON", wantNoAPI: true},
-		{name: "connect default return_url", handler: UsersPlexConnectHandler{}, options: str.Options{Action: consts.PlexConnect},
-			method: http.MethodPost, path: "/users/settings/plex/connect", status: http.StatusOK, body: `{"url":"https://plex.example/auth"}`,
-			wantBody: `{"return_url":"https://trakt.tv"}`, wantOutput: true},
-		{name: "connect bad return_url", handler: UsersPlexConnectHandler{}, options: str.Options{Action: consts.PlexConnect, ReturnURL: "https://example.com"},
-			method: http.MethodPost, path: "/users/settings/plex/connect", status: http.StatusBadRequest, body: `{}`, wantErr: "plex_connect rejected return_url https://example.com"},
+		{name: "connect is locked", handler: UsersPlexConnectHandler{}, options: str.Options{Action: consts.PlexConnect},
+			wantErr: "POST users/settings/plex/connect" + locked, wantNoAPI: true},
 		{name: "disconnect", handler: UsersPlexDisconnectHandler{}, options: str.Options{Action: consts.PlexDisconnect},
 			method: http.MethodDelete, path: "/users/settings/plex/connect", status: http.StatusNoContent},
-		{name: "servers", handler: UsersPlexServersHandler{}, options: str.Options{Action: consts.PlexServers},
-			method: http.MethodGet, path: "/users/settings/plex/servers", status: http.StatusOK, body: `{"servers":[{"id":"abc"}]}`, wantOutput: true},
-		{name: "servers empty", handler: UsersPlexServersHandler{}, options: str.Options{Action: consts.PlexServers},
-			method: http.MethodGet, path: "/users/settings/plex/servers", status: http.StatusOK, body: `{"servers":[]}`, wantOutput: true},
-		{name: "servers plex bad_auth", handler: UsersPlexServersHandler{}, options: str.Options{Action: consts.PlexServers},
-			method: http.MethodGet, path: "/users/settings/plex/servers", status: http.StatusUnauthorized, body: badAuth,
-			wantErr: "plex_servers: Plex bad_auth: Plex rejected the authorization. Reconnect Plex."},
-		{name: "servers plex timeout", handler: UsersPlexServersHandler{}, options: str.Options{Action: consts.PlexServers},
-			method: http.MethodGet, path: "/users/settings/plex/servers", status: http.StatusGatewayTimeout,
-			body: `{"error_code":"plex_timeout","message":"Plex did not answer.","guidance":"Try again."}`, wantErr: "plex_servers: Plex plex_timeout: Plex did not answer. Try again."},
-		{name: "servers 405", handler: UsersPlexServersHandler{}, options: str.Options{Action: consts.PlexServers},
-			method: http.MethodGet, path: "/users/settings/plex/servers", status: http.StatusMethodNotAllowed,
-			wantErr: "plex_servers: Trakt answered 405 although the API docs list this route as GET"},
-		{name: "server", handler: UsersPlexServerHandler{}, options: str.Options{Action: consts.PlexServer, ID: "abc"},
-			method: http.MethodGet, path: "/users/settings/plex/servers/abc", status: http.StatusOK, body: `{"accounts":[],"libraries":[]}`, wantOutput: true},
-		{name: "server not found", handler: UsersPlexServerHandler{}, options: str.Options{Action: consts.PlexServer, ID: "nope"},
-			method: http.MethodGet, path: "/users/settings/plex/servers/nope", status: http.StatusNotFound,
-			body: `{"error_code":"plex_not_found","message":"x","guidance":"y"}`, wantErr: "not found Plex server:nope"},
+		{name: "servers is locked", handler: UsersPlexServersHandler{}, options: str.Options{Action: consts.PlexServers},
+			wantErr: "GET users/settings/plex/servers" + locked, wantNoAPI: true},
+		{name: "server is locked", handler: UsersPlexServerHandler{}, options: str.Options{Action: consts.PlexServer, ID: "abc"},
+			wantErr: "GET users/settings/plex/servers/{server_id}" + locked, wantNoAPI: true},
 		{name: "server without id", handler: UsersPlexServerHandler{}, options: str.Options{Action: consts.PlexServer},
 			wantErr: "set Plex server id", wantNoAPI: true},
-		{name: "sync all servers", handler: UsersPlexSyncHandler{}, options: str.Options{Action: consts.PlexSync},
-			method: http.MethodPost, path: "/users/settings/plex/sync", status: http.StatusCreated, wantBody: `{}`},
-		{name: "sync one server full", handler: UsersPlexSyncHandler{}, options: str.Options{Action: consts.PlexSync, ID: "abc", AllData: true},
-			method: http.MethodPost, path: "/users/settings/plex/sync", status: http.StatusCreated, wantBody: `{"server_id":"abc","all_data":true}`},
-		{name: "sync without server", handler: UsersPlexSyncHandler{}, options: str.Options{Action: consts.PlexSync},
-			method: http.MethodPost, path: "/users/settings/plex/sync", status: http.StatusUnprocessableEntity, body: `{}`, wantErr: "no Plex server to sync"},
+		{name: "sync is locked", handler: UsersPlexSyncHandler{}, options: str.Options{Action: consts.PlexSync, ID: "abc", AllData: true},
+			wantErr: "POST users/settings/plex/sync" + locked, wantNoAPI: true},
 	}
 
 	for _, tt := range tests {

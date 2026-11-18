@@ -19,6 +19,8 @@ const (
 	day20261020 = "2026-10-20"
 	// day20261117 is the day the Trakt API contract removed the movies hot and streaming routes, already answering 404
 	day20261117 = "2026-11-17"
+	// day20261118 is the day the Trakt API contract removed four Plex settings routes, already answering 404
+	day20261118 = "2026-11-18"
 )
 
 // notices lists every deprecated endpoint with the module action that calls it.
@@ -36,6 +38,10 @@ var notices = []Notice{
 	{Module: consts.Sync, Action: consts.UpdateFavorites, Method: http.MethodPut, Route: "sync/favorites", Reason: endpointDropped, Deprecated: day20261013},
 	{Module: consts.Users, Action: consts.AddSavedFilters, Method: http.MethodPost, Route: "users/saved_filters", Reason: endpointDropped, Deprecated: day20261013},
 	{Module: consts.Users, Action: consts.DeleteSavedFilter, Method: http.MethodDelete, Route: "users/saved_filters/{id}", Reason: endpointDropped, Deprecated: day20261013},
+	{Module: consts.Users, Action: consts.PlexConnect, Method: http.MethodPost, Route: "users/settings/plex/connect", Reason: endpointGone, Deprecated: day20261118, Locked: day20261118},
+	{Module: consts.Users, Action: consts.PlexServer, Method: http.MethodGet, Route: "users/settings/plex/servers/{server_id}", Reason: endpointGone, Deprecated: day20261118, Locked: day20261118},
+	{Module: consts.Users, Action: consts.PlexServers, Method: http.MethodGet, Route: "users/settings/plex/servers", Reason: endpointGone, Deprecated: day20261118, Locked: day20261118},
+	{Module: consts.Users, Action: consts.PlexSync, Method: http.MethodPost, Route: "users/settings/plex/sync", Reason: endpointGone, Deprecated: day20261118, Locked: day20261118},
 }
 
 // Notices returns a copy of every registered notice

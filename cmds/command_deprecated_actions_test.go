@@ -94,14 +94,19 @@ func TestLockedActionsSendNothing(t *testing.T) {
 	config.ClientID, config.ClientSecret = "a", "b"
 	config.TokenPath, config.SettingsPath = "/locked/token.json", "/locked/user_settings.json"
 
-	const status = " is locked since 2026-11-17: Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent"
+	const status = ": Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent"
 	tests := []struct {
 		name string
+		cmd  *Command
 		args []string
 		want string
 	}{
-		{name: "movies hot", args: []string{"-a", "hot"}, want: "movies -a hot" + status},
-		{name: "movies streaming", args: []string{"-a", "streaming", "-period", "daily"}, want: "movies -a streaming" + status},
+		{name: "movies hot", cmd: MoviesCmd, args: []string{"-a", "hot"}, want: "movies -a hot is locked since 2026-11-17" + status},
+		{name: "movies streaming", cmd: MoviesCmd, args: []string{"-a", "streaming", "-period", "daily"}, want: "movies -a streaming is locked since 2026-11-17" + status},
+		{name: "users plex_connect", cmd: UsersCmd, args: []string{"-a", "plex_connect", "-return_url", "http://localhost:8080"}, want: "users -a plex_connect is locked since 2026-11-18" + status},
+		{name: "users plex_servers", cmd: UsersCmd, args: []string{"-a", "plex_servers"}, want: "users -a plex_servers is locked since 2026-11-18" + status},
+		{name: "users plex_server", cmd: UsersCmd, args: []string{"-a", "plex_server", "-i", "abc"}, want: "users -a plex_server is locked since 2026-11-18" + status},
+		{name: "users plex_sync", cmd: UsersCmd, args: []string{"-a", "plex_sync", "-i", "abc", "-all_data"}, want: "users -a plex_sync is locked since 2026-11-18" + status},
 	}
 	for _, tt := range tests {
 		tt := tt
@@ -110,7 +115,7 @@ func TestLockedActionsSendNothing(t *testing.T) {
 			t.Cleanup(resetAllFlags)
 
 			ran := false
-			command := &Command{Name: MoviesCmd.Name, Flag: MoviesCmd.Flag, Run: func(_ *Command, _ ...string) error {
+			command := &Command{Name: tt.cmd.Name, Flag: tt.cmd.Flag, Run: func(_ *Command, _ ...string) error {
 				ran = true
 				return nil
 			}}

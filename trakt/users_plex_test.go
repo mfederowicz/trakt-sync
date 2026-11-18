@@ -64,34 +64,9 @@ func TestUsersServicePlexRequests(t *testing.T) {
 				})
 				return nil, resp, err
 			}},
-		{name: "connect", method: http.MethodPost, path: "/users/settings/plex/connect", status: http.StatusOK, body: `{"url":"https://plex.example/auth"}`,
-			wantBody: `{"return_url":"trakt://settings"}`,
-			call: func(u *UsersService) (any, *str.Response, error) {
-				return u.ConnectPlex(context.Background(), &str.PlexConnect{ReturnURL: str.String("trakt://settings")})
-			},
-			want: &str.PlexConnectResult{URL: str.String("https://plex.example/auth")}},
 		{name: "disconnect", method: http.MethodDelete, path: "/users/settings/plex/connect", status: http.StatusNoContent,
 			call: func(u *UsersService) (any, *str.Response, error) {
 				resp, err := u.DisconnectPlex(context.Background())
-				return nil, resp, err
-			}},
-		{name: "servers", method: http.MethodGet, path: "/users/settings/plex/servers", status: http.StatusOK,
-			body: `{"servers":[{"id":"abc","name":"Home","connection_count":2,"connection_timeout":5,"ports":[32400],"owned":true,"url":null}]}`,
-			call: func(u *UsersService) (any, *str.Response, error) { return u.GetPlexServers(context.Background()) },
-			want: &str.PlexServers{Servers: []*str.PlexServer{{ID: str.String("abc"), Name: str.String("Home"), ConnectionCount: test.Ptr(2),
-				ConnectionTimeout: test.Ptr(5), Ports: []int{32400}, Owned: test.Ptr(true)}}}},
-		{name: "server accounts", method: http.MethodGet, path: "/users/settings/plex/servers/abc", status: http.StatusOK,
-			body: `{"accounts":[{"id":1,"name":"sean"}],"libraries":[{"id":3,"uuid":"u1","type":"movie","title":"Movies","agent":"a","scanner":"s","selected":true,"url":"/lib/3"}]}`,
-			call: func(u *UsersService) (any, *str.Response, error) {
-				return u.GetPlexServerAccounts(context.Background(), "abc")
-			},
-			want: &str.PlexServerAccounts{Accounts: []*str.PlexAccount{{ID: test.Ptr(1), Name: str.String("sean")}},
-				Libraries: []*str.PlexLibrary{{ID: test.Ptr(3), UUID: str.String("u1"), Type: str.String("movie"), Title: str.String("Movies"),
-					Agent: str.String("a"), Scanner: str.String("s"), Selected: test.Ptr(true), URL: str.String("/lib/3")}}}},
-		{name: "sync", method: http.MethodPost, path: "/users/settings/plex/sync", status: http.StatusCreated,
-			wantBody: `{"server_id":"abc","all_data":true}`,
-			call: func(u *UsersService) (any, *str.Response, error) {
-				resp, err := u.SyncPlex(context.Background(), &str.PlexSyncRequest{ServerID: str.String("abc"), AllData: test.Ptr(true)})
 				return nil, resp, err
 			}},
 	}
