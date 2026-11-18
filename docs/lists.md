@@ -41,7 +41,7 @@ Without `-t`, `items` returns all item types (`movie,show,episode,season`).
 ```console
 $ ./trakt-sync lists -a comments -trakt_id 2142753
 ```
-`-s` sorts the comments: `likes` (the default), `replies`, `newest` or `oldest`. Another value stops before the request.
+`-s` sorts the comments: `newest`, `oldest`, `likes` or `replies`. Without `-s` no sort is sent and Trakt sorts by `newest`. Another value stops before the request.
 ```console
 $ ./trakt-sync lists -a comments -trakt_id 2142753 -s newest
 ```
