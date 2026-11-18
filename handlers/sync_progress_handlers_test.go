@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -142,7 +143,7 @@ func TestSyncProgressHandlerPages(t *testing.T) {
 	defer s.Teardown()
 
 	pages := []string{}
-	s.Mux.HandleFunc("/sync/progress/up_next", func(w http.ResponseWriter, r *http.Request) {
+	s.Mux.HandleFunc("/sync/progress/watched", func(w http.ResponseWriter, r *http.Request) {
 		page := r.URL.Query().Get("page")
 		pages = append(pages, page)
 		w.Header().Set(trakt.HeaderPaginationPage, page)
@@ -150,7 +151,60 @@ func TestSyncProgressHandlerPages(t *testing.T) {
 		test.SafeFprint(w, `[{"show":{"title":"Reacher"}}]`)
 	})
 
-	options := str.Options{Module: consts.Sync, Action: consts.GetUpNext, Output: filepath.Join(t.TempDir(), "out.json")}
-	test.AssertNilError(t, SyncGetUpNextHandler{}.Handle(&options, s.Client))
+	options := str.Options{Module: consts.Sync, Action: consts.GetWatchedProgress, Output: filepath.Join(t.TempDir(), "out.json")}
+	test.AssertNilError(t, SyncGetWatchedProgressHandler{}.Handle(&options, s.Client))
 	test.AssertNoDiff(t, []string{"1", "2"}, pages)
+}
+
+// TestSyncUpNextPagesUntilEmpty checks that up next and up next nitro ignore the placeholder X-Pagination-*-Count
+// headers Trakt sends on these routes and page until an empty page, or until -pages_limit.
+func TestSyncUpNextPagesUntilEmpty(t *testing.T) {
+	tests := []struct {
+		name       string
+		handler    Handler
+		path       string
+		pagesLimit int
+		full       int // pages 1..full hold a show, later pages are empty
+		wantPages  []string
+		wantShows  int
+	}{
+		{name: "up next goes past a page count that says it is the last page", handler: SyncGetUpNextHandler{}, path: "/sync/progress/up_next",
+			full: 2, wantPages: []string{"1", "2", "3"}, wantShows: 2},
+		{name: "up next nitro goes past a page count that says it is the last page", handler: SyncGetUpNextNitroHandler{}, path: "/sync/progress/up_next_nitro",
+			full: 2, wantPages: []string{"1", "2", "3"}, wantShows: 2},
+		{name: "up next stops at pages_limit", handler: SyncGetUpNextHandler{}, path: "/sync/progress/up_next",
+			pagesLimit: 3, full: 10, wantPages: []string{"1", "2", "3"}, wantShows: 3},
+		{name: "up next with an empty first page", handler: SyncGetUpNextHandler{}, path: "/sync/progress/up_next",
+			full: 0, wantPages: []string{"1"}, wantShows: 0},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			s := setup(t)
+			defer s.Teardown()
+
+			pages := []string{}
+			s.Mux.HandleFunc(tt.path, func(w http.ResponseWriter, r *http.Request) {
+				page := r.URL.Query().Get("page")
+				pages = append(pages, page)
+				// placeholder counts: every page claims to be the last one
+				w.Header().Set(trakt.HeaderPaginationPage, page)
+				w.Header().Set(trakt.HeaderPaginationPageCount, page)
+				if n, err := strconv.Atoi(page); err == nil && n <= tt.full {
+					test.SafeFprint(w, `[{"show":{"title":"Reacher"}}]`)
+					return
+				}
+				test.SafeFprint(w, `[]`)
+			})
+
+			options := str.Options{Module: consts.Sync, PagesLimit: tt.pagesLimit, Output: filepath.Join(t.TempDir(), "out.json")}
+			test.AssertNilError(t, tt.handler.Handle(&options, s.Client))
+			test.AssertNoDiff(t, tt.wantPages, pages)
+			data, err := os.ReadFile(options.Output)
+			test.AssertNilError(t, err)
+			if got := strings.Count(string(data), `"title": "Reacher"`); got != tt.wantShows {
+				t.Errorf("output holds %d shows, want %d", got, tt.wantShows)
+			}
+		})
+	}
 }

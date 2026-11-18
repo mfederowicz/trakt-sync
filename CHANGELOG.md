@@ -46,6 +46,7 @@ schedule.
 
 - `sync -a get_minimal_collection -available_on other` works, and so does `-available_on digital` for items with a source: Trakt sends each value as `collected_at|source` when `-available_on` is set, and the export keeps that form, such as `"2002-07-19T21:00:00Z|plex"` or `"2002-07-19T21:00:00Z|"`. Before, the action stopped with `invalid timestamp format`.
 - The `not_found` part of the export from `sync -a add_to_*` and `remove_from_*` (history, collection, ratings, watchlist, favorites) and from `users -a add_hidden_items`, `remove_hidden_items`, `add_list_items` and `remove_list_items` keeps the show and the season or episode that was not found. Before, a missing season kept only the show's ids, without the season number, and a missing episode was written as `{}`.
+- `sync -a get_up_next` and `get_up_next_nitro` page until Trakt returns an empty page, capped by `pages_limit`. Trakt sends placeholder `X-Pagination-Page-Count` values on these routes (documented in its API on 2026-11-18), and the actions used to stop when that count said the last page was reached, which could leave shows out of the export.
 
 ## [1.31.0] - 2026-11-15
 

@@ -26,7 +26,7 @@ func (SyncGetUpNextHandler) Handle(options *str.Options, client *trakt.Client) e
 		IncludeStats:  options.IncludeStats,
 		LifetimeStats: options.LifetimeStats,
 	}
-	result, err := fetchSyncProgress(client, options, consts.DefaultPage, func(ctx context.Context, page int) ([]*str.ShowProgress, *str.Response, error) {
+	result, err := fetchSyncProgressUntilEmpty(options, consts.DefaultPage, func(ctx context.Context, page int) ([]*str.ShowProgress, *str.Response, error) {
 		opts.Page = page
 		return client.Sync.GetUpNext(ctx, &opts)
 	})
