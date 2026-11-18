@@ -78,6 +78,25 @@ func TestLockedEndpointsSendNoRequest(t *testing.T) {
 				_, resp, err := c.Movies.GetStreamingMovies(ctx, "daily", &uri.ListOptions{})
 				return resp, err
 			}},
+		{name: "ConnectPlex", method: http.MethodPost, route: "users/settings/plex/connect",
+			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
+				_, resp, err := c.Users.ConnectPlex(ctx, &str.PlexConnect{ReturnURL: str.String("trakt://settings")})
+				return resp, err
+			}},
+		{name: "GetPlexServers", method: http.MethodGet, route: "users/settings/plex/servers",
+			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
+				_, resp, err := c.Users.GetPlexServers(ctx)
+				return resp, err
+			}},
+		{name: "GetPlexServerAccounts", method: http.MethodGet, route: "users/settings/plex/servers/{server_id}",
+			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
+				_, resp, err := c.Users.GetPlexServerAccounts(ctx, "abc")
+				return resp, err
+			}},
+		{name: "SyncPlex", method: http.MethodPost, route: "users/settings/plex/sync",
+			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
+				return c.Users.SyncPlex(ctx, &str.PlexSyncRequest{ServerID: str.String("abc")})
+			}},
 		{name: "GetSocialShowRecommendations", method: http.MethodGet, route: "social_recommendations/shows", call: func(c *Client) (*str.Response, error) {
 			_, resp, err := c.SocialRecommendations.GetSocialShowRecommendations(ctx, &uri.ListOptions{})
 			return resp, err
@@ -138,6 +157,7 @@ func TestLockedEndpointLeavesOthersAlone(t *testing.T) {
 		{http.MethodGet, "users/saved_filters/{section}"},
 		{http.MethodPost, "movies/{id}/refresh/justwatch"},
 		{http.MethodPost, "search/recent"},
+		{http.MethodDelete, "users/settings/plex/connect"},
 	} {
 		if err := lockedEndpoint(tt.method, tt.route); err != nil {
 			t.Errorf("%s %s: %v, want nil", tt.method, tt.route, err)

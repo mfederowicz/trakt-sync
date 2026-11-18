@@ -27,6 +27,10 @@ func TestLookup(t *testing.T) {
 		{name: "search remove_recent", module: consts.Search, action: consts.RemoveRecent, method: http.MethodPost, route: "search/recent/remove", want: true},
 		{name: "users add_saved_filters", module: consts.Users, action: consts.AddSavedFilters, method: http.MethodPost, route: "users/saved_filters", want: true},
 		{name: "users delete_saved_filter", module: consts.Users, action: consts.DeleteSavedFilter, method: http.MethodDelete, route: "users/saved_filters/{id}", want: true},
+		{name: "users plex_connect", module: consts.Users, action: consts.PlexConnect, method: http.MethodPost, route: "users/settings/plex/connect", want: true},
+		{name: "users plex_servers", module: consts.Users, action: consts.PlexServers, method: http.MethodGet, route: "users/settings/plex/servers", want: true},
+		{name: "users plex_server", module: consts.Users, action: consts.PlexServer, method: http.MethodGet, route: "users/settings/plex/servers/{server_id}", want: true},
+		{name: "users plex_sync", module: consts.Users, action: consts.PlexSync, method: http.MethodPost, route: "users/settings/plex/sync", want: true},
 		{name: "sync update_favorites", module: consts.Sync, action: consts.UpdateFavorites, method: http.MethodPut, route: "sync/favorites", want: true},
 		{name: "social movies", module: consts.SocialRecommendations, action: consts.Movies, method: http.MethodGet, route: "social_recommendations/movies", want: true},
 		{name: "social shows", module: consts.SocialRecommendations, action: consts.Shows, method: http.MethodGet, route: "social_recommendations/shows", want: true},
@@ -35,6 +39,7 @@ func TestLookup(t *testing.T) {
 		{name: "movies without action", module: consts.Movies, action: consts.EmptyString, method: http.MethodGet, route: "movies/{id}"},
 		{name: "sync add_to_favorites, same path", module: consts.Sync, action: consts.AddToFavorites, method: http.MethodPost, route: "sync/favorites"},
 		{name: "users saved_filters, same prefix", module: consts.Users, action: consts.SavedFilters, method: http.MethodGet, route: "users/saved_filters/{section}"},
+		{name: "users plex_disconnect, same path", module: consts.Users, action: consts.PlexDisconnect, method: http.MethodDelete, route: "users/settings/plex/connect"},
 	}
 	for _, tt := range tests {
 		tt := tt
