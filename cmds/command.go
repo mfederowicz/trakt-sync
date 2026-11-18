@@ -516,6 +516,7 @@ func setOptionsDependsOnModuleYounify(options str.Options) str.Options {
 	options.ServiceID = *_younifyServiceID
 	options.ReturnURL = *_younifyReturnURL
 	options.AllData = *_younifyAllData
+	options.SkipSync = *_younifySkipSync
 	return options
 }
 

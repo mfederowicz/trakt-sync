@@ -196,6 +196,7 @@ const (
 	ShowsSortUsage               = "allow to overwrite sort"
 	ShowsSpecialsUsage           = "allow to overwrite specials"
 	ShowsTypeUsage               = "allow to overwrite type"
+	SkipSyncUsage                = "only mark the service as synced now, so history from before this moment is ignored"
 	SortUsage                    = "allow to overwrite sort"
 	SortByUsage                  = "allow to overwrite sort_by"
 	ShowStatusUsage              = "show status, comma separated: returning series, continuing, in production, planned, upcoming, pilot, canceled, ended"

@@ -32,6 +32,7 @@ func TestYounifyFlags(t *testing.T) {
 		wantID     string
 		wantURL    string
 		wantAll    bool
+		wantSkip   bool
 		wantOutput string
 	}{
 		{name: "connections", args: []string{"-a", "connections"}, wantAction: consts.Connections, wantURL: consts.DefaultReturnURL,
@@ -40,6 +41,8 @@ func TestYounifyFlags(t *testing.T) {
 			wantID: "netflix", wantURL: "trakt://settings", wantOutput: "export_younify_connect_results.json"},
 		{name: "refresh all data", args: []string{"-a", "refresh", "-service_id", "netflix", "-all_data"}, wantAction: consts.Refresh,
 			wantID: "netflix", wantURL: consts.DefaultReturnURL, wantAll: true, wantOutput: "export_younify_refresh.json"},
+		{name: "refresh skip_sync", args: []string{"-a", "refresh", "-service_id", "netflix", "-skip_sync"}, wantAction: consts.Refresh,
+			wantID: "netflix", wantURL: consts.DefaultReturnURL, wantSkip: true, wantOutput: "export_younify_refresh.json"},
 	}
 	for _, tt := range tests {
 		tt := tt
@@ -57,6 +60,7 @@ func TestYounifyFlags(t *testing.T) {
 			assert.Equal(t, tt.wantID, got.ServiceID)
 			assert.Equal(t, tt.wantURL, got.ReturnURL)
 			assert.Equal(t, tt.wantAll, got.AllData)
+			assert.Equal(t, tt.wantSkip, got.SkipSync)
 			assert.Equal(t, tt.wantOutput, got.Output)
 		})
 	}

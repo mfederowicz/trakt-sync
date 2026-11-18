@@ -22,6 +22,10 @@ Full re-sync of all data instead of an incremental one:
 ```console
 $ ./trakt-sync younify -a refresh -service_id netflix -all_data
 ```
+Only mark the service as synced now, so history from before this moment is ignored (sends `{"skip_sync":true}`):
+```console
+$ ./trakt-sync younify -a refresh -service_id netflix -skip_sync
+```
 ##### Unlink a service:
 ```console
 $ ./trakt-sync younify -a disconnect -service_id netflix

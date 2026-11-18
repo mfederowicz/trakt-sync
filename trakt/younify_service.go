@@ -50,15 +50,33 @@ func (y *YounifyService) Connect(ctx context.Context, connect *str.YounifyConnec
 }
 
 // RefreshService Queues a re-sync of a connected streaming service; allData forces a full re-sync.
+// A nil refresh sends no body; SkipSync only marks the service as synced now.
 //
 // API docs: https://docs.trakt.tv/reference/postyounifyrefresh
 // API docs: https://docs.trakt.tv/reference/postyounifyrefreshall
-func (y *YounifyService) RefreshService(ctx context.Context, serviceID string, allData bool) (*str.Response, error) {
+func (y *YounifyService) RefreshService(ctx context.Context, serviceID string, allData bool, refresh *str.YounifyRefresh) (*str.Response, error) {
 	var url = fmt.Sprintf("younify/users/refresh/%s", serviceID)
 	if allData {
 		url = fmt.Sprintf("%s/%s", url, consts.AllDataSegment)
 	}
-	req, err := y.client.NewRequest(http.MethodPost, url, nil)
+	// a nil *str.YounifyRefresh in an any is not nil, so the body is set only when there is one
+	var body any
+	if refresh != nil {
+		body = refresh
+	}
+	req, err := y.client.NewRequest(http.MethodPost, url, body)
+	if err != nil {
+		return nil, err
+	}
+
+	return y.client.Do(ctx, req, nil)
+}
+
+// RefreshServiceByBody Queues a re-sync of the connected streaming service named in the body.
+//
+// API docs: https://docs.trakt.tv/reference/postyounifyrefreshservice
+func (y *YounifyService) RefreshServiceByBody(ctx context.Context, refresh *str.YounifyRefreshService) (*str.Response, error) {
+	req, err := y.client.NewRequest(http.MethodPost, "younify/users/refresh", refresh)
 	if err != nil {
 		return nil, err
 	}

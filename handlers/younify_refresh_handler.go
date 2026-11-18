@@ -21,8 +21,13 @@ func (YounifyRefreshHandler) Handle(options *str.Options, client *trakt.Client) 
 	if options.AllData {
 		kind = "full"
 	}
+	var refresh *str.YounifyRefresh
+	if options.SkipSync {
+		kind = "skip_sync"
+		refresh = &str.YounifyRefresh{SkipSync: &options.SkipSync}
+	}
 	printer.Println("Queue a " + kind + " re-sync of: " + options.ServiceID)
-	resp, err := client.Younify.RefreshService(cli.ContextFromOptions(options), options.ServiceID, options.AllData)
+	resp, err := client.Younify.RefreshService(cli.ContextFromOptions(options), options.ServiceID, options.AllData, refresh)
 	if err = younifyError(options.Action, options.ServiceID, resp, err); err != nil {
 		return err
 	}

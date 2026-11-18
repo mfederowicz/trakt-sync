@@ -58,6 +58,8 @@ func TestYounifyHandlers(t *testing.T) {
 			method: http.MethodPost, path: "/younify/users/refresh/netflix", status: http.StatusCreated},
 		{name: "refresh all data", handler: YounifyRefreshHandler{}, options: str.Options{Action: consts.Refresh, ServiceID: "netflix", AllData: true},
 			method: http.MethodPost, path: "/younify/users/refresh/netflix/true", status: http.StatusCreated},
+		{name: "refresh skip_sync", handler: YounifyRefreshHandler{}, options: str.Options{Action: consts.Refresh, ServiceID: "netflix", SkipSync: true},
+			method: http.MethodPost, path: "/younify/users/refresh/netflix", status: http.StatusCreated, wantBody: `{"skip_sync":true}`},
 		{name: "refresh unknown service", handler: YounifyRefreshHandler{}, options: str.Options{Action: consts.Refresh, ServiceID: "nope"},
 			method: http.MethodPost, path: "/younify/users/refresh/nope", status: http.StatusNotFound, body: `{}`, wantErr: "not found streaming service for:nope"},
 		{name: "refresh without service", handler: YounifyRefreshHandler{}, options: str.Options{Action: consts.Refresh},
@@ -82,9 +84,9 @@ func TestYounifyHandlers(t *testing.T) {
 					t.Errorf("path is %q, want %q", r.URL.Path, tt.path)
 				}
 				if tt.wantBody != "" {
-					got := map[string]string{}
+					got := map[string]any{}
 					test.AssertNilError(t, json.NewDecoder(r.Body).Decode(&got))
-					want := map[string]string{}
+					want := map[string]any{}
 					test.AssertNilError(t, json.Unmarshal([]byte(tt.wantBody), &want))
 					test.AssertNoDiff(t, want, got)
 				}
