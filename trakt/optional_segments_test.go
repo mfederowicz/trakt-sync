@@ -237,6 +237,30 @@ func TestOptionalPathSegments(t *testing.T) {
 			_, _, err := c.Users.GetLikes(ctx, "sean", "comments", opts)
 			return err
 		}},
+		{name: "user list comments default", path: "/users/sean/lists/55/comments", call: func(c *Client) error {
+			_, _, err := c.Users.GetListComments(ctx, "sean", "55", "", opts)
+			return err
+		}},
+		{name: "user list comments sorted", path: "/users/sean/lists/55/comments/likes", call: func(c *Client) error {
+			_, _, err := c.Users.GetListComments(ctx, "sean", "55", "likes", opts)
+			return err
+		}},
+		{name: "user watchlist comments default", path: "/users/sean/watchlist/comments", call: func(c *Client) error {
+			_, _, err := c.Users.GetWatchlistComments(ctx, "sean", "", opts)
+			return err
+		}},
+		{name: "user watchlist comments sorted", path: "/users/sean/watchlist/comments/likes", call: func(c *Client) error {
+			_, _, err := c.Users.GetWatchlistComments(ctx, "sean", "likes", opts)
+			return err
+		}},
+		{name: "user favorites comments default", path: "/users/sean/favorites/comments", call: func(c *Client) error {
+			_, _, err := c.Users.GetFavoritesComments(ctx, "sean", "", opts)
+			return err
+		}},
+		{name: "user favorites comments sorted", path: "/users/sean/favorites/comments/likes", call: func(c *Client) error {
+			_, _, err := c.Users.GetFavoritesComments(ctx, "sean", "likes", opts)
+			return err
+		}},
 		{name: "user collection given", path: "/users/sean/collection/shows", call: func(c *Client) error {
 			_, _, err := c.Users.GetCollection(ctx, "sean", "shows", opts)
 			return err

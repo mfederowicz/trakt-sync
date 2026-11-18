@@ -997,17 +997,11 @@ func UpdateOptionsWithCommandUsersFlags(c *Command, options *str.Options) *str.O
 	if options.Action == consts.ListItems && options.Type == "" {
 		options.Type = consts.Movies
 	}
-	if options.Action == consts.ListComments && options.Type == "" {
-		options.Sort = consts.Likes
-	}
 	if options.Action == consts.History && options.Type == "" {
 		options.Type = consts.Movies
 	}
 	if options.Action == consts.Watchlist && options.Type == "" {
 		options.Type = consts.ActionTypeAll
-	}
-	if options.Action == consts.WatchlistComments && len(*_usersSort) == consts.ZeroValue {
-		options.Sort = consts.Likes
 	}
 	if len(*_usersSort) > consts.ZeroValue {
 		options.Sort = *_usersSort

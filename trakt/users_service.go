@@ -793,13 +793,14 @@ func (u *UsersService) UpdateListItem(ctx context.Context, user string, listID s
 }
 
 // GetListComments Returns all top level comments for a list.
-// By default, the comments are sorted by most likes.
-// Other sorting options include likes_30, most replies, replies_30,
-// most plays, highest rating, and added date.
+// An empty sort leaves the segment out and Trakt sorts by newest; other sorts are oldest, likes and replies.
 // API docs: https://docs.trakt.tv/reference/getuserslistslistcomments
 func (u *UsersService) GetListComments(ctx context.Context, user string, listID string, sort string, options *uri.ListOptions) ([]*str.ListComment, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/lists/%s/comments/%s", userOrMe(user), listID, sort)
+	url = fmt.Sprintf("users/%s/lists/%s/comments", userOrMe(user), listID)
+	if len(sort) > consts.ZeroValue {
+		url = fmt.Sprintf("%s/%s", url, sort)
+	}
 	url, err := uri.AddQuery(url, options)
 	if err != nil {
 		return nil, nil, err
@@ -1130,13 +1131,15 @@ func (u *UsersService) GetWatchlist(ctx context.Context, user string, types stri
 }
 
 // GetWatchlistComments Returns all top level comments for the watchlist.
-// By default, the comments are sorted by most likes.
-// Other sorting options include likes_30, most replies, replies_30, most plays, highest rating, and added date.
+// An empty sort leaves the segment out and Trakt sorts by newest; other sorts are oldest, likes and replies.
 // API docs: https://docs.trakt.tv/reference/getuserswatchlistcomments
 func (u *UsersService) GetWatchlistComments(ctx context.Context, user string, sort string, options *uri.ListOptions) ([]*str.ListComment, *str.Response, error) {
 	var url string
 
-	url = fmt.Sprintf("users/%s/watchlist/comments/%s", userOrMe(user), sort)
+	url = fmt.Sprintf("users/%s/watchlist/comments", userOrMe(user))
+	if len(sort) > consts.ZeroValue {
+		url = fmt.Sprintf("%s/%s", url, sort)
+	}
 	url, err := uri.AddQuery(url, options)
 	if err != nil {
 		return nil, nil, err
@@ -1187,12 +1190,14 @@ func (u *UsersService) GetFavorites(ctx context.Context, user string, strType st
 }
 
 // GetFavoritesComments Returns all top level comments for the favorites.
-// By default, the comments are sorted by most likes. Other sorting options include
-// likes_30, most replies, replies_30, most plays, highest rating, and added date.
+// An empty sort leaves the segment out and Trakt sorts by newest; other sorts are oldest, likes and replies.
 // API docs: https://docs.trakt.tv/reference/getusersfavoritescomments
 func (u *UsersService) GetFavoritesComments(ctx context.Context, user string, sort string, options *uri.ListOptions) ([]*str.ListComment, *str.Response, error) {
 	var url string
-	url = fmt.Sprintf("users/%s/favorites/comments/%s", userOrMe(user), sort)
+	url = fmt.Sprintf("users/%s/favorites/comments", userOrMe(user))
+	if len(sort) > consts.ZeroValue {
+		url = fmt.Sprintf("%s/%s", url, sort)
+	}
 	url, err := uri.AddQuery(url, options)
 	if err != nil {
 		return nil, nil, err

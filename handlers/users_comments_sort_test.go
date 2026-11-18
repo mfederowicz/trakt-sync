@@ -11,6 +11,12 @@ import (
 
 // The comment routes of watchlist, favorites and lists accept only the sorts of
 // listCommentsSortParamsSchema; live, every other value answers 400 invalid_sort.
+// TestCommentSortLabel checks the console label: no sort means Trakt's default order.
+func TestCommentSortLabel(t *testing.T) {
+	assert.Equal(t, "newest (Trakt default)", commentSortLabel(""))
+	assert.Equal(t, "likes", commentSortLabel("likes"))
+}
+
 func TestUsersCommentsSort(t *testing.T) {
 	c := &CommonLogic{}
 	defaults := cfg.DefaultConfig()

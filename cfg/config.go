@@ -561,7 +561,7 @@ func DefaultConfig() *Config {
 		UserName:       "me",
 		UsersSection:   consts.Calendar,
 		UsersType:      "",
-		UsersSort:      consts.Likes,
+		UsersSort:      consts.EmptyString,
 		Verbose:        false,
 		WarningCode:    consts.ZeroValue,
 	}

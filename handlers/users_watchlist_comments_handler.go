@@ -21,7 +21,7 @@ func (m UsersWatchlistCommentsHandler) Handle(options *str.Options, client *trak
 	if err != nil {
 		return err
 	}
-	printer.Println("Returns all top level comments for the watchlist. sorted by:", options.Sort)
+	printer.Println("Returns all top level comments for the watchlist. sorted by:", commentSortLabel(options.Sort))
 	items, err := m.usersWatchlistComments(client, options, consts.DefaultPage)
 	if err != nil {
 		return fmt.Errorf("get watchlist error:%w", err)
