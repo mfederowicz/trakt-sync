@@ -65,7 +65,8 @@ $ ./trakt-sync sync -a get_minimal_collection -t shows -available_on digital
 ##### Up next
 Shows you are watching, each with its next episode and progress. `-include_stats` adds play count and minutes,
 `-lifetime_stats` counts across all rewatches instead of the current watch. `-sort_by` and `-sort_how` are sent only
-when given.
+when given. Trakt sends placeholder page counts on up next and up next nitro, so both actions request pages until one
+comes back empty (one request more than the data needs), capped by `pages_limit`.
 ```console
 $ ./trakt-sync sync -a get_up_next
 ```

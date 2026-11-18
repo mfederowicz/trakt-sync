@@ -44,6 +44,28 @@ func fetchSyncProgress(client *trakt.Client, options *str.Options, page int, fet
 	return list, nil
 }
 
+// fetchSyncProgressUntilEmpty fetches every page of up next progress. Trakt sends placeholder X-Pagination-*-Count
+// values on these routes, so paging goes on until a page comes back empty (or -pages_limit is reached), not by the counts.
+func fetchSyncProgressUntilEmpty(options *str.Options, page int, fetch syncProgressFetch) ([]*str.ShowProgress, error) {
+	list, resp, err := fetch(cli.ContextFromOptions(options), page)
+	if err != nil {
+		return nil, err
+	}
+
+	_, paginated := resp.Header[trakt.HeaderPaginationPage]
+	if !paginated || len(list) == consts.ZeroValue || (options.PagesLimit > consts.ZeroValue && page >= options.PagesLimit) {
+		return list, nil
+	}
+
+	waitPageDelay()
+	nextPageItems, err := fetchSyncProgressUntilEmpty(options, page+consts.NextPageStep, fetch)
+	if err != nil {
+		return nil, err
+	}
+
+	return append(list, nextPageItems...), nil
+}
+
 // writeSyncProgress writes up next or watched progress to the output file
 func writeSyncProgress(options *str.Options, result []*str.ShowProgress) error {
 	printer.Printf("Found %d shows\n", len(result))
