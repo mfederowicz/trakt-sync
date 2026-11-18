@@ -1239,7 +1239,7 @@ func (c *CommonLogic) ConvertBytesToItemsList(data []byte, action string, stype 
 		if err := checkItemsCollectionInput(list, action); err != nil {
 			return nil, err
 		}
-		items = c.ListToItemsCollection(items, list, stype)
+		items = c.listToItemsCollection(items, list, stype, str.ContainString(action, itemNotesActions))
 		return items, nil
 	case consts.AddHiddenItems, consts.RemoveHiddenItems:
 		if err := checkItemsCollectionInput(list, action); err != nil {
@@ -1280,6 +1280,9 @@ func checkItemsListInput(list []*str.ExportlistItem, stype string) error {
 	}
 	return nil
 }
+
+// itemNotesActions are the actions that send the notes of each item: Trakt applies them only when the list owner is a VIP
+var itemNotesActions = []string{consts.AddListItems, consts.AddToWatchlist}
 
 // reorderItemsActions are the actions CreateItemsToReorder sends the list item ids for
 var reorderItemsActions = []string{consts.ReorderWatchlist, consts.ReorderFavorites, consts.ReorderListItems}
@@ -1417,8 +1420,17 @@ func (*CommonLogic) InitItemsList() *str.ItemsList {
 }
 
 // ListToItemsCollection helper function to convert one list to another
-func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
+func (c *CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.ExportlistItem, stype string) *str.ItemsList {
+	return c.listToItemsCollection(items, list, stype, false)
+}
+
+// listToItemsCollection converts one list to another; with keepNotes the notes of movies, shows, seasons and episodes are kept
+func (*CommonLogic) listToItemsCollection(items *str.ItemsList, list []*str.ExportlistItem, stype string, keepNotes bool) *str.ItemsList {
 	for _, val := range list {
+		var notes *string
+		if keepNotes {
+			notes = val.Notes
+		}
 		if val.ID != nil {
 			*items.IDs = append(*items.IDs, *val.ID)
 		}
@@ -1430,6 +1442,7 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			e.IDs = val.Movie.IDs
 			e.UpdateCollectedData(val)
 			e.ID = val.ID
+			e.Notes = notes
 			*items.Movies = append(*items.Movies, e)
 		}
 		if val.Show != nil && isShowType(stype) {
@@ -1439,6 +1452,7 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			e.IDs = val.Show.IDs
 			e.UpdateCollectedData(val)
 			e.ID = val.ID
+			e.Notes = notes
 			*items.Shows = append(*items.Shows, e)
 		}
 		if val.Season != nil && isSeasonType(stype) {
@@ -1447,6 +1461,7 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			val.Season.UpdateCollectedData(val)
 			e.UpdateCollectedData(val)
 			e.ID = val.ID
+			e.Notes = notes
 			*items.Seasons = append(*items.Seasons, e)
 		}
 		if val.Episode != nil && isEpisodeType(stype) {
@@ -1454,6 +1469,7 @@ func (*CommonLogic) ListToItemsCollection(items *str.ItemsList, list []*str.Expo
 			e.IDs = val.Episode.IDs
 			e.UpdateCollectedData(val)
 			e.ID = val.ID
+			e.Notes = notes
 			*items.Episodes = append(*items.Episodes, e)
 		}
 		if val.Person != nil && isPeopleType(stype) {

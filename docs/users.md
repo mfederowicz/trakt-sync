@@ -428,6 +428,7 @@ $ cat export_users_list_seasons.json | ./trakt-sync users -u username -i 123456 
 ```console
 $ cat export_users_list_all.json | ./trakt-sync users -u username -i 123456 -t seasons -a add_list_items
 ```
+The `notes` of each item in the input are sent with it. Trakt saves them only when the list owner is a VIP.
 ##### Remove items from personal list - via -items flag
 ```console
 $ ./trakt-sync users -u username -i 123456 -t movies -a remove_list_items -items export_users_list_movies.json

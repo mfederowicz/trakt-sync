@@ -392,6 +392,7 @@ $ cat export_sync_watchlist_seasons.json | ./trakt-sync sync -t seasons -a add_t
 ```console
 $ cat export_sync_watchlist_all.json | ./trakt-sync sync -t seasons -a add_to_watchlist
 ```
+The `notes` of each item in the input are sent with it. Trakt saves them only when you are a VIP.
 ##### Remove from Watchlist - via -items flag
 ```console
 $ ./trakt-sync sync -t movies -a remove_from_watchlist -items export_sync_watchlist_movies.json

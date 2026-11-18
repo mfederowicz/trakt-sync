@@ -34,6 +34,7 @@ schedule.
 
 - `younify -a refresh -skip_sync` sends `skip_sync`: Trakt only marks the service as synced now and ignores history from before this moment. Younify is open only to Trakt's own apps for now (403), so this is untested against the live API.
 - Library: `YounifyService.RefreshServiceByBody` for `POST /younify/users/refresh` (the service named in the body), with the new `str.YounifyRefreshService`.
+- `users -a add_list_items` and `sync -a add_to_watchlist` send the `notes` of each movie, show, season and episode in `-items`, so a list exported with its notes keeps them when it is added again. Trakt saves them only for VIP list owners, so this is tested against a mock server only.
 
 ### Changed
 
