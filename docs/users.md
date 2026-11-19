@@ -711,6 +711,7 @@ $ ./trakt-sync users -a watched -t shows -u sean
 $ ./trakt-sync users -a watched -t shows -u sean --ex noseasons
 ```
 ##### Fetch stats for selected user:
+Trakt computes stats for VIP users only (🔥 VIP Only, since 2026-09: [trakt/trakt-api#929](https://github.com/trakt/trakt-api/issues/929)). For a non-VIP account the live API answers with all counts at `0` (seen live 2026-11-19), even when the account has plays; its API documents `204 No Content` instead, and then the action prints `users -a stats: Trakt has no stats for <user> (stats are computed for VIP users only), nothing was written` and writes no file.
 ```console
 $ ./trakt-sync users -a stats -u sean
 ```

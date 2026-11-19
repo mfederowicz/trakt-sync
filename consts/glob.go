@@ -257,6 +257,7 @@ const (
 	UserPendingFollowRequest     = "user is already being followed or there is a pending follow request"
 	UserBlockedAlready           = "user is already blocked, or you try to block yourself"
 	UsersListsItemsHint          = "to export the items of one list add: -i <list id>"
+	UsersStatsNoContent          = "users -a stats: Trakt has no stats for %s (stats are computed for VIP users only), nothing was written"
 	VerboseUsage                 = "print additional verbose information"
 	VersionUsage                 = "get trakt-sync version"
 	WatchedProgressError         = "watched progress error:%w"
