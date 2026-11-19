@@ -36,6 +36,7 @@ schedule.
 - Library: `YounifyService.RefreshServiceByBody` for `POST /younify/users/refresh` (the service named in the body), with the new `str.YounifyRefreshService`.
 - `users -a add_list_items` and `sync -a add_to_watchlist` send the `notes` of each movie, show, season and episode in `-items`, so a list exported with its notes keeps them when it is added again. Trakt saves them only for VIP list owners, so this is tested against a mock server only.
 - Library: `str.AttachedTo` has `WatchedAt`, `CollectedAt`, `RatedAt` and `Rating`, and `str.CommentMediaItem` has `Person`, `Comment` and `User`, as described in Trakt's API since 2026-11-19.
+- Library: `str.UserStats` has `ListComments`, the number of comments on the user's lists.
 
 ### Changed
 
@@ -57,6 +58,7 @@ schedule.
 - `sync -a get_up_next` and `get_up_next_nitro` page until Trakt returns an empty page, capped by `pages_limit`. Trakt sends placeholder `X-Pagination-Page-Count` values on these routes (documented in its API on 2026-11-18), and the actions used to stop when that count said the last page was reached, which could leave shows out of the export.
 - `users -a notes` keeps `watched_at`, `collected_at`, `rated_at` and `rating` in `attached_to`, so a note on a history, collection or rating entry shows when the item was watched, collected or rated. Before, the export kept only `type` and `id`.
 - `comments -a item` keeps the person, comment or user a comment belongs to. Before, the export of such a comment held only its `type`.
+- `users -a stats` keeps `list_comments`, the number of comments on the user's lists. Before, the export left it out.
 
 ## [1.31.0] - 2026-11-15
 

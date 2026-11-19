@@ -13,6 +13,7 @@ type UserStats struct {
 	CompletedCount *int               `json:"completed_count,omitempty"`
 	Progress       *UserStatsProgress `json:"progress,omitempty"`
 	Lists          *int               `json:"lists,omitempty"`
+	ListComments   *int               `json:"list_comments,omitempty"`
 	TotalMinutes   *int               `json:"total_minutes,omitempty"`
 	TotalPlays     *int               `json:"total_plays,omitempty"`
 }
