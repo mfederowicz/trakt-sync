@@ -29,6 +29,11 @@ func (UsersStatsHandler) Handle(options *str.Options, client *trakt.Client) erro
 		return fmt.Errorf("not found user stats for:%s", options.UserName)
 	}
 
+	if resp.StatusCode == http.StatusNoContent {
+		printer.Printf(consts.UsersStatsNoContent+"\n", options.UserName)
+		return nil
+	}
+
 	printer.Printf("Found %s user stats\n", options.UserName)
 
 	jsonData, err := json.MarshalIndent(stats, consts.EmptyString, consts.JSONDataFormat)

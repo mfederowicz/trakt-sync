@@ -59,6 +59,7 @@ schedule.
 - `users -a notes` keeps `watched_at`, `collected_at`, `rated_at` and `rating` in `attached_to`, so a note on a history, collection or rating entry shows when the item was watched, collected or rated. Before, the export kept only `type` and `id`.
 - `comments -a item` keeps the person, comment or user a comment belongs to. Before, the export of such a comment held only its `type`.
 - `users -a stats` keeps `list_comments`, the number of comments on the user's lists. Before, the export left it out.
+- `users -a stats` prints `users -a stats: Trakt has no stats for <user> (stats are computed for VIP users only), nothing was written` and writes no file when Trakt answers `204 No Content`, as its API documents for users without precomputed stats. Before, it printed `Found <user> user stats` and wrote `{}`. Stats are VIP only: for a non-VIP account the live API currently sends all counts as `0`, which is exported as is; `docs/users.md` now says so.
 
 ## [1.31.0] - 2026-11-15
 
