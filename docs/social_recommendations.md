@@ -1,5 +1,11 @@
-#### Social recommendations (deprecated):
-Deprecated since 2026-10-13: Trakt dropped the social recommendations endpoints from its API contract. Both actions still work (checked 2026-10-13) and print a deprecation notice; they may stop working. [`recommendations`](./recommendations.md) is not affected.
+#### Social recommendations (locked):
+Trakt dropped the social recommendations endpoints from its API contract on 2026-10-13, and the live API answers 404
+since 2026-11-20. Both actions are locked: they send no request and stop with a notice. [`recommendations`](./recommendations.md) is not affected.
+```console
+$ ./trakt-sync social_recommendations -a movies
+social_recommendations -a movies is locked since 2026-11-20: Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent
+```
+The rest of this page describes what the actions did while Trakt served them.
 
 Movie and show recommendations based on the people you follow. `limit` follows `per_page` from the config file; `-ex` sets extended info (`full`, `images`, `colors`, `streaming_ids`).
 ```console

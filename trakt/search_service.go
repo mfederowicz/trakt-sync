@@ -142,8 +142,8 @@ func (s *SearchService) AddRecentSearch(ctx context.Context, search *str.RecentS
 //
 // API docs: https://docs.trakt.tv/reference/postsearchrecentremove
 //
-// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13. The method still sends its
-// request; in a later release it will return an *EndpointRemovedError instead, and then be removed.
+// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13; the live API no longer serves it (checked 2026-11-20).
+// The method sends no request and returns an *EndpointRemovedError; in a later release it will be removed.
 func (s *SearchService) RemoveRecentSearch(ctx context.Context, search *str.RecentSearch) (*str.Response, error) {
 	if err := lockedEndpoint(http.MethodPost, "search/recent/remove"); err != nil {
 		return nil, err

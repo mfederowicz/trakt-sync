@@ -16,8 +16,8 @@ type SocialRecommendationsService Service
 //
 // API docs: https://docs.trakt.tv/reference/getsocial_recommendationsmoviesrecommend
 //
-// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13. The method still sends its
-// request; in a later release it will return an *EndpointRemovedError instead, and then be removed.
+// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13; the live API no longer serves it (checked 2026-11-20).
+// The method sends no request and returns an *EndpointRemovedError; in a later release it will be removed.
 func (s *SocialRecommendationsService) GetSocialMovieRecommendations(ctx context.Context, opts *uri.ListOptions) ([]*str.Recommendation, *str.Response, error) {
 	if err := lockedEndpoint(http.MethodGet, "social_recommendations/movies"); err != nil {
 		return nil, nil, err
@@ -29,8 +29,8 @@ func (s *SocialRecommendationsService) GetSocialMovieRecommendations(ctx context
 //
 // API docs: https://docs.trakt.tv/reference/getsocial_recommendationsshowsrecommend
 //
-// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13. The method still sends its
-// request; in a later release it will return an *EndpointRemovedError instead, and then be removed.
+// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13; the live API no longer serves it (checked 2026-11-20).
+// The method sends no request and returns an *EndpointRemovedError; in a later release it will be removed.
 func (s *SocialRecommendationsService) GetSocialShowRecommendations(ctx context.Context, opts *uri.ListOptions) ([]*str.Recommendation, *str.Response, error) {
 	if err := lockedEndpoint(http.MethodGet, "social_recommendations/shows"); err != nil {
 		return nil, nil, err

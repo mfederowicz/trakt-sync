@@ -135,10 +135,11 @@ func TestSearchHandlers(t *testing.T) {
 			wantCalls: map[string]int{`POST /search/recent {"query":"reacher","id":139606,"type":"shows"}`: 1},
 		},
 		{
-			name:      "remove recent",
+			name:      "remove recent is locked",
 			handler:   SearchRemoveRecentHandler{},
 			options:   str.Options{Action: consts.RemoveRecent, SearchType: str.Slice{"lists"}, Query: "best of", ID: "55"},
-			wantCalls: map[string]int{`POST /search/recent/remove {"query":"best of","id":55,"type":"lists"}`: 1},
+			wantCalls: map[string]int{},
+			wantErr:   "POST search/recent/remove is locked since 2026-11-20: Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent",
 		},
 		{
 			name:      "add recent singular type",

@@ -117,8 +117,6 @@ func TestRecommendationsHandlersExportExtendedFields(t *testing.T) {
 	}{
 		{name: "movies", handler: RecommendationsMoviesHandler{}, action: consts.Movies, path: "/recommendations/movies", item: movie},
 		{name: "shows", handler: RecommendationsShowsHandler{}, action: consts.Shows, path: "/recommendations/shows", item: show},
-		{name: "social movies", handler: SocialRecommendationsMoviesHandler{}, action: consts.Movies, path: "/social_recommendations/movies", item: movie},
-		{name: "social shows", handler: SocialRecommendationsShowsHandler{}, action: consts.Shows, path: "/social_recommendations/shows", item: show},
 	}
 
 	for _, tt := range tests {

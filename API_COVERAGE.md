@@ -3,7 +3,7 @@
 Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 - Source: [trakt/trakt-api](https://github.com/trakt/trakt-api) contracts, via the generated spec at <https://developer.trakt.tv/openapi.json>.
-- Snapshot date: 2026-11-19. Update rows when the contract changes.
+- Snapshot date: 2026-11-20. Update rows when the contract changes.
 - ✅ implemented: a service method in `trakt/` calls this exact route.
 - 🟡 needs checking: a service method calls this route only through a generic path parameter (for example `sync/collection/%s`); confirm the CLI accepts this value.
 - ⬜ missing: no service method calls this route.
@@ -26,24 +26,24 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | [`languages`](#languages) | 1 | 0 | 0 | 0 | 0 | 1 |
 | [`lists`](#lists) | 15 | 0 | 0 | 0 | 0 | 15 |
 | [`media`](#media) | 4 | 0 | 0 | 0 | 0 | 4 |
-| [`movies`](#movies) | 30 | 0 | 0 | 3 | 0 | 33 |
+| [`movies`](#movies) | 29 | 0 | 0 | 4 | 0 | 33 |
 | [`networks`](#networks) | 1 | 0 | 0 | 0 | 0 | 1 |
 | [`notes`](#notes) | 5 | 0 | 0 | 0 | 0 | 5 |
 | [`oauth`](#oauth) | 3 | 0 | 0 | 0 | 2 | 5 |
-| [`people`](#people) | 7 | 0 | 0 | 2 | 0 | 9 |
+| [`people`](#people) | 6 | 0 | 0 | 3 | 0 | 9 |
 | [`recommendations`](#recommendations) | 4 | 0 | 0 | 0 | 0 | 4 |
 | [`scrobble`](#scrobble) | 3 | 0 | 0 | 0 | 0 | 3 |
-| [`search`](#search) | 6 | 0 | 0 | 0 | 0 | 6 |
+| [`search`](#search) | 5 | 0 | 0 | 1 | 0 | 6 |
 | [`seasons`](#seasons) | 1 | 0 | 0 | 0 | 0 | 1 |
-| [`shows`](#shows) | 59 | 0 | 0 | 1 | 0 | 60 |
+| [`shows`](#shows) | 58 | 0 | 0 | 2 | 0 | 60 |
 | [`smart-lists`](#smart-lists) | 4 | 0 | 0 | 0 | 0 | 4 |
-| [`social_recommendations`](#social_recommendations) | 2 | 0 | 0 | 0 | 0 | 2 |
+| [`social_recommendations`](#social_recommendations) | 0 | 0 | 0 | 2 | 0 | 2 |
 | [`sync`](#sync) | 37 | 0 | 0 | 0 | 0 | 37 |
 | [`team`](#team) | 1 | 0 | 0 | 0 | 0 | 1 |
-| [`users`](#users) | 89 | 0 | 0 | 21 | 1 | 111 |
+| [`users`](#users) | 87 | 0 | 0 | 23 | 1 | 111 |
 | [`watchnow`](#watchnow) | 2 | 0 | 0 | 0 | 0 | 2 |
 | [`younify`](#younify) | 0 | 0 | 0 | 6 | 0 | 6 |
-| **Total** | **313** | **0** | **0** | **35** | **3** | **351** |
+| **Total** | **305** | **0** | **0** | **43** | **3** | **351** |
 
 ## awards
 
@@ -185,7 +185,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/movies/{id}/lists/{type}/{sort}` | Get lists containing this movie | `MoviesService.GetListsContainingMovie` |
 | ✅ | GET | `/movies/{id}/people` | Get all people for a movie | `MoviesService.GetAllPeopleForMovie` |
 | ✅ | GET | `/movies/{id}/ratings` | Get movie ratings | `MoviesService.GetMovieRatings` |
-| ✅ | POST | `/movies/{id}/refresh` | Refresh movie metadata | `MoviesService.RefreshMovieMetadata` |
+| ⚠️ | POST | `/movies/{id}/refresh` | Refresh movie metadata | `MoviesService.RefreshMovieMetadata` |
 | ✅ | POST | `/movies/{id}/refresh/justwatch` | Refresh movie JustWatch links | `MoviesService.RefreshMovieJustwatch` |
 | ✅ | GET | `/movies/{id}/related` | Get related movies | `MoviesService.GetRelatedMovies` |
 | ✅ | GET | `/movies/{id}/releases/{country}` | Get all movie releases | `MoviesService.GetAllMovieReleases` |
@@ -235,7 +235,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ⚠️ | GET | `/people/{id}/awards` | Get person awards |  |
 | ⚠️ | GET | `/people/{id}/lists/{type}/{sort}` | Get lists containing this person | `PeopleService.GetListsContainingThisPerson` |
 | ✅ | GET | `/people/{id}/movies` | Get movie credits | `PeopleService.GetMovieCredits` |
-| ✅ | POST | `/people/{id}/refresh` | Refresh person metadata | `PeopleService.RefreshPersonMetadata` |
+| ⚠️ | POST | `/people/{id}/refresh` | Refresh person metadata | `PeopleService.RefreshPersonMetadata` |
 | ✅ | POST | `/people/{id}/report` | Report a person | `PeopleService.ReportPerson` |
 | ✅ | GET | `/people/{id}/shows` | Get show credits | `PeopleService.GetShowCredits` |
 
@@ -261,7 +261,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
 | ✅ | POST | `/search/recent/` | Add recent search | `SearchService.AddRecentSearch` |
-| ✅ | POST | `/search/recent/remove` | Remove recent search | `SearchService.RemoveRecentSearch` |
+| ⚠️ | POST | `/search/recent/remove` | Remove recent search | `SearchService.RemoveRecentSearch` |
 | ✅ | GET | `/search/recent_by_id/global/{type}` | Get trending search results | `SearchService.GetTrendingSearches` |
 | ✅ | GET | `/search/{id_type}/{id}` | Get ID lookup results | `SearchService.GetIDLookupResults` |
 | ✅ | GET | `/search/{type}` | Get text query results | `SearchService.GetTextQueryResults` |
@@ -301,7 +301,7 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | POST | `/shows/{id}/progress/watched/reset` | Reset show progress | `ShowsService.ResetShowProgress` |
 | ✅ | DELETE | `/shows/{id}/progress/watched/reset` | Undo reset show progress | `ShowsService.UndoResetShowProgress` |
 | ✅ | GET | `/shows/{id}/ratings` | Get show ratings | `ShowsService.GetShowRatings` |
-| ✅ | POST | `/shows/{id}/refresh` | Refresh show metadata | `ShowsService.RefreshShowMetadata` |
+| ⚠️ | POST | `/shows/{id}/refresh` | Refresh show metadata | `ShowsService.RefreshShowMetadata` |
 | ✅ | POST | `/shows/{id}/refresh/justwatch` | Refresh show JustWatch links | `ShowsService.RefreshShowJustwatch` |
 | ✅ | GET | `/shows/{id}/related` | Get related shows | `ShowsService.GetRelatedShows` |
 | ✅ | POST | `/shows/{id}/report` | Report a show | `ShowsService.ReportShow` |
@@ -351,8 +351,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 
 | Status | Method | Path | Summary | Go method |
 | :---: | --- | --- | --- | --- |
-| ✅ | GET | `/social_recommendations/movies/` | Get social movie recommendations | `SocialRecommendationsService.GetSocialMovieRecommendations` |
-| ✅ | GET | `/social_recommendations/shows/` | Get social show recommendations | `SocialRecommendationsService.GetSocialShowRecommendations` |
+| ⚠️ | GET | `/social_recommendations/movies/` | Get social movie recommendations | `SocialRecommendationsService.GetSocialMovieRecommendations` |
+| ⚠️ | GET | `/social_recommendations/shows/` | Get social show recommendations | `SocialRecommendationsService.GetSocialShowRecommendations` |
 
 ## sync
 
@@ -421,8 +421,8 @@ Trakt API routes (from the contract) and whether trakt-sync implements them.
 | ✅ | GET | `/users/requests/following` | Get pending following requests | `UsersService.GetPendingFollowingRequests` |
 | ✅ | POST | `/users/requests/{id}` | Approve follow request | `UsersService.ApproveFollowRequest` |
 | ✅ | DELETE | `/users/requests/{id}` | Deny follow request | `UsersService.DenyFollowRequest` |
-| ✅ | POST | `/users/saved_filters` | Add saved filters | `UsersService.AddSavedFilters` |
-| ✅ | DELETE | `/users/saved_filters/{id}` | Delete saved filter | `UsersService.DeleteSavedFilter` |
+| ⚠️ | POST | `/users/saved_filters` | Add saved filters | `UsersService.AddSavedFilters` |
+| ⚠️ | DELETE | `/users/saved_filters/{id}` | Delete saved filter | `UsersService.DeleteSavedFilter` |
 | ✅ | GET | `/users/saved_filters/{section}` | Get saved filters | `UsersService.GetSavedFilters` |
 | ⚠️ | PUT | `/users/set_cover` | Update cover image |  |
 | ✅ | GET | `/users/settings` | Retrieve settings | `UsersService.GetSettings` |
@@ -544,7 +544,7 @@ The ⚠️ routes are live API gaps, not client bugs. A row that ends with "Upst
 
 | Go method | Route | Note |
 | --- | --- | --- |
-| `MoviesService.RefreshMovieMetadata`, `ShowsService.RefreshShowMetadata`, `PeopleService.RefreshPersonMetadata`, `SearchService.RemoveRecentSearch`, `UsersService.AddSavedFilters`, `DeleteSavedFilter`, `SyncService.UpdateFavorites`, `SocialRecommendationsService.*` | `POST /movies/{id}/refresh`, `/shows/{id}/refresh`, `/people/{id}/refresh`, `POST /search/recent/remove`, `POST /users/saved_filters`, `DELETE /users/saved_filters/{id}`, `PUT /sync/favorites`, `GET /social_recommendations/movies/`, `/shows/` | Trakt dropped these 9 routes from the contract on 2026-10-13 (trakt/trakt-api `f3a3b0c`), but the live API still serves all of them (checked 2026-10-13: 200/201/204, 426 for the VIP ones, while a made-up path answers 400 or 405; re-checked 2026-10-14 through the CLI against trakt/trakt-api `2349f49`: all still served, `PUT /sync/favorites` not re-run; re-checked 2026-11-08 against trakt/trakt-api `832622b`: the 8 routes other than `PUT /sync/favorites` still served, and `POST /users/saved_filters` and `DELETE /users/saved_filters/{id}` work for a non-VIP account). The rows stay ✅ and in the totals (the contract itself now lists 331 routes); the actions and methods are deprecated in the `deprecation` registry and still send their request. Re-check before moving them to the locked stage. |
+| `MoviesService.RefreshMovieMetadata`, `ShowsService.RefreshShowMetadata`, `PeopleService.RefreshPersonMetadata`, `SearchService.RemoveRecentSearch`, `UsersService.AddSavedFilters`, `DeleteSavedFilter`, `SyncService.UpdateFavorites`, `SocialRecommendationsService.*` | `POST /movies/{id}/refresh`, `/shows/{id}/refresh`, `/people/{id}/refresh`, `POST /search/recent/remove`, `POST /users/saved_filters`, `DELETE /users/saved_filters/{id}`, `PUT /sync/favorites`, `GET /social_recommendations/movies/`, `/shows/` | Trakt dropped these 9 routes from the contract on 2026-10-13 (trakt/trakt-api `f3a3b0c`), but the live API still serves all of them (checked 2026-10-13: 200/201/204, 426 for the VIP ones, while a made-up path answers 400 or 405; re-checked 2026-10-14 through the CLI against trakt/trakt-api `2349f49`: all still served, `PUT /sync/favorites` not re-run; re-checked 2026-11-08 against trakt/trakt-api `832622b`: the 8 routes other than `PUT /sync/favorites` still served, and `POST /users/saved_filters` and `DELETE /users/saved_filters/{id}` work for a non-VIP account). Re-checked 2026-11-20 with raw requests (GETs, the three refreshes, and a malformed JSON body on the other writes, so nothing was written): `GET /social_recommendations/movies` and `/shows`, the three refresh routes (for ids that answer 200 on their GET) and `POST /search/recent/remove` answer 404 with an empty body, the same as a made-up path; `POST /users/saved_filters` and `DELETE /users/saved_filters/{id}` answer 410 `{"error":"saved_filters_retired"}`; `PUT /sync/favorites` still answers 400 `invalid_request_body`, the same as the `POST /sync/history` control. The 8 gone routes are ⚠️ and their actions and methods are locked in the `deprecation` registry (no request is sent); `PUT /sync/favorites` stays ✅, deprecated, and still sends its request. The rows stay in the totals (the contract itself now lists 331 routes). |
 | `MoviesService.GetHotMovies`, `GetStreamingMovies` | `GET /movies/hot`, `/movies/streaming/{period}` | live API returns 404 (checked 2026-09-24; streaming with `{"error":"endpoint removed"}`). Trakt answered [trakt/trakt-api#1074](https://github.com/trakt/trakt-api/issues/1074): the streaming charts are retired and hot was never served; on 2026-11-17 the contract removed these two routes and `GET /shows/hot`, `/shows/streaming/{period}` (trakt/trakt-api `e9bf819`). The movie actions and methods are locked in the `deprecation` registry and send no request; the two movie rows stay until the code is removed, the shows rows are gone. |
 | `YounifyService.*` | `/younify/*` (all 6 routes) | `GET /younify/connections` returns 401 for the maintainer's OAuth token, and the developer portal's own "try it" gets 401 too (checked 2026-09-25); 403 on 2026-10-31 and again on 2026-11-14. Younify looks limited to Trakt's own apps. The other routes change the account and were not tried; assumed the same. The CLI explains a 401 or 403. Since 2026-10-29 the contract (trakt/trakt-api `28e57aa`) adds `POST /younify/users/refresh` (the service in the body) and an optional `skip_sync` body on every refresh route; since 2026-11-18 (`0c044fd`) it marks all 6 routes first-party only (403). trakt-sync sends `skip_sync` from `younify -a refresh -skip_sync` and has `YounifyService.RefreshServiceByBody` for the body route (library only, the CLI keeps the path routes); both are mock-tested only. Upstream issue: [trakt/trakt-api#1075](https://github.com/trakt/trakt-api/issues/1075) |
 | `UsersService.GetMonthInReview`, `GetYearInReview`, `GetSocialActivity` | `GET /users/{id}/mir/{year}/{month}`, `/users/{id}/yir/{year}`, `/users/{id}/yir/{year}/{year_end}`, `/users/{id}/yir/all`, `/users/{id}/{type}/activities` | live API returns 401 for month and year in review while `GET /users/reactions/comments` (OAuth required) works with the same token (checked 2026-09-25, again 2026-10-31, 2026-11-04 and 2026-11-08). Since 2026-11-09 the contract documents why (trakt/trakt-api `c37ae56`): only official Trakt apps can call these routes, the profile owner needs VIP, and other apps get a 401. The same commit added `yir/{year}/{year_end}` and `yir/all` with the same access; trakt-sync does not implement them. The CLI explains the 401. Activities answered 403 on 2026-10-31, and the contract marks it limited to first-party apps; the CLI explains the 403 as limited access. |

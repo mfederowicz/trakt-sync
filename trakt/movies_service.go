@@ -714,8 +714,8 @@ func (m *MoviesService) GetMovieVideos(ctx context.Context, id string, opts *uri
 //
 // API docs: https://docs.trakt.tv/reference/postmoviesrefresh
 //
-// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13. The method still sends its
-// request; in a later release it will return an *EndpointRemovedError instead, and then be removed.
+// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13; the live API no longer serves it (checked 2026-11-20).
+// The method sends no request and returns an *EndpointRemovedError; in a later release it will be removed.
 func (m *MoviesService) RefreshMovieMetadata(ctx context.Context, id string) (*str.Response, error) {
 	if err := lockedEndpoint(http.MethodPost, "movies/{id}/refresh"); err != nil {
 		return nil, err

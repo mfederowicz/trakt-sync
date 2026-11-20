@@ -28,7 +28,6 @@ func TestConfigFileIgnoreOptions(t *testing.T) {
 		action []string
 	}{
 		{name: consts.Recommendations, flags: &RecommendationsCmd.Flag, action: []string{"-a", "movies"}},
-		{name: consts.SocialRecommendations, flags: &SocialRecommendationsCmd.Flag, action: []string{"-a", "movies"}},
 		{name: consts.SmartLists, flags: &SmartListsCmd.Flag, action: []string{"-a", "items", "-i", "top-sci-fi"}},
 		{name: consts.Users, flags: &UsersCmd.Flag, action: []string{"-a", "activities", "-t", "friends"}},
 	}

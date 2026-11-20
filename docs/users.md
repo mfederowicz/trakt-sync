@@ -29,16 +29,13 @@ $ ./trakt-sync users -a follower_requests -follower_request 123 -deny
 ```console
 $ ./trakt-sync users -a saved_filters -u username
 ```
-##### Add saved filters (deprecated) - via -items flag or stdin:
-Deprecated since 2026-10-13: Trakt dropped this endpoint from its API contract. `users -a add_saved_filters` still works (checked 2026-10-13 and 2026-11-08) and prints a deprecation notice; it may stop working.
-A JSON array of `name` + `url` (a trakt.tv page with its filters).
-```console
-$ echo '[{"name":"Sci-fi","url":"https://trakt.tv/movies/trending?genres=science-fiction"}]' | ./trakt-sync users -a add_saved_filters -> users_add_saved_filters_results.json
-```
-##### Delete saved filter (deprecated):
-Deprecated since 2026-10-13: Trakt dropped this endpoint from its API contract. `users -a delete_saved_filter` still works (checked 2026-10-13 and 2026-11-08) and prints a deprecation notice; it may stop working.
+##### Add and delete saved filters (locked)
+Trakt dropped both endpoints from its API contract on 2026-10-13, and since 2026-11-20 the live API answers
+`410 {"error":"saved_filters_retired"}`. `add_saved_filters` and `delete_saved_filter` are locked: they send no request
+and stop with a notice:
 ```console
 $ ./trakt-sync users -a delete_saved_filter -i 101
+users -a delete_saved_filter is locked since 2026-11-20: Trakt retired saved filters, the live API answers 410 saved_filters_retired; no request was sent
 ```
 ##### Export hidden items for a section (movie,show,season,user):
 Sections: `calendar` (default), `progress_watched`, `progress_collected`, `recommendations`, `comments`, `dropped`.

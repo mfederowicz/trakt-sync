@@ -274,10 +274,12 @@ an API app without access gets a limited access error.
 ```console
 $ ./trakt-sync shows -a videos -i the-sopranos
 ```
-##### Refresh show metadata (deprecated)
-Deprecated since 2026-10-13: Trakt dropped this endpoint from its API contract. `shows -a refresh` still works (checked 2026-10-13 and 2026-11-08) and prints a deprecation notice; it may stop working.
+##### Refresh show metadata (locked)
+Trakt dropped this endpoint from its API contract on 2026-10-13, and the live API answers 404 since 2026-11-20.
+`shows -a refresh` is locked: it sends no request and stops with a notice:
 ```console
 $ ./trakt-sync shows -a refresh -i the-sopranos
+shows -a refresh is locked since 2026-11-20: Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent
 ```
 ##### Refresh show JustWatch links
 ```console
