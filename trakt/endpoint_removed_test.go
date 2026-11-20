@@ -33,41 +33,48 @@ func TestLockedEndpointsSendNoRequest(t *testing.T) {
 		name   string
 		method string
 		route  string
-		reason string // the reason of the 2026-10-13 routes when not set
+		reason string // the reason of the 2026-10-13 routes still served when not set
 		call   func(c *Client) (*str.Response, error)
 	}{
-		{name: "RefreshMovieMetadata", method: http.MethodPost, route: "movies/{id}/refresh", call: func(c *Client) (*str.Response, error) {
-			return c.Movies.RefreshMovieMetadata(ctx, "tron-legacy-2010")
-		}},
-		{name: "RefreshShowMetadata", method: http.MethodPost, route: "shows/{id}/refresh", call: func(c *Client) (*str.Response, error) {
-			return c.Shows.RefreshShowMetadata(ctx, "breaking-bad")
-		}},
-		{name: "RefreshPersonMetadata", method: http.MethodPost, route: "people/{id}/refresh", call: func(c *Client) (*str.Response, error) {
-			return c.People.RefreshPersonMetadata(ctx, "bryan-cranston")
-		}},
+		{name: "RefreshMovieMetadata", method: http.MethodPost, route: "movies/{id}/refresh",
+			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
+				return c.Movies.RefreshMovieMetadata(ctx, "tron-legacy-2010")
+			}},
+		{name: "RefreshShowMetadata", method: http.MethodPost, route: "shows/{id}/refresh",
+			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
+				return c.Shows.RefreshShowMetadata(ctx, "breaking-bad")
+			}},
+		{name: "RefreshPersonMetadata", method: http.MethodPost, route: "people/{id}/refresh",
+			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
+				return c.People.RefreshPersonMetadata(ctx, "bryan-cranston")
+			}},
 		{name: "GetListsContainingThisPerson", method: http.MethodGet, route: "people/{id}/lists/{type}/{sort}",
 			reason: "Trakt deprecated this endpoint: lists no longer hold people, so it always returns no lists", call: func(c *Client) (*str.Response, error) {
 				_, resp, err := c.People.GetListsContainingThisPerson(ctx, "bryan-cranston", "personal", "popular", &uri.ListOptions{})
 				return resp, err
 			}},
-		{name: "RemoveRecentSearch", method: http.MethodPost, route: "search/recent/remove", call: func(c *Client) (*str.Response, error) {
-			return c.Search.RemoveRecentSearch(ctx, &str.RecentSearch{Query: "reacher", ID: 139606, Type: "shows"})
-		}},
-		{name: "AddSavedFilters", method: http.MethodPost, route: "users/saved_filters", call: func(c *Client) (*str.Response, error) {
-			_, resp, err := c.Users.AddSavedFilters(ctx, []*str.SavedFilterAdd{{Name: str.String("Sci-fi")}})
-			return resp, err
-		}},
-		{name: "DeleteSavedFilter", method: http.MethodDelete, route: "users/saved_filters/{id}", call: func(c *Client) (*str.Response, error) {
-			return c.Users.DeleteSavedFilter(ctx, 101)
-		}},
+		{name: "RemoveRecentSearch", method: http.MethodPost, route: "search/recent/remove",
+			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
+				return c.Search.RemoveRecentSearch(ctx, &str.RecentSearch{Query: "reacher", ID: 139606, Type: "shows"})
+			}},
+		{name: "AddSavedFilters", method: http.MethodPost, route: "users/saved_filters",
+			reason: "Trakt retired saved filters, the live API answers 410 saved_filters_retired", call: func(c *Client) (*str.Response, error) {
+				_, resp, err := c.Users.AddSavedFilters(ctx, []*str.SavedFilterAdd{{Name: str.String("Sci-fi")}})
+				return resp, err
+			}},
+		{name: "DeleteSavedFilter", method: http.MethodDelete, route: "users/saved_filters/{id}",
+			reason: "Trakt retired saved filters, the live API answers 410 saved_filters_retired", call: func(c *Client) (*str.Response, error) {
+				return c.Users.DeleteSavedFilter(ctx, 101)
+			}},
 		{name: "UpdateFavorites", method: http.MethodPut, route: "sync/favorites", call: func(c *Client) (*str.Response, error) {
 			_, resp, err := c.Sync.UpdateFavorites(ctx, new(str.PersonalList))
 			return resp, err
 		}},
-		{name: "GetSocialMovieRecommendations", method: http.MethodGet, route: "social_recommendations/movies", call: func(c *Client) (*str.Response, error) {
-			_, resp, err := c.SocialRecommendations.GetSocialMovieRecommendations(ctx, &uri.ListOptions{})
-			return resp, err
-		}},
+		{name: "GetSocialMovieRecommendations", method: http.MethodGet, route: "social_recommendations/movies",
+			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
+				_, resp, err := c.SocialRecommendations.GetSocialMovieRecommendations(ctx, &uri.ListOptions{})
+				return resp, err
+			}},
 		{name: "GetHotMovies", method: http.MethodGet, route: "movies/hot",
 			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
 				_, resp, err := c.Movies.GetHotMovies(ctx, &uri.ListOptions{})
@@ -97,10 +104,11 @@ func TestLockedEndpointsSendNoRequest(t *testing.T) {
 			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
 				return c.Users.SyncPlex(ctx, &str.PlexSyncRequest{ServerID: str.String("abc")})
 			}},
-		{name: "GetSocialShowRecommendations", method: http.MethodGet, route: "social_recommendations/shows", call: func(c *Client) (*str.Response, error) {
-			_, resp, err := c.SocialRecommendations.GetSocialShowRecommendations(ctx, &uri.ListOptions{})
-			return resp, err
-		}},
+		{name: "GetSocialShowRecommendations", method: http.MethodGet, route: "social_recommendations/shows",
+			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
+				_, resp, err := c.SocialRecommendations.GetSocialShowRecommendations(ctx, &uri.ListOptions{})
+				return resp, err
+			}},
 	}
 	if len(tests) != len(deprecation.Notices()) {
 		t.Errorf("%d methods tested, %d notices registered", len(tests), len(deprecation.Notices()))
@@ -145,11 +153,11 @@ func TestLockedEndpointsSendNoRequest(t *testing.T) {
 // TestLockedEndpointLeavesOthersAlone checks that routes sharing a path or prefix with a registered one still pass
 // when the registered ones are locked, and that a registered route passes while it is only deprecated.
 func TestLockedEndpointLeavesOthersAlone(t *testing.T) {
-	if err := lockedEndpoint(http.MethodPost, "movies/{id}/refresh"); err != nil {
+	if err := lockedEndpoint(http.MethodPut, "sync/favorites"); err != nil {
 		t.Errorf("deprecated route is locked: %v", err)
 	}
 	lockRegisteredRoutes(t)
-	if err := lockedEndpoint(http.MethodPost, "movies/{id}/refresh"); err == nil {
+	if err := lockedEndpoint(http.MethodPut, "sync/favorites"); err == nil {
 		t.Error("locked route passes")
 	}
 	for _, tt := range []struct{ method, route string }{

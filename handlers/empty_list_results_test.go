@@ -78,8 +78,6 @@ func TestListHandlersEmptyResult(t *testing.T) {
 		{module: "calendars", name: "streaming", handler: CalendarsStreamingHandler{}},
 		{module: "recommendations", name: "movies", handler: RecommendationsMoviesHandler{}},
 		{module: "recommendations", name: "shows", handler: RecommendationsShowsHandler{}},
-		{module: "social_recommendations", name: "movies", handler: SocialRecommendationsMoviesHandler{}},
-		{module: "social_recommendations", name: "shows", handler: SocialRecommendationsShowsHandler{}},
 		{module: "smart_lists", name: "templates", handler: SmartListsTemplatesHandler{}},
 		{module: "smart_lists", name: "items", handler: SmartListsItemsHandler{}},
 		{module: "team", name: "members", handler: TeamMembersHandler{}},

@@ -33,11 +33,13 @@ $ ./trakt-sync people -a lists -i john-wayne -t official -s likes
 
 The Trakt API currently returns no lists for any person on this route (checked 2026-10-01, again 2026-10-31), so the export is `[]`.
 Deprecated since 2026-10-20: the Trakt API contract marks the endpoint deprecated because lists no longer hold people. `people -a lists` still sends its request and prints a deprecation notice first; it may stop working.
-##### Refresh person metadata (deprecated)
+##### Refresh person metadata (locked)
+Trakt dropped this endpoint from its API contract on 2026-10-13, and the live API answers 404 since 2026-11-20.
+`people -a refresh` is locked: it sends no request and stops with a notice:
 ```console
 $ ./trakt-sync people -a refresh -i john-wayne
+people -a refresh is locked since 2026-11-20: Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent
 ```
-Deprecated since 2026-10-13: Trakt dropped this endpoint from its API contract. `people -a refresh` still works (checked 2026-10-13 and 2026-11-08) and prints a deprecation notice; it may stop working.
 ##### Report a person
 ```console
 $ ./trakt-sync people -a report -i john-wayne -r metadata -message "birthday is wrong"

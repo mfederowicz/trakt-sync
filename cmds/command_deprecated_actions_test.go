@@ -30,17 +30,9 @@ func TestDeprecatedActionsPrintNoticeAndRun(t *testing.T) {
 		args    []string
 		want    string
 	}{
-		{name: "movies refresh", command: MoviesCmd, args: []string{"-a", "refresh", "-i", "tron-legacy-2010"}, want: "movies -a refresh" + status},
-		{name: "shows refresh", command: ShowsCmd, args: []string{"-a", "refresh", "-i", "the-sopranos"}, want: "shows -a refresh" + status},
-		{name: "people refresh", command: PeopleCmd, args: []string{"-a", "refresh", "-i", "bryan-cranston"}, want: "people -a refresh" + status},
 		{name: "people lists", command: PeopleCmd, args: []string{"-a", "lists", "-i", "bryan-cranston"},
 			want: "people -a lists is deprecated since 2026-10-20: Trakt deprecated this endpoint: lists no longer hold people, so it always returns no lists\n"},
-		{name: "search remove_recent", command: SearchCmd, args: []string{"-a", "remove_recent", "-q", "reacher", "-i", "139606"}, want: "search -a remove_recent" + status},
-		{name: "users add_saved_filters", command: UsersCmd, args: []string{"-a", "add_saved_filters"}, want: "users -a add_saved_filters" + status},
-		{name: "users delete_saved_filter", command: UsersCmd, args: []string{"-a", "delete_saved_filter", "-i", "101"}, want: "users -a delete_saved_filter" + status},
 		{name: "sync update_favorites", command: SyncCmd, args: []string{"-a", "update_favorites", "-sort_by", "added"}, want: "sync -a update_favorites" + status},
-		{name: "social_recommendations movies", command: SocialRecommendationsCmd, args: []string{"-a", "movies"}, want: "social_recommendations -a movies" + status},
-		{name: "social_recommendations shows", command: SocialRecommendationsCmd, args: []string{"-a", "shows", "-watch_window", "30"}, want: "social_recommendations -a shows" + status},
 		{name: "younify refresh", command: YounifyCmd, args: []string{"-a", "refresh", "-service_id", "netflix"}},
 		{name: "movies refresh_justwatch", command: MoviesCmd, args: []string{"-a", "refresh_justwatch", "-i", "tron-legacy-2010"}},
 		{name: "users saved_filters", command: UsersCmd, args: []string{"-a", "saved_filters"}},
@@ -95,6 +87,8 @@ func TestLockedActionsSendNothing(t *testing.T) {
 	config.TokenPath, config.SettingsPath = "/locked/token.json", "/locked/user_settings.json"
 
 	const status = ": Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent"
+	const gone = " is locked since 2026-11-20" + status
+	const retired = " is locked since 2026-11-20: Trakt retired saved filters, the live API answers 410 saved_filters_retired; no request was sent"
 	tests := []struct {
 		name string
 		cmd  *Command
@@ -107,6 +101,14 @@ func TestLockedActionsSendNothing(t *testing.T) {
 		{name: "users plex_servers", cmd: UsersCmd, args: []string{"-a", "plex_servers"}, want: "users -a plex_servers is locked since 2026-11-18" + status},
 		{name: "users plex_server", cmd: UsersCmd, args: []string{"-a", "plex_server", "-i", "abc"}, want: "users -a plex_server is locked since 2026-11-18" + status},
 		{name: "users plex_sync", cmd: UsersCmd, args: []string{"-a", "plex_sync", "-i", "abc", "-all_data"}, want: "users -a plex_sync is locked since 2026-11-18" + status},
+		{name: "movies refresh", cmd: MoviesCmd, args: []string{"-a", "refresh", "-i", "tron-legacy-2010"}, want: "movies -a refresh" + gone},
+		{name: "shows refresh", cmd: ShowsCmd, args: []string{"-a", "refresh", "-i", "the-sopranos"}, want: "shows -a refresh" + gone},
+		{name: "people refresh", cmd: PeopleCmd, args: []string{"-a", "refresh", "-i", "bryan-cranston"}, want: "people -a refresh" + gone},
+		{name: "search remove_recent", cmd: SearchCmd, args: []string{"-a", "remove_recent", "-q", "reacher", "-i", "139606"}, want: "search -a remove_recent" + gone},
+		{name: "users add_saved_filters", cmd: UsersCmd, args: []string{"-a", "add_saved_filters"}, want: "users -a add_saved_filters" + retired},
+		{name: "users delete_saved_filter", cmd: UsersCmd, args: []string{"-a", "delete_saved_filter", "-i", "101"}, want: "users -a delete_saved_filter" + retired},
+		{name: "social_recommendations movies", cmd: SocialRecommendationsCmd, args: []string{"-a", "movies"}, want: "social_recommendations -a movies" + gone},
+		{name: "social_recommendations shows", cmd: SocialRecommendationsCmd, args: []string{"-a", "shows", "-watch_window", "30"}, want: "social_recommendations -a shows" + gone},
 	}
 	for _, tt := range tests {
 		tt := tt

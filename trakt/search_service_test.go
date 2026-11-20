@@ -80,9 +80,6 @@ func TestSearchServiceRecentSearch(t *testing.T) {
 		{name: "add", path: "/search/recent", status: http.StatusCreated, call: func(c *Client) (*str.Response, error) {
 			return c.Search.AddRecentSearch(context.Background(), body)
 		}},
-		{name: "remove", path: "/search/recent/remove", status: http.StatusNoContent, call: func(c *Client) (*str.Response, error) {
-			return c.Search.RemoveRecentSearch(context.Background(), body)
-		}},
 	}
 
 	for _, tt := range tests {

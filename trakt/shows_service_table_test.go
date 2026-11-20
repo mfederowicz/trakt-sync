@@ -161,8 +161,6 @@ func TestShowsServiceRequests(t *testing.T) {
 			call: func(c *Client) (any, error) { r, _, err := c.Shows.GetShowWatching(ctx, id, opts); return r, err }},
 		{name: "GetShowVideos", method: http.MethodGet, path: "/shows/breaking-bad/videos", query: "limit=10", body: videos,
 			call: func(c *Client) (any, error) { r, _, err := c.Shows.GetShowVideos(ctx, id, opts); return r, err }},
-		{name: "RefreshShowMetadata", method: http.MethodPost, path: "/shows/breaking-bad/refresh", status: http.StatusCreated,
-			call: func(c *Client) (any, error) { _, err := c.Shows.RefreshShowMetadata(ctx, id); return nil, err }},
 		{name: "GetNextEpisode", method: http.MethodGet, path: "/shows/breaking-bad/next_episode", query: "limit=10", body: episode,
 			call: func(c *Client) (any, error) { r, _, err := c.Shows.GetNextEpisode(ctx, id, opts); return r, err }},
 		{name: "GetLastEpisode", method: http.MethodGet, path: "/shows/breaking-bad/last_episode", query: "limit=10", body: episode,

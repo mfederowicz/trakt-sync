@@ -40,16 +40,14 @@ func TestUsersWritesHandlers(t *testing.T) {
 			input: `{"browsing":{"dark_knight":""}}`, wantErr: "browsing.dark_knight '' is not valid", wantNoAPI: true},
 		{name: "update settings unknown key", handler: UsersUpdateSettingsHandler{}, options: str.Options{Action: consts.UpdateSettings},
 			input: `{"browsing":{"dark_night":"auto"}}`, wantErr: "invalid update_settings JSON", wantNoAPI: true},
-		{name: "add saved filters", handler: UsersAddSavedFiltersHandler{}, options: str.Options{Action: consts.AddSavedFilters}, input: filters,
-			method: http.MethodPost, path: "/users/saved_filters", status: http.StatusCreated, body: `{"added":[{"id":101}],"skipped":[]}`, wantOutput: true},
+		{name: "add saved filters is locked", handler: UsersAddSavedFiltersHandler{}, options: str.Options{Action: consts.AddSavedFilters}, input: filters,
+			wantErr: "POST users/saved_filters is locked since 2026-11-20: Trakt retired saved filters, the live API answers 410 saved_filters_retired; no request was sent", wantNoAPI: true},
 		{name: "add saved filters empty", handler: UsersAddSavedFiltersHandler{}, options: str.Options{Action: consts.AddSavedFilters},
 			input: `[]`, wantErr: "needs a JSON array", wantNoAPI: true},
 		{name: "add saved filters missing url", handler: UsersAddSavedFiltersHandler{}, options: str.Options{Action: consts.AddSavedFilters},
 			input: `[{"name":"Sci-fi"}]`, wantErr: "saved filter 1 needs name and url", wantNoAPI: true},
-		{name: "delete saved filter", handler: UsersDeleteSavedFilterHandler{}, options: str.Options{Action: consts.DeleteSavedFilter, ID: "101"},
-			method: http.MethodDelete, path: "/users/saved_filters/101", status: http.StatusNoContent},
-		{name: "delete saved filter not found", handler: UsersDeleteSavedFilterHandler{}, options: str.Options{Action: consts.DeleteSavedFilter, ID: "7"},
-			method: http.MethodDelete, path: "/users/saved_filters/7", status: http.StatusNotFound, body: `{}`, wantErr: "not found saved filter:7"},
+		{name: "delete saved filter is locked", handler: UsersDeleteSavedFilterHandler{}, options: str.Options{Action: consts.DeleteSavedFilter, ID: "101"},
+			wantErr: "DELETE users/saved_filters/{id} is locked since 2026-11-20: Trakt retired saved filters, the live API answers 410 saved_filters_retired; no request was sent", wantNoAPI: true},
 		{name: "delete saved filter without id", handler: UsersDeleteSavedFilterHandler{}, options: str.Options{Action: consts.DeleteSavedFilter},
 			wantErr: "set saved filter id", wantNoAPI: true},
 		{name: "delete saved filter slug id", handler: UsersDeleteSavedFilterHandler{}, options: str.Options{Action: consts.DeleteSavedFilter, ID: "sci-fi"},
@@ -100,51 +98,6 @@ func TestUsersWritesHandlers(t *testing.T) {
 			}
 			if !tt.wantOutput && !os.IsNotExist(statErr) {
 				t.Errorf("unexpected output file: %v", statErr)
-			}
-		})
-	}
-}
-
-// The live API accepted add and delete from a non-VIP account (checked 2026-11-08), so the output must not call them VIP only.
-func TestUsersSavedFilterWritesNoVIPNote(t *testing.T) {
-	tests := []struct {
-		name    string
-		handler Handler
-		options str.Options
-		input   string
-		status  int
-		body    string
-	}{
-		{name: "add", handler: UsersAddSavedFiltersHandler{}, options: str.Options{Action: consts.AddSavedFilters},
-			input: `[{"name":"Sci-fi","url":"https://trakt.tv/movies/trending?genres=science-fiction"}]`, status: http.StatusCreated, body: `{"added":[{"id":101}],"skipped":[]}`},
-		{name: "delete", handler: UsersDeleteSavedFilterHandler{}, options: str.Options{Action: consts.DeleteSavedFilter, ID: "101"}, status: http.StatusNoContent},
-	}
-
-	for _, tt := range tests {
-		tt := tt
-		t.Run(tt.name, func(t *testing.T) {
-			s := setup(t)
-			defer s.Teardown()
-
-			s.Mux.HandleFunc("/users/", func(w http.ResponseWriter, _ *http.Request) {
-				w.WriteHeader(tt.status)
-				test.SafeFprint(w, tt.body)
-			})
-
-			dir := t.TempDir()
-			options := tt.options
-			options.Output = filepath.Join(dir, "out.json")
-			if tt.input != "" {
-				options.Items = filepath.Join(dir, "input.json")
-				test.AssertNilError(t, os.WriteFile(options.Items, []byte(tt.input), consts.X644))
-			}
-			var err error
-			out := captureStdout(t, func() {
-				err = tt.handler.Handle(&options, s.Client)
-			})
-			test.AssertNilError(t, err)
-			if strings.Contains(out, "VIP only") {
-				t.Errorf("output calls the route VIP only: %q", out)
 			}
 		})
 	}

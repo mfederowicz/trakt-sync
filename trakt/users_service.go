@@ -1565,8 +1565,8 @@ func (u *UsersService) UpdateSettings(ctx context.Context, settings *str.Setting
 //
 // API docs: https://docs.trakt.tv/reference/postusersfiltersadd
 //
-// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13. The method still sends its
-// request; in a later release it will return an *EndpointRemovedError instead, and then be removed.
+// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13; the live API answers 410 saved_filters_retired (checked 2026-11-20).
+// The method sends no request and returns an *EndpointRemovedError; in a later release it will be removed.
 func (u *UsersService) AddSavedFilters(ctx context.Context, filters []*str.SavedFilterAdd) (*str.SavedFiltersResult, *str.Response, error) {
 	if err := lockedEndpoint(http.MethodPost, "users/saved_filters"); err != nil {
 		return nil, nil, err
@@ -1589,8 +1589,8 @@ func (u *UsersService) AddSavedFilters(ctx context.Context, filters []*str.Saved
 //
 // API docs: https://docs.trakt.tv/reference/deleteusersfiltersdelete
 //
-// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13. The method still sends its
-// request; in a later release it will return an *EndpointRemovedError instead, and then be removed.
+// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13; the live API answers 410 saved_filters_retired (checked 2026-11-20).
+// The method sends no request and returns an *EndpointRemovedError; in a later release it will be removed.
 func (u *UsersService) DeleteSavedFilter(ctx context.Context, id int) (*str.Response, error) {
 	if err := lockedEndpoint(http.MethodDelete, "users/saved_filters/{id}"); err != nil {
 		return nil, err

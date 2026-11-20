@@ -80,7 +80,9 @@ one value: `movies`, `shows`, `people` or `lists`; `-i` must be the numeric Trak
 ```console
 $ ./trakt-sync search -a add_recent -t shows -q reacher -i 139606
 ```
-`remove_recent` is deprecated since 2026-10-13: Trakt dropped this endpoint from its API contract. `search -a remove_recent` still works (checked 2026-10-13 and 2026-11-08) and prints a deprecation notice; it may stop working.
+`remove_recent` is locked: Trakt dropped this endpoint from its API contract on 2026-10-13, and the live API answers 404
+since 2026-11-20. The action sends no request and stops with a notice:
 ```console
 $ ./trakt-sync search -a remove_recent -t shows -q reacher -i 139606
+search -a remove_recent is locked since 2026-11-20: Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent
 ```

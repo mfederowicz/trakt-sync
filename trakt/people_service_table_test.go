@@ -39,8 +39,6 @@ func TestPeopleServiceRequests(t *testing.T) {
 				r, _, err := c.People.GetRecentlyUpdatedPeopleTraktIDs(ctx, "2026-10-01", opts)
 				return r, err
 			}},
-		{name: "RefreshPersonMetadata", method: http.MethodPost, path: "/people/bryan-cranston/refresh", status: http.StatusCreated,
-			call: func(c *Client) (any, error) { _, err := c.People.RefreshPersonMetadata(ctx, id); return nil, err }},
 	}
 	runServiceCases(t, cases)
 }

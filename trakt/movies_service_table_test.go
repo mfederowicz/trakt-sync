@@ -86,8 +86,6 @@ func TestMoviesServiceRequests(t *testing.T) {
 			call: func(c *Client) (any, error) { r, _, err := c.Movies.GetMovieWatching(ctx, id, opts); return r, err }},
 		{name: "GetMovieVideos", method: http.MethodGet, path: "/movies/tron-legacy-2010/videos", query: "limit=10", body: videos,
 			call: func(c *Client) (any, error) { r, _, err := c.Movies.GetMovieVideos(ctx, id, opts); return r, err }},
-		{name: "RefreshMovieMetadata", method: http.MethodPost, path: "/movies/tron-legacy-2010/refresh", status: http.StatusCreated,
-			call: func(c *Client) (any, error) { _, err := c.Movies.RefreshMovieMetadata(ctx, id); return nil, err }},
 	}
 	runServiceCases(t, cases)
 }

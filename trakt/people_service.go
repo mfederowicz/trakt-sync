@@ -231,8 +231,8 @@ func (p *PeopleService) GetRecentlyUpdatedPeopleTraktIDs(ctx context.Context, st
 //
 // API docs: https://docs.trakt.tv/reference/postpeoplerefresh
 //
-// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13. The method still sends its
-// request; in a later release it will return an *EndpointRemovedError instead, and then be removed.
+// Deprecated: Trakt dropped this endpoint from its API contract on 2026-10-13; the live API no longer serves it (checked 2026-11-20).
+// The method sends no request and returns an *EndpointRemovedError; in a later release it will be removed.
 func (p *PeopleService) RefreshPersonMetadata(ctx context.Context, id string) (*str.Response, error) {
 	if err := lockedEndpoint(http.MethodPost, "people/{id}/refresh"); err != nil {
 		return nil, err
