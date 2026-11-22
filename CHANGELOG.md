@@ -32,6 +32,14 @@ schedule.
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.32.0] - 2026-11-22
+
+### Added
+
 - `younify -a refresh -skip_sync` sends `skip_sync`: Trakt only marks the service as synced now and ignores history from before this moment. Younify is open only to Trakt's own apps for now (403), so this is untested against the live API.
 - Library: `YounifyService.RefreshServiceByBody` for `POST /younify/users/refresh` (the service named in the body), with the new `str.YounifyRefreshService`.
 - `users -a add_list_items` and `sync -a add_to_watchlist` send the `notes` of each movie, show, season and episode in `-items`, so a list exported with its notes keeps them when it is added again. Trakt saves them only for VIP list owners, so this is tested against a mock server only.
@@ -917,7 +925,8 @@ schedule.
 - First release, with the `calendars`, `collection`, `help`, `history`, `lists`, `people`, `search` and `watchlist`
   commands exporting Trakt data to JSON.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.31.0...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.32.0...HEAD
+[1.32.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.31.0...v1.32.0
 [1.31.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.30.0...v1.31.0
 [1.30.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.29.0...v1.30.0
 [1.29.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.28.0...v1.29.0
