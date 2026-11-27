@@ -29,6 +29,7 @@ func Setup() *SetupData {
 	client := NewClient(nil)
 	uri, _ := url.Parse(server.URL + consts.BaseURLPath + "/")
 	client.BaseURL = uri
+	client.AuthURL = uri
 
 	return &SetupData{
 		Client:    client,

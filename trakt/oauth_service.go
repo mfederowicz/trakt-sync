@@ -8,9 +8,9 @@ import (
 )
 
 // OauthService handles communication with the oauth related
-// methods of the Trakt API.
+// methods of the Trakt API. Its requests go to Client.AuthURL (https://auth.trakt.tv/ by default).
 //
-// API docs: https://trakt.docs.apiary.io/#reference/authentication-oauth
+// API docs: https://developer.trakt.tv/docs/authentication-oauth
 type OauthService Service
 
 // GenerateNewDeviceCodes Generate new codes to start the device authentication process.
@@ -18,7 +18,7 @@ type OauthService Service
 // API docs: https://docs.trakt.tv/reference/postoauthdevicecode
 func (o *OauthService) GenerateNewDeviceCodes(ctx context.Context, code *str.NewDeviceCode) (*str.DeviceCode, *str.Response, error) {
 	u := "oauth/device/code"
-	req, err := o.client.NewRequest("POST", u, code)
+	req, err := o.client.newAuthRequest("POST", u, code)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -37,7 +37,7 @@ func (o *OauthService) GenerateNewDeviceCodes(ctx context.Context, code *str.New
 // API docs: https://docs.trakt.tv/reference/postoauthdevicetoken
 func (o *OauthService) PollForAccessToken(ctx context.Context, deviceToken *str.NewDeviceToken) (*str.DeviceToken, *str.Response, error) {
 	u := "oauth/device/token"
-	req, err := o.client.NewRequest("POST", u, deviceToken)
+	req, err := o.client.newAuthRequest("POST", u, deviceToken)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -58,7 +58,7 @@ func (o *OauthService) PollForAccessToken(ctx context.Context, deviceToken *str.
 // API docs: https://docs.trakt.tv/reference/postoauthtoken
 func (o *OauthService) ExchangeRefreshTokenForAccessToken(ctx context.Context, deviceToken *str.CurrentDeviceToken) (*str.DeviceToken, *str.Response, error) {
 	u := "oauth/token"
-	req, err := o.client.NewRequest(http.MethodPost, u, deviceToken)
+	req, err := o.client.newAuthRequest(http.MethodPost, u, deviceToken)
 	if err != nil {
 		return nil, nil, err
 	}
