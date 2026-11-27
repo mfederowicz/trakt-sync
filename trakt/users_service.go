@@ -125,6 +125,7 @@ func (u *UsersService) GetSavedFilters(ctx context.Context, section string) ([]*
 }
 
 // GetStats Returns stats about the movies, shows, and episodes a user has watched, collected, and rated.
+// Stats are for VIP users only; for a non-VIP user Trakt sends placeholder zeros for now.
 //
 // API docs: https://docs.trakt.tv/reference/getusersstats
 func (u *UsersService) GetStats(ctx context.Context, id string) (*str.UserStats, *str.Response, error) {

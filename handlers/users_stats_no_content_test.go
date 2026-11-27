@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// A 204 from users stats (no precomputed stats, documented for non-VIP users) prints a note and writes no file.
+// A 204 from users stats prints a note and writes no file; kept for when Trakt stops sending placeholder zeros to non-VIP users.
 func TestUsersStatsHandlerNoContent(t *testing.T) {
 	s := setup(t)
 	defer s.Teardown()
