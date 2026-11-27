@@ -32,6 +32,14 @@ schedule.
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.33.0] - 2026-11-27
+
+### Added
+
 - Library: `Client.AuthURL`, the host of the OAuth requests (`OauthService`), `https://auth.trakt.tv/` by default. Every other request still goes to `Client.BaseURL`.
 
 ### Changed
@@ -40,8 +48,6 @@ schedule.
 - Library: `OauthService` sends its requests to `Client.AuthURL` instead of `Client.BaseURL`. An app that points `BaseURL` at a proxy or a mock server sets `AuthURL` too.
 - `users -a plex_settings`, `update_plex_settings` and `plex_disconnect` are locked: Trakt removed these Plex settings routes from its API on 2026-11-27 ([trakt/trakt-api#1098](https://github.com/trakt/trakt-api/issues/1098)), and the live API already answered 404 since 2026-11-18. The actions send no request and stop with `users -a plex_settings is locked since 2026-11-27: Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent`; the action names stay. All seven Plex actions are now locked.
 - Library: `UsersService.GetPlexSettings`, `UpdatePlexSettings` and `DisconnectPlex` are marked deprecated and return a `*trakt.EndpointRemovedError` without sending a request. They will be removed in a later release.
-
-### Fixed
 
 ## [1.32.0] - 2026-11-22
 
@@ -932,7 +938,8 @@ schedule.
 - First release, with the `calendars`, `collection`, `help`, `history`, `lists`, `people`, `search` and `watchlist`
   commands exporting Trakt data to JSON.
 
-[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.32.0...HEAD
+[Unreleased]: https://github.com/mfederowicz/trakt-sync/compare/v1.33.0...HEAD
+[1.33.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.32.0...v1.33.0
 [1.32.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.31.0...v1.32.0
 [1.31.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.30.0...v1.31.0
 [1.30.0]: https://github.com/mfederowicz/trakt-sync/compare/v1.29.0...v1.30.0
