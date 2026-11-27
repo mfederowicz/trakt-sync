@@ -25,6 +25,8 @@ const (
 	day20261118 = "2026-11-18"
 	// day20261120 is the day the live API was found no longer serving eight routes dropped from the contract on 2026-10-13
 	day20261120 = "2026-11-20"
+	// day20261127 is the day the Trakt API contract removed the last three Plex settings routes, answering 404 since 2026-11-18
+	day20261127 = "2026-11-27"
 )
 
 // notices lists every deprecated endpoint with the module action that calls it.
@@ -43,9 +45,12 @@ var notices = []Notice{
 	{Module: consts.Users, Action: consts.AddSavedFilters, Method: http.MethodPost, Route: "users/saved_filters", Reason: savedFiltersRetired, Deprecated: day20261013, Locked: day20261120},
 	{Module: consts.Users, Action: consts.DeleteSavedFilter, Method: http.MethodDelete, Route: "users/saved_filters/{id}", Reason: savedFiltersRetired, Deprecated: day20261013, Locked: day20261120},
 	{Module: consts.Users, Action: consts.PlexConnect, Method: http.MethodPost, Route: "users/settings/plex/connect", Reason: endpointGone, Deprecated: day20261118, Locked: day20261118},
+	{Module: consts.Users, Action: consts.PlexDisconnect, Method: http.MethodDelete, Route: "users/settings/plex/connect", Reason: endpointGone, Deprecated: day20261127, Locked: day20261127},
 	{Module: consts.Users, Action: consts.PlexServer, Method: http.MethodGet, Route: "users/settings/plex/servers/{server_id}", Reason: endpointGone, Deprecated: day20261118, Locked: day20261118},
 	{Module: consts.Users, Action: consts.PlexServers, Method: http.MethodGet, Route: "users/settings/plex/servers", Reason: endpointGone, Deprecated: day20261118, Locked: day20261118},
+	{Module: consts.Users, Action: consts.PlexSettings, Method: http.MethodGet, Route: "users/settings/plex", Reason: endpointGone, Deprecated: day20261127, Locked: day20261127},
 	{Module: consts.Users, Action: consts.PlexSync, Method: http.MethodPost, Route: "users/settings/plex/sync", Reason: endpointGone, Deprecated: day20261118, Locked: day20261118},
+	{Module: consts.Users, Action: consts.UpdatePlexSettings, Method: http.MethodPut, Route: "users/settings/plex", Reason: endpointGone, Deprecated: day20261127, Locked: day20261127},
 }
 
 // Notices returns a copy of every registered notice

@@ -1687,7 +1687,13 @@ func (u *UsersService) UndoDataSync(ctx context.Context, id int) (*str.Response,
 // GetPlexSettings Returns the Plex connection, webhook, sync selection and toggles of the authenticated user.
 //
 // API docs: https://docs.trakt.tv/reference/getusersplexsettings
+//
+// Deprecated: Trakt removed this endpoint from its API contract on 2026-11-27; the live API no longer serves it.
+// The method sends no request and returns an *EndpointRemovedError; in a later release it will be removed.
 func (u *UsersService) GetPlexSettings(ctx context.Context) (*str.PlexSettings, *str.Response, error) {
+	if err := lockedEndpoint(http.MethodGet, "users/settings/plex"); err != nil {
+		return nil, nil, err
+	}
 	result := new(str.PlexSettings)
 	resp, err := u.plexRequest(ctx, http.MethodGet, "users/settings/plex", nil, result)
 	if err != nil {
@@ -1700,7 +1706,13 @@ func (u *UsersService) GetPlexSettings(ctx context.Context) (*str.PlexSettings, 
 // UpdatePlexSettings Writes Plex toggles, selection and home users; omitted keys are left unchanged (204).
 //
 // API docs: https://docs.trakt.tv/reference/putusersplexupdatesettings
+//
+// Deprecated: Trakt removed this endpoint from its API contract on 2026-11-27; the live API no longer serves it.
+// The method sends no request and returns an *EndpointRemovedError; in a later release it will be removed.
 func (u *UsersService) UpdatePlexSettings(ctx context.Context, settings *str.PlexSettingsUpdate) (*str.Response, error) {
+	if err := lockedEndpoint(http.MethodPut, "users/settings/plex"); err != nil {
+		return nil, err
+	}
 	return u.plexRequest(ctx, http.MethodPut, "users/settings/plex", settings, nil)
 }
 
@@ -1726,7 +1738,13 @@ func (u *UsersService) ConnectPlex(ctx context.Context, connect *str.PlexConnect
 // DisconnectPlex Destroys the Plex authorization and clears the selection and sync state (204).
 //
 // API docs: https://docs.trakt.tv/reference/deleteusersplexdisconnect
+//
+// Deprecated: Trakt removed this endpoint from its API contract on 2026-11-27; the live API no longer serves it.
+// The method sends no request and returns an *EndpointRemovedError; in a later release it will be removed.
 func (u *UsersService) DisconnectPlex(ctx context.Context) (*str.Response, error) {
+	if err := lockedEndpoint(http.MethodDelete, "users/settings/plex/connect"); err != nil {
+		return nil, err
+	}
 	return u.plexRequest(ctx, http.MethodDelete, "users/settings/plex/connect", nil, nil)
 }
 
