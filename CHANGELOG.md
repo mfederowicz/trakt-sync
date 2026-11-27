@@ -34,6 +34,9 @@ schedule.
 
 ### Changed
 
+- `users -a plex_settings`, `update_plex_settings` and `plex_disconnect` are locked: Trakt removed these Plex settings routes from its API on 2026-11-27 ([trakt/trakt-api#1098](https://github.com/trakt/trakt-api/issues/1098)), and the live API already answered 404 since 2026-11-18. The actions send no request and stop with `users -a plex_settings is locked since 2026-11-27: Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent`; the action names stay. All seven Plex actions are now locked.
+- Library: `UsersService.GetPlexSettings`, `UpdatePlexSettings` and `DisconnectPlex` are marked deprecated and return a `*trakt.EndpointRemovedError` without sending a request. They will be removed in a later release.
+
 ### Fixed
 
 ## [1.32.0] - 2026-11-22

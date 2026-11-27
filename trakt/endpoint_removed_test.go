@@ -104,6 +104,19 @@ func TestLockedEndpointsSendNoRequest(t *testing.T) {
 			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
 				return c.Users.SyncPlex(ctx, &str.PlexSyncRequest{ServerID: str.String("abc")})
 			}},
+		{name: "GetPlexSettings", method: http.MethodGet, route: "users/settings/plex",
+			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
+				_, resp, err := c.Users.GetPlexSettings(ctx)
+				return resp, err
+			}},
+		{name: "UpdatePlexSettings", method: http.MethodPut, route: "users/settings/plex",
+			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
+				return c.Users.UpdatePlexSettings(ctx, &str.PlexSettingsUpdate{TriggerSync: &str.PlexTriggerSync{WatchedAllData: str.Bool(true)}})
+			}},
+		{name: "DisconnectPlex", method: http.MethodDelete, route: "users/settings/plex/connect",
+			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
+				return c.Users.DisconnectPlex(ctx)
+			}},
 		{name: "GetSocialShowRecommendations", method: http.MethodGet, route: "social_recommendations/shows",
 			reason: "Trakt removed this endpoint from its API, the live API no longer serves it", call: func(c *Client) (*str.Response, error) {
 				_, resp, err := c.SocialRecommendations.GetSocialShowRecommendations(ctx, &uri.ListOptions{})
@@ -165,7 +178,7 @@ func TestLockedEndpointLeavesOthersAlone(t *testing.T) {
 		{http.MethodGet, "users/saved_filters/{section}"},
 		{http.MethodPost, "movies/{id}/refresh/justwatch"},
 		{http.MethodPost, "search/recent"},
-		{http.MethodDelete, "users/settings/plex/connect"},
+		{http.MethodGet, "users/settings"},
 	} {
 		if err := lockedEndpoint(tt.method, tt.route); err != nil {
 			t.Errorf("%s %s: %v, want nil", tt.method, tt.route, err)

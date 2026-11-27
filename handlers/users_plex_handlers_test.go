@@ -15,7 +15,9 @@ import (
 )
 
 func TestUsersPlexHandlers(t *testing.T) {
-	const locked = " is locked since 2026-11-18: Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent"
+	const status = ": Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent"
+	const locked = " is locked since 2026-11-18" + status
+	const lockedLater = " is locked since 2026-11-27" + status
 	tests := []struct {
 		name       string
 		handler    Handler
@@ -30,22 +32,18 @@ func TestUsersPlexHandlers(t *testing.T) {
 		wantNoAPI  bool
 		wantOutput bool
 	}{
-		{name: "settings", handler: UsersPlexSettingsHandler{}, options: str.Options{Action: consts.PlexSettings},
-			method: http.MethodGet, path: "/users/settings/plex", status: http.StatusOK, body: `{"connection":{"connected":false}}`, wantOutput: true},
-		{name: "settings not open to API apps", handler: UsersPlexSettingsHandler{}, options: str.Options{Action: consts.PlexSettings},
-			method: http.MethodGet, path: "/users/settings/plex", status: http.StatusUnauthorized, body: `{}`, wantErr: "plex_settings: Trakt answered 401"},
-		{name: "update settings", handler: UsersUpdatePlexSettingsHandler{}, options: str.Options{Action: consts.UpdatePlexSettings},
-			input:  `{"scrobbler":{"toggles":{"movie":{"watched":true}}},"webhook":{"home_users":"sean"}}`,
-			method: http.MethodPut, path: "/users/settings/plex", status: http.StatusNoContent,
-			wantBody: `{"scrobbler":{"toggles":{"movie":{"watched":true}}},"webhook":{"home_users":"sean"}}`},
+		{name: "settings is locked", handler: UsersPlexSettingsHandler{}, options: str.Options{Action: consts.PlexSettings},
+			wantErr: "GET users/settings/plex" + lockedLater, wantNoAPI: true},
+		{name: "update settings is locked", handler: UsersUpdatePlexSettingsHandler{}, options: str.Options{Action: consts.UpdatePlexSettings},
+			input: `{"scrobbler":{"toggles":{"movie":{"watched":true}}},"webhook":{"home_users":"sean"}}`, wantErr: "PUT users/settings/plex" + lockedLater, wantNoAPI: true},
 		{name: "update settings empty", handler: UsersUpdatePlexSettingsHandler{}, options: str.Options{Action: consts.UpdatePlexSettings},
 			input: `{}`, wantErr: "needs at least one of sync, scrobbler, webhook, trigger_sync", wantNoAPI: true},
 		{name: "update settings unknown key", handler: UsersUpdatePlexSettingsHandler{}, options: str.Options{Action: consts.UpdatePlexSettings},
 			input: `{"scrobbler":{"toggles":{"movie":{"seen":true}}}}`, wantErr: "invalid update_plex_settings JSON", wantNoAPI: true},
 		{name: "connect is locked", handler: UsersPlexConnectHandler{}, options: str.Options{Action: consts.PlexConnect},
 			wantErr: "POST users/settings/plex/connect" + locked, wantNoAPI: true},
-		{name: "disconnect", handler: UsersPlexDisconnectHandler{}, options: str.Options{Action: consts.PlexDisconnect},
-			method: http.MethodDelete, path: "/users/settings/plex/connect", status: http.StatusNoContent},
+		{name: "disconnect is locked", handler: UsersPlexDisconnectHandler{}, options: str.Options{Action: consts.PlexDisconnect},
+			wantErr: "DELETE users/settings/plex/connect" + lockedLater, wantNoAPI: true},
 		{name: "servers is locked", handler: UsersPlexServersHandler{}, options: str.Options{Action: consts.PlexServers},
 			wantErr: "GET users/settings/plex/servers" + locked, wantNoAPI: true},
 		{name: "server is locked", handler: UsersPlexServerHandler{}, options: str.Options{Action: consts.PlexServer, ID: "abc"},

@@ -801,31 +801,14 @@ Reverses every item the sync imported (history, ratings, paused, watchlist, coll
 ```console
 $ ./trakt-sync users -a undo_data_sync -i 157
 ```
-##### Plex settings
-> **Note:** as of 2026-09-25 Trakt answers `plex_settings` and `plex_servers` with 401 for API apps (other OAuth routes work with the
-> same token), and the other Plex actions are expected to do the same; they fail with `this route is not open to API apps yet`.
-> Since 2026-10-31 `plex_servers` gets 405 instead (checked again 2026-11-04 and 2026-11-08) and fails with `it looks not served to API apps right now`.
-> On 2026-11-18 `plex_settings` answered 404.
-
-Connection status, real-time scrobbler webhook, sync selection and toggles.
+##### Plex settings, connect, servers and sync (locked)
+Trakt removed `plex_connect`, `plex_servers`, `plex_server` and `plex_sync` from its API on 2026-11-18
+([trakt/trakt-api#1075](https://github.com/trakt/trakt-api/issues/1075)), and `plex_settings`, `update_plex_settings`
+and `plex_disconnect` on 2026-11-27 ([trakt/trakt-api#1098](https://github.com/trakt/trakt-api/issues/1098)); the live
+API already answered 404 for all of them. The seven actions are locked: they send no request and stop with a notice:
 ```console
-$ ./trakt-sync users -a plex_settings -> export_users_plex_settings.json
-```
-Update toggles, selection or home users - via -items flag or stdin (send only what changes; `trigger_sync` also queues a sync):
-```console
-$ echo '{"sync":{"toggles":{"movie":{"watched":true}}}}' | ./trakt-sync users -a update_plex_settings
-```
-##### Disconnect Plex
-```console
-$ ./trakt-sync users -a plex_disconnect
-```
-##### Connect Plex, Plex servers and Plex sync (locked)
-Trakt removed `plex_connect`, `plex_servers`, `plex_server` and `plex_sync` from its API on 2026-11-18 (the live API
-already answered 404, [trakt/trakt-api#1075](https://github.com/trakt/trakt-api/issues/1075)). The four actions are
-locked: they send no request and stop with a notice:
-```console
-$ ./trakt-sync users -a plex_servers
-users -a plex_servers is locked since 2026-11-18: Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent
+$ ./trakt-sync users -a plex_settings
+users -a plex_settings is locked since 2026-11-27: Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent
 ```
 ##### Filter watchlist, history and list items
 `watchlist`, `history` and `list_items` take the Trakt media filters: `-genres`, `-subgenres`, `-years`, `-ratings`,
