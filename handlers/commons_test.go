@@ -46,6 +46,7 @@ func setup(t *testing.T) *TestSetup {
 	client := trakt.NewClient(nil)
 	uri, _ := url.Parse(server.URL + consts.BaseURLPath + "/")
 	client.BaseURL = uri
+	client.AuthURL = uri
 
 	return &TestSetup{
 		Client:    client,

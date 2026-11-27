@@ -32,8 +32,12 @@ schedule.
 
 ### Added
 
+- Library: `Client.AuthURL`, the host of the OAuth requests (`OauthService`), `https://auth.trakt.tv/` by default. Every other request still goes to `Client.BaseURL`.
+
 ### Changed
 
+- Sign-in (device code and device token) and the access token refresh go to `https://auth.trakt.tv`, the host Trakt's guides name for every OAuth route since 2026-11-27. Before, they went to `https://api.trakt.tv`. Nothing changes in how you sign in.
+- Library: `OauthService` sends its requests to `Client.AuthURL` instead of `Client.BaseURL`. An app that points `BaseURL` at a proxy or a mock server sets `AuthURL` too.
 - `users -a plex_settings`, `update_plex_settings` and `plex_disconnect` are locked: Trakt removed these Plex settings routes from its API on 2026-11-27 ([trakt/trakt-api#1098](https://github.com/trakt/trakt-api/issues/1098)), and the live API already answered 404 since 2026-11-18. The actions send no request and stop with `users -a plex_settings is locked since 2026-11-27: Trakt removed this endpoint from its API, the live API no longer serves it; no request was sent`; the action names stay. All seven Plex actions are now locked.
 - Library: `UsersService.GetPlexSettings`, `UpdatePlexSettings` and `DisconnectPlex` are marked deprecated and return a `*trakt.EndpointRemovedError` without sending a request. They will be removed in a later release.
 

@@ -39,6 +39,7 @@ const (
 	DefaultUserAgent                         = "trakt-sync-go" // fallback only: apps should set their own with WithUserAgent
 	TimezoneKey               contextKey     = "timezone"
 	Version                                  = "2"
+	defaultAuthURL                           = "https://auth.trakt.tv/"
 	defaultBaseURL                           = "https://api.trakt.tv/"
 	emptyLimit                               = ""
 	skipRateLimitCheck        requestContext = iota
@@ -58,6 +59,7 @@ type Client struct {
 	RateLimitReset        time.Time
 	client                *http.Client
 	BaseURL               *url.URL
+	AuthURL               *url.URL // host of the OAuth routes (OauthService); every other request goes to BaseURL
 	UpgradeURL            *url.URL
 	authToken             string
 	clientID              string
@@ -148,6 +150,7 @@ func (c *Client) clone() *Client {
 		RateLimitReset: reset,
 		client:         c.client,
 		BaseURL:        c.BaseURL,
+		AuthURL:        c.AuthURL,
 		UpgradeURL:     c.UpgradeURL,
 		authToken:      c.authToken,
 		clientID:       c.clientID,
@@ -176,6 +179,9 @@ func (c *Client) initialize() {
 	}
 	if c.BaseURL == nil {
 		c.BaseURL, _ = url.Parse(defaultBaseURL)
+	}
+	if c.AuthURL == nil {
+		c.AuthURL, _ = url.Parse(defaultAuthURL)
 	}
 
 	c.common.client = c
@@ -210,10 +216,20 @@ func (c *Client) initialize() {
 
 // NewRequest creates an API request.
 func (c *Client) NewRequest(method, urlStr string, body any, opts ...RequestOption) (*http.Request, error) {
-	if !strings.HasSuffix(c.BaseURL.Path, "/") {
-		return nil, fmt.Errorf("BaseURL must have a trailing slash, but %q does not", c.BaseURL)
+	return c.newRequestAt(c.BaseURL, "BaseURL", method, urlStr, body, opts...)
+}
+
+// newAuthRequest creates an OAuth request on AuthURL.
+func (c *Client) newAuthRequest(method, urlStr string, body any) (*http.Request, error) {
+	return c.newRequestAt(c.AuthURL, "AuthURL", method, urlStr, body)
+}
+
+// newRequestAt creates a request for urlStr resolved against base; name is the field base comes from.
+func (c *Client) newRequestAt(base *url.URL, name, method, urlStr string, body any, opts ...RequestOption) (*http.Request, error) {
+	if !strings.HasSuffix(base.Path, "/") {
+		return nil, fmt.Errorf("%s must have a trailing slash, but %q does not", name, base)
 	}
-	u, err := c.BaseURL.Parse(urlStr)
+	u, err := base.Parse(urlStr)
 	if err != nil {
 		return nil, err
 	}
